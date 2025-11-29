@@ -13,6 +13,7 @@
       "FediE2EE\\PKDServer\\Tests\\": "tests/"
     }
   },
+  "license": "ISC",
   "require": {
     "php": "^8.4",
     "ext-pdo": "*",
