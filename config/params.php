@@ -14,4 +14,5 @@ return new Params(
     hashAlgo: 'sha256',
     otpMaxLife: 120,
     actorUsername: 'pubkeydir',
+    hostname: 'localhost',
 );

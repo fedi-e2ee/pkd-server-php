@@ -28,15 +28,6 @@ class Finger implements RequestHandlerInterface
     use ActivityStreamsTrait;
     use ReqTrait;
 
-    protected array $hosts;
-
-    public function __construct()
-    {
-        $this->hosts = [
-            $_SERVER['HTTP_HOST'] ?? 'localhost',
-        ];
-    }
-
     /**
      * @return ResponseInterface
      * @throws CertaintyException
@@ -62,8 +53,10 @@ class Finger implements RequestHandlerInterface
         $user = $matches[1] ?? '';
         $domain = $matches[2] ?? '';
 
+        $serverParams = $this->config->getParams();
+
         // Handle third-party lookups
-        if (!in_array($domain, $this->hosts, true)) {
+        if (!hash_equals($serverParams->hostname, $domain)) {
             try {
                 return $this->json(
                     $this->webfinger($this->config->getGuzzle())
@@ -75,7 +68,7 @@ class Finger implements RequestHandlerInterface
         }
 
         // We only return a WebFinger for the valid configured user:
-        if (!hash_equals($this->config->getParams()->actorUsername, $user)) {
+        if (!hash_equals($serverParams->actorUsername, $user)) {
             return $this->error('User not found', 404);
         }
 

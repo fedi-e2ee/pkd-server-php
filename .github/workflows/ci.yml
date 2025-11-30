@@ -93,7 +93,7 @@ jobs:
           fi
 
       - name: Setup Databases
-        run: php cmd/init.php
+        run: php cmd/init-database.php
 
       - name: PHPUnit tests
         run: vendor/bin/phpunit --testsuite unit
