@@ -7,11 +7,12 @@ use FediE2EE\PKDServer\ActivityPub\ActivityStream;
 use FediE2EE\PKDServer\Dependency\WrappedEncryptedRow;
 use FediE2EE\PKDServer\Exceptions\ActivityPubException;
 use FediE2EE\PKDServer\Table;
-use ParagonIE\CipherSweet\BlindIndex;
+use Override;
 
 class ActivityStreamQueue extends Table
 {
 
+    #[Override]
     public function getCipher(): WrappedEncryptedRow
     {
         return new WrappedEncryptedRow(
@@ -22,6 +23,7 @@ class ActivityStreamQueue extends Table
         );
     }
 
+    #[Override]
     protected function convertKeyMap(AttributeKeyMap $inputMap): array
     {
         return [];

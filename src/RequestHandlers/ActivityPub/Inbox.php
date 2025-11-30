@@ -67,7 +67,10 @@ class Inbox implements RequestHandlerInterface
         // This endpoint just enqueues the message to be processed by the cron job.
         try {
             $as = $this->getVerifiedStream($request);
-            $this->asq->insert($as);
+            $queueId = $this->asq->insert($as);
+            if (defined('PKD_SERVER_DEBUG')) {
+                return $this->json(['queue_id' => $queueId], 202);
+            }
             return $this->json([], 202);
         } catch (FetchException|HttpSignatureException $ex) {
             return $this->error($ex->getMessage(), 500);
