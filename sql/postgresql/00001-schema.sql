@@ -96,8 +96,17 @@ CREATE TABLE IF NOT EXISTS pkd_totp_secrets (
     domain TEXT,
     secret TEXT,
     wrap_secret TEXT NULL,
-    created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    created TIMESTAMP DEFAULT NOW(),
+    modified TIMESTAMP DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS pkd_activitystream_queue (
+    queueid BIGSERIAL PRIMARY KEY,
+    message TEXT,
+    processed BOOLEAN DEFAULT FALSE,
+    successful BOOLEAN DEFAULT FALSE,
+    created TIMESTAMP DEFAULT NOW(),
+    modified TIMESTAMP DEFAULT NOW()
 );
 
 -- Update modification time triggers

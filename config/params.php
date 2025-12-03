@@ -13,4 +13,6 @@ if (file_exists(__DIR__ . '/local/params.php')) {
 return new Params(
     hashAlgo: 'sha256',
     otpMaxLife: 120,
+    actorUsername: 'pubkeydir',
+    hostname: 'localhost',
 );

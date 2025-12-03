@@ -22,6 +22,11 @@ use FediE2EE\PKDServer\RequestHandlers\Api\{
     TotpDisenroll,
     TotpEnroll
 };
+use FediE2EE\PKDServer\RequestHandlers\ActivityPub\{
+    Finger,
+    Inbox,
+    UserPage
+};
 use FediE2EE\PKDServer\RequestHandlers\IndexPage;
 use League\Route\Router;
 use League\Route\RouteGroup;
@@ -53,6 +58,12 @@ $router->group('/api', function(RouteGroup $r) use ($router) {
     $r->map('POST', '/totp/disenroll', TotpDisenroll::class);
     $r->map('POST', '/totp/rotate', TotpRotate::class);
 });
+// ActivityPub integration
+$router->map('GET', '/.well-known/webfinger', Finger::class);
+$router->map(['GET', 'POST'], '/users/{user_id}/inbox', Inbox::class);
+$router->map('GET', '/users/{user_id}', UserPage::class);
+
+// Index page just to have something basic:
 $router->map('GET', '/', IndexPage::class);
 
 return $router;

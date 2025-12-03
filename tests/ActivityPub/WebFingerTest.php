@@ -20,11 +20,7 @@ use ParagonIE\Certainty\{
     Exception\CertaintyException,
     RemoteFetch
 };
-use PHPUnit\Framework\{
-    Attributes\CoversClass,
-    MockObject\Exception,
-    TestCase
-};
+use PHPUnit\Framework\{Attributes\CoversClass, Attributes\DataProvider, MockObject\Exception, TestCase};
 use ReflectionProperty;
 use SodiumException;
 
@@ -90,7 +86,11 @@ class WebFingerTest extends TestCase
         $mockHttp = $this->createMock(Client::class);
         $mockHttp->expects($this->once()) // Expect exactly one call
             ->method('get')
-            ->willReturn(new Response(200, ['Content-Type' => 'application/json'], '{"subject":"https://example.com/users/alice"}'));
+            ->willReturn(new Response(
+                200,
+                ['Content-Type' => 'application/json'],
+                '{"subject":"https://example.com/users/alice","links":[{"rel":"self","href":"https://example.com/users/alice"}]}'
+            ));
 
         // 2. Instantiate WebFinger with the mock client
         $webFinger = new WebFinger($mockHttp);
@@ -277,5 +277,23 @@ class WebFingerTest extends TestCase
         $webFinger = new WebFinger($mockHttp);
         $this->expectException(FetchException::class);
         $webFinger->getPublicKey('https://example.com/users/alice');
+    }
+
+    public static function inboxUrlProvider(): array
+    {
+        return [
+            ['soatok@furry.engineer', 'https://furry.engineer/users/soatok/inbox'],
+            ['fedie2ee@mastodon.social', 'https://mastodon.social/ap/users/115428847654719749/inbox'],
+        ];
+    }
+
+    #[DataProvider("inboxUrlProvider")]
+    public function testGetInboxUrl(string $in, string $expect): void
+    {
+        /** @var Client $http */
+        $http = $GLOBALS['config']->getGuzzle();
+        $webFinger = new WebFinger($http);
+        $inboxUrl = $webFinger->getInboxUrl($in);
+        $this->assertSame($expect, $inboxUrl);
     }
 }

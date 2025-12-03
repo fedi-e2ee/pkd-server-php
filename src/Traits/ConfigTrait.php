@@ -9,6 +9,7 @@ use FediE2EE\PKDServer\Exceptions\{
 };
 use FediE2EE\PKDServer\Tables\{
     Actors,
+    ActivityStreamQueue,
     AuxData,
     MerkleState,
     PublicKeys,
@@ -43,6 +44,7 @@ trait ConfigTrait
 
         $table = match ($tableName) {
             'Actors' => new Actors($this->config()),
+            'ActivityStreamQueue' => new ActivityStreamQueue($this->config()),
             'AuxData' => new AuxData($this->config()),
             'MerkleState' => new MerkleState($this->config()),
             'PublicKeys' => new PublicKeys($this->config()),

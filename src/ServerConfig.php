@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace FediE2EE\PKDServer;
 
 use FediE2EE\PKDServer\Meta\Params;
+use GuzzleHttp\Client;
 use FediE2EE\PKDServer\Dependency\{
     HPKE,
     SigningKeys
@@ -36,6 +37,13 @@ class ServerConfig
             throw new DependencyException('caCertFetch is not injected');
         }
         return $this->caCertFetch;
+    }
+
+    public function getGuzzle(): Client
+    {
+        return new Client([
+            'verify' => $this->getCaCertFetch()->getLatestBundle()->getFilePath()
+        ]);
     }
 
     /**

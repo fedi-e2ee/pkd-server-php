@@ -23,6 +23,7 @@ class WebFinger
 {
     protected static array $cache = [];
     protected static array $canonicalCache = [];
+    protected static array $inboxCache = [];
     protected Client $http;
     protected Fetch $fetch;
 
@@ -40,6 +41,13 @@ class WebFinger
             $client = new Client(['verify' => $this->fetch->getLatestBundle()]);
         }
         $this->http = $client;
+    }
+
+    public function clearCaches(): void
+    {
+        self::$cache = [];
+        self::$canonicalCache = [];
+        self::$inboxCache = [];
     }
 
     /**
@@ -68,13 +76,14 @@ class WebFinger
         }
         return $this->lookupUsername($identifier);
     }
+
     /**
-     * @param string $identifier
-     * @return string
+     * Fetch an entire remote WebFinger response.
+     *
      * @throws GuzzleException
      * @throws NetworkException
      */
-    protected function lookupUsername(string $identifier): string
+    public function fetch(string $identifier): array
     {
         [, $host] = explode('@', $identifier);
         $url = "https://{$host}/.well-known/webfinger?resource=acct:{$identifier}";
@@ -86,10 +95,27 @@ class WebFinger
         if (!is_array($jrd)) {
             throw new NetworkException('Invalid JSON');
         }
-        if (empty($jrd['subject'])) {
-            throw new NetworkException('No subject found');
+        return $jrd;
+    }
+
+    /**
+     * @param string $identifier
+     * @return string
+     * @throws GuzzleException
+     * @throws NetworkException
+     */
+    protected function lookupUsername(string $identifier): string
+    {
+        $jrd = $this->fetch($identifier);
+        if (!array_key_exists('links', $jrd)) {
+            throw new NetworkException('Could not lookup ' . $identifier);
         }
-        return $jrd['subject'];
+        foreach ($jrd['links'] as $link) {
+            if ($link['rel'] === 'self') {
+                return $link['href'];
+            }
+        }
+        throw new NetworkException('Could not lookup ' . $identifier);
     }
 
     /**
@@ -130,8 +156,25 @@ class WebFinger
         self::$canonicalCache = [];
     }
 
+    public function getInboxUrl(string $actorUrl): string
+    {
+        if (!array_key_exists($actorUrl, self::$inboxCache)) {
+            $canonicalUrl = $this->canonicalize($actorUrl);
+            $raw = $this->http->get(
+                $canonicalUrl . '.json',
+                ['Accept' => 'application/activity+json']
+            );
+            $decoded = json_decode($raw->getBody()->getContents());
+            if (!is_object($decoded)) {
+                throw new NetworkException('Could not decode ' . $canonicalUrl);
+            }
+            $url = $decoded->inbox;
+            self::$inboxCache[$actorUrl] = $url;
+        }
+        return self::$inboxCache[$actorUrl];
+    }
+
     /**
-.
      * @throws CryptoException
      * @throws FetchException
      */

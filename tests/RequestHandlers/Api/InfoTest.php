@@ -23,6 +23,7 @@ class InfoTest extends TestCase
      */
     public function testHandle(): void
     {
+        /** @var ServerConfig $config */
         $config = $this->getConfig();
         $request = $this->makeGetRequest('/api/info');
         $handler = new Info();
@@ -34,5 +35,8 @@ class InfoTest extends TestCase
         $this->assertLessThanOrEqual(time(), $decoded['current-time']);
         $this->assertSame($config->getSigningKeys()->publicKey->toString(), $decoded['public-key']);
         $this->assertSame('fedi-e2ee:v1/api/info', $decoded['!pkd-context']);
+        $params = $config->getParams();
+        $expectedActor = $params->actorUsername . '@' . $params->hostname;
+        $this->assertSame($expectedActor, $decoded['actor']);
     }
 }

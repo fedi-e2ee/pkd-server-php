@@ -64,7 +64,7 @@ if (!($GLOBALS['config'] instanceof ServerConfig)) {
     if (!tableExists($db, 'pkd_merkle_state')) {
         $argv_backup = $_SERVER['argv'];
         $_SERVER['argv'] = [$_SERVER['argv'][0]];
-        require __DIR__ . '/cmd/init.php';
+        require __DIR__ . '/cmd/init-database.php';
         $_SERVER['argv'] = $argv_backup;
         echo 'Imported!', PHP_EOL;
     }

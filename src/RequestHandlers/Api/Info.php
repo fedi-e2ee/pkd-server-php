@@ -22,9 +22,12 @@ class Info implements RequestHandlerInterface
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         $keys = $this->config()->getSigningKeys();
+        $params = $this->config->getParams();
+        $actor = $params->actorUsername . '@' . $params->hostname;
         return $this->json([
             '!pkd-context' => 'fedi-e2ee:v1/api/info',
             'current-time' => time(),
+            'actor' => $actor,
             'public-key' => $keys->publicKey->toString(),
         ]);
     }
