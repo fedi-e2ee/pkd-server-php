@@ -14,6 +14,7 @@ class ActivityStream implements JsonSerializable
 {
     protected const string PUBLIC_ADDRESS = 'https://www.w3.org/ns/activitystreams#Public';
     private string $internalContext = '';
+    public string $id = '';
     public string $type = '';
     public string $actor = '';
     public object $object;
@@ -76,6 +77,12 @@ class ActivityStream implements JsonSerializable
             return false;
         }
         if (!property_exists($this->object, 'content')) {
+            return false;
+        }
+        if (empty($this->id)) {
+            return false;
+        }
+        if (!is_string($this->object->content)) {
             return false;
         }
 

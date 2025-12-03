@@ -15,8 +15,8 @@ class ActivityStreamTest extends TestCase
     public static function decodedProvider(): array
     {
         return [
-            ['{"@context":"https://www.w3.org/ns/activitystreams","type":"Create","actor":"https://mastodon.social/users/alice","object":{}}'],
-            ['{"@context":"https://www.w3.org/ns/activitystreams","type":"Create","actor":"https://mastodon.social/users/alice","object":{"type":"Note","content":"<p>Hello!</p>","to":["https://mastodon.social/users/alice"]}}'],
+            ['{"@context":"https://www.w3.org/ns/activitystreams","id":"https://mastodon.social/users/alice/statuses/123456/activity","type":"Create","actor":"https://mastodon.social/users/alice","object":{}}'],
+            ['{"@context":"https://www.w3.org/ns/activitystreams","id":"https://mastodon.social/users/alice/statuses/123457/activity","type":"Create","actor":"https://mastodon.social/users/alice","object":{"type":"Note","content":"<p>Hello!</p>","to":["https://mastodon.social/users/alice"]}}'],
         ];
     }
 
@@ -43,8 +43,9 @@ class ActivityStreamTest extends TestCase
     public static function directMessageProvider(): array
     {
         return [
-            ['{"@context":"https://www.w3.org/ns/activitystreams","type":"Create","actor":"https://mastodon.social/users/alice","object":{"type":"Note","content":"<p>Hello!</p>","to":["https://mastodon.social/users/alice"]}}', true],
-            ['{"@context":"https://www.w3.org/ns/activitystreams","type":"Create","actor":"https://mastodon.social/users/alice","object":{"type":"Note","content":"<p>Hello!</p>","to":["https://www.w3.org/ns/activitystreams#Public","https://mastodon.social/users/alice"]}}', false],
+            ['{"@context":"https://www.w3.org/ns/activitystreams","type":"Create","actor":"https://mastodon.social/users/alice","object":{"type":"Note","content":"<p>Hello!</p>","to":["https://mastodon.social/users/alice"]},"id":"https://mastodon.social/users/alice/statuses/123458/activity"}', true],
+            ['{"@context":"https://www.w3.org/ns/activitystreams","type":"Create","actor":"https://mastodon.social/users/alice","object":{"type":"Note","content":"<p>Hello!</p>","to":["https://mastodon.social/users/alice"]}}', false],
+            ['{"@context":"https://www.w3.org/ns/activitystreams","type":"Create","actor":"https://mastodon.social/users/alice","object":{"type":"Note","content":"<p>Hello!</p>","to":["https://www.w3.org/ns/activitystreams#Public","https://mastodon.social/users/alice"]},"id":"https://mastodon.social/users/alice/statuses/123459/activity"}', false],
         ];
     }
 

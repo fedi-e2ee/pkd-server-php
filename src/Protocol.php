@@ -17,11 +17,13 @@ use FediE2EE\PKDServer\Exceptions\{
 use FediE2EE\PKDServer\{
     ActivityPub\ActivityStream,
     ActivityPub\WebFinger,
-    Protocol\Payload
+    Protocol\Payload,
+    Traits\ConfigTrait
 };
 use GuzzleHttp\Client;
 use FediE2EE\PKDServer\Tables\{
     AuxData,
+    MerkleState,
     PublicKeys,
     Records\ActorKey
 };
@@ -34,17 +36,100 @@ use SodiumException;
  */
 class Protocol
 {
+    use ConfigTrait;
+
     protected Parser $parser;
     protected ?WebFinger $webFinger = null;
 
-    public function __construct(private readonly ServerConfig $config)
+    public function __construct(?ServerConfig $config)
     {
+        if (is_null($config)) {
+            throw new DependencyException('config not injected');
+        }
+        $this->config = $config;
         $this->parser = new Parser();
     }
 
-    public function process(ActivityStream $enqueued): void
+    /**
+     * @throws CryptoException
+     * @throws DependencyException
+     * @throws Exceptions\CacheException
+     * @throws HPKEException
+     * @throws NotImplementedException
+     * @throws ParserException
+     * @throws ProtocolException
+     * @throws SodiumException
+     * @throws TableException
+     */
+    public function process(ActivityStream $enqueued): array
     {
-        // TODO
+        // Initialize some Table classes for handling SQL:
+        /** @var PublicKeys $publicKeyTable */
+        $publicKeyTable = $this->table('PublicKeys');
+        /** @var AuxData $auxDataTable */
+        $auxDataTable = $this->table('AuxData');
+        /** @var MerkleState $merkleState */
+        $merkleState = $this->table('MerkleState');
+
+        if (!$enqueued->isDirectMessage()) {
+            throw new ProtocolException('Only direct messages are allowed.');
+        }
+        // We already verified te HTTP Message Signature in the Inbox ResponseHandler.
+        // If it was enqueued, we can assume the signature was valid.
+
+        // Is this encrypted?
+        $hpke = $this->config->getHPKE();
+        $adapter = new HPKEAdapter($hpke->cs);
+        $wasEncrypted = $adapter->isHpkeCiphertext($enqueued->object->content);
+
+        // If it was encrypted, we should decrypt it:
+        if ($wasEncrypted) {
+            $raw = $adapter->open($hpke->decapsKey, $hpke->encapsKey, $enqueued->object->content);
+        } else {
+            $raw = $enqueued->object->content;
+        }
+
+        // Parse the plaintext, grab the action parameter;
+        $parsed = $this->parser->parse($raw);
+        $payload = new Payload($parsed->getMessage(), $parsed->getKeyMap(), $raw);
+        $action = $parsed->getMessage()->getAction();
+
+        // Route the request based on whether it was encrypted or not:
+        if ($wasEncrypted) {
+            $result = match ($action) {
+                // These actions are allowed to be encrypted:
+                'AddAuxData' => $auxDataTable->addAuxData($payload),
+                'AddKey' => $publicKeyTable->addKey($payload),
+                'Checkpoint' => $publicKeyTable->checkpoint($payload),
+                'Fireproof' => $publicKeyTable->fireproof($payload),
+                'MoveIdentity' => $publicKeyTable->moveIdentity($payload),
+                'RevokeAuxData' => $auxDataTable->revokeAuxData($payload),
+                'RevokeKey' => $publicKeyTable->revokeKey($payload),
+                'UndoFireproof' => $publicKeyTable->undoFireproof($payload),
+                // BurnDown MUST NOT be encrypted:
+                'BurnDown' =>
+                    throw new ProtocolException('BurnDown MUST NOT be HPKE-encrypted'),
+                // Unknown:
+                default =>
+                    throw new ProtocolException('Unknown action: ' . $action),
+            };
+        } else {
+            $result = match ($action) {
+                // These actions are allowed to be plaintext:
+                'BurnDown' => $publicKeyTable->burndown($payload),
+                'Checkpoint' => $publicKeyTable->checkpoint($payload),
+                // These actions MUST be encrypted:
+                'AddAuxData', 'AddKey', 'Fireproof', 'MoveIdentity', 'RevokeAuxData', 'RevokeKey', 'UndoFireproof' =>
+                    throw new ProtocolException('This action MUST be HPKE-encrypted: ' . $action),
+                default =>
+                    throw new ProtocolException('Unknown action: ' . $action),
+            };
+        }
+        // You'll notice that Checkpoint is allowed, but not require, to be HPKE encrypted.
+        $merkleRoot = $merkleState->getLatestRoot();
+
+        // Return the results as an array so other processes can shape a response:
+        return ['action' => $action, 'result' => $result, 'latest-root' => $merkleRoot];
     }
 
     /**
