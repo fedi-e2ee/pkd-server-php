@@ -232,9 +232,9 @@ class WebFinger
         }
 
         // Prefer FEP-521a over the incumbent publicKey approach:
-        /** @var object{type: string, id: string, controller: string, publicKeyMultibase: string} $assertionMethod */
         if (property_exists($actor, 'assertionMethod')) {
             if (is_array($actor->assertionMethod)) {
+                /** @var object{type: string, id: string, controller: string, publicKeyMultibase: string} $assertionMethod */
                 foreach ($actor->assertionMethod as $assertionMethod) {
                     try {
                         return PublicKey::fromMultibase($assertionMethod->publicKeyMultibase);

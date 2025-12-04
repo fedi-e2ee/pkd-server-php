@@ -207,7 +207,11 @@ class PublicKeys extends Table
     public function getPublicKeysFor(string $actorName, string $keyId = ''): array
     {
         $results = [];
+        /** @var Actors $actorTable */
         $actorTable = $this->table('Actors');
+        if (!($actorTable instanceof Actors)) {
+            throw new TableException('Actor table not found');
+        }
         $actor = $actorTable->searchForActor($actorName);
         if (!$actor) {
             return [];

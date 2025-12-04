@@ -12,12 +12,12 @@ class TableCache
         private array $tables = []
     ) {}
 
-    public static function instance(): static
+    public static function instance(): self
     {
-        if (!isset(static::$instance)) {
-            static::$instance = new static();
+        if (!isset(self::$instance)) {
+            self::$instance = new self();
         }
-        return static::$instance;
+        return self::$instance;
     }
 
     public function clearCache(): void

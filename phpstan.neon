@@ -1,0 +1,5 @@
+parameters:
+    treatPhpDocTypesAsCertain: false
+    paths:
+        - src
+        - public

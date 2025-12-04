@@ -18,7 +18,7 @@ class Checkpoint implements RequestHandlerInterface
 {
     use ReqTrait;
 
-    #[Route("/api/checkpoint", "POST")]
+    #[Route("/api/checkpoint")]
     #[Override]
     public function handle(ServerRequestInterface $request): ResponseInterface
     {

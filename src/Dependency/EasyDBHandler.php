@@ -12,7 +12,7 @@ use PDOStatement;
 class EasyDBHandler extends AbstractProcessingHandler
 {
     private EasyDB $db;
-    private ?PDOStatement $statement;
+    private ?PDOStatement $statement = null;
 
     public function __construct(EasyDB $db, int|string|Level $level = Level::Debug, bool $bubble = true)
     {

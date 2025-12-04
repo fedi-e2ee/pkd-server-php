@@ -225,6 +225,7 @@ class MerkleState extends Table
      *
      * @throws CryptoException
      * @throws NotImplementedException
+     * @throws PDOException
      * @throws SodiumException
      * @throws DependencyException
      */
