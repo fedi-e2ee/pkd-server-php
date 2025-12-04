@@ -31,7 +31,7 @@ use SodiumException;
 trait TOTPTrait
 {
     use UtilTrait;
-    const int TOTP_WINDOW_TIME = 30;
+    public const int TOTP_WINDOW_TIME = 30;
 
     /**
      * @param string $secret

@@ -132,7 +132,8 @@ class TOTP extends Table
         if (!array_key_exists('wrap_secret', $encrypted)) {
             throw new TableException('wrapping is not specified!');
         }
-        $this->db->update('pkd_totp_secrets',
+        $this->db->update(
+            'pkd_totp_secrets',
             [
                 'secret' => $encrypted['secret'],
                 'wrap_secret' => $encrypted['wrap_secret']

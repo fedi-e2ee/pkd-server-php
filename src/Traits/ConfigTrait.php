@@ -55,7 +55,7 @@ trait ConfigTrait
         return $table;
     }
 
-    function injectConfig(ServerConfig $config): void
+    public function injectConfig(ServerConfig $config): void
     {
         $this->config = $config;
     }

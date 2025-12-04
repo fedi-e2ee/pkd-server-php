@@ -33,11 +33,11 @@ class EasyDBHandler extends AbstractProcessingHandler
         if (is_null($this->statement)) {
             $this->initialize();
         }
-        $this->statement->execute(array(
+        $this->statement->execute([
             'channel' => $record->channel,
             'level' => $record->level,
             'message' => $record->formatted,
             'time' => $record->datetime->format('U'),
-        ));
+        ]);
     }
 }

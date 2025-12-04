@@ -165,7 +165,7 @@ class AuxData extends Table
         return $this->protocolMethod(
             $payload,
             'AddAuxData',
-            fn(MerkleLeaf $leaf, Payload $payload) => $this->addAuxDataCallback($leaf, $payload)
+            fn (MerkleLeaf $leaf, Payload $payload) => $this->addAuxDataCallback($leaf, $payload)
         );
     }
 
@@ -263,7 +263,7 @@ class AuxData extends Table
         return $this->protocolMethod(
             $payload,
             'RevokeAuxData',
-            fn(MerkleLeaf $leaf, Payload $payload) => $this->revokeAuxDataCallback($leaf, $payload)
+            fn (MerkleLeaf $leaf, Payload $payload) => $this->revokeAuxDataCallback($leaf, $payload)
         );
     }
 

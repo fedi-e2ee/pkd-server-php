@@ -96,7 +96,7 @@ class GetKey implements RequestHandlerInterface
         // Make sure Key ID is populated:
         $keyID = $request->getAttribute('key_id') ?? '';
         if (empty($keyID)) {
-            return (new Redirect('/api/actors/' . urlencode($actorID) . '/keys' ))->respond();
+            return (new Redirect('/api/actors/' . urlencode($actorID) . '/keys'))->respond();
         }
 
         // Ensure actor exists
@@ -109,7 +109,7 @@ class GetKey implements RequestHandlerInterface
         $pk = $this->publicKeysTable->lookup($actor->getPrimaryKey(), $keyID);
         if (empty($pk)) {
             // Redirect to keys list
-            return (new Redirect('/api/actors/' . urlencode($actorID) . '/keys' ))->respond();
+            return (new Redirect('/api/actors/' . urlencode($actorID) . '/keys'))->respond();
         }
         $pk['!pkd-context'] = 'fedi-e2ee:v1/api/actor/key-info';
         $pk['actor-id'] = $actorID;

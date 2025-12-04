@@ -15,7 +15,7 @@ readonly class Payload
         public ProtocolMessageInterface $message,
         public AttributeKeyMap $keyMap,
         public string $rawJson,
-    ){}
+    ) {}
 
     public function decrypt(): ProtocolMessageInterface
     {

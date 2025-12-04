@@ -1,6 +1,5 @@
 <?php
 declare(strict_types=1);
-
 namespace FediE2EE\PKDServer\ActivityPub;
 
 use FediE2EE\PKD\Crypto\{
@@ -17,6 +16,7 @@ use ParagonIE\Certainty\{
     RemoteFetch
 };
 use SodiumException;
+
 use const FediE2EE\PKDServer\PKD_SERVER_ROOT;
 
 class WebFinger

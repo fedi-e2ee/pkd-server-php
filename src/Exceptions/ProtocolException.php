@@ -2,7 +2,4 @@
 declare(strict_types=1);
 namespace FediE2EE\PKDServer\Exceptions;
 
-class ProtocolException extends BaseException
-{
-
-}
+class ProtocolException extends BaseException {}

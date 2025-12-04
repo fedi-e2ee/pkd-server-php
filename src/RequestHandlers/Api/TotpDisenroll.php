@@ -51,7 +51,7 @@ class TotpDisenroll implements RequestHandlerInterface
      */
     public function __construct()
     {
-        $totpTable =$this->table('TOTP');
+        $totpTable = $this->table('TOTP');
         if (!($totpTable instanceof TOTPTable)) {
             throw new TypeError('Could not load TOTP table at runtime');
         }
