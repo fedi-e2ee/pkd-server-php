@@ -1,5 +1,4 @@
 <?php
-
 namespace FediE2EE\PKDServer\Tables;
 
 use FediE2EE\PKD\Crypto\AttributeEncryption\AttributeKeyMap;

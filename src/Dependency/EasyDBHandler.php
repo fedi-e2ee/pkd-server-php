@@ -12,7 +12,7 @@ use PDOStatement;
 class EasyDBHandler extends AbstractProcessingHandler
 {
     private EasyDB $db;
-    private ?PDOStatement $statement;
+    private ?PDOStatement $statement = null;
 
     public function __construct(EasyDB $db, int|string|Level $level = Level::Debug, bool $bubble = true)
     {
@@ -33,11 +33,11 @@ class EasyDBHandler extends AbstractProcessingHandler
         if (is_null($this->statement)) {
             $this->initialize();
         }
-        $this->statement->execute(array(
+        $this->statement->execute([
             'channel' => $record->channel,
             'level' => $record->level,
             'message' => $record->formatted,
             'time' => $record->datetime->format('U'),
-        ));
+        ]);
     }
 }

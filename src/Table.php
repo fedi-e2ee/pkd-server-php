@@ -118,7 +118,8 @@ abstract class Table
             "SELECT count(merkleleafid)
             FROM pkd_merkle_leaves
             WHERE root = ? AND merkleleafid >= ?",
-            $merkleRoot, $cutoff
+            $merkleRoot,
+            $cutoff
         );
     }
 }

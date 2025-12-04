@@ -28,6 +28,7 @@ class ActivityStream implements JsonSerializable
             throw new ActivityPubException('The @context property must be set.');
         }
         $self = new self();
+        // @phpstan-ignore foreach.nonIterable
         foreach ($decoded as $key => $value) {
             if ($key === '@context') {
                 $self->internalContext = $value;
@@ -42,6 +43,7 @@ class ActivityStream implements JsonSerializable
     public function jsonSerialize(): stdClass
     {
         $fields = ['@context' => $this->internalContext];
+        // @phpstan-ignore foreach.nonIterable
         foreach ($this as $key => $value) {
             if ($key !== 'internalContext') {
                 $fields[$key] = $value;

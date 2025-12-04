@@ -50,8 +50,8 @@ class Finger implements RequestHandlerInterface
         if (!preg_match('#^acct:([^@]+)@(.+)$#', $resource, $matches)) {
             return $this->error('invalid resource format', 400);
         }
-        $user = $matches[1] ?? '';
-        $domain = $matches[2] ?? '';
+        $user = $matches[1];
+        $domain = $matches[2];
 
         $serverParams = $this->config->getParams();
 

@@ -25,8 +25,10 @@ final class Actor
         public string $actorID,
         public ?PublicKey $rfc9421pk = null,
         public bool $fireProof = false,
-        protected ?int $primaryKey = null,
-    ){}
+        ?int $primaryKey = null,
+    ) {
+        $this->primaryKey = $primaryKey;
+    }
 
     /**
      * Instantiate a new object without a primary key

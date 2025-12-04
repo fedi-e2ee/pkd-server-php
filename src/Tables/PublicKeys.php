@@ -207,7 +207,11 @@ class PublicKeys extends Table
     public function getPublicKeysFor(string $actorName, string $keyId = ''): array
     {
         $results = [];
+        /** @var Actors $actorTable */
         $actorTable = $this->table('Actors');
+        if (!($actorTable instanceof Actors)) {
+            throw new TableException('Actor table not found');
+        }
         $actor = $actorTable->searchForActor($actorName);
         if (!$actor) {
             return [];
@@ -254,7 +258,7 @@ class PublicKeys extends Table
                     $inclusionProof = [];
                 }
 
-                $results[]= [
+                $results[] = [
                     'public-key' => PublicKey::fromString((string) $decrypt['publickey']),
                     'actorpublickeyid' => (int) $row['actorpublickeyid'],
                     'key-id' => (string) $row['key_id'],
@@ -289,7 +293,7 @@ class PublicKeys extends Table
         return $this->protocolMethod(
             $payload,
             'AddKey',
-            fn(MerkleLeaf $leaf, Payload $payload) => $this->addKeyCallback($leaf, $payload)
+            fn (MerkleLeaf $leaf, Payload $payload) => $this->addKeyCallback($leaf, $payload)
         );
     }
 
@@ -306,7 +310,7 @@ class PublicKeys extends Table
         return $this->protocolMethod(
             $payload,
             'RevokeKey',
-            fn(MerkleLeaf $leaf, Payload $payload) => $this->revokeKeyCallback($leaf, $payload)
+            fn (MerkleLeaf $leaf, Payload $payload) => $this->revokeKeyCallback($leaf, $payload)
         );
     }
 
@@ -323,7 +327,7 @@ class PublicKeys extends Table
         return $this->protocolMethod(
             $payload,
             'RevokeKeyThirdParty',
-            fn(MerkleLeaf $leaf, Payload $payload) => $this->revokeKeyThirdPartyCallback($leaf, $payload),
+            fn (MerkleLeaf $leaf, Payload $payload) => $this->revokeKeyThirdPartyCallback($leaf, $payload),
             self::ENCRYPTION_DISALLOWED
         );
     }
@@ -341,7 +345,7 @@ class PublicKeys extends Table
         return $this->protocolMethod(
             $payload,
             'MoveIdentity',
-            fn(MerkleLeaf $leaf, Payload $payload) => $this->moveIdentityCallback($leaf, $payload)
+            fn (MerkleLeaf $leaf, Payload $payload) => $this->moveIdentityCallback($leaf, $payload)
         );
     }
 
@@ -481,14 +485,14 @@ class PublicKeys extends Table
         foreach ($candidatePublicKeys as $row) {
             if ($sm->verify($row['public-key'])) {
                 // Valid key found!
-                 $this->db->update(
-                     'pkd_actors_publickeys',
-                     [
-                         'trusted' => false,
-                         'revokeleaf' => $leaf->getPrimaryKey(),
-                     ],
-                     ['actorpublickeyid' => $row['actorpublickeyid']]
-                 );
+                $this->db->update(
+                    'pkd_actors_publickeys',
+                    [
+                        'trusted' => false,
+                        'revokeleaf' => $leaf->getPrimaryKey(),
+                    ],
+                    ['actorpublickeyid' => $row['actorpublickeyid']]
+                );
                 return $this->getRecord($row['actorpublickeyid']);
             }
         }
@@ -645,7 +649,7 @@ class PublicKeys extends Table
         return $this->protocolMethod(
             $payload,
             'BurnDown',
-            fn(MerkleLeaf $leaf, Payload $payload) =>
+            fn (MerkleLeaf $leaf, Payload $payload) =>
                 $this->burnDownCallback($leaf, $payload)
         );
     }
@@ -744,7 +748,7 @@ class PublicKeys extends Table
         return $this->protocolMethod(
             $payload,
             'Fireproof',
-            fn(MerkleLeaf $leaf, Payload $payload) =>
+            fn (MerkleLeaf $leaf, Payload $payload) =>
                 $this->fireproofCallback($leaf, $payload)
         );
     }
@@ -828,7 +832,7 @@ class PublicKeys extends Table
         return $this->protocolMethod(
             $payload,
             'UndoFireproof',
-            fn(MerkleLeaf $leaf, Payload $payload) =>
+            fn (MerkleLeaf $leaf, Payload $payload) =>
                 $this->undoFireproofCallback($leaf, $payload)
         );
     }
@@ -912,7 +916,7 @@ class PublicKeys extends Table
         return $this->protocolMethod(
             $payload,
             'Checkpoint',
-            fn(MerkleLeaf $leaf, Payload $payload) => $this->checkpointCallback($leaf, $payload),
+            fn (MerkleLeaf $leaf, Payload $payload) => $this->checkpointCallback($leaf, $payload),
             self::ENCRYPTION_DISALLOWED
         );
     }

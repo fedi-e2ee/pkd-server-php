@@ -1,6 +1,5 @@
 <?php
 declare(strict_types=1);
-
 namespace FediE2EE\PKDServer\ActivityPub;
 
 use FediE2EE\PKD\Crypto\{
@@ -17,6 +16,7 @@ use ParagonIE\Certainty\{
     RemoteFetch
 };
 use SodiumException;
+
 use const FediE2EE\PKDServer\PKD_SERVER_ROOT;
 
 class WebFinger
@@ -232,9 +232,9 @@ class WebFinger
         }
 
         // Prefer FEP-521a over the incumbent publicKey approach:
-        /** @var object{type: string, id: string, controller: string, publicKeyMultibase: string} $assertionMethod */
         if (property_exists($actor, 'assertionMethod')) {
             if (is_array($actor->assertionMethod)) {
+                /** @var object{type: string, id: string, controller: string, publicKeyMultibase: string} $assertionMethod */
                 foreach ($actor->assertionMethod as $assertionMethod) {
                     try {
                         return PublicKey::fromMultibase($assertionMethod->publicKeyMultibase);

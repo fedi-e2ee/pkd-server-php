@@ -22,5 +22,8 @@ class ActorKey
         public MerkleLeaf $insertLeaf,
         public ?MerkleLeaf $revokeLeaf = null,
         public ?string $keyID = null,
-    ) {}
+        ?int $primaryKey = null,
+    ) {
+        $this->primaryKey = $primaryKey;
+    }
 }

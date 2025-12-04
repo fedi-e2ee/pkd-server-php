@@ -118,7 +118,7 @@ class TotpRotateTest extends TestCase
         $oldSecret = random_bytes(20);
         $totpTable->saveSecret($domain, $oldSecret);
 
-        $totpGenerator = new class {
+        $totpGenerator = new class() {
             use TOTPTrait;
         };
 

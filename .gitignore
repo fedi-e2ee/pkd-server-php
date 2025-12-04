@@ -11,3 +11,4 @@
 !/tmp/.gitkeep
 /vendor
 /.phpunit.cache
+/.php-cs-fixer.cache

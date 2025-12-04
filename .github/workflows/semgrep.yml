@@ -1,0 +1,21 @@
+name: Semgrep
+on:
+  pull_request: {}
+  workflow_dispatch: {}
+  push:
+    branches: ["main"]
+  schedule:
+    - cron: '19 23 * * *' # Sets Semgrep to scan every day at 23:19 UTC.
+    # Time chosen randomly.
+permissions:
+  contents: read
+jobs:
+  semgrep:
+    name: semgrep-oss/scan
+    runs-on: ubuntu-latest
+    container:
+      image: semgrep/semgrep
+    if: (github.actor != 'dependabot[bot]')
+    steps:
+      - uses: actions/checkout@v4
+      - run: semgrep scan --config auto

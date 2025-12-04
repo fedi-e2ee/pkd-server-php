@@ -92,11 +92,11 @@ class MerkleState extends Table
                 switch ($this->db->getDriver()) {
                     case 'mysql':
                         // Deadlock or lock wait timeout
-                        $shouldRetry = in_array($e->getCode(), ['40001', 'HY000']);
+                        $shouldRetry = in_array($e->getCode(), ['40001', 'HY000'], true);
                         break;
                     case 'pgsql':
                         // Deadlock detected or serialization failure
-                        $shouldRetry = in_array($e->getCode(), ['40001', '40P01']);
+                        $shouldRetry = in_array($e->getCode(), ['40001', '40P01'], true);
                         break;
                     case 'sqlite':
                         // Database is locked
@@ -225,6 +225,7 @@ class MerkleState extends Table
      *
      * @throws CryptoException
      * @throws NotImplementedException
+     * @throws PDOException
      * @throws SodiumException
      * @throws DependencyException
      */

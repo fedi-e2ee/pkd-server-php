@@ -11,7 +11,6 @@ use Override;
 
 class ActivityStreamQueue extends Table
 {
-
     #[Override]
     public function getCipher(): WrappedEncryptedRow
     {

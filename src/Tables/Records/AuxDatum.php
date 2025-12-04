@@ -15,11 +15,19 @@ class AuxDatum
     use TableRecordTrait;
 
     public function __construct(
-        Actor $actor,
-        string $auxDataType,
-        string $auxData,
-        bool $trusted,
-        MerkleLeaf $insertLeaf,
-        ?MerkleLeaf $revokeLeaf = null,
-    ) {}
+        public Actor $actor,
+        public string $auxDataType,
+        public string $auxData,
+        public bool $trusted,
+        public MerkleLeaf $insertLeaf,
+        public ?MerkleLeaf $revokeLeaf = null,
+        ?int $primaryKey = null,
+    ) {
+        $this->primaryKey = $primaryKey;
+    }
+
+    public function getActor(): Actor
+    {
+        return $this->actor;
+    }
 }

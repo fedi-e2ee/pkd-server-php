@@ -13,20 +13,21 @@ use FediE2EE\PKDServer\Exceptions\{
     TableException,
 };
 
+/**
+ * @property ?int $primaryKey
+ */
 trait TableRecordTrait
 {
+    public ?int $primaryKey = null;
+
     /** @var SymmetricKey[] */
     public array $symmetricKeys = [];
 
     /**
-     * @throws TableException
      * @psalm-suppress UndefinedThisPropertyFetch
      */
     public function hasPrimaryKey(): bool
     {
-        if (!property_exists($this,'primaryKey')) {
-            throw new TableException('Access violation: Orimary key property is undefined');
-        }
         return !is_null($this->primaryKey);
     }
 
@@ -36,9 +37,6 @@ trait TableRecordTrait
      */
     public function getPrimaryKey(): int
     {
-        if (!property_exists($this,'primaryKey')) {
-            throw new TableException('Access violation: Orimary key property is undefined');
-        }
         if (is_null($this->primaryKey)) {
             throw new TableException('Access violation: This record has no primary key');
         }

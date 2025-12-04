@@ -27,17 +27,19 @@ class MerkleLeaf
         public readonly string $publicKeyHash,
         public ?InclusionProof $inclusionProof = null,
         public readonly string $created = '',
-        public ?int $primaryKey = null
-    ) {}
+        ?int $primaryKey = null
+    ) {
+        $this->primaryKey = $primaryKey;
+    }
 
     public static function from(
         string $contents,
         SecretKey $sk
-    ): static {
+    ): self {
         $contentHash = hash('sha256', $contents);
         $signature = $sk->sign(sodium_hex2bin($contentHash));
         $publicKeyHash = hash('sha256', $sk->getPublicKey()->getBytes());
-        return new static(
+        return new self(
             $contents,
             $contentHash,
             $signature,
@@ -50,7 +52,7 @@ class MerkleLeaf
     /**
      * @api
      */
-    public static function fromPayload(Payload $payload, SecretKey $sk): static
+    public static function fromPayload(Payload $payload, SecretKey $sk): self
     {
         return self::from($payload->getMerkleTreePayload(), $sk);
     }

@@ -165,7 +165,7 @@ class AuxData extends Table
         return $this->protocolMethod(
             $payload,
             'AddAuxData',
-            fn(MerkleLeaf $leaf, Payload $payload) => $this->addAuxDataCallback($leaf, $payload)
+            fn (MerkleLeaf $leaf, Payload $payload) => $this->addAuxDataCallback($leaf, $payload)
         );
     }
 
@@ -186,6 +186,11 @@ class AuxData extends Table
      */
     protected function addAuxDataCallback(MerkleLeaf $leaf, Payload $payload): bool
     {
+        $publicKeyTable = $this->table('PublicKeys');
+        if (!($publicKeyTable instanceof PublicKeys)) {
+            throw new TableException('Public Keys table could not be loaded');
+        }
+
         $rawJson = $payload->rawJson;
         $decoded = json_decode($rawJson, true);
 
@@ -205,7 +210,7 @@ class AuxData extends Table
             throw new ProtocolException('Actor not found');
         }
 
-        $candidatePublicKeys = $this->table('PublicKeys')->getPublicKeysFor(
+        $candidatePublicKeys = $publicKeyTable->getPublicKeysFor(
             actorName: $actor->actorID,
             keyId: $decoded['key-id'] ?? ''
         );
@@ -258,7 +263,7 @@ class AuxData extends Table
         return $this->protocolMethod(
             $payload,
             'RevokeAuxData',
-            fn(MerkleLeaf $leaf, Payload $payload) => $this->revokeAuxDataCallback($leaf, $payload)
+            fn (MerkleLeaf $leaf, Payload $payload) => $this->revokeAuxDataCallback($leaf, $payload)
         );
     }
 
@@ -279,6 +284,11 @@ class AuxData extends Table
      */
     protected function revokeAuxDataCallback(MerkleLeaf $leaf, Payload $payload): bool
     {
+        $publicKeyTable = $this->table('PublicKeys');
+        if (!($publicKeyTable instanceof PublicKeys)) {
+            throw new TableException('Public Keys table could not be loaded');
+        }
+
         $rawJson = $payload->rawJson;
         $decoded = json_decode($rawJson, true);
 
@@ -298,7 +308,7 @@ class AuxData extends Table
             throw new ProtocolException('Actor not found');
         }
 
-        $candidatePublicKeys = $this->table('PublicKeys')->getPublicKeysFor(
+        $candidatePublicKeys = $publicKeyTable->getPublicKeysFor(
             actorName: $actor->actorID,
             keyId: $decoded['key-id'] ?? ''
         );

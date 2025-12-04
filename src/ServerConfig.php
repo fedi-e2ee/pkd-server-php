@@ -10,7 +10,7 @@ use FediE2EE\PKDServer\Dependency\{
 };
 use FediE2EE\PKDServer\Exceptions\DependencyException;
 use League\Route\Router;
-use Monolog\Logger;;
+use Monolog\Logger;
 use ParagonIE\Certainty\Fetch;
 use ParagonIE\CipherSweet\CipherSweet;
 use ParagonIE\EasyDB\EasyDB;
@@ -27,8 +27,7 @@ class ServerConfig
     private ?SigningKeys $signingKeys = null;
     private ?Environment $twig = null;
 
-    public function __construct(private readonly Params $params)
-    {}
+    public function __construct(private readonly Params $params) {}
 
     /**
      * @throws DependencyException

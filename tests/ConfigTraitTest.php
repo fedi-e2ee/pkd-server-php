@@ -21,7 +21,7 @@ class ConfigTraitTest extends TestCase
 
     public function testTable(): void
     {
-        $mock = new class {
+        $mock = new class() {
             use ConfigTrait;
         };
         $mock->injectConfig($this->getConfig());
@@ -36,7 +36,7 @@ class ConfigTraitTest extends TestCase
 
     public function testTableException(): void
     {
-        $mock = new class {
+        $mock = new class() {
             use ConfigTrait;
         };
         $mock->injectConfig($this->getConfig());
@@ -46,7 +46,7 @@ class ConfigTraitTest extends TestCase
 
     public function testConfig(): void
     {
-        $mock = new class {
+        $mock = new class() {
             use ConfigTrait;
         };
         $config = $this->getConfig();
@@ -56,7 +56,7 @@ class ConfigTraitTest extends TestCase
 
     public function testWebFinger(): void
     {
-        $mock = new class {
+        $mock = new class() {
             use ConfigTrait;
         };
         $mock->injectConfig($this->getConfig());

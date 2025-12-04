@@ -96,7 +96,7 @@ class GetAuxData implements RequestHandlerInterface
         // Make sure Aux Data ID is populated:
         $auxDataID = $request->getAttribute('aux_data_id') ?? '';
         if (empty($auxDataID)) {
-            return (new Redirect('/api/actors/' . urlencode($actorID) . '/auxiliary' ))->respond();
+            return (new Redirect('/api/actors/' . urlencode($actorID) . '/auxiliary'))->respond();
         }
 
         // Ensure actor exists

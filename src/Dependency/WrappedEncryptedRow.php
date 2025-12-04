@@ -131,7 +131,7 @@ class WrappedEncryptedRow extends EncryptedRow
                 continue;
             }
             $wrapIdx = $this->wrappedColumnName[$field];
-            $wrapKey = $this->wrapKey($symmetricKeyMap[$field], $field);;
+            $wrapKey = $this->wrapKey($symmetricKeyMap[$field], $field);
             // Store wrapped key in row:
             $outRow[$wrapIdx] = $wrapKey;
             // Cache plaintext key here:

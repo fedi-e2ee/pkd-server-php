@@ -17,13 +17,7 @@ use ParagonIE\HPKE\AEAD\{
     AES256GCM,
     ChaCha20Poly1305
 };
-use ParagonIE\HPKE\{
-    HPKE,
-    HPKEException,
-    KDF\HKDF,
-    KEM\DHKEM\Curve,
-    KEM\DiffieHellmanKEM
-};
+use ParagonIE\HPKE\{HPKE, HPKEException, KDF\HKDF, KEM\DHKEM\Curve, KEM\DHKEM\EncapsKey, KEM\DiffieHellmanKEM};
 use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Http\Message\{
     ServerRequestInterface,
@@ -51,6 +45,9 @@ class ServerPublicKey implements RequestHandlerInterface
         $hpke = $this->config()->getHPKE();
         $cs = $this->cipherSuiteString($hpke->cs);
         $encapsKey = $hpke->encapsKey;
+        if (!($encapsKey instanceof EncapsKey)) {
+            throw new TypeError('Only DHKEM encaps keys are expected');
+        }
         return $this->json([
             '!pkd-context' => 'fedi-e2ee:v1/api/server-public-key',
             'current-time' => $this->time(),
