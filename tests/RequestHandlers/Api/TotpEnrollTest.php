@@ -69,7 +69,6 @@ use PHPUnit\Framework\TestCase;
 #[UsesClass(ActorKey::class)]
 #[UsesClass(MerkleLeaf::class)]
 #[UsesClass(TOTP::class)]
-#[UsesClass(WebFinger::class)]
 class TotpEnrollTest extends TestCase
 {
     use ConfigTrait;
