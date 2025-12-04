@@ -5,6 +5,7 @@ namespace FediE2EE\PKDServer\Dependency;
 use Monolog\Handler\AbstractProcessingHandler;
 use Monolog\Level;
 use Monolog\LogRecord;
+use Override;
 use ParagonIE\EasyDB\EasyDB;
 use PDOStatement;
 
@@ -26,6 +27,7 @@ class EasyDBHandler extends AbstractProcessingHandler
         );
     }
 
+    #[Override]
     protected function write(LogRecord $record): void
     {
         if (is_null($this->statement)) {
