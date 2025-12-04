@@ -21,7 +21,10 @@ class AuxDatum
         public bool $trusted,
         public MerkleLeaf $insertLeaf,
         public ?MerkleLeaf $revokeLeaf = null,
-    ) {}
+        ?int $primaryKey = null,
+    ) {
+        $this->primaryKey = $primaryKey;
+    }
 
     public function getActor(): Actor
     {

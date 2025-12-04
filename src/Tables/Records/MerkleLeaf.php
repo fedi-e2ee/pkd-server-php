@@ -27,8 +27,10 @@ class MerkleLeaf
         public readonly string $publicKeyHash,
         public ?InclusionProof $inclusionProof = null,
         public readonly string $created = '',
-        public ?int $primaryKey = null
-    ) {}
+        ?int $primaryKey = null
+    ) {
+        $this->primaryKey = $primaryKey;
+    }
 
     public static function from(
         string $contents,
