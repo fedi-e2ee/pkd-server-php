@@ -55,5 +55,9 @@ foreach ($files as $file) {
 }
 
 // Make lazy copies of these config classes so that they can be modified without affecting Git history.
-copy(PKD_SERVER_ROOT . '/config/database.php', PKD_SERVER_ROOT . '/config/local/database.php');
-copy(PKD_SERVER_ROOT . '/config/params.php', PKD_SERVER_ROOT . '/config/local/params.php');
+if (!file_exists(PKD_SERVER_ROOT . '/config/local/database.php')) {
+    @copy(PKD_SERVER_ROOT . '/config/database.php', PKD_SERVER_ROOT . '/config/local/database.php');
+}
+if (!file_exists(PKD_SERVER_ROOT . '/config/local/params.php')) {
+    @copy(PKD_SERVER_ROOT . '/config/params.php', PKD_SERVER_ROOT . '/config/local/params.php');
+}
