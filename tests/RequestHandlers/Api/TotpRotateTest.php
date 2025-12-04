@@ -15,7 +15,7 @@ use FediE2EE\PKD\Crypto\{
 use FediE2EE\PKDServer\RequestHandlers\Api\{
     TotpRotate
 };
-use FediE2EE\PKDServer\{
+use FediE2EE\PKDServer\{ActivityPub\WebFinger,
     Dependency\HPKE,
     Dependency\InjectConfigStrategy,
     Dependency\WrappedEncryptedRow,
@@ -23,8 +23,7 @@ use FediE2EE\PKDServer\{
     Protocol\Payload,
     ServerConfig,
     Table,
-    TableCache
-};
+    TableCache};
 use FediE2EE\PKDServer\Tables\{
     Actors,
     MerkleState,
@@ -65,6 +64,7 @@ use PHPUnit\Framework\TestCase;
 #[UsesClass(ActorKey::class)]
 #[UsesClass(MerkleLeaf::class)]
 #[UsesClass(TOTP::class)]
+#[UsesClass(WebFinger::class)]
 class TotpRotateTest extends TestCase
 {
     use HttpTestTrait;
