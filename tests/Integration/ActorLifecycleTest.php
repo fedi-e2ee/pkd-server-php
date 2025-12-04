@@ -42,6 +42,7 @@ use FediE2EE\PKDServer\Tables\{
     PublicKeys
 };
 use FediE2EE\PKDServer\Tables\Records\{
+    Actor as ActorRecord,
     ActorKey,
     MerkleLeaf
 };
@@ -71,6 +72,7 @@ use SodiumException;
 #[CoversClass(WebFinger::class)]
 #[UsesClass(Actor::class)]
 #[UsesClass(ActorKey::class)]
+#[UsesClass(ActorRecord::class)]
 #[UsesClass(Actors::class)]
 #[UsesClass(MerkleLeaf::class)]
 #[UsesClass(MerkleState::class)]
