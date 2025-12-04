@@ -9,12 +9,16 @@ use FediE2EE\PKDServer\Tables\{
     Actors,
     TOTP
 };
-use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\{
+    CoversNothing,
+    UsesClass
+};
 use PHPUnit\Framework\TestCase;
 use FediE2EE\PKDServer\Traits\ConfigTrait;
 
-#[CoversClass(ConfigTrait::class)]
-#[CoversClass(TableCache::class)]
+#[CoversNothing]
+#[UsesClass(ConfigTrait::class)]
+#[UsesClass(TableCache::class)]
 class ConfigTraitTest extends TestCase
 {
     use HttpTestTrait;
