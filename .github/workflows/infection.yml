@@ -1,6 +1,7 @@
 name: Mutation Testing
 
 on:
+  push: # undo later
   create:
     tags:
      - v*
