@@ -109,6 +109,14 @@ CREATE TABLE IF NOT EXISTS pkd_activitystream_queue (
     modified TIMESTAMP DEFAULT NOW()
 );
 
+CREATE TABLE IF NOT EXISTS pkd_log (
+    logid BIGSERIAL PRIMARY KEY,
+    channel TEXT,
+    level INTEGER,
+    message TEXT,
+    created TIMESTAMP DEFAULT NOW()
+);
+
 -- Update modification time triggers
 DROP TRIGGER IF EXISTS update_pkd_actors_modtime ON pkd_actors;
 CREATE TRIGGER update_pkd_actors_modtime

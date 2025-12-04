@@ -10,6 +10,7 @@ use FediE2EE\PKDServer\Dependency\{
 };
 use FediE2EE\PKDServer\Exceptions\DependencyException;
 use League\Route\Router;
+use Monolog\Logger;;
 use ParagonIE\Certainty\Fetch;
 use ParagonIE\CipherSweet\CipherSweet;
 use ParagonIE\EasyDB\EasyDB;
@@ -21,6 +22,7 @@ class ServerConfig
     private ?EasyDB $db = null;
     private ?Fetch $caCertFetch = null;
     private ?HPKE $hpke = null;
+    private ?Logger $logger = null;
     private ?Router $router = null;
     private ?SigningKeys $signingKeys = null;
     private ?Environment $twig = null;
@@ -79,6 +81,14 @@ class ServerConfig
             throw new DependencyException('hpke not injected');
         }
         return $this->hpke;
+    }
+
+    public function getLogger(): Logger
+    {
+        if (is_null($this->logger)) {
+            throw new DependencyException('logger not injected');
+        }
+        return $this->logger;
     }
 
     public function getParams(): Params
@@ -143,6 +153,12 @@ class ServerConfig
     public function withHPKE(HPKE $hpke): static
     {
         $this->hpke = $hpke;
+        return $this;
+    }
+
+    public function withLogger(Logger $logger): static
+    {
+        $this->logger = $logger;
         return $this;
     }
 

@@ -25,6 +25,7 @@
     "laminas/laminas-httphandlerrunner": "^2",
     "landrok/activitypub": "^0",
     "league/route": "^6",
+    "monolog/monolog": "^3.9",
     "paragonie/certainty": "^3",
     "paragonie/ciphersweet": "^4.9",
     "paragonie/constant_time_encoding": "^3",

@@ -102,7 +102,7 @@ class TotpEnroll implements RequestHandlerInterface
                 return $this->error('Missing required fields', 400);
             }
         } catch (Throwable $ex) {
-            // TODO: log $ex
+            $this->config()->getLogger()->error($ex->getMessage());
             return $this->error('Invalid JSON', 400);
         }
 

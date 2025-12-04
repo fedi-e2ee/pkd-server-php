@@ -70,7 +70,7 @@ class ASQueue
                     $this->replyFailure($enqueued, $ex);
                 }
             } catch (Throwable $ex) {
-                // TODO: log failure!
+                $this->config->getLogger()->error($ex->getMessage());
                 echo $ex->getMessage(), PHP_EOL;
             }
 

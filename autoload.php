@@ -23,6 +23,10 @@ $GLOBALS['config'] = new ServerConfig(require_once PKD_SERVER_ROOT . '/config/pa
     ->withTwig(require_once PKD_SERVER_ROOT . '/config/twig.php')
 ;
 
+// We have to guarantee `$GLOBALS['config']` exists before calling logger.php
+$GLOBALS['config']
+    ->withLogger(require_once PKD_SERVER_ROOT . '/config/logs.php');
+
 // Set the config injection strategy to the router
 $GLOBALS['config']
     ->getRouter()
