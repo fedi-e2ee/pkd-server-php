@@ -5,6 +5,9 @@ on:
     branches:
       - main
   pull_request:
+  schedule:
+    - cron: '50 9 * * 1' # Run mutation tests every Monday at 09:50 UTC.
+    # Time chosen randomly.
 
 jobs:
   fuzz:
