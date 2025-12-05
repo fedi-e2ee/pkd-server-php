@@ -218,14 +218,15 @@ class WebFinger
             }
             foreach ($jrd['links'] as $link) {
                 if ($link['rel'] === 'self' && $link['type'] === 'application/activity+json') {
-                    return $this->getPublicKeyFromActivityPub($link['href']);
+                    return $this->getPublicKeyFromActivityPub($link['href'])->toString();
                 }
             }
+            throw new FetchException("Could not fetch public key for {$actorUrl}");
         });
         if (!$publicKey) {
             throw new FetchException("Could not fetch public key for {$actorUrl}");
         }
-        return $publicKey;
+        return PublicKey::fromString($publicKey);
     }
 
     /**
