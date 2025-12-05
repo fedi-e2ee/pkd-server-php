@@ -35,11 +35,14 @@ use FediE2EE\PKDServer\Exceptions\{
 };
 use FediE2EE\PKDServer\ActivityPub\WebFinger;
 use FediE2EE\PKDServer\Dependency\WrappedEncryptedRow;
-use FediE2EE\PKDServer\Protocol;
+use FediE2EE\PKDServer\{
+    AppCache,
+    Protocol,
+    ServerConfig,
+    Table,
+    TableCache
+};
 use FediE2EE\PKDServer\Protocol\Payload;
-use FediE2EE\PKDServer\ServerConfig;
-use FediE2EE\PKDServer\Table;
-use FediE2EE\PKDServer\TableCache;
 use FediE2EE\PKDServer\Tables\{
     Actors,
     AuxData,
@@ -65,6 +68,7 @@ use PHPUnit\Framework\TestCase;
 use SodiumException;
 
 #[CoversClass(Protocol::class)]
+#[UsesClass(AppCache::class)]
 #[UsesClass(ActorKey::class)]
 #[UsesClass(ActorRecord::class)]
 #[UsesClass(Actors::class)]
