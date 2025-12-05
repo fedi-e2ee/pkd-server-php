@@ -3,8 +3,8 @@ name: CI
 on: [push, pull_request]
 
 jobs:
-  tests:
-    name: PHP ${{ matrix.php-versions }} on ${{ matrix.operating-system }} with ${{ matrix.db }}${{ matrix.redis && ' with redis' || '' }}
+  tests-without-redis:
+    name: PHP ${{ matrix.php-versions }} on ${{ matrix.operating-system }} with ${{ matrix.db }}
     runs-on: ${{ matrix.operating-system }}
     strategy:
       fail-fast: false
@@ -12,7 +12,101 @@ jobs:
         operating-system: ['ubuntu-latest']
         php-versions: ['8.4', '8.5']
         db: ['mysql', 'pgsql', 'sqlite']
-        redis: [false, true]
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_PASSWORD: pkd_test
+          POSTGRES_DB: pkd_test
+          POSTGRES_USER: pkd_test
+        ports:
+          - 5432:5432
+        options: --health-cmd="pg_isready" --health-interval=10s --health-timeout=5s --health-retries=3
+      mysql:
+        image: mysql:8
+        env:
+          MYSQL_ROOT_PASSWORD: pkd_test
+          MYSQL_DATABASE: pkd_test
+          MYSQL_USER: pkd_test
+          MYSQL_PASSWORD: pkd_test
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-versions }}
+          extensions: mbstring, intl, pdo_mysql, pdo_pgsql, pdo_sqlite, sodium
+          ini-values: error_reporting=-1, display_errors=On
+          coverage: none
+
+      - name: Install Composer dependencies
+        uses: "ramsey/composer-install@v3"
+
+      - name: Configure Database
+        run: |
+          mkdir -p config/local
+          if [ "${{ matrix.db }}" = "mysql" ]; then
+            echo "<?php
+          declare(strict_types=1);
+          namespace FediE2EE\PKDServer\Config;
+
+          use ParagonIE\EasyDB\EasyDBCache;
+          use PDO;
+
+          return new EasyDBCache(
+              new PDO(
+                  'mysql:host=127.0.0.1;port=3306;dbname=pkd_test',
+                  'pkd_test',
+                  'pkd_test'
+              )
+          );" > config/local/database.php
+          elif [ "${{ matrix.db }}" = "pgsql" ]; then
+            echo "<?php
+          declare(strict_types=1);
+          namespace FediE2EE\PKDServer\Config;
+
+          use ParagonIE\EasyDB\EasyDBCache;
+          use PDO;
+
+          return new EasyDBCache(
+              new PDO(
+                  'pgsql:host=127.0.0.1;port=5432;dbname=pkd_test',
+                  'pkd_test',
+                  'pkd_test'
+              )
+          );" > config/local/database.php
+          else
+            echo "<?php
+          declare(strict_types=1);
+          namespace FediE2EE\PKDServer\Config;
+
+          use ParagonIE\EasyDB\EasyDBCache;
+          use PDO;
+
+          return new EasyDBCache(new PDO('sqlite::memory:'));" > config/local/database.php
+          fi
+
+      - name: Setup Databases
+        run: php cmd/init-database.php
+
+      - name: PHPUnit tests
+        run: vendor/bin/phpunit --testsuite unit
+
+  tests-with-redis:
+    name: PHP ${{ matrix.php-versions }} on ${{ matrix.operating-system }} with ${{ matrix.db }} with redis
+    runs-on: ${{ matrix.operating-system }}
+    strategy:
+      fail-fast: false
+      matrix:
+        operating-system: ['ubuntu-latest']
+        php-versions: ['8.4', '8.5']
+        db: ['mysql', 'pgsql', 'sqlite']
     services:
       postgres:
         image: postgres:16
@@ -34,12 +128,10 @@ jobs:
           - 3306:3306
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
       redis:
-        if: matrix.redis
         image: redis
         ports:
           - 6379:6379
         options: --entrypoint redis-server --health-cmd "redis-cli ping" --health-interval 10s --health-timeout 5s --health-retries 3
-
 
     steps:
       - name: Checkout
@@ -49,7 +141,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php-versions }}
-          extensions: mbstring, intl, pdo_mysql, pdo_pgsql, pdo_sqlite, sodium, ${{ matrix.redis && 'redis' || '' }}
+          extensions: mbstring, intl, pdo_mysql, pdo_pgsql, pdo_sqlite, sodium, redis
           ini-values: error_reporting=-1, display_errors=On
           coverage: none
 
