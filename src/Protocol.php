@@ -142,7 +142,7 @@ class Protocol
         if (!is_null($this->webFinger)) {
             return $this->webFinger;
         }
-        return new WebFinger($this->config, $http, $this->config->getCaCertFetch(), $this->config);
+        return new WebFinger($this->config, $http, $this->config->getCaCertFetch());
     }
 
     /**
