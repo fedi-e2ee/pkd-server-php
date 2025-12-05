@@ -10,6 +10,7 @@ use FediE2EE\PKD\Crypto\Exceptions\{
 use FediE2EE\PKD\Crypto\SecretKey;
 use FediE2EE\PKDServer\ActivityPub\WebFinger;
 use FediE2EE\PKDServer\Exceptions\FetchException;
+use FediE2EE\PKDServer\AppCache;
 use FediE2EE\PKDServer\ServerConfig;
 use FediE2EE\PKDServer\Tests\HttpTestTrait;
 use GuzzleHttp\{
@@ -32,6 +33,7 @@ use ReflectionProperty;
 use SodiumException;
 
 #[CoversClass(WebFinger::class)]
+#[UsesClass(AppCache::class)]
 #[UsesClass(ServerConfig::class)]
 class WebFingerTest extends TestCase
 {
