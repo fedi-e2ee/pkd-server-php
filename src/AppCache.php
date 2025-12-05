@@ -65,7 +65,7 @@ class AppCache implements CacheInterface
     public function set(string $key, mixed $value, DateInterval|int|null $ttl = null): bool
     {
         if (!is_null($this->redis)) {
-            $this->redis->setex($key, $value, $this->processTTL($ttl));
+            $this->redis->setex($key, $this->processTTL($ttl), $value);
         } else {
             self::$inMemoryCache[$this->namespace][$key] = $value;
         }
