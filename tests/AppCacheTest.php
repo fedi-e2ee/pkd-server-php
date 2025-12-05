@@ -6,9 +6,12 @@ use FediE2EE\PKDServer\AppCache;
 use FediE2EE\PKDServer\Meta\Params;
 use FediE2EE\PKDServer\ServerConfig;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(AppCache::class)]
+#[UsesClass(ServerConfig::class)]
+#[UsesClass(Params::class)]
 class AppCacheTest extends TestCase
 {
     use HttpTestTrait;
