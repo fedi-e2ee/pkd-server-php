@@ -80,7 +80,7 @@ class WebFinger
     {
         $result = $this->canonicalCache->cache(
             $actorUsernameOrUrl,
-            fn() => $this->lookup($actorUsernameOrUrl)
+            fn () => $this->lookup($actorUsernameOrUrl)
         );
         if (!$result) {
             throw new CacheException('Could not lookup actor ' . $actorUsernameOrUrl);
