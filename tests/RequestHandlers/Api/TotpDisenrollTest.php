@@ -16,6 +16,7 @@ use FediE2EE\PKDServer\RequestHandlers\Api\{
 };
 use FediE2EE\PKDServer\{
     ActivityPub\WebFinger,
+    AppCache,
     Dependency\InjectConfigStrategy,
     Dependency\WrappedEncryptedRow,
     Protocol,
@@ -49,6 +50,7 @@ use PHPUnit\Framework\TestCase;
 
 #[CoversClass(TotpDisenroll::class)]
 #[UsesClass(WebFinger::class)]
+#[UsesClass(AppCache::class)]
 #[UsesClass(WrappedEncryptedRow::class)]
 #[UsesClass(InjectConfigStrategy::class)]
 #[UsesClass(Protocol::class)]
