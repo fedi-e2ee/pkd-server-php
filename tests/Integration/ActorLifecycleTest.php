@@ -24,6 +24,7 @@ use FediE2EE\PKDServer\RequestHandlers\Api\{
 };
 use FediE2EE\PKDServer\{
     ActivityPub\WebFinger,
+    AppCache,
     Dependency\WrappedEncryptedRow,
     Protocol,
     ServerConfig,
@@ -74,6 +75,7 @@ use SodiumException;
 #[UsesClass(ActorKey::class)]
 #[UsesClass(ActorRecord::class)]
 #[UsesClass(Actors::class)]
+#[UsesClass(AppCache::class)]
 #[UsesClass(MerkleLeaf::class)]
 #[UsesClass(MerkleState::class)]
 #[UsesClass(PublicKeys::class)]
