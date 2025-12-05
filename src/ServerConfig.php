@@ -16,6 +16,7 @@ use ParagonIE\CipherSweet\CipherSweet;
 use ParagonIE\EasyDB\EasyDB;
 use Predis\Client as RedisClient;
 use Twig\Environment;
+use Throwable;
 
 class ServerConfig
 {
@@ -175,6 +176,14 @@ class ServerConfig
 
     public function withOptionalRedisClient(?RedisClient $redis = null): static
     {
+        if (!is_null($redis)) {
+            try {
+                $redis->connect();
+            } catch (Throwable) {
+                // If we cannot connect, fallback to in-memory caching
+                $redis = null;
+            }
+        }
         $this->redis = $redis;
         return $this;
     }

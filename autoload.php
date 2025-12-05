@@ -19,7 +19,6 @@ $GLOBALS['pkdConfig'] = new ServerConfig(require_once PKD_SERVER_ROOT . '/config
     ->withDatabase(require_once PKD_SERVER_ROOT . '/config/database.php')
     ->withRouter(require_once PKD_SERVER_ROOT . '/config/routes.php')
     ->withHPKE(require_once PKD_SERVER_ROOT . '/config/hpke.php')
-    ->withOptionalRedisClient(require_once PKD_SERVER_ROOT . '/config/redis.php')
     ->withSigningKeys(require_once PKD_SERVER_ROOT . '/config/signing-keys.php')
     ->withTwig(require_once PKD_SERVER_ROOT . '/config/twig.php')
 ;
@@ -27,6 +26,10 @@ $GLOBALS['pkdConfig'] = new ServerConfig(require_once PKD_SERVER_ROOT . '/config
 // We have to guarantee `$GLOBALS['pkdConfig']` exists before calling logger.php
 $GLOBALS['pkdConfig']
     ->withLogger(require_once PKD_SERVER_ROOT . '/config/logs.php');
+
+// Optional dependencies go last:
+$GLOBALS['pkdConfig']
+    ->withOptionalRedisClient(require_once PKD_SERVER_ROOT . '/config/redis.php');
 
 // Set the config injection strategy to the router
 $GLOBALS['pkdConfig']
