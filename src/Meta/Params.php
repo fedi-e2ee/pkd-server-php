@@ -15,5 +15,6 @@ readonly class Params
         public int $otpMaxLife = 120,
         public string $actorUsername = 'pubkeydir',
         public string $hostname = 'localhost',
+        public string $cacheKey = '',
     ) {}
 }

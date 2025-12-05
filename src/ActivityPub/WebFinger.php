@@ -7,34 +7,51 @@ use FediE2EE\PKD\Crypto\{
     Exceptions\NetworkException,
     PublicKey
 };
-use FediE2EE\PKDServer\Exceptions\FetchException;
+use FediE2EE\PKDServer\Exceptions\{
+    CacheException,
+    DependencyException,
+    FetchException
+};
+use FediE2EE\PKDServer\{
+    AppCache,
+    ServerConfig
+};
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use ParagonIE\Certainty\{
     Exception\CertaintyException,
-    Fetch,
-    RemoteFetch
+    Fetch
 };
+use Psr\SimpleCache\InvalidArgumentException;
 use SodiumException;
-
-use const FediE2EE\PKDServer\PKD_SERVER_ROOT;
 
 class WebFinger
 {
-    protected static array $cache = [];
-    protected static array $canonicalCache = [];
-    protected static array $inboxCache = [];
+    protected AppCache $canonicalCache;
+    protected AppCache $inboxCache;
+    protected AppCache $pkCache;
+
     protected Client $http;
     protected Fetch $fetch;
 
     /**
      * @throws CertaintyException
+     * @throws DependencyException
      * @throws SodiumException
      */
-    public function __construct(?Client $client = null, ?Fetch $fetch = null)
+    public function __construct(?ServerConfig $config = null, ?Client $client = null, ?Fetch $fetch = null)
     {
+        if (is_null($config)) {
+            $config = $GLOBALS['pkdConfig'];
+            if (!($config instanceof ServerConfig)) {
+                throw new DependencyException('config not injected');
+            }
+        }
+        $this->canonicalCache = new AppCache($config, 'webfinger-canonical', 3600);
+        $this->inboxCache = new AppCache($config, 'webfinger-inbox', 60);
+        $this->pkCache = new AppCache($config, 'webfinger-public-key', 60);
         if (is_null($fetch)) {
-            $fetch = new RemoteFetch(PKD_SERVER_ROOT . '/tmp');
+            $fetch = $config->getCaCertFetch();
         }
         $this->fetch = $fetch;
         if (is_null($client)) {
@@ -43,11 +60,16 @@ class WebFinger
         $this->http = $client;
     }
 
+    /**
+     * @api
+     */
     public function clearCaches(): void
     {
-        self::$cache = [];
-        self::$canonicalCache = [];
-        self::$inboxCache = [];
+        if (!$this->canonicalCache->clear()) {
+            throw new CacheException();
+        }
+        $this->inboxCache->clear();
+        $this->pkCache->clear();
     }
 
     /**
@@ -56,10 +78,14 @@ class WebFinger
      */
     public function canonicalize(string $actorUsernameOrUrl): string
     {
-        if (!array_key_exists($actorUsernameOrUrl, self::$canonicalCache)) {
-            self::$canonicalCache[$actorUsernameOrUrl] = $this->lookup($actorUsernameOrUrl);
+        $result = $this->canonicalCache->cache(
+            $actorUsernameOrUrl,
+            fn () => $this->lookup($actorUsernameOrUrl)
+        );
+        if (!$result) {
+            throw new CacheException('Could not lookup actor ' . $actorUsernameOrUrl);
         }
-        return self::$canonicalCache[$actorUsernameOrUrl];
+        return $result;
     }
 
     /**
@@ -85,7 +111,7 @@ class WebFinger
      */
     public function fetch(string $identifier): array
     {
-        [, $host] = explode('@', $identifier);
+        [, $host] = explode('@', ltrim($identifier, '@'));
         $url = "https://{$host}/.well-known/webfinger?resource=acct:{$identifier}";
         $response = $this->http->get($url);
         if ($response->getStatusCode() !== 200) {
@@ -140,25 +166,14 @@ class WebFinger
         return $actor['id'];
     }
 
-
     /**
-     * @api
+     * @throws CacheException
+     * @throws GuzzleException
+     * @throws NetworkException
      */
-    public static function clearCache(): void
-    {
-        self::$cache = [];
-    }
-    /**
-     * @api
-     */
-    public static function clearCanonicalCache(): void
-    {
-        self::$canonicalCache = [];
-    }
-
     public function getInboxUrl(string $actorUrl): string
     {
-        if (!array_key_exists($actorUrl, self::$inboxCache)) {
+        $url = $this->inboxCache->cache($actorUrl, function () use ($actorUrl) {
             $canonicalUrl = $this->canonicalize($actorUrl);
             $raw = $this->http->get(
                 $canonicalUrl . '.json',
@@ -168,10 +183,12 @@ class WebFinger
             if (!is_object($decoded)) {
                 throw new NetworkException('Could not decode ' . $canonicalUrl);
             }
-            $url = $decoded->inbox;
-            self::$inboxCache[$actorUrl] = $url;
+            return $decoded->inbox;
+        });
+        if (!$url) {
+            throw new CacheException('Could not retrieve ' . $actorUrl);
         }
-        return self::$inboxCache[$actorUrl];
+        return $url;
     }
 
     /**
@@ -180,36 +197,36 @@ class WebFinger
      */
     public function getPublicKey(string $actorUrl): PublicKey
     {
-        if (isset(self::$cache[$actorUrl])) {
-            return self::$cache[$actorUrl];
-        }
+        $publicKey = $this->pkCache->cache($actorUrl, function () use ($actorUrl) {
+            $parsed = parse_url($actorUrl);
+            $host = $parsed['host'];
+            $path = $parsed['path'];
+            $username = trim(str_replace('/', '', $path));
 
-        $parsed = parse_url($actorUrl);
-        $host = $parsed['host'];
-        $path = $parsed['path'];
-        $username = trim(str_replace('/', '', $path));
-
-        try {
-            $url = "https://{$host}/.well-known/webfinger?resource=acct:{$username}@{$host}";
-            $response = $this->http->get($url);
-        } catch (GuzzleException $e) {
-            throw new FetchException("Could not fetch WebFinger data for {$actorUrl}", 0, $e);
-        }
-        if ($response->getStatusCode() !== 200) {
-            throw new FetchException("Could not fetch WebFinger data for {$actorUrl}");
-        }
-        $jrd = json_decode($response->getBody()->getContents(), true);
-        if (!is_array($jrd)) {
-            throw new FetchException("Could not parse WebFinger data for {$actorUrl}");
-        }
-        foreach ($jrd['links'] as $link) {
-            if ($link['rel'] === 'self' && $link['type'] === 'application/activity+json') {
-                $publicKey = $this->getPublicKeyFromActivityPub($link['href']);
-                self::$cache[$actorUrl] = $publicKey;
-                return $publicKey;
+            try {
+                $url = "https://{$host}/.well-known/webfinger?resource=acct:{$username}@{$host}";
+                $response = $this->http->get($url);
+            } catch (GuzzleException $e) {
+                throw new FetchException("Could not fetch WebFinger data for {$actorUrl}", 0, $e);
             }
+            if ($response->getStatusCode() !== 200) {
+                throw new FetchException("Could not fetch WebFinger data for {$actorUrl}");
+            }
+            $jrd = json_decode($response->getBody()->getContents(), true);
+            if (!is_array($jrd)) {
+                throw new FetchException("Could not parse WebFinger data for {$actorUrl}");
+            }
+            foreach ($jrd['links'] as $link) {
+                if ($link['rel'] === 'self' && $link['type'] === 'application/activity+json') {
+                    return $this->getPublicKeyFromActivityPub($link['href'])->toString();
+                }
+            }
+            throw new FetchException("Could not fetch public key for {$actorUrl}");
+        });
+        if (!$publicKey) {
+            throw new FetchException("Could not fetch public key for {$actorUrl}");
         }
-        throw new FetchException("Could not find ActivityPub link for {$actorUrl}");
+        return PublicKey::fromString($publicKey);
     }
 
     /**
@@ -260,10 +277,17 @@ class WebFinger
      * @param string $index
      * @param string $value
      * @return void
+     *
+     * @throws SodiumException
+     * @throws InvalidArgumentException
      */
-    public static function setCanonicalForTesting(string $index, string $value): void
+    public function setCanonicalForTesting(string $index, string $value): void
     {
-        self::$canonicalCache[$index] = $value;
+        // Use deriveKey() to get the namespace prefix:
+        $key = $this->canonicalCache->deriveKey($index);
+        if (!$this->canonicalCache->set($key, $value)) {
+            throw new CacheException('Could not set ' . $index . ' to ' . $key);
+        }
     }
 
     /**

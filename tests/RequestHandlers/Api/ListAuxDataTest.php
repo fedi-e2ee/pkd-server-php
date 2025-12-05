@@ -73,9 +73,12 @@ class ListAuxDataTest extends TestCase
         $keypair = SecretKey::generate();
         $config = $this->getConfig();
         $protocol = new Protocol($config);
-        $webFinger = new WebFinger($this->getMockClient([
-            new Response(200, ['Content-Type' => 'application/json'], '{"subject":"' . $canonical . '"}')
-        ]));
+        $webFinger = new WebFinger(
+            $config,
+            $this->getMockClient([
+                new Response(200, ['Content-Type' => 'application/json'], '{"subject":"' . $canonical . '"}')
+            ])
+        );
         $protocol->setWebFinger($webFinger);
 
         /** @var MerkleState $merkleState */

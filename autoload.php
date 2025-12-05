@@ -27,6 +27,10 @@ $GLOBALS['pkdConfig'] = new ServerConfig(require_once PKD_SERVER_ROOT . '/config
 $GLOBALS['pkdConfig']
     ->withLogger(require_once PKD_SERVER_ROOT . '/config/logs.php');
 
+// Optional dependencies go last:
+$GLOBALS['pkdConfig']
+    ->withOptionalRedisClient(require_once PKD_SERVER_ROOT . '/config/redis.php');
+
 // Set the config injection strategy to the router
 $GLOBALS['pkdConfig']
     ->getRouter()

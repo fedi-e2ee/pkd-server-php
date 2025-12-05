@@ -9,8 +9,12 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\ServerRequest;
+use ParagonIE\Certainty\Exception\CertaintyException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\SimpleCache\InvalidArgumentException;
+use Random\RandomException;
+use SodiumException;
 
 /**
  * Helper methods for writing unit tests with HTTP messages
@@ -34,6 +38,13 @@ trait HttpTestTrait
         return new Client(['handler' => $handlerStack]);
     }
 
+    /**
+     * @throws RandomException
+     * @throws CertaintyException
+     * @throws DependencyException
+     * @throws InvalidArgumentException
+     * @throws SodiumException
+     */
     public function makeDummyActor(string $domain = 'example.com'): array
     {
         $username = 'test';
@@ -44,7 +55,8 @@ trait HttpTestTrait
         }
         $input = $username . '@' . $domain;
         $canon = 'https://' . $domain . '/users/' . $username;
-        WebFinger::setCanonicalForTesting($input, $canon);
+        $wf = new WebFinger($this->getConfig());
+        $wf->setCanonicalForTesting($input, $canon);
         return [$input, $canon];
     }
 

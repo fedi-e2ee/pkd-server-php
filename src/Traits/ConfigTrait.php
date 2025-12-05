@@ -16,11 +16,7 @@ use FediE2EE\PKDServer\Tables\{
     TOTP
 };
 use FediE2EE\PKDServer\Exceptions\TableException;
-use FediE2EE\PKDServer\{
-    ServerConfig,
-    Table,
-    TableCache
-};
+use FediE2EE\PKDServer\{AppCache, ServerConfig, Table, TableCache};
 use GuzzleHttp\Client;
 use ParagonIE\Certainty\Exception\CertaintyException;
 use SodiumException;
@@ -29,6 +25,11 @@ trait ConfigTrait
 {
     public ?ServerConfig $config = null;
     protected ?WebFinger $webFinger = null;
+
+    public function appCache(string $namespace): AppCache
+    {
+        return new AppCache($this->config(), $namespace);
+    }
 
     /**
      * @throws CacheException
@@ -94,7 +95,7 @@ trait ConfigTrait
         if (!is_null($this->webFinger)) {
             return $this->webFinger;
         }
-        $this->webFinger = new WebFinger($http, $this->config->getCaCertFetch());
+        $this->webFinger = new WebFinger($this->config, $http, $this->config->getCaCertFetch());
         return $this->webFinger;
     }
 }
