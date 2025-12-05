@@ -8,6 +8,10 @@ use FediE2EE\PKDServer\Meta\Params;
 if (file_exists(__DIR__ . '/local/params.php')) {
     return require_once __DIR__ . '/local/params.php';
 }
+if (!file_exists(__DIR__ . '/cache.key')) {
+    file_put_contents(__DIR__ . '/cache.key', sodium_bin2hex(random_bytes(32)));
+}
+$key = file_get_contents(__DIR__ . '/cache.key');
 
 // We will define local configuration here:
 return new Params(
@@ -15,4 +19,5 @@ return new Params(
     otpMaxLife: 120,
     actorUsername: 'pubkeydir',
     hostname: 'localhost',
+    cacheKey: $key,
 );

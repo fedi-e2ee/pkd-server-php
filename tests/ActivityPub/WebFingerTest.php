@@ -39,8 +39,7 @@ class WebFingerTest extends TestCase
 
     public function tearDown(): void
     {
-        WebFinger::clearCanonicalCache();
-        WebFinger::clearCache();
+        new WebFinger($this->getConfig())->clearCaches();
     }
 
     public function testConstructorDefaults(): void
@@ -59,7 +58,7 @@ class WebFingerTest extends TestCase
             json_encode(['data' => ['test']])
         );
 
-        $webFinger = new WebFinger();
+        $webFinger = new WebFinger($this->getConfig());
 
         $fetchProp = new ReflectionProperty(WebFinger::class, 'fetch');
         $this->assertInstanceOf(RemoteFetch::class, $fetchProp->getValue($webFinger));
@@ -75,7 +74,7 @@ class WebFingerTest extends TestCase
     public function testConstructorWithClient(): void
     {
         $client = new Client();
-        $webFinger = new WebFinger($client);
+        $webFinger = new WebFinger($this->getConfig(), $client);
 
         $httpProp = new ReflectionProperty(WebFinger::class, 'http');
         $this->assertSame($client, $httpProp->getValue($webFinger));
@@ -101,7 +100,7 @@ class WebFingerTest extends TestCase
             ));
 
         // 2. Instantiate WebFinger with the mock client
-        $webFinger = new WebFinger($mockHttp);
+        $webFinger = new WebFinger($this->getConfig(), $mockHttp);
 
         // 3. Call canonicalize twice
         $result1 = $webFinger->canonicalize('alice@example.com');
@@ -142,7 +141,7 @@ class WebFingerTest extends TestCase
                 ]
             ]))
         ]);
-        $webFinger = new WebFinger($mockHttp);
+        $webFinger = new WebFinger($this->getConfig(), $mockHttp);
         $fetchedPk = $webFinger->getPublicKey('https://example.com/users/alice');
         $this->assertSame($pk->toString(), $fetchedPk->toString());
     }
@@ -175,7 +174,7 @@ class WebFingerTest extends TestCase
                 ]
             ]))
         ]);
-        $webFinger = new WebFinger($mockHttp);
+        $webFinger = new WebFinger($this->getConfig(), $mockHttp);
         $fetchedPk = $webFinger->getPublicKey('https://example.com/users/alice');
         $this->assertSame($pk->toString(), $fetchedPk->toString());
     }
@@ -191,7 +190,7 @@ class WebFingerTest extends TestCase
         $mockHttp = $this->getMockClient([
             new Response(500)
         ]);
-        $webFinger = new WebFinger($mockHttp);
+        $webFinger = new WebFinger($this->getConfig(), $mockHttp);
         $this->expectException(FetchException::class);
         $webFinger->getPublicKey('https://example.com/users/alice');
     }
@@ -207,7 +206,7 @@ class WebFingerTest extends TestCase
         $mockHttp = $this->getMockClient([
             new Response(200, ['Content-Type' => 'application/json'], 'not json')
         ]);
-        $webFinger = new WebFinger($mockHttp);
+        $webFinger = new WebFinger($this->getConfig(), $mockHttp);
         $this->expectException(FetchException::class);
         $webFinger->getPublicKey('https://example.com/users/alice');
     }
@@ -232,7 +231,7 @@ class WebFingerTest extends TestCase
             ])),
             new Response(500)
         ]);
-        $webFinger = new WebFinger($mockHttp);
+        $webFinger = new WebFinger($this->getConfig(), $mockHttp);
         $this->expectException(FetchException::class);
         $webFinger->getPublicKey('https://example.com/users/alice');
     }
@@ -257,7 +256,7 @@ class WebFingerTest extends TestCase
             ])),
             new Response(200, ['Content-Type' => 'application/activity+json'], 'not json')
         ]);
-        $webFinger = new WebFinger($mockHttp);
+        $webFinger = new WebFinger($this->getConfig(), $mockHttp);
         $this->expectException(FetchException::class);
         $webFinger->getPublicKey('https://example.com/users/alice');
     }
@@ -282,7 +281,7 @@ class WebFingerTest extends TestCase
             ])),
             new Response(200, ['Content-Type' => 'application/activity+json'], json_encode([]))
         ]);
-        $webFinger = new WebFinger($mockHttp);
+        $webFinger = new WebFinger($this->getConfig(), $mockHttp);
         $this->expectException(FetchException::class);
         $webFinger->getPublicKey('https://example.com/users/alice');
     }
@@ -298,9 +297,9 @@ class WebFingerTest extends TestCase
     #[DataProvider("inboxUrlProvider")]
     public function testGetInboxUrl(string $in, string $expect): void
     {
-        /** @var Client $http */
-        $http = $GLOBALS['pkdConfig']->getGuzzle();
-        $webFinger = new WebFinger($http);
+        $config = $this->getConfig();
+        $http = $config->getGuzzle();
+        $webFinger = new WebFinger($config, $http);
         $inboxUrl = $webFinger->getInboxUrl($in);
         $this->assertSame($expect, $inboxUrl);
     }

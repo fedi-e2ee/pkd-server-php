@@ -34,6 +34,7 @@
     "paragonie/easydb-cache": "^2.2",
     "predis/predis": "^3",
     "psr/http-message": "^2",
+    "psr/simple-cache": "^3",
     "twig/twig": "^3",
     "ulrichsg/getopt-php": "^4"
   },

@@ -70,7 +70,7 @@ class HistorySinceTest extends TestCase
         $keypair = SecretKey::generate();
         $config = $this->getConfig();
         $protocol = new Protocol($config);
-        $webFinger = new WebFinger($this->getMockClient([
+        $webFinger = new WebFinger($config, $this->getMockClient([
             new Response(200, ['Content-Type' => 'application/json'], '{"subject":"' . $canonical . '"}')
         ]));
         $protocol->setWebFinger($webFinger);

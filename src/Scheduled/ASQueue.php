@@ -38,7 +38,7 @@ class ASQueue
     {
         $this->db = $config->getDB();
         $this->http = $this->config->getGuzzle();
-        $this->webFinger = new WebFinger($this->http, $this->config->getCaCertFetch());
+        $this->webFinger = new WebFinger($config, $this->http, $this->config->getCaCertFetch());
     }
 
     /**

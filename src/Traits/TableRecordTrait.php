@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace FediE2EE\PKDServer\Traits;
 
 use FediE2EE\PKD\Crypto\Exceptions\CryptoException;
+use FediE2EE\PKDServer\ServerConfig;
 use FediE2EE\PKD\Crypto\{
     PublicKey,
     SymmetricKey
@@ -14,6 +15,7 @@ use FediE2EE\PKDServer\Exceptions\{
 };
 
 /**
+ * @property ServerConfig $config
  * @property ?int $primaryKey
  */
 trait TableRecordTrait
