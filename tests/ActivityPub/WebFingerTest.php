@@ -10,6 +10,7 @@ use FediE2EE\PKD\Crypto\Exceptions\{
 use FediE2EE\PKD\Crypto\SecretKey;
 use FediE2EE\PKDServer\ActivityPub\WebFinger;
 use FediE2EE\PKDServer\Exceptions\FetchException;
+use FediE2EE\PKDServer\ServerConfig;
 use FediE2EE\PKDServer\Tests\HttpTestTrait;
 use GuzzleHttp\{
     Client,
@@ -20,11 +21,18 @@ use ParagonIE\Certainty\{
     Exception\CertaintyException,
     RemoteFetch
 };
-use PHPUnit\Framework\{Attributes\CoversClass, Attributes\DataProvider, MockObject\Exception, TestCase};
+use PHPUnit\Framework\{
+    Attributes\CoversClass,
+    Attributes\DataProvider,
+    Attributes\UsesClass,
+    MockObject\Exception,
+    TestCase
+};
 use ReflectionProperty;
 use SodiumException;
 
 #[CoversClass(WebFinger::class)]
+#[UsesClass(ServerConfig::class)]
 class WebFingerTest extends TestCase
 {
     use HttpTestTrait;

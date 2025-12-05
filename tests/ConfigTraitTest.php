@@ -4,17 +4,15 @@ namespace FediE2EE\PKDServer\Tests;
 
 use FediE2EE\PKDServer\ActivityPub\WebFinger;
 use FediE2EE\PKDServer\Exceptions\TableException;
-use FediE2EE\PKDServer\TableCache;
 use FediE2EE\PKDServer\Tables\{
     Actors,
     TOTP
 };
-use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\TestCase;
 use FediE2EE\PKDServer\Traits\ConfigTrait;
 
-#[CoversClass(ConfigTrait::class)]
-#[CoversClass(TableCache::class)]
+#[CoversNothing]
 class ConfigTraitTest extends TestCase
 {
     use HttpTestTrait;

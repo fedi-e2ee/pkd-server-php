@@ -5,11 +5,11 @@ namespace FediE2EE\PKDServer\Tests\ActivityPub;
 use FediE2EE\PKDServer\ActivityPub\ActivityStream;
 use FediE2EE\PKDServer\Exceptions\ActivityPubException;
 use JsonException;
-use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass("ActivityStream")]
+#[CoversNothing]
 class ActivityStreamTest extends TestCase
 {
     public static function decodedProvider(): array
