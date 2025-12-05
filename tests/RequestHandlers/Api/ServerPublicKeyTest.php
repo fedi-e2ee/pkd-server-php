@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace FediE2EE\PKDServer\Tests\RequestHandlers\Api;
 
 use Exception;
+use FediE2EE\PKDServer\AppCache;
 use FediE2EE\PKDServer\RequestHandlers\Api\ServerPublicKey;
 use FediE2EE\PKDServer\ServerConfig;
 use FediE2EE\PKDServer\Tests\HttpTestTrait;
@@ -14,6 +15,7 @@ use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
 #[CoversClass(ServerPublicKey::class)]
+#[UsesClass(AppCache::class)]
 #[UsesClass(ServerConfig::class)]
 class ServerPublicKeyTest extends TestCase
 {

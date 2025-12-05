@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace FediE2EE\PKDServer\Tests\RequestHandlers\Api;
 
+use FediE2EE\PKDServer\AppCache;
 use FediE2EE\PKDServer\Exceptions\DependencyException;
 use FediE2EE\PKDServer\RequestHandlers\Api\Info;
 use FediE2EE\PKDServer\ServerConfig;
@@ -13,6 +14,7 @@ use PHPUnit\Framework\Attributes\{
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(Info::class)]
+#[UsesClass(AppCache::class)]
 #[UsesClass(ServerConfig::class)]
 class InfoTest extends TestCase
 {
