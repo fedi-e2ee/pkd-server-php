@@ -2,9 +2,10 @@
 
 [![CI](https://github.com/fedi-e2ee/pkd-server-php/actions/workflows/ci.yml/badge.svg)](https://github.com/fedi-e2ee/pkd-server-php/actions/workflows/ci.yml)
 [![Psalm](https://github.com/fedi-e2ee/pkd-server-php/actions/workflows/psalm.yml/badge.svg)](https://github.com/fedi-e2ee/pkd-server-php/actions/workflows/psalm.yml)
-[![Psalm](https://github.com/fedi-e2ee/pkd-server-php/actions/workflows/phpstan.yml/badge.svg)](https://github.com/fedi-e2ee/pkd-server-php/actions/workflows/phpstan.yml)
+[![PHPStan](https://github.com/fedi-e2ee/pkd-server-php/actions/workflows/phpstan.yml/badge.svg)](https://github.com/fedi-e2ee/pkd-server-php/actions/workflows/phpstan.yml)
 [![Psalm](https://github.com/fedi-e2ee/pkd-server-php/actions/workflows/semgrep.yml/badge.svg)](https://github.com/fedi-e2ee/pkd-server-php/actions/workflows/semgrep.yml)
-[![Psalm](https://github.com/fedi-e2ee/pkd-server-php/actions/workflows/style.yml/badge.svg)](https://github.com/fedi-e2ee/pkd-server-php/actions/workflows/style.yml)
+[![Style](https://github.com/fedi-e2ee/pkd-server-php/actions/workflows/style.yml/badge.svg)](https://github.com/fedi-e2ee/pkd-server-php/actions/workflows/style.yml)
+[![Mutation Testing](https://github.com/fedi-e2ee/pkd-server-php/actions/workflows/infection.yml/badge.svg)](https://github.com/fedi-e2ee/pkd-server-php/actions/workflows/infection.yml)  
 [![Latest Stable Version](https://poser.pugx.org/fedi-e2ee/pkd-server/v/stable)](https://packagist.org/packages/fedi-e2ee/pkd-server)
 [![Latest Unstable Version](https://poser.pugx.org/fedi-e2ee/pkd-server/v/unstable)](https://packagist.org/packages/fedi-e2ee/pkd-server)
 [![License](https://poser.pugx.org/fedi-e2ee/pkd-server/license)](https://packagist.org/packages/fedi-e2ee/pkd-server)
