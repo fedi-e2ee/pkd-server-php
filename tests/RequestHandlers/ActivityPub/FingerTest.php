@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace FediE2EE\PKDServer\Tests\RequestHandlers\ActivityPub;
 
 use FediE2EE\PKDServer\ActivityPub\WebFinger;
+use FediE2EE\PKDServer\AppCache;
 use FediE2EE\PKDServer\RequestHandlers\ActivityPub\Finger;
 use FediE2EE\PKDServer\ServerConfig;
 use FediE2EE\PKDServer\Tests\HttpTestTrait;
@@ -12,6 +13,7 @@ use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(Finger::class)]
+#[UsesClass(AppCache::class)]
 #[UsesClass(WebFinger::class)]
 #[UsesClass(ServerConfig::class)]
 class FingerTest extends TestCase
