@@ -19,6 +19,7 @@ $GLOBALS['pkdConfig'] = new ServerConfig(require_once PKD_SERVER_ROOT . '/config
     ->withDatabase(require_once PKD_SERVER_ROOT . '/config/database.php')
     ->withRouter(require_once PKD_SERVER_ROOT . '/config/routes.php')
     ->withHPKE(require_once PKD_SERVER_ROOT . '/config/hpke.php')
+    ->withOptionalRedisClient(require_once PKD_SERVER_ROOT . '/config/redis.php')
     ->withSigningKeys(require_once PKD_SERVER_ROOT . '/config/signing-keys.php')
     ->withTwig(require_once PKD_SERVER_ROOT . '/config/twig.php')
 ;

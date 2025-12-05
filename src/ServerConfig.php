@@ -14,6 +14,7 @@ use Monolog\Logger;
 use ParagonIE\Certainty\Fetch;
 use ParagonIE\CipherSweet\CipherSweet;
 use ParagonIE\EasyDB\EasyDB;
+use Predis\Client as RedisClient;
 use Twig\Environment;
 
 class ServerConfig
@@ -22,6 +23,7 @@ class ServerConfig
     private ?EasyDB $db = null;
     private ?Fetch $caCertFetch = null;
     private ?HPKE $hpke = null;
+    private ?RedisClient $redis = null;
     private ?Logger $logger = null;
     private ?Router $router = null;
     private ?SigningKeys $signingKeys = null;
@@ -131,6 +133,16 @@ class ServerConfig
         return $this->twig;
     }
 
+    public function getRedis(): ?RedisClient
+    {
+        return $this->redis;
+    }
+
+    public function hasRedis(): bool
+    {
+        return !is_null($this->redis);
+    }
+
     public function withCACertFetch(Fetch $fetch): static
     {
         $this->caCertFetch = $fetch;
@@ -158,6 +170,12 @@ class ServerConfig
     public function withLogger(Logger $logger): static
     {
         $this->logger = $logger;
+        return $this;
+    }
+
+    public function withOptionalRedisClient(?RedisClient $redis = null): static
+    {
+        $this->redis = $redis;
         return $this;
     }
 
