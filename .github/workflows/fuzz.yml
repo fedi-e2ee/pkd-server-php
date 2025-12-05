@@ -6,7 +6,7 @@ on:
       - main
   pull_request:
   schedule:
-    - cron: '50 9 * * 1' # Run mutation tests every Monday at 09:50 UTC.
+    - cron: '50 9 * * *' # Run mutation tests every day at 09:50 UTC.
     # Time chosen randomly.
 
 jobs:
