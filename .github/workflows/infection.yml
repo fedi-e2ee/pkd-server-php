@@ -1,4 +1,4 @@
-name: Mutation Testing
+name: Mutation
 
 on:
   create:

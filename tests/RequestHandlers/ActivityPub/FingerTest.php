@@ -35,7 +35,7 @@ class FingerTest extends TestCase
         ]);
 
         $handler = new Finger();
-        $handler->injectConfig($GLOBALS['config']);
+        $handler->injectConfig($GLOBALS['pkdConfig']);
         $response = $handler->handle($request);
         $this->assertSame(200, $response->getStatusCode());
         $body = json_decode($response->getBody()->getContents());

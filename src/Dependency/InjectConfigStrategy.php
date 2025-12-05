@@ -19,7 +19,7 @@ class InjectConfigStrategy extends ApplicationStrategy
      */
     public function __construct()
     {
-        $config = $GLOBALS['config'];
+        $config = $GLOBALS['pkdConfig'];
         if (!($config instanceof ServerConfig)) {
             throw new DependencyException('config not defined globally');
         }

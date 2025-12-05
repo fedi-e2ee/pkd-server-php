@@ -10,7 +10,7 @@ use Throwable;
 require_once dirname(__DIR__) . '/autoload.php';
 
 // Make sure teh configuration has been loaded
-if (!isset($GLOBALS['config']) || !($GLOBALS['config'] instanceof ServerConfig)) {
+if (!isset($GLOBALS['pkdConfig']) || !($GLOBALS['pkdConfig'] instanceof ServerConfig)) {
     http_response_code(500);
     header('Content-Type: text/plain');
     die('Server configuration not found!');
@@ -18,7 +18,7 @@ if (!isset($GLOBALS['config']) || !($GLOBALS['config'] instanceof ServerConfig))
 
 // Route request
 try {
-    $router = $GLOBALS['config']->getRouter();
+    $router = $GLOBALS['pkdConfig']->getRouter();
     $request = ServerRequestFactory::fromGlobals();
     (new SapiEmitter)->emit(
         $router->dispatch($request)

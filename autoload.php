@@ -13,7 +13,7 @@ const PKD_SERVER_ROOT = __DIR__;
 require_once PKD_SERVER_ROOT . '/vendor/autoload.php';
 
 // We load this config and store it in a global variable for use in public/index.php
-$GLOBALS['config'] = new ServerConfig(require_once PKD_SERVER_ROOT . '/config/params.php')
+$GLOBALS['pkdConfig'] = new ServerConfig(require_once PKD_SERVER_ROOT . '/config/params.php')
     ->withCACertFetch(require_once PKD_SERVER_ROOT . '/config/certainty.php')
     ->withCipherSweet(require_once PKD_SERVER_ROOT . '/config/ciphersweet.php')
     ->withDatabase(require_once PKD_SERVER_ROOT . '/config/database.php')
@@ -23,11 +23,11 @@ $GLOBALS['config'] = new ServerConfig(require_once PKD_SERVER_ROOT . '/config/pa
     ->withTwig(require_once PKD_SERVER_ROOT . '/config/twig.php')
 ;
 
-// We have to guarantee `$GLOBALS['config']` exists before calling logger.php
-$GLOBALS['config']
+// We have to guarantee `$GLOBALS['pkdConfig']` exists before calling logger.php
+$GLOBALS['pkdConfig']
     ->withLogger(require_once PKD_SERVER_ROOT . '/config/logs.php');
 
 // Set the config injection strategy to the router
-$GLOBALS['config']
+$GLOBALS['pkdConfig']
     ->getRouter()
     ->setStrategy(new InjectConfigStrategy());

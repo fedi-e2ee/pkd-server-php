@@ -1,0 +1,28 @@
+name: Fuzzing
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  schedule:
+    - cron: '50 9 * * *' # Run mutation tests every day at 09:50 UTC.
+    # Time chosen randomly.
+
+jobs:
+  fuzz:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+      - name: Setup PHP-Fuzzer
+        run: composer global require nikic/php-fuzzer
+      - name: Install dependencies
+        run: composer install --optimize-autoloader
+      - name: Run FuzzProtocol
+        run: php-fuzzer fuzz --max-runs 50000 fuzzing/FuzzProtocol.php
+      - name: Run FuzzRequestHandlers
+        run: php-fuzzer fuzz --max-runs 50000 fuzzing/FuzzRequestHandlers.php

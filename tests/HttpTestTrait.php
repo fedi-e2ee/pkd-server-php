@@ -21,10 +21,10 @@ trait HttpTestTrait
 {
     public function getConfig(): ServerConfig
     {
-        if (!($GLOBALS['config'] instanceof ServerConfig)) {
+        if (!($GLOBALS['pkdConfig'] instanceof ServerConfig)) {
             $this->fail('Server config not injected');
         }
-        return $GLOBALS['config'];
+        return $GLOBALS['pkdConfig'];
     }
 
     public function getMockClient(array $responses = []): Client

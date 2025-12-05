@@ -66,8 +66,8 @@ trait ConfigTrait
     public function config(): ServerConfig
     {
         if (is_null($this->config)) {
-            if ($GLOBALS['config'] instanceof ServerConfig) {
-                $this->config = $GLOBALS['config'];
+            if ($GLOBALS['pkdConfig'] instanceof ServerConfig) {
+                $this->config = $GLOBALS['pkdConfig'];
             } else {
                 throw new DependencyException('config not injected!');
             }

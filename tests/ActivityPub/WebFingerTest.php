@@ -299,7 +299,7 @@ class WebFingerTest extends TestCase
     public function testGetInboxUrl(string $in, string $expect): void
     {
         /** @var Client $http */
-        $http = $GLOBALS['config']->getGuzzle();
+        $http = $GLOBALS['pkdConfig']->getGuzzle();
         $webFinger = new WebFinger($http);
         $inboxUrl = $webFinger->getInboxUrl($in);
         $this->assertSame($expect, $inboxUrl);
