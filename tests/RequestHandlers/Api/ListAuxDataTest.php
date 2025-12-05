@@ -16,6 +16,7 @@ use FediE2EE\PKD\Crypto\{
 use FediE2EE\PKDServer\RequestHandlers\Api\ListAuxData;
 use FediE2EE\PKDServer\{
     ActivityPub\WebFinger,
+    AppCache,
     Dependency\WrappedEncryptedRow,
     Protocol,
     Protocol\Payload,
@@ -45,6 +46,7 @@ use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
 #[CoversClass(ListAuxData::class)]
+#[UsesClass(AppCache::class)]
 #[UsesClass(WebFinger::class)]
 #[UsesClass(WrappedEncryptedRow::class)]
 #[UsesClass(Protocol::class)]
