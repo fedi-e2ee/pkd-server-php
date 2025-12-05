@@ -15,6 +15,6 @@ if (file_exists(__DIR__ . '/local/logs.php')) {
 }
 
 $logger = new Logger('logs');
-$logger->pushHandler(new EasyDBHandler($GLOBALS['config']->getDb()));
+$logger->pushHandler(new EasyDBHandler($GLOBALS['pkdConfig']->getDb()));
 // $logger->pushHandler(new StreamHandler(PKD_SERVER_ROOT . '/logs/' . date('Y-m-d') . '.log', LogLevel::ERROR));
 return $logger;

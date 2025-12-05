@@ -22,7 +22,7 @@ class IndexPageTest extends TestCase
         $request = $this->makeGetRequest('/');
 
         $handler = new IndexPage();
-        $handler->injectConfig($GLOBALS['config']);
+        $handler->injectConfig($GLOBALS['pkdConfig']);
         $response = $handler->handle($request);
         $this->assertSame(200, $response->getStatusCode());
     }

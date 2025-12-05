@@ -38,17 +38,17 @@ function tableExists(EasyDB $db, string $tableName): bool
     }
 }
 
-if (!isset($GLOBALS['config'])) {
+if (!isset($GLOBALS['pkdConfig'])) {
     echo 'Could not load PHP config.', PHP_EOL;
     exit(255);
 }
-if (!($GLOBALS['config'] instanceof ServerConfig)) {
+if (!($GLOBALS['pkdConfig'] instanceof ServerConfig)) {
     echo 'Config is not an instance of the correct class.', PHP_EOL;
     exit(254);
 }
 
 (function () {
-    $config = $GLOBALS['config'];
+    $config = $GLOBALS['pkdConfig'];
     if (!($config instanceof ServerConfig)) {
         echo 'Config is not an instance of the correct class.', PHP_EOL;
         exit(253);
@@ -60,7 +60,7 @@ if (!($GLOBALS['config'] instanceof ServerConfig)) {
         $temp = __DIR__ . '/tmp/db/' . sodium_bin2hex(random_bytes(16)) . '-test.db';
         $config->withDatabase(new EasyDBCache(new PDO('sqlite:' . $temp)));
     }
-    $db = $GLOBALS['config']->getDb();
+    $db = $GLOBALS['pkdConfig']->getDb();
     if (!tableExists($db, 'pkd_merkle_state')) {
         $argv_backup = $_SERVER['argv'];
         $_SERVER['argv'] = [$_SERVER['argv'][0]];

@@ -14,10 +14,10 @@ $getopt = new GetOpt([
 ]);
 $getopt->process();
 
-if (!($GLOBALS['config'] instanceof ServerConfig)) {
+if (!($GLOBALS['pkdConfig'] instanceof ServerConfig)) {
     throw new TypeError();
 }
-$db = $GLOBALS['config']->getDb();
+$db = $GLOBALS['pkdConfig']->getDb();
 $driver = $db->getDriver();
 $dbDriver = $driver;
 if ($dbDriver === 'pgsql') {

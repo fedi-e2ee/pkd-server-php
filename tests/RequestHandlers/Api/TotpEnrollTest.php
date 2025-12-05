@@ -78,7 +78,7 @@ class TotpEnrollTest extends TestCase
 
     public function setUp(): void
     {
-        $this->config = $GLOBALS['config'];
+        $this->config = $GLOBALS['pkdConfig'];
     }
 
     /**
