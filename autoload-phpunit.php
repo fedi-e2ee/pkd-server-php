@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace FediE2EE\PKDServer;
 
 use Exception;
+use FediE2EE\PKD\Extensions\ExtensionInterface;
 use ParagonIE\EasyDB\EasyDB;
 use ParagonIE\EasyDB\EasyDBCache;
 use PDO;
@@ -48,17 +49,17 @@ if (!($GLOBALS['pkdConfig'] instanceof ServerConfig)) {
 }
 
 (function () {
-    $config = $GLOBALS['pkdConfig'];
-    if (!($config instanceof ServerConfig)) {
+    $pkdConfig = $GLOBALS['pkdConfig'];
+    if (!($pkdConfig instanceof ServerConfig)) {
         echo 'Config is not an instance of the correct class.', PHP_EOL;
         exit(253);
     }
-    if ($config->getDb()->getDriver() === 'sqlite') {
+    if ($pkdConfig->getDb()->getDriver() === 'sqlite') {
         if (!is_dir(__DIR__ . '/tmp/db/')) {
             mkdir(__DIR__ . '/tmp/db/');
         }
         $temp = __DIR__ . '/tmp/db/' . sodium_bin2hex(random_bytes(16)) . '-test.db';
-        $config->withDatabase(new EasyDBCache(new PDO('sqlite:' . $temp)));
+        $pkdConfig->withDatabase(new EasyDBCache(new PDO('sqlite:' . $temp)));
     }
     $db = $GLOBALS['pkdConfig']->getDb();
     if (!tableExists($db, 'pkd_merkle_state')) {
@@ -68,4 +69,27 @@ if (!($GLOBALS['pkdConfig'] instanceof ServerConfig)) {
         $_SERVER['argv'] = $argv_backup;
         echo 'Imported!', PHP_EOL;
     }
+
+    // Create test extension:
+    $testRegistry = new class implements ExtensionInterface {
+        public function getAuxDataType(): string
+        {
+            return 'test-v1';
+        }
+
+        public function getRejectionReason(): string
+        {
+            return '';
+        }
+
+        public function isValid(string $auxData): bool
+        {
+            return true;
+        }
+    };
+    $pkdConfig->getAuxDataRegistry()->addAuxDataType($testRegistry, 'test');
+    // Add "test" extension to allow list
+    $pkdConfig->withAuxDataTypeAllowList(
+        $pkdConfig->getAuxDataTypeAllowList() + ['test-v1']
+    );
 })();
