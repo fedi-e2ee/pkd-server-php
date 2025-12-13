@@ -7,11 +7,7 @@ use FediE2EE\PKD\Crypto\Exceptions\{
     JsonException,
     NotImplementedException
 };
-use FediE2EE\PKDServer\{
-    Exceptions\DependencyException,
-    Meta\Route,
-    Traits\ReqTrait
-};
+use FediE2EE\PKDServer\{Exceptions\DependencyException, Meta\Route, ServerConfig, Traits\ReqTrait};
 use Override;
 use Psr\Http\Message\{
     ResponseInterface,
@@ -37,7 +33,7 @@ class Extensions implements RequestHandlerInterface
         return $this->json([
             '!pkd-context' => 'fedi-e2ee:v1/api/extensions',
             'current-time' => (string) new DateTime()->getTimestamp(),
-            'extensions' => [],
+            'extensions' => $this->config()->getAuxDataTypeAllowList(),
         ]);
     }
 }
