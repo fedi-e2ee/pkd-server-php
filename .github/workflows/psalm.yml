@@ -23,14 +23,6 @@ jobs:
 
       - name: Install Composer dependencies
         uses: "ramsey/composer-install@v3"
-        with:
-          composer-options: --no-dev
-
-      - name: Add psalm to composer
-        run: composer require --dev vimeo/psalm:^6
-
-      - name: Add vendor/bin to path to ensure psalm exists
-        run: export PATH="$PATH:vendor/bin/"
 
       - name: Static Analysis
         run: psalm
