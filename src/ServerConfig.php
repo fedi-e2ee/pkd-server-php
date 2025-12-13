@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace FediE2EE\PKDServer;
 
+use FediE2EE\PKD\Extensions\Registry;
 use FediE2EE\PKDServer\Meta\Params;
 use GuzzleHttp\Client;
 use FediE2EE\PKDServer\Dependency\{
@@ -20,6 +21,8 @@ use Throwable;
 
 class ServerConfig
 {
+    private array $auxDataTypeAllowList = [];
+    private ?Registry $auxDataRegistry = null;
     private ?CipherSweet $ciphersweet = null;
     private ?EasyDB $db = null;
     private ?Fetch $caCertFetch = null;
@@ -41,6 +44,22 @@ class ServerConfig
             throw new DependencyException('caCertFetch is not injected');
         }
         return $this->caCertFetch;
+    }
+
+    /**
+     * @api
+     */
+    public function getAuxDataTypeAllowList(): array
+    {
+        return $this->auxDataTypeAllowList;
+    }
+
+    public function getAuxDataRegistry(): Registry
+    {
+        if (is_null($this->auxDataRegistry)) {
+            throw new DependencyException('registry is not injected');
+        }
+        return $this->auxDataRegistry;
     }
 
     public function getGuzzle(): Client
@@ -142,6 +161,22 @@ class ServerConfig
     public function hasRedis(): bool
     {
         return !is_null($this->redis);
+    }
+
+    /**
+     * @param string[] $allowList
+     * @return static
+     */
+    public function withAuxDataTypeAllowList(array $allowList = []): static
+    {
+        $this->auxDataTypeAllowList = $allowList;
+        return $this;
+    }
+
+    public function withAuxDataRegistry(Registry $registry): static
+    {
+        $this->auxDataRegistry = $registry;
+        return $this;
     }
 
     public function withCACertFetch(Fetch $fetch): static

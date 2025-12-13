@@ -61,6 +61,7 @@ use FediE2EE\PKDServer\Tables\Records\{
     ActorKey,
     MerkleLeaf
 };
+use FediE2EE\PKD\Extensions\ExtensionInterface;
 use FediE2EE\PKDServer\Tests\HttpTestTrait;
 use FediE2EE\PKDServer\Traits\ConfigTrait;
 use PHPUnit\Framework\Attributes\{
@@ -77,6 +78,7 @@ use ParagonIE\CipherSweet\Exception\{
     InvalidCiphertextException
 };
 use ParagonIE\HPKE\HPKEException;
+use PHPStan\Rules\Registry;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use GuzzleHttp\Psr7\Response;

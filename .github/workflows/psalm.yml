@@ -18,13 +18,10 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php-versions }}
-          tools: psalm:6
           coverage: none
 
       - name: Install Composer dependencies
         uses: "ramsey/composer-install@v3"
-        with:
-          composer-options: --no-dev
 
       - name: Static Analysis
-        run: psalm
+        run: vendor/bin/psalm

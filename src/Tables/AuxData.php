@@ -225,8 +225,20 @@ class AuxData extends Table
         if (!$signatureIsValid) {
             throw new ProtocolException('Invalid signature');
         }
+        $type = $array['aux-type'];
+        $data = $array['aux-data'];
+        $allowed = $this->config->getAuxDataTypeAllowList();
+        $registry = $this->config->getAuxDataRegistry();
 
-        // TODO: Allow-list aux-type
+        // If the registry isn't allow-listed, this will throw:
+        $ext = $registry->get($type, $allowed);
+
+        // Make sure the data is valid for this aux-data type:
+        if (!$ext->isValid($data)) {
+            throw new ProtocolException('Invalid aux-data: ' . $ext->getRejectionReason());
+        }
+
+        // We are now positive the data is acceptable:
         $encryptor = $this->getCipher();
         $maxId = (int) $this->db->cell("SELECT MAX(actorauxdataid) FROM pkd_actors_auxdata");
         $nextId = $maxId + 1;
@@ -234,8 +246,8 @@ class AuxData extends Table
             [
                 'actorauxdataid' => $nextId,
                 'actorid' => $actor->getPrimaryKey(),
-                'auxdatatype' => $array['aux-type'],
-                'auxdata' => $array['aux-data'],
+                'auxdatatype' => $type,
+                'auxdata' => $data,
                 'insertleaf' => $leaf->getPrimaryKey(),
                 'trusted' => 1
             ],
