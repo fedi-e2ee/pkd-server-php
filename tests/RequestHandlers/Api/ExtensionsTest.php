@@ -36,7 +36,7 @@ class ExtensionsTest extends TestCase
         $this->assertSame('fedi-e2ee:v1/api/extensions', $body['!pkd-context']);
         $this->assertIsArray($body['extensions']);
         // These are added via autoload-phpunit.php:
-        $this->assertTrue(in_array('test-v1', $body['extensions']));
-        $this->assertFalse(in_array('test', $body['extensions']));
+        $this->assertTrue(in_array('test-v1', $body['extensions'], true));
+        $this->assertFalse(in_array('test', $body['extensions'], true));
     }
 }
