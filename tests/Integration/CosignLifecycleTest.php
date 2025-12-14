@@ -190,7 +190,7 @@ class CosignLifecycleTest extends TestCase
 
             // Create cosignature
             $hist = new HistoricalRecord(
-                trim($record['encrypted-message']),
+                $record['encrypted-message'],
                 $record['publickeyhash'],
                 $record['signature'],
             );
