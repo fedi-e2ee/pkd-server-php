@@ -17,7 +17,12 @@ use FediE2EE\PKDServer\Tables\{
     TOTP
 };
 use FediE2EE\PKDServer\Exceptions\TableException;
-use FediE2EE\PKDServer\{AppCache, ServerConfig, Table, TableCache};
+use FediE2EE\PKDServer\{
+    AppCache,
+    ServerConfig,
+    Table,
+    TableCache
+};
 use GuzzleHttp\Client;
 use ParagonIE\Certainty\Exception\CertaintyException;
 use SodiumException;
