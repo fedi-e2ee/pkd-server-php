@@ -40,11 +40,11 @@ use Throwable;
 class Witness
 {
     use ConfigTrait;
-    private EasyDB $db;
-    private Client $http;
-    private Logger $logger;
+    private readonly EasyDB $db;
+    private readonly Client $http;
+    private readonly Logger $logger;
     private readonly Peers $peers;
-    private HttpSignature $rfc9421;
+    private readonly HttpSignature $rfc9421;
 
     /**
      * @throws CacheException
@@ -59,6 +59,7 @@ class Witness
         if (!($peers instanceof Peers)) {
             throw new TableException('Could not load table class for Peers');
         }
+        $this->peers = $peers;
         $this->http = $this->config->getGuzzle();
         $this->logger = $this->config->getLogger();
         $this->rfc9421 = new HttpSignature();
