@@ -23,7 +23,9 @@ class Peer
         public DateTimeImmutable $created,
         public DateTimeImmutable $modified,
         ?int $primaryKey = null,
-    ) {}
+    ) {
+        $this->primaryKey = $primaryKey;
+    }
 
     public function toArray(): array
     {

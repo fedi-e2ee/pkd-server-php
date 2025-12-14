@@ -20,7 +20,5 @@ class Witness
     }
 
     public function run(): void
-    {
-
-    }
+    {}
 }

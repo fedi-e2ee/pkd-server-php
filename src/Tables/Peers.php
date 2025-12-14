@@ -21,7 +21,7 @@ class Peers extends Table
     #[Override]
     public function getCipher(): WrappedEncryptedRow
     {
-        return new WrappedEncryptedRow($this->engine,'pkd_peers');
+        return new WrappedEncryptedRow($this->engine, 'pkd_peers');
     }
 
     #[Override]
