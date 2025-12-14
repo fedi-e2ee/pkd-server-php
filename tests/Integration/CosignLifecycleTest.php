@@ -198,11 +198,13 @@ class CosignLifecycleTest extends TestCase
 
             // TODO: Delete me
             $clone = clone $cosign->getTree();
-            $clone->addLeaf($hist->serializeForMerkle());
+            $serialized = $hist->serializeForMerkle();
+            $clone->addLeaf($serialized);
             var_dump([
                 'calculated' => $clone->getEncodedRoot(),
                 'expected' => $thisRoot,
-                'hashed' => hash('sha256', $hist->serializeForMerkle()),
+                'serialized' => sodium_bin2hex($serialized),
+                'hashed' => hash('sha256', $hist->encryptedMessage),
                 'record' => $record,
             ]);
             // TODO: Delete above
