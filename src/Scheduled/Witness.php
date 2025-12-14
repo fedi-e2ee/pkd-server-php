@@ -43,7 +43,7 @@ class Witness
     private EasyDB $db;
     private Client $http;
     private Logger $logger;
-    private Peers $peers;
+    private readonly Peers $peers;
     private HttpSignature $rfc9421;
 
     /**
@@ -192,8 +192,8 @@ class Witness
             throw new CryptoException('Invalid HTTP Signature from peer response');
         }
         $body = $response->getBody()->getContents();
-        if (!is_string($body)) {
-            throw new ProtocolException('Body is not a string');
+        if (!$body) {
+            throw new ProtocolException('Invalid response body');
         }
         $json = json_decode($body, true);
         if (!is_array($json)) {

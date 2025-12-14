@@ -12,10 +12,7 @@ use FediE2EE\PKDServer\Exceptions\{
     TableException
 };
 use FediE2EE\PKDServer\Meta\Route;
-use FediE2EE\PKDServer\Tables\{
-    MerkleState,
-    Witnesses
-};
+use FediE2EE\PKDServer\Tables\MerkleState;
 use FediE2EE\PKDServer\Traits\ReqTrait;
 use Override;
 use Psr\Http\Message\{
@@ -24,7 +21,7 @@ use Psr\Http\Message\{
 };
 use Psr\Http\Server\RequestHandlerInterface;
 use SodiumException;
-use Throwable;;
+use Throwable;
 use TypeError;
 
 class HistoryCosign implements RequestHandlerInterface
