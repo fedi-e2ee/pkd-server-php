@@ -4,6 +4,7 @@ namespace FediE2EE\PKDServer\Tables\Records;
 
 use DateTimeImmutable;
 use FediE2EE\PKD\Crypto\Merkle\IncrementalTree;
+use FediE2EE\PKD\Crypto\PublicKey;
 use FediE2EE\PKD\Crypto\UtilTrait;
 use FediE2EE\PKDServer\Meta\RecordForTable;
 use FediE2EE\PKDServer\Tables\Peers;
@@ -18,6 +19,7 @@ class Peer
 
     public function __construct(
         public string $hostname,
+        public PublicKey $publicKey,
         public IncrementalTree $tree,
         public string $latestRoot,
         public DateTimeImmutable $created,
@@ -32,6 +34,8 @@ class Peer
         return [
             'hostname' =>
                 $this->hostname,
+            'publicKey' =>
+                $this->publicKey->toString(),
             'incrementaltreestate' =>
                 Base64UrlSafe::encodeUnpadded($this->tree->toJson()),
             'latestroot' =>

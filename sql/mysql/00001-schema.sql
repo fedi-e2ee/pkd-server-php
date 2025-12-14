@@ -124,6 +124,7 @@ CREATE TABLE IF NOT EXISTS pkd_log (
 CREATE TABLE IF NOT EXISTS pkd_peers(
     peerid BIGINT PRIMARY KEY AUTO_INCREMENT,
     hostname TEXT,
+    publickey TEXT,
     incrementaltreestate TEXT,
     latestroot TEXT,
     replicate BOOLEAN DEFAULT FALSE,

@@ -120,6 +120,7 @@ CREATE TABLE IF NOT EXISTS pkd_log (
 CREATE TABLE IF NOT EXISTS pkd_peers (
     peerid BIGSERIAL PRIMARY KEY,
     hostname TEXT,
+    publickey TEXT,
     incrementaltreestate TEXT,
     latestroot TEXT,
     replicate BOOLEAN DEFAULT FALSE,

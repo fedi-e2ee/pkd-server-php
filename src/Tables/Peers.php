@@ -5,6 +5,7 @@ namespace FediE2EE\PKDServer\Tables;
 use DateMalformedStringException;
 use DateTimeImmutable;
 use FediE2EE\PKD\Crypto\AttributeEncryption\AttributeKeyMap;
+use FediE2EE\PKD\Crypto\PublicKey;
 use FediE2EE\PKD\Crypto\Merkle\{
     IncrementalTree,
     Tree
@@ -42,10 +43,11 @@ class Peers extends Table
     /**
      * @api
      */
-    public function create(string $hostname): Peer
+    public function create(PublicKey $publicKey, string $hostname): Peer
     {
         $peer = new Peer(
             $hostname,
+            $publicKey,
             new IncrementalTree(),
             new Tree()->getEncodedRoot(),
             new DateTimeImmutable('NOW'),
@@ -63,9 +65,20 @@ class Peers extends Table
         if (empty($peer)) {
             throw new TableException('Peer not found: ' . $hostname);
         }
+
+        // When we first add a peer, we start with an incremental tree:
+        if (empty($peer['incrementaltreestate'])) {
+            $tree = new IncrementalTree();
+        } else {
+            $tree = IncrementalTree::fromJson(
+                Base64UrlSafe::decodeNoPadding($peer['incrementaltreestate'])
+            );
+        }
+
         return new Peer(
             $peer['hostname'],
-            IncrementalTree::fromJson(Base64UrlSafe::decodeNoPadding($peer['incrementaltreestate'])),
+            PublicKey::fromString($peer['publicKey']),
+            $tree,
             $peer['latestroot'],
             new DateTimeImmutable($peer['created']),
             new DateTimeImmutable($peer['modified']),
@@ -81,9 +94,17 @@ class Peers extends Table
     {
         $peerList = [];
         foreach ($this->db->run("SELECT * FROM peers") as $peer) {
+            if (empty($peer['incrementaltreestate'])) {
+                $tree = new IncrementalTree();
+            } else {
+                $tree = IncrementalTree::fromJson(
+                    Base64UrlSafe::decodeNoPadding($peer['incrementaltreestate'])
+                );
+            }
             $peerList[] = new Peer(
                 $peer['hostname'],
-                IncrementalTree::fromJson(Base64UrlSafe::decodeNoPadding($peer['incrementaltreestate'])),
+                PublicKey::fromString($peer['publicKey']),
+                $tree,
                 $peer['latestroot'],
                 new DateTimeImmutable($peer['created']),
                 new DateTimeImmutable($peer['modified']),
