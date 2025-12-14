@@ -117,6 +117,16 @@ CREATE TABLE IF NOT EXISTS pkd_log (
     created TIMESTAMP DEFAULT NOW()
 );
 
+CREATE TABLE IF NOT EXISTS pkd_peers (
+    peerid BIGSERIAL PRIMARY KEY,
+    hostname TEXT,
+    incrementaltreestate TEXT,
+    latestroot TEXT,
+    replicate BOOLEAN DEFAULT FALSE,
+    created TIMESTAMP DEFAULT NOW(),
+    modified TIMESTAMP DEFAULT NOW()
+);
+
 -- Update modification time triggers
 DROP TRIGGER IF EXISTS update_pkd_actors_modtime ON pkd_actors;
 CREATE TRIGGER update_pkd_actors_modtime

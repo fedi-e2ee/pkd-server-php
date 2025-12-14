@@ -120,3 +120,13 @@ CREATE TABLE IF NOT EXISTS pkd_log (
     message LONGTEXT,
     created TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE IF NOT EXISTS pkd_peers(
+    peerid BIGINT PRIMARY KEY AUTO_INCREMENT,
+    hostname TEXT,
+    incrementaltreestate TEXT,
+    latestroot TEXT,
+    replicate BOOLEAN DEFAULT FALSE,
+    created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

@@ -120,6 +120,16 @@ CREATE TABLE IF NOT EXISTS pkd_log (
     created TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE IF NOT EXISTS pkd_peers (
+    peerid INTEGER PRIMARY KEY AUTOINCREMENT,
+    hostname TEXT,
+    incrementaltreestate TEXT,
+    latestroot TEXT,
+    replicate BOOLEAN DEFAULT FALSE,
+    created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
 -- Update modification time triggers
 CREATE TRIGGER IF NOT EXISTS update_pkd_actors_modtime
     AFTER UPDATE ON pkd_actors
