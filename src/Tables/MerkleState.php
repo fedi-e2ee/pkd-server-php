@@ -148,6 +148,18 @@ class MerkleState extends Table
         return $cosigs;
     }
 
+    public function countCosignatures(int $leafId): int
+    {
+        $count = $this->db->cell(
+            "SELECT count(*) FROM pkd_merkle_witness_cosignatures WHERE leaf = ?",
+            $leafId
+        );
+        if (!$count) {
+            return 0;
+        }
+        return (int) $count;
+    }
+
     /**
      * @api
      */
