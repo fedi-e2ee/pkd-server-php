@@ -196,19 +196,6 @@ class CosignLifecycleTest extends TestCase
             );
             $cosign->append($hist, $thisRoot);
 
-            // TODO: Delete me
-            $clone = clone $cosign->getTree();
-            $serialized = $hist->serializeForMerkle();
-            $clone->addLeaf($serialized);
-            var_dump([
-                'calculated' => $clone->getEncodedRoot(),
-                'expected' => $thisRoot,
-                'serialized' => sodium_bin2hex($serialized),
-                'hashed' => hash('sha256', $hist->encryptedMessage),
-                'record' => $record,
-            ]);
-            // TODO: Delete above
-
             $cosigned = $cosign->cosign($witnessSK, $this->config->getParams()->hostname);
 
             // Push cosignature to PKD
@@ -229,6 +216,7 @@ class CosignLifecycleTest extends TestCase
             $this->assertTrue($body['status']);
             $countAgain = $merkleState->countCosignatures($leaf->primaryKey);
             $this->assertNotSame($numCosigs, $countAgain, 'Number of cosignatures did not increase');
+            $tree = $cosign->getTree();
         }
     }
 }
