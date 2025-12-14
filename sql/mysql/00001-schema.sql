@@ -53,7 +53,7 @@ CREATE TABLE IF NOT EXISTS pkd_actors (
     FOREIGN KEY (fireproofleaf) REFERENCES pkd_merkle_leaves(merkleleafid),
     FOREIGN KEY (undofireproofleaf) REFERENCES pkd_merkle_leaves(merkleleafid),
     FOREIGN KEY (movedleaf) REFERENCES pkd_merkle_leaves(merkleleafid),
-    UNIQUE KEY `pkd_actors_activitypubid_bi` (activitypubid_idx(255))
+    INDEX `pkd_actors_activitypubid_bi` (activitypubid_idx(255))
 );
 
 -- Public Keys

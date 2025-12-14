@@ -57,6 +57,7 @@ CREATE TABLE IF NOT EXISTS pkd_actors (
     modified TIMESTAMP DEFAULT NOW()
 );
 CREATE UNIQUE INDEX ON pkd_actors(activitypubid);
+CREATE INDEX ON pkd_actors(activitypubid_idx);
 
 -- Public Keys
 CREATE TABLE IF NOT EXISTS pkd_actors_publickeys (
