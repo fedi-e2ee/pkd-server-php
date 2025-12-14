@@ -114,6 +114,11 @@ class HistorySinceTest extends TestCase
         $body = json_decode($response->getBody()->getContents(), true);
         $this->assertSame('fedi-e2ee:v1/api/history/since', $body['!pkd-context']);
         $this->assertCount(1, $body['records']);
+        $this->assertArrayHasKey('created', $body['records'][0]);
+        $this->assertArrayHasKey('encrypted-message', $body['records'][0]);
+        $this->assertArrayHasKey('contenthash', $body['records'][0]);
+        $this->assertArrayHasKey('publickeyhash', $body['records'][0]);
+        $this->assertArrayHasKey('signature', $body['records'][0]);
         $this->assertSame($newRoot, $body['records'][0]['merkle-root']);
     }
 }

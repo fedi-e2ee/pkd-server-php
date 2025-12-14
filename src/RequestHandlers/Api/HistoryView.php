@@ -70,6 +70,7 @@ class HistoryView implements RequestHandlerInterface
             'message' => null,
             'merkle-root' => $hash,
             'rewrapped-keys' => null,
+            'witnesses' => $this->merkleState->getCosignatures($leaf->primaryKey),
         ]);
     }
 }

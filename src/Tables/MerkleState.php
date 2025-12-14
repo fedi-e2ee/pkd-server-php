@@ -2,11 +2,12 @@
 declare(strict_types=1);
 namespace FediE2EE\PKDServer\Tables;
 
-use FediE2EE\PKD\Crypto\Exceptions\{
-    CryptoException,
-    NotImplementedException
-};
+use FediE2EE\PKD\Crypto\Exceptions\{CryptoException, JsonException, NotImplementedException};
 use FediE2EE\PKD\Crypto\AttributeEncryption\AttributeKeyMap;
+use FediE2EE\PKD\Crypto\Protocol\Cosignature;
+use FediE2EE\PKD\Crypto\PublicKey;
+use FediE2EE\PKDServer\Exceptions\ProtocolException;
+use FediE2EE\PKDServer\Exceptions\TableException;
 use FediE2EE\PKD\Crypto\Merkle\{
     InclusionProof,
     IncrementalTree,
@@ -49,6 +50,114 @@ class MerkleState extends Table
     protected function convertKeyMap(AttributeKeyMap $inputMap): array
     {
         return [];
+    }
+
+    /**
+     * Return the witness data (including public key) for a given origin
+     *
+     * @param string $origin
+     * @return array<string, mixed>
+     * @throws TableException
+     */
+    public function getWitnessByOrigin(string $origin): array
+    {
+        /** @var array<string, mixed> $witness */
+        $witness = $this->db->row(
+            "SELECT * FROM pkd_merkle_witnesses WHERE origin = ?",
+            $origin
+        );
+        if (!$witness) {
+            throw new TableException('Witness not found for ' . $origin);
+        }
+        return $witness;
+    }
+
+    /**
+     * @api
+     *
+     * @param string $origin
+     * @param string $merkleRoot
+     * @param string $cosignature
+     * @return bool
+     *
+     * @throws CryptoException
+     * @throws JsonException
+     * @throws NotImplementedException
+     * @throws ProtocolException
+     * @throws SodiumException
+     * @throws TableException
+     */
+    public function addWitnessCosignature(string $origin, string $merkleRoot, string $cosignature): bool
+    {
+        // Throw if witness is not in allow-list:
+        $witness = $this->getWitnessByOrigin($origin);
+
+        // Ensure we're dealing with a valid cosignature
+        $pk = PublicKey::fromString($witness['publickey']);
+
+        // This will throw if the signature is invalid:
+        $tmp = Cosignature::verifyCosignature($pk, $cosignature);
+        if (!hash_equals($tmp['merkle-root'], $merkleRoot)) {
+            throw new ProtocolException('Cosignature Merkle root mismatch');
+        }
+
+        // Validate hostname:
+        $hostname = $this->config->getParams()->hostname;
+        if ($tmp['hostname'] !== $hostname) {
+            // If hostname is formatted as a URL, just grab the hostname:
+            $parsedUrl = parse_url($tmp['hostname']);
+            if ($parsedUrl['host'] !== $hostname) {
+                // Both mismatched? Bail out.
+                throw new ProtocolException('Hostname mismatch');
+            }
+        }
+
+        // Grab the leaf that they're cosigning:
+        $leaf = $this->getLeafByRoot($merkleRoot);
+
+        // If we get here without throwing, we're good:
+        $this->db->beginTransaction();
+        $this->db->insert(
+            'pkd_merkle_witness_cosignatures',
+            [
+                'leaf' => $leaf->primaryKey,
+                'witness' => $witness['witnessid'],
+                'cosignature' => $cosignature,
+            ]
+        );
+        return $this->db->commit();
+    }
+
+    public function getCosignatures(int $leafId): array
+    {
+        // TODO: cache
+        $cosigs = $this->db->run(
+            "SELECT
+                    w.origin AS witness,
+                    w.publickey,
+                    c.cosignature,
+                    c.created
+                FROM pkd_merkle_witness_cosignatures c 
+                JOIN pkd_merkle_witnesses w ON c.witness = w.witnessid
+                WHERE c.leaf = ?",
+            $leafId
+        );
+        if (empty($cosigs)) {
+            return [];
+        }
+        return $cosigs;
+    }
+
+    public function countCosignatures(int $leafId): int
+    {
+        $count = $this->db->cell(
+            "SELECT count(*) FROM pkd_merkle_witness_cosignatures WHERE leaf = ?",
+            $leafId
+        );
+        if (!$count) {
+            return 0;
+        }
+        return (int) $count;
     }
 
     /**
@@ -201,7 +310,7 @@ class MerkleState extends Table
             }
         }
         $oldRecords = $this->db->run(
-            "SELECT contents, root, created
+            "SELECT publickeyhash, contents, contenthash, root, created, signature
             FROM pkd_merkle_leaves
             WHERE merkleleafid > ?
             LIMIT {$limit} OFFSET {$offset}",
@@ -212,6 +321,9 @@ class MerkleState extends Table
             $return[] = [
                 'created' => $row['created'],
                 'encrypted-message' => $row['contents'],
+                'contenthash' => $row['contenthash'],
+                'publickeyhash' => $row['publickeyhash'],
+                'signature' => $row['signature'],
                 'message' => null,
                 'merkle-root' => $row['root'],
                 'rewrapped-keys' => null,

@@ -57,6 +57,7 @@ CREATE TABLE IF NOT EXISTS pkd_actors (
     modified TIMESTAMP DEFAULT NOW()
 );
 CREATE UNIQUE INDEX ON pkd_actors(activitypubid);
+CREATE INDEX ON pkd_actors(activitypubid_idx);
 
 -- Public Keys
 CREATE TABLE IF NOT EXISTS pkd_actors_publickeys (
@@ -115,6 +116,17 @@ CREATE TABLE IF NOT EXISTS pkd_log (
     level INTEGER,
     message TEXT,
     created TIMESTAMP DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS pkd_peers (
+    peerid BIGSERIAL PRIMARY KEY,
+    hostname TEXT,
+    publickey TEXT,
+    incrementaltreestate TEXT,
+    latestroot TEXT,
+    replicate BOOLEAN DEFAULT FALSE,
+    created TIMESTAMP DEFAULT NOW(),
+    modified TIMESTAMP DEFAULT NOW()
 );
 
 -- Update modification time triggers

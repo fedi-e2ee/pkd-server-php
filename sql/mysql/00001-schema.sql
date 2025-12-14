@@ -53,7 +53,7 @@ CREATE TABLE IF NOT EXISTS pkd_actors (
     FOREIGN KEY (fireproofleaf) REFERENCES pkd_merkle_leaves(merkleleafid),
     FOREIGN KEY (undofireproofleaf) REFERENCES pkd_merkle_leaves(merkleleafid),
     FOREIGN KEY (movedleaf) REFERENCES pkd_merkle_leaves(merkleleafid),
-    UNIQUE KEY `pkd_actors_activitypubid_bi` (activitypubid_idx(255))
+    INDEX `pkd_actors_activitypubid_bi` (activitypubid_idx(255))
 );
 
 -- Public Keys
@@ -119,4 +119,15 @@ CREATE TABLE IF NOT EXISTS pkd_log (
     level INTEGER,
     message LONGTEXT,
     created TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS pkd_peers(
+    peerid BIGINT PRIMARY KEY AUTO_INCREMENT,
+    hostname TEXT,
+    publickey TEXT,
+    incrementaltreestate TEXT,
+    latestroot TEXT,
+    replicate BOOLEAN DEFAULT FALSE,
+    created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

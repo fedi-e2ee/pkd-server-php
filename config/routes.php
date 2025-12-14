@@ -9,6 +9,7 @@ use FediE2EE\PKDServer\RequestHandlers\Api\{
     GetAuxData,
     GetKey,
     History,
+    HistoryCosign,
     HistorySince,
     HistoryView,
     Info,
@@ -53,6 +54,7 @@ $router->group('/api', function(RouteGroup $r) use ($router) {
     $r->map('GET', '/server-public-key', ServerPublicKey::class);
 
     $r->map('POST', '/checkpoint', Checkpoint::class);
+    $r->map('POST', '/history/cosign/{hash}', HistoryCosign::class);
     $r->map('POST', '/revoke', Revoke::class);
     $r->map('POST', '/totp/enroll', TotpEnroll::class);
     $r->map('POST', '/totp/disenroll', TotpDisenroll::class);

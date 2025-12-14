@@ -55,7 +55,7 @@ trait ReqTrait
      * @throws NotImplementedException
      * @throws SodiumException
      */
-    public function error(string $message, int $code = 408): ResponseInterface
+    public function error(string $message, int $code = 400): ResponseInterface
     {
         return $this->json(['error' => $message], $code);
     }

@@ -113,6 +113,8 @@ class HistoryViewTest extends TestCase
         $this->assertSame(200, $response->getStatusCode());
         $body = json_decode($response->getBody()->getContents(), true);
         $this->assertSame('fedi-e2ee:v1/api/history/view', $body['!pkd-context']);
+        $this->assertArrayHasKey('witnesses', $body);
+        $this->assertIsArray($body['witnesses']);
         $this->assertSame($newRoot, $body['merkle-root']);
     }
 }

@@ -61,7 +61,7 @@ class HistorySince implements RequestHandlerInterface
         $records = $this->merkleState->getHashesSince($lastHash, 100);
         return $this->json([
             '!pkd-context' => 'fedi-e2ee:v1/api/history/since',
-            'current-time' => (string) (new DateTime())->getTimestamp(),
+            'current-time' => $this->time(),
             'records' => $records,
         ]);
     }

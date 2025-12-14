@@ -20,7 +20,7 @@
     "ext-pdo": "*",
     "ext-json": "*",
     "ext-sodium": "*",
-    "fedi-e2ee/pkd-crypto": "^0.19|1",
+    "fedi-e2ee/pkd-crypto": "^0.20|1",
     "fedi-e2ee/pkd-extensions": "^0.2|^1",
     "guzzlehttp/guzzle": "^7",
     "laminas/laminas-diactoros": "^3",
@@ -41,12 +41,12 @@
     "ulrichsg/getopt-php": "^4"
   },
   "require-dev": {
-    "vimeo/psalm": "^6.14",
     "friendsofphp/php-cs-fixer": "^3.5",
     "nikic/php-fuzzer": "^0.0.11",
     "phpstan/phpstan": "^2.1",
     "phpunit/phpunit": "^12",
-    "roave/security-advisories": "dev-latest"
+    "roave/security-advisories": "dev-latest",
+    "vimeo/psalm": "^6.14"
   },
   "config": {
     "allow-plugins": {

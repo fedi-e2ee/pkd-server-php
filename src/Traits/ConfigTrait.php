@@ -12,11 +12,17 @@ use FediE2EE\PKDServer\Tables\{
     ActivityStreamQueue,
     AuxData,
     MerkleState,
+    Peers,
     PublicKeys,
     TOTP
 };
 use FediE2EE\PKDServer\Exceptions\TableException;
-use FediE2EE\PKDServer\{AppCache, ServerConfig, Table, TableCache};
+use FediE2EE\PKDServer\{
+    AppCache,
+    ServerConfig,
+    Table,
+    TableCache
+};
 use GuzzleHttp\Client;
 use ParagonIE\Certainty\Exception\CertaintyException;
 use SodiumException;
@@ -44,10 +50,11 @@ trait ConfigTrait
         }
 
         $table = match ($tableName) {
-            'Actors' => new Actors($this->config()),
             'ActivityStreamQueue' => new ActivityStreamQueue($this->config()),
+            'Actors' => new Actors($this->config()),
             'AuxData' => new AuxData($this->config()),
             'MerkleState' => new MerkleState($this->config()),
+            'Peers' => new Peers($this->config()),
             'PublicKeys' => new PublicKeys($this->config()),
             'TOTP' => new TOTP($this->config()),
             default => throw new TableException('Unknown table name: ' . $tableName)
