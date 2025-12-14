@@ -194,7 +194,19 @@ class CosignLifecycleTest extends TestCase
                 $record['publickeyhash'],
                 $record['signature'],
             );
-            $cosign->append($hist, $thisRoot);
+            try {
+                $cosign->append($hist, $thisRoot);
+            } catch (CryptoException $ex) {
+                $clone = clone $cosign->getTree();
+                $clone->addLeaf($hist->serializeForMerkle());
+                var_dump([
+                    'message' => $ex->getMessage(),
+                    'calculated' => $clone->getEncodedRoot(),
+                    'expected' => $thisRoot,
+                    'hashed' => hash('sha256', $hist->serializeForMerkle()),
+                    'record' => $record,
+                ]);
+            }
             $cosigned = $cosign->cosign($witnessSK, $this->config->getParams()->hostname);
 
             // Push cosignature to PKD
