@@ -93,7 +93,7 @@ class Peers extends Table
     public function listAll(): array
     {
         $peerList = [];
-        foreach ($this->db->run("SELECT * FROM peers") as $peer) {
+        foreach ($this->db->run("SELECT * FROM pkd_peers") as $peer) {
             if (empty($peer['incrementaltreestate'])) {
                 $tree = new IncrementalTree();
             } else {
