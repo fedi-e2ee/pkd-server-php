@@ -4,7 +4,7 @@ declare(strict_types=1);
 use GetOpt\GetOpt;
 use GetOpt\Option;
 use FediE2EE\PKDServer\ServerConfig;
-use const FediE2EE\PKDServer\PKD_SERVER_ROOT;;
+use const FediE2EE\PKDServer\PKD_SERVER_ROOT;
 
 require_once dirname(__DIR__) . '/vendor/autoload.php';
 
