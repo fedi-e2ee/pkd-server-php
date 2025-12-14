@@ -17,7 +17,6 @@ use FediE2EE\PKDServer\Exceptions\{
     ProtocolException,
     TableException
 };
-
 use FediE2EE\PKDServer\{
     ActivityPub\WebFinger,
     AppCache,
