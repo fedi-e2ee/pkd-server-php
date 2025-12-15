@@ -2,9 +2,15 @@
 /.gitignore export-ignore
 /.github export-ignore
 /.phpunit.cache export-ignore
+/.php-cs-fixer.cache export-ignore
+/.php-cs-fixer.dist.php export-ignore
+/docs export-ignore
 /tests export-ignore
 /tmp export-ignore
 /vendor export-ignore
+/CONTRIBUTING.md export-ignore
 /infection.json.dist export-ignore
+/LICENSE export-ignore
+/phpstan.neon export-ignore
 /phpunit.xml export-ignore
 /psalm.xml export-ignore
