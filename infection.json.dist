@@ -6,7 +6,7 @@
         ]
     },
     "threads": "max",
-    "minCoveredMsi": 50,
+    "minCoveredMsi": 65,
     "phpUnit": {
         "configDir": "."
     },
