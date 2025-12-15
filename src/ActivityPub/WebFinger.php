@@ -119,7 +119,7 @@ class WebFinger
         }
         $jrd = json_decode($response->getBody()->getContents(), true);
         if (!is_array($jrd)) {
-            throw new NetworkException('Invalid JSON');
+            throw new NetworkException('Invalid JSON: ' . json_last_error_msg());
         }
         return $jrd;
     }

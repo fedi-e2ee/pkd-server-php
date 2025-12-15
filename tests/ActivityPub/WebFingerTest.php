@@ -416,6 +416,42 @@ class WebFingerTest extends TestCase
      * @throws NetworkException
      * @throws SodiumException
      */
+    public function testFetch(): void
+    {
+        $jsonStr = json_encode(['links' => [['rel' => 'self', 'type' => 'application/activity+json', 'href' => 'https://example.com/users/alice']]]);
+        $mockHttp = $this->getMockClient([
+            new Response(
+                200,
+                ['Content-Type' => 'application/json'],
+                $jsonStr
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/json'],
+                $jsonStr
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/json'],
+                $jsonStr
+            ),
+        ]);
+        $webFinger = new WebFinger($this->getConfig(), $mockHttp, $this->getConfig()->getCaCertFetch());
+        $res1 = $webFinger->fetch('alice@example.com');
+        $res2 = $webFinger->fetch('@alice@example.com');
+        $res3 = $webFinger->fetch('@@alice@example.com');
+        $this->assertSame($res1['links']['href'], $res2['links']['href']);
+        $this->assertSame($res2['links']['href'], $res3['links']['href']);
+        $this->assertSame($res3['links']['href'], $res1['links']['href']);
+    }
+
+    /**
+     * @throws CertaintyException
+     * @throws DependencyException
+     * @throws GuzzleException
+     * @throws NetworkException
+     * @throws SodiumException
+     */
     public function testLeadingAtSymbol(): void
     {
         $container = [];
