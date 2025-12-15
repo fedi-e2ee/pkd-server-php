@@ -12,3 +12,11 @@ each with a distinct intended audience.
 
 If the documentation contains any errors or omissions, please understand that we're writing it by hand (or by paw), not
 with large language models.
+
+## Where is the cryptography?
+
+We extracted most cryptographic features into [fedi-e2ee/pkd-crypto](https://github.com/fedi-e2ee/pkd-crypto) for ease
+of reuse. 
+
+The cryptographic algorithms and protocols used are documented in the 
+[specification](https://github.com/fedi-e2ee/public-key-directory-specification).
