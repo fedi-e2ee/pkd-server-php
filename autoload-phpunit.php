@@ -67,7 +67,12 @@ if (!($GLOBALS['pkdConfig'] instanceof ServerConfig)) {
         $_SERVER['argv'] = [$_SERVER['argv'][0]];
         require __DIR__ . '/cmd/init-database.php';
         $_SERVER['argv'] = $argv_backup;
-        echo 'Imported!', PHP_EOL;
+        if (tableExists($db, 'pkd_loh')) {
+            echo 'Imported!', PHP_EOL;
+        } else {
+            // This is normally dangerous, but we need to trigger it again just to be sure:
+            shell_exec(PHP_BINARY . ' ' . __DIR__ . '/cmd/init-database.php');
+        }
     }
 
     // Create test extension:
