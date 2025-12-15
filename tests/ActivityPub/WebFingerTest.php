@@ -19,6 +19,7 @@ use FediE2EE\PKDServer\ServerConfig;
 use FediE2EE\PKDServer\Tests\HttpTestTrait;
 use GuzzleHttp\{
     Client,
+    Exception\ClientException,
     Exception\GuzzleException,
     Exception\RequestException,
     Handler\MockHandler,
@@ -245,6 +246,35 @@ class WebFingerTest extends TestCase
         $this->assertSame($pk->toString(), $fetchedPk->toString());
     }
 
+    public function testGetPublicKeyInvalidBecauseRsa(): void
+    {
+        $sk = SecretKey::generate();
+        $pk = $sk->getPublicKey();
+
+        $mockHttp = $this->getMockClient([
+            new Response(200, ['Content-Type' => 'application/json'], json_encode([
+                'links' => [
+                    [
+                        'rel' => 'self',
+                        'type' => 'application/activity+json',
+                        'href' => 'https://example.com/users/alice'
+                    ]
+                ]
+            ])),
+            new Response(200, ['Content-Type' => 'application/activity+json'], json_encode([
+                'assertionMethod' => [
+                    [
+                        'publicKeyMultibase' =>
+                            "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAyaTgTt53ph3p5GHgwoGW\nwz5hRfWXSQA08NCOwe0FEgALWos9GCjNFCd723nCHxBtN1qd74MSh/uN88JPIbwx\nKheDp4kxo4YMN5trPaF0e9G6Bj1N02HnanxFLW+gmLbgYO/SZYfWF/M8yLBcu5Y1\nOt0ZxDDDXS9wIQTtBE0ne3YbxgZJAZTU5XqyQ1DxdzYyC5lF6yBaR5UQtCYTnXAA\npVRuUI2Sd6L1E2vl9bSBumZ5IpNxkRnAwIMjeTJB/0AIELh0mE5vwdihOCbdV6al\nUyhKC1+1w/FW6HWcp/JG1kKC8DPIidZ78Bbqv9YFzkAbNni5eSBOsXVBKG78Zsc8\nowIDAQAB\n-----END PUBLIC KEY-----"
+                    ]
+                ]
+            ]))
+        ]);
+        $webFinger = new WebFinger($this->getConfig(), $mockHttp);
+        $this->expectException(FetchException::class);
+        $webFinger->getPublicKey('https://example.com/users/alice');
+    }
+
     /**
      * @throws CertaintyException
      * @throws CryptoException
@@ -435,6 +465,11 @@ class WebFingerTest extends TestCase
                 ['Content-Type' => 'application/json'],
                 $jsonStr
             ),
+            new Response(
+                404,
+                ['Content-Type' => 'application/json'],
+                '',
+            )
         ]);
         $webFinger = new WebFinger($this->getConfig(), $mockHttp, $this->getConfig()->getCaCertFetch());
         $res1 = $webFinger->fetch('alice@example.com');
@@ -443,6 +478,10 @@ class WebFingerTest extends TestCase
         $this->assertSame($res1['links']['href'], $res2['links']['href']);
         $this->assertSame($res2['links']['href'], $res3['links']['href']);
         $this->assertSame($res3['links']['href'], $res1['links']['href']);
+
+        // The fourth response we loaded up should throw an exception:
+        $this->expectException(ClientException::class);
+        $webFinger->fetch('@@alice@example.com');
     }
 
     /**
