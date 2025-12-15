@@ -35,7 +35,7 @@ class EasyDBHandler extends AbstractProcessingHandler
         }
         $this->statement->execute([
             'channel' => $record->channel,
-            'level' => $record->level,
+            'level' => $record->level->value,
             'message' => $record->formatted,
             'time' => $record->datetime->format('U'),
         ]);
