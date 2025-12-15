@@ -43,7 +43,7 @@ MUST be tied to a specific, unique record in the Merkle Tree history.
 
 #### Symmetric Key Wrapping
 
-> ![NOTICE]
+> ![NOTE]
 > This is not normative to the spec, but an implementation detail we do in the PHP software.
 
 When messages are to be stored encrypted in the database, we re-wrap the client-provided symmetric key (if you recall,
