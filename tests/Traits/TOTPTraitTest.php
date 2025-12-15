@@ -13,7 +13,7 @@ class TOTPTraitTest extends TestCase
 {
     public function getDummyClass(): object
     {
-        return new class {
+        return new class() {
             use TOTPTrait;
             private ServerConfig $config;
             public function __construct()
