@@ -1,16 +1,14 @@
 <?php
 declare(strict_types=1);
-namespace FediE2EE\PKDServer\Tests;
+namespace FediE2EE\PKDServer\Tests\Traits;
 
 use FediE2EE\PKDServer\ActivityPub\WebFinger;
 use FediE2EE\PKDServer\Exceptions\TableException;
-use FediE2EE\PKDServer\Tables\{
-    Actors,
-    TOTP
-};
+use FediE2EE\PKDServer\Tables\{Actors, TOTP};
+use FediE2EE\PKDServer\Tests\HttpTestTrait;
+use FediE2EE\PKDServer\Traits\ConfigTrait;
 use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\TestCase;
-use FediE2EE\PKDServer\Traits\ConfigTrait;
 
 #[CoversNothing]
 class ConfigTraitTest extends TestCase

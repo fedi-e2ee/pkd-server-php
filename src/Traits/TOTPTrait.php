@@ -69,7 +69,7 @@ trait TOTPTrait
         $truncatedHash = substr($hash, $offset, 4);
         $value = unpack('N', $truncatedHash)[1];
         $value &= 0x7FFFFFFF;
-        return sprintf('%08d', $value);
+        return substr(sprintf('%08d', $value), -8);
     }
 
     /**
