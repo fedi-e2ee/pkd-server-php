@@ -32,9 +32,12 @@ file_put_contents($tempFile, $newCrontab);
 
 // Load the new crontab from the temporary file
 $output = '';
+// nosemgrep: php.lang.security.exec-use.exec-use
 exec("crontab {$tempFile}", $output, $return_var);
 
 // Clean up the temporary file
+// This is not actually based on user input, but the OS temporary directory features.
+// nosemgrep: php.lang.security.unlink-use.unlink-use
 unlink($tempFile);
 
 if ($return_var === 0) {

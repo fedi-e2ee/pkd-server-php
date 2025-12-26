@@ -71,6 +71,7 @@ if (!($GLOBALS['pkdConfig'] instanceof ServerConfig)) {
             echo 'Imported!', PHP_EOL;
         } else {
             // This is normally dangerous, but we need to trigger it again just to be sure:
+            // nosemgrep: php.lang.security.exec-use.exec-use
             shell_exec(PHP_BINARY . ' ' . __DIR__ . '/cmd/init-database.php');
         }
     }
