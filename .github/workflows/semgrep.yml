@@ -18,4 +18,12 @@ jobs:
     if: (github.actor != 'dependabot[bot]')
     steps:
       - uses: actions/checkout@v4
-      - run: semgrep scan --config auto
+      - run: |
+         semgrep scan \
+            --config auto \
+            --config p/phpcs-security-audit \
+            --config p/security-audit \
+            --config p/secure-defaults \
+            --config p/owasp-top-ten \
+            --config p/cwe-top-25 \
+            --config p/trailofbits
