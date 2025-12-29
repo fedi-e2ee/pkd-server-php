@@ -1,3 +1,5 @@
+BEGIN TRANSACTION;
+
 CREATE OR REPLACE FUNCTION update_modtime()
     RETURNS TRIGGER AS $body$
 BEGIN
@@ -144,3 +146,5 @@ DROP TRIGGER IF EXISTS update_pkd_actors_auxdata_modtime ON pkd_actors_auxdata;
 CREATE TRIGGER update_pkd_actors_auxdata_modtime
     BEFORE UPDATE ON pkd_actors_auxdata
     FOR EACH ROW EXECUTE PROCEDURE update_modtime();
+
+COMMIT;
