@@ -1,4 +1,4 @@
-BEGIN TRANSACTION;
+START TRANSACTION;
 
 -- A table with one row so we can lock its state with "SELECT ... FOR UPDATE":
 CREATE TABLE IF NOT EXISTS pkd_merkle_state (
