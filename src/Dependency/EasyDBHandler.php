@@ -23,7 +23,7 @@ class EasyDBHandler extends AbstractProcessingHandler
     private function initialize(): void
     {
         $this->statement = $this->db->prepare(
-            "INSERT INTO pkd_log (channel, level, message, time) VALUES (:channel, :level, :message, :time)"
+            "INSERT INTO pkd_log (channel, level, message, created) VALUES (:channel, :level, :message, :time)"
         );
     }
 
