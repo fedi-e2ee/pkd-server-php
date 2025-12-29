@@ -69,6 +69,9 @@ function check_witness_run(Witness $witness): void
     }
 }
 
+// We hard-cap this process at 60 seconds since it runs every minute:
+set_time_limit(60);
+
 // Current time (with microsecond resolution):
 $start = microtime(true);
 
