@@ -77,16 +77,57 @@ class Protocol
         // We already verified te HTTP Message Signature in the Inbox ResponseHandler.
         // If it was enqueued, we can assume the signature was valid.
 
+        // First, parse the outer JSON envelope (per v0.3.0+ of the specification)
+        $outerJson = json_decode($enqueued->object->content, true);
+        if (!is_array($outerJson)) {
+            throw new ProtocolException('Only JSON objects are allowed.');
+        }
+        if (!array_key_exists('!pkd-context', $outerJson)) {
+            throw new ProtocolException('No !pkd-context was set.');
+        }
+        if (!array_key_exists('actor', $outerJson)) {
+            throw new ProtocolException('No actor was set.');
+        }
+
+        // Let's figure out, from the context, whether encryption was expected:
+        $contextImpliesEncryption = match($outerJson['!pkd-context']) {
+            'fedi-e2ee:v1-encrypted-message' => true,
+            'fedi-e2ee:v1-plaintext-message' => false,
+            default => throw new ProtocolException('Invalid !pkd-context value'),
+        };
+        if ($contextImpliesEncryption) {
+            if (!array_key_exists('encrypted-message', $outerJson)) {
+                throw new ProtocolException('No "encrypted-message" was set.');
+            }
+            if (array_key_exists('plaintext-message', $outerJson)) {
+                throw new ProtocolException('Unexpected "plaintext-message".');
+            }
+            $fieldToUse = 'encrypted-message';
+        } else {
+            if (!array_key_exists('plaintext-message', $outerJson)) {
+                throw new ProtocolException('No "plaintext-message" was set.');
+            }
+            if (array_key_exists('encrypted-message', $outerJson)) {
+                throw new ProtocolException('Unexpected "encrypted-message".');
+            }
+            $fieldToUse = 'plaintext-message';
+        }
+
         // Is this encrypted?
         $hpke = $this->config->getHPKE();
         $adapter = new HPKEAdapter($hpke->cs);
-        $wasEncrypted = $adapter->isHpkeCiphertext($enqueued->object->content);
+        $wasEncrypted = $adapter->isHpkeCiphertext($outerJson[$fieldToUse]);
+
+        // Let's bail out if anything strange is happening:
+        if ($wasEncrypted !== $contextImpliesEncryption) {
+            throw new ProtocolException('Client confusion: an HPKE encrypted payload was sent as plaintext.');
+        }
 
         // If it was encrypted, we should decrypt it:
         if ($wasEncrypted) {
-            $raw = $adapter->open($hpke->decapsKey, $hpke->encapsKey, $enqueued->object->content);
+            $raw = $adapter->open($hpke->decapsKey, $hpke->encapsKey, $outerJson[$fieldToUse]);
         } else {
-            $raw = $enqueued->object->content;
+            $raw = $outerJson[$fieldToUse];
         }
 
         // Parse the plaintext, grab the action parameter;
