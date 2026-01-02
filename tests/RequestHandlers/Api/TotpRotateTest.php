@@ -114,7 +114,7 @@ class TotpRotateTest extends TestCase
             $serverHpke->encapsKey,
             $serverHpke->cs,
         );
-        $addKeyResult = $protocol->addKey($encryptedForServer);
+        $addKeyResult = $protocol->addKey($encryptedForServer, $canonical);
         $keyId = $addKeyResult->keyID;
 
         $domain = parse_url($canonical)['host'];

@@ -99,7 +99,7 @@ class ActorTest extends TestCase
             $serverHpke->encapsKey,
             $serverHpke->cs
         );
-        $protocol->addKey($encryptedForServer);
+        $protocol->addKey($encryptedForServer, $canonical);
 
         // Add aux data
         $addAux = new AddAuxData($canonical, 'test', 'test');
@@ -114,7 +114,7 @@ class ActorTest extends TestCase
             $serverHpke->encapsKey,
             $serverHpke->cs
         );
-        $protocol->addAuxData($encryptedForServer);
+        $protocol->addAuxData($encryptedForServer, $canonical);
 
         $request = $this->makeGetRequest('/api/actor/' . urlencode($actorId));
         $request = $request->withAttribute('actor_id', $actorId);

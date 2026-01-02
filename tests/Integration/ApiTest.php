@@ -174,7 +174,7 @@ class ApiTest extends TestCase
             $serverHpke->encapsKey,
             $serverHpke->cs
         );
-        $protocol->addKey($encryptedForServer);
+        $protocol->addKey($encryptedForServer, $canonical);
 
         // Add aux data
         $addAux = new AddAuxData($canonical, 'test', 'test');
@@ -189,7 +189,7 @@ class ApiTest extends TestCase
             $serverHpke->encapsKey,
             $serverHpke->cs
         );
-        $protocol->addAuxData($encryptedForServer);
+        $protocol->addAuxData($encryptedForServer, $canonical);
 
         $request = $this->makeGetRequest('/api/actor/' . urlencode($actorId));
         $request = $request->withAttribute('actor_id', $actorId);
@@ -265,7 +265,7 @@ class ApiTest extends TestCase
             $serverHpke->encapsKey,
             $serverHpke->cs
         );
-        $protocol->addKey($encryptedForServer);
+        $protocol->addKey($encryptedForServer, $canonical);
 
         $request = $this->makeGetRequest('/api/actor/' . urlencode($actorId) . '/keys');
         $request = $request->withAttribute('actor_id', $actorId);
@@ -358,7 +358,7 @@ class ApiTest extends TestCase
             $serverHpke->encapsKey,
             $serverHpke->cs
         );
-        $protocol->addKey($encryptedForServer);
+        $protocol->addKey($encryptedForServer, $canonical);
 
         // Add aux data
         $addAux = new AddAuxData($canonical, 'test', 'test-data');
@@ -373,7 +373,7 @@ class ApiTest extends TestCase
             $serverHpke->encapsKey,
             $serverHpke->cs
         );
-        $protocol->addAuxData($encryptedForServer);
+        $protocol->addAuxData($encryptedForServer, $canonical);
 
         $request = $this->makeGetRequest('/api/actor/' . urlencode($actorId) . '/auxiliary');
         $request = $request->withAttribute('actor_id', $actorId);
@@ -462,7 +462,7 @@ class ApiTest extends TestCase
             $serverHpke->encapsKey,
             $serverHpke->cs
         );
-        $protocol->addKey($encryptedForServer);
+        $protocol->addKey($encryptedForServer, $canonical);
         $newRoot = $merkleState->getLatestRoot();
         $this->assertNotSame($newRoot, $latestRoot);
 
@@ -587,7 +587,7 @@ class ApiTest extends TestCase
             $serverHpke->encapsKey,
             $serverHpke->cs
         );
-        $protocol->addKey($encryptedForServer);
+        $protocol->addKey($encryptedForServer, $canonical);
 
         // Now, let's build a revocation token.
         $revocation = new Revocation();

@@ -147,7 +147,7 @@ class ActorLifecycleTest extends TestCase
             $serverHpke->encapsKey,
             $serverHpke->cs,
         );
-        $protocol->addKey($encryptedForServer1);
+        $protocol->addKey($encryptedForServer1, $canonical);
 
         // Verify with HTTP request
         $request = $this->makeGetRequest('/api/actor/' . urlencode($actorId) . '/keys');
@@ -185,7 +185,7 @@ class ActorLifecycleTest extends TestCase
             $serverHpke->encapsKey,
             $serverHpke->cs,
         );
-        $protocol->revokeKey($encryptedForServer2);
+        $protocol->revokeKey($encryptedForServer2, $canonical);
 
         // Verify with HTTP request
         $response = $actorHandler->handle($request);

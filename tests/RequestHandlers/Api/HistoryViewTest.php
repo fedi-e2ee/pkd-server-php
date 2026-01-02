@@ -96,7 +96,7 @@ class HistoryViewTest extends TestCase
             $serverHpke->encapsKey,
             $serverHpke->cs
         );
-        $protocol->addKey($encryptedForServer);
+        $protocol->addKey($encryptedForServer, $canonical);
         $newRoot = $merkleState->getLatestRoot();
 
         $reflector = new ReflectionClass(HistoryView::class);

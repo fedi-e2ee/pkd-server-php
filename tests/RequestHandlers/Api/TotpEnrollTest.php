@@ -120,7 +120,7 @@ class TotpEnrollTest extends TestCase
             $serverHpke->encapsKey,
             $serverHpke->cs,
         );
-        $result = $protocol->addKey($encryptedForServer);
+        $result = $protocol->addKey($encryptedForServer, $canonical);
         $keyId = $result->keyID;
 
         // Generate TOTP secret and codes

@@ -6,6 +6,7 @@ use FediE2EE\PKD\Crypto\Exceptions\{
     BundleException,
     CryptoException,
     JsonException,
+    NetworkException,
     NotImplementedException
 };
 use FediE2EE\PKD\Crypto\Protocol\{
@@ -37,6 +38,7 @@ use FediE2EE\PKDServer\Tables\Records\{
     ActorKey,
     MerkleLeaf
 };
+use GuzzleHttp\Exception\GuzzleException;
 use FediE2EE\PKDServer\Traits\{
     ProtocolMethodTrait,
     TOTPTrait
@@ -288,12 +290,13 @@ class PublicKeys extends Table
      * @throws SodiumException
      * @throws TableException
      */
-    public function addKey(Payload $payload): ActorKey
+    public function addKey(Payload $payload, string $outerActor): ActorKey
     {
         return $this->protocolMethod(
             $payload,
             'AddKey',
-            fn (MerkleLeaf $leaf, Payload $payload) => $this->addKeyCallback($leaf, $payload)
+            fn (MerkleLeaf $leaf, Payload $payload) =>
+                $this->addKeyCallback($leaf, $payload, $outerActor)
         );
     }
 
@@ -305,12 +308,13 @@ class PublicKeys extends Table
      * @throws SodiumException
      * @throws TableException
      */
-    public function revokeKey(Payload $payload): ActorKey
+    public function revokeKey(Payload $payload, string $outerActor): ActorKey
     {
         return $this->protocolMethod(
             $payload,
             'RevokeKey',
-            fn (MerkleLeaf $leaf, Payload $payload) => $this->revokeKeyCallback($leaf, $payload)
+            fn (MerkleLeaf $leaf, Payload $payload) =>
+                $this->revokeKeyCallback($leaf, $payload, $outerActor)
         );
     }
 
@@ -340,12 +344,13 @@ class PublicKeys extends Table
      * @throws SodiumException
      * @throws TableException
      */
-    public function moveIdentity(Payload $payload): bool
+    public function moveIdentity(Payload $payload, string $outerActor): bool
     {
         return $this->protocolMethod(
             $payload,
             'MoveIdentity',
-            fn (MerkleLeaf $leaf, Payload $payload) => $this->moveIdentityCallback($leaf, $payload)
+            fn (MerkleLeaf $leaf, Payload $payload) =>
+                $this->moveIdentityCallback($leaf, $payload, $outerActor)
         );
     }
 
@@ -362,7 +367,9 @@ class PublicKeys extends Table
      * @throws CryptoOperationException
      * @throws DateMalformedStringException
      * @throws DependencyException
+     * @throws GuzzleException
      * @throws InvalidCiphertextException
+     * @throws NetworkException
      * @throws JsonException
      * @throws NotImplementedException
      * @throws ProtocolException
@@ -370,7 +377,7 @@ class PublicKeys extends Table
      * @throws SodiumException
      * @throws TableException
      */
-    protected function addKeyCallback(MerkleLeaf $leaf, Payload $payload): ActorKey
+    protected function addKeyCallback(MerkleLeaf $leaf, Payload $payload, string $outerActor): ActorKey
     {
         $decoded = $payload->jsonDecode();
 
@@ -390,6 +397,9 @@ class PublicKeys extends Table
             throw new TypeError('Decrypted message must be an AddKey');
         }
         $actionData = $decrypted->toArray();
+
+        // Explicit check that the outer actor (from ActivityPub) matches the protocol message
+        $this->explicitOuterActorCheck($outerActor, $actionData['actor']);
 
         // Does this actor need to e created? (Only AddKey can create an actor!)
         $actor = $actorTable->searchForActor($actionData['actor']);
@@ -456,13 +466,15 @@ class PublicKeys extends Table
      * @throws CryptoOperationException
      * @throws DateMalformedStringException
      * @throws DependencyException
+     * @throws GuzzleException
      * @throws InvalidCiphertextException
+     * @throws NetworkException
      * @throws NotImplementedException
      * @throws ProtocolException
      * @throws SodiumException
      * @throws TableException
      */
-    protected function revokeKeyCallback(MerkleLeaf $leaf, Payload $payload): ActorKey
+    protected function revokeKeyCallback(MerkleLeaf $leaf, Payload $payload, string $outerActor): ActorKey
     {
         $rawJson = $payload->rawJson;
         $decoded = json_decode($rawJson, true);
@@ -476,11 +488,14 @@ class PublicKeys extends Table
         if (!($decrypted instanceof RevokeKey)) {
             throw new ProtocolException('Invalid message type');
         }
-        $array = $decrypted->toArray();
+        $actionData = $decrypted->toArray();
+
+        // Explicit check that the outer actor (from ActivityPub) matches the protocol message
+        $this->explicitOuterActorCheck($outerActor, $actionData['actor']);
         $sm = Bundle::fromJson($rawJson)->toSignedMessage();
         $candidatePublicKeys = $this->getPublicKeysFor(
-            actorName: $array['actor'],
-            keyId: $array['key-id'] ?? ''
+            actorName: $actionData['actor'],
+            keyId: $actionData['key-id'] ?? ''
         );
         foreach ($candidatePublicKeys as $row) {
             if ($sm->verify($row['public-key'])) {
@@ -576,13 +591,15 @@ class PublicKeys extends Table
      * @throws CryptoOperationException
      * @throws DateMalformedStringException
      * @throws DependencyException
+     * @throws GuzzleException
      * @throws InvalidCiphertextException
+     * @throws NetworkException
      * @throws NotImplementedException
      * @throws ProtocolException
      * @throws SodiumException
      * @throws TableException
      */
-    protected function moveIdentityCallback(MerkleLeaf $leaf, Payload $payload): bool
+    protected function moveIdentityCallback(MerkleLeaf $leaf, Payload $payload, string $outerActor): bool
     {
         $rawJson = $payload->rawJson;
         $decoded = json_decode($rawJson, true);
@@ -597,13 +614,15 @@ class PublicKeys extends Table
         if (!($decrypted instanceof MoveIdentity)) {
             throw new ProtocolException('Invalid message type');
         }
-        $array = $decrypted->toArray();
+        $actionData = $decrypted->toArray();
+        // Explicit check that the outer actor (from ActivityPub) matches the protocol message
+        $this->explicitOuterActorCheck($outerActor, $actionData['new-actor']);
         $sm = Bundle::fromJson($rawJson)->toSignedMessage();
 
         $oldActorId = $actorTable
-            ->searchForActor($array['old-actor'])->getPrimaryKey();
+            ->searchForActor($actionData['old-actor'])->getPrimaryKey();
         $candidatePublicKeys = $this->getPublicKeysFor(
-            actorName: $array['old-actor'],
+            actorName: $actionData['old-actor'],
             keyId: $decoded['key-id'] ?? ''
         );
 
@@ -618,10 +637,10 @@ class PublicKeys extends Table
             throw new ProtocolException('Invalid signature');
         }
 
-        if (!empty($this->getPublicKeysFor($array['new-actor']))) {
+        if (!empty($this->getPublicKeysFor($actionData['new-actor']))) {
             throw new ProtocolException('New actor already has public keys');
         }
-        $newActorId = $actorTable->createActor($array['new-actor'], $payload);
+        $newActorId = $actorTable->createActor($actionData['new-actor'], $payload);
 
         $this->db->update(
             'pkd_actors_publickeys',
@@ -644,13 +663,13 @@ class PublicKeys extends Table
      * @throws SodiumException
      * @throws TableException
      */
-    public function burnDown(Payload $payload): bool
+    public function burnDown(Payload $payload, string $outerActor): bool
     {
         return $this->protocolMethod(
             $payload,
             'BurnDown',
             fn (MerkleLeaf $leaf, Payload $payload) =>
-                $this->burnDownCallback($leaf, $payload)
+                $this->burnDownCallback($leaf, $payload, $outerActor)
         );
     }
 
@@ -665,13 +684,15 @@ class PublicKeys extends Table
      * @throws CryptoOperationException
      * @throws DateMalformedStringException
      * @throws DependencyException
+     * @throws GuzzleException
      * @throws InvalidCiphertextException
+     * @throws NetworkException
      * @throws NotImplementedException
      * @throws ProtocolException
      * @throws SodiumException
      * @throws TableException
      */
-    protected function burnDownCallback(MerkleLeaf $leaf, Payload $payload): bool
+    protected function burnDownCallback(MerkleLeaf $leaf, Payload $payload, string $outerActor): bool
     {
         $rawJson = $payload->rawJson;
         $decoded = json_decode($rawJson, true);
@@ -682,19 +703,22 @@ class PublicKeys extends Table
         if (!($decrypted instanceof BurnDown)) {
             throw new ProtocolException('Invalid message type');
         }
-        $array = $decrypted->toArray();
+        $actionData = $decrypted->toArray();
         $sm = Bundle::fromJson($rawJson)->toSignedMessage();
 
         /** @var Actors $actorTable */
         $actorTable = $this->table('Actors');
-        $actor = $actorTable->searchForActor($array['actor']);
+        $actor = $actorTable->searchForActor($actionData['actor']);
         if (is_null($actor)) {
             throw new ProtocolException('Actor not found');
         }
         if ($actor->fireProof) {
             throw new ProtocolException('Actor is fireproof');
         }
-        $operator = $actorTable->searchForActor($array['operator']);
+
+        // Explicit check that the outer actor (from ActivityPub) matches the protocol message
+        $this->explicitOuterActorCheck($outerActor, $actionData['operator']);
+        $operator = $actorTable->searchForActor($actionData['operator']);
         if (is_null($operator)) {
             throw new ProtocolException('Operator not found');
         }
@@ -743,13 +767,13 @@ class PublicKeys extends Table
      * @throws SodiumException
      * @throws TableException
      */
-    public function fireproof(Payload $payload): bool
+    public function fireproof(Payload $payload, string $outerActor): bool
     {
         return $this->protocolMethod(
             $payload,
             'Fireproof',
             fn (MerkleLeaf $leaf, Payload $payload) =>
-                $this->fireproofCallback($leaf, $payload)
+                $this->fireproofCallback($leaf, $payload, $outerActor)
         );
     }
 
@@ -764,13 +788,16 @@ class PublicKeys extends Table
      * @throws CryptoOperationException
      * @throws DateMalformedStringException
      * @throws DependencyException
+     * @throws GuzzleException
      * @throws InvalidCiphertextException
+     * @throws NetworkException
      * @throws NotImplementedException
      * @throws ProtocolException
      * @throws SodiumException
      * @throws TableException
+     *
      */
-    protected function fireproofCallback(MerkleLeaf $leaf, Payload $payload): bool
+    protected function fireproofCallback(MerkleLeaf $leaf, Payload $payload, string $outerActor): bool
     {
         $rawJson = $payload->rawJson;
         $decoded = json_decode($rawJson, true);
@@ -781,12 +808,16 @@ class PublicKeys extends Table
         if (!($decrypted instanceof Fireproof)) {
             throw new ProtocolException('Invalid message type');
         }
-        $array = $decrypted->toArray();
+        $actionData = $decrypted->toArray();
+
+        // Explicit check that the outer actor (from ActivityPub) matches the protocol message
+        $this->explicitOuterActorCheck($outerActor, $actionData['actor']);
+
         $sm = Bundle::fromJson($rawJson)->toSignedMessage();
 
         /** @var Actors $actorTable */
         $actorTable = $this->table('Actors');
-        $actor = $actorTable->searchForActor($array['actor']);
+        $actor = $actorTable->searchForActor($actionData['actor']);
         if ($actor->fireProof) {
             throw new ProtocolException('Actor is already fireproof');
         }
@@ -827,13 +858,13 @@ class PublicKeys extends Table
      * @throws SodiumException
      * @throws TableException
      */
-    public function undoFireproof(Payload $payload): bool
+    public function undoFireproof(Payload $payload, string $outerActor): bool
     {
         return $this->protocolMethod(
             $payload,
             'UndoFireproof',
             fn (MerkleLeaf $leaf, Payload $payload) =>
-                $this->undoFireproofCallback($leaf, $payload)
+                $this->undoFireproofCallback($leaf, $payload, $outerActor)
         );
     }
 
@@ -848,13 +879,15 @@ class PublicKeys extends Table
      * @throws CryptoOperationException
      * @throws DateMalformedStringException
      * @throws DependencyException
+     * @throws GuzzleException
      * @throws InvalidCiphertextException
+     * @throws NetworkException
      * @throws NotImplementedException
      * @throws ProtocolException
      * @throws SodiumException
      * @throws TableException
      */
-    protected function undoFireproofCallback(MerkleLeaf $leaf, Payload $payload): bool
+    protected function undoFireproofCallback(MerkleLeaf $leaf, Payload $payload, string $outerActor): bool
     {
         $rawJson = $payload->rawJson;
         $decoded = json_decode($rawJson, true);
@@ -865,12 +898,16 @@ class PublicKeys extends Table
         if (!($decrypted instanceof UndoFireproof)) {
             throw new ProtocolException('Invalid message type');
         }
-        $array = $decrypted->toArray();
+        $actionData = $decrypted->toArray();
+
+        // Explicit check that the outer actor (from ActivityPub) matches the protocol message
+        $this->explicitOuterActorCheck($outerActor, $actionData['actor']);
+
         $sm = Bundle::fromJson($rawJson)->toSignedMessage();
 
         /** @var Actors $actorTable */
         $actorTable = $this->table('Actors');
-        $actor = $actorTable->searchForActor($array['actor']);
+        $actor = $actorTable->searchForActor($actionData['actor']);
         if (!$actor->fireProof) {
             throw new ProtocolException('Actor is not fireproof');
         }

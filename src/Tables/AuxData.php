@@ -8,6 +8,7 @@ use FediE2EE\PKD\Crypto\AttributeEncryption\AttributeKeyMap;
 use FediE2EE\PKD\Crypto\Exceptions\{
     BundleException,
     CryptoException,
+    NetworkException,
     NotImplementedException
 };
 use FediE2EE\PKD\Crypto\Protocol\Actions\{
@@ -15,6 +16,7 @@ use FediE2EE\PKD\Crypto\Protocol\Actions\{
     RevokeAuxData
 };
 use FediE2EE\PKD\Crypto\Protocol\Bundle;
+use FediE2EE\PKD\Extensions\ExtensionException;
 use FediE2EE\PKDServer\Dependency\WrappedEncryptedRow;
 use FediE2EE\PKDServer\Exceptions\{
     CacheException,
@@ -26,6 +28,7 @@ use FediE2EE\PKDServer\Protocol\Payload;
 use FediE2EE\PKDServer\Table;
 use FediE2EE\PKDServer\Tables\Records\MerkleLeaf;
 use FediE2EE\PKDServer\Traits\ProtocolMethodTrait;
+use GuzzleHttp\Exception\GuzzleException;
 use JsonException;
 use Override;
 use ParagonIE\CipherSweet\BlindIndex;
@@ -160,12 +163,12 @@ class AuxData extends Table
      * @throws SodiumException
      * @throws TableException
      */
-    public function addAuxData(Payload $payload): bool
+    public function addAuxData(Payload $payload, string $outerActor): bool
     {
         return $this->protocolMethod(
             $payload,
             'AddAuxData',
-            fn (MerkleLeaf $leaf, Payload $payload) => $this->addAuxDataCallback($leaf, $payload)
+            fn (MerkleLeaf $leaf, Payload $payload) => $this->addAuxDataCallback($leaf, $payload, $outerActor)
         );
     }
 
@@ -177,14 +180,19 @@ class AuxData extends Table
      * @throws CipherSweetException
      * @throws CryptoException
      * @throws CryptoOperationException
+     * @throws DateMalformedStringException
      * @throws DependencyException
+     * @throws ExtensionException
+     * @throws GuzzleException
      * @throws InvalidCiphertextException
+     * @throws JsonException
+     * @throws NetworkException
      * @throws NotImplementedException
      * @throws ProtocolException
      * @throws SodiumException
      * @throws TableException
      */
-    protected function addAuxDataCallback(MerkleLeaf $leaf, Payload $payload): bool
+    protected function addAuxDataCallback(MerkleLeaf $leaf, Payload $payload, string $outerActor): bool
     {
         $publicKeyTable = $this->table('PublicKeys');
         if (!($publicKeyTable instanceof PublicKeys)) {
@@ -200,12 +208,16 @@ class AuxData extends Table
         if (!($decrypted instanceof AddAuxData)) {
             throw new ProtocolException('Invalid message type');
         }
-        $array = $decrypted->toArray();
+        $actionData = $decrypted->toArray();
+
+        // Explicit check that the outer actor (from ActivityPub) matches the protocol message
+        $this->explicitOuterActorCheck($outerActor, $actionData['actor']);
+
         $sm = Bundle::fromJson($rawJson)->toSignedMessage();
 
         /** @var Actors $actorTable */
         $actorTable = $this->table('Actors');
-        $actor = $actorTable->searchForActor($array['actor']);
+        $actor = $actorTable->searchForActor($actionData['actor']);
         if (is_null($actor)) {
             throw new ProtocolException('Actor not found');
         }
@@ -225,8 +237,8 @@ class AuxData extends Table
         if (!$signatureIsValid) {
             throw new ProtocolException('Invalid signature');
         }
-        $type = $array['aux-type'];
-        $data = $array['aux-data'];
+        $type = $actionData['aux-type'];
+        $data = $actionData['aux-data'];
         $allowed = $this->config->getAuxDataTypeAllowList();
         $registry = $this->config->getAuxDataRegistry();
 
@@ -270,12 +282,13 @@ class AuxData extends Table
      * @throws SodiumException
      * @throws TableException
      */
-    public function revokeAuxData(Payload $payload): bool
+    public function revokeAuxData(Payload $payload, string $outerActor): bool
     {
         return $this->protocolMethod(
             $payload,
             'RevokeAuxData',
-            fn (MerkleLeaf $leaf, Payload $payload) => $this->revokeAuxDataCallback($leaf, $payload)
+            fn (MerkleLeaf $leaf, Payload $payload) =>
+                $this->revokeAuxDataCallback($leaf, $payload, $outerActor)
         );
     }
 
@@ -287,14 +300,18 @@ class AuxData extends Table
      * @throws CipherSweetException
      * @throws CryptoException
      * @throws CryptoOperationException
+     * @throws DateMalformedStringException
      * @throws DependencyException
+     * @throws GuzzleException
      * @throws InvalidCiphertextException
+     * @throws JsonException
+     * @throws NetworkException
      * @throws NotImplementedException
      * @throws ProtocolException
      * @throws SodiumException
      * @throws TableException
      */
-    protected function revokeAuxDataCallback(MerkleLeaf $leaf, Payload $payload): bool
+    protected function revokeAuxDataCallback(MerkleLeaf $leaf, Payload $payload, string $outerActor): bool
     {
         $publicKeyTable = $this->table('PublicKeys');
         if (!($publicKeyTable instanceof PublicKeys)) {
@@ -310,12 +327,16 @@ class AuxData extends Table
         if (!($decrypted instanceof RevokeAuxData)) {
             throw new ProtocolException('Invalid message type');
         }
-        $array = $decrypted->toArray();
+        $actionData = $decrypted->toArray();
+
+        // Explicit check that the outer actor (from ActivityPub) matches the protocol message
+        $this->explicitOuterActorCheck($outerActor, $actionData['actor']);
+
         $sm = Bundle::fromJson($rawJson)->toSignedMessage();
 
         /** @var Actors $actorTable */
         $actorTable = $this->table('Actors');
-        $actor = $actorTable->searchForActor($array['actor']);
+        $actor = $actorTable->searchForActor($actionData['actor']);
         if (is_null($actor)) {
             throw new ProtocolException('Actor not found');
         }
@@ -338,7 +359,7 @@ class AuxData extends Table
 
         $bidx = $this->getCipher()->getBlindIndex(
             'auxdata_idx',
-            ['auxdata' => $array['aux-data']]
+            ['auxdata' => $actionData['aux-data']]
         );
 
         $toRevoke = $this->db->run(
@@ -346,7 +367,7 @@ class AuxData extends Table
                 FROM pkd_actors_auxdata
                 WHERE actorid = ? AND auxdatatype = ? AND auxdata_idx = ? AND trusted",
             $actor->getPrimaryKey(),
-            $array['aux-type'],
+            $actionData['aux-type'],
             $bidx
         );
 
@@ -358,7 +379,7 @@ class AuxData extends Table
         $revoked = false;
         foreach ($toRevoke as $row) {
             $decrypted = $this->getCipher()->decryptRow($row);
-            if (hash_equals($array['aux-data'], (string) $decrypted['auxdata'])) {
+            if (hash_equals($actionData['aux-data'], (string) $decrypted['auxdata'])) {
                 $this->db->update(
                     'pkd_actors_auxdata',
                     [

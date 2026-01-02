@@ -3,10 +3,7 @@ declare(strict_types=1);
 namespace FediE2EE\PKDServer\Traits;
 
 use Closure;
-use FediE2EE\PKD\Crypto\Exceptions\{
-    CryptoException,
-    NotImplementedException
-};
+use FediE2EE\PKD\Crypto\Exceptions\{CryptoException, NetworkException, NotImplementedException};
 use FediE2EE\PKD\Crypto\Protocol\EncryptedProtocolMessageInterface;
 use FediE2EE\PKDServer\Exceptions\{
     DependencyException,
@@ -15,6 +12,7 @@ use FediE2EE\PKDServer\Exceptions\{
 };
 use FediE2EE\PKDServer\Protocol\Payload;
 use FediE2EE\PKDServer\ServerConfig;
+use GuzzleHttp\Exception\GuzzleException;
 use FediE2EE\PKDServer\Tables\{
     MerkleState,
     Records\MerkleLeaf
@@ -69,5 +67,25 @@ trait ProtocolMethodTrait
             return $result;
         }
         throw new TableException('Could not insert new leaf');
+    }
+
+
+    /**
+     * @throws GuzzleException
+     * @throws NetworkException
+     * @throws ProtocolException
+     */
+    protected function explicitOuterActorCheck(string $expected, string $given): void
+    {
+        if (hash_equals($expected, $given)) {
+            return;
+        }
+        $this->webfinger();
+        $canonicalExpected = $this->webFinger->canonicalize($expected);
+        $canonicalGiven = $this->webFinger->canonicalize($given);
+        if (hash_equals($canonicalExpected, $canonicalGiven)) {
+            return;
+        }
+        throw new ProtocolException('Actor confusion attack detected and prevented');
     }
 }

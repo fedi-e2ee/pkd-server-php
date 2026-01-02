@@ -99,7 +99,7 @@ class GetKeyTest extends TestCase
             $serverHpke->encapsKey,
             $serverHpke->cs
         );
-        $protocol->addKey($encryptedForServer);
+        $protocol->addKey($encryptedForServer, $canonical);
 
         $request = $this->makeGetRequest('/api/actor/' . urlencode($actorId) . '/keys');
         $request = $request->withAttribute('actor_id', $actorId);

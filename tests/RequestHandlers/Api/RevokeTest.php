@@ -100,7 +100,7 @@ class RevokeTest extends TestCase
             $serverHpke->encapsKey,
             $serverHpke->cs
         );
-        $protocol->addKey($encryptedForServer);
+        $protocol->addKey($encryptedForServer, $canonical);
 
         // Now, let's build a revocation token.
         $revocation = new Revocation();

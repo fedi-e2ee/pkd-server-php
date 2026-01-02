@@ -134,19 +134,23 @@ class Protocol
         $parsed = $this->parser->parse($raw);
         $payload = new Payload($parsed->getMessage(), $parsed->getKeyMap(), $raw);
         $action = $parsed->getMessage()->getAction();
+        $outerActor = $outerJson['actor'];
+        if (!is_string($outerActor)) {
+            throw new ProtocolException('Only strings are allowed for actor IDs.');
+        }
 
         // Route the request based on whether it was encrypted or not:
         if ($wasEncrypted) {
             $result = match ($action) {
                 // These actions are allowed to be encrypted:
-                'AddAuxData' => $auxDataTable->addAuxData($payload),
-                'AddKey' => $publicKeyTable->addKey($payload),
+                'AddAuxData' => $auxDataTable->addAuxData($payload, $outerActor),
+                'AddKey' => $publicKeyTable->addKey($payload, $outerActor),
                 'Checkpoint' => $publicKeyTable->checkpoint($payload),
-                'Fireproof' => $publicKeyTable->fireproof($payload),
-                'MoveIdentity' => $publicKeyTable->moveIdentity($payload),
-                'RevokeAuxData' => $auxDataTable->revokeAuxData($payload),
-                'RevokeKey' => $publicKeyTable->revokeKey($payload),
-                'UndoFireproof' => $publicKeyTable->undoFireproof($payload),
+                'Fireproof' => $publicKeyTable->fireproof($payload, $outerActor),
+                'MoveIdentity' => $publicKeyTable->moveIdentity($payload, $outerActor),
+                'RevokeAuxData' => $auxDataTable->revokeAuxData($payload, $outerActor),
+                'RevokeKey' => $publicKeyTable->revokeKey($payload, $outerActor),
+                'UndoFireproof' => $publicKeyTable->undoFireproof($payload, $outerActor),
                 // BurnDown MUST NOT be encrypted:
                 'BurnDown' =>
                     throw new ProtocolException('BurnDown MUST NOT be HPKE-encrypted'),
@@ -157,7 +161,7 @@ class Protocol
         } else {
             $result = match ($action) {
                 // These actions are allowed to be plaintext:
-                'BurnDown' => $publicKeyTable->burndown($payload),
+                'BurnDown' => $publicKeyTable->burndown($payload, $outerActor),
                 'Checkpoint' => $publicKeyTable->checkpoint($payload),
                 // These actions MUST be encrypted:
                 'AddAuxData', 'AddKey', 'Fireproof', 'MoveIdentity', 'RevokeAuxData', 'RevokeKey', 'UndoFireproof' =>
@@ -225,11 +229,11 @@ class Protocol
      * @throws ParserException
      * @throws SodiumException
      */
-    public function addKey(string $body): ActorKey
+    public function addKey(string $body, string $outerActor): ActorKey
     {
         $payload = $this->hpkeUnwrap($body);
         $table = new PublicKeys($this->config);
-        return $table->addKey($payload);
+        return $table->addKey($payload, $outerActor);
     }
 
     /**
@@ -242,11 +246,11 @@ class Protocol
      * @throws ParserException
      * @throws SodiumException
      */
-    public function revokeKey(string $body): ActorKey
+    public function revokeKey(string $body, string $outerActor): ActorKey
     {
         $payload = $this->hpkeUnwrap($body);
         $table = new PublicKeys($this->config);
-        return $table->revokeKey($payload);
+        return $table->revokeKey($payload, $outerActor);
     }
 
     /**
@@ -282,11 +286,11 @@ class Protocol
      * @throws SodiumException
      * @throws TableException
      */
-    public function moveIdentity(string $body): bool
+    public function moveIdentity(string $body, string $outerActor): bool
     {
         $payload = $this->hpkeUnwrap($body);
         $table = new PublicKeys($this->config);
-        return $table->moveIdentity($payload);
+        return $table->moveIdentity($payload, $outerActor);
     }
 
     /**
@@ -299,11 +303,11 @@ class Protocol
      * @throws SodiumException
      * @throws TableException
      */
-    public function burnDown(string $body): bool
+    public function burnDown(string $body, string $outerActor): bool
     {
         $payload = $this->hpkeUnwrap($body);
         $table = new PublicKeys($this->config);
-        return $table->burnDown($payload);
+        return $table->burnDown($payload, $outerActor);
     }
 
     /**
@@ -316,11 +320,11 @@ class Protocol
      * @throws SodiumException
      * @throws TableException
      */
-    public function fireproof(string $body): bool
+    public function fireproof(string $body, string $outerActor): bool
     {
         $payload = $this->hpkeUnwrap($body);
         $table = new PublicKeys($this->config);
-        return $table->fireproof($payload);
+        return $table->fireproof($payload, $outerActor);
     }
 
     /**
@@ -333,11 +337,11 @@ class Protocol
      * @throws SodiumException
      * @throws TableException
      */
-    public function undoFireproof(string $body): bool
+    public function undoFireproof(string $body, string $outerActor): bool
     {
         $payload = $this->hpkeUnwrap($body);
         $table = new PublicKeys($this->config);
-        return $table->undoFireproof($payload);
+        return $table->undoFireproof($payload, $outerActor);
     }
 
     /**
@@ -350,11 +354,11 @@ class Protocol
      * @throws SodiumException
      * @throws TableException
      */
-    public function addAuxData(string $body): bool
+    public function addAuxData(string $body, string $outerActor): bool
     {
         $payload = $this->hpkeUnwrap($body);
         $table = new AuxData($this->config);
-        return $table->addAuxData($payload);
+        return $table->addAuxData($payload, $outerActor);
     }
 
     /**
@@ -367,11 +371,11 @@ class Protocol
      * @throws SodiumException
      * @throws TableException
      */
-    public function revokeAuxData(string $body): bool
+    public function revokeAuxData(string $body, string $outerActor): bool
     {
         $payload = $this->hpkeUnwrap($body);
         $table = new AuxData($this->config);
-        return $table->revokeAuxData($payload);
+        return $table->revokeAuxData($payload, $outerActor);
     }
 
     /**

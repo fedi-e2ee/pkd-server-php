@@ -142,7 +142,7 @@ class ProtocolTest extends TestCase
             $serverHpke->encapsKey,
             $serverHpke->cs,
         );
-        $result1 = $this->protocol->addKey($encryptedForServer1);
+        $result1 = $this->protocol->addKey($encryptedForServer1, $canonical);
         $this->assertTrue($result1->trusted);
         $keyId1 = $result1->keyID;
 
@@ -165,7 +165,7 @@ class ProtocolTest extends TestCase
             $serverHpke->cs,
         );
 
-        $result2 = $this->protocol->addKey($encryptedForServer2);
+        $result2 = $this->protocol->addKey($encryptedForServer2, $canonical);
         $this->assertTrue($result2->trusted);
         $this->assertNotNull($result2->keyID);
         $keyId2 = $result2->keyID;
@@ -194,7 +194,7 @@ class ProtocolTest extends TestCase
             $serverHpke->cs,
         );
 
-        $result3 = $this->protocol->revokeKey($encryptedForServer3);
+        $result3 = $this->protocol->revokeKey($encryptedForServer3, $canonical);
         $this->assertFalse($result3->trusted);
         $this->assertCount(1, $pkTable->getPublicKeysFor($canonical));
     }
@@ -243,7 +243,7 @@ class ProtocolTest extends TestCase
             $serverHpke->encapsKey,
             $serverHpke->cs,
         );
-        $result1 = $this->protocol->addKey($encryptedForServer1);
+        $result1 = $this->protocol->addKey($encryptedForServer1, $canonical);
         $keyId = $result1->keyID;
 
         /** @var PublicKeys $pkTable */
@@ -263,7 +263,7 @@ class ProtocolTest extends TestCase
             $serverHpke->encapsKey,
             $serverHpke->cs,
         );
-        $result2 = $this->protocol->addKey($encryptedForServer2);
+        $result2 = $this->protocol->addKey($encryptedForServer2, $canonical);
         $keyId2 = $result2->keyID;
         $this->assertCount(2, $pkTable->getPublicKeysFor($canonical));
 
@@ -282,7 +282,7 @@ class ProtocolTest extends TestCase
             $serverHpke->encapsKey,
             $serverHpke->cs,
         );
-        $result = $this->protocol->moveIdentity($encryptedForServer3);
+        $result = $this->protocol->moveIdentity($encryptedForServer3, $canonical2);
         $this->assertTrue($result);
         $this->assertCount(0, $pkTable->getPublicKeysFor($canonical));
         $this->assertCount(2, $pkTable->getPublicKeysFor($canonical2));
@@ -331,7 +331,7 @@ class ProtocolTest extends TestCase
             $serverHpke->encapsKey,
             $serverHpke->cs
         );
-        $this->protocol->addKey($encryptedForServer1);
+        $this->protocol->addKey($encryptedForServer1, $canonActor);
 
         // 2. AddKey for operator
         $latestRoot2 = $merkleState->getLatestRoot();
@@ -346,7 +346,7 @@ class ProtocolTest extends TestCase
             $serverHpke->encapsKey,
             $serverHpke->cs
         );
-        $result2 = $this->protocol->addKey($encryptedForServer2);
+        $result2 = $this->protocol->addKey($encryptedForServer2, $canonOperator);
         $operatorKeyId = $result2->keyID;
 
         /** @var PublicKeys $pkTable */
@@ -366,7 +366,7 @@ class ProtocolTest extends TestCase
             $serverHpke->encapsKey,
             $serverHpke->cs
         );
-        $result = $this->protocol->burnDown($encryptedForServer3);
+        $result = $this->protocol->burnDown($encryptedForServer3, $canonOperator);
         $this->assertTrue($result);
         $this->assertCount(0, $pkTable->getPublicKeysFor($canonActor));
     }
@@ -409,7 +409,7 @@ class ProtocolTest extends TestCase
             $serverHpke->encapsKey,
             $serverHpke->cs
         );
-        $result1 = $this->protocol->addKey($encryptedForServer1);
+        $result1 = $this->protocol->addKey($encryptedForServer1, $canonActor);
         $actorKeyId = $result1->keyID;
 
         // 2. AddKey for operator
@@ -425,7 +425,7 @@ class ProtocolTest extends TestCase
             $serverHpke->encapsKey,
             $serverHpke->cs
         );
-        $result2 = $this->protocol->addKey($encryptedForServer2);
+        $result2 = $this->protocol->addKey($encryptedForServer2, $canonOperator);
         $operatorKeyId = $result2->keyID;
 
         // 3. Fireproof
@@ -440,7 +440,7 @@ class ProtocolTest extends TestCase
             $serverHpke->encapsKey,
             $serverHpke->cs
         );
-        $result = $this->protocol->fireproof($encryptedForServer3);
+        $result = $this->protocol->fireproof($encryptedForServer3, $canonActor);
         $this->assertTrue($result);
 
         // 4. BurnDown (should fail)
@@ -458,7 +458,7 @@ class ProtocolTest extends TestCase
             $serverHpke->encapsKey,
             $serverHpke->cs
         );
-        $this->protocol->burnDown($encryptedForServer4);
+        $this->protocol->burnDown($encryptedForServer4, $canonOperator);
     }
 
     /**
@@ -499,7 +499,7 @@ class ProtocolTest extends TestCase
             $serverHpke->encapsKey,
             $serverHpke->cs
         );
-        $result1 = $this->protocol->addKey($encryptedForServer1);
+        $result1 = $this->protocol->addKey($encryptedForServer1, $canonicalActor);
         $actorKeyId = $result1->keyID;
 
         // 2. AddKey for operator
@@ -515,7 +515,7 @@ class ProtocolTest extends TestCase
             $serverHpke->encapsKey,
             $serverHpke->cs
         );
-        $result2 = $this->protocol->addKey($encryptedForServer2);
+        $result2 = $this->protocol->addKey($encryptedForServer2, $canonicalOperator);
         $operatorKeyId = $result2->keyID;
 
         // 3. Fireproof
@@ -530,7 +530,7 @@ class ProtocolTest extends TestCase
             $serverHpke->encapsKey,
             $serverHpke->cs
         );
-        $result = $this->protocol->fireproof($encryptedForServer3);
+        $result = $this->protocol->fireproof($encryptedForServer3, $canonicalActor);
         $this->assertTrue($result);
 
         // 4. UndoFireproof
@@ -545,7 +545,7 @@ class ProtocolTest extends TestCase
             $serverHpke->encapsKey,
             $serverHpke->cs
         );
-        $result = $this->protocol->undoFireproof($encryptedForServer4);
+        $result = $this->protocol->undoFireproof($encryptedForServer4, $canonicalActor);
         $this->assertTrue($result);
 
         // 5. BurnDown (should succeed)
@@ -561,7 +561,7 @@ class ProtocolTest extends TestCase
             $serverHpke->encapsKey,
             $serverHpke->cs
         );
-        $result = $this->protocol->burnDown($encryptedForServer5);
+        $result = $this->protocol->burnDown($encryptedForServer5, $canonicalOperator);
         $this->assertTrue($result);
     }
 
@@ -600,7 +600,7 @@ class ProtocolTest extends TestCase
             $serverHpke->encapsKey,
             $serverHpke->cs
         );
-        $result1 = $this->protocol->addKey($encryptedForServer1);
+        $result1 = $this->protocol->addKey($encryptedForServer1, $canonEve);
 
         // 2. AddAuxData
         $latestRoot2 = $merkleState->getLatestRoot();
@@ -616,7 +616,7 @@ class ProtocolTest extends TestCase
             $serverHpke->encapsKey,
             $serverHpke->cs
         );
-        $result = $this->protocol->addAuxData($encryptedForServer2);
+        $result = $this->protocol->addAuxData($encryptedForServer2, $canonEve);
         $this->assertTrue($result);
 
         // 3. RevokeAuxData
@@ -633,7 +633,7 @@ class ProtocolTest extends TestCase
             $serverHpke->encapsKey,
             $serverHpke->cs
         );
-        $result = $this->protocol->revokeAuxData($encryptedForServer3);
+        $result = $this->protocol->revokeAuxData($encryptedForServer3, $canonEve);
         $this->assertTrue($result);
     }
 

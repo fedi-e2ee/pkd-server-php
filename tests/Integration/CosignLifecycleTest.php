@@ -134,7 +134,7 @@ class CosignLifecycleTest extends TestCase
             $serverHpke->encapsKey,
             $serverHpke->cs
         );
-        $protocol->addKey($encryptedForServer);
+        $protocol->addKey($encryptedForServer, $canonical);
     }
 
     public function testCosignLifecycle(): void
