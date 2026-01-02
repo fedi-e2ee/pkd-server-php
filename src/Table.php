@@ -111,7 +111,7 @@ abstract class Table
             $cutoff = (int) ($numLeaves - ceil(2 * $log2 * $log2));
         }
         if ($cutoff < 1) {
-            return true;
+            $cutoff = 1;
         }
 
         return $this->db->exists(
