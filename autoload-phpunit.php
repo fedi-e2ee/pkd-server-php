@@ -65,7 +65,7 @@ if (!($GLOBALS['pkdConfig'] instanceof ServerConfig)) {
         $GLOBALS['PKD_PHPUNIT_DB'] = new EasyDBCache(new PDO('sqlite:' . $temp));
     } else {
         // Create second DB connection for testing concurrency
-        $GLOBALS['PKD_PHPUNIT_DB'] = require __DIR__ . '/cmd/init-database.php';
+        $GLOBALS['PKD_PHPUNIT_DB'] = require __DIR__ . '/config/database.php';
     }
 
     $db = $GLOBALS['pkdConfig']->getDb();
