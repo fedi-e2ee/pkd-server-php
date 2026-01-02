@@ -347,23 +347,23 @@ class MerkleState extends Table
     protected function insertLeafInternal(MerkleLeaf $leaf, callable $inTransaction): bool
     {
         $needsTransaction = !$this->db->inTransaction();
-        switch ($this->db->getDriver()) {
-            case 'pgsql':
-            case 'mysql':
-                if ($needsTransaction) {
+        if ($needsTransaction) {
+            switch ($this->db->getDriver()) {
+                case 'pgsql':
+                case 'mysql':
                     $this->db->beginTransaction();
-                }
-                $state = $this->db->cell("SELECT merkle_state FROM pkd_merkle_state WHERE TRUE FOR UPDATE");
-                break;
-            case "sqlite":
-                if ($needsTransaction) {
+                    $state = $this->db->cell("SELECT merkle_state FROM pkd_merkle_state WHERE TRUE FOR UPDATE");
+                    break;
+                case "sqlite":
                     $this->db->exec("PRAGMA busy_timeout=5000");
                     $this->db->beginTransaction();
-                }
-                $state = $this->db->cell("SELECT merkle_state FROM pkd_merkle_state WHERE 1");
-                break;
-            default:
-                throw new NotImplementedException('Database driver support not implemented');
+                    $state = $this->db->cell("SELECT merkle_state FROM pkd_merkle_state WHERE 1");
+                    break;
+                default:
+                    throw new NotImplementedException('Database driver support not implemented');
+            }
+        } else {
+            $state = $this->db->cell("SELECT merkle_state FROM pkd_merkle_state");
         }
         $insert = empty($state);
         if ($insert) {
