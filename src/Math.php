@@ -11,6 +11,9 @@ abstract class Math
 
     public static function getLowVolumeCutoff(int $numLeaves): int
     {
+        if ($numLeaves < 81) {
+            return 1;
+        }
         $log2 = (log($numLeaves) / log(2));
         return (int) ($numLeaves - ceil(2 * $log2 * $log2));
     }

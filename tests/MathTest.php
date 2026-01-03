@@ -24,11 +24,11 @@ class MathTest extends TestCase
     public static function lowVolume(): array
     {
         return [
-            [0, 0],
+            [0, 1],
             [1, 1],
-            [2, 0],
-            [3, -3],
-            [80, 0],
+            [2, 1],
+            [3, 1],
+            [80, 1],
             [96, 9],
             [128, 30],
             [256, 128],
