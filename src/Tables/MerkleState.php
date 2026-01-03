@@ -383,6 +383,10 @@ class MerkleState extends Table
         $incremental->updateRoot();
         $inclusion = $incremental->getInclusionProof($rawLeaf);
         $root = $incremental->getEncodedRoot();
+        $rawNewRoot = $incremental->getRoot();
+        if (!$incremental->verifyInclusionProof($rawNewRoot, $rawLeaf, $inclusion)) {
+            throw new PDOException('invalid inclusion proof');
+        }
 
         // Sequence ID is needed for some DB drivers:
         $sequenceId = match($this->db->getDriver()) {
