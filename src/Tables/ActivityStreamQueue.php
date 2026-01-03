@@ -6,6 +6,7 @@ use FediE2EE\PKD\Crypto\AttributeEncryption\AttributeKeyMap;
 use FediE2EE\PKDServer\ActivityPub\ActivityStream;
 use FediE2EE\PKDServer\Dependency\WrappedEncryptedRow;
 use FediE2EE\PKDServer\Exceptions\ActivityPubException;
+use FediE2EE\PKDServer\Exceptions\TableException;
 use FediE2EE\PKDServer\Table;
 use Override;
 
