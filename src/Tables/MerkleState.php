@@ -409,6 +409,14 @@ class MerkleState extends Table
         // Set the primary key on the MerkleLeaf record object:
         $leaf->setPrimaryKey((int) $inserted);
 
+        if (!$this->db->inTransaction()) {
+            throw new PDOException('we are not in a transaction before the callback!');
+        }
+
+        // Insert whatever data was important to the Merkle state, as defined by the callback.
+        // We don't check the return value. If it throws, the transaction is never committed.
+        $inTransaction();
+
         // Update the Merkle state:
         if ($insert) {
             // This will only trigger on the first leaf
@@ -427,10 +435,9 @@ class MerkleState extends Table
                 ['merkle_state' => $state]
             );
         }
-
-        // Finally, insert whatever data was important to the Merkle state, as defined by the callback.
-        // We don't check the return value. If it throws, the transaction is never committed.
-        $inTransaction();
+        if (!$this->db->inTransaction()) {
+            throw new PDOException('we are not in a transaction after updating merkle_state');
+        }
 
         // We only commit this transaction if all was successful:
         return $this->db->commit();
