@@ -19,6 +19,7 @@ use FediE2EE\PKDServer\Table;
 use FediE2EE\PKDServer\Tables\Records\MerkleLeaf;
 use Override;
 use ParagonIE\ConstantTime\Base64UrlSafe;
+use PDO;
 use PDOException;
 use SodiumException;
 
@@ -353,6 +354,7 @@ class MerkleState extends Table
      */
     protected function insertLeafInternal(MerkleLeaf $leaf, callable $inTransaction): bool
     {
+        $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         switch ($this->db->getDriver()) {
             case 'pgsql':
             case 'mysql':
@@ -435,6 +437,7 @@ class MerkleState extends Table
                 ['merkle_state' => $state]
             );
         }
+        // @phpstan-ignore-next-line
         if (!$this->db->inTransaction()) {
             throw new PDOException('we are not in a transaction after updating merkle_state');
         }
