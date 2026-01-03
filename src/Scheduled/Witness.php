@@ -146,9 +146,7 @@ class Witness
             } catch (Throwable $ex) {
                 // Log error, bail out;
                 $this->logger->error($ex->getMessage(), $ex->getTrace());
-                if ($this->db->inTransaction()) {
-                    $this->db->rollBack();
-                }
+                $this->db->rollBack();
                 return;
             }
 
@@ -171,17 +169,13 @@ class Witness
             );
             // We had an invalid response:
             if (!$this->rfc9421->verify($peer->publicKey, $response)) {
-                if ($this->db->inTransaction()) {
-                    $this->db->rollBack();
-                }
+                $this->db->rollBack();
                 throw new CryptoException('Invalid HTTP Signature from peer response');
             }
             // Save progress:
             $peer->tree = $cosignature->getTree();
             $this->peers->save($peer);
-            if ($this->db->inTransaction()) {
-                $this->db->commit();
-            }
+            $this->db->commit();
         }
     }
 

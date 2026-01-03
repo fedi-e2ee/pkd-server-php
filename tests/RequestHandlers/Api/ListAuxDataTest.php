@@ -119,6 +119,7 @@ class ListAuxDataTest extends TestCase
             $serverHpke->encapsKey,
             $serverHpke->cs
         );
+        $this->assertNotInTransaction();
         $protocol->addAuxData($encryptedForServer, $canonical);
         $this->assertNotInTransaction();
 
