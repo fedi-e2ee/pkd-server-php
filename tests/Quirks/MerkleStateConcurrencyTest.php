@@ -61,7 +61,7 @@ class MerkleStateConcurrencyTest extends TestCase
                 $this->expectExceptionMessage('intentional timeout from table1');
 
                 $table1->insertLeaf(MerkleLeaf::from('test1', $sk), function () {
-                    usleep(6_000_000);
+                    usleep(5_000_001);
                     throw new PDOException('intentional timeout from table1');
                 });
 

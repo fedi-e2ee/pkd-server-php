@@ -115,6 +115,7 @@ class ProtocolTest extends TestCase
      */
     public function testAddAndRevoke(): void
     {
+        $this->clearOldTransaction($this->config);
         [$actor, $canonical] = $this->makeDummyActor();
 
         // Generate two key pairs for alice
@@ -200,6 +201,7 @@ class ProtocolTest extends TestCase
         $result3 = $this->protocol->revokeKey($encryptedForServer3, $canonical);
         $this->assertFalse($result3->trusted);
         $this->assertCount(1, $pkTable->getPublicKeysFor($canonical));
+        $this->assertNotInTransaction();
     }
 
     /**
@@ -221,7 +223,7 @@ class ProtocolTest extends TestCase
      */
     public function testMoveIdentity(): void
     {
-        $this->assertNotInTransaction();
+        $this->clearOldTransaction($this->config);
         [$oldActor, $canonical] = $this->makeDummyActor();
         [$newActor, $canonical2] = $this->makeDummyActor();
         $keypair = SecretKey::generate();
@@ -315,7 +317,7 @@ class ProtocolTest extends TestCase
      */
     public function testBurnDown(): void
     {
-        $this->assertNotInTransaction();
+        $this->clearOldTransaction($this->config);
         [, $canonActor] = $this->makeDummyActor();
         [, $canonOperator] = $this->makeDummyActor();
 
@@ -398,6 +400,7 @@ class ProtocolTest extends TestCase
      */
     public function testFireproof(): void
     {
+        $this->clearOldTransaction($this->config);
         [$actor, $canonActor] = $this->makeDummyActor();
         [$operator, $canonOperator] = $this->makeDummyActor();
 
@@ -477,11 +480,9 @@ class ProtocolTest extends TestCase
         $this->assertNotInTransaction();
         try {
             $this->protocol->burnDown($encryptedForServer4, $canonOperator);
+            $this->assertNotInTransaction();
         } finally {
-            $db = $this->config()->getDb();
-            if ($db->inTransaction()) {
-                $db->rollBack();
-            }
+            $this->clearOldTransaction($this->config);
         }
     }
 
@@ -499,6 +500,7 @@ class ProtocolTest extends TestCase
      */
     public function testUndoFireproof(): void
     {
+        $this->clearOldTransaction($this->config);
         [$actor, $canonicalActor] = $this->makeDummyActor();
         [$operator, $canonicalOperator] = $this->makeDummyActor();
 
@@ -525,6 +527,7 @@ class ProtocolTest extends TestCase
         );
         $this->assertNotInTransaction();
         $result1 = $this->protocol->addKey($encryptedForServer1, $canonicalActor);
+        $this->clearOldTransaction($this->config);
         $actorKeyId = $result1->keyID;
 
         // 2. AddKey for operator
@@ -542,6 +545,7 @@ class ProtocolTest extends TestCase
         );
         $this->assertNotInTransaction();
         $result2 = $this->protocol->addKey($encryptedForServer2, $canonicalOperator);
+        $this->clearOldTransaction($this->config);
         $operatorKeyId = $result2->keyID;
 
         // 3. Fireproof
@@ -558,6 +562,7 @@ class ProtocolTest extends TestCase
         );
         $this->assertNotInTransaction();
         $result = $this->protocol->fireproof($encryptedForServer3, $canonicalActor);
+        $this->clearOldTransaction($this->config);
         $this->assertTrue($result);
 
         // 4. UndoFireproof
@@ -574,6 +579,7 @@ class ProtocolTest extends TestCase
         );
         $this->assertNotInTransaction();
         $result = $this->protocol->undoFireproof($encryptedForServer4, $canonicalActor);
+        $this->clearOldTransaction($this->config);
         $this->assertTrue($result);
 
         // 5. BurnDown (should succeed)
@@ -591,7 +597,9 @@ class ProtocolTest extends TestCase
         );
         $this->assertNotInTransaction();
         $result = $this->protocol->burnDown($encryptedForServer5, $canonicalOperator);
+        $this->clearOldTransaction($this->config);
         $this->assertTrue($result);
+        $this->assertNotInTransaction();
     }
 
     /**
@@ -608,6 +616,7 @@ class ProtocolTest extends TestCase
      */
     public function testAddAuxData(): void
     {
+        $this->clearOldTransaction($this->config);
         [$actor, $canonEve] = $this->makeDummyActor();
         $actorKey = SecretKey::generate();
 
@@ -667,6 +676,7 @@ class ProtocolTest extends TestCase
         $this->assertNotInTransaction();
         $result = $this->protocol->revokeAuxData($encryptedForServer3, $canonEve);
         $this->assertTrue($result);
+        $this->assertNotInTransaction();
     }
 
     /**
@@ -682,6 +692,7 @@ class ProtocolTest extends TestCase
      */
     public function testCheckpoint(): void
     {
+        $this->clearOldTransaction($this->config);
         $directory = 'example.net';
         $directoryKey = SecretKey::generate();
 
@@ -704,5 +715,6 @@ class ProtocolTest extends TestCase
         $this->assertNotInTransaction();
         $result = $this->protocol->checkpoint($bundle->toString());
         $this->assertTrue($result);
+        $this->assertNotInTransaction();
     }
 }

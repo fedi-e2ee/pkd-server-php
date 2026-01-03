@@ -103,8 +103,9 @@ class ListAuxDataTest extends TestCase
             $serverHpke->encapsKey,
             $serverHpke->cs
         );
-        $protocol->addKey($encryptedForServer, $canonical);
         $this->assertNotInTransaction();
+        $protocol->addKey($encryptedForServer, $canonical);
+        $this->clearOldTransaction($this->config);
 
         // Add aux data
         $addAux = new AddAuxData($canonical, 'test', 'test-data');
@@ -121,7 +122,7 @@ class ListAuxDataTest extends TestCase
         );
         $this->assertNotInTransaction();
         $protocol->addAuxData($encryptedForServer, $canonical);
-        $this->assertNotInTransaction();
+        $this->clearOldTransaction($this->config);
 
         $request = $this->makeGetRequest('/api/actor/' . urlencode($actorId) . '/auxiliary');
         $request = $request->withAttribute('actor_id', $actorId);
@@ -135,7 +136,9 @@ class ListAuxDataTest extends TestCase
             $constructor->invoke($listAuxDataHandler);
         }
 
+        $this->assertNotInTransaction();
         $response = $listAuxDataHandler->handle($request);
+        $this->clearOldTransaction($this->config);
         $this->assertSame(200, $response->getStatusCode());
         $body = json_decode($response->getBody()->getContents(), true);
         $this->assertSame('fedi-e2ee:v1/api/actor/aux-info', $body['!pkd-context']);
