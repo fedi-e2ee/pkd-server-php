@@ -60,7 +60,7 @@ abstract class Table
             if (!$this->isMerkleRootRecent($recentMerkle, true)) {
                 // No? OK, then let's bail out.
                 var_dump(
-                    $this->db->row("SELECT * FROM pkd_merkle_leaves ORDER BY merkleafid DESC LIMIT 1"),
+                    $this->db->row("SELECT * FROM pkd_merkle_leaves ORDER BY merkleleafid DESC LIMIT 1"),
                     $this->db->cell("SELECT count(merkleleafid) FROM pkd_merkle_leaves")
                 );
                 throw new ProtocolException('Stale or invalid Merkle Root provided');
