@@ -47,9 +47,12 @@ foreach ($files as $file) {
         try {
             $db->beginTransaction();
             $db->exec($sql);
-            if (!$db->commit()) {
-                var_dump($db->errorInfo());
-                exit;
+            // I think MySQL auto-commits on CREATE TABLE
+            if ($db->inTransaction()) {
+                if (!$db->commit()) {
+                    var_dump($db->errorInfo());
+                    exit;
+                }
             }
         } catch (Throwable $ex) {
             echo 'Error running ', $path, ':', PHP_EOL,
