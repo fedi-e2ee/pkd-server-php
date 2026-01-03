@@ -64,10 +64,7 @@ use FediE2EE\PKDServer\Tables\Records\{
 use FediE2EE\PKD\Extensions\ExtensionInterface;
 use FediE2EE\PKDServer\Tests\HttpTestTrait;
 use FediE2EE\PKDServer\Traits\ConfigTrait;
-use PHPUnit\Framework\Attributes\{
-    CoversClass,
-    UsesClass
-};
+use PHPUnit\Framework\Attributes\{After, CoversClass, UsesClass};
 use Mdanter\Ecc\Exception\InsecureCurveException;
 use ParagonIE\Certainty\Exception\CertaintyException;
 use ParagonIE\CipherSweet\Exception\{
@@ -119,6 +116,14 @@ class ApiTest extends TestCase
     public function setUp(): void
     {
         $this->config = $this->getConfig();
+    }
+
+    #[After]
+    public function commitDanglingTransaction(): void
+    {
+        if ($this->config->getDb()->inTransaction()) {
+            $this->config->getDb()->commit();
+        }
     }
 
     /**
@@ -177,6 +182,7 @@ class ApiTest extends TestCase
         );
         $this->assertNotInTransaction();
         $protocol->addKey($encryptedForServer, $canonical);
+        $this->clearOldTransaction($config);
 
         // Add aux data
         $addAux = new AddAuxData($canonical, 'test', 'test');
@@ -193,6 +199,7 @@ class ApiTest extends TestCase
         );
         $this->assertNotInTransaction();
         $protocol->addAuxData($encryptedForServer, $canonical);
+        $this->clearOldTransaction($config);
 
         $request = $this->makeGetRequest('/api/actor/' . urlencode($actorId));
         $request = $request->withAttribute('actor_id', $actorId);
