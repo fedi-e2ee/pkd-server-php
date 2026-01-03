@@ -47,7 +47,10 @@ foreach ($files as $file) {
         try {
             $db->beginTransaction();
             $db->exec($sql);
-            $db->commit();
+            if (!$db->commit()) {
+                var_dump($db->errorInfo());
+                exit;
+            }
         } catch (Throwable $ex) {
             echo 'Error running ', $path, ':', PHP_EOL,
             $ex->getMessage(), PHP_EOL;
