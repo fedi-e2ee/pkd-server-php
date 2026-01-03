@@ -9,8 +9,18 @@ use FediE2EE\PKD\Crypto\Exceptions\{
     NotImplementedException,
     ParserException
 };
-use FediE2EE\PKD\Crypto\Protocol\{Actions\AddKey, Cosignature, Handler, HistoricalRecord};
-use FediE2EE\PKD\Crypto\{Merkle\IncrementalTree, Merkle\Tree, SecretKey, SymmetricKey};
+use FediE2EE\PKD\Crypto\Protocol\{
+    Actions\AddKey,
+    Cosignature,
+    Handler,
+    HistoricalRecord
+};
+use FediE2EE\PKD\Crypto\{
+    Merkle\IncrementalTree,
+    Merkle\Tree,
+    SecretKey,
+    SymmetricKey
+};
 use FediE2EE\PKDServer\Exceptions\{
     CacheException,
     DependencyException,

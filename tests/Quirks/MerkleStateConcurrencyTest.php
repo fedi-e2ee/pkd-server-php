@@ -19,6 +19,9 @@ class MerkleStateConcurrencyTest extends TestCase
 
     public function testConcurrency(): void
     {
+        if (!extension_loaded('pcntl')) {
+            $this->markTestSkipped('pcntl extension not loaded');
+        }
         // Let's make sure we have two database connections open:
         if (!array_key_exists('PKD_PHPUNIT_DB', $GLOBALS)) {
             $this->markTestSkipped('autoload-phpunit was not triggered');
@@ -37,12 +40,32 @@ class MerkleStateConcurrencyTest extends TestCase
         $this->expectException(PDOException::class);
         $this->expectExceptionMessage('intentional timeout from table1');
         // Let's try to write both. Only one should be thrown.
-        $table1->insertLeaf(MerkleLeaf::from('test1', $sk), function () {
-            usleep(1000);
-            throw new PDOException('intentional timeout from table1');
-        });
-        $table2->insertLeaf(MerkleLeaf::from('test2', $sk), function () {
-            throw new PDOException('table2 failed');
-        }, 1);
+
+        $pid = pcntl_fork();
+        if ($pid === -1) {
+            $this->fail('Could not fork process');
+        } elseif ($pid === 0) {
+            // Child process
+            try {
+                $table2->insertLeaf(MerkleLeaf::from('test2', $sk), function () {
+                    throw new PDOException('table2 failed');
+                }, 1);
+            } catch (PDOException $e) {
+                exit(1);
+            }
+            exit(0);
+        } else {
+            // Parent process
+            $this->expectException(PDOException::class);
+            $this->expectExceptionMessage('intentional timeout from table1');
+
+            $table1->insertLeaf(MerkleLeaf::from('test1', $sk), function () {
+                usleep(6_000_000);
+                throw new PDOException('intentional timeout from table1');
+            });
+
+            // Wait for child
+            pcntl_waitpid($pid, $status);
+        }
     }
 }
