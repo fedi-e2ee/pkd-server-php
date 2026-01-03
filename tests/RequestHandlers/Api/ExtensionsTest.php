@@ -10,6 +10,7 @@ use PHPUnit\Framework\Attributes\{
     CoversClass,
     UsesClass
 };
+use FediE2EE\PKDServer\Traits\ConfigTrait;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
@@ -17,6 +18,7 @@ use ReflectionClass;
 #[UsesClass(ServerConfig::class)]
 class ExtensionsTest extends TestCase
 {
+    use ConfigTrait;
     use HttpTestTrait;
 
     /**
@@ -25,10 +27,12 @@ class ExtensionsTest extends TestCase
     public function testHandle(): void
     {
         $config = $this->getConfig();
+        $this->clearOldTransaction($config);
         $reflector = new ReflectionClass(Extensions::class);
         $extensionsHandler = $reflector->newInstanceWithoutConstructor();
         $extensionsHandler->injectConfig($config);
 
+        $this->assertNotInTransaction();
         $request = $this->makeGetRequest('/api/extensions');
         $response = $extensionsHandler->handle($request);
         $this->assertSame(200, $response->getStatusCode());
@@ -38,5 +42,6 @@ class ExtensionsTest extends TestCase
         // These are added via autoload-phpunit.php:
         $this->assertTrue(in_array('test-v1', $body['extensions'], true));
         $this->assertFalse(in_array('test', $body['extensions'], true));
+        $this->assertNotInTransaction();
     }
 }

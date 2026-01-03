@@ -54,6 +54,7 @@ class ActivityStreamQueue extends Table
             ]
         );
         if (!$this->db->commit()) {
+            $this->db->rollBack();
             throw new ActivityPubException('A database error occurred.');
         }
         return $nextPrimaryKey;

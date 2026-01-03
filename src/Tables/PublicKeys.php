@@ -748,7 +748,7 @@ class PublicKeys extends Table
             }
         }
 
-        $this->db->update(
+        $affected = $this->db->update(
             'pkd_actors_publickeys',
             [
                 'trusted' => false,
@@ -756,7 +756,7 @@ class PublicKeys extends Table
             ],
             ['actorid' => $actor->getPrimaryKey()]
         );
-        return true;
+        return $affected > 0;
     }
 
     /**

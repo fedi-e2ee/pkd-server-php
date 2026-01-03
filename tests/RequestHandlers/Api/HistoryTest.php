@@ -71,6 +71,7 @@ class HistoryTest extends TestCase
         [$actorId, $canonical] = $this->makeDummyActor('example.com');
         $keypair = SecretKey::generate();
         $config = $this->getConfig();
+        $this->clearOldTransaction($config);
         $protocol = new Protocol($config);
         $webFinger = new WebFinger($config, $this->getMockClient([
             new Response(200, ['Content-Type' => 'application/json'], '{"subject":"' . $canonical . '"}')
@@ -113,5 +114,6 @@ class HistoryTest extends TestCase
         $body = json_decode($response->getBody()->getContents(), true);
         $this->assertSame('fedi-e2ee:v1/api/history', $body['!pkd-context']);
         $this->assertSame($newRoot, $body['merkle-root']);
+        $this->assertNotInTransaction();
     }
 }

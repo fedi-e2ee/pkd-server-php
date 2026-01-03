@@ -192,9 +192,16 @@ class MerkleState extends Table
     {
         $attempt = 0;
         while ($attempt < $maxRetries) {
+            if ($this->db->inTransaction()) {
+                // Make sure whatever is happening before insertLeaf() is committed
+                $this->db->rollBack();
+            }
             try {
                 return $this->insertLeafInternal($leaf, $inTransaction);
             } catch (PDOException $e) {
+                if ($this->db->inTransaction()) {
+                    $this->db->rollBack();
+                }
                 $shouldRetry = false;
 
                 // Check for deadlock/lock timeout errors by driver
@@ -346,24 +353,19 @@ class MerkleState extends Table
      */
     protected function insertLeafInternal(MerkleLeaf $leaf, callable $inTransaction): bool
     {
-        $needsTransaction = !$this->db->inTransaction();
-        if ($needsTransaction) {
-            switch ($this->db->getDriver()) {
-                case 'pgsql':
-                case 'mysql':
-                    $this->db->beginTransaction();
-                    $state = $this->db->cell("SELECT merkle_state FROM pkd_merkle_state WHERE TRUE FOR UPDATE");
-                    break;
-                case "sqlite":
-                    $this->db->exec("PRAGMA busy_timeout=5000");
-                    $this->db->beginTransaction();
-                    $state = $this->db->cell("SELECT merkle_state FROM pkd_merkle_state WHERE 1");
-                    break;
-                default:
-                    throw new NotImplementedException('Database driver support not implemented');
-            }
-        } else {
-            $state = $this->db->cell("SELECT merkle_state FROM pkd_merkle_state");
+        switch ($this->db->getDriver()) {
+            case 'pgsql':
+            case 'mysql':
+                $this->db->beginTransaction();
+                $state = $this->db->cell("SELECT merkle_state FROM pkd_merkle_state WHERE TRUE FOR UPDATE");
+                break;
+            case "sqlite":
+                $this->db->beginTransaction();
+                $this->db->exec("PRAGMA busy_timeout=5000");
+                $state = $this->db->cell("SELECT merkle_state FROM pkd_merkle_state WHERE 1");
+                break;
+            default:
+                throw new NotImplementedException('Database driver support not implemented');
         }
         $insert = empty($state);
         if ($insert) {

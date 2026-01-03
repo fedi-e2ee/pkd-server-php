@@ -104,7 +104,9 @@ class TotpEnrollTest extends TestCase
         }
 
         // We need to add the key to the PKD first, so the signature can be verified.
-        $protocol = new Protocol($this->getConfig());
+        $config = $this->getConfig();
+        $protocol = new Protocol($config);
+        $this->clearOldTransaction($config);
         $latestRoot = $merkleState->getLatestRoot();
         $serverHpke = $this->config->getHPKE();
         $handler = new Handler();
@@ -188,5 +190,6 @@ class TotpEnrollTest extends TestCase
 
         $this->assertNotNull($storedSecret);
         $this->assertSame($totpSecret, $storedSecret);
+        $this->assertNotInTransaction();
     }
 }

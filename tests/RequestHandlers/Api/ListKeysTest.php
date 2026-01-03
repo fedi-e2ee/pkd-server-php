@@ -71,6 +71,7 @@ class ListKeysTest extends TestCase
         [$actorId, $canonical] = $this->makeDummyActor('example.com');
         $keypair = SecretKey::generate();
         $config = $this->getConfig();
+        $this->clearOldTransaction($config);
         $protocol = new Protocol($config);
         $webFinger = new WebFinger($config, $this->getMockClient([
             new Response(200, ['Content-Type' => 'application/json'], '{"subject":"' . $canonical . '"}')
@@ -117,5 +118,6 @@ class ListKeysTest extends TestCase
         $this->assertSame($canonical, $body['actor-id']);
         $this->assertCount(1, $body['public-keys']);
         $this->assertSame($keypair->getPublicKey()->toString(), $body['public-keys'][0]['public-key']);
+        $this->assertNotInTransaction();
     }
 }

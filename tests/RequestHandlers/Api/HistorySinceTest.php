@@ -71,6 +71,7 @@ class HistorySinceTest extends TestCase
         [$actorId, $canonical] = $this->makeDummyActor('example.com');
         $keypair = SecretKey::generate();
         $config = $this->getConfig();
+        $this->clearOldTransaction($config);
         $protocol = new Protocol($config);
         $webFinger = new WebFinger($config, $this->getMockClient([
             new Response(200, ['Content-Type' => 'application/json'], '{"subject":"' . $canonical . '"}')
@@ -120,5 +121,6 @@ class HistorySinceTest extends TestCase
         $this->assertArrayHasKey('publickeyhash', $body['records'][0]);
         $this->assertArrayHasKey('signature', $body['records'][0]);
         $this->assertSame($newRoot, $body['records'][0]['merkle-root']);
+        $this->assertNotInTransaction();
     }
 }

@@ -41,31 +41,40 @@ class MerkleStateConcurrencyTest extends TestCase
         $this->expectExceptionMessage('intentional timeout from table1');
         // Let's try to write both. Only one should be thrown.
 
-        $pid = pcntl_fork();
-        if ($pid === -1) {
-            $this->fail('Could not fork process');
-        } elseif ($pid === 0) {
-            // Child process
-            try {
-                $table2->insertLeaf(MerkleLeaf::from('test2', $sk), function () {
-                    throw new PDOException('table2 failed');
-                }, 1);
-            } catch (PDOException $e) {
-                exit(1);
+        try {
+            $pid = pcntl_fork();
+            if ($pid === -1) {
+                $this->fail('Could not fork process');
+            } elseif ($pid === 0) {
+                // Child process
+                try {
+                    $table2->insertLeaf(MerkleLeaf::from('test2', $sk), function () {
+                        throw new PDOException('table2 failed');
+                    }, 1);
+                } catch (PDOException $e) {
+                    exit(1);
+                }
+                exit(0);
+            } else {
+                // Parent process
+                $this->expectException(PDOException::class);
+                $this->expectExceptionMessage('intentional timeout from table1');
+
+                $table1->insertLeaf(MerkleLeaf::from('test1', $sk), function () {
+                    usleep(6_000_000);
+                    throw new PDOException('intentional timeout from table1');
+                });
+
+                // Wait for child
+                pcntl_waitpid($pid, $status);
             }
-            exit(0);
-        } else {
-            // Parent process
-            $this->expectException(PDOException::class);
-            $this->expectExceptionMessage('intentional timeout from table1');
-
-            $table1->insertLeaf(MerkleLeaf::from('test1', $sk), function () {
-                usleep(6_000_000);
-                throw new PDOException('intentional timeout from table1');
-            });
-
-            // Wait for child
-            pcntl_waitpid($pid, $status);
+        } finally {
+            if ($config1->getDb()->inTransaction()) {
+                $config1->getDb()->rollBack();
+            }
+            if ($config2->getDb()->inTransaction()) {
+                $config2->getDb()->rollBack();
+            }
         }
     }
 }

@@ -75,6 +75,7 @@ class RevokeTest extends TestCase
         [, $canonical] = $this->makeDummyActor('example.com');
         $keypair = SecretKey::generate();
         $config = $this->getConfig();
+        $this->clearOldTransaction($config);
         $protocol = new Protocol($config);
         $webFinger = new WebFinger($config, $this->getMockClient([
             new Response(200, ['Content-Type' => 'application/json'], '{"subject":"' . $canonical . '"}')
@@ -127,5 +128,6 @@ class RevokeTest extends TestCase
 
         $pks = $this->table('PublicKeys');
         $this->assertEmpty($pks->getPublicKeysFor($canonical));
+        $this->assertNotInTransaction();
     }
 }

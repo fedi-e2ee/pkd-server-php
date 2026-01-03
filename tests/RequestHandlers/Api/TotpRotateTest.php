@@ -97,6 +97,7 @@ class TotpRotateTest extends TestCase
         }
 
         $config = $this->getConfig();
+        $this->clearOldTransaction($config);
         $protocol = new Protocol($config);
         $latestRoot = $merkleState->getLatestRoot();
 
@@ -184,5 +185,6 @@ class TotpRotateTest extends TestCase
             bin2hex($newSecret),
             bin2hex($dbSecret)
         );
+        $this->assertNotInTransaction();
     }
 }

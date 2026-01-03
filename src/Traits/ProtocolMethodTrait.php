@@ -42,6 +42,10 @@ trait ProtocolMethodTrait
         Closure $callback,
         int $encryption = self::ENCRYPTION_REQUIRED
     ): mixed {
+        // Before we do any insets, we should make sure we're not in a dangling transaction:
+        if ($this->config->getDb()->inTransaction()) {
+            $this->config->getDb()->commit();
+        }
         $message = $payload->message;
         if ($message->getAction() !== $expectedAction) {
             throw new ProtocolException('Invalid bundle for ' . $expectedAction);
@@ -64,7 +68,14 @@ trait ProtocolMethodTrait
             $result = $callback($leaf, $payload);
         };
         if (new MerkleState($this->config)->insertLeaf($leaf, $cb)) {
+            if ($this->config->getDb()->inTransaction()) {
+                $this->config->getDb()->commit();
+            }
             return $result;
+        }
+        // Before we do any insets, we should make sure we're not in a dangling transaction:
+        if ($this->config->getDb()->inTransaction()) {
+            $this->config->getDb()->rollBack();
         }
         throw new TableException('Could not insert new leaf');
     }

@@ -142,6 +142,7 @@ class ProtocolTest extends TestCase
             $serverHpke->encapsKey,
             $serverHpke->cs,
         );
+        $this->assertNotInTransaction();
         $result1 = $this->protocol->addKey($encryptedForServer1, $canonical);
         $this->assertTrue($result1->trusted);
         $keyId1 = $result1->keyID;
@@ -165,6 +166,7 @@ class ProtocolTest extends TestCase
             $serverHpke->cs,
         );
 
+        $this->assertNotInTransaction();
         $result2 = $this->protocol->addKey($encryptedForServer2, $canonical);
         $this->assertTrue($result2->trusted);
         $this->assertNotNull($result2->keyID);
@@ -194,6 +196,7 @@ class ProtocolTest extends TestCase
             $serverHpke->cs,
         );
 
+        $this->assertNotInTransaction();
         $result3 = $this->protocol->revokeKey($encryptedForServer3, $canonical);
         $this->assertFalse($result3->trusted);
         $this->assertCount(1, $pkTable->getPublicKeysFor($canonical));
@@ -218,6 +221,7 @@ class ProtocolTest extends TestCase
      */
     public function testMoveIdentity(): void
     {
+        $this->assertNotInTransaction();
         [$oldActor, $canonical] = $this->makeDummyActor();
         [$newActor, $canonical2] = $this->makeDummyActor();
         $keypair = SecretKey::generate();
@@ -243,6 +247,7 @@ class ProtocolTest extends TestCase
             $serverHpke->encapsKey,
             $serverHpke->cs,
         );
+        $this->assertNotInTransaction();
         $result1 = $this->protocol->addKey($encryptedForServer1, $canonical);
         $keyId = $result1->keyID;
 
@@ -263,6 +268,7 @@ class ProtocolTest extends TestCase
             $serverHpke->encapsKey,
             $serverHpke->cs,
         );
+        $this->assertNotInTransaction();
         $result2 = $this->protocol->addKey($encryptedForServer2, $canonical);
         $keyId2 = $result2->keyID;
         $this->assertCount(2, $pkTable->getPublicKeysFor($canonical));
@@ -282,10 +288,12 @@ class ProtocolTest extends TestCase
             $serverHpke->encapsKey,
             $serverHpke->cs,
         );
+        $this->assertNotInTransaction();
         $result = $this->protocol->moveIdentity($encryptedForServer3, $canonical2);
         $this->assertTrue($result);
         $this->assertCount(0, $pkTable->getPublicKeysFor($canonical));
         $this->assertCount(2, $pkTable->getPublicKeysFor($canonical2));
+        $this->assertNotInTransaction();
     }
 
     /**
@@ -307,6 +315,7 @@ class ProtocolTest extends TestCase
      */
     public function testBurnDown(): void
     {
+        $this->assertNotInTransaction();
         [, $canonActor] = $this->makeDummyActor();
         [, $canonOperator] = $this->makeDummyActor();
 
@@ -331,6 +340,7 @@ class ProtocolTest extends TestCase
             $serverHpke->encapsKey,
             $serverHpke->cs
         );
+        $this->assertNotInTransaction();
         $this->protocol->addKey($encryptedForServer1, $canonActor);
 
         // 2. AddKey for operator
@@ -346,6 +356,7 @@ class ProtocolTest extends TestCase
             $serverHpke->encapsKey,
             $serverHpke->cs
         );
+        $this->assertNotInTransaction();
         $result2 = $this->protocol->addKey($encryptedForServer2, $canonOperator);
         $operatorKeyId = $result2->keyID;
 
@@ -366,9 +377,11 @@ class ProtocolTest extends TestCase
             $serverHpke->encapsKey,
             $serverHpke->cs
         );
+        $this->assertNotInTransaction();
         $result = $this->protocol->burnDown($encryptedForServer3, $canonOperator);
         $this->assertTrue($result);
         $this->assertCount(0, $pkTable->getPublicKeysFor($canonActor));
+        $this->assertNotInTransaction();
     }
 
     /**
@@ -409,6 +422,7 @@ class ProtocolTest extends TestCase
             $serverHpke->encapsKey,
             $serverHpke->cs
         );
+        $this->assertNotInTransaction();
         $result1 = $this->protocol->addKey($encryptedForServer1, $canonActor);
         $actorKeyId = $result1->keyID;
 
@@ -425,6 +439,7 @@ class ProtocolTest extends TestCase
             $serverHpke->encapsKey,
             $serverHpke->cs
         );
+        $this->assertNotInTransaction();
         $result2 = $this->protocol->addKey($encryptedForServer2, $canonOperator);
         $operatorKeyId = $result2->keyID;
 
@@ -440,6 +455,7 @@ class ProtocolTest extends TestCase
             $serverHpke->encapsKey,
             $serverHpke->cs
         );
+        $this->assertNotInTransaction();
         $result = $this->protocol->fireproof($encryptedForServer3, $canonActor);
         $this->assertTrue($result);
 
@@ -458,7 +474,15 @@ class ProtocolTest extends TestCase
             $serverHpke->encapsKey,
             $serverHpke->cs
         );
-        $this->protocol->burnDown($encryptedForServer4, $canonOperator);
+        $this->assertNotInTransaction();
+        try {
+            $this->protocol->burnDown($encryptedForServer4, $canonOperator);
+        } finally {
+            $db = $this->config()->getDb();
+            if ($db->inTransaction()) {
+                $db->rollBack();
+            }
+        }
     }
 
     /**
@@ -499,6 +523,7 @@ class ProtocolTest extends TestCase
             $serverHpke->encapsKey,
             $serverHpke->cs
         );
+        $this->assertNotInTransaction();
         $result1 = $this->protocol->addKey($encryptedForServer1, $canonicalActor);
         $actorKeyId = $result1->keyID;
 
@@ -515,6 +540,7 @@ class ProtocolTest extends TestCase
             $serverHpke->encapsKey,
             $serverHpke->cs
         );
+        $this->assertNotInTransaction();
         $result2 = $this->protocol->addKey($encryptedForServer2, $canonicalOperator);
         $operatorKeyId = $result2->keyID;
 
@@ -530,6 +556,7 @@ class ProtocolTest extends TestCase
             $serverHpke->encapsKey,
             $serverHpke->cs
         );
+        $this->assertNotInTransaction();
         $result = $this->protocol->fireproof($encryptedForServer3, $canonicalActor);
         $this->assertTrue($result);
 
@@ -545,6 +572,7 @@ class ProtocolTest extends TestCase
             $serverHpke->encapsKey,
             $serverHpke->cs
         );
+        $this->assertNotInTransaction();
         $result = $this->protocol->undoFireproof($encryptedForServer4, $canonicalActor);
         $this->assertTrue($result);
 
@@ -561,6 +589,7 @@ class ProtocolTest extends TestCase
             $serverHpke->encapsKey,
             $serverHpke->cs
         );
+        $this->assertNotInTransaction();
         $result = $this->protocol->burnDown($encryptedForServer5, $canonicalOperator);
         $this->assertTrue($result);
     }
@@ -600,6 +629,7 @@ class ProtocolTest extends TestCase
             $serverHpke->encapsKey,
             $serverHpke->cs
         );
+        $this->assertNotInTransaction();
         $result1 = $this->protocol->addKey($encryptedForServer1, $canonEve);
 
         // 2. AddAuxData
@@ -616,6 +646,7 @@ class ProtocolTest extends TestCase
             $serverHpke->encapsKey,
             $serverHpke->cs
         );
+        $this->assertNotInTransaction();
         $result = $this->protocol->addAuxData($encryptedForServer2, $canonEve);
         $this->assertTrue($result);
 
@@ -633,6 +664,7 @@ class ProtocolTest extends TestCase
             $serverHpke->encapsKey,
             $serverHpke->cs
         );
+        $this->assertNotInTransaction();
         $result = $this->protocol->revokeAuxData($encryptedForServer3, $canonEve);
         $this->assertTrue($result);
     }
@@ -669,6 +701,7 @@ class ProtocolTest extends TestCase
         );
         $empty = new AttributeKeyMap();
         $bundle = $handler->handle($checkpoint, $directoryKey, $empty, $latestRoot1);
+        $this->assertNotInTransaction();
         $result = $this->protocol->checkpoint($bundle->toString());
         $this->assertTrue($result);
     }

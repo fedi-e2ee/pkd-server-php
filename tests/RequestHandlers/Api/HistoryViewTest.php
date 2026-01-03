@@ -71,6 +71,7 @@ class HistoryViewTest extends TestCase
         [$actorId, $canonical] = $this->makeDummyActor('example.com');
         $keypair = SecretKey::generate();
         $config = $this->getConfig();
+        $this->clearOldTransaction($config);
         $protocol = new Protocol($config);
         $webFinger = new WebFinger($config, $this->getMockClient([
             new Response(200, ['Content-Type' => 'application/json'], '{"subject":"' . $canonical . '"}')
@@ -116,5 +117,6 @@ class HistoryViewTest extends TestCase
         $this->assertArrayHasKey('witnesses', $body);
         $this->assertIsArray($body['witnesses']);
         $this->assertSame($newRoot, $body['merkle-root']);
+        $this->assertNotInTransaction();
     }
 }

@@ -94,6 +94,9 @@ class Witness
      */
     protected function witnessFor(Peer $peer): void
     {
+        if ($this->db->inTransaction()) {
+            $this->db->commit();
+        }
         // Try to lock the table in case another process hits it too:
         switch ($this->db->getDriver()) {
             case 'pgsql':
@@ -143,7 +146,9 @@ class Witness
             } catch (Throwable $ex) {
                 // Log error, bail out;
                 $this->logger->error($ex->getMessage(), $ex->getTrace());
-                $this->db->rollBack();
+                if ($this->db->inTransaction()) {
+                    $this->db->rollBack();
+                }
                 return;
             }
 
@@ -166,12 +171,17 @@ class Witness
             );
             // We had an invalid response:
             if (!$this->rfc9421->verify($peer->publicKey, $response)) {
-                $this->db->rollBack();
+                if ($this->db->inTransaction()) {
+                    $this->db->rollBack();
+                }
                 throw new CryptoException('Invalid HTTP Signature from peer response');
             }
             // Save progress:
             $peer->tree = $cosignature->getTree();
             $this->peers->save($peer);
+            if ($this->db->inTransaction()) {
+                $this->db->commit();
+            }
         }
     }
 

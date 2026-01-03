@@ -78,6 +78,7 @@ class GetAuxDataTest extends TestCase
         [$actorId, $canonical] = $this->makeDummyActor('example.com');
         $keypair = SecretKey::generate();
         $config = $this->getConfig();
+        $this->clearOldTransaction($config);
         $protocol = new Protocol($config);
         $webFinger = new WebFinger($config, $this->getMockClient([
             new Response(200, ['Content-Type' => 'application/json'], '{"subject":"' . $canonical . '"}'),
@@ -104,7 +105,9 @@ class GetAuxDataTest extends TestCase
             $serverHpke->encapsKey,
             $serverHpke->cs
         );
+        $this->assertNotInTransaction();
         $protocol->addKey($encryptedForServer, $canonical);
+        $this->assertNotInTransaction();
 
         // Add aux data
         $addAux = new AddAuxData($canonical, 'test', 'test-data');
@@ -119,7 +122,9 @@ class GetAuxDataTest extends TestCase
             $serverHpke->encapsKey,
             $serverHpke->cs
         );
+        $this->assertNotInTransaction();
         $protocol->addAuxData($encryptedForServer, $canonical);
+        $this->assertNotInTransaction();
 
         $request = $this->makeGetRequest('/api/actor/' . urlencode($actorId) . '/auxiliary');
         $request = $request->withAttribute('actor_id', $actorId);
@@ -155,5 +160,6 @@ class GetAuxDataTest extends TestCase
         $this->assertSame($canonical, $body['actor-id']);
         $this->assertSame('test', $body['aux-type']);
         $this->assertSame('test-data', $body['aux-data']);
+        $this->assertNotInTransaction();
     }
 }

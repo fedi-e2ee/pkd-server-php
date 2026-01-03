@@ -98,7 +98,9 @@ class TotpDisenrollTest extends TestCase
         }
 
         // We need to add the key to the PKD first, so the signature can be verified.
-        $protocol = new Protocol($this->getConfig());
+        $config = $this->getConfig();
+        $protocol = new Protocol($config);
+        $this->clearOldTransaction($config);
         $latestRoot = $merkleState->getLatestRoot();
         $serverHpke = $this->config->getHPKE();
         $handler = new Handler();
@@ -171,5 +173,6 @@ class TotpDisenrollTest extends TestCase
 
         // Let's check the domain now:
         $this->assertEmpty($table->getSecretByDomain($domain));
+        $this->assertNotInTransaction();
     }
 }

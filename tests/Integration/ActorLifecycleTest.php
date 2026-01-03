@@ -121,6 +121,7 @@ class ActorLifecycleTest extends TestCase
         $keypair1 = SecretKey::generate();
 
         $config = $this->getConfig();
+        $this->clearOldTransaction($config);
         $protocol = new Protocol($config);
         $webFinger = new WebFinger($config, $this->getMockClient([
             new Response(200, ['Content-Type' => 'application/json'], '{"subject":"' . $canonical . '"}'),
@@ -147,6 +148,7 @@ class ActorLifecycleTest extends TestCase
             $serverHpke->encapsKey,
             $serverHpke->cs,
         );
+        $this->assertNotInTransaction();
         $protocol->addKey($encryptedForServer1, $canonical);
 
         // Verify with HTTP request
@@ -185,7 +187,9 @@ class ActorLifecycleTest extends TestCase
             $serverHpke->encapsKey,
             $serverHpke->cs,
         );
+        $this->assertNotInTransaction();
         $protocol->revokeKey($encryptedForServer2, $canonical);
+        $this->assertNotInTransaction();
 
         // Verify with HTTP request
         $response = $actorHandler->handle($request);
@@ -194,5 +198,6 @@ class ActorLifecycleTest extends TestCase
         $this->assertIsArray($body);
         $this->assertArrayHasKey('error', $body);
         $this->assertSame('Actor not found or has no registered public keys', $body['error']);
+        $this->assertNotInTransaction();
     }
 }

@@ -27,6 +27,7 @@ class ServerPublicKeyTest extends TestCase
     public function testHandle(): void
     {
         $config = $this->getConfig();
+        $this->clearOldTransaction($config);
         $reflector = new ReflectionClass(ServerPublicKey::class);
         $spkHandler = $reflector->newInstanceWithoutConstructor();
         $spkHandler->injectConfig($config);

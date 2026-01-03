@@ -11,6 +11,7 @@ use PHPUnit\Framework\Attributes\{
     CoversClass,
     UsesClass
 };
+use FediE2EE\PKDServer\Traits\ConfigTrait;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(Info::class)]
@@ -18,6 +19,7 @@ use PHPUnit\Framework\TestCase;
 #[UsesClass(ServerConfig::class)]
 class InfoTest extends TestCase
 {
+    use ConfigTrait;
     use HttpTestTrait;
 
     /**
@@ -25,8 +27,8 @@ class InfoTest extends TestCase
      */
     public function testHandle(): void
     {
-        /** @var ServerConfig $config */
         $config = $this->getConfig();
+        $this->clearOldTransaction($config);
         $request = $this->makeGetRequest('/api/info');
         $handler = new Info();
         $handler->injectConfig($config);
@@ -40,5 +42,6 @@ class InfoTest extends TestCase
         $params = $config->getParams();
         $expectedActor = $params->actorUsername . '@' . $params->hostname;
         $this->assertSame($expectedActor, $decoded['actor']);
+        $this->assertNotInTransaction();
     }
 }
