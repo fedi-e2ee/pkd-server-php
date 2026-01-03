@@ -46,8 +46,11 @@ foreach ($files as $file) {
         }
         try {
             $db->beginTransaction();
-            $pieces = explode(";\n", $sql);
+            $pieces = explode(";\n", trim($sql));
             foreach ($pieces as $piece) {
+                if (empty($piece)) {
+                    continue;
+                }
                 $db->exec($piece);
             }
             $db->commit();
