@@ -419,6 +419,11 @@ class MerkleState extends Table
         // We don't check the return value. If it throws, the transaction is never committed.
         $inTransaction();
 
+        // @phpstan-ignore-next-line
+        if (!$this->db->inTransaction()) {
+            throw new PDOException('we are not in a transaction after the callback but before merkle_state');
+        }
+
         // Update the Merkle state:
         if ($insert) {
             // This will only trigger on the first leaf
