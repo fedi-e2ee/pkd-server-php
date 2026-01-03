@@ -112,6 +112,7 @@ class CosignLifecycleTest extends TestCase
      */
     private function makeDummyEntries(): void
     {
+        $this->assertNotInTransaction();
         [, $canonical] = $this->makeDummyActor();
         $keypair = SecretKey::generate();
         $config = $this->getConfig();
@@ -146,6 +147,7 @@ class CosignLifecycleTest extends TestCase
         );
         $this->assertNotInTransaction();
         $protocol->addKey($encryptedForServer, $canonical);
+        $this->assertNotInTransaction();
     }
 
     public function testCosignLifecycle(): void
