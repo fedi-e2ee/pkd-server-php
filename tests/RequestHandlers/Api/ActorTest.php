@@ -39,6 +39,7 @@ use FediE2EE\PKDServer\Traits\ConfigTrait;
 use FediE2EE\PKDServer\Tests\HttpTestTrait;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\Attributes\{
+    After,
     CoversClass,
     UsesClass
 };
@@ -65,6 +66,14 @@ class ActorTest extends TestCase
 {
     use ConfigTrait;
     use HttpTestTrait;
+
+    #[After]
+    public function commitDanglingTransaction(): void
+    {
+        if ($this->config->getDb()->inTransaction()) {
+            $this->config->getDb()->commit();
+        }
+    }
 
     /**
      * @throws Exception

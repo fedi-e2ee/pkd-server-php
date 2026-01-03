@@ -117,6 +117,9 @@ class MerkleState extends Table
         $leaf = $this->getLeafByRoot($merkleRoot);
 
         // If we get here without throwing, we're good:
+        if ($this->db->inTransaction()) {
+            $this->db->commit();
+        }
         $this->db->beginTransaction();
         $this->db->insert(
             'pkd_merkle_witness_cosignatures',
