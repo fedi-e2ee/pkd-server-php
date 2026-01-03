@@ -46,13 +46,7 @@ foreach ($files as $file) {
         }
         try {
             $db->beginTransaction();
-            $pieces = explode(";\n", trim($sql));
-            foreach ($pieces as $piece) {
-                if (empty($piece)) {
-                    continue;
-                }
-                $db->exec($piece);
-            }
+            $db->exec($sql);
             $db->commit();
         } catch (Throwable $ex) {
             echo 'Error running ', $path, ':', PHP_EOL,
