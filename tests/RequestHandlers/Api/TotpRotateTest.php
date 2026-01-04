@@ -21,6 +21,7 @@ use FediE2EE\PKDServer\{
     Dependency\HPKE,
     Dependency\InjectConfigStrategy,
     Dependency\WrappedEncryptedRow,
+    Math,
     Protocol,
     Protocol\Payload,
     ServerConfig,
@@ -69,6 +70,7 @@ use PHPUnit\Framework\TestCase;
 #[UsesClass(MerkleLeaf::class)]
 #[UsesClass(TOTP::class)]
 #[UsesClass(WebFinger::class)]
+#[UsesClass(Math::class)]
 class TotpRotateTest extends TestCase
 {
     use HttpTestTrait;
