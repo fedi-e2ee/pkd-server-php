@@ -430,15 +430,6 @@ class MerkleState extends Table
             throw new PDOException('we are not in a transaction before the callback!');
         }
 
-        // Insert whatever data was important to the Merkle state, as defined by the callback.
-        // We don't check the return value. If it throws, the transaction is never committed.
-        $inTransaction();
-
-        // @phpstan-ignore-next-line
-        if (!$this->db->inTransaction()) {
-            throw new PDOException('we are not in a transaction after the callback but before merkle_state');
-        }
-
         // Update the Merkle state:
         $this->db->update(
             'pkd_merkle_state',
@@ -447,6 +438,15 @@ class MerkleState extends Table
             ],
             ['merkle_state' => $state]
         );
+
+        // Insert whatever data was important to the Merkle state, as defined by the callback.
+        // We don't check the return value. If it throws, the transaction is never committed.
+        $inTransaction();
+
+        // @phpstan-ignore-next-line
+        if (!$this->db->inTransaction()) {
+            throw new PDOException('we are not in a transaction after the callback but before merkle_state');
+        }
         // @phpstan-ignore-next-line
         if (!$this->db->inTransaction()) {
             throw new PDOException('we are not in a transaction after updating merkle_state');
