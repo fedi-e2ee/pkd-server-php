@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace FediE2EE\PKDServer\Tests;
 
+use FediE2EE\PKD\Crypto\Merkle\IncrementalTree;
 use FediE2EE\PKDServer\ActivityPub\WebFinger;
 use FediE2EE\PKDServer\Exceptions\DependencyException;
 use FediE2EE\PKDServer\ServerConfig;
@@ -9,6 +10,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\ServerRequest;
+use ParagonIE\ConstantTime\Base64UrlSafe;
 use ParagonIE\Certainty\Exception\CertaintyException;
 use PDOException;
 use Psr\Http\Message\ResponseInterface;
@@ -109,5 +111,66 @@ trait HttpTestTrait
     public function dispatchRequest(ServerRequestInterface $request): ResponseInterface
     {
         return $this->getConfig()->getRouter()->dispatch($request);
+    }
+
+    /**
+     * This nukes every table in the database.
+     *
+     * @return void
+     * @throws DependencyException
+     */
+    public function truncateTables(): void
+    {
+        if (method_exists($this, 'getConfig')) {
+            $db = $this->getConfig()->getDb();
+        } else {
+            $db = $GLOBALS['pkdConfig']->getDb();
+        }
+        $tables = [
+            'pkd_merkle_witness_cosignatures',
+            'pkd_merkle_witnesses',
+            'pkd_actors_publickeys',
+            'pkd_actors_auxdata',
+            'pkd_actors',
+            'pkd_merkle_leaves',
+            'pkd_totp_secrets',
+            'pkd_activitystream_queue',
+            'pkd_log',
+            'pkd_peers',
+        ];
+
+        switch ($db->getDriver()) {
+            case 'pgsql':
+                $tableList = implode(', ', $tables);
+                $db->exec("TRUNCATE {$tableList} RESTART IDENTITY CASCADE");
+                break;
+            case 'mysql':
+                $db->exec('SET FOREIGN_KEY_CHECKS = 0;');
+                foreach ($tables as $table) {
+                    $db->exec("TRUNCATE TABLE `{$table}`");
+                }
+                $db->exec('SET FOREIGN_KEY_CHECKS = 1;');
+                break;
+            case 'sqlite':
+                foreach ($tables as $table) {
+                    $db->exec("DELETE FROM `{$table}`");
+                    try {
+                        $db->exec("DELETE FROM `sqlite_sequence` WHERE `name` = '{$table}'");
+                    } catch (PDOException $ex) {
+                        // This is fine.
+                    }
+                }
+                break;
+            default:
+                throw new \RuntimeException("Unsupported driver: {$db->getDriver()}");
+        }
+
+        $incremental = new IncrementalTree([], $GLOBALS['pkdConfig']->getParams()->hashAlgo);
+        $db->safeQuery(
+            "UPDATE pkd_merkle_state SET merkle_state = ?, lock_challenge = ''",
+            [
+                Base64UrlSafe::encodeUnpadded($incremental->toJson())
+            ]
+        );
     }
 }

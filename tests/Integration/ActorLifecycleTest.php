@@ -92,6 +92,7 @@ class ActorLifecycleTest extends TestCase
     public function setUp(): void
     {
         $this->config = $this->getConfig();
+        $this->truncateTables();
     }
 
     /**
