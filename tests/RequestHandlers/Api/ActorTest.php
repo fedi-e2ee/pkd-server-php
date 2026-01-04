@@ -13,16 +13,15 @@ use FediE2EE\PKD\Crypto\{
     SecretKey,
     SymmetricKey,
 };
-use FediE2EE\PKDServer\{
-    ActivityPub\WebFinger,
+use FediE2EE\PKDServer\{ActivityPub\WebFinger,
     AppCache,
     Dependency\WrappedEncryptedRow,
+    Math,
     Protocol,
     Protocol\Payload,
     ServerConfig,
     Table,
-    TableCache,
-};
+    TableCache};
 use FediE2EE\PKDServer\RequestHandlers\Api\Actor;
 use FediE2EE\PKDServer\Tables\{
     Actors,
@@ -62,6 +61,7 @@ use ReflectionClass;
 #[UsesClass(ActorRecord::class)]
 #[UsesClass(ActorKey::class)]
 #[UsesClass(MerkleLeaf::class)]
+#[UsesClass(Math::class)]
 class ActorTest extends TestCase
 {
     use ConfigTrait;

@@ -14,17 +14,16 @@ use FediE2EE\PKD\Crypto\{
 use FediE2EE\PKDServer\RequestHandlers\Api\{
     TotpDisenroll
 };
-use FediE2EE\PKDServer\{
-    ActivityPub\WebFinger,
+use FediE2EE\PKDServer\{ActivityPub\WebFinger,
     AppCache,
     Dependency\InjectConfigStrategy,
     Dependency\WrappedEncryptedRow,
+    Math,
     Protocol,
     Protocol\Payload,
     ServerConfig,
     Table,
-    TableCache
-};
+    TableCache};
 use FediE2EE\PKDServer\Tables\{
     Actors,
     MerkleState,
@@ -65,6 +64,7 @@ use PHPUnit\Framework\TestCase;
 #[UsesClass(ActorKey::class)]
 #[UsesClass(MerkleLeaf::class)]
 #[UsesClass(TOTP::class)]
+#[UsesClass(Math::class)]
 class TotpDisenrollTest extends TestCase
 {
     use ConfigTrait;

@@ -14,16 +14,15 @@ use FediE2EE\PKD\Crypto\{
     SymmetricKey
 };
 use FediE2EE\PKDServer\RequestHandlers\Api\ListAuxData;
-use FediE2EE\PKDServer\{
-    ActivityPub\WebFinger,
+use FediE2EE\PKDServer\{ActivityPub\WebFinger,
     AppCache,
     Dependency\WrappedEncryptedRow,
+    Math,
     Protocol,
     Protocol\Payload,
     ServerConfig,
     Table,
-    TableCache
-};
+    TableCache};
 use FediE2EE\PKDServer\Tables\{
     Actors,
     AuxData,
@@ -61,6 +60,7 @@ use ReflectionClass;
 #[UsesClass(Actor::class)]
 #[UsesClass(ActorKey::class)]
 #[UsesClass(MerkleLeaf::class)]
+#[UsesClass(Math::class)]
 class ListAuxDataTest extends TestCase
 {
     use ConfigTrait;

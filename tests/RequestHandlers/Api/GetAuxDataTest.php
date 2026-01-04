@@ -17,16 +17,15 @@ use FediE2EE\PKDServer\RequestHandlers\Api\{
     GetAuxData,
     ListAuxData
 };
-use FediE2EE\PKDServer\{
-    ActivityPub\WebFinger,
+use FediE2EE\PKDServer\{ActivityPub\WebFinger,
     AppCache,
     Dependency\WrappedEncryptedRow,
+    Math,
     Protocol,
     Protocol\Payload,
     ServerConfig,
     Table,
-    TableCache
-};
+    TableCache};
 use FediE2EE\PKDServer\Tables\{
     Actors,
     AuxData,
@@ -65,6 +64,7 @@ use ReflectionClass;
 #[UsesClass(Actor::class)]
 #[UsesClass(ActorKey::class)]
 #[UsesClass(MerkleLeaf::class)]
+#[UsesClass(Math::class)]
 class GetAuxDataTest extends TestCase
 {
     use ConfigTrait;
