@@ -372,8 +372,7 @@ class MerkleState extends Table
             default:
                 throw new NotImplementedException('Database driver support not implemented');
         }
-        $insert = empty($state);
-        if ($insert) {
+        if (empty($state)) {
             $incremental = new IncrementalTree([], $this->config()->getParams()->hashAlgo);
             // This will only trigger on the first leaf:
             $this->db->insert(
@@ -385,10 +384,9 @@ class MerkleState extends Table
             $this->db->commit();
             // Restart this call so it locks the field too
             return $this->insertLeafInternal($leaf, $inTransaction);
-        } else {
-            // Deserialize state:
-            $incremental = IncrementalTree::fromJson(Base64UrlSafe::decodeNoPadding($state));
         }
+        // Deserialize state:
+        $incremental = IncrementalTree::fromJson(Base64UrlSafe::decodeNoPadding($state));
 
         // Append this leaf to the tree:
         $rawLeaf = $leaf->serializeForMerkle();

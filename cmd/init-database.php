@@ -1,9 +1,11 @@
 <?php
 declare(strict_types=1);
 
+use FediE2EE\PKD\Crypto\Merkle\IncrementalTree;
 use GetOpt\GetOpt;
 use GetOpt\Option;
 use FediE2EE\PKDServer\ServerConfig;
+use ParagonIE\ConstantTime\Base64UrlSafe;
 use const FediE2EE\PKDServer\PKD_SERVER_ROOT;
 
 require_once dirname(__DIR__) . '/vendor/autoload.php';
@@ -60,6 +62,15 @@ foreach ($files as $file) {
             exit(1);
         }
     }
+
+    // Create row in pkd_merkle_state for tests so it can be locked for updates
+    $incremental = new IncrementalTree([], $this->config()->getParams()->hashAlgo);
+    $db->insert(
+        'pkd_merkle_state',
+        [
+            'merkle_state' => Base64UrlSafe::encodeUnpadded($incremental->toJson())
+        ]
+    );
 }
 
 // Make lazy copies of these config classes so that they can be modified without affecting Git history.
