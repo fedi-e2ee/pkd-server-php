@@ -8,7 +8,7 @@ require_once dirname(__DIR__) . '/vendor/autoload.php';
 // Make lazy copies of these config classes so that they can be modified without affecting Git history.
 function lazy_copy(string $filename): void
 {
-    copy(
+    @copy(
         PKD_SERVER_ROOT . '/config/' . $filename . '.php',
         PKD_SERVER_ROOT . '/config/local/' . $filename . '.php'
     );
