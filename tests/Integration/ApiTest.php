@@ -34,16 +34,15 @@ use FediE2EE\PKDServer\RequestHandlers\Api\{
     Revoke,
     ServerPublicKey
 };
-use FediE2EE\PKDServer\{
-    ActivityPub\WebFinger,
+use FediE2EE\PKDServer\{ActivityPub\WebFinger,
     AppCache,
     Dependency\WrappedEncryptedRow,
+    Math,
     Protocol,
     Protocol\Payload,
     ServerConfig,
     Table,
-    TableCache
-};
+    TableCache};
 use FediE2EE\PKDServer\Exceptions\{
     CacheException,
     DependencyException,
@@ -108,6 +107,7 @@ use SodiumException;
 #[UsesClass(TableCache::class)]
 #[UsesClass(WebFinger::class)]
 #[UsesClass(WrappedEncryptedRow::class)]
+#[UsesClass(Math::class)]
 class ApiTest extends TestCase
 {
     use ConfigTrait;

@@ -27,17 +27,16 @@ use FediE2EE\PKDServer\Exceptions\{
     ProtocolException,
     TableException
 };
-use FediE2EE\PKDServer\{
-    ActivityPub\WebFinger,
+use FediE2EE\PKDServer\{ActivityPub\WebFinger,
     AppCache,
     Dependency\WrappedEncryptedRow,
+    Math,
     Protocol,
     Protocol\Payload,
     ServerConfig,
     Table,
     TableCache,
-    Traits\ConfigTrait
-};
+    Traits\ConfigTrait};
 use FediE2EE\PKDServer\Tables\{
     Actors,
     AuxData,
@@ -84,6 +83,7 @@ use SodiumException;
 #[UsesClass(TableCache::class)]
 #[UsesClass(WebFinger::class)]
 #[UsesClass(WrappedEncryptedRow::class)]
+#[UsesClass(Math::class)]
 class CosignLifecycleTest extends TestCase
 {
     use ConfigTrait;
