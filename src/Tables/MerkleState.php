@@ -496,7 +496,9 @@ class MerkleState extends Table
             // We only commit this transaction if all was successful:
             return $this->db->commit();
         } finally {
+            // @phpstan-ignore-next-line
             $wrap = !$this->db->inTransaction();
+            // @phpstan-ignore-next-line
             if ($wrap) {
                 $this->db->beginTransaction();
             }
@@ -508,6 +510,7 @@ class MerkleState extends Table
                 ],
                 ['merkle_state' => $state]
             );
+            // @phpstan-ignore-next-line
             if ($wrap) {
                 $this->db->commit();
             }
