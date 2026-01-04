@@ -115,7 +115,7 @@ abstract class Table
              */
             $cutoff = Math::getLowVolumeCutoff($numLeaves);
         }
-        if ($cutoff < 1) {
+        if ($cutoff < 16) {
             $zero = (new Tree([], $this->config()->getParams()->hashAlgo))->getEncodedRoot();
             if (hash_equals($zero, $merkleRoot)) {
                 return true;

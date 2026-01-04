@@ -64,7 +64,7 @@ foreach ($files as $file) {
     }
 
     // Create row in pkd_merkle_state for tests so it can be locked for updates
-    $incremental = new IncrementalTree([], $this->config()->getParams()->hashAlgo);
+    $incremental = new IncrementalTree([], $GLOBALS['pkdConfig']->getParams()->hashAlgo);
     $db->insert(
         'pkd_merkle_state',
         [
