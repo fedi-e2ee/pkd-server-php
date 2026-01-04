@@ -35,13 +35,7 @@ use FediE2EE\PKDServer\Exceptions\{
 };
 use FediE2EE\PKDServer\ActivityPub\WebFinger;
 use FediE2EE\PKDServer\Dependency\WrappedEncryptedRow;
-use FediE2EE\PKDServer\{
-    AppCache,
-    Protocol,
-    ServerConfig,
-    Table,
-    TableCache
-};
+use FediE2EE\PKDServer\{AppCache, Math, Protocol, ServerConfig, Table, TableCache};
 use FediE2EE\PKDServer\Protocol\Payload;
 use FediE2EE\PKDServer\Tables\{
     Actors,
@@ -83,6 +77,7 @@ use SodiumException;
 #[UsesClass(TOTP::class)]
 #[UsesClass(WebFinger::class)]
 #[UsesClass(WrappedEncryptedRow::class)]
+#[UsesClass(Math::class)]
 class ProtocolTest extends TestCase
 {
     use ConfigTrait;
