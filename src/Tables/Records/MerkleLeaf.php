@@ -84,15 +84,15 @@ class MerkleLeaf
 
     public function getSignature(): string
     {
-        return Base64UrlSafe::encodeUnpadded($this->signature);
+        return Base64UrlSafe::encodeUnpadded(sodium_hex2bin($this->signature));
     }
 
     public function serializeForMerkle(): string
     {
         return $this->preAuthEncode([
-            $this->contentHash,
-            $this->signature,
-            $this->publicKeyHash,
+            sodium_hex2bin($this->contentHash),
+            sodium_hex2bin($this->signature),
+            sodium_hex2bin($this->publicKeyHash),
         ]);
     }
 }

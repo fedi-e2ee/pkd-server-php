@@ -120,8 +120,11 @@ class HistorySinceTest extends TestCase
         $this->assertArrayHasKey('created', $body['records'][0]);
         $this->assertArrayHasKey('encrypted-message', $body['records'][0]);
         $this->assertArrayHasKey('contenthash', $body['records'][0]);
+        $this->assertSame(64, strlen($body['records'][0]['contenthash']));
         $this->assertArrayHasKey('publickeyhash', $body['records'][0]);
+        $this->assertSame(64, strlen($body['records'][0]['publickeyhash']));
         $this->assertArrayHasKey('signature', $body['records'][0]);
+        $this->assertSame(86, strlen($body['records'][0]['signature']));
         $this->assertSame($newRoot, $body['records'][0]['merkle-root']);
         $this->assertNotInTransaction();
     }

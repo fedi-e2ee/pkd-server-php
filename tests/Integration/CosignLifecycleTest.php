@@ -211,12 +211,7 @@ class CosignLifecycleTest extends TestCase
                 $record['signature'],
             );
 
-            try {
-                $cosign->append($hist, $thisRoot);
-            } catch (CryptoException $ex) {
-                var_dump($count, $record);
-                throw $ex;
-            }
+            $cosign->append($hist, $thisRoot);
 
             $cosigned = $cosign->cosign($witnessSK, $this->config->getParams()->hostname);
 
