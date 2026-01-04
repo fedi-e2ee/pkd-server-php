@@ -7,6 +7,7 @@ use FediE2EE\PKDServer\AppCache;
 use FediE2EE\PKDServer\RequestHandlers\ActivityPub\Finger;
 use FediE2EE\PKDServer\ServerConfig;
 use FediE2EE\PKDServer\Tests\HttpTestTrait;
+use FediE2EE\PKDServer\Traits\ConfigTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\UsesClass;
@@ -18,6 +19,7 @@ use PHPUnit\Framework\TestCase;
 #[UsesClass(ServerConfig::class)]
 class FingerTest extends TestCase
 {
+    use ConfigTrait;
     use HttpTestTrait;
 
     public static function fingerProvider(): array
@@ -39,6 +41,7 @@ class FingerTest extends TestCase
         $handler = new Finger();
         $handler->injectConfig($GLOBALS['pkdConfig']);
         $response = $handler->handle($request);
+        $this->assertNotInTransaction();
         $this->assertSame(200, $response->getStatusCode());
         $body = json_decode($response->getBody()->getContents());
         foreach ($expected['aliases'] as $alias) {
