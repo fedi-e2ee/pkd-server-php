@@ -375,6 +375,16 @@ class MerkleState extends Table
         $insert = empty($state);
         if ($insert) {
             $incremental = new IncrementalTree([], $this->config()->getParams()->hashAlgo);
+            // This will only trigger on the first leaf:
+            $this->db->insert(
+                'pkd_merkle_state',
+                [
+                    'merkle_state' => Base64UrlSafe::encodeUnpadded($incremental->toJson())
+                ]
+            );
+            $this->db->commit();
+            // Restart this call so it locks the field too
+            return $this->insertLeafInternal($leaf, $inTransaction);
         } else {
             // Deserialize state:
             $incremental = IncrementalTree::fromJson(Base64UrlSafe::decodeNoPadding($state));
@@ -432,23 +442,13 @@ class MerkleState extends Table
         }
 
         // Update the Merkle state:
-        if ($insert) {
-            // This will only trigger on the first leaf
-            $this->db->insert(
-                'pkd_merkle_state',
-                [
-                    'merkle_state' => Base64UrlSafe::encodeUnpadded($incremental->toJson())
-                ]
-            );
-        } else {
-            $this->db->update(
-                'pkd_merkle_state',
-                [
-                    'merkle_state' => Base64UrlSafe::encodeUnpadded($incremental->toJson())
-                ],
-                ['merkle_state' => $state]
-            );
-        }
+        $this->db->update(
+            'pkd_merkle_state',
+            [
+                'merkle_state' => Base64UrlSafe::encodeUnpadded($incremental->toJson())
+            ],
+            ['merkle_state' => $state]
+        );
         // @phpstan-ignore-next-line
         if (!$this->db->inTransaction()) {
             throw new PDOException('we are not in a transaction after updating merkle_state');
