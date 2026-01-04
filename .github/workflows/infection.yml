@@ -1,6 +1,7 @@
 name: Mutation
 
 on:
+  push:
   create:
     tags:
      - v*
