@@ -97,7 +97,9 @@ class HistorySinceTest extends TestCase
             $serverHpke->encapsKey,
             $serverHpke->cs
         );
+        $this->assertNotInTransaction();
         $protocol->addKey($encryptedForServer, $canonical);
+        $this->assertNotInTransaction();
         $newRoot = $merkleState->getLatestRoot();
 
         $reflector = new ReflectionClass(HistorySince::class);

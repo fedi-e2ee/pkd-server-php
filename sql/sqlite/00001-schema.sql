@@ -1,6 +1,7 @@
 -- A table with one row so we can lock its state:
 CREATE TABLE IF NOT EXISTS pkd_merkle_state (
-    merkle_state TEXT
+    merkle_state TEXT,
+    lock_challenge TEXT
 );
 
 -- The leaves of the Merkle tree. Sequential.

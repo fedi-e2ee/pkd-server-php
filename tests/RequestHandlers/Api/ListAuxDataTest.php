@@ -106,6 +106,7 @@ class ListAuxDataTest extends TestCase
         $this->assertNotInTransaction();
         $protocol->addKey($encryptedForServer, $canonical);
         $this->clearOldTransaction($this->config);
+        $this->ensureMerkleStateUnlocked();
 
         // Add aux data
         $addAux = new AddAuxData($canonical, 'test', 'test-data');

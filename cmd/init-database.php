@@ -68,7 +68,8 @@ foreach ($files as $file) {
     $db->insert(
         'pkd_merkle_state',
         [
-            'merkle_state' => Base64UrlSafe::encodeUnpadded($incremental->toJson())
+            'merkle_state' => Base64UrlSafe::encodeUnpadded($incremental->toJson()),
+            'lock_challenge' => '',
         ]
     );
 }

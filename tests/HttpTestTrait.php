@@ -40,6 +40,13 @@ trait HttpTestTrait
         }
     }
 
+    public function ensureMerkleStateUnlocked(): void
+    {
+        $db = $this->config()->getDb();
+        $lock = $db->cell("SELECT lock_challenge FROM pkd_merkle_state");
+        $this->assertEmpty($lock, 'lock = "' . $lock . '" but empty string was expected');
+    }
+
     public function assertNotInTransaction(): void
     {
         $db = $this->config()->getDb();

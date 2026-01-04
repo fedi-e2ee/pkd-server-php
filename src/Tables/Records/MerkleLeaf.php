@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace FediE2EE\PKDServer\Tables\Records;
 
+use FediE2EE\PKD\Crypto\Exceptions\NotImplementedException;
 use FediE2EE\PKD\Crypto\Merkle\InclusionProof;
 use FediE2EE\PKD\Crypto\SecretKey;
 use FediE2EE\PKD\Crypto\UtilTrait;
@@ -10,6 +11,7 @@ use FediE2EE\PKDServer\Protocol\Payload;
 use FediE2EE\PKDServer\Traits\TableRecordTrait;
 use FediE2EE\PKDServer\Tables\MerkleState;
 use ParagonIE\ConstantTime\Base64UrlSafe;
+use SodiumException;
 
 /**
  * Abstraction for a row in the MerkleState table
@@ -32,12 +34,16 @@ class MerkleLeaf
         $this->primaryKey = $primaryKey;
     }
 
+    /**
+     * @throws NotImplementedException
+     * @throws SodiumException
+     */
     public static function from(
         string $contents,
         SecretKey $sk
     ): self {
         $contentHash = hash('sha256', $contents);
-        $signature = $sk->sign(sodium_hex2bin($contentHash));
+        $signature = sodium_bin2hex($sk->sign(sodium_hex2bin($contentHash)));
         $publicKeyHash = hash('sha256', $sk->getPublicKey()->getBytes());
         return new self(
             $contents,

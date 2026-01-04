@@ -59,12 +59,6 @@ abstract class Table
             // Does high-traffic mode make it succeed?
             if (!$this->isMerkleRootRecent($recentMerkle, true)) {
                 // No? OK, then let's bail out.
-                var_dump(
-                    $recentMerkle,
-                    $this->db->row("SELECT * FROM pkd_merkle_leaves ORDER BY merkleleafid DESC LIMIT 1"),
-                    $this->db->cell("SELECT count(merkleleafid) FROM pkd_merkle_leaves"),
-                    $this->db->cell("SELECT merkleleafid FROM pkd_merkle_leaves WHERE root = ?", $recentMerkle)
-                );
                 throw new ProtocolException('Stale or invalid Merkle Root provided');
             }
             // We should log these incidents, even though the Merkle Root is strictly speaking OK.

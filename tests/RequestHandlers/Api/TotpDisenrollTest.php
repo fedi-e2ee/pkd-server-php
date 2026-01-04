@@ -117,6 +117,8 @@ class TotpDisenrollTest extends TestCase
             $serverHpke->cs,
         );
         $result = $protocol->addKey($encryptedForServer, $canonical);
+        $this->assertNotInTransaction();
+        $this->ensureMerkleStateUnlocked();
         $this->assertObjectHasProperty('keyID', $result);
 
         // Create TOTP Secret:

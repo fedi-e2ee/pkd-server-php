@@ -233,7 +233,9 @@ class Protocol
     {
         $payload = $this->hpkeUnwrap($body);
         $table = new PublicKeys($this->config);
-        return $table->addKey($payload, $outerActor);
+        $return = $table->addKey($payload, $outerActor);
+        $this->cleanUpAfterAction();
+        return $return;
     }
 
     /**
@@ -250,7 +252,9 @@ class Protocol
     {
         $payload = $this->hpkeUnwrap($body);
         $table = new PublicKeys($this->config);
-        return $table->revokeKey($payload, $outerActor);
+        $return = $table->revokeKey($payload, $outerActor);
+        $this->cleanUpAfterAction();
+        return $return;
     }
 
     /**
@@ -273,7 +277,9 @@ class Protocol
         }
 
         $table = new PublicKeys($this->config);
-        return $table->revokeKeyThirdParty($payload);
+        $return = $table->revokeKeyThirdParty($payload);
+        $this->cleanUpAfterAction();
+        return $return;
     }
 
     /**
@@ -290,7 +296,9 @@ class Protocol
     {
         $payload = $this->hpkeUnwrap($body);
         $table = new PublicKeys($this->config);
-        return $table->moveIdentity($payload, $outerActor);
+        $return = $table->moveIdentity($payload, $outerActor);
+        $this->cleanUpAfterAction();
+        return $return;
     }
 
     /**
@@ -307,7 +315,9 @@ class Protocol
     {
         $payload = $this->hpkeUnwrap($body);
         $table = new PublicKeys($this->config);
-        return $table->burnDown($payload, $outerActor);
+        $return = $table->burnDown($payload, $outerActor);
+        $this->cleanUpAfterAction();
+        return $return;
     }
 
     /**
@@ -324,7 +334,9 @@ class Protocol
     {
         $payload = $this->hpkeUnwrap($body);
         $table = new PublicKeys($this->config);
-        return $table->fireproof($payload, $outerActor);
+        $return = $table->fireproof($payload, $outerActor);
+        $this->cleanUpAfterAction();
+        return $return;
     }
 
     /**
@@ -341,7 +353,9 @@ class Protocol
     {
         $payload = $this->hpkeUnwrap($body);
         $table = new PublicKeys($this->config);
-        return $table->undoFireproof($payload, $outerActor);
+        $return = $table->undoFireproof($payload, $outerActor);
+        $this->cleanUpAfterAction();
+        return $return;
     }
 
     /**
@@ -358,7 +372,9 @@ class Protocol
     {
         $payload = $this->hpkeUnwrap($body);
         $table = new AuxData($this->config);
-        return $table->addAuxData($payload, $outerActor);
+        $return = $table->addAuxData($payload, $outerActor);
+        $this->cleanUpAfterAction();
+        return $return;
     }
 
     /**
@@ -375,7 +391,9 @@ class Protocol
     {
         $payload = $this->hpkeUnwrap($body);
         $table = new AuxData($this->config);
-        return $table->revokeAuxData($payload, $outerActor);
+        $return = $table->revokeAuxData($payload, $outerActor);
+        $this->cleanUpAfterAction();
+        return $return;
     }
 
     /**
@@ -396,6 +414,15 @@ class Protocol
             throw new ProtocolException('Invalid bundle for Checkpoint', 0, $e);
         }
         $table = new PublicKeys($this->config);
-        return $table->checkpoint($payload);
+        $return = $table->checkpoint($payload);
+        $this->cleanUpAfterAction();
+        return $return;
+    }
+
+    protected function cleanUpAfterAction(): void
+    {
+        $this->config->getDb()->exec(
+            "UPDATE pkd_merkle_state SET lock_challenge = ''"
+        );
     }
 }

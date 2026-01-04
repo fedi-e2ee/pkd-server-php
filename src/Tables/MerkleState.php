@@ -2,25 +2,33 @@
 declare(strict_types=1);
 namespace FediE2EE\PKDServer\Tables;
 
-use FediE2EE\PKD\Crypto\Exceptions\{CryptoException, JsonException, NotImplementedException};
+use FediE2EE\PKD\Crypto\Exceptions\{
+    CryptoException,
+    JsonException,
+    NotImplementedException
+};
 use FediE2EE\PKD\Crypto\AttributeEncryption\AttributeKeyMap;
 use FediE2EE\PKD\Crypto\Protocol\Cosignature;
 use FediE2EE\PKD\Crypto\PublicKey;
-use FediE2EE\PKDServer\Exceptions\ProtocolException;
-use FediE2EE\PKDServer\Exceptions\TableException;
+use FediE2EE\PKDServer\Exceptions\{
+    ConcurrentException,
+    DependencyException,
+    ProtocolException,
+    TableException
+};
 use FediE2EE\PKD\Crypto\Merkle\{
     InclusionProof,
     IncrementalTree,
     Tree
 };
 use FediE2EE\PKDServer\Dependency\WrappedEncryptedRow;
-use FediE2EE\PKDServer\Exceptions\DependencyException;
 use FediE2EE\PKDServer\Table;
 use FediE2EE\PKDServer\Tables\Records\MerkleLeaf;
 use Override;
 use ParagonIE\ConstantTime\Base64UrlSafe;
 use PDO;
 use PDOException;
+use Random\RandomException;
 use SodiumException;
 
 /**
@@ -186,22 +194,34 @@ class MerkleState extends Table
      * @param int $maxRetries         Maximum number of retries if Merkle Tree is locked
      * @return bool
      *
+     * @throws ConcurrentException
      * @throws CryptoException
      * @throws DependencyException
      * @throws NotImplementedException
+     * @throws RandomException
      * @throws SodiumException
+     *
      * @api
      */
-    public function insertLeaf(MerkleLeaf $leaf, callable $inTransaction, int $maxRetries = 3): bool
+    public function insertLeaf(MerkleLeaf $leaf, callable $inTransaction, int $maxRetries = 5): bool
     {
         $attempt = 0;
+        $lockChallenge = sodium_bin2hex(random_bytes(32));
+        $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         while ($attempt < $maxRetries) {
             if ($this->db->inTransaction()) {
                 // Make sure whatever is happening before insertLeaf() is committed
                 $this->db->rollBack();
             }
             try {
-                return $this->insertLeafInternal($leaf, $inTransaction);
+                return $this->insertLeafInternal($leaf, $inTransaction, $lockChallenge);
+            } catch (ConcurrentException $e) {
+                if ($attempt < $maxRetries - 1) {
+                    $attempt++;
+                    usleep(random_int(10000, 100000)); // Random backoff 10-100ms
+                    continue;
+                }
+                throw $e;
             } catch (PDOException $e) {
                 if ($this->db->inTransaction()) {
                     $this->db->rollBack();
@@ -349,25 +369,38 @@ class MerkleState extends Table
     /**
      * Internal processing for insertLeaf() above.
      *
+     * @throws ConcurrentException
      * @throws CryptoException
      * @throws NotImplementedException
      * @throws PDOException
      * @throws SodiumException
      * @throws DependencyException
      */
-    protected function insertLeafInternal(MerkleLeaf $leaf, callable $inTransaction): bool
-    {
-        $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    protected function insertLeafInternal(
+        MerkleLeaf $leaf,
+        callable $inTransaction,
+        string $lockChallenge
+    ): bool {
         switch ($this->db->getDriver()) {
             case 'pgsql':
             case 'mysql':
                 $this->db->beginTransaction();
-                $state = $this->db->cell("SELECT merkle_state FROM pkd_merkle_state WHERE TRUE FOR UPDATE");
+                $row = $this->db->row(
+                    "SELECT merkle_state, lock_challenge 
+                            FROM pkd_merkle_state WHERE TRUE FOR UPDATE"
+                );
+                $state = $row['merkle_state'];
+                $storedChallenge = $row['lock_challenge'];
                 break;
             case "sqlite":
                 $this->db->beginTransaction();
                 $this->db->exec("PRAGMA busy_timeout=5000");
-                $state = $this->db->cell("SELECT merkle_state FROM pkd_merkle_state WHERE 1");
+                $row = $this->db->row(
+                    "SELECT merkle_state, lock_challenge
+                        FROM pkd_merkle_state WHERE 1"
+                );
+                $state = $row['merkle_state'];
+                $storedChallenge = $row['lock_challenge'];
                 break;
             default:
                 throw new NotImplementedException('Database driver support not implemented');
@@ -383,8 +416,24 @@ class MerkleState extends Table
             );
             $this->db->commit();
             // Restart this call so it locks the field too
-            return $this->insertLeafInternal($leaf, $inTransaction);
+            return $this->insertLeafInternal($leaf, $inTransaction, $lockChallenge);
         }
+
+        // Let's make sure another thread doesn't have this locked.
+        if (!empty($storedChallenge)) {
+            if (!hash_equals($storedChallenge, $lockChallenge)) {
+                throw new ConcurrentException('Thread is locked by another process, wait');
+            }
+        }
+
+        // Lock table:
+        $this->db->update(
+            'pkd_merkle_state',
+            [
+                'lock_challenge' => $lockChallenge,
+            ],
+            ['merkle_state' => $state]
+        );
         // Deserialize state:
         $incremental = IncrementalTree::fromJson(Base64UrlSafe::decodeNoPadding($state));
 
@@ -441,18 +490,27 @@ class MerkleState extends Table
 
         // Insert whatever data was important to the Merkle state, as defined by the callback.
         // We don't check the return value. If it throws, the transaction is never committed.
-        $inTransaction();
+        try {
+            $inTransaction();
 
-        // @phpstan-ignore-next-line
-        if (!$this->db->inTransaction()) {
-            throw new PDOException('we are not in a transaction after the callback but before merkle_state');
+            // We only commit this transaction if all was successful:
+            return $this->db->commit();
+        } finally {
+            $wrap = !$this->db->inTransaction();
+            if ($wrap) {
+                $this->db->beginTransaction();;
+            }
+            // Unlock challenge
+            $this->db->update(
+                'pkd_merkle_state',
+                [
+                    'lock_challenge' => '',
+                ],
+                ['merkle_state' => $state]
+            );
+            if ($wrap) {
+                $this->db->commit();
+            }
         }
-        // @phpstan-ignore-next-line
-        if (!$this->db->inTransaction()) {
-            throw new PDOException('we are not in a transaction after updating merkle_state');
-        }
-
-        // We only commit this transaction if all was successful:
-        return $this->db->commit();
     }
 }

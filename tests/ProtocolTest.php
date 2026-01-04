@@ -640,6 +640,8 @@ class ProtocolTest extends TestCase
         );
         $this->assertNotInTransaction();
         $result1 = $this->protocol->addKey($encryptedForServer1, $canonEve);
+        $this->ensureMerkleStateUnlocked();
+        $this->assertNotInTransaction();
 
         // 2. AddAuxData
         $latestRoot2 = $merkleState->getLatestRoot();
@@ -716,5 +718,6 @@ class ProtocolTest extends TestCase
         $result = $this->protocol->checkpoint($bundle->toString());
         $this->assertTrue($result);
         $this->assertNotInTransaction();
+        $this->ensureMerkleStateUnlocked();
     }
 }
