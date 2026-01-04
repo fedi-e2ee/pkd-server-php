@@ -498,7 +498,7 @@ class MerkleState extends Table
         } finally {
             $wrap = !$this->db->inTransaction();
             if ($wrap) {
-                $this->db->beginTransaction();;
+                $this->db->beginTransaction();
             }
             // Unlock challenge
             $this->db->update(
