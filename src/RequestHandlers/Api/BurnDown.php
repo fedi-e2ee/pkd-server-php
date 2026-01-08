@@ -2,28 +2,38 @@
 declare(strict_types=1);
 namespace FediE2EE\PKDServer\RequestHandlers\Api;
 
-use FediE2EE\PKD\Crypto\Exceptions\CryptoException;
-use FediE2EE\PKD\Crypto\Exceptions\JsonException;
-use FediE2EE\PKD\Crypto\Exceptions\NotImplementedException;
-use FediE2EE\PKD\Crypto\Exceptions\ParserException;
-use FediE2EE\PKDServer\ActivityPub\ActivityStream;
-use FediE2EE\PKDServer\Exceptions\ActivityPubException;
-use FediE2EE\PKDServer\Exceptions\CacheException;
-use FediE2EE\PKDServer\Exceptions\DependencyException;
-use FediE2EE\PKDServer\Exceptions\ProtocolException;
-use FediE2EE\PKDServer\Exceptions\TableException;
-use FediE2EE\PKDServer\Meta\Route;
-use FediE2EE\PKDServer\Protocol;
-use FediE2EE\PKDServer\Traits\ReqTrait;
+use FediE2EE\PKD\Crypto\Exceptions\{CryptoException,
+    HttpSignatureException,
+    JsonException,
+    NotImplementedException,
+    ParserException};
+use FediE2EE\PKDServer\Exceptions\{ActivityPubException,
+    CacheException,
+    DependencyException,
+    FetchException,
+    ProtocolException,
+    TableException};
+use FediE2EE\PKDServer\{
+    Meta\Route,
+    Protocol
+};
+use FediE2EE\PKDServer\Traits\{
+    ActivityStreamsTrait,
+    ReqTrait
+};
 use Override;
+use ParagonIE\Certainty\Exception\CertaintyException;
 use ParagonIE\HPKE\HPKEException;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\{
+    ResponseInterface,
+    ServerRequestInterface
+};
 use Psr\Http\Server\RequestHandlerInterface;
 use SodiumException;
 
 class BurnDown implements RequestHandlerInterface
 {
+    use ActivityStreamsTrait;
     use ReqTrait;
 
     protected Protocol $protocol;
@@ -36,10 +46,9 @@ class BurnDown implements RequestHandlerInterface
         $this->protocol = new Protocol($this->config());
     }
 
-
     /**
-     * @throws ActivityPubException
      * @throws CacheException
+     * @throws CertaintyException
      * @throws CryptoException
      * @throws DependencyException
      * @throws HPKEException
@@ -53,9 +62,8 @@ class BurnDown implements RequestHandlerInterface
     #[Override]
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $message = (string) $request->getBody();
         try {
-            $as = ActivityStream::fromString($message);
+            $as = $this->getVerifiedStream($request);
             /** @var array{action: string, result: bool, latest-root: string} $result */
             $result = $this->protocol->process($as, false);
             return $this->json([
@@ -63,7 +71,7 @@ class BurnDown implements RequestHandlerInterface
                 'time' => $this->time(),
                 'status' => $result['result'],
             ]);
-        } catch (ProtocolException $e) {
+        } catch (FetchException|HttpSignatureException|ActivityPubException|ProtocolException $e) {
             $this->config()->getLogger()->error(
                 $e->getMessage(),
                 $e->getTrace(),
