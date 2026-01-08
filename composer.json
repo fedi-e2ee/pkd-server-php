@@ -20,7 +20,7 @@
     "ext-pdo": "*",
     "ext-json": "*",
     "ext-sodium": "*",
-    "fedi-e2ee/pkd-crypto": "^0.23|1",
+    "fedi-e2ee/pkd-crypto": "^0.24|1",
     "fedi-e2ee/pkd-extensions": "^0.2|^1",
     "guzzlehttp/guzzle": "^7",
     "laminas/laminas-diactoros": "^3",

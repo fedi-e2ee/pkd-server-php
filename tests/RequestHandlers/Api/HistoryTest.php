@@ -36,6 +36,7 @@ use FediE2EE\PKDServer\Tests\HttpTestTrait;
 use FediE2EE\PKDServer\Traits\ConfigTrait;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\Attributes\{
+    AllowMockObjectsWithoutExpectations,
     CoversClass,
     UsesClass
 };
@@ -114,6 +115,44 @@ class HistoryTest extends TestCase
         $body = json_decode($response->getBody()->getContents(), true);
         $this->assertSame('fedi-e2ee:v1/api/history', $body['!pkd-context']);
         $this->assertSame($newRoot, $body['merkle-root']);
+        $this->assertNotInTransaction();
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[AllowMockObjectsWithoutExpectations]
+    public function testHandleNullLeaf(): void
+    {
+        $config = $this->getConfig();
+        $this->clearOldTransaction($config);
+
+        $latestRoot = 'pkd-mr-v1:dummy-root';
+
+        // Create a mock for MerkleState
+        $merkleStateMock = $this->createMock(MerkleState::class);
+        $merkleStateMock->method('getLatestRoot')->willReturn($latestRoot);
+        $merkleStateMock->method('getLeafByRoot')->willReturn(null);
+
+        // Instantiate the handler
+        $reflector = new ReflectionClass(History::class);
+        $historyHandler = $reflector->newInstanceWithoutConstructor();
+
+        // Inject config
+        $historyHandler->injectConfig($config);
+
+        // Replace the real MerkleState with our mock
+        $merkleStateProp = $reflector->getProperty('merkleState');
+        $merkleStateProp->setValue($historyHandler, $merkleStateMock);
+
+        // Dispatch the request
+        $request = $this->makeGetRequest('/api/history');
+        $response = $historyHandler->handle($request);
+        $this->assertSame(200, $response->getStatusCode());
+        $body = json_decode($response->getBody()->getContents(), true);
+        $this->assertSame('fedi-e2ee:v1/api/history', $body['!pkd-context']);
+        $this->assertSame($latestRoot, $body['merkle-root']);
+        $this->assertSame('0', $body['created']);
         $this->assertNotInTransaction();
     }
 }

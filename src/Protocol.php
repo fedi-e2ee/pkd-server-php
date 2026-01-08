@@ -61,7 +61,7 @@ class Protocol
      * @throws SodiumException
      * @throws TableException
      */
-    public function process(ActivityStream $enqueued): array
+    public function process(ActivityStream $enqueued, bool $isActivityPub = true): array
     {
         // Initialize some Table classes for handling SQL:
         /** @var PublicKeys $publicKeyTable */
@@ -131,12 +131,21 @@ class Protocol
         }
 
         // Parse the plaintext, grab the action parameter;
-        $parsed = $this->parser->parse($raw);
+        if ($isActivityPub) {
+            $parsed = $this->parser->parseForActivityPub($raw);
+        } else {
+            $parsed = $this->parser->parse($raw);
+        }
         $payload = new Payload($parsed->getMessage(), $parsed->getKeyMap(), $raw);
         $action = $parsed->getMessage()->getAction();
         $outerActor = $outerJson['actor'];
         if (!is_string($outerActor)) {
             throw new ProtocolException('Only strings are allowed for actor IDs.');
+        }
+
+        // Explicitly reject BurnDown if received over ActivityPub.
+        if ($isActivityPub && ($action === 'BurnDown')) {
+            throw new ProtocolException('BurnDown is not allowed over ActivityPub.');
         }
 
         // Route the request based on whether it was encrypted or not:
@@ -313,6 +322,10 @@ class Protocol
      */
     public function burnDown(string $body, string $outerActor): bool
     {
+        $hpke = $this->config->getHPKE();
+        if (new HPKEAdapter($hpke->cs)->isHpkeCiphertext($body)) {
+            throw new ProtocolException('BurnDown MUST NOT be encrypted.');
+        }
         $payload = $this->hpkeUnwrap($body);
         $table = new PublicKeys($this->config);
         $return = $table->burnDown($payload, $outerActor);
