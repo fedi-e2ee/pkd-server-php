@@ -6,12 +6,37 @@
         ]
     },
     "threads": "max",
-    "minCoveredMsi": 65,
+    "minCoveredMsi": 70,
     "phpUnit": {
         "configDir": "."
     },
     "mutators": {
-        "@default": true
+        "@default": true,
+        "ProtectedVisibility": false,
+        "PublicVisibility": false,
+        "DecrementInteger": {
+            "ignore": [
+                "FediE2EE\\PKDServer\\AppCache::__construct"
+            ]
+        },
+        "IncrementInteger": {
+            "ignore": [
+                "FediE2EE\\PKDServer\\AppCache::__construct"
+            ]
+        },
+        "FalseValue": {
+            "ignore": [
+                "FediE2EE\\PKDServer\\Dependency\\WrappedEncryptedRow::addField",
+                "FediE2EE\\PKDServer\\Dependency\\WrappedEncryptedRow::addBooleanField",
+                "FediE2EE\\PKDServer\\Dependency\\WrappedEncryptedRow::addFloatField",
+                "FediE2EE\\PKDServer\\Dependency\\WrappedEncryptedRow::addIntegerField",
+                "FediE2EE\\PKDServer\\Dependency\\WrappedEncryptedRow::addOptionalBooleanField",
+                "FediE2EE\\PKDServer\\Dependency\\WrappedEncryptedRow::addOptionalFloatField",
+                "FediE2EE\\PKDServer\\Dependency\\WrappedEncryptedRow::addOptionalIntegerField",
+                "FediE2EE\\PKDServer\\Dependency\\WrappedEncryptedRow::addOptionalTextField",
+                "FediE2EE\\PKDServer\\Dependency\\WrappedEncryptedRow::addTextField"
+            ]
+        }
     },
     "logs": {
         "text": "infection.log"

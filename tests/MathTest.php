@@ -29,6 +29,8 @@ class MathTest extends TestCase
             [2, 1],
             [3, 1],
             [80, 1],
+            [81, 0],  // Boundary: 81 uses formula, returns 0
+            [82, 1],
             [96, 9],
             [128, 30],
             [256, 128],

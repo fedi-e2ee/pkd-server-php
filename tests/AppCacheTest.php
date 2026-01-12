@@ -8,6 +8,8 @@ use FediE2EE\PKDServer\ServerConfig;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
+use Psr\SimpleCache\InvalidArgumentException;
+use SodiumException;
 
 #[CoversClass(AppCache::class)]
 #[UsesClass(ServerConfig::class)]
@@ -58,6 +60,41 @@ class AppCacheTest extends TestCase
             $b = $bad->deriveKey($i);
             $this->assertNotSame($a, $b);
         }
+    }
+
+    /**
+     * @return void
+     * @throws SodiumException
+     */
+    public function testDeriveKeyFormat(): void
+    {
+        $conf = $this->getConfig();
+        $cache = new AppCache($conf, 'test-namespace');
+        $key = $cache->deriveKey('input-value');
+
+        // Key should start with namespace and colon
+        $this->assertStringStartsWith('test-namespace:', $key);
+
+        // Key should contain hex characters after the colon
+        $parts = explode(':', $key, 2);
+        $this->assertCount(2, $parts);
+        $this->assertSame('test-namespace', $parts[0]);
+        $this->assertTrue(ctype_xdigit($parts[1]), 'Hash part should be hex');
+    }
+
+    /**
+     * @return void
+     * @throws InvalidArgumentException
+     */
+    public function testSetReturnsTrue(): void
+    {
+        $cache = $this->getConfiguredCache();
+        $result = $cache->set('test-key', 'test-value');
+        $this->assertTrue($result, 'set() should return true on success');
+
+        // Verify the value was actually set
+        $retrieved = $cache->get('test-key');
+        $this->assertSame('test-value', $retrieved);
     }
 
     public function testCache(): void
