@@ -8,6 +8,7 @@ use Monolog\Level;
 use Monolog\LogRecord;
 use Override;
 use ParagonIE\EasyDB\EasyDB;
+use PDO;
 use PDOStatement;
 use RuntimeException;
 
@@ -94,7 +95,7 @@ class EasyDBHandler extends AbstractProcessingHandler
                 ),
                 'sqlite' => $this->db->exists(
                     "SELECT COUNT(*) FROM sqlite_master 
-                         WHERE type =' table' AND name = 'pkd_log'"
+                         WHERE type = 'table' AND name = 'pkd_log'"
                 ),
                 default =>
                     throw new RuntimeException("Unsupported driver: {$this->db->getDriver()}"),
