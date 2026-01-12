@@ -260,6 +260,9 @@ class BurnDownTest extends TestCase
 
         $body = json_decode($response->getBody()->getContents(), true);
         $this->assertSame('fedi-e2ee:v1/api/burndown', $body['!pkd-context']);
+        // Verify time field is present and is a string
+        $this->assertArrayHasKey('time', $body);
+        $this->assertIsString($body['time']);
         $this->assertTrue($body['status']);
 
         // 9. Verify actor's keys were burned
@@ -334,6 +337,9 @@ class BurnDownTest extends TestCase
 
         $body = json_decode($response->getBody()->getContents(), true);
         $this->assertSame('fedi-e2ee:v1/api/burndown', $body['!pkd-context']);
+        // Verify time field is present and is a string even on failure
+        $this->assertArrayHasKey('time', $body);
+        $this->assertIsString($body['time']);
         $this->assertFalse($body['status']); // Should fail due to invalid signature
 
         $this->clearMerkleStateLock();

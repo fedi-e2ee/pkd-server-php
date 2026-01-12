@@ -38,6 +38,9 @@ class ExtensionsTest extends TestCase
         $this->assertSame(200, $response->getStatusCode());
         $body = json_decode($response->getBody()->getContents(), true);
         $this->assertSame('fedi-e2ee:v1/api/extensions', $body['!pkd-context']);
+        // Verify current-time is a string (kills CastString mutation)
+        $this->assertArrayHasKey('current-time', $body);
+        $this->assertIsString($body['current-time']);
         $this->assertIsArray($body['extensions']);
         // These are added via autoload-phpunit.php:
         $this->assertTrue(in_array('test-v1', $body['extensions'], true));

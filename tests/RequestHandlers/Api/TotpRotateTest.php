@@ -18,6 +18,7 @@ use FediE2EE\PKDServer\RequestHandlers\Api\{
 use FediE2EE\PKDServer\{
     ActivityPub\WebFinger,
     AppCache,
+    Dependency\EasyDBHandler,
     Dependency\HPKE,
     Dependency\InjectConfigStrategy,
     Dependency\WrappedEncryptedRow,
@@ -42,6 +43,8 @@ use FediE2EE\PKDServer\Tables\Records\{
 };
 use FediE2EE\PKDServer\Tests\HttpTestTrait;
 use FediE2EE\PKDServer\Traits\ConfigTrait;
+use Laminas\Diactoros\ServerRequest;
+use Laminas\Diactoros\StreamFactory;
 use ParagonIE\ConstantTime\{
     Base32,
     Base64UrlSafe
@@ -54,6 +57,7 @@ use PHPUnit\Framework\TestCase;
 
 #[CoversClass(TotpRotate::class)]
 #[UsesClass(AppCache::class)]
+#[UsesClass(EasyDBHandler::class)]
 #[UsesClass(HPKE::class)]
 #[UsesClass(WrappedEncryptedRow::class)]
 #[UsesClass(InjectConfigStrategy::class)]
@@ -181,6 +185,10 @@ class TotpRotateTest extends TestCase
         $this->assertSame(200, $response->getStatusCode());
         $body = json_decode((string) $response->getBody(), true);
         $this->assertTrue($body['success']);
+        // Verify response format includes !pkd-context
+        $this->assertSame('fedi-e2ee:v1/api/totp/rotate', $body['!pkd-context']);
+        $this->assertArrayHasKey('time', $body);
+        $this->assertIsString($body['time']);
 
         $dbSecret = $totpTable->getSecretByDomain($domain);
         $this->assertSame(
@@ -188,5 +196,294 @@ class TotpRotateTest extends TestCase
             bin2hex($dbSecret)
         );
         $this->assertNotInTransaction();
+    }
+
+    /**
+     * Test that missing actor-id returns error.
+     *
+     * @throws Exception
+     */
+    public function testMissingActorId(): void
+    {
+        $body = [
+            '!pkd-context' => 'fedi-e2ee:v1/api/totp/rotate',
+            'action' => 'TOTP-Rotate',
+            'current-time' => (string) time(),
+            'rotation' => [
+                // actor-id is missing
+                'key-id' => 'some-key-id',
+                'old-otp' => '12345678',
+                'new-otp-current' => '87654321',
+                'new-otp-previous' => '11111111',
+                'new-totp-secret' => 'ABCDEFGH',
+            ],
+            'signature' => 'fake-signature'
+        ];
+
+        $request = new ServerRequest([], [], '/api/totp/rotate', 'POST')
+            ->withHeader('Content-Type', 'application/json')
+            ->withBody(new StreamFactory()->createStream(json_encode($body)));
+        $response = $this->dispatchRequest($request);
+
+        $this->assertSame(400, $response->getStatusCode());
+        $responseBody = json_decode((string) $response->getBody(), true);
+        $this->assertArrayHasKey('error', $responseBody);
+    }
+
+    /**
+     * Test that missing key-id returns error.
+     *
+     * @throws Exception
+     */
+    public function testMissingKeyId(): void
+    {
+        $body = [
+            '!pkd-context' => 'fedi-e2ee:v1/api/totp/rotate',
+            'action' => 'TOTP-Rotate',
+            'current-time' => (string) time(),
+            'rotation' => [
+                'actor-id' => 'https://example.com/users/test',
+                // key-id is missing
+                'old-otp' => '12345678',
+                'new-otp-current' => '87654321',
+                'new-otp-previous' => '11111111',
+                'new-totp-secret' => 'ABCDEFGH',
+            ],
+            'signature' => 'fake-signature'
+        ];
+
+        $request = new ServerRequest([], [], '/api/totp/rotate', 'POST')
+            ->withHeader('Content-Type', 'application/json')
+            ->withBody(new StreamFactory()->createStream(json_encode($body)));
+        $response = $this->dispatchRequest($request);
+
+        $this->assertSame(400, $response->getStatusCode());
+    }
+
+    /**
+     * Test that missing old-otp returns error.
+     *
+     * @throws Exception
+     */
+    public function testMissingOldOtp(): void
+    {
+        $body = [
+            '!pkd-context' => 'fedi-e2ee:v1/api/totp/rotate',
+            'action' => 'TOTP-Rotate',
+            'current-time' => (string) time(),
+            'rotation' => [
+                'actor-id' => 'https://example.com/users/test',
+                'key-id' => 'some-key-id',
+                // old-otp is missing
+                'new-otp-current' => '87654321',
+                'new-otp-previous' => '11111111',
+                'new-totp-secret' => 'ABCDEFGH',
+            ],
+            'signature' => 'fake-signature'
+        ];
+
+        $request = new ServerRequest([], [], '/api/totp/rotate', 'POST')
+            ->withHeader('Content-Type', 'application/json')
+            ->withBody(new StreamFactory()->createStream(json_encode($body)));
+        $response = $this->dispatchRequest($request);
+
+        $this->assertSame(400, $response->getStatusCode());
+    }
+
+    /**
+     * Test that missing new-otp-current returns error.
+     *
+     * @throws Exception
+     */
+    public function testMissingNewOtpCurrent(): void
+    {
+        $body = [
+            '!pkd-context' => 'fedi-e2ee:v1/api/totp/rotate',
+            'action' => 'TOTP-Rotate',
+            'current-time' => (string) time(),
+            'rotation' => [
+                'actor-id' => 'https://example.com/users/test',
+                'key-id' => 'some-key-id',
+                'old-otp' => '12345678',
+                // new-otp-current is missing
+                'new-otp-previous' => '11111111',
+                'new-totp-secret' => 'ABCDEFGH',
+            ],
+            'signature' => 'fake-signature'
+        ];
+
+        $request = new ServerRequest([], [], '/api/totp/rotate', 'POST')
+            ->withHeader('Content-Type', 'application/json')
+            ->withBody(new StreamFactory()->createStream(json_encode($body)));
+        $response = $this->dispatchRequest($request);
+
+        $this->assertSame(400, $response->getStatusCode());
+    }
+
+    /**
+     * Test that missing new-otp-previous returns error.
+     *
+     * @throws Exception
+     */
+    public function testMissingNewOtpPrevious(): void
+    {
+        $body = [
+            '!pkd-context' => 'fedi-e2ee:v1/api/totp/rotate',
+            'action' => 'TOTP-Rotate',
+            'current-time' => (string) time(),
+            'rotation' => [
+                'actor-id' => 'https://example.com/users/test',
+                'key-id' => 'some-key-id',
+                'old-otp' => '12345678',
+                'new-otp-current' => '87654321',
+                // new-otp-previous is missing
+                'new-totp-secret' => 'ABCDEFGH',
+            ],
+            'signature' => 'fake-signature'
+        ];
+
+        $request = new ServerRequest([], [], '/api/totp/rotate', 'POST')
+            ->withHeader('Content-Type', 'application/json')
+            ->withBody(new StreamFactory()->createStream(json_encode($body)));
+        $response = $this->dispatchRequest($request);
+
+        $this->assertSame(400, $response->getStatusCode());
+    }
+
+    /**
+     * Test that missing new-totp-secret returns error.
+     *
+     * @throws Exception
+     */
+    public function testMissingNewTotpSecret(): void
+    {
+        $body = [
+            '!pkd-context' => 'fedi-e2ee:v1/api/totp/rotate',
+            'action' => 'TOTP-Rotate',
+            'current-time' => (string) time(),
+            'rotation' => [
+                'actor-id' => 'https://example.com/users/test',
+                'key-id' => 'some-key-id',
+                'old-otp' => '12345678',
+                'new-otp-current' => '87654321',
+                'new-otp-previous' => '11111111',
+                // new-totp-secret is missing
+            ],
+            'signature' => 'fake-signature'
+        ];
+
+        $request = new ServerRequest([], [], '/api/totp/rotate', 'POST')
+            ->withHeader('Content-Type', 'application/json')
+            ->withBody(new StreamFactory()->createStream(json_encode($body)));
+        $response = $this->dispatchRequest($request);
+
+        $this->assertSame(400, $response->getStatusCode());
+    }
+
+    /**
+     * Test that missing action returns error.
+     *
+     * @throws Exception
+     */
+    public function testMissingAction(): void
+    {
+        $body = [
+            '!pkd-context' => 'fedi-e2ee:v1/api/totp/rotate',
+            // action is missing
+            'current-time' => (string) time(),
+            'rotation' => [
+                'actor-id' => 'https://example.com/users/test',
+                'key-id' => 'some-key-id',
+                'old-otp' => '12345678',
+                'new-otp-current' => '87654321',
+                'new-otp-previous' => '11111111',
+                'new-totp-secret' => 'ABCDEFGH',
+            ],
+            'signature' => 'fake-signature'
+        ];
+
+        $request = new ServerRequest([], [], '/api/totp/rotate', 'POST')
+            ->withHeader('Content-Type', 'application/json')
+            ->withBody(new StreamFactory()->createStream(json_encode($body)));
+        $response = $this->dispatchRequest($request);
+
+        $this->assertSame(400, $response->getStatusCode());
+    }
+
+    /**
+     * Test that missing current-time returns error.
+     *
+     * @throws Exception
+     */
+    public function testMissingCurrentTime(): void
+    {
+        $body = [
+            '!pkd-context' => 'fedi-e2ee:v1/api/totp/rotate',
+            'action' => 'TOTP-Rotate',
+            // current-time is missing
+            'rotation' => [
+                'actor-id' => 'https://example.com/users/test',
+                'key-id' => 'some-key-id',
+                'old-otp' => '12345678',
+                'new-otp-current' => '87654321',
+                'new-otp-previous' => '11111111',
+                'new-totp-secret' => 'ABCDEFGH',
+            ],
+            'signature' => 'fake-signature'
+        ];
+
+        $request = new ServerRequest([], [], '/api/totp/rotate', 'POST')
+            ->withHeader('Content-Type', 'application/json')
+            ->withBody(new StreamFactory()->createStream(json_encode($body)));
+        $response = $this->dispatchRequest($request);
+
+        $this->assertSame(400, $response->getStatusCode());
+    }
+
+    /**
+     * Test that missing !pkd-context returns error.
+     *
+     * @throws Exception
+     */
+    public function testMissingPkdContext(): void
+    {
+        $body = [
+            // !pkd-context is missing
+            'action' => 'TOTP-Rotate',
+            'current-time' => (string) time(),
+            'rotation' => [
+                'actor-id' => 'https://example.com/users/test',
+                'key-id' => 'some-key-id',
+                'old-otp' => '12345678',
+                'new-otp-current' => '87654321',
+                'new-otp-previous' => '11111111',
+                'new-totp-secret' => 'ABCDEFGH',
+            ],
+            'signature' => 'fake-signature'
+        ];
+
+        $request = new ServerRequest([], [], '/api/totp/rotate', 'POST')
+            ->withHeader('Content-Type', 'application/json')
+            ->withBody(new StreamFactory()->createStream(json_encode($body)));
+        $response = $this->dispatchRequest($request);
+
+        $this->assertSame(400, $response->getStatusCode());
+    }
+
+    /**
+     * Test that invalid JSON returns error.
+     *
+     * @throws Exception
+     */
+    public function testInvalidJson(): void
+    {
+        $request = new ServerRequest([], [], '/api/totp/rotate', 'POST')
+            ->withHeader('Content-Type', 'application/json')
+            ->withBody(new StreamFactory()->createStream('not valid json'));
+        $response = $this->dispatchRequest($request);
+
+        $this->assertSame(400, $response->getStatusCode());
+        $responseBody = json_decode((string) $response->getBody(), true);
+        $this->assertArrayHasKey('error', $responseBody);
     }
 }

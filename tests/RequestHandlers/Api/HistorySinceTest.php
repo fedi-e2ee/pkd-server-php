@@ -116,6 +116,9 @@ class HistorySinceTest extends TestCase
         $this->assertSame(200, $response->getStatusCode());
         $body = json_decode($response->getBody()->getContents(), true);
         $this->assertSame('fedi-e2ee:v1/api/history/since', $body['!pkd-context']);
+        // Verify current-time field
+        $this->assertArrayHasKey('current-time', $body);
+        $this->assertIsString($body['current-time']);
         $this->assertCount(1, $body['records']);
         $this->assertArrayHasKey('created', $body['records'][0]);
         $this->assertArrayHasKey('encrypted-message', $body['records'][0]);
@@ -126,6 +129,67 @@ class HistorySinceTest extends TestCase
         $this->assertArrayHasKey('signature', $body['records'][0]);
         $this->assertSame(86, strlen($body['records'][0]['signature']));
         $this->assertSame($newRoot, $body['records'][0]['merkle-root']);
+        $this->assertNotInTransaction();
+    }
+
+    /**
+     * Test that missing hash returns 400 error.
+     *
+     * @throws Exception
+     */
+    public function testMissingHash(): void
+    {
+        $config = $this->getConfig();
+        $this->clearOldTransaction($config);
+
+        $reflector = new ReflectionClass(HistorySince::class);
+        $sinceHandler = $reflector->newInstanceWithoutConstructor();
+        $sinceHandler->injectConfig($config);
+        $constructor = $reflector->getConstructor();
+        if ($constructor) {
+            $constructor->invoke($sinceHandler);
+        }
+
+        // Request without hash attribute
+        $request = $this->makeGetRequest('/api/history/since/');
+        $response = $sinceHandler->handle($request);
+
+        $this->assertSame(400, $response->getStatusCode());
+        $body = json_decode($response->getBody()->getContents(), true);
+        $this->assertArrayHasKey('error', $body);
+        $this->assertNotInTransaction();
+    }
+
+    /**
+     * Test that unknown hash returns empty records (not error).
+     *
+     * @throws Exception
+     */
+    public function testUnknownHash(): void
+    {
+        $config = $this->getConfig();
+        $this->clearOldTransaction($config);
+
+        $reflector = new ReflectionClass(HistorySince::class);
+        $sinceHandler = $reflector->newInstanceWithoutConstructor();
+        $sinceHandler->injectConfig($config);
+        $constructor = $reflector->getConstructor();
+        if ($constructor) {
+            $constructor->invoke($sinceHandler);
+        }
+
+        // Use a hash that doesn't exist
+        $fakeHash = str_repeat('a', 64);
+        $request = $this->makeGetRequest('/api/history/since/' . $fakeHash);
+        $request = $request->withAttribute('hash', $fakeHash);
+        $response = $sinceHandler->handle($request);
+
+        $this->assertSame(200, $response->getStatusCode());
+        $body = json_decode($response->getBody()->getContents(), true);
+        $this->assertSame('fedi-e2ee:v1/api/history/since', $body['!pkd-context']);
+        $this->assertArrayHasKey('current-time', $body);
+        $this->assertArrayHasKey('records', $body);
+        $this->assertIsArray($body['records']);
         $this->assertNotInTransaction();
     }
 }
