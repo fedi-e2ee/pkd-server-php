@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace FediE2EE\PKDServer\Dependency;
 
+use DateTimeInterface;
 use Monolog\Handler\AbstractProcessingHandler;
 use Monolog\Level;
 use Monolog\LogRecord;
@@ -37,7 +38,7 @@ class EasyDBHandler extends AbstractProcessingHandler
             'channel' => $record->channel,
             'level' => $record->level->value,
             'message' => $record->formatted,
-            'time' => $record->datetime->format('U'),
+            'time' => $record->datetime->format(DateTimeInterface::ISO8601),
         ]);
     }
 }
