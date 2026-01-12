@@ -2,22 +2,59 @@
 declare(strict_types=1);
 namespace FediE2EE\PKDServer\Tests;
 
+use FediE2EE\PKD\Crypto\AttributeEncryption\AttributeKeyMap;
+use FediE2EE\PKD\Crypto\Exceptions\{
+    CryptoException,
+    JsonException,
+    NotImplementedException,
+    ParserException
+};
 use FediE2EE\PKD\Crypto\Merkle\IncrementalTree;
-use FediE2EE\PKDServer\ActivityPub\WebFinger;
-use FediE2EE\PKDServer\Exceptions\DependencyException;
-use FediE2EE\PKDServer\ServerConfig;
+use FediE2EE\PKD\Crypto\Protocol\{
+    Actions\AddKey,
+    Handler
+};
+use FediE2EE\PKD\Crypto\{
+    SecretKey,
+    SymmetricKey
+};
+use FediE2EE\PKDServer\Exceptions\{
+    CacheException,
+    DependencyException,
+    ProtocolException,
+    TableException
+};
+use FediE2EE\PKDServer\{
+    ActivityPub\WebFinger,
+    Protocol,
+    ServerConfig
+};
+use FediE2EE\PKDServer\Tables\{
+    MerkleState,
+    Records\ActorKey
+};
 use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
-use GuzzleHttp\Psr7\ServerRequest;
+use GuzzleHttp\Psr7\{
+    Response,
+    ServerRequest
+};
 use ParagonIE\ConstantTime\Base64UrlSafe;
 use ParagonIE\Certainty\Exception\CertaintyException;
+use ParagonIE\HPKE\HPKEException;
 use PDOException;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\{
+    ResponseInterface,
+    ServerRequestInterface
+};
+use Psr\Http\Server\RequestHandlerInterface;
 use Psr\SimpleCache\InvalidArgumentException;
 use Random\RandomException;
+use ReflectionClass;
+use ReflectionException;
 use SodiumException;
+use TypeError;
 
 /**
  * Helper methods for writing unit tests with HTTP messages
@@ -34,6 +71,9 @@ trait HttpTestTrait
         return $GLOBALS['pkdConfig'];
     }
 
+    /**
+     * @throws DependencyException
+     */
     public function clearOldTransaction(ServerConfig $config): void
     {
         $db = $config->getDb();
@@ -42,11 +82,25 @@ trait HttpTestTrait
         }
     }
 
+    /**
+     * @throws DependencyException
+     */
     public function ensureMerkleStateUnlocked(): void
     {
         $db = $this->config()->getDb();
         $lock = $db->cell("SELECT lock_challenge FROM pkd_merkle_state");
-        $this->assertEmpty($lock, 'lock = "' . $lock . '" but empty string was expected');
+        $this->assertEmpty($lock, "lock = \"{$lock}\" but empty string was expected");
+    }
+
+    /**
+     * Force-clear the Merkle state lock for test isolation.
+     *
+     * @throws DependencyException
+     */
+    public function clearMerkleStateLock(): void
+    {
+        $db = $this->config()->getDb();
+        $db->safeQuery("UPDATE pkd_merkle_state SET lock_challenge = ''");
     }
 
     public function assertNotInTransaction(): void
@@ -116,8 +170,8 @@ trait HttpTestTrait
     /**
      * This nukes every table in the database.
      *
-     * @return void
      * @throws DependencyException
+     * @throws SodiumException
      */
     public function truncateTables(): void
     {
@@ -172,5 +226,94 @@ trait HttpTestTrait
                 Base64UrlSafe::encodeUnpadded($incremental->toJson())
             ]
         );
+    }
+
+    /**
+     * Instantiate a request handler using reflection (bypasses DI container).
+     *
+     * @param class-string<RequestHandlerInterface> $handlerClass
+     *
+     * @throws ReflectionException
+     */
+    public function instantiateHandler(
+        string $handlerClass,
+        ServerConfig $config,
+        ?WebFinger $webFinger = null
+    ): RequestHandlerInterface {
+        $reflector = new ReflectionClass($handlerClass);
+        $handler = $reflector->newInstanceWithoutConstructor();
+        $handler->injectConfig($config);
+        if ($webFinger !== null && method_exists($handler, 'setWebFinger')) {
+            $handler->setWebFinger($webFinger);
+        }
+        $constructor = $reflector->getConstructor();
+        if ($constructor) {
+            $constructor->invoke($handler);
+        }
+        if (!($handler instanceof RequestHandlerInterface)) {
+            throw new TypeError('reflection failed to instantiate a class that implements RequestHandlerInterface');
+        }
+        return $handler;
+    }
+
+    /**
+     * Create a simple WebFinger mock that returns the canonical URL.
+     *
+     * @throws CertaintyException
+     * @throws DependencyException
+     * @throws SodiumException
+     */
+    public function createWebFingerMock(
+        ServerConfig $config,
+        string $canonical,
+        int $responseCount = 1
+    ): WebFinger {
+        $responses = [];
+        for ($i = 0; $i < $responseCount; $i++) {
+            $responses[] = new Response(
+                200,
+                ['Content-Type' => 'application/json'],
+                json_encode(['subject' => $canonical])
+            );
+        }
+        return new WebFinger($config, $this->getMockClient($responses));
+    }
+
+    /**
+     * Add a key for an actor via the Protocol class.
+     *
+     * @throws CacheException
+     * @throws CryptoException
+     * @throws DependencyException
+     * @throws HPKEException
+     * @throws JsonException
+     * @throws NotImplementedException
+     * @throws ParserException
+     * @throws ProtocolException
+     * @throws SodiumException
+     * @throws TableException
+     */
+    public function addKeyForActor(
+        string $canonical,
+        SecretKey $keypair,
+        Protocol $protocol,
+        ServerConfig $config
+    ): ActorKey {
+        /** @var MerkleState $merkleState */
+        $merkleState = $this->table('MerkleState');
+        $latestRoot = $merkleState->getLatestRoot();
+
+        $serverHpke = $config->getHPKE();
+        $handler = new Handler();
+
+        $addKey = new AddKey($canonical, $keypair->getPublicKey());
+        $akm = new AttributeKeyMap();
+        $akm->addKey('actor', SymmetricKey::generate());
+        $akm->addKey('public-key', SymmetricKey::generate());
+
+        $bundle = $handler->handle($addKey->encrypt($akm), $keypair, $akm, $latestRoot);
+        $encrypted = $handler->hpkeEncrypt($bundle, $serverHpke->encapsKey, $serverHpke->cs);
+
+        return $protocol->addKey($encrypted, $canonical);
     }
 }
