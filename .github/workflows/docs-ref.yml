@@ -1,0 +1,44 @@
+name: Reference Docs
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  docs-check:
+    name: Check generated reference docs are up to date
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v4.2.2
+        with:
+          persist-credentials: false
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@9e72090525849c5e82e596468b86eb55e9cc5401  # v2.32.0
+        with:
+          php-version: '8.4'
+          extensions: sodium, pdo
+
+      - name: Install dependencies
+        run: composer install --no-interaction --prefer-dist
+
+      - name: Generate documentation
+        run: php docs/reference/generate.php
+
+      - name: Check for uncommitted changes
+        run: |
+          if ! git diff --quiet docs/reference/; then
+            echo "::error::Generated documentation is out of date. Run 'php docs/reference/generate.php' and commit the changes."
+            echo ""
+            echo "Changed files:"
+            git diff --name-only docs/reference/
+            echo ""
+            echo "Diff:"
+            git diff docs/reference/
+            exit 1
+          fi
+          echo "Documentation is up to date."
