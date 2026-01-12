@@ -46,7 +46,7 @@ class EasyDBHandler extends AbstractProcessingHandler
     private function ensureTableExists(): void
     {
         $tries = 0;
-        while (!$this->tableExists() && ++$tries < 10) {
+        while (!$this->tableExists() && ++$tries <= 10) {
             match ($this->db->getDriver()) {
                 'mysql' => $this->db->exec("CREATE TABLE IF NOT EXISTS pkd_log (
                         logid BIGINT PRIMARY KEY AUTO_INCREMENT,
