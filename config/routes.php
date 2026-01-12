@@ -4,6 +4,7 @@ namespace FediE2EE\PKDServer\Config;
 
 use FediE2EE\PKDServer\RequestHandlers\Api\{
     Actor,
+    BurnDown,
     Checkpoint,
     Extensions,
     GetAuxData,
@@ -55,6 +56,7 @@ $router->group('/api', function(RouteGroup $r) use ($router) {
 
     $r->map('POST', '/checkpoint', Checkpoint::class);
     $r->map('POST', '/history/cosign/{hash}', HistoryCosign::class);
+    $r->map('POST', '/burndown', BurnDown::class);
     $r->map('POST', '/revoke', Revoke::class);
     $r->map('POST', '/totp/enroll', TotpEnroll::class);
     $r->map('POST', '/totp/disenroll', TotpDisenroll::class);

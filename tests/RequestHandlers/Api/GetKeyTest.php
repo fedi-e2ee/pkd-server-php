@@ -3,18 +3,9 @@ declare(strict_types=1);
 namespace FediE2EE\PKDServer\Tests\RequestHandlers\Api;
 
 use Exception;
-use FediE2EE\PKD\Crypto\Protocol\Actions\AddKey;
-use FediE2EE\PKD\Crypto\{
-    AttributeEncryption\AttributeKeyMap,
-    Protocol\Handler,
-    SecretKey,
-    SymmetricKey
-};
-use FediE2EE\PKDServer\RequestHandlers\Api\{
-    GetKey,
-    ListKeys,
-};
-use FediE2EE\PKDServer\{ActivityPub\WebFinger,
+use FediE2EE\PKD\Crypto\SecretKey;
+use FediE2EE\PKDServer\ActivityPub\WebFinger;
+use FediE2EE\PKDServer\{
     AppCache,
     Dependency\WrappedEncryptedRow,
     Math,
@@ -22,7 +13,12 @@ use FediE2EE\PKDServer\{ActivityPub\WebFinger,
     Protocol\Payload,
     ServerConfig,
     Table,
-    TableCache};
+    TableCache
+};
+use FediE2EE\PKDServer\RequestHandlers\Api\{
+    GetKey,
+    ListKeys
+};
 use FediE2EE\PKDServer\Tables\{
     Actors,
     MerkleState,
@@ -35,13 +31,11 @@ use FediE2EE\PKDServer\Tables\Records\{
 };
 use FediE2EE\PKDServer\Tests\HttpTestTrait;
 use FediE2EE\PKDServer\Traits\ConfigTrait;
-use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\Attributes\{
     CoversClass,
     UsesClass
 };
 use PHPUnit\Framework\TestCase;
-use ReflectionClass;
 
 #[CoversClass(GetKey::class)]
 #[UsesClass(AppCache::class)]
@@ -74,62 +68,29 @@ class GetKeyTest extends TestCase
         $keypair = SecretKey::generate();
         $config = $this->getConfig();
         $this->clearOldTransaction($config);
+
         $protocol = new Protocol($config);
-        $webFinger = new WebFinger($config, $this->getMockClient([
-            new Response(200, ['Content-Type' => 'application/json'], '{"subject":"' . $canonical . '"}'),
-            new Response(200, ['Content-Type' => 'application/json'], '{"subject":"' . $canonical . '"}')
-        ]));
+        $webFinger = $this->createWebFingerMock($config, $canonical, 2);
         $protocol->setWebFinger($webFinger);
 
-        /** @var MerkleState $merkleState */
-        $merkleState = $this->table('MerkleState');
-        $latestRoot = $merkleState->getLatestRoot();
+        $this->addKeyForActor($canonical, $keypair, $protocol, $config);
 
-        $serverHpke = $config->getHPKE();
-        $handler = new Handler();
-
-        // Add a key
-        $addKey = new AddKey($canonical, $keypair->getPublicKey());
-        $akm = (new AttributeKeyMap())
-            ->addKey('actor', SymmetricKey::generate())
-            ->addKey('public-key', SymmetricKey::generate());
-        $encryptedMsg = $addKey->encrypt($akm);
-        $bundle = $handler->handle($encryptedMsg, $keypair, $akm, $latestRoot);
-        $encryptedForServer = $handler->hpkeEncrypt(
-            $bundle,
-            $serverHpke->encapsKey,
-            $serverHpke->cs
-        );
-        $protocol->addKey($encryptedForServer, $canonical);
-
+        // First get the key ID via ListKeys
         $request = $this->makeGetRequest('/api/actor/' . urlencode($actorId) . '/keys');
         $request = $request->withAttribute('actor_id', $actorId);
-        $reflector = new ReflectionClass(\FediE2EE\PKDServer\RequestHandlers\Api\ListKeys::class);
-        $listKeysHandler = $reflector->newInstanceWithoutConstructor();
-        $listKeysHandler->injectConfig($config);
-        $listKeysHandler->setWebFinger($webFinger);
-        $constructor = $reflector->getConstructor();
-        if ($constructor) {
-            $constructor->invoke($listKeysHandler);
-        }
+        $listKeysHandler = $this->instantiateHandler(ListKeys::class, $config, $webFinger);
         $response = $listKeysHandler->handle($request);
         $body = json_decode($response->getBody()->getContents(), true);
         $keyId = $body['public-keys'][0]['key-id'];
 
+        // Now test GetKey
         $request = $this->makeGetRequest('/api/actor/' . urlencode($actorId) . '/key/' . $keyId);
         $request = $request->withAttribute('actor_id', $actorId);
         $request = $request->withAttribute('key_id', $keyId);
 
-        $reflector = new ReflectionClass(GetKey::class);
-        $getKeyHandler = $reflector->newInstanceWithoutConstructor();
-        $getKeyHandler->injectConfig($config);
-        $getKeyHandler->setWebFinger($webFinger);
-        $constructor = $reflector->getConstructor();
-        if ($constructor) {
-            $constructor->invoke($getKeyHandler);
-        }
-
+        $getKeyHandler = $this->instantiateHandler(GetKey::class, $config, $webFinger);
         $response = $getKeyHandler->handle($request);
+
         $this->assertSame(200, $response->getStatusCode());
         $body = json_decode($response->getBody()->getContents(), true);
         $this->assertSame('fedi-e2ee:v1/api/actor/key-info', $body['!pkd-context']);

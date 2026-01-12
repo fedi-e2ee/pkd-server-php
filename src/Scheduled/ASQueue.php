@@ -92,7 +92,6 @@ class ASQueue
         $message = match ($results['action']) {
             'AddKey' => 'Key added successfully.',
             'AddAuxData' => 'Auxiliary data added successfully.',
-            'BurnDown' => 'The fire has been lit. Now all of Fedi knows your keys are revoked.',
             'Checkpoint' => 'Checkpoint acknowledged.',
             'Fireproof' => 'You are now immune from BurnDown.',
             'RevokeKey' => 'Key revoked successfully.',

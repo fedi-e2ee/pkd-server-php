@@ -7,6 +7,7 @@ use FediE2EE\PKD\Crypto\AttributeEncryption\AttributeKeyMap;
 use FediE2EE\PKD\Crypto\Exceptions\{
     CryptoException,
     JsonException,
+    NetworkException,
     NotImplementedException,
     ParserException
 };
@@ -22,12 +23,16 @@ use FediE2EE\PKD\Crypto\Protocol\{
     Actions\UndoFireproof,
     Handler
 };
+use ParagonIE\Certainty\Exception\CertaintyException;
+use Psr\SimpleCache\InvalidArgumentException;
+use Random\RandomException;
 use FediE2EE\PKD\Crypto\{
     SecretKey,
     SymmetricKey
 };
 use FediE2EE\PKDServer\Traits\ConfigTrait;
 use FediE2EE\PKDServer\Exceptions\{
+    ActivityPubException,
     CacheException,
     DependencyException,
     ProtocolException,
@@ -35,7 +40,14 @@ use FediE2EE\PKDServer\Exceptions\{
 };
 use FediE2EE\PKDServer\ActivityPub\WebFinger;
 use FediE2EE\PKDServer\Dependency\WrappedEncryptedRow;
-use FediE2EE\PKDServer\{AppCache, Math, Protocol, ServerConfig, Table, TableCache};
+use FediE2EE\PKDServer\{
+    AppCache,
+    Math,
+    Protocol,
+    ServerConfig,
+    Table,
+    TableCache
+};
 use FediE2EE\PKDServer\Protocol\Payload;
 use FediE2EE\PKDServer\Tables\{
     Actors,
@@ -56,12 +68,14 @@ use ParagonIE\CipherSweet\Exception\{
     InvalidCiphertextException
 };
 use ParagonIE\HPKE\HPKEException;
+use FediE2EE\PKDServer\ActivityPub\ActivityStream;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 use SodiumException;
 
 #[CoversClass(Protocol::class)]
+#[UsesClass(ActivityStream::class)]
 #[UsesClass(AppCache::class)]
 #[UsesClass(ActorKey::class)]
 #[UsesClass(ActorRecord::class)]
@@ -375,6 +389,8 @@ class ProtocolTest extends TestCase
             $serverHpke->cs
         );
         $this->assertNotInTransaction();
+        $this->expectException(ProtocolException::class);
+        $this->expectExceptionMessage('BurnDown MUST NOT be encrypted.');
         $result = $this->protocol->burnDown($encryptedForServer3, $canonOperator);
         $this->assertTrue($result);
         $this->assertCount(0, $pkTable->getPublicKeysFor($canonActor));
@@ -459,7 +475,7 @@ class ProtocolTest extends TestCase
 
         // 4. BurnDown (should fail)
         $this->expectException(ProtocolException::class);
-        $this->expectExceptionMessage('Actor is fireproof');
+        $this->expectExceptionMessage('BurnDown MUST NOT be encrypted.');
         $latestRoot4 = $merkleState->getLatestRoot();
         $burnDown = new BurnDown($canonActor, $canonOperator);
         $akm4 = new AttributeKeyMap()
@@ -476,6 +492,8 @@ class ProtocolTest extends TestCase
         try {
             $this->protocol->burnDown($encryptedForServer4, $canonOperator);
             $this->assertNotInTransaction();
+        } catch (NetworkException $e) {
+            throw new ProtocolException($e->getMessage(), $e->getCode(), $e);
         } finally {
             $this->clearOldTransaction($this->config);
         }
@@ -591,6 +609,8 @@ class ProtocolTest extends TestCase
             $serverHpke->cs
         );
         $this->assertNotInTransaction();
+        $this->expectException(ProtocolException::class);
+        $this->expectExceptionMessage('BurnDown MUST NOT be encrypted.');
         $result = $this->protocol->burnDown($encryptedForServer5, $canonicalOperator);
         $this->clearOldTransaction($this->config);
         $this->assertTrue($result);

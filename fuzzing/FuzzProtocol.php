@@ -19,4 +19,9 @@ $config->setTarget(function (string $input) use ($protocol) {
     } catch (TypeError|ActivityPubException) {
         // We don't care about invalid inputs, only other behavior.
     }
+    try {
+        $protocol->process(ActivityStream::fromString($input), false);
+    } catch (TypeError|ActivityPubException) {
+        // We don't care about invalid inputs, only other behavior.
+    }
 });
