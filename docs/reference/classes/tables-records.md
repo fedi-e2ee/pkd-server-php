@@ -16,7 +16,7 @@ Namespace: `FediE2EE\PKDServer\Tables\Records`
 
 **final class** `FediE2EE\PKDServer\Tables\Records\Actor`
 
-**File:** [`src/Tables/Records/Actor.php`](../../src/Tables/Records/Actor.php)
+**File:** [`src/Tables/Records/Actor.php`](../../../src/Tables/Records/Actor.php)
 
 Abstraction for a row in the Actors table
 
@@ -105,7 +105,7 @@ Fetch the RFC 9421 public keys for an actor.
 
 **class** `FediE2EE\PKDServer\Tables\Records\ActorKey`
 
-**File:** [`src/Tables/Records/ActorKey.php`](../../src/Tables/Records/ActorKey.php)
+**File:** [`src/Tables/Records/ActorKey.php`](../../../src/Tables/Records/ActorKey.php)
 
 Abstraction for a row in the PublicKeys table
 
@@ -188,7 +188,7 @@ Fetch the RFC 9421 public keys for an actor.
 
 **class** `FediE2EE\PKDServer\Tables\Records\AuxDatum`
 
-**File:** [`src/Tables/Records/AuxDatum.php`](../../src/Tables/Records/AuxDatum.php)
+**File:** [`src/Tables/Records/AuxDatum.php`](../../../src/Tables/Records/AuxDatum.php)
 
 Abstraction for a row in the AuxData table
 
@@ -273,7 +273,7 @@ Fetch the RFC 9421 public keys for an actor.
 
 **class** `FediE2EE\PKDServer\Tables\Records\MerkleLeaf`
 
-**File:** [`src/Tables/Records/MerkleLeaf.php`](../../src/Tables/Records/MerkleLeaf.php)
+**File:** [`src/Tables/Records/MerkleLeaf.php`](../../../src/Tables/Records/MerkleLeaf.php)
 
 Abstraction for a row in the MerkleState table
 
@@ -445,7 +445,7 @@ Strip all newlines (CR, LF) characters from a string.
 
 **class** `FediE2EE\PKDServer\Tables\Records\Peer`
 
-**File:** [`src/Tables/Records/Peer.php`](../../src/Tables/Records/Peer.php)
+**File:** [`src/Tables/Records/Peer.php`](../../../src/Tables/Records/Peer.php)
 
 **Uses:** `FediE2EE\PKDServer\Traits\TableRecordTrait`, `FediE2EE\PKD\Crypto\UtilTrait`
 

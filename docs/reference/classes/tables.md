@@ -18,7 +18,7 @@ Namespace: `FediE2EE\PKDServer\Tables`
 
 **class** `FediE2EE\PKDServer\Tables\ActivityStreamQueue`
 
-**File:** [`src/Tables/ActivityStreamQueue.php`](../../src/Tables/ActivityStreamQueue.php)
+**File:** [`src/Tables/ActivityStreamQueue.php`](../../../src/Tables/ActivityStreamQueue.php)
 
 **Extends:** `FediE2EE\PKDServer\Table`
 
@@ -46,7 +46,7 @@ Namespace: `FediE2EE\PKDServer\Tables`
 
 **class** `FediE2EE\PKDServer\Tables\Actors`
 
-**File:** [`src/Tables/Actors.php`](../../src/Tables/Actors.php)
+**File:** [`src/Tables/Actors.php`](../../../src/Tables/Actors.php)
 
 **Extends:** `FediE2EE\PKDServer\Table`
 
@@ -133,7 +133,7 @@ When you only have an ActivityPub Actor ID, first canonicalize it, then fetch th
 
 **class** `FediE2EE\PKDServer\Tables\AuxData`
 
-**File:** [`src/Tables/AuxData.php`](../../src/Tables/AuxData.php)
+**File:** [`src/Tables/AuxData.php`](../../../src/Tables/AuxData.php)
 
 **Extends:** `FediE2EE\PKDServer\Table`
 
@@ -211,7 +211,7 @@ When you only have an ActivityPub Actor ID, first canonicalize it, then fetch th
 
 **class** `FediE2EE\PKDServer\Tables\MerkleState`
 
-**File:** [`src/Tables/MerkleState.php`](../../src/Tables/MerkleState.php)
+**File:** [`src/Tables/MerkleState.php`](../../../src/Tables/MerkleState.php)
 
 Merkle State management
 
@@ -325,7 +325,7 @@ Insert leaf with retry logic for deadlocks
 
 **class** `FediE2EE\PKDServer\Tables\Peers`
 
-**File:** [`src/Tables/Peers.php`](../../src/Tables/Peers.php)
+**File:** [`src/Tables/Peers.php`](../../../src/Tables/Peers.php)
 
 **Extends:** `FediE2EE\PKDServer\Table`
 
@@ -372,7 +372,7 @@ Insert leaf with retry logic for deadlocks
 
 **class** `FediE2EE\PKDServer\Tables\PublicKeys`
 
-**File:** [`src/Tables/PublicKeys.php`](../../src/Tables/PublicKeys.php)
+**File:** [`src/Tables/PublicKeys.php`](../../../src/Tables/PublicKeys.php)
 
 **Extends:** `FediE2EE\PKDServer\Table`
 
@@ -660,7 +660,7 @@ Strip all newlines (CR, LF) characters from a string.
 
 **class** `FediE2EE\PKDServer\Tables\TOTP`
 
-**File:** [`src/Tables/TOTP.php`](../../src/Tables/TOTP.php)
+**File:** [`src/Tables/TOTP.php`](../../../src/Tables/TOTP.php)
 
 **Extends:** `FediE2EE\PKDServer\Table`
 

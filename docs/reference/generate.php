@@ -534,9 +534,9 @@ final class DocGenerator
      */
     private function getRelativePrefix(string $fromFile): string
     {
-        // From classes/foo.md to root is ../..
-        // From classes/foo.md to src/ is ../../src/
-        return '../..';
+        // From docs/reference/classes/foo.md to root is ../../..
+        // From docs/reference/classes/foo.md to src/ is ../../../src/
+        return '../../..';
     }
 
     private function generateClassDocs(): void

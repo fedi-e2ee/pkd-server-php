@@ -15,7 +15,7 @@ Namespace: `FediE2EE\PKDServer\Dependency`
 
 **class** `FediE2EE\PKDServer\Dependency\HPKE`
 
-**File:** [`src/Dependency/HPKE.php`](../../src/Dependency/HPKE.php)
+**File:** [`src/Dependency/HPKE.php`](../../../src/Dependency/HPKE.php)
 
 ### Properties
 
@@ -53,7 +53,7 @@ Namespace: `FediE2EE\PKDServer\Dependency`
 
 **class** `FediE2EE\PKDServer\Dependency\InjectConfigStrategy`
 
-**File:** [`src/Dependency/InjectConfigStrategy.php`](../../src/Dependency/InjectConfigStrategy.php)
+**File:** [`src/Dependency/InjectConfigStrategy.php`](../../../src/Dependency/InjectConfigStrategy.php)
 
 **Extends:** `League\Route\Strategy\ApplicationStrategy`
 
@@ -86,7 +86,7 @@ Namespace: `FediE2EE\PKDServer\Dependency`
 
 **class** `FediE2EE\PKDServer\Dependency\SigningKeys`
 
-**File:** [`src/Dependency/SigningKeys.php`](../../src/Dependency/SigningKeys.php)
+**File:** [`src/Dependency/SigningKeys.php`](../../../src/Dependency/SigningKeys.php)
 
 ### Properties
 
@@ -110,7 +110,7 @@ Namespace: `FediE2EE\PKDServer\Dependency`
 
 **class** `FediE2EE\PKDServer\Dependency\WrappedEncryptedRow`
 
-**File:** [`src/Dependency/WrappedEncryptedRow.php`](../../src/Dependency/WrappedEncryptedRow.php)
+**File:** [`src/Dependency/WrappedEncryptedRow.php`](../../../src/Dependency/WrappedEncryptedRow.php)
 
 Extends the CipherSweet EncryptedRow class to support key-wrapping
 

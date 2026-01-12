@@ -13,7 +13,7 @@ Namespace: `FediE2EE\PKDServer\Scheduled`
 
 **class** `FediE2EE\PKDServer\Scheduled\ASQueue`
 
-**File:** [`src/Scheduled/ASQueue.php`](../../src/Scheduled/ASQueue.php)
+**File:** [`src/Scheduled/ASQueue.php`](../../../src/Scheduled/ASQueue.php)
 
 ### Methods
 
@@ -39,7 +39,7 @@ ASQueue::run() is a very dumb method.
 
 **class** `FediE2EE\PKDServer\Scheduled\Witness`
 
-**File:** [`src/Scheduled/Witness.php`](../../src/Scheduled/Witness.php)
+**File:** [`src/Scheduled/Witness.php`](../../../src/Scheduled/Witness.php)
 
 Perform witness co-signatures for third-porty Public Key Directory instances.
 

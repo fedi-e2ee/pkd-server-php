@@ -13,7 +13,7 @@ Namespace: `FediE2EE\PKDServer\ActivityPub`
 
 **class** `FediE2EE\PKDServer\ActivityPub\ActivityStream`
 
-**File:** [`src/ActivityPub/ActivityStream.php`](../../src/ActivityPub/ActivityStream.php)
+**File:** [`src/ActivityPub/ActivityStream.php`](../../../src/ActivityPub/ActivityStream.php)
 
 **Implements:** `JsonSerializable`, `Stringable`
 
@@ -66,7 +66,7 @@ Namespace: `FediE2EE\PKDServer\ActivityPub`
 
 **class** `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
-**File:** [`src/ActivityPub/WebFinger.php`](../../src/ActivityPub/WebFinger.php)
+**File:** [`src/ActivityPub/WebFinger.php`](../../../src/ActivityPub/WebFinger.php)
 
 ### Methods
 

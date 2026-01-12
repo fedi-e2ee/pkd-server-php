@@ -19,7 +19,7 @@ Namespace: `FediE2EE\PKDServer\Exceptions`
 
 **class** `FediE2EE\PKDServer\Exceptions\ActivityPubException`
 
-**File:** [`src/Exceptions/ActivityPubException.php`](../../src/Exceptions/ActivityPubException.php)
+**File:** [`src/Exceptions/ActivityPubException.php`](../../../src/Exceptions/ActivityPubException.php)
 
 **Extends:** `FediE2EE\PKDServer\Exceptions\BaseException`
 
@@ -31,7 +31,7 @@ Namespace: `FediE2EE\PKDServer\Exceptions`
 
 **class** `FediE2EE\PKDServer\Exceptions\BaseException`
 
-**File:** [`src/Exceptions/BaseException.php`](../../src/Exceptions/BaseException.php)
+**File:** [`src/Exceptions/BaseException.php`](../../../src/Exceptions/BaseException.php)
 
 **Extends:** `Exception`
 
@@ -43,7 +43,7 @@ Namespace: `FediE2EE\PKDServer\Exceptions`
 
 **class** `FediE2EE\PKDServer\Exceptions\CacheException`
 
-**File:** [`src/Exceptions/CacheException.php`](../../src/Exceptions/CacheException.php)
+**File:** [`src/Exceptions/CacheException.php`](../../../src/Exceptions/CacheException.php)
 
 **Extends:** `FediE2EE\PKDServer\Exceptions\BaseException`
 
@@ -55,7 +55,7 @@ Namespace: `FediE2EE\PKDServer\Exceptions`
 
 **class** `FediE2EE\PKDServer\Exceptions\ConcurrentException`
 
-**File:** [`src/Exceptions/ConcurrentException.php`](../../src/Exceptions/ConcurrentException.php)
+**File:** [`src/Exceptions/ConcurrentException.php`](../../../src/Exceptions/ConcurrentException.php)
 
 **Extends:** `FediE2EE\PKDServer\Exceptions\BaseException`
 
@@ -67,7 +67,7 @@ Namespace: `FediE2EE\PKDServer\Exceptions`
 
 **class** `FediE2EE\PKDServer\Exceptions\DependencyException`
 
-**File:** [`src/Exceptions/DependencyException.php`](../../src/Exceptions/DependencyException.php)
+**File:** [`src/Exceptions/DependencyException.php`](../../../src/Exceptions/DependencyException.php)
 
 **Extends:** `FediE2EE\PKDServer\Exceptions\BaseException`
 
@@ -79,7 +79,7 @@ Namespace: `FediE2EE\PKDServer\Exceptions`
 
 **class** `FediE2EE\PKDServer\Exceptions\FetchException`
 
-**File:** [`src/Exceptions/FetchException.php`](../../src/Exceptions/FetchException.php)
+**File:** [`src/Exceptions/FetchException.php`](../../../src/Exceptions/FetchException.php)
 
 **Extends:** `Exception`
 
@@ -91,7 +91,7 @@ Namespace: `FediE2EE\PKDServer\Exceptions`
 
 **class** `FediE2EE\PKDServer\Exceptions\ProtocolException`
 
-**File:** [`src/Exceptions/ProtocolException.php`](../../src/Exceptions/ProtocolException.php)
+**File:** [`src/Exceptions/ProtocolException.php`](../../../src/Exceptions/ProtocolException.php)
 
 **Extends:** `FediE2EE\PKDServer\Exceptions\BaseException`
 
@@ -103,7 +103,7 @@ Namespace: `FediE2EE\PKDServer\Exceptions`
 
 **class** `FediE2EE\PKDServer\Exceptions\TableException`
 
-**File:** [`src/Exceptions/TableException.php`](../../src/Exceptions/TableException.php)
+**File:** [`src/Exceptions/TableException.php`](../../../src/Exceptions/TableException.php)
 
 **Extends:** `FediE2EE\PKDServer\Exceptions\BaseException`
 

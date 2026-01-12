@@ -31,7 +31,7 @@ Namespace: `FediE2EE\PKDServer\RequestHandlers\Api`
 
 **class** `FediE2EE\PKDServer\RequestHandlers\Api\Actor`
 
-**File:** [`src/RequestHandlers/Api/Actor.php`](../../src/RequestHandlers/Api/Actor.php)
+**File:** [`src/RequestHandlers/Api/Actor.php`](../../../src/RequestHandlers/Api/Actor.php)
 
 **Implements:** `Psr\Http\Server\RequestHandlerInterface`
 
@@ -209,7 +209,7 @@ This is intended for mocking in unit tests
 
 **class** `FediE2EE\PKDServer\RequestHandlers\Api\BurnDown`
 
-**File:** [`src/RequestHandlers/Api/BurnDown.php`](../../src/RequestHandlers/Api/BurnDown.php)
+**File:** [`src/RequestHandlers/Api/BurnDown.php`](../../../src/RequestHandlers/Api/BurnDown.php)
 
 **Implements:** `Psr\Http\Server\RequestHandlerInterface`
 
@@ -400,7 +400,7 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 
 **class** `FediE2EE\PKDServer\RequestHandlers\Api\Checkpoint`
 
-**File:** [`src/RequestHandlers/Api/Checkpoint.php`](../../src/RequestHandlers/Api/Checkpoint.php)
+**File:** [`src/RequestHandlers/Api/Checkpoint.php`](../../../src/RequestHandlers/Api/Checkpoint.php)
 
 **Implements:** `Psr\Http\Server\RequestHandlerInterface`
 
@@ -555,7 +555,7 @@ This is intended for mocking in unit tests
 
 **class** `FediE2EE\PKDServer\RequestHandlers\Api\Extensions`
 
-**File:** [`src/RequestHandlers/Api/Extensions.php`](../../src/RequestHandlers/Api/Extensions.php)
+**File:** [`src/RequestHandlers/Api/Extensions.php`](../../../src/RequestHandlers/Api/Extensions.php)
 
 **Implements:** `Psr\Http\Server\RequestHandlerInterface`
 
@@ -717,7 +717,7 @@ This is intended for mocking in unit tests
 
 **class** `FediE2EE\PKDServer\RequestHandlers\Api\GetAuxData`
 
-**File:** [`src/RequestHandlers/Api/GetAuxData.php`](../../src/RequestHandlers/Api/GetAuxData.php)
+**File:** [`src/RequestHandlers/Api/GetAuxData.php`](../../../src/RequestHandlers/Api/GetAuxData.php)
 
 **Implements:** `Psr\Http\Server\RequestHandlerInterface`
 
@@ -895,7 +895,7 @@ This is intended for mocking in unit tests
 
 **class** `FediE2EE\PKDServer\RequestHandlers\Api\GetKey`
 
-**File:** [`src/RequestHandlers/Api/GetKey.php`](../../src/RequestHandlers/Api/GetKey.php)
+**File:** [`src/RequestHandlers/Api/GetKey.php`](../../../src/RequestHandlers/Api/GetKey.php)
 
 **Implements:** `Psr\Http\Server\RequestHandlerInterface`
 
@@ -1073,7 +1073,7 @@ This is intended for mocking in unit tests
 
 **class** `FediE2EE\PKDServer\RequestHandlers\Api\History`
 
-**File:** [`src/RequestHandlers/Api/History.php`](../../src/RequestHandlers/Api/History.php)
+**File:** [`src/RequestHandlers/Api/History.php`](../../../src/RequestHandlers/Api/History.php)
 
 **Implements:** `Psr\Http\Server\RequestHandlerInterface`
 
@@ -1243,7 +1243,7 @@ This is intended for mocking in unit tests
 
 **class** `FediE2EE\PKDServer\RequestHandlers\Api\HistoryCosign`
 
-**File:** [`src/RequestHandlers/Api/HistoryCosign.php`](../../src/RequestHandlers/Api/HistoryCosign.php)
+**File:** [`src/RequestHandlers/Api/HistoryCosign.php`](../../../src/RequestHandlers/Api/HistoryCosign.php)
 
 **Implements:** `Psr\Http\Server\RequestHandlerInterface`
 
@@ -1413,7 +1413,7 @@ This is intended for mocking in unit tests
 
 **class** `FediE2EE\PKDServer\RequestHandlers\Api\HistorySince`
 
-**File:** [`src/RequestHandlers/Api/HistorySince.php`](../../src/RequestHandlers/Api/HistorySince.php)
+**File:** [`src/RequestHandlers/Api/HistorySince.php`](../../../src/RequestHandlers/Api/HistorySince.php)
 
 **Implements:** `Psr\Http\Server\RequestHandlerInterface`
 
@@ -1583,7 +1583,7 @@ This is intended for mocking in unit tests
 
 **class** `FediE2EE\PKDServer\RequestHandlers\Api\HistoryView`
 
-**File:** [`src/RequestHandlers/Api/HistoryView.php`](../../src/RequestHandlers/Api/HistoryView.php)
+**File:** [`src/RequestHandlers/Api/HistoryView.php`](../../../src/RequestHandlers/Api/HistoryView.php)
 
 **Implements:** `Psr\Http\Server\RequestHandlerInterface`
 
@@ -1753,7 +1753,7 @@ This is intended for mocking in unit tests
 
 **class** `FediE2EE\PKDServer\RequestHandlers\Api\Info`
 
-**File:** [`src/RequestHandlers/Api/Info.php`](../../src/RequestHandlers/Api/Info.php)
+**File:** [`src/RequestHandlers/Api/Info.php`](../../../src/RequestHandlers/Api/Info.php)
 
 **Implements:** `Psr\Http\Server\RequestHandlerInterface`
 
@@ -1908,7 +1908,7 @@ This is intended for mocking in unit tests
 
 **class** `FediE2EE\PKDServer\RequestHandlers\Api\ListAuxData`
 
-**File:** [`src/RequestHandlers/Api/ListAuxData.php`](../../src/RequestHandlers/Api/ListAuxData.php)
+**File:** [`src/RequestHandlers/Api/ListAuxData.php`](../../../src/RequestHandlers/Api/ListAuxData.php)
 
 **Implements:** `Psr\Http\Server\RequestHandlerInterface`
 
@@ -2086,7 +2086,7 @@ This is intended for mocking in unit tests
 
 **class** `FediE2EE\PKDServer\RequestHandlers\Api\ListKeys`
 
-**File:** [`src/RequestHandlers/Api/ListKeys.php`](../../src/RequestHandlers/Api/ListKeys.php)
+**File:** [`src/RequestHandlers/Api/ListKeys.php`](../../../src/RequestHandlers/Api/ListKeys.php)
 
 **Implements:** `Psr\Http\Server\RequestHandlerInterface`
 
@@ -2264,7 +2264,7 @@ This is intended for mocking in unit tests
 
 **class** `FediE2EE\PKDServer\RequestHandlers\Api\ReplicaInfo`
 
-**File:** [`src/RequestHandlers/Api/ReplicaInfo.php`](../../src/RequestHandlers/Api/ReplicaInfo.php)
+**File:** [`src/RequestHandlers/Api/ReplicaInfo.php`](../../../src/RequestHandlers/Api/ReplicaInfo.php)
 
 **Implements:** `Psr\Http\Server\RequestHandlerInterface`
 
@@ -2419,7 +2419,7 @@ This is intended for mocking in unit tests
 
 **class** `FediE2EE\PKDServer\RequestHandlers\Api\Replicas`
 
-**File:** [`src/RequestHandlers/Api/Replicas.php`](../../src/RequestHandlers/Api/Replicas.php)
+**File:** [`src/RequestHandlers/Api/Replicas.php`](../../../src/RequestHandlers/Api/Replicas.php)
 
 **Implements:** `Psr\Http\Server\RequestHandlerInterface`
 
@@ -2574,7 +2574,7 @@ This is intended for mocking in unit tests
 
 **class** `FediE2EE\PKDServer\RequestHandlers\Api\Revoke`
 
-**File:** [`src/RequestHandlers/Api/Revoke.php`](../../src/RequestHandlers/Api/Revoke.php)
+**File:** [`src/RequestHandlers/Api/Revoke.php`](../../../src/RequestHandlers/Api/Revoke.php)
 
 **Implements:** `Psr\Http\Server\RequestHandlerInterface`
 
@@ -2745,7 +2745,7 @@ This is intended for mocking in unit tests
 
 **class** `FediE2EE\PKDServer\RequestHandlers\Api\ServerPublicKey`
 
-**File:** [`src/RequestHandlers/Api/ServerPublicKey.php`](../../src/RequestHandlers/Api/ServerPublicKey.php)
+**File:** [`src/RequestHandlers/Api/ServerPublicKey.php`](../../../src/RequestHandlers/Api/ServerPublicKey.php)
 
 **Implements:** `Psr\Http\Server\RequestHandlerInterface`
 
@@ -2915,7 +2915,7 @@ This is intended for mocking in unit tests
 
 **class** `FediE2EE\PKDServer\RequestHandlers\Api\TotpDisenroll`
 
-**File:** [`src/RequestHandlers/Api/TotpDisenroll.php`](../../src/RequestHandlers/Api/TotpDisenroll.php)
+**File:** [`src/RequestHandlers/Api/TotpDisenroll.php`](../../../src/RequestHandlers/Api/TotpDisenroll.php)
 
 **Implements:** `Psr\Http\Server\RequestHandlerInterface`
 
@@ -3178,7 +3178,7 @@ Strip all newlines (CR, LF) characters from a string.
 
 **class** `FediE2EE\PKDServer\RequestHandlers\Api\TotpEnroll`
 
-**File:** [`src/RequestHandlers/Api/TotpEnroll.php`](../../src/RequestHandlers/Api/TotpEnroll.php)
+**File:** [`src/RequestHandlers/Api/TotpEnroll.php`](../../../src/RequestHandlers/Api/TotpEnroll.php)
 
 **Implements:** `Psr\Http\Server\RequestHandlerInterface`
 
@@ -3442,7 +3442,7 @@ Strip all newlines (CR, LF) characters from a string.
 
 **class** `FediE2EE\PKDServer\RequestHandlers\Api\TotpRotate`
 
-**File:** [`src/RequestHandlers/Api/TotpRotate.php`](../../src/RequestHandlers/Api/TotpRotate.php)
+**File:** [`src/RequestHandlers/Api/TotpRotate.php`](../../../src/RequestHandlers/Api/TotpRotate.php)
 
 **Implements:** `Psr\Http\Server\RequestHandlerInterface`
 

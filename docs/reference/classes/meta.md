@@ -14,7 +14,7 @@ Namespace: `FediE2EE\PKDServer\Meta`
 
 **class** `FediE2EE\PKDServer\Meta\Params`
 
-**File:** [`src/Meta/Params.php`](../../src/Meta/Params.php)
+**File:** [`src/Meta/Params.php`](../../../src/Meta/Params.php)
 
 Server configuration parameters
 
@@ -48,7 +48,7 @@ These parameters MUST be public and MUST have a default value
 
 **class** `FediE2EE\PKDServer\Meta\RecordForTable`
 
-**File:** [`src/Meta/RecordForTable.php`](../../src/Meta/RecordForTable.php)
+**File:** [`src/Meta/RecordForTable.php`](../../../src/Meta/RecordForTable.php)
 
 ### Properties
 
@@ -70,7 +70,7 @@ These parameters MUST be public and MUST have a default value
 
 **class** `FediE2EE\PKDServer\Meta\Route`
 
-**File:** [`src/Meta/Route.php`](../../src/Meta/Route.php)
+**File:** [`src/Meta/Route.php`](../../../src/Meta/Route.php)
 
 ### Properties
 

@@ -14,7 +14,7 @@ Namespace: `FediE2EE\PKDServer\RequestHandlers\ActivityPub`
 
 **class** `FediE2EE\PKDServer\RequestHandlers\ActivityPub\Finger`
 
-**File:** [`src/RequestHandlers/ActivityPub/Finger.php`](../../src/RequestHandlers/ActivityPub/Finger.php)
+**File:** [`src/RequestHandlers/ActivityPub/Finger.php`](../../../src/RequestHandlers/ActivityPub/Finger.php)
 
 **Implements:** `Psr\Http\Server\RequestHandlerInterface`
 
@@ -195,7 +195,7 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 
 **class** `FediE2EE\PKDServer\RequestHandlers\ActivityPub\Inbox`
 
-**File:** [`src/RequestHandlers/ActivityPub/Inbox.php`](../../src/RequestHandlers/ActivityPub/Inbox.php)
+**File:** [`src/RequestHandlers/ActivityPub/Inbox.php`](../../../src/RequestHandlers/ActivityPub/Inbox.php)
 
 **Implements:** `Psr\Http\Server\RequestHandlerInterface`
 
@@ -385,7 +385,7 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 
 **class** `FediE2EE\PKDServer\RequestHandlers\ActivityPub\UserPage`
 
-**File:** [`src/RequestHandlers/ActivityPub/UserPage.php`](../../src/RequestHandlers/ActivityPub/UserPage.php)
+**File:** [`src/RequestHandlers/ActivityPub/UserPage.php`](../../../src/RequestHandlers/ActivityPub/UserPage.php)
 
 **Implements:** `Psr\Http\Server\RequestHandlerInterface`
 

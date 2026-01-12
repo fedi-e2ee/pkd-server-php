@@ -17,7 +17,7 @@ Namespace: `FediE2EE\PKDServer\Traits`
 
 **trait** `FediE2EE\PKDServer\Traits\ActivityStreamsTrait`
 
-**File:** [`src/Traits/ActivityStreamsTrait.php`](../../src/Traits/ActivityStreamsTrait.php)
+**File:** [`src/Traits/ActivityStreamsTrait.php`](../../../src/Traits/ActivityStreamsTrait.php)
 
 **Uses:** `FediE2EE\PKDServer\Traits\ConfigTrait`
 
@@ -102,7 +102,7 @@ This is intended for mocking in unit tests
 
 **trait** `FediE2EE\PKDServer\Traits\ConfigTrait`
 
-**File:** [`src/Traits/ConfigTrait.php`](../../src/Traits/ConfigTrait.php)
+**File:** [`src/Traits/ConfigTrait.php`](../../../src/Traits/ConfigTrait.php)
 
 ### Properties
 
@@ -168,7 +168,7 @@ This is intended for mocking in unit tests
 
 **trait** `FediE2EE\PKDServer\Traits\ProtocolMethodTrait`
 
-**File:** [`src/Traits/ProtocolMethodTrait.php`](../../src/Traits/ProtocolMethodTrait.php)
+**File:** [`src/Traits/ProtocolMethodTrait.php`](../../../src/Traits/ProtocolMethodTrait.php)
 
 ---
 
@@ -176,7 +176,7 @@ This is intended for mocking in unit tests
 
 **trait** `FediE2EE\PKDServer\Traits\ReqTrait`
 
-**File:** [`src/Traits/ReqTrait.php`](../../src/Traits/ReqTrait.php)
+**File:** [`src/Traits/ReqTrait.php`](../../../src/Traits/ReqTrait.php)
 
 Request Handler trait
 
@@ -323,7 +323,7 @@ This is intended for mocking in unit tests
 
 **trait** `FediE2EE\PKDServer\Traits\TOTPTrait`
 
-**File:** [`src/Traits/TOTPTrait.php`](../../src/Traits/TOTPTrait.php)
+**File:** [`src/Traits/TOTPTrait.php`](../../../src/Traits/TOTPTrait.php)
 
 **Uses:** `FediE2EE\PKD\Crypto\UtilTrait`
 
@@ -420,7 +420,7 @@ Strip all newlines (CR, LF) characters from a string.
 
 **trait** `FediE2EE\PKDServer\Traits\TableRecordTrait`
 
-**File:** [`src/Traits/TableRecordTrait.php`](../../src/Traits/TableRecordTrait.php)
+**File:** [`src/Traits/TableRecordTrait.php`](../../../src/Traits/TableRecordTrait.php)
 
 ### Properties
 

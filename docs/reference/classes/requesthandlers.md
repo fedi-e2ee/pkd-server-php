@@ -12,7 +12,7 @@ Namespace: `FediE2EE\PKDServer\RequestHandlers`
 
 **class** `FediE2EE\PKDServer\RequestHandlers\IndexPage`
 
-**File:** [`src/RequestHandlers/IndexPage.php`](../../src/RequestHandlers/IndexPage.php)
+**File:** [`src/RequestHandlers/IndexPage.php`](../../../src/RequestHandlers/IndexPage.php)
 
 **Implements:** `Psr\Http\Server\RequestHandlerInterface`
 

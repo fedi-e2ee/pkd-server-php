@@ -12,7 +12,7 @@ Namespace: `FediE2EE\PKDServer\Protocol`
 
 **class** `FediE2EE\PKDServer\Protocol\Payload`
 
-**File:** [`src/Protocol/Payload.php`](../../src/Protocol/Payload.php)
+**File:** [`src/Protocol/Payload.php`](../../../src/Protocol/Payload.php)
 
 ### Properties
 

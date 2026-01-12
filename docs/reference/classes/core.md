@@ -18,7 +18,7 @@ Namespace: `FediE2EE\PKDServer`
 
 **class** `FediE2EE\PKDServer\AppCache`
 
-**File:** [`src/AppCache.php`](../../src/AppCache.php)
+**File:** [`src/AppCache.php`](../../../src/AppCache.php)
 
 **Implements:** `Psr\SimpleCache\CacheInterface`
 
@@ -130,7 +130,7 @@ Collapse multiple types into a number of seconds for Redis.
 
 **abstract class** `FediE2EE\PKDServer\Math`
 
-**File:** [`src/Math.php`](../../src/Math.php)
+**File:** [`src/Math.php`](../../../src/Math.php)
 
 ### Methods
 
@@ -152,7 +152,7 @@ Collapse multiple types into a number of seconds for Redis.
 
 **class** `FediE2EE\PKDServer\Protocol`
 
-**File:** [`src/Protocol.php`](../../src/Protocol.php)
+**File:** [`src/Protocol.php`](../../../src/Protocol.php)
 
 This class defines the process for which records are updated in the Public Key Directory.
 
@@ -424,7 +424,7 @@ This is intended for mocking in unit tests
 
 **class** `FediE2EE\PKDServer\Redirect`
 
-**File:** [`src/Redirect.php`](../../src/Redirect.php)
+**File:** [`src/Redirect.php`](../../../src/Redirect.php)
 
 Abstracts an HTTP Redirect
 
@@ -446,7 +446,7 @@ Abstracts an HTTP Redirect
 
 **class** `FediE2EE\PKDServer\ServerConfig`
 
-**File:** [`src/ServerConfig.php`](../../src/ServerConfig.php)
+**File:** [`src/ServerConfig.php`](../../../src/ServerConfig.php)
 
 ### Methods
 
@@ -596,7 +596,7 @@ Abstracts an HTTP Redirect
 
 **abstract class** `FediE2EE\PKDServer\Table`
 
-**File:** [`src/Table.php`](../../src/Table.php)
+**File:** [`src/Table.php`](../../../src/Table.php)
 
 **Uses:** `FediE2EE\PKDServer\Traits\ConfigTrait`
 
@@ -705,7 +705,7 @@ This is intended for mocking in unit tests
 
 **class** `FediE2EE\PKDServer\TableCache`
 
-**File:** [`src/TableCache.php`](../../src/TableCache.php)
+**File:** [`src/TableCache.php`](../../../src/TableCache.php)
 
 ### Methods
 
