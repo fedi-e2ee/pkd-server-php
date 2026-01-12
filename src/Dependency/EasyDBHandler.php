@@ -73,7 +73,7 @@ class EasyDBHandler extends AbstractProcessingHandler
                     throw new RuntimeException("Unsupported driver: {$this->db->getDriver()}"),
             };
         }
-        if ($tries > 10) {
+        if ($tries >= 10) {
             throw new RuntimeException('Cannot create pkd_log table as a contingency');
         }
     }
