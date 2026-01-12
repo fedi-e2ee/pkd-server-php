@@ -4,12 +4,10 @@ This section contains auto-generated technical reference documentation for the P
 
 ## Contents
 
-| File                                        | Description                         |
-|---------------------------------------------|-------------------------------------|
-| [Classes Reference](classes.md)             | All classes, interfaces, and traits |
-| [API Routes Reference](routes.md)           | HTTP API endpoints                  |
-| [Configuration Reference](configuration.md) | Configuration files                 |
-| [CLI Scripts Reference](cli.md)             | Command-line tools                  |
+- [Classes Reference](classes.md) - All classes, interfaces, and traits
+- [API Routes Reference](routes.md) - HTTP API endpoints
+- [Configuration Reference](configuration.md) - Configuration files
+- [CLI Scripts Reference](cli.md) - Command-line tools
 
 ## Regenerating Documentation
 

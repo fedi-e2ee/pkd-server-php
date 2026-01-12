@@ -26,7 +26,7 @@ This document provides technical reference for all classes in the PKD Server.
 
 **class** `FediE2EE\PKDServer\AppCache`
 
-**File:** `src\AppCache.php`
+**File:** [`src/AppCache.php`](../../src/AppCache.php)
 
 **Implements:** `Psr\SimpleCache\CacheInterface`
 
@@ -138,7 +138,7 @@ Collapse multiple types into a number of seconds for Redis.
 
 **abstract class** `FediE2EE\PKDServer\Math`
 
-**File:** `src\Math.php`
+**File:** [`src/Math.php`](../../src/Math.php)
 
 #### Methods
 
@@ -160,7 +160,7 @@ Collapse multiple types into a number of seconds for Redis.
 
 **class** `FediE2EE\PKDServer\Protocol`
 
-**File:** `src\Protocol.php`
+**File:** [`src/Protocol.php`](../../src/Protocol.php)
 
 This class defines the process for which records are updated in the Public Key Directory.
 
@@ -432,7 +432,7 @@ This is intended for mocking in unit tests
 
 **class** `FediE2EE\PKDServer\Redirect`
 
-**File:** `src\Redirect.php`
+**File:** [`src/Redirect.php`](../../src/Redirect.php)
 
 Abstracts an HTTP Redirect
 
@@ -454,7 +454,7 @@ Abstracts an HTTP Redirect
 
 **class** `FediE2EE\PKDServer\ServerConfig`
 
-**File:** `src\ServerConfig.php`
+**File:** [`src/ServerConfig.php`](../../src/ServerConfig.php)
 
 #### Methods
 
@@ -604,7 +604,7 @@ Abstracts an HTTP Redirect
 
 **abstract class** `FediE2EE\PKDServer\Table`
 
-**File:** `src\Table.php`
+**File:** [`src/Table.php`](../../src/Table.php)
 
 **Uses:** `FediE2EE\PKDServer\Traits\ConfigTrait`
 
@@ -713,7 +713,7 @@ This is intended for mocking in unit tests
 
 **class** `FediE2EE\PKDServer\TableCache`
 
-**File:** `src\TableCache.php`
+**File:** [`src/TableCache.php`](../../src/TableCache.php)
 
 #### Methods
 
@@ -752,7 +752,7 @@ This is intended for mocking in unit tests
 
 **class** `FediE2EE\PKDServer\ActivityPub\ActivityStream`
 
-**File:** `src\ActivityPub\ActivityStream.php`
+**File:** [`src/ActivityPub/ActivityStream.php`](../../src/ActivityPub/ActivityStream.php)
 
 **Implements:** `JsonSerializable`, `Stringable`
 
@@ -805,7 +805,7 @@ This is intended for mocking in unit tests
 
 **class** `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
-**File:** `src\ActivityPub\WebFinger.php`
+**File:** [`src/ActivityPub/WebFinger.php`](../../src/ActivityPub/WebFinger.php)
 
 #### Methods
 
@@ -896,7 +896,7 @@ Used for unit tests. Sets a canonical value to bypass the live webfinger query.
 
 **class** `FediE2EE\PKDServer\Dependency\HPKE`
 
-**File:** `src\Dependency\HPKE.php`
+**File:** [`src/Dependency/HPKE.php`](../../src/Dependency/HPKE.php)
 
 #### Properties
 
@@ -934,7 +934,7 @@ Used for unit tests. Sets a canonical value to bypass the live webfinger query.
 
 **class** `FediE2EE\PKDServer\Dependency\InjectConfigStrategy`
 
-**File:** `src\Dependency\InjectConfigStrategy.php`
+**File:** [`src/Dependency/InjectConfigStrategy.php`](../../src/Dependency/InjectConfigStrategy.php)
 
 **Extends:** `League\Route\Strategy\ApplicationStrategy`
 
@@ -967,7 +967,7 @@ Used for unit tests. Sets a canonical value to bypass the live webfinger query.
 
 **class** `FediE2EE\PKDServer\Dependency\SigningKeys`
 
-**File:** `src\Dependency\SigningKeys.php`
+**File:** [`src/Dependency/SigningKeys.php`](../../src/Dependency/SigningKeys.php)
 
 #### Properties
 
@@ -991,7 +991,7 @@ Used for unit tests. Sets a canonical value to bypass the live webfinger query.
 
 **class** `FediE2EE\PKDServer\Dependency\WrappedEncryptedRow`
 
-**File:** `src\Dependency\WrappedEncryptedRow.php`
+**File:** [`src/Dependency/WrappedEncryptedRow.php`](../../src/Dependency/WrappedEncryptedRow.php)
 
 Extends the CipherSweet EncryptedRow class to support key-wrapping
 
@@ -1178,7 +1178,7 @@ Get the key used to encrypt/decrypt the field symmetric key.
 
 **class** `FediE2EE\PKDServer\Exceptions\ActivityPubException`
 
-**File:** `src\Exceptions\ActivityPubException.php`
+**File:** [`src/Exceptions/ActivityPubException.php`](../../src/Exceptions/ActivityPubException.php)
 
 **Extends:** `FediE2EE\PKDServer\Exceptions\BaseException`
 
@@ -1190,7 +1190,7 @@ Get the key used to encrypt/decrypt the field symmetric key.
 
 **class** `FediE2EE\PKDServer\Exceptions\BaseException`
 
-**File:** `src\Exceptions\BaseException.php`
+**File:** [`src/Exceptions/BaseException.php`](../../src/Exceptions/BaseException.php)
 
 **Extends:** `Exception`
 
@@ -1202,7 +1202,7 @@ Get the key used to encrypt/decrypt the field symmetric key.
 
 **class** `FediE2EE\PKDServer\Exceptions\CacheException`
 
-**File:** `src\Exceptions\CacheException.php`
+**File:** [`src/Exceptions/CacheException.php`](../../src/Exceptions/CacheException.php)
 
 **Extends:** `FediE2EE\PKDServer\Exceptions\BaseException`
 
@@ -1214,7 +1214,7 @@ Get the key used to encrypt/decrypt the field symmetric key.
 
 **class** `FediE2EE\PKDServer\Exceptions\ConcurrentException`
 
-**File:** `src\Exceptions\ConcurrentException.php`
+**File:** [`src/Exceptions/ConcurrentException.php`](../../src/Exceptions/ConcurrentException.php)
 
 **Extends:** `FediE2EE\PKDServer\Exceptions\BaseException`
 
@@ -1226,7 +1226,7 @@ Get the key used to encrypt/decrypt the field symmetric key.
 
 **class** `FediE2EE\PKDServer\Exceptions\DependencyException`
 
-**File:** `src\Exceptions\DependencyException.php`
+**File:** [`src/Exceptions/DependencyException.php`](../../src/Exceptions/DependencyException.php)
 
 **Extends:** `FediE2EE\PKDServer\Exceptions\BaseException`
 
@@ -1238,7 +1238,7 @@ Get the key used to encrypt/decrypt the field symmetric key.
 
 **class** `FediE2EE\PKDServer\Exceptions\FetchException`
 
-**File:** `src\Exceptions\FetchException.php`
+**File:** [`src/Exceptions/FetchException.php`](../../src/Exceptions/FetchException.php)
 
 **Extends:** `Exception`
 
@@ -1250,7 +1250,7 @@ Get the key used to encrypt/decrypt the field symmetric key.
 
 **class** `FediE2EE\PKDServer\Exceptions\ProtocolException`
 
-**File:** `src\Exceptions\ProtocolException.php`
+**File:** [`src/Exceptions/ProtocolException.php`](../../src/Exceptions/ProtocolException.php)
 
 **Extends:** `FediE2EE\PKDServer\Exceptions\BaseException`
 
@@ -1262,7 +1262,7 @@ Get the key used to encrypt/decrypt the field symmetric key.
 
 **class** `FediE2EE\PKDServer\Exceptions\TableException`
 
-**File:** `src\Exceptions\TableException.php`
+**File:** [`src/Exceptions/TableException.php`](../../src/Exceptions/TableException.php)
 
 **Extends:** `FediE2EE\PKDServer\Exceptions\BaseException`
 
@@ -1276,7 +1276,7 @@ Get the key used to encrypt/decrypt the field symmetric key.
 
 **class** `FediE2EE\PKDServer\Meta\Params`
 
-**File:** `src\Meta\Params.php`
+**File:** [`src/Meta/Params.php`](../../src/Meta/Params.php)
 
 Server configuration parameters
 
@@ -1310,7 +1310,7 @@ These parameters MUST be public and MUST have a default value
 
 **class** `FediE2EE\PKDServer\Meta\RecordForTable`
 
-**File:** `src\Meta\RecordForTable.php`
+**File:** [`src/Meta/RecordForTable.php`](../../src/Meta/RecordForTable.php)
 
 #### Properties
 
@@ -1332,7 +1332,7 @@ These parameters MUST be public and MUST have a default value
 
 **class** `FediE2EE\PKDServer\Meta\Route`
 
-**File:** `src\Meta\Route.php`
+**File:** [`src/Meta/Route.php`](../../src/Meta/Route.php)
 
 #### Properties
 
@@ -1356,7 +1356,7 @@ These parameters MUST be public and MUST have a default value
 
 **class** `FediE2EE\PKDServer\Protocol\Payload`
 
-**File:** `src\Protocol\Payload.php`
+**File:** [`src/Protocol/Payload.php`](../../src/Protocol/Payload.php)
 
 #### Properties
 
@@ -1394,7 +1394,7 @@ These parameters MUST be public and MUST have a default value
 
 **class** `FediE2EE\PKDServer\RequestHandlers\IndexPage`
 
-**File:** `src\RequestHandlers\IndexPage.php`
+**File:** [`src/RequestHandlers/IndexPage.php`](../../src/RequestHandlers/IndexPage.php)
 
 **Implements:** `Psr\Http\Server\RequestHandlerInterface`
 
@@ -1551,7 +1551,7 @@ This is intended for mocking in unit tests
 
 **class** `FediE2EE\PKDServer\RequestHandlers\ActivityPub\Finger`
 
-**File:** `src\RequestHandlers\ActivityPub\Finger.php`
+**File:** [`src/RequestHandlers/ActivityPub/Finger.php`](../../src/RequestHandlers/ActivityPub/Finger.php)
 
 **Implements:** `Psr\Http\Server\RequestHandlerInterface`
 
@@ -1732,7 +1732,7 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 
 **class** `FediE2EE\PKDServer\RequestHandlers\ActivityPub\Inbox`
 
-**File:** `src\RequestHandlers\ActivityPub\Inbox.php`
+**File:** [`src/RequestHandlers/ActivityPub/Inbox.php`](../../src/RequestHandlers/ActivityPub/Inbox.php)
 
 **Implements:** `Psr\Http\Server\RequestHandlerInterface`
 
@@ -1922,7 +1922,7 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 
 **class** `FediE2EE\PKDServer\RequestHandlers\ActivityPub\UserPage`
 
-**File:** `src\RequestHandlers\ActivityPub\UserPage.php`
+**File:** [`src/RequestHandlers/ActivityPub/UserPage.php`](../../src/RequestHandlers/ActivityPub/UserPage.php)
 
 **Implements:** `Psr\Http\Server\RequestHandlerInterface`
 
@@ -2096,7 +2096,7 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 
 **class** `FediE2EE\PKDServer\RequestHandlers\Api\Actor`
 
-**File:** `src\RequestHandlers\Api\Actor.php`
+**File:** [`src/RequestHandlers/Api/Actor.php`](../../src/RequestHandlers/Api/Actor.php)
 
 **Implements:** `Psr\Http\Server\RequestHandlerInterface`
 
@@ -2274,7 +2274,7 @@ This is intended for mocking in unit tests
 
 **class** `FediE2EE\PKDServer\RequestHandlers\Api\BurnDown`
 
-**File:** `src\RequestHandlers\Api\BurnDown.php`
+**File:** [`src/RequestHandlers/Api/BurnDown.php`](../../src/RequestHandlers/Api/BurnDown.php)
 
 **Implements:** `Psr\Http\Server\RequestHandlerInterface`
 
@@ -2465,7 +2465,7 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 
 **class** `FediE2EE\PKDServer\RequestHandlers\Api\Checkpoint`
 
-**File:** `src\RequestHandlers\Api\Checkpoint.php`
+**File:** [`src/RequestHandlers/Api/Checkpoint.php`](../../src/RequestHandlers/Api/Checkpoint.php)
 
 **Implements:** `Psr\Http\Server\RequestHandlerInterface`
 
@@ -2620,7 +2620,7 @@ This is intended for mocking in unit tests
 
 **class** `FediE2EE\PKDServer\RequestHandlers\Api\Extensions`
 
-**File:** `src\RequestHandlers\Api\Extensions.php`
+**File:** [`src/RequestHandlers/Api/Extensions.php`](../../src/RequestHandlers/Api/Extensions.php)
 
 **Implements:** `Psr\Http\Server\RequestHandlerInterface`
 
@@ -2782,7 +2782,7 @@ This is intended for mocking in unit tests
 
 **class** `FediE2EE\PKDServer\RequestHandlers\Api\GetAuxData`
 
-**File:** `src\RequestHandlers\Api\GetAuxData.php`
+**File:** [`src/RequestHandlers/Api/GetAuxData.php`](../../src/RequestHandlers/Api/GetAuxData.php)
 
 **Implements:** `Psr\Http\Server\RequestHandlerInterface`
 
@@ -2960,7 +2960,7 @@ This is intended for mocking in unit tests
 
 **class** `FediE2EE\PKDServer\RequestHandlers\Api\GetKey`
 
-**File:** `src\RequestHandlers\Api\GetKey.php`
+**File:** [`src/RequestHandlers/Api/GetKey.php`](../../src/RequestHandlers/Api/GetKey.php)
 
 **Implements:** `Psr\Http\Server\RequestHandlerInterface`
 
@@ -3138,7 +3138,7 @@ This is intended for mocking in unit tests
 
 **class** `FediE2EE\PKDServer\RequestHandlers\Api\History`
 
-**File:** `src\RequestHandlers\Api\History.php`
+**File:** [`src/RequestHandlers/Api/History.php`](../../src/RequestHandlers/Api/History.php)
 
 **Implements:** `Psr\Http\Server\RequestHandlerInterface`
 
@@ -3308,7 +3308,7 @@ This is intended for mocking in unit tests
 
 **class** `FediE2EE\PKDServer\RequestHandlers\Api\HistoryCosign`
 
-**File:** `src\RequestHandlers\Api\HistoryCosign.php`
+**File:** [`src/RequestHandlers/Api/HistoryCosign.php`](../../src/RequestHandlers/Api/HistoryCosign.php)
 
 **Implements:** `Psr\Http\Server\RequestHandlerInterface`
 
@@ -3478,7 +3478,7 @@ This is intended for mocking in unit tests
 
 **class** `FediE2EE\PKDServer\RequestHandlers\Api\HistorySince`
 
-**File:** `src\RequestHandlers\Api\HistorySince.php`
+**File:** [`src/RequestHandlers/Api/HistorySince.php`](../../src/RequestHandlers/Api/HistorySince.php)
 
 **Implements:** `Psr\Http\Server\RequestHandlerInterface`
 
@@ -3648,7 +3648,7 @@ This is intended for mocking in unit tests
 
 **class** `FediE2EE\PKDServer\RequestHandlers\Api\HistoryView`
 
-**File:** `src\RequestHandlers\Api\HistoryView.php`
+**File:** [`src/RequestHandlers/Api/HistoryView.php`](../../src/RequestHandlers/Api/HistoryView.php)
 
 **Implements:** `Psr\Http\Server\RequestHandlerInterface`
 
@@ -3818,7 +3818,7 @@ This is intended for mocking in unit tests
 
 **class** `FediE2EE\PKDServer\RequestHandlers\Api\Info`
 
-**File:** `src\RequestHandlers\Api\Info.php`
+**File:** [`src/RequestHandlers/Api/Info.php`](../../src/RequestHandlers/Api/Info.php)
 
 **Implements:** `Psr\Http\Server\RequestHandlerInterface`
 
@@ -3973,7 +3973,7 @@ This is intended for mocking in unit tests
 
 **class** `FediE2EE\PKDServer\RequestHandlers\Api\ListAuxData`
 
-**File:** `src\RequestHandlers\Api\ListAuxData.php`
+**File:** [`src/RequestHandlers/Api/ListAuxData.php`](../../src/RequestHandlers/Api/ListAuxData.php)
 
 **Implements:** `Psr\Http\Server\RequestHandlerInterface`
 
@@ -4151,7 +4151,7 @@ This is intended for mocking in unit tests
 
 **class** `FediE2EE\PKDServer\RequestHandlers\Api\ListKeys`
 
-**File:** `src\RequestHandlers\Api\ListKeys.php`
+**File:** [`src/RequestHandlers/Api/ListKeys.php`](../../src/RequestHandlers/Api/ListKeys.php)
 
 **Implements:** `Psr\Http\Server\RequestHandlerInterface`
 
@@ -4329,7 +4329,7 @@ This is intended for mocking in unit tests
 
 **class** `FediE2EE\PKDServer\RequestHandlers\Api\ReplicaInfo`
 
-**File:** `src\RequestHandlers\Api\ReplicaInfo.php`
+**File:** [`src/RequestHandlers/Api/ReplicaInfo.php`](../../src/RequestHandlers/Api/ReplicaInfo.php)
 
 **Implements:** `Psr\Http\Server\RequestHandlerInterface`
 
@@ -4484,7 +4484,7 @@ This is intended for mocking in unit tests
 
 **class** `FediE2EE\PKDServer\RequestHandlers\Api\Replicas`
 
-**File:** `src\RequestHandlers\Api\Replicas.php`
+**File:** [`src/RequestHandlers/Api/Replicas.php`](../../src/RequestHandlers/Api/Replicas.php)
 
 **Implements:** `Psr\Http\Server\RequestHandlerInterface`
 
@@ -4639,7 +4639,7 @@ This is intended for mocking in unit tests
 
 **class** `FediE2EE\PKDServer\RequestHandlers\Api\Revoke`
 
-**File:** `src\RequestHandlers\Api\Revoke.php`
+**File:** [`src/RequestHandlers/Api/Revoke.php`](../../src/RequestHandlers/Api/Revoke.php)
 
 **Implements:** `Psr\Http\Server\RequestHandlerInterface`
 
@@ -4810,7 +4810,7 @@ This is intended for mocking in unit tests
 
 **class** `FediE2EE\PKDServer\RequestHandlers\Api\ServerPublicKey`
 
-**File:** `src\RequestHandlers\Api\ServerPublicKey.php`
+**File:** [`src/RequestHandlers/Api/ServerPublicKey.php`](../../src/RequestHandlers/Api/ServerPublicKey.php)
 
 **Implements:** `Psr\Http\Server\RequestHandlerInterface`
 
@@ -4980,7 +4980,7 @@ This is intended for mocking in unit tests
 
 **class** `FediE2EE\PKDServer\RequestHandlers\Api\TotpDisenroll`
 
-**File:** `src\RequestHandlers\Api\TotpDisenroll.php`
+**File:** [`src/RequestHandlers/Api/TotpDisenroll.php`](../../src/RequestHandlers/Api/TotpDisenroll.php)
 
 **Implements:** `Psr\Http\Server\RequestHandlerInterface`
 
@@ -5243,7 +5243,7 @@ Strip all newlines (CR, LF) characters from a string.
 
 **class** `FediE2EE\PKDServer\RequestHandlers\Api\TotpEnroll`
 
-**File:** `src\RequestHandlers\Api\TotpEnroll.php`
+**File:** [`src/RequestHandlers/Api/TotpEnroll.php`](../../src/RequestHandlers/Api/TotpEnroll.php)
 
 **Implements:** `Psr\Http\Server\RequestHandlerInterface`
 
@@ -5507,7 +5507,7 @@ Strip all newlines (CR, LF) characters from a string.
 
 **class** `FediE2EE\PKDServer\RequestHandlers\Api\TotpRotate`
 
-**File:** `src\RequestHandlers\Api\TotpRotate.php`
+**File:** [`src/RequestHandlers/Api/TotpRotate.php`](../../src/RequestHandlers/Api/TotpRotate.php)
 
 **Implements:** `Psr\Http\Server\RequestHandlerInterface`
 
@@ -5774,7 +5774,7 @@ Strip all newlines (CR, LF) characters from a string.
 
 **class** `FediE2EE\PKDServer\Scheduled\ASQueue`
 
-**File:** `src\Scheduled\ASQueue.php`
+**File:** [`src/Scheduled/ASQueue.php`](../../src/Scheduled/ASQueue.php)
 
 #### Methods
 
@@ -5800,7 +5800,7 @@ ASQueue::run() is a very dumb method.
 
 **class** `FediE2EE\PKDServer\Scheduled\Witness`
 
-**File:** `src\Scheduled\Witness.php`
+**File:** [`src/Scheduled/Witness.php`](../../src/Scheduled/Witness.php)
 
 Perform witness co-signatures for third-porty Public Key Directory instances.
 
@@ -5906,7 +5906,7 @@ This is intended for mocking in unit tests
 
 **class** `FediE2EE\PKDServer\Tables\ActivityStreamQueue`
 
-**File:** `src\Tables\ActivityStreamQueue.php`
+**File:** [`src/Tables/ActivityStreamQueue.php`](../../src/Tables/ActivityStreamQueue.php)
 
 **Extends:** `FediE2EE\PKDServer\Table`
 
@@ -5934,7 +5934,7 @@ This is intended for mocking in unit tests
 
 **class** `FediE2EE\PKDServer\Tables\Actors`
 
-**File:** `src\Tables\Actors.php`
+**File:** [`src/Tables/Actors.php`](../../src/Tables/Actors.php)
 
 **Extends:** `FediE2EE\PKDServer\Table`
 
@@ -6021,7 +6021,7 @@ When you only have an ActivityPub Actor ID, first canonicalize it, then fetch th
 
 **class** `FediE2EE\PKDServer\Tables\AuxData`
 
-**File:** `src\Tables\AuxData.php`
+**File:** [`src/Tables/AuxData.php`](../../src/Tables/AuxData.php)
 
 **Extends:** `FediE2EE\PKDServer\Table`
 
@@ -6099,7 +6099,7 @@ When you only have an ActivityPub Actor ID, first canonicalize it, then fetch th
 
 **class** `FediE2EE\PKDServer\Tables\MerkleState`
 
-**File:** `src\Tables\MerkleState.php`
+**File:** [`src/Tables/MerkleState.php`](../../src/Tables/MerkleState.php)
 
 Merkle State management
 
@@ -6213,7 +6213,7 @@ Insert leaf with retry logic for deadlocks
 
 **class** `FediE2EE\PKDServer\Tables\Peers`
 
-**File:** `src\Tables\Peers.php`
+**File:** [`src/Tables/Peers.php`](../../src/Tables/Peers.php)
 
 **Extends:** `FediE2EE\PKDServer\Table`
 
@@ -6260,7 +6260,7 @@ Insert leaf with retry logic for deadlocks
 
 **class** `FediE2EE\PKDServer\Tables\PublicKeys`
 
-**File:** `src\Tables\PublicKeys.php`
+**File:** [`src/Tables/PublicKeys.php`](../../src/Tables/PublicKeys.php)
 
 **Extends:** `FediE2EE\PKDServer\Table`
 
@@ -6548,7 +6548,7 @@ Strip all newlines (CR, LF) characters from a string.
 
 **class** `FediE2EE\PKDServer\Tables\TOTP`
 
-**File:** `src\Tables\TOTP.php`
+**File:** [`src/Tables/TOTP.php`](../../src/Tables/TOTP.php)
 
 **Extends:** `FediE2EE\PKDServer\Table`
 
@@ -6617,7 +6617,7 @@ Strip all newlines (CR, LF) characters from a string.
 
 **final class** `FediE2EE\PKDServer\Tables\Records\Actor`
 
-**File:** `src\Tables\Records\Actor.php`
+**File:** [`src/Tables/Records/Actor.php`](../../src/Tables/Records/Actor.php)
 
 Abstraction for a row in the Actors table
 
@@ -6706,7 +6706,7 @@ Fetch the RFC 9421 public keys for an actor.
 
 **class** `FediE2EE\PKDServer\Tables\Records\ActorKey`
 
-**File:** `src\Tables\Records\ActorKey.php`
+**File:** [`src/Tables/Records/ActorKey.php`](../../src/Tables/Records/ActorKey.php)
 
 Abstraction for a row in the PublicKeys table
 
@@ -6789,7 +6789,7 @@ Fetch the RFC 9421 public keys for an actor.
 
 **class** `FediE2EE\PKDServer\Tables\Records\AuxDatum`
 
-**File:** `src\Tables\Records\AuxDatum.php`
+**File:** [`src/Tables/Records/AuxDatum.php`](../../src/Tables/Records/AuxDatum.php)
 
 Abstraction for a row in the AuxData table
 
@@ -6874,7 +6874,7 @@ Fetch the RFC 9421 public keys for an actor.
 
 **class** `FediE2EE\PKDServer\Tables\Records\MerkleLeaf`
 
-**File:** `src\Tables\Records\MerkleLeaf.php`
+**File:** [`src/Tables/Records/MerkleLeaf.php`](../../src/Tables/Records/MerkleLeaf.php)
 
 Abstraction for a row in the MerkleState table
 
@@ -7046,7 +7046,7 @@ Strip all newlines (CR, LF) characters from a string.
 
 **class** `FediE2EE\PKDServer\Tables\Records\Peer`
 
-**File:** `src\Tables\Records\Peer.php`
+**File:** [`src/Tables/Records/Peer.php`](../../src/Tables/Records/Peer.php)
 
 **Uses:** `FediE2EE\PKDServer\Traits\TableRecordTrait`, `FediE2EE\PKD\Crypto\UtilTrait`
 
@@ -7183,7 +7183,7 @@ Strip all newlines (CR, LF) characters from a string.
 
 **trait** `FediE2EE\PKDServer\Traits\ActivityStreamsTrait`
 
-**File:** `src\Traits\ActivityStreamsTrait.php`
+**File:** [`src/Traits/ActivityStreamsTrait.php`](../../src/Traits/ActivityStreamsTrait.php)
 
 **Uses:** `FediE2EE\PKDServer\Traits\ConfigTrait`
 
@@ -7268,7 +7268,7 @@ This is intended for mocking in unit tests
 
 **trait** `FediE2EE\PKDServer\Traits\ConfigTrait`
 
-**File:** `src\Traits\ConfigTrait.php`
+**File:** [`src/Traits/ConfigTrait.php`](../../src/Traits/ConfigTrait.php)
 
 #### Properties
 
@@ -7334,7 +7334,7 @@ This is intended for mocking in unit tests
 
 **trait** `FediE2EE\PKDServer\Traits\ProtocolMethodTrait`
 
-**File:** `src\Traits\ProtocolMethodTrait.php`
+**File:** [`src/Traits/ProtocolMethodTrait.php`](../../src/Traits/ProtocolMethodTrait.php)
 
 ---
 
@@ -7342,7 +7342,7 @@ This is intended for mocking in unit tests
 
 **trait** `FediE2EE\PKDServer\Traits\ReqTrait`
 
-**File:** `src\Traits\ReqTrait.php`
+**File:** [`src/Traits/ReqTrait.php`](../../src/Traits/ReqTrait.php)
 
 Request Handler trait
 
@@ -7489,7 +7489,7 @@ This is intended for mocking in unit tests
 
 **trait** `FediE2EE\PKDServer\Traits\TOTPTrait`
 
-**File:** `src\Traits\TOTPTrait.php`
+**File:** [`src/Traits/TOTPTrait.php`](../../src/Traits/TOTPTrait.php)
 
 **Uses:** `FediE2EE\PKD\Crypto\UtilTrait`
 
@@ -7586,7 +7586,7 @@ Strip all newlines (CR, LF) characters from a string.
 
 **trait** `FediE2EE\PKDServer\Traits\TableRecordTrait`
 
-**File:** `src\Traits\TableRecordTrait.php`
+**File:** [`src/Traits/TableRecordTrait.php`](../../src/Traits/TableRecordTrait.php)
 
 #### Properties
 

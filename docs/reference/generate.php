@@ -76,6 +76,7 @@ final class DocGenerator
                 continue;
             }
             $relativePath = str_replace(PKD_ROOT . '/', '', $file->getPathname());
+            $relativePath = str_replace('\\', '/', $relativePath);
 
             if ($rootDir === 'config') {
                 $this->processConfigFile($file->getPathname(), $relativePath);
@@ -513,7 +514,7 @@ final class DocGenerator
 
         $out = "### {$doc->shortName}\n\n";
         $out .= "**" . implode(' ', $modifiers) . "** `{$doc->name}`\n\n";
-        $out .= "**File:** `{$doc->filepath}`\n\n";
+        $out .= "**File:** [`{$doc->filepath}`](../../{$doc->filepath})\n\n";
 
         if ($doc->summary) {
             $out .= "{$doc->summary}\n\n";
@@ -635,7 +636,8 @@ final class DocGenerator
             $class = str_replace('FediE2EE\\PKDServer\\', '', $info['class']);
             // Ensure pattern has exactly one leading slash
             $displayPattern = '/' . ltrim($pattern, '/');
-            $output .= "| `{$displayPattern}` | `{$class}` | `{$info['method']}` |\n";
+            $filepath = str_replace('\\', '/', $class) . '.php';
+            $output .= "| `{$displayPattern}` | [`{$class}`](../../src/{$filepath}) | `{$info['method']}` |\n";
         }
 
         $output .= "\n## Route Details\n\n";
@@ -655,7 +657,7 @@ final class DocGenerator
 
         ksort($this->configFiles);
         foreach ($this->configFiles as $path => $description) {
-            $output .= "| `{$path}` | {$description} |\n";
+            $output .= "| [`{$path}`](../../{$path}) | {$description} |\n";
         }
 
         $output .= "\n## Local Configuration\n\n";
@@ -678,7 +680,7 @@ final class DocGenerator
 
         ksort($this->cmdScripts);
         foreach ($this->cmdScripts as $path => $description) {
-            $output .= "| `{$path}` | {$description} |\n";
+            $output .= "| [`{$path}`](../../{$path}) | {$description} |\n";
         }
 
         $output .= "\n## Usage\n\n";

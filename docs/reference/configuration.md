@@ -6,22 +6,18 @@ This document describes configuration files in the `config/` directory.
 
 | File | Purpose |
 |------|--------|
-| `config\aux-type-allow-list.php` | Auxiliary data type allowlist |
-| `config\aux-type-registry.php` | Auxiliary data type registry |
-| `config\certainty.php` | CA certificate bundle configuration |
-| `config\ciphersweet.php` | CipherSweet encryption configuration |
-| `config\database.php` | Database connection configuration |
-| `config\hpke.php` | HPKE encryption configuration |
-| `config\local\aux-type-allow-list.php` | Auxiliary data type allowlist |
-| `config\local\aux-type-registry.php` | Auxiliary data type registry |
-| `config\local\database.php` | Database connection configuration |
-| `config\local\params.php` | Server parameters configuration |
-| `config\logs.php` | Logging configuration |
-| `config\params.php` | Server parameters configuration |
-| `config\redis.php` | Redis cache configuration |
-| `config\routes.php` | HTTP routing configuration |
-| `config\signing-keys.php` | Signing keys configuration |
-| `config\twig.php` | Twig template engine configuration |
+| [`config/aux-type-allow-list.php`](../../config/aux-type-allow-list.php) | Auxiliary data type allowlist |
+| [`config/aux-type-registry.php`](../../config/aux-type-registry.php) | Auxiliary data type registry |
+| [`config/certainty.php`](../../config/certainty.php) | CA certificate bundle configuration |
+| [`config/ciphersweet.php`](../../config/ciphersweet.php) | CipherSweet encryption configuration |
+| [`config/database.php`](../../config/database.php) | Database connection configuration |
+| [`config/hpke.php`](../../config/hpke.php) | HPKE encryption configuration |
+| [`config/logs.php`](../../config/logs.php) | Logging configuration |
+| [`config/params.php`](../../config/params.php) | Server parameters configuration |
+| [`config/redis.php`](../../config/redis.php) | Redis cache configuration |
+| [`config/routes.php`](../../config/routes.php) | HTTP routing configuration |
+| [`config/signing-keys.php`](../../config/signing-keys.php) | Signing keys configuration |
+| [`config/twig.php`](../../config/twig.php) | Twig template engine configuration |
 
 ## Local Configuration
 
