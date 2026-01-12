@@ -26,7 +26,7 @@ class EasyDBHandler extends AbstractProcessingHandler
     {
         $this->ensureTableExists();
         $this->statement = $this->db->prepare(
-            "INSERT INTO pkd_log (channel, level, message, created) VALUES (:channel, :level, :message, :time)"
+            "INSERT INTO pkd_log (channel, level, message) VALUES (:channel, :level, :message)"
         );
     }
 
@@ -40,7 +40,6 @@ class EasyDBHandler extends AbstractProcessingHandler
             'channel' => $record->channel,
             'level' => $record->level->value,
             'message' => $record->formatted,
-            'time' => $record->datetime->format('U'),
         ]);
     }
 
