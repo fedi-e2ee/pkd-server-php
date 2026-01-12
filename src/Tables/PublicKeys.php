@@ -669,7 +669,8 @@ class PublicKeys extends Table
             $payload,
             'BurnDown',
             fn (MerkleLeaf $leaf, Payload $payload) =>
-                $this->burnDownCallback($leaf, $payload, $outerActor)
+                $this->burnDownCallback($leaf, $payload, $outerActor),
+            self::ENCRYPTION_DISALLOWED
         );
     }
 
