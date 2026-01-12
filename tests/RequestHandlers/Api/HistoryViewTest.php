@@ -114,9 +114,77 @@ class HistoryViewTest extends TestCase
         $this->assertSame(200, $response->getStatusCode());
         $body = json_decode($response->getBody()->getContents(), true);
         $this->assertSame('fedi-e2ee:v1/api/history/view', $body['!pkd-context']);
+
+        // Verify all expected response fields
+        $this->assertArrayHasKey('created', $body);
+        $this->assertArrayHasKey('encrypted-message', $body);
+        $this->assertArrayHasKey('inclusion-proof', $body);
+        $this->assertIsArray($body['inclusion-proof']);
+        $this->assertArrayHasKey('message', $body);
+        $this->assertArrayHasKey('merkle-root', $body);
+        $this->assertSame($newRoot, $body['merkle-root']);
+        $this->assertArrayHasKey('rewrapped-keys', $body);
         $this->assertArrayHasKey('witnesses', $body);
         $this->assertIsArray($body['witnesses']);
-        $this->assertSame($newRoot, $body['merkle-root']);
+
+        $this->assertNotInTransaction();
+    }
+
+    /**
+     * Test that missing hash returns 400 error.
+     *
+     * @throws Exception
+     */
+    public function testMissingHash(): void
+    {
+        $config = $this->getConfig();
+        $this->clearOldTransaction($config);
+
+        $reflector = new ReflectionClass(HistoryView::class);
+        $viewHandler = $reflector->newInstanceWithoutConstructor();
+        $viewHandler->injectConfig($config);
+        $constructor = $reflector->getConstructor();
+        if ($constructor) {
+            $constructor->invoke($viewHandler);
+        }
+
+        // Request without hash attribute
+        $request = $this->makeGetRequest('/api/history/view/');
+        $response = $viewHandler->handle($request);
+
+        $this->assertSame(400, $response->getStatusCode());
+        $body = json_decode($response->getBody()->getContents(), true);
+        $this->assertArrayHasKey('error', $body);
+        $this->assertNotInTransaction();
+    }
+
+    /**
+     * Test that unknown hash returns 404 error.
+     *
+     * @throws Exception
+     */
+    public function testUnknownHash(): void
+    {
+        $config = $this->getConfig();
+        $this->clearOldTransaction($config);
+
+        $reflector = new ReflectionClass(HistoryView::class);
+        $viewHandler = $reflector->newInstanceWithoutConstructor();
+        $viewHandler->injectConfig($config);
+        $constructor = $reflector->getConstructor();
+        if ($constructor) {
+            $constructor->invoke($viewHandler);
+        }
+
+        // Use a hash that doesn't exist
+        $fakeHash = str_repeat('a', 64);
+        $request = $this->makeGetRequest('/api/history/view/' . $fakeHash);
+        $request = $request->withAttribute('hash', $fakeHash);
+        $response = $viewHandler->handle($request);
+
+        $this->assertSame(404, $response->getStatusCode());
+        $body = json_decode($response->getBody()->getContents(), true);
+        $this->assertArrayHasKey('error', $body);
         $this->assertNotInTransaction();
     }
 }

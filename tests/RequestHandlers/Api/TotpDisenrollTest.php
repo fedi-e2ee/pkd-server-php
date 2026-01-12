@@ -16,6 +16,7 @@ use FediE2EE\PKDServer\RequestHandlers\Api\{
 };
 use FediE2EE\PKDServer\{ActivityPub\WebFinger,
     AppCache,
+    Dependency\EasyDBHandler,
     Dependency\InjectConfigStrategy,
     Dependency\WrappedEncryptedRow,
     Math,
@@ -50,6 +51,7 @@ use PHPUnit\Framework\TestCase;
 #[CoversClass(TotpDisenroll::class)]
 #[UsesClass(WebFinger::class)]
 #[UsesClass(AppCache::class)]
+#[UsesClass(EasyDBHandler::class)]
 #[UsesClass(WrappedEncryptedRow::class)]
 #[UsesClass(InjectConfigStrategy::class)]
 #[UsesClass(Protocol::class)]
@@ -172,9 +174,194 @@ class TotpDisenrollTest extends TestCase
         $this->assertSame(200, $response->getStatusCode(), (string) $response->getBody());
         $responseBody = json_decode((string) $response->getBody(), true);
         $this->assertTrue($responseBody['success']);
+        // Verify response format includes !pkd-context
+        $this->assertSame('fedi-e2ee:v1/api/totp/disenroll', $responseBody['!pkd-context']);
+        $this->assertArrayHasKey('time', $responseBody);
+        $this->assertIsString($responseBody['time']);
 
         // Let's check the domain now:
         $this->assertEmpty($table->getSecretByDomain($domain));
         $this->assertNotInTransaction();
+    }
+
+    /**
+     * Test that missing actor-id returns error.
+     *
+     * @throws Exception
+     */
+    public function testMissingActorId(): void
+    {
+        $body = [
+            '!pkd-context' => 'fedi-e2ee:v1/api/totp/disenroll',
+            'action' => 'TOTP-Disenroll',
+            'current-time' => (string) time(),
+            'disenrollment' => [
+                // actor-id is missing
+                'key-id' => 'some-key-id',
+                'otp' => '12345678',
+            ],
+            'signature' => 'fake-signature'
+        ];
+
+        $request = new ServerRequest([], [], '/api/totp/disenroll', 'POST')
+            ->withHeader('Content-Type', 'application/json')
+            ->withBody(new StreamFactory()->createStream(json_encode($body)));
+        $response = $this->dispatchRequest($request);
+
+        $this->assertSame(400, $response->getStatusCode());
+        $responseBody = json_decode((string) $response->getBody(), true);
+        $this->assertArrayHasKey('error', $responseBody);
+    }
+
+    /**
+     * Test that missing key-id returns error.
+     *
+     * @throws Exception
+     */
+    public function testMissingKeyId(): void
+    {
+        $body = [
+            '!pkd-context' => 'fedi-e2ee:v1/api/totp/disenroll',
+            'action' => 'TOTP-Disenroll',
+            'current-time' => (string) time(),
+            'disenrollment' => [
+                'actor-id' => 'https://example.com/users/test',
+                // key-id is missing
+                'otp' => '12345678',
+            ],
+            'signature' => 'fake-signature'
+        ];
+
+        $request = new ServerRequest([], [], '/api/totp/disenroll', 'POST')
+            ->withHeader('Content-Type', 'application/json')
+            ->withBody(new StreamFactory()->createStream(json_encode($body)));
+        $response = $this->dispatchRequest($request);
+
+        $this->assertSame(400, $response->getStatusCode());
+    }
+
+    /**
+     * Test that missing otp returns error.
+     *
+     * @throws Exception
+     */
+    public function testMissingOtp(): void
+    {
+        $body = [
+            '!pkd-context' => 'fedi-e2ee:v1/api/totp/disenroll',
+            'action' => 'TOTP-Disenroll',
+            'current-time' => (string) time(),
+            'disenrollment' => [
+                'actor-id' => 'https://example.com/users/test',
+                'key-id' => 'some-key-id',
+                // otp is missing
+            ],
+            'signature' => 'fake-signature'
+        ];
+
+        $request = new ServerRequest([], [], '/api/totp/disenroll', 'POST')
+            ->withHeader('Content-Type', 'application/json')
+            ->withBody(new StreamFactory()->createStream(json_encode($body)));
+        $response = $this->dispatchRequest($request);
+
+        $this->assertSame(400, $response->getStatusCode());
+    }
+
+    /**
+     * Test that missing action returns error.
+     *
+     * @throws Exception
+     */
+    public function testMissingAction(): void
+    {
+        $body = [
+            '!pkd-context' => 'fedi-e2ee:v1/api/totp/disenroll',
+            // action is missing
+            'current-time' => (string) time(),
+            'disenrollment' => [
+                'actor-id' => 'https://example.com/users/test',
+                'key-id' => 'some-key-id',
+                'otp' => '12345678',
+            ],
+            'signature' => 'fake-signature'
+        ];
+
+        $request = new ServerRequest([], [], '/api/totp/disenroll', 'POST')
+            ->withHeader('Content-Type', 'application/json')
+            ->withBody(new StreamFactory()->createStream(json_encode($body)));
+        $response = $this->dispatchRequest($request);
+
+        $this->assertSame(400, $response->getStatusCode());
+    }
+
+    /**
+     * Test that missing current-time returns error.
+     *
+     * @throws Exception
+     */
+    public function testMissingCurrentTime(): void
+    {
+        $body = [
+            '!pkd-context' => 'fedi-e2ee:v1/api/totp/disenroll',
+            'action' => 'TOTP-Disenroll',
+            // current-time is missing
+            'disenrollment' => [
+                'actor-id' => 'https://example.com/users/test',
+                'key-id' => 'some-key-id',
+                'otp' => '12345678',
+            ],
+            'signature' => 'fake-signature'
+        ];
+
+        $request = new ServerRequest([], [], '/api/totp/disenroll', 'POST')
+            ->withHeader('Content-Type', 'application/json')
+            ->withBody(new StreamFactory()->createStream(json_encode($body)));
+        $response = $this->dispatchRequest($request);
+
+        $this->assertSame(400, $response->getStatusCode());
+    }
+
+    /**
+     * Test that missing !pkd-context returns error.
+     *
+     * @throws Exception
+     */
+    public function testMissingPkdContext(): void
+    {
+        $body = [
+            // !pkd-context is missing
+            'action' => 'TOTP-Disenroll',
+            'current-time' => (string) time(),
+            'disenrollment' => [
+                'actor-id' => 'https://example.com/users/test',
+                'key-id' => 'some-key-id',
+                'otp' => '12345678',
+            ],
+            'signature' => 'fake-signature'
+        ];
+
+        $request = new ServerRequest([], [], '/api/totp/disenroll', 'POST')
+            ->withHeader('Content-Type', 'application/json')
+            ->withBody(new StreamFactory()->createStream(json_encode($body)));
+        $response = $this->dispatchRequest($request);
+
+        $this->assertSame(400, $response->getStatusCode());
+    }
+
+    /**
+     * Test that invalid JSON returns error.
+     *
+     * @throws Exception
+     */
+    public function testInvalidJson(): void
+    {
+        $request = new ServerRequest([], [], '/api/totp/disenroll', 'POST')
+            ->withHeader('Content-Type', 'application/json')
+            ->withBody(new StreamFactory()->createStream('not valid json'));
+        $response = $this->dispatchRequest($request);
+
+        $this->assertSame(400, $response->getStatusCode());
+        $responseBody = json_decode((string) $response->getBody(), true);
+        $this->assertArrayHasKey('error', $responseBody);
     }
 }

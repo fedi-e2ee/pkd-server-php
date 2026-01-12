@@ -114,6 +114,10 @@ class HistoryTest extends TestCase
         $this->assertSame(200, $response->getStatusCode());
         $body = json_decode($response->getBody()->getContents(), true);
         $this->assertSame('fedi-e2ee:v1/api/history', $body['!pkd-context']);
+        // Verify current-time is a string (kills CastString mutation)
+        $this->assertArrayHasKey('current-time', $body);
+        $this->assertIsString($body['current-time']);
+        $this->assertArrayHasKey('created', $body);
         $this->assertSame($newRoot, $body['merkle-root']);
         $this->assertNotInTransaction();
     }
@@ -151,6 +155,9 @@ class HistoryTest extends TestCase
         $this->assertSame(200, $response->getStatusCode());
         $body = json_decode($response->getBody()->getContents(), true);
         $this->assertSame('fedi-e2ee:v1/api/history', $body['!pkd-context']);
+        // Verify current-time is a string
+        $this->assertArrayHasKey('current-time', $body);
+        $this->assertIsString($body['current-time']);
         $this->assertSame($latestRoot, $body['merkle-root']);
         $this->assertSame('0', $body['created']);
         $this->assertNotInTransaction();
