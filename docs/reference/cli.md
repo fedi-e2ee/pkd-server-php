@@ -6,11 +6,11 @@ This document describes CLI scripts in the `cmd/` directory.
 
 | Script | Purpose |
 |--------|--------|
-| [`cmd/cron-setup.php`](../../cmd/cron-setup.php) | Set up cron jobs for scheduled tasks |
-| [`cmd/init-database.php`](../../cmd/init-database.php) | Initialize the database schema |
-| [`cmd/init-local-config.php`](../../cmd/init-local-config.php) | Generate local configuration files |
-| [`cmd/init.php`](../../cmd/init.php) | Run this when deploying a new environment. |
-| [`cmd/scheduled-tasks.php`](../../cmd/scheduled-tasks.php) | Run scheduled background tasks |
+| [`cmd/cron-setup.php`](../cmd/cron-setup.php) | Set up cron jobs for scheduled tasks |
+| [`cmd/init-database.php`](../cmd/init-database.php) | Initialize the database schema |
+| [`cmd/init-local-config.php`](../cmd/init-local-config.php) | Generate local configuration files |
+| [`cmd/init.php`](../cmd/init.php) | Run this when deploying a new environment. |
+| [`cmd/scheduled-tasks.php`](../cmd/scheduled-tasks.php) | Run scheduled background tasks |
 
 ## Usage
 

@@ -31,14 +31,15 @@ jobs:
 
       - name: Check for uncommitted changes
         run: |
-          if ! git diff --quiet docs/reference/; then
+          git add docs/reference/
+          if ! git diff --cached --quiet docs/reference/; then
             echo "::error::Generated documentation is out of date. Run 'php docs/reference/generate.php' and commit the changes."
             echo ""
             echo "Changed files:"
-            git diff --name-only docs/reference/
+            git diff --cached --name-only docs/reference/
             echo ""
             echo "Diff:"
-            git diff docs/reference/
+            git diff --cached docs/reference/
             exit 1
           fi
           echo "Documentation is up to date."

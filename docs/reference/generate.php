@@ -17,7 +17,6 @@ const PKD_ROOT = __DIR__ . '/../..';
 
 require_once PKD_ROOT . '/vendor/autoload.php';
 
-
 /**
  * Extracts documentation from PHP files using reflection.
  */
@@ -25,6 +24,7 @@ final class DocGenerator
 {
     private const array DIRECTORIES = ['cmd', 'config', 'public', 'src'];
     private const string OUTPUT_DIR = PKD_ROOT . '/docs/reference';
+    private const string CLASSES_DIR = PKD_ROOT . '/docs/reference/classes';
 
     /** @var array<string, ClassDoc> */
     private array $classes = [];
@@ -44,6 +44,7 @@ final class DocGenerator
         $this->scanDirectories();
 
         echo "Generating documentation...\n";
+        $this->prepareClassesDirectory();
         $this->generateClassDocs();
         $this->generateRouteDocs();
         $this->generateConfigDocs();
@@ -51,6 +52,38 @@ final class DocGenerator
         $this->generateIndex();
 
         echo "Done.\n";
+    }
+
+    private function prepareClassesDirectory(): void
+    {
+        // Remove old classes directory if it exists
+        if (is_dir(self::CLASSES_DIR)) {
+            $this->removeDirectory(self::CLASSES_DIR);
+        }
+        mkdir(self::CLASSES_DIR, 0755, true);
+
+        // Remove old monolithic classes.md if it exists
+        $oldFile = self::OUTPUT_DIR . '/classes.md';
+        if (file_exists($oldFile)) {
+            unlink($oldFile);
+        }
+    }
+
+    private function removeDirectory(string $dir): void
+    {
+        if (!is_dir($dir)) {
+            return;
+        }
+        $files = array_diff(scandir($dir), ['.', '..']);
+        foreach ($files as $file) {
+            $path = $dir . '/' . $file;
+            if (is_dir($path)) {
+                $this->removeDirectory($path);
+            } else {
+                unlink($path);
+            }
+        }
+        rmdir($dir);
     }
 
     private function scanDirectories(): void
@@ -114,7 +147,7 @@ final class DocGenerator
 
                 // Check for Route attributes
                 $this->extractRoutes($reflection, $fqcn);
-            } catch (Throwable $e) {
+            } catch (Throwable) {
                 // Skip classes that can't be reflected
                 continue;
             }
@@ -326,11 +359,9 @@ final class DocGenerator
         $description = '';
         $throws = [];
         $tags = [];
-        $inDescription = false;
 
         foreach ($cleaned as $line) {
             if (str_starts_with($line, '@')) {
-                $inDescription = false;
                 if (preg_match('/@throws\s+(\S+)/', $line, $m)) {
                     $throws[] = $m[1];
                 } elseif (preg_match('/@(\w+)(?:\s+(.*))?/', $line, $m)) {
@@ -339,7 +370,6 @@ final class DocGenerator
             } elseif (empty($summary)) {
                 $summary = $line;
             } else {
-                $inDescription = true;
                 $description .= ($description ? ' ' : '') . $line;
             }
         }
@@ -461,6 +491,54 @@ final class DocGenerator
         };
     }
 
+    /**
+     * Convert a string to a GitHub-compatible anchor.
+     */
+    private function toAnchor(string $text): string
+    {
+        // GitHub anchor rules: lowercase, spaces to hyphens, remove non-alphanumeric except hyphens
+        $anchor = strtolower($text);
+        $anchor = preg_replace('/[^a-z0-9\s-]/', '', $anchor);
+        $anchor = preg_replace('/\s+/', '-', $anchor);
+        $anchor = preg_replace('/-+/', '-', $anchor);
+        return trim($anchor, '-');
+    }
+
+    /**
+     * Convert namespace to a safe filename.
+     */
+    private function namespaceToFilename(string $namespace): string
+    {
+        $short = str_replace('FediE2EE\\PKDServer\\', '', $namespace);
+        if (empty($short) || $short === 'FediE2EE\\PKDServer') {
+            return 'core';
+        }
+        // Convert backslashes to hyphens, lowercase
+        return strtolower(str_replace('\\', '-', $short));
+    }
+
+    /**
+     * Get display name for namespace.
+     */
+    private function namespaceDisplayName(string $namespace): string
+    {
+        $short = str_replace('FediE2EE\\PKDServer\\', '', $namespace);
+        if (empty($short) || $short === 'FediE2EE\\PKDServer') {
+            return 'Core';
+        }
+        return str_replace('\\', ' / ', $short);
+    }
+
+    /**
+     * Calculate relative path depth for links.
+     */
+    private function getRelativePrefix(string $fromFile): string
+    {
+        // From docs/reference/classes/foo.md to root is ../../..
+        // From docs/reference/classes/foo.md to src/ is ../../../src/
+        return '../../..';
+    }
+
     private function generateClassDocs(): void
     {
         // Group classes by namespace
@@ -471,37 +549,56 @@ final class DocGenerator
         }
         ksort($byNamespace);
 
-        $output = "# Classes Reference\n\n";
-        $output .= "This document provides technical reference for all classes in the PKD Server.\n\n";
-        $output .= "## Table of Contents\n\n";
+        // Generate index file for classes
+        $index = "# Classes Reference\n\n";
+        $index .= "Technical reference for all classes in the PKD Server, organized by namespace.\n\n";
+        $index .= "## Namespaces\n\n";
 
         foreach ($byNamespace as $ns => $classes) {
-            $shortNs = str_replace('FediE2EE\\PKDServer\\', '', $ns);
-            if (empty($shortNs)) {
-                $shortNs = 'Root';
-            }
-            $anchor = strtolower(str_replace('\\', '-', $shortNs));
-            $output .= "- [{$shortNs}](#{$anchor})\n";
+            $displayName = $this->namespaceDisplayName($ns);
+            $filename = $this->namespaceToFilename($ns);
+            $classCount = count($classes);
+            $index .= "- [{$displayName}](classes/{$filename}.md) ({$classCount} classes)\n";
+        }
+
+        file_put_contents(self::OUTPUT_DIR . '/classes.md', $index);
+
+        // Generate individual namespace files
+        foreach ($byNamespace as $ns => $classes) {
+            $this->generateNamespaceFile($ns, $classes);
+        }
+    }
+
+    /**
+     * @param array<string, ClassDoc> $classes
+     */
+    private function generateNamespaceFile(string $namespace, array $classes): void
+    {
+        $displayName = $this->namespaceDisplayName($namespace);
+        $filename = $this->namespaceToFilename($namespace);
+        $relativePrefix = $this->getRelativePrefix($filename);
+
+        $output = "# {$displayName}\n\n";
+        $output .= "Namespace: `{$namespace}`\n\n";
+
+        // Table of contents
+        $output .= "## Classes\n\n";
+        ksort($classes);
+        foreach ($classes as $fqcn => $doc) {
+            $anchor = $this->toAnchor($doc->shortName);
+            $output .= "- [{$doc->shortName}](#{$anchor}) - {$doc->type}\n";
         }
         $output .= "\n---\n\n";
 
-        foreach ($byNamespace as $ns => $classes) {
-            $shortNs = str_replace('FediE2EE\\PKDServer\\', '', $ns);
-            if (empty($shortNs)) {
-                $shortNs = 'Root';
-            }
-            $output .= "## {$shortNs}\n\n";
-
-            ksort($classes);
-            foreach ($classes as $fqcn => $doc) {
-                $output .= $this->renderClassDoc($doc);
-            }
+        // Class documentation
+        foreach ($classes as $fqcn => $doc) {
+            $output .= $this->renderClassDoc($doc, $relativePrefix);
         }
 
-        file_put_contents(self::OUTPUT_DIR . '/classes.md', $output);
+        file_put_contents(self::CLASSES_DIR . "/{$filename}.md", $output);
     }
 
-    private function renderClassDoc(ClassDoc $doc): string
+    private function renderClassDoc(ClassDoc $doc, string $relativePrefix): string
     {
         $modifiers = [];
         if ($doc->isAbstract) {
@@ -512,9 +609,9 @@ final class DocGenerator
         }
         $modifiers[] = $doc->type;
 
-        $out = "### {$doc->shortName}\n\n";
+        $out = "## {$doc->shortName}\n\n";
         $out .= "**" . implode(' ', $modifiers) . "** `{$doc->name}`\n\n";
-        $out .= "**File:** [`{$doc->filepath}`](../../{$doc->filepath})\n\n";
+        $out .= "**File:** [`{$doc->filepath}`]({$relativePrefix}/{$doc->filepath})\n\n";
 
         if ($doc->summary) {
             $out .= "{$doc->summary}\n\n";
@@ -541,7 +638,7 @@ final class DocGenerator
         // Public properties
         $publicProps = array_filter($doc->properties, fn($p) => $p->visibility === 'public');
         if (!empty($publicProps)) {
-            $out .= "#### Properties\n\n";
+            $out .= "### Properties\n\n";
             $out .= "| Property | Type | Description |\n";
             $out .= "|----------|------|-------------|\n";
             foreach ($publicProps as $prop) {
@@ -554,7 +651,7 @@ final class DocGenerator
         // Public methods
         $publicMethods = array_filter($doc->methods, fn($m) => $m->visibility === 'public');
         if (!empty($publicMethods)) {
-            $out .= "#### Methods\n\n";
+            $out .= "### Methods\n\n";
             foreach ($publicMethods as $method) {
                 $out .= $this->renderMethodDoc($method);
             }
@@ -588,7 +685,7 @@ final class DocGenerator
         }
         $paramStr = implode(', ', $params);
 
-        $out = "##### `{$modifierStr}{$method->name}({$paramStr}): {$method->returnType}`\n\n";
+        $out = "#### `{$modifierStr}{$method->name}({$paramStr}): {$method->returnType}`\n\n";
 
         if ($method->isApi) {
             $out .= "**API Method**\n\n";
@@ -628,6 +725,7 @@ final class DocGenerator
     {
         $output = "# API Routes Reference\n\n";
         $output .= "This document lists all API routes defined via `#[Route]` attributes.\n\n";
+        $output .= "## Routes\n\n";
         $output .= "| Route Pattern | Handler Class | Method |\n";
         $output .= "|---------------|---------------|--------|\n";
 
@@ -637,11 +735,11 @@ final class DocGenerator
             // Ensure pattern has exactly one leading slash
             $displayPattern = '/' . ltrim($pattern, '/');
             $filepath = str_replace('\\', '/', $class) . '.php';
-            $output .= "| `{$displayPattern}` | [`{$class}`](../../src/{$filepath}) | `{$info['method']}` |\n";
+            $output .= "| `{$displayPattern}` | [`{$class}`](../src/{$filepath}) | `{$info['method']}` |\n";
         }
 
         $output .= "\n## Route Details\n\n";
-        $output .= "Routes are configured in `config/routes.php` using League\\Route.\n";
+        $output .= "Routes are configured in [`config/routes.php`](../config/routes.php) using League\\Route.\n";
         $output .= "The `#[Route]` attribute on handler methods is used for documentation purposes.\n";
 
         file_put_contents(self::OUTPUT_DIR . '/routes.md', $output);
@@ -657,7 +755,7 @@ final class DocGenerator
 
         ksort($this->configFiles);
         foreach ($this->configFiles as $path => $description) {
-            $output .= "| [`{$path}`](../../{$path}) | {$description} |\n";
+            $output .= "| [`{$path}`](../{$path}) | {$description} |\n";
         }
 
         $output .= "\n## Local Configuration\n\n";
@@ -680,7 +778,7 @@ final class DocGenerator
 
         ksort($this->cmdScripts);
         foreach ($this->cmdScripts as $path => $description) {
-            $output .= "| [`{$path}`](../../{$path}) | {$description} |\n";
+            $output .= "| [`{$path}`](../{$path}) | {$description} |\n";
         }
 
         $output .= "\n## Usage\n\n";
