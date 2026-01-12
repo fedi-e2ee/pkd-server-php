@@ -60,7 +60,7 @@ if (!($GLOBALS['pkdConfig'] instanceof ServerConfig)) {
         }
         $temp = __DIR__ . '/tmp/db/' . sodium_bin2hex(random_bytes(16)) . '-test.db';
         $pkdConfig->withDatabase(new EasyDBCache(new PDO('sqlite:' . $temp)));
-        chmod(__DIR__ . '/tmp/db/' . sodium_bin2hex(random_bytes(16)) . '-test.db', 0777);
+        chmod($temp, 0777);
 
         // Create second DB connection for testing concurrency
         $GLOBALS['PKD_PHPUNIT_DB'] = new EasyDBCache(new PDO('sqlite:' . $temp));
