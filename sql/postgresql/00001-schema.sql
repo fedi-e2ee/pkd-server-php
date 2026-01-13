@@ -121,14 +121,87 @@ CREATE TABLE IF NOT EXISTS pkd_log (
 
 CREATE TABLE IF NOT EXISTS pkd_peers (
     peerid BIGSERIAL PRIMARY KEY,
+    uniqueid TEXT NOT NULL UNIQUE,
     hostname TEXT,
     publickey TEXT,
     incrementaltreestate TEXT,
     latestroot TEXT,
+    cosign BOOLEAN DEFAULT FALSE,
     replicate BOOLEAN DEFAULT FALSE,
     created TIMESTAMP DEFAULT NOW(),
     modified TIMESTAMP DEFAULT NOW()
 );
+
+CREATE TABLE IF NOT EXISTS pkd_replica_history (
+    replicahistoryid BIGSERIAL PRIMARY KEY,
+    peer BIGINT NOT NULL REFERENCES pkd_peers (peerid),
+    root TEXT,
+    publickeyhash TEXT,
+    contenthash TEXT,
+    signature TEXT,
+    contents TEXT,
+    cosignature TEXT,
+    inclusionproof TEXT,
+    created TIMESTAMP,
+    replicated TIMESTAMP DEFAULT NOW()
+);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_pkd_replica_history_peer_root
+    ON pkd_replica_history (peer, root);
+
+CREATE TABLE IF NOT EXISTS pkd_replica_actors (
+    replicaactorid BIGSERIAL PRIMARY KEY,
+    peer BIGINT NOT NULL REFERENCES pkd_peers (peerid),
+    activitypubid TEXT,
+    activitypubid_idx TEXT, -- Blind index
+    rfc9421pubkey TEXT,
+    wrap_activitypubid TEXT NULL,
+    fireproof BOOLEAN DEFAULT FALSE,
+    fireproofleaf BIGINT NULL REFERENCES pkd_replica_history(replicahistoryid),
+    undofireproofleaf BIGINT NULL REFERENCES pkd_replica_history(replicahistoryid),
+    movedleaf BIGINT NULL REFERENCES pkd_replica_history(replicahistoryid),
+    created TIMESTAMP DEFAULT NOW(),
+    modified TIMESTAMP DEFAULT NOW()
+);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_pkd_replica_actors_peer_activitypubid
+    ON pkd_replica_actors (peer, activitypubid);
+CREATE INDEX IF NOT EXISTS idx_pkd_replica_actors_peer_activitypubid_idx
+    ON pkd_replica_actors (peer, activitypubid_idx);
+
+CREATE TABLE IF NOT EXISTS pkd_replica_actors_publickeys (
+    replicaactorpublickeyid BIGSERIAL PRIMARY KEY,
+    peer BIGINT NOT NULL REFERENCES pkd_peers (peerid),
+    actor BIGINT NOT NULL REFERENCES pkd_replica_actors (replicaactorid),
+    publickey TEXT, -- Encrypted, client-side
+    publickey_idx TEXT, -- Blind index, used for searching
+    wrap_publickey TEXT NULL, -- Wrapped symmetric key for the publickey field
+    key_id TEXT NULL, -- Unique, chosen by server
+    insertleaf BIGINT NULL REFERENCES pkd_replica_history(replicahistoryid),
+    revokeleaf BIGINT NULL REFERENCES pkd_replica_history(replicahistoryid),
+    trusted BOOLEAN DEFAULT FALSE,
+    created TIMESTAMP DEFAULT NOW(),
+    modified TIMESTAMP DEFAULT NOW()
+);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_pkd_replica_actors_publickeys_peer_publickey
+    ON pkd_replica_actors_publickeys (peer, publickey);
+CREATE INDEX IF NOT EXISTS idx_pkd_replica_actors_publickeys_peer_publickey_idx
+    ON pkd_replica_actors_publickeys (peer, publickey_idx);
+
+CREATE TABLE IF NOT EXISTS pkd_replica_actors_auxdata (
+    replicaactorauxdataid BIGSERIAL PRIMARY KEY,
+    peer BIGINT NOT NULL REFERENCES pkd_peers (peerid),
+    actor BIGINT NOT NULL REFERENCES pkd_replica_actors (replicaactorid),
+    auxdatatype TEXT,
+    auxdata TEXT, -- Encrypted, client-side
+    wrap_auxdata TEXT NULL, -- Wrapped symmetric key for the auxdata field
+    auxdata_idx TEXT,
+    insertleaf BIGINT NULL REFERENCES pkd_replica_history(replicahistoryid),
+    revokeleaf BIGINT NULL REFERENCES pkd_replica_history(replicahistoryid),
+    trusted BOOLEAN DEFAULT FALSE,
+    created TIMESTAMP DEFAULT NOW(),
+    modified TIMESTAMP DEFAULT NOW()
+);
+CREATE INDEX IF NOT EXISTS idx_pkd_replica_actors_auxdata_peer_auxdata_idx
+    ON pkd_replica_actors_auxdata (peer, auxdata_idx);
 
 -- Update modification time triggers
 DROP TRIGGER IF EXISTS update_pkd_actors_modtime ON pkd_actors;

@@ -124,11 +124,92 @@ CREATE TABLE IF NOT EXISTS pkd_log (
 
 CREATE TABLE IF NOT EXISTS pkd_peers(
     peerid BIGINT PRIMARY KEY AUTO_INCREMENT,
+    uniqueid TEXT NOT NULL,
     hostname TEXT,
     publickey TEXT,
     incrementaltreestate TEXT,
     latestroot TEXT,
+    cosign BOOLEAN DEFAULT FALSE,
     replicate BOOLEAN DEFAULT FALSE,
     created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE INDEX `pkd_peers_uniqueid_idx` (uniqueid(255))
+);
+
+CREATE TABLE IF NOT EXISTS pkd_replica_history (
+    replicahistoryid BIGINT AUTO_INCREMENT PRIMARY KEY,
+    peer BIGINT NOT NULL,
+    root TEXT,
+    publickeyhash TEXT,
+    contenthash TEXT,
+    signature TEXT,
+    contents TEXT,
+    cosignature TEXT,
+    inclusionproof TEXT,
+    created TIMESTAMP NULL,
+    replicated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (peer) REFERENCES pkd_peers (peerid),
+    UNIQUE KEY uk_pkd_replica_history_peer_root (peer, root(255))
+);
+
+CREATE TABLE IF NOT EXISTS pkd_replica_actors (
+    replicaactorid BIGINT AUTO_INCREMENT PRIMARY KEY,
+    peer BIGINT NOT NULL,
+    activitypubid TEXT,
+    activitypubid_idx TEXT,
+    rfc9421pubkey TEXT,
+    wrap_activitypubid TEXT,
+    fireproof BOOLEAN DEFAULT FALSE,
+    fireproofleaf BIGINT,
+    undofireproofleaf BIGINT,
+    movedleaf BIGINT,
+    created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (peer) REFERENCES pkd_peers (peerid),
+    FOREIGN KEY (fireproofleaf) REFERENCES pkd_replica_history (replicahistoryid),
+    FOREIGN KEY (undofireproofleaf) REFERENCES pkd_replica_history (replicahistoryid),
+    FOREIGN KEY (movedleaf) REFERENCES pkd_replica_history (replicahistoryid),
+    UNIQUE KEY uk_pkd_replica_actors_peer_activitypubid (peer, activitypubid(255)),
+    KEY idx_pkd_replica_actors_peer_activitypubid_idx (peer, activitypubid_idx(255))
+);
+
+CREATE TABLE IF NOT EXISTS pkd_replica_actors_publickeys (
+    replicaactorpublickeyid BIGINT AUTO_INCREMENT PRIMARY KEY,
+    peer BIGINT NOT NULL,
+    actor BIGINT NOT NULL,
+    publickey TEXT,
+    publickey_idx TEXT,
+    wrap_publickey TEXT,
+    key_id TEXT,
+    insertleaf BIGINT,
+    revokeleaf BIGINT,
+    trusted BOOLEAN DEFAULT FALSE,
+    created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (peer) REFERENCES pkd_peers (peerid),
+    FOREIGN KEY (actor) REFERENCES pkd_replica_actors (replicaactorid),
+    FOREIGN KEY (insertleaf) REFERENCES pkd_replica_history (replicahistoryid),
+    FOREIGN KEY (revokeleaf) REFERENCES pkd_replica_history (replicahistoryid),
+    UNIQUE KEY uk_pkd_replica_actors_publickeys_peer_publickey (peer, publickey(255)),
+    KEY idx_pkd_replica_actors_publickeys_peer_publickey_idx (peer, publickey_idx(255))
+);
+
+CREATE TABLE IF NOT EXISTS pkd_replica_actors_auxdata (
+    replicaactorauxdataid BIGINT AUTO_INCREMENT PRIMARY KEY,
+    peer BIGINT NOT NULL,
+    actor BIGINT NOT NULL,
+    auxdatatype TEXT,
+    auxdata TEXT,
+    wrap_auxdata TEXT,
+    auxdata_idx TEXT,
+    insertleaf BIGINT,
+    revokeleaf BIGINT,
+    trusted BOOLEAN DEFAULT FALSE,
+    created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (peer) REFERENCES pkd_peers (peerid),
+    FOREIGN KEY (actor) REFERENCES pkd_replica_actors (replicaactorid),
+    FOREIGN KEY (insertleaf) REFERENCES pkd_replica_history (replicahistoryid),
+    FOREIGN KEY (revokeleaf) REFERENCES pkd_replica_history (replicahistoryid),
+    KEY idx_pkd_replica_actors_auxdata_peer_auxdata_idx (peer, auxdata_idx(255))
 );
