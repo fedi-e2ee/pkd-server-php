@@ -134,7 +134,7 @@ class Protocol
         if ($isActivityPub) {
             $parsed = $this->parser->parseForActivityPub($raw);
         } else {
-            $parsed = $this->parser->parse($raw);
+            $parsed = $this->parser->parseUnverified($raw);
         }
         $payload = new Payload($parsed->getMessage(), $parsed->getKeyMap(), $raw);
         $action = $parsed->getMessage()->getAction();
@@ -224,7 +224,7 @@ class Protocol
         $hpke = $this->config->getHPKE();
         $raw = new HPKEAdapter($hpke->cs)
             ->open($hpke->decapsKey, $hpke->encapsKey, $arbitrary);
-        $parsed = $this->parser->parse($raw);
+        $parsed = $this->parser->parseUnverified($raw);
         return new Payload($parsed->getMessage(), $parsed->getKeyMap(), $raw);
     }
 
@@ -279,7 +279,7 @@ class Protocol
     public function revokeKeyThirdParty(string $body): bool
     {
         try {
-            $parsed = $this->parser->parse($body);
+            $parsed = $this->parser->parseUnverified($body);
             $payload = new Payload($parsed->getMessage(), $parsed->getKeyMap(), $body);
         } catch (ParserException $e) {
             throw new ProtocolException('Invalid bundle for RevokeKeyThirdParty', 0, $e);
@@ -421,7 +421,7 @@ class Protocol
     public function checkpoint(string $body): bool
     {
         try {
-            $parsed = $this->parser->parse($body);
+            $parsed = $this->parser->parseUnverified($body);
             $payload = new Payload($parsed->getMessage(), $parsed->getKeyMap(), $body);
         } catch (ParserException $e) {
             throw new ProtocolException('Invalid bundle for Checkpoint', 0, $e);
