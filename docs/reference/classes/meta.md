@@ -42,6 +42,10 @@ These parameters MUST be public and MUST have a default value
 - `$hostname`: `string`
 - `$cacheKey`: `string`
 
+**Throws:**
+
+- `DependencyException`
+
 ---
 
 ## RecordForTable
