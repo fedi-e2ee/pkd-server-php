@@ -2,6 +2,8 @@
 declare(strict_types=1);
 namespace FediE2EE\PKDServer\Fuzzing;
 
+use FediE2EE\PKD\Crypto\Exceptions\CryptoException;
+use FediE2EE\PKDServer\Exceptions\BaseException;
 use FediE2EE\PKDServer\Meta\Route;
 use Psr\Http\Server\RequestHandlerInterface;
 use ReflectionMethod;
@@ -106,5 +108,9 @@ $config->setTarget(function (string $input) use ($fuzzableHandlers) {
     $uri = get_route($handler);
 
     $request = new ServerRequest([], [], $uri, 'POST', $stream);
-    $handler->handle($request);
+    try {
+        $handler->handle($request);
+    } catch (BaseException|CryptoException) {
+        // Expected for malformed inputs
+    }
 });
