@@ -31,19 +31,19 @@ jobs:
       - name: Run FuzzProtocol
         run: |
           php-fuzzer fuzz --max-runs "$FUZZ_RUNS" fuzzing/FuzzProtocol.php
-          shopt -s nullglob; for f in crash-*.txt; do mv "$f" "${f/crash-/crash-FuzzProtocol-}"; done
+          shopt -s nullglob; for f in crash-*.txt; do mv "$f" "${f/crash-/fuzzed-FuzzProtocol-}"; done
       - name: Run FuzzRequestHandlers
         run: |
           php-fuzzer fuzz --max-runs "$FUZZ_RUNS" fuzzing/FuzzRequestHandlers.php
-          shopt -s nullglob; for f in crash-*.txt; do mv "$f" "${f/crash-/crash-FuzzRequestHandlers-}"; done
+          shopt -s nullglob; for f in crash-*.txt; do mv "$f" "${f/crash-/fuzzed-FuzzRequestHandlers-}"; done
       - name: Run FuzzActivityStream
         run: |
           php-fuzzer fuzz --max-runs "$FUZZ_RUNS" fuzzing/FuzzActivityStream.php
-          shopt -s nullglob; for f in crash-*.txt; do mv "$f" "${f/crash-/crash-FuzzActivityStream-}"; done
+          shopt -s nullglob; for f in crash-*.txt; do mv "$f" "${f/crash-/fuzzed-FuzzActivityStream-}"; done
       - name: Run FuzzJsonParsing
         run: |
           php-fuzzer fuzz --max-runs "$FUZZ_RUNS" fuzzing/FuzzJsonParsing.php
-          shopt -s nullglob; for f in crash-*.txt; do mv "$f" "${f/crash-/crash-FuzzJsonParsing-}"; done
+          shopt -s nullglob; for f in crash-*.txt; do mv "$f" "${f/crash-/fuzzed-FuzzJsonParsing-}"; done
       - name: Run FuzzBase64
         run: |
           php-fuzzer fuzz --max-runs "$FUZZ_RUNS" fuzzing/FuzzBase64.php
