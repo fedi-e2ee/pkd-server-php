@@ -70,6 +70,9 @@ jobs:
               echo "--- $f ---"
               cat "$f"
               echo ""
+              echo "Hex dump:"
+              xxd "$f"
+              echo ""
             done
             exit 1
           fi
