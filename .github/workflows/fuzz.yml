@@ -4,18 +4,24 @@ on:
   push:
     branches:
       - main
+    tags:
+      - 'v*'
   pull_request:
   schedule:
-    - cron: '50 9 * * *' # Run mutation tests every day at 09:50 UTC.
-    # Time chosen randomly.
+    - cron: '50 9 * * *' # Run fuzz tests daily at 09:50 UTC
 
 jobs:
   fuzz:
     runs-on: ubuntu-latest
+    env:
+      # 500k runs for releases, 50k for regular CI
+      FUZZ_RUNS: ${{ startsWith(github.ref, 'refs/tags/') && '500000' || '50000' }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8  # v6.0.1
+        with:
+          persist-credentials: false
       - name: Setup PHP
-        uses: shivammathur/setup-php@v2
+        uses: shivammathur/setup-php@44454db4f0199b8b9685a5d763dc37cbf79108e1  # v2.36.0
         with:
           php-version: '8.4'
       - name: Setup PHP-Fuzzer
@@ -23,18 +29,48 @@ jobs:
       - name: Install dependencies
         run: composer install --optimize-autoloader
       - name: Run FuzzProtocol
-        run: php-fuzzer fuzz --max-runs 50000 fuzzing/FuzzProtocol.php
+        run: |
+          php-fuzzer fuzz --max-runs "$FUZZ_RUNS" fuzzing/FuzzProtocol.php
+          shopt -s nullglob; for f in crash-*.txt; do mv "$f" "${f/crash-/crash-FuzzProtocol-}"; done
       - name: Run FuzzRequestHandlers
-        run: php-fuzzer fuzz --max-runs 50000 fuzzing/FuzzRequestHandlers.php
+        run: |
+          php-fuzzer fuzz --max-runs "$FUZZ_RUNS" fuzzing/FuzzRequestHandlers.php
+          shopt -s nullglob; for f in crash-*.txt; do mv "$f" "${f/crash-/crash-FuzzRequestHandlers-}"; done
       - name: Run FuzzActivityStream
-        run: php-fuzzer fuzz --max-runs 50000 fuzzing/FuzzActivityStream.php
+        run: |
+          php-fuzzer fuzz --max-runs "$FUZZ_RUNS" fuzzing/FuzzActivityStream.php
+          shopt -s nullglob; for f in crash-*.txt; do mv "$f" "${f/crash-/crash-FuzzActivityStream-}"; done
       - name: Run FuzzJsonParsing
-        run: php-fuzzer fuzz --max-runs 50000 fuzzing/FuzzJsonParsing.php
+        run: |
+          php-fuzzer fuzz --max-runs "$FUZZ_RUNS" fuzzing/FuzzJsonParsing.php
+          shopt -s nullglob; for f in crash-*.txt; do mv "$f" "${f/crash-/crash-FuzzJsonParsing-}"; done
       - name: Run FuzzBase64
-        run: php-fuzzer fuzz --max-runs 50000 fuzzing/FuzzBase64.php
+        run: |
+          php-fuzzer fuzz --max-runs "$FUZZ_RUNS" fuzzing/FuzzBase64.php
+          shopt -s nullglob; for f in crash-*.txt; do mv "$f" "${f/crash-/fuzzed-FuzzBase64-}"; done
       - name: Run FuzzMerkleLeaf
-        run: php-fuzzer fuzz --max-runs 50000 fuzzing/FuzzMerkleLeaf.php
+        run: |
+          php-fuzzer fuzz --max-runs "$FUZZ_RUNS" fuzzing/FuzzMerkleLeaf.php
+          shopt -s nullglob; for f in crash-*.txt; do mv "$f" "${f/crash-/fuzzed-FuzzMerkleLeaf-}"; done
       - name: Run FuzzMerkleTree
-        run: php-fuzzer fuzz --max-runs 50000 fuzzing/FuzzMerkleTree.php
+        run: |
+          php-fuzzer fuzz --max-runs "$FUZZ_RUNS" fuzzing/FuzzMerkleTree.php
+          shopt -s nullglob; for f in crash-*.txt; do mv "$f" "${f/crash-/fuzzed-FuzzMerkleTree-}"; done
       - name: Run FuzzTOTP
-        run: php-fuzzer fuzz --max-runs 50000 fuzzing/FuzzTOTP.php
+        run: |
+          php-fuzzer fuzz --max-runs "$FUZZ_RUNS" fuzzing/FuzzTOTP.php
+          shopt -s nullglob; for f in crash-*.txt; do mv "$f" "${f/crash-/fuzzed-FuzzTOTP-}"; done
+      - name: Check for crashes
+        if: always()
+        run: |
+          if compgen -G "fuzzed-*.txt" > /dev/null; then
+            echo "::error::Fuzzing found crashes"
+            echo "=== Crash files found ==="
+            for f in fuzzed-*.txt; do
+              echo "--- $f ---"
+              cat "$f"
+              echo ""
+            done
+            exit 1
+          fi
+          echo "No crashes detected"
