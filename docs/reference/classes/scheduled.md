@@ -69,7 +69,9 @@ Perform witness co-signatures for third-porty Public Key Directory instances.
 
 **Throws:**
 
+- `CryptoException`
 - `DateMalformedStringException`
+- `SodiumException`
 
 #### `getHashesSince(FediE2EE\PKDServer\Tables\Records\Peer $peer): array`
 

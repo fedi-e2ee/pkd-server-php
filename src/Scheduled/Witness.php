@@ -50,11 +50,14 @@ class Witness
     private readonly Client $http;
     private readonly Logger $logger;
     private readonly Peers $peers;
+
+    // @phpstan-ignore property.onlyWritten
     private readonly ReplicaActors $replicaActors;
+
     // @phpstan-ignore property.onlyWritten
     private readonly ReplicaAuxData $replicaAuxData;
-    // @phpstan-ignore property.onlyWritten
     private readonly ReplicaHistory $replicaHistory;
+
     // @phpstan-ignore property.onlyWritten
     private readonly ReplicaPublicKeys $replicaPublicKeys;
     private readonly HttpSignature $rfc9421;

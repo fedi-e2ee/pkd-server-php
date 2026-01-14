@@ -11,6 +11,7 @@ Namespace: `FediE2EE\PKDServer\Exceptions`
 - [DependencyException](#dependencyexception) - class
 - [FetchException](#fetchexception) - class
 - [ProtocolException](#protocolexception) - class
+- [ScheduledTaskException](#scheduledtaskexception) - class
 - [TableException](#tableexception) - class
 
 ---
@@ -92,6 +93,18 @@ Namespace: `FediE2EE\PKDServer\Exceptions`
 **class** `FediE2EE\PKDServer\Exceptions\ProtocolException`
 
 **File:** [`src/Exceptions/ProtocolException.php`](../../../src/Exceptions/ProtocolException.php)
+
+**Extends:** `FediE2EE\PKDServer\Exceptions\BaseException`
+
+**Implements:** `Stringable`, `Throwable`
+
+---
+
+## ScheduledTaskException
+
+**class** `FediE2EE\PKDServer\Exceptions\ScheduledTaskException`
+
+**File:** [`src/Exceptions/ScheduledTaskException.php`](../../../src/Exceptions/ScheduledTaskException.php)
 
 **Extends:** `FediE2EE\PKDServer\Exceptions\BaseException`
 
