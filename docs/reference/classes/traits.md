@@ -362,6 +362,24 @@ Avoid cache-timing leaks in ord() by using unpack()
 
 - `ProtocolException`
 
+#### `static assertAllArrayKeysExist(array $target, string $arrayKeys): void`
+
+**Parameters:**
+
+- `$target`: `array`
+- `...$arrayKeys`: `string`
+
+**Throws:**
+
+- `InputException`
+
+#### `static allArrayKeysExist(array $target, string $arrayKeys): bool`
+
+**Parameters:**
+
+- `$target`: `array`
+- `...$arrayKeys`: `string`
+
 #### `constantTimeSelect(int $select, string $left, string $right): string`
 
 **Parameters:**
