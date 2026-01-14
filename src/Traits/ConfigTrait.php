@@ -14,6 +14,10 @@ use FediE2EE\PKDServer\Tables\{
     MerkleState,
     Peers,
     PublicKeys,
+    ReplicaActors,
+    ReplicaAuxData,
+    ReplicaHistory,
+    ReplicaPublicKeys,
     TOTP
 };
 use FediE2EE\PKDServer\Exceptions\TableException;
@@ -56,6 +60,10 @@ trait ConfigTrait
             'MerkleState' => new MerkleState($this->config()),
             'Peers' => new Peers($this->config()),
             'PublicKeys' => new PublicKeys($this->config()),
+            'ReplicaActors' => new ReplicaActors($this->config()),
+            'ReplicaAuxData' => new ReplicaAuxData($this->config()),
+            'ReplicaHistory' => new ReplicaHistory($this->config()),
+            'ReplicaPublicKeys' => new ReplicaPublicKeys($this->config()),
             'TOTP' => new TOTP($this->config()),
             default => throw new TableException('Unknown table name: ' . $tableName)
         };

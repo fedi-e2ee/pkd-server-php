@@ -19,9 +19,12 @@ class Peer
 
     public function __construct(
         public string $hostname,
+        public string $uniqueId,
         public PublicKey $publicKey,
         public IncrementalTree $tree,
         public string $latestRoot,
+        public bool $cosign,
+        public bool $replicate,
         public DateTimeImmutable $created,
         public DateTimeImmutable $modified,
         ?int $primaryKey = null,
@@ -32,6 +35,8 @@ class Peer
     public function toArray(): array
     {
         return [
+            'uniqueid' =>
+                $this->uniqueId,
             'hostname' =>
                 $this->hostname,
             'publicKey' =>
@@ -40,6 +45,10 @@ class Peer
                 Base64UrlSafe::encodeUnpadded($this->tree->toJson()),
             'latestroot' =>
                 $this->latestRoot,
+            'cosign' =>
+                $this->cosign,
+            'replicate' =>
+                $this->replicate,
             'created' =>
                 $this->created->format(DateTimeImmutable::ATOM),
             'modified' =>

@@ -20,6 +20,7 @@
         <UndefinedMethod errorLevel="info" />
         <UnusedClass errorLevel="info" />
         <UnusedParam errorLevel="info" />
+        <UnusedProperty errorLevel="info" />
         <UnusedVariable errorLeel="info" /><!-- False positive -->
     </issueHandlers>
 </psalm>
