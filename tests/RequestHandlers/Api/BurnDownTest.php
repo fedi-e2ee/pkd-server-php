@@ -25,6 +25,7 @@ use FediE2EE\PKDServer\ActivityPub\{
     ActivityStream,
     WebFinger
 };
+use DateTimeImmutable;
 use FediE2EE\PKDServer\Dependency\{
     EasyDBHandler,
     WrappedEncryptedRow
@@ -197,7 +198,9 @@ class BurnDownTest extends TestCase
 
         $latestRoot3 = $merkleState->getLatestRoot();
         // Note: BurnDownAction canonicalizes actor but NOT operator, so operator must be canonical URL
-        $burnDown = new BurnDownAction($actorHandle, $canonOperator);
+        $otp = '12345678';
+        $now = (new DateTimeImmutable('NOW'));
+        $burnDown = new BurnDownAction($actorHandle, $canonOperator, $now, $otp);
         // BurnDown is in UNENCRYPTED_ACTIONS - use empty AttributeKeyMap (plaintext fields)
         $emptyKeyMap = new AttributeKeyMap();
         $bundle3 = $handler->handle($burnDown, $operatorKey, $emptyKeyMap, $latestRoot3);
