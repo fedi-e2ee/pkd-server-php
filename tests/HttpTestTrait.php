@@ -191,6 +191,11 @@ trait HttpTestTrait
             'pkd_activitystream_queue',
             'pkd_log',
             'pkd_peers',
+            'pkd_merkle_leaf_rewrapped_keys',
+            'pkd_replica_history',
+            'pkd_replica_actors',
+            'pkd_replica_actors_publickeys',
+            'pkd_replica_actors_auxdata',
         ];
 
         switch ($db->getDriver()) {

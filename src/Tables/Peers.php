@@ -156,6 +156,23 @@ class Peers extends Table
         return $peerList;
     }
 
+    /**
+     * Lists which peers we replicate.
+     *
+     * @return Peer[]
+     * @throws CryptoException
+     * @throws DateMalformedStringException
+     * @throws SodiumException
+     */
+    public function listReplicatingPeers(): array
+    {
+        $peerList = [];
+        foreach ($this->db->run("SELECT * FROM pkd_peers WHERE replicate") as $peer) {
+            $peerList[] = $this->tableRowToPeer($peer);
+        }
+        return $peerList;
+    }
+
     public function save(Peer $peer): bool
     {
         if ($peer->hasPrimaryKey()) {
@@ -198,8 +215,9 @@ class Peers extends Table
             $exists = $this->db->exists(
                 "SELECT count(rewrappedkeyid) 
                     FROM pkd_merkle_leaf_rewrapped_keys
-                    WHERE peer = ? AND pkdattrname = ?",
+                    WHERE peer = ? AND leaf = ? AND pkdattrname = ?",
                 $peer->getPrimaryKey(),
+                $leafId,
                 $attr
             );
             $ciphertext = $adapter->seal($encapsKey, $keyMap->getKey($attr)->getBytes());

@@ -388,6 +388,16 @@ Insert leaf with retry logic for deadlocks
 - `DateMalformedStringException`
 - `SodiumException`
 
+#### `listReplicatingPeers(): array`
+
+Lists which peers we replicate.
+
+**Throws:**
+
+- `CryptoException`
+- `DateMalformedStringException`
+- `SodiumException`
+
 #### `save(FediE2EE\PKDServer\Tables\Records\Peer $peer): bool`
 
 **Parameters:**

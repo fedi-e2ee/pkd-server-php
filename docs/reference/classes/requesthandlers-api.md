@@ -2433,6 +2433,12 @@ This is intended for mocking in unit tests
 
 ### Methods
 
+#### `__construct(?FediE2EE\PKDServer\ServerConfig $config = null): void`
+
+**Parameters:**
+
+- `$config`: `?FediE2EE\PKDServer\ServerConfig` (nullable)
+
 #### `handle(Psr\Http\Message\ServerRequestInterface $request): Psr\Http\Message\ResponseInterface`
 
 **Attributes:** `#[Route]`, `#[Override]`
