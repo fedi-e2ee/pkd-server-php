@@ -15,7 +15,8 @@ use FediE2EE\PKD\Crypto\{
 use FediE2EE\PKDServer\RequestHandlers\Api\{
     TotpEnroll
 };
-use FediE2EE\PKDServer\{ActivityPub\WebFinger,
+use FediE2EE\PKDServer\{
+    ActivityPub\WebFinger,
     AppCache,
     Dependency\EasyDBHandler,
     Dependency\HPKE,
@@ -23,13 +24,16 @@ use FediE2EE\PKDServer\{ActivityPub\WebFinger,
     Dependency\WrappedEncryptedRow,
     Math,
     Protocol,
+    Protocol\KeyWrapping,
     Protocol\Payload,
     ServerConfig,
     Table,
-    TableCache};
+    TableCache
+};
 use FediE2EE\PKDServer\Tables\{
     Actors,
     MerkleState,
+    Peers,
     PublicKeys,
     TOTP
 };
@@ -61,6 +65,8 @@ use PHPUnit\Framework\TestCase;
 #[UsesClass(WrappedEncryptedRow::class)]
 #[UsesClass(InjectConfigStrategy::class)]
 #[UsesClass(Protocol::class)]
+#[UsesClass(KeyWrapping::class)]
+#[UsesClass(Peers::class)]
 #[UsesClass(Payload::class)]
 #[UsesClass(ServerConfig::class)]
 #[UsesClass(Table::class)]

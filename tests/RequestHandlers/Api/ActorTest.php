@@ -18,6 +18,7 @@ use FediE2EE\PKDServer\{ActivityPub\WebFinger,
     Dependency\WrappedEncryptedRow,
     Math,
     Protocol,
+    Protocol\KeyWrapping,
     Protocol\Payload,
     ServerConfig,
     Table,
@@ -27,6 +28,7 @@ use FediE2EE\PKDServer\Tables\{
     Actors,
     AuxData,
     MerkleState,
+    Peers,
     PublicKeys
 };
 use FediE2EE\PKDServer\Tables\Records\{
@@ -57,6 +59,8 @@ use ReflectionClass;
 #[UsesClass(Actors::class)]
 #[UsesClass(AuxData::class)]
 #[UsesClass(MerkleState::class)]
+#[UsesClass(KeyWrapping::class)]
+#[UsesClass(Peers::class)]
 #[UsesClass(PublicKeys::class)]
 #[UsesClass(ActorRecord::class)]
 #[UsesClass(ActorKey::class)]

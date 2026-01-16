@@ -41,6 +41,7 @@ use FediE2EE\PKDServer\{
     Traits\ConfigTrait,
     Math,
     Protocol,
+    Protocol\KeyWrapping,
     Protocol\Payload,
     ServerConfig,
     Table,
@@ -50,6 +51,7 @@ use FediE2EE\PKDServer\RequestHandlers\Api\BurnDown;
 use FediE2EE\PKDServer\Tables\{
     Actors,
     MerkleState,
+    Peers,
     PublicKeys,
     TOTP
 };
@@ -90,6 +92,8 @@ use SodiumException;
 #[UsesClass(EasyDBHandler::class)]
 #[UsesClass(WrappedEncryptedRow::class)]
 #[UsesClass(Protocol::class)]
+#[UsesClass(KeyWrapping::class)]
+#[UsesClass(Peers::class)]
 #[UsesClass(Payload::class)]
 #[UsesClass(ServerConfig::class)]
 #[UsesClass(Table::class)]

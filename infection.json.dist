@@ -38,7 +38,7 @@
                 "FediE2EE\\PKDServer\\AppCache::__construct",
                 "FediE2EE\\PKDServer\\Traits\\TOTPTrait::generateTOTP",
                 "FediE2EE\\PKDServer\\Traits\\TOTPTrait::verifyTOTP",
-                "FediE2EE\\PKDServer\\Traits\\ReqTrait::error",`
+                "FediE2EE\\PKDServer\\Traits\\ReqTrait::error",
                 "FediE2EE\\PKDServer\\RequestHandlers\\Api\\HistorySince::handle",
                 "FediE2EE\\PKDServer\\RequestHandlers\\Api\\Revoke::handle"
             ]

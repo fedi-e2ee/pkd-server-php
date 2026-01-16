@@ -27,6 +27,7 @@ use FediE2EE\PKDServer\{ActivityPub\WebFinger,
     Dependency\WrappedEncryptedRow,
     Math,
     Protocol,
+    Protocol\KeyWrapping,
     ServerConfig,
     Table,
     TableCache};
@@ -39,6 +40,7 @@ use FediE2EE\PKDServer\Exceptions\{
 use FediE2EE\PKDServer\Tables\{
     Actors,
     MerkleState,
+    Peers,
     PublicKeys
 };
 use FediE2EE\PKDServer\Tables\Records\{
@@ -84,6 +86,8 @@ use SodiumException;
 #[UsesClass(Table::class)]
 #[UsesClass(WrappedEncryptedRow::class)]
 #[UsesClass(Math::class)]
+#[UsesClass(KeyWrapping::class)]
+#[UsesClass(Peers::class)]
 class ActorLifecycleTest extends TestCase
 {
     use ConfigTrait;

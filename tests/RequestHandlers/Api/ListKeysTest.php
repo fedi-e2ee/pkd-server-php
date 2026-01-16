@@ -10,6 +10,7 @@ use FediE2EE\PKDServer\{
     Dependency\WrappedEncryptedRow,
     Math,
     Protocol,
+    Protocol\KeyWrapping,
     Protocol\Payload,
     ServerConfig,
     Table,
@@ -19,6 +20,7 @@ use FediE2EE\PKDServer\RequestHandlers\Api\ListKeys;
 use FediE2EE\PKDServer\Tables\{
     Actors,
     MerkleState,
+    Peers,
     PublicKeys
 };
 use FediE2EE\PKDServer\Tables\Records\{
@@ -39,6 +41,8 @@ use PHPUnit\Framework\TestCase;
 #[UsesClass(WebFinger::class)]
 #[UsesClass(WrappedEncryptedRow::class)]
 #[UsesClass(Protocol::class)]
+#[UsesClass(KeyWrapping::class)]
+#[UsesClass(Peers::class)]
 #[UsesClass(Payload::class)]
 #[UsesClass(ServerConfig::class)]
 #[UsesClass(Table::class)]
