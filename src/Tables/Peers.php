@@ -66,8 +66,8 @@ class Peers extends Table
         );
 
         $peer = new Peer(
-            $newUniqueId,
             $hostname,
+            $newUniqueId,
             $publicKey,
             new IncrementalTree(),
             new Tree()->getEncodedRoot(),
@@ -127,17 +127,17 @@ class Peers extends Table
         }
 
         return new Peer(
-            $peer['uniqueid'],
             $peer['hostname'],
-            PublicKey::fromString($peer['publicKey']),
+            $peer['uniqueid'],
+            PublicKey::fromString($peer['publickey']),
             $tree,
             $peer['latestroot'],
-            $peer['cosign'],
-            $peer['replicate'],
+            (bool) $peer['cosign'],
+            (bool) $peer['replicate'],
             new DateTimeImmutable($peer['created']),
             new DateTimeImmutable($peer['modified']),
             is_null($peer['rewrap']) ? null : RewrapConfig::fromJson($peer['rewrap']),
-            $peer['peerid'],
+            (int) $peer['peerid'],
         );
     }
 
@@ -158,14 +158,13 @@ class Peers extends Table
 
     public function save(Peer $peer): bool
     {
-        $this->db->beginTransaction();
         if ($peer->hasPrimaryKey()) {
             $this->db->update('pkd_peers', $peer->toArray(), ['peerid' => $peer->getPrimaryKey()]);
         } else {
             $peer->primaryKey = $this->getNextPeerId();
             $this->db->insert('pkd_peers', $peer->toArray());
         }
-        return $this->db->commit();
+        return true;
     }
 
     public function getRewrapCandidates(): array

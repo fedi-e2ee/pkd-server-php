@@ -40,6 +40,7 @@ use FediE2EE\PKDServer\{
     AppCache,
     Math,
     Protocol,
+    Protocol\RewrapConfig,
     ServerConfig,
     Table,
     TableCache
@@ -89,6 +90,7 @@ use SodiumException;
 #[UsesClass(Peer::class)]
 #[UsesClass(Peers::class)]
 #[UsesClass(PublicKeys::class)]
+#[UsesClass(RewrapConfig::class)]
 #[UsesClass(ServerConfig::class)]
 #[UsesClass(Table::class)]
 #[UsesClass(TableCache::class)]

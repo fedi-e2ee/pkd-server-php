@@ -293,12 +293,13 @@ Abstraction for a row in the MerkleState table
 | `$publicKeyHash` | `string` | (readonly)  |
 | `$inclusionProof` | `?FediE2EE\PKD\Crypto\Merkle\InclusionProof` |  |
 | `$created` | `string` | (readonly)  |
+| `$wrappedKeys` | `?string` |  |
 | `$primaryKey` | `?int` |  |
 | `$symmetricKeys` | `array` |  |
 
 ### Methods
 
-#### `__construct(string $contents, string $contentHash, string $signature, string $publicKeyHash, ?FediE2EE\PKD\Crypto\Merkle\InclusionProof $inclusionProof = null, string $created = '', ?int $primaryKey = null): void`
+#### `__construct(string $contents, string $contentHash, string $signature, string $publicKeyHash, ?FediE2EE\PKD\Crypto\Merkle\InclusionProof $inclusionProof = null, string $created = '', ?string $wrappedKeys = null, ?int $primaryKey = null): void`
 
 **Parameters:**
 
@@ -308,21 +309,23 @@ Abstraction for a row in the MerkleState table
 - `$publicKeyHash`: `string`
 - `$inclusionProof`: `?FediE2EE\PKD\Crypto\Merkle\InclusionProof` (nullable)
 - `$created`: `string`
+- `$wrappedKeys`: `?string` (nullable)
 - `$primaryKey`: `?int` (nullable)
 
-#### `static from(string $contents, FediE2EE\PKD\Crypto\SecretKey $sk): self`
+#### `static from(string $contents, FediE2EE\PKD\Crypto\SecretKey $sk, ?string $rewrappedKeys = null): self`
 
 **Parameters:**
 
 - `$contents`: `string`
 - `$sk`: `FediE2EE\PKD\Crypto\SecretKey`
+- `$rewrappedKeys`: `?string` (nullable)
 
 **Throws:**
 
 - `NotImplementedException`
 - `SodiumException`
 
-#### `static fromPayload(FediE2EE\PKDServer\Protocol\Payload $payload, FediE2EE\PKD\Crypto\SecretKey $sk): self`
+#### `static fromPayload(FediE2EE\PKDServer\Protocol\Payload $payload, FediE2EE\PKD\Crypto\SecretKey $sk, ?string $rewrappedKeys = null): self`
 
 **API Method**
 
@@ -330,6 +333,12 @@ Abstraction for a row in the MerkleState table
 
 - `$payload`: `FediE2EE\PKDServer\Protocol\Payload`
 - `$sk`: `FediE2EE\PKD\Crypto\SecretKey`
+- `$rewrappedKeys`: `?string` (nullable)
+
+**Throws:**
+
+- `NotImplementedException`
+- `SodiumException`
 
 #### `setPrimaryKey(?int $primary): static`
 
@@ -346,6 +355,10 @@ Abstraction for a row in the MerkleState table
 #### `getSignature(): string`
 
 #### `serializeForMerkle(): string`
+
+**Throws:**
+
+- `SodiumException`
 
 #### `hasPrimaryKey(): bool`
 

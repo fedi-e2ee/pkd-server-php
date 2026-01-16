@@ -16,7 +16,7 @@ Namespace: `FediE2EE\PKDServer\Protocol`
 
 **File:** [`src/Protocol/KeyWrapping.php`](../../../src/Protocol/KeyWrapping.php)
 
-**Uses:** `FediE2EE\PKDServer\Traits\ConfigTrait`
+**Uses:** `FediE2EE\PKDServer\Traits\ConfigTrait`, `FediE2EE\PKD\Crypto\UtilTrait`
 
 ### Properties
 
@@ -31,19 +31,6 @@ Namespace: `FediE2EE\PKDServer\Protocol`
 **Parameters:**
 
 - `$config`: `?FediE2EE\PKDServer\ServerConfig` (nullable)
-
-#### `localKeyWrap(string $merkleRoot, FediE2EE\PKD\Crypto\AttributeEncryption\AttributeKeyMap $keyMap): void`
-
-Wrap the local symmetric keys in 'wrappedkeys'
-
-**Parameters:**
-
-- `$merkleRoot`: `string`
-- `$keyMap`: `FediE2EE\PKD\Crypto\AttributeEncryption\AttributeKeyMap`
-
-**Throws:**
-
-- `DependencyException`
 
 #### `rewrapSymmetricKeys(string $merkleRoot, ?FediE2EE\PKD\Crypto\AttributeEncryption\AttributeKeyMap $keyMap = null): void`
 
@@ -66,6 +53,22 @@ Initiate a rewrapping of the symmetric keys associated with a record.
 - `JsonException`
 - `TableException`
 
+#### `hpkeWrapSymmetricKeys(FediE2EE\PKD\Crypto\AttributeEncryption\AttributeKeyMap $keyMap): string`
+
+**Parameters:**
+
+- `$keyMap`: `FediE2EE\PKD\Crypto\AttributeEncryption\AttributeKeyMap`
+
+#### `hpkeUnwrap(string $ciphertext): string`
+
+**Parameters:**
+
+- `$ciphertext`: `string`
+
+**Throws:**
+
+- `HPKEException`
+
 #### `serializeKeyMap(FediE2EE\PKD\Crypto\AttributeEncryption\AttributeKeyMap $keyMap): string`
 
 **Parameters:**
@@ -77,6 +80,40 @@ Initiate a rewrapping of the symmetric keys associated with a record.
 **Parameters:**
 
 - `$plaintextJsonString`: `string`
+
+#### `decryptAndGetRewrapped(string $merkleRoot, ?string $wrappedKeys = null): array`
+
+Usage:
+
+**Parameters:**
+
+- `$merkleRoot`: `string`
+- `$wrappedKeys`: `?string` (nullable)
+
+#### `unwrapLocalMessage(string $encryptedMessage, string $wrappedKeys): array`
+
+**Parameters:**
+
+- `$encryptedMessage`: `string`
+- `$wrappedKeys`: `string`
+
+**Throws:**
+
+- `BundleException`
+- `CryptoException`
+- `HPKEException`
+- `InputException`
+- `JsonException`
+
+#### `getRewrappedFor(string $merkleRoot): array`
+
+**Parameters:**
+
+- `$merkleRoot`: `string`
+
+**Throws:**
+
+- `InputException`
 
 #### `appCache(string $namespace): FediE2EE\PKDServer\AppCache`
 
@@ -127,6 +164,76 @@ This is intended for mocking in unit tests
 - `CertaintyException`
 - `DependencyException`
 - `SodiumException`
+
+#### `static assertAllArrayKeysExist(array $target, string $arrayKeys): void`
+
+**Parameters:**
+
+- `$target`: `array`
+- `...$arrayKeys`: `string`
+
+**Throws:**
+
+- `InputException`
+
+#### `static allArrayKeysExist(array $target, string $arrayKeys): bool`
+
+**Parameters:**
+
+- `$target`: `array`
+- `...$arrayKeys`: `string`
+
+#### `constantTimeSelect(int $select, string $left, string $right): string`
+
+**Parameters:**
+
+- `$select`: `int`
+- `$left`: `string`
+- `$right`: `string`
+
+**Throws:**
+
+- `CryptoException`
+
+#### `static dos2unix(string $in): string`
+
+Normalize line-endings to UNIX-style (LF rather than CRLF).
+
+**Parameters:**
+
+- `$in`: `string`
+
+#### `static preAuthEncode(array $pieces): string`
+
+**Parameters:**
+
+- `$pieces`: `array`
+
+#### `static sortByKey(array $arr): void`
+
+**Parameters:**
+
+- `$arr`: `array`
+
+#### `static LE64(int $n): string`
+
+**Parameters:**
+
+- `$n`: `int`
+
+#### `stringToByteArray(string $str): array`
+
+**Parameters:**
+
+- `$str`: `string`
+
+#### `static stripNewlines(string $input): string`
+
+Strip all newlines (CR, LF) characters from a string.
+
+**Parameters:**
+
+- `$input`: `string`
 
 ---
 

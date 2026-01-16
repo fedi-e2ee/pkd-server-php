@@ -41,7 +41,7 @@ class Peer
                 $this->uniqueId,
             'hostname' =>
                 $this->hostname,
-            'publicKey' =>
+            'publickey' =>
                 $this->publicKey->toString(),
             'incrementaltreestate' =>
                 Base64UrlSafe::encodeUnpadded($this->tree->toJson()),

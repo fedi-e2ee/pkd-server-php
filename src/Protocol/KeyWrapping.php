@@ -122,7 +122,7 @@ class KeyWrapping
     public function hpkeUnwrap(string $ciphertext): string
     {
         return (new HPKEAdapter($this->hpke->cs))
-            ->open($this->hpke->decapsKey, $this->hpke->encapsKey, $ciphertext);
+                ->open($this->hpke->decapsKey, $this->hpke->encapsKey, $ciphertext);
     }
 
     public function serializeKeyMap(AttributeKeyMap $keyMap): string
@@ -190,8 +190,8 @@ class KeyWrapping
         $unwrappedKeys = $this->hpkeUnwrap($wrappedKeys);
         $keyMap = $this->deserializeKeyMap($unwrappedKeys);
         return Bundle::fromJson($encryptedMessage, $keyMap)
-            ->toSignedMessage()
-            ->getDecryptedContents($keyMap);
+                ->toSignedMessage()
+                ->getDecryptedContents($keyMap);
     }
 
     /**

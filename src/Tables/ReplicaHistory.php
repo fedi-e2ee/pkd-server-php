@@ -37,8 +37,8 @@ class ReplicaHistory extends Table
             $apiResponseRecord['encrypted-message'],
             $cosignature,
             $proof,
-            $apiResponseRecord['created'],
-            $apiResponseRecord['replicated'],
+            $apiResponseRecord['created'] ?? '',
+            $apiResponseRecord['replicated'] ?? date('Y-m-d H:i:s'),
         );
     }
 

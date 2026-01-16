@@ -323,6 +323,10 @@ Insert leaf with retry logic for deadlocks
 - `$limit`: `int`
 - `$offset`: `int`
 
+**Throws:**
+
+- `DependencyException`
+
 ---
 
 ## Peers

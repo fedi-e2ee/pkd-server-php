@@ -46,7 +46,7 @@ readonly class RewrapConfig implements JsonSerializable
         if (!property_exists($pieces, 'ek')) {
             throw new JsonException('EncapsKey (ek) is not defined');
         }
-        return new self($pieces->cs, $pieces->encapsKey);
+        return new self($pieces->cs, $pieces->ek);
     }
 
     #[Override]

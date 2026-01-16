@@ -48,7 +48,7 @@ final class ReplicaLeaf
             'inclusionproof' =>
                 is_null($this->inclusionProof)
                     ? null
-                    : $this->inclusionProof->jsonSerialize(),
+                    : json_encode($this->inclusionProof),
             'created' =>
                 $this->created,
             'replicated' =>

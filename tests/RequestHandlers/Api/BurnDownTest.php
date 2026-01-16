@@ -43,6 +43,7 @@ use FediE2EE\PKDServer\{
     Protocol,
     Protocol\KeyWrapping,
     Protocol\Payload,
+    Protocol\RewrapConfig,
     ServerConfig,
     Table,
     TableCache,
@@ -58,7 +59,8 @@ use FediE2EE\PKDServer\Tables\{
 use FediE2EE\PKDServer\Tables\Records\{
     Actor,
     ActorKey,
-    MerkleLeaf
+    MerkleLeaf,
+    Peer
 };
 use FediE2EE\PKDServer\Tests\HttpTestTrait;
 use GuzzleHttp\Psr7\{
@@ -106,6 +108,8 @@ use SodiumException;
 #[UsesClass(ActorKey::class)]
 #[UsesClass(MerkleLeaf::class)]
 #[UsesClass(Math::class)]
+#[UsesClass(RewrapConfig::class)]
+#[UsesClass(Peer::class)]
 class BurnDownTest extends TestCase
 {
     use ConfigTrait;
