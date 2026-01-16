@@ -484,12 +484,13 @@ Strip all newlines (CR, LF) characters from a string.
 | `$replicate` | `bool` |  |
 | `$created` | `DateTimeImmutable` |  |
 | `$modified` | `DateTimeImmutable` |  |
+| `$wrapConfig` | `?FediE2EE\PKDServer\Protocol\RewrapConfig` |  |
 | `$primaryKey` | `?int` |  |
 | `$symmetricKeys` | `array` |  |
 
 ### Methods
 
-#### `__construct(string $hostname, string $uniqueId, FediE2EE\PKD\Crypto\PublicKey $publicKey, FediE2EE\PKD\Crypto\Merkle\IncrementalTree $tree, string $latestRoot, bool $cosign, bool $replicate, DateTimeImmutable $created, DateTimeImmutable $modified, ?int $primaryKey = null): void`
+#### `__construct(string $hostname, string $uniqueId, FediE2EE\PKD\Crypto\PublicKey $publicKey, FediE2EE\PKD\Crypto\Merkle\IncrementalTree $tree, string $latestRoot, bool $cosign, bool $replicate, DateTimeImmutable $created, DateTimeImmutable $modified, ?FediE2EE\PKDServer\Protocol\RewrapConfig $wrapConfig = null, ?int $primaryKey = null): void`
 
 **Parameters:**
 
@@ -502,6 +503,7 @@ Strip all newlines (CR, LF) characters from a string.
 - `$replicate`: `bool`
 - `$created`: `DateTimeImmutable`
 - `$modified`: `DateTimeImmutable`
+- `$wrapConfig`: `?FediE2EE\PKDServer\Protocol\RewrapConfig` (nullable)
 - `$primaryKey`: `?int` (nullable)
 
 #### `toArray(): array`

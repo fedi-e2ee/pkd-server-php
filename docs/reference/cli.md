@@ -6,6 +6,7 @@ This document describes CLI scripts in the `cmd/` directory.
 
 | Script | Purpose |
 |--------|--------|
+| [`cmd/cleanup-test-db.php`](../../cmd/cleanup-test-db.php) | Command-line script |
 | [`cmd/cron-setup.php`](../../cmd/cron-setup.php) | Set up cron jobs for scheduled tasks |
 | [`cmd/init-database.php`](../../cmd/init-database.php) | Initialize the database schema |
 | [`cmd/init-local-config.php`](../../cmd/init-local-config.php) | Generate local configuration files |

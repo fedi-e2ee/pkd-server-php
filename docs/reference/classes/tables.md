@@ -341,7 +341,7 @@ Insert leaf with retry logic for deadlocks
 
 #### `getNextPeerId(): int`
 
-#### `create(FediE2EE\PKD\Crypto\PublicKey $publicKey, string $hostname, bool $cosign = false, bool $replicate = false): FediE2EE\PKDServer\Tables\Records\Peer`
+#### `create(FediE2EE\PKD\Crypto\PublicKey $publicKey, string $hostname, bool $cosign = false, bool $replicate = false, ?FediE2EE\PKDServer\Protocol\RewrapConfig $rewrapConfig = null): FediE2EE\PKDServer\Tables\Records\Peer`
 
 **API Method**
 
@@ -351,6 +351,7 @@ Insert leaf with retry logic for deadlocks
 - `$hostname`: `string`
 - `$cosign`: `bool`
 - `$replicate`: `bool`
+- `$rewrapConfig`: `?FediE2EE\PKDServer\Protocol\RewrapConfig` (nullable)
 
 #### `getPeerByUniqueId(string $uniqueId): FediE2EE\PKDServer\Tables\Records\Peer`
 
@@ -388,6 +389,16 @@ Insert leaf with retry logic for deadlocks
 **Parameters:**
 
 - `$peer`: `FediE2EE\PKDServer\Tables\Records\Peer`
+
+#### `getRewrapCandidates(): array`
+
+#### `rewrapKeyMap(FediE2EE\PKDServer\Tables\Records\Peer $peer, FediE2EE\PKD\Crypto\AttributeEncryption\AttributeKeyMap $keyMap, int $leafId): void`
+
+**Parameters:**
+
+- `$peer`: `FediE2EE\PKDServer\Tables\Records\Peer`
+- `$keyMap`: `FediE2EE\PKD\Crypto\AttributeEncryption\AttributeKeyMap`
+- `$leafId`: `int`
 
 ---
 
