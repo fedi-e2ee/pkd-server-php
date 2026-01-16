@@ -115,6 +115,7 @@ class TotpRotateTest extends TestCase
             ->addKey('actor', SymmetricKey::generate())
             ->addKey('public-key', SymmetricKey::generate());
         $encryptedMsg = $addKey->encrypt($akm);
+        $this->clearOldTransaction($config);
         $bundle = $handler->handle($encryptedMsg, $sk, $akm, $latestRoot);
         $encryptedForServer = $handler->hpkeEncrypt(
             $bundle,

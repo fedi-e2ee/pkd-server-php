@@ -21,6 +21,7 @@ CREATE TABLE IF NOT EXISTS pkd_merkle_leaves (
     signature TEXT, -- Ed25519 signature of contenthash and publickey
     contents TEXT, -- Protocol Message being hashes
     inclusionproof TEXT, -- JSON: encodes a proof of inclusion
+    wrappedkeys TEXT NULL, -- Optional: Wrapped symmetric keys
     created TIMESTAMP DEFAULT NOW()
 );
 CREATE UNIQUE INDEX ON pkd_merkle_leaves (publickeyhash, contenthash, signature);
@@ -126,10 +127,21 @@ CREATE TABLE IF NOT EXISTS pkd_peers (
     publickey TEXT,
     incrementaltreestate TEXT,
     latestroot TEXT,
+    rewrap TEXT NULL,
     cosign BOOLEAN DEFAULT FALSE,
     replicate BOOLEAN DEFAULT FALSE,
     created TIMESTAMP DEFAULT NOW(),
     modified TIMESTAMP DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS merkle_leaf_rewrapped_keys (
+    rewrappedkeyid BIGSERIAL PRIMARY KEY ,
+    peer BIGINT NOT NULL REFERENCES pkd_peers (peerid),
+    leaf BIGINT NOT NULL REFERENCES pkd_merkle_leaves (merkleleafid),
+    pkdattrname TEXT,
+    rewrapped TEXT,
+    created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE IF NOT EXISTS pkd_replica_history (

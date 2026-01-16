@@ -335,6 +335,7 @@ class BurnDownTest extends TestCase
         $burnDownHandler = $this->instantiateHandler(BurnDown::class, $config, $webFinger);
 
         // Handle request - should fail signature verification
+        $this->clearOldTransaction($config);
         $response = $burnDownHandler->handle($request);
         $this->assertSame(200, $response->getStatusCode());
 

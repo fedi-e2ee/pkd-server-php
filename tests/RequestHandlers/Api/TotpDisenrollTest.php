@@ -358,6 +358,7 @@ class TotpDisenrollTest extends TestCase
         $request = new ServerRequest([], [], '/api/totp/disenroll', 'POST')
             ->withHeader('Content-Type', 'application/json')
             ->withBody(new StreamFactory()->createStream('not valid json'));
+        $this->clearOldTransaction($this->config());
         $response = $this->dispatchRequest($request);
 
         $this->assertSame(400, $response->getStatusCode());

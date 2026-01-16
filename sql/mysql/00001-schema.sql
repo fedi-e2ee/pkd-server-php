@@ -13,6 +13,7 @@ CREATE TABLE IF NOT EXISTS pkd_merkle_leaves (
     signature TEXT, -- Ed25519 signature of contenthash and publickey
     contents TEXT, -- Protocol Message being hashes
     inclusionproof TEXT, -- JSON: encodes a proof of inclusion
+    wrappedkeys TEXT NULL, -- Optional: Wrapped symmetric keys
     created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     UNIQUE KEY (root(255)),
     UNIQUE KEY (publickeyhash(255), contenthash(255), signature(255))
@@ -129,11 +130,24 @@ CREATE TABLE IF NOT EXISTS pkd_peers(
     publickey TEXT,
     incrementaltreestate TEXT,
     latestroot TEXT,
+    rewrap TEXT NULL,
     cosign BOOLEAN DEFAULT FALSE,
     replicate BOOLEAN DEFAULT FALSE,
     created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     UNIQUE INDEX `pkd_peers_uniqueid_idx` (uniqueid(255))
+);
+
+CREATE TABLE IF NOT EXISTS merkle_leaf_rewrapped_keys (
+    rewrappedkeyid BIGINT PRIMARY KEY AUTO_INCREMENT,
+    peer BIGINT NOT NULL,
+    leaf BIGINT NOT NULL,
+    pkdattrname TEXT,
+    rewrapped TEXT,
+    created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (peer) REFERENCES pkd_peers (peerid),
+    FOREIGN KEY (leaf) REFERENCES pkd_merkle_leaves (merkleleafid)
 );
 
 CREATE TABLE IF NOT EXISTS pkd_replica_history (

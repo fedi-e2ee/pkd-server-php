@@ -14,12 +14,11 @@ use FediE2EE\PKDServer\Exceptions\{
     ProtocolException,
     TableException
 };
-use FediE2EE\PKDServer\{
-    ActivityPub\ActivityStream,
+use FediE2EE\PKDServer\{ActivityPub\ActivityStream,
     ActivityPub\WebFinger,
+    Protocol\KeyWrapping,
     Protocol\Payload,
-    Traits\ConfigTrait
-};
+    Traits\ConfigTrait};
 use GuzzleHttp\Client;
 use FediE2EE\PKDServer\Tables\{
     AuxData,
@@ -181,6 +180,13 @@ class Protocol
         }
         // You'll notice that Checkpoint is allowed, but not require, to be HPKE encrypted.
         $merkleRoot = $merkleState->getLatestRoot();
+
+        // Trigger a rewrap on the new record immediately:
+        if (!empty($result)) {
+            $keyWrapping = new KeyWrapping($this->config);
+            $keyWrapping->localKeyWrap($merkleRoot, $payload->keyMap);
+            $keyWrapping->rewrapSymmetricKeys($merkleRoot, $payload->keyMap);
+        }
 
         // Return the results as an array so other processes can shape a response:
         return ['action' => $action, 'result' => $result, 'latest-root' => $merkleRoot];

@@ -6,7 +6,9 @@ use DateMalformedStringException;
 use DateTimeImmutable;
 use FediE2EE\PKD\Crypto\AttributeEncryption\AttributeKeyMap;
 use FediE2EE\PKD\Crypto\Exceptions\CryptoException;
+use FediE2EE\PKD\Crypto\Protocol\HPKEAdapter;
 use FediE2EE\PKD\Crypto\PublicKey;
+use FediE2EE\PKDServer\Protocol\RewrapConfig;
 use FediE2EE\PKD\Crypto\Merkle\{
     IncrementalTree,
     Tree
@@ -50,7 +52,8 @@ class Peers extends Table
         PublicKey $publicKey,
         string $hostname,
         bool $cosign = false,
-        bool $replicate = false
+        bool $replicate = false,
+        ?RewrapConfig $rewrapConfig = null,
     ): Peer {
         // Get an unused unique id
         do {
@@ -72,6 +75,7 @@ class Peers extends Table
             $replicate,
             new DateTimeImmutable('NOW'),
             new DateTimeImmutable('NOW'),
+            $rewrapConfig,
         );
         if (!$this->save($peer)) {
             throw new TableException('Failed to save peer');
@@ -132,6 +136,7 @@ class Peers extends Table
             $peer['replicate'],
             new DateTimeImmutable($peer['created']),
             new DateTimeImmutable($peer['modified']),
+            is_null($peer['rewrap']) ? null : RewrapConfig::fromJson($peer['rewrap']),
             $peer['peerid'],
         );
     }
@@ -161,5 +166,65 @@ class Peers extends Table
             $this->db->insert('pkd_peers', $peer->toArray());
         }
         return $this->db->commit();
+    }
+
+    public function getRewrapCandidates(): array
+    {
+        $rows = $this->db->run(
+            "SELECT
+                    *
+                FROM 
+                    pkd_peers 
+                WHERE 
+                    replicate 
+                    AND rewrap IS NOT NULL"
+        );
+        $peers = [];
+        foreach ($rows as $row) {
+            $peers[] = $this->tableRowToPeer($row);
+        }
+        return $peers;
+    }
+
+    public function rewrapKeyMap(Peer $peer, AttributeKeyMap $keyMap, int $leafId): void
+    {
+        if (is_null($peer->wrapConfig)) {
+            return;
+        }
+        $cs = $peer->wrapConfig->getCipherSuite();
+        $encapsKey = $peer->wrapConfig->getEncapsKey();
+        $adapter = (new HPKEAdapter($cs));
+        foreach ($keyMap->getAttributes() as $attr) {
+            // Are we replacing or inserting?
+            $exists = $this->db->exists(
+                "SELECT count(rewrappedkeyid) FROM merkle_leaf_rewrapped_keys WHERE peer = ? AND pkdattrname = ?",
+                $peer->getPrimaryKey(),
+                $attr
+            );
+            $ciphertext = $adapter->seal($encapsKey, $keyMap->getKey($attr)->getBytes());
+            if ($exists) {
+                $this->db->update(
+                    'merkle_leaf_rewrapped_keys',
+                    [
+                        'rewrapped' => $ciphertext,
+                    ],
+                    [
+                        'peer' => $peer->getPrimaryKey(),
+                        'leaf' => $leafId,
+                        'pkdattrname' => $attr,
+                    ]
+                );
+            } else {
+                $this->db->insert(
+                    'merkle_leaf_rewrapped_keys',
+                    [
+                        'peer' => $peer->getPrimaryKey(),
+                        'leaf' => $leafId,
+                        'pkdattrname' => $attr,
+                        'rewrapped' => $ciphertext,
+                    ]
+                );
+            }
+        }
     }
 }

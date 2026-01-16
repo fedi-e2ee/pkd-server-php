@@ -75,7 +75,7 @@ if (!($GLOBALS['pkdConfig'] instanceof ServerConfig)) {
         $_SERVER['argv'] = [$_SERVER['argv'][0]];
         require __DIR__ . '/cmd/init-database.php';
         $_SERVER['argv'] = $argv_backup;
-        if (tableExists($db, 'pkd_log')) {
+        if (tableExists($db, 'pkd_replica_actors_auxdata')) {
             echo 'Imported!', PHP_EOL;
         } else {
             // This is normally dangerous, but we need to trigger it again just to be sure:
