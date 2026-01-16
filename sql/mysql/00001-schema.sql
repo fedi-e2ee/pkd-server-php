@@ -138,7 +138,7 @@ CREATE TABLE IF NOT EXISTS pkd_peers(
     UNIQUE INDEX `pkd_peers_uniqueid_idx` (uniqueid(255))
 );
 
-CREATE TABLE IF NOT EXISTS merkle_leaf_rewrapped_keys (
+CREATE TABLE IF NOT EXISTS pkd_merkle_leaf_rewrapped_keys (
     rewrappedkeyid BIGINT PRIMARY KEY AUTO_INCREMENT,
     peer BIGINT NOT NULL,
     leaf BIGINT NOT NULL,

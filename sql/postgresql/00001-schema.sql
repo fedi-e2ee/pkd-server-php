@@ -134,7 +134,7 @@ CREATE TABLE IF NOT EXISTS pkd_peers (
     modified TIMESTAMP DEFAULT NOW()
 );
 
-CREATE TABLE IF NOT EXISTS merkle_leaf_rewrapped_keys (
+CREATE TABLE IF NOT EXISTS pkd_merkle_leaf_rewrapped_keys (
     rewrappedkeyid BIGSERIAL PRIMARY KEY ,
     peer BIGINT NOT NULL REFERENCES pkd_peers (peerid),
     leaf BIGINT NOT NULL REFERENCES pkd_merkle_leaves (merkleleafid),

@@ -197,14 +197,16 @@ class Peers extends Table
         foreach ($keyMap->getAttributes() as $attr) {
             // Are we replacing or inserting?
             $exists = $this->db->exists(
-                "SELECT count(rewrappedkeyid) FROM merkle_leaf_rewrapped_keys WHERE peer = ? AND pkdattrname = ?",
+                "SELECT count(rewrappedkeyid) 
+                    FROM pkd_merkle_leaf_rewrapped_keys
+                    WHERE peer = ? AND pkdattrname = ?",
                 $peer->getPrimaryKey(),
                 $attr
             );
             $ciphertext = $adapter->seal($encapsKey, $keyMap->getKey($attr)->getBytes());
             if ($exists) {
                 $this->db->update(
-                    'merkle_leaf_rewrapped_keys',
+                    'pkd_merkle_leaf_rewrapped_keys',
                     [
                         'rewrapped' => $ciphertext,
                     ],
@@ -216,7 +218,7 @@ class Peers extends Table
                 );
             } else {
                 $this->db->insert(
-                    'merkle_leaf_rewrapped_keys',
+                    'pkd_merkle_leaf_rewrapped_keys',
                     [
                         'peer' => $peer->getPrimaryKey(),
                         'leaf' => $leafId,

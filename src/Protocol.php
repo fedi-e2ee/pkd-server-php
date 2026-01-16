@@ -208,7 +208,7 @@ class Protocol
         $keyWrapping = new KeyWrapping($this->config);
         $merkleRoot = $merkleState->getLatestRoot();
 
-        $keyWrapping->localKeyWrap($merkleRoot, $payload->keyMap);
+        // $keyWrapping->localKeyWrap($merkleRoot, $payload->keyMap);
         $keyWrapping->rewrapSymmetricKeys($merkleRoot, $payload->keyMap);
         if ($this->config->getDb()->inTransaction()) {
             $this->config->getDb()->commit();

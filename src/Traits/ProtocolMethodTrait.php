@@ -10,6 +10,7 @@ use FediE2EE\PKDServer\Exceptions\{
     ProtocolException,
     TableException
 };
+use FediE2EE\PKDServer\Protocol\KeyWrapping;
 use FediE2EE\PKDServer\Protocol\Payload;
 use FediE2EE\PKDServer\ServerConfig;
 use GuzzleHttp\Exception\GuzzleException;
@@ -60,8 +61,13 @@ trait ProtocolMethodTrait
                 throw new ProtocolException('Message must be encrypted for ' . $expectedAction);
             }
         }
+        $keyWrapping = new KeyWrapping($this->config);
 
-        $leaf = MerkleLeaf::fromPayload($payload, $this->config()->getSigningKeys()->secretKey);
+        $leaf = MerkleLeaf::fromPayload(
+            $payload,
+            $this->config()->getSigningKeys()->secretKey,
+            $keyWrapping->hpkeWrapSymmetricKeys($payload->keyMap)
+        );
 
         $result = null;
         $cb = function () use (&$result, $leaf, $payload, $callback) {

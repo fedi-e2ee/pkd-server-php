@@ -130,6 +130,7 @@ class HistoryViewTest extends TestCase
         $this->assertArrayHasKey('rewrapped-keys', $body);
         $this->assertArrayHasKey('witnesses', $body);
         $this->assertIsArray($body['witnesses']);
+        $this->assertIsArray($body['message']);
 
         $this->assertNotInTransaction();
     }

@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace FediE2EE\PKDServer\RequestHandlers\Api;
 
 use DateTime;
+use FediE2EE\PKDServer\Protocol\KeyWrapping;
 use FediE2EE\PKD\Crypto\Exceptions\{
     JsonException,
     NotImplementedException
@@ -62,14 +63,16 @@ class HistoryView implements RequestHandlerInterface
         if (is_null($leaf)) {
             return $this->error('Not found', 404);
         }
+        [$message, $rewrappedKeys] = (new KeyWrapping($this->config()))
+            ->decryptAndGetRewrapped($hash, $leaf->wrappedKeys);
         return $this->json([
             '!pkd-context' => 'fedi-e2ee:v1/api/history/view',
             'created' => $leaf->created,
             'encrypted-message' => $leaf->contents,
-            'inclusion-proof' => $leaf->inclusionProof->proof,
-            'message' => null,
+            'inclusion-proof' => $leaf->inclusionProof,
+            'message' => $message,
             'merkle-root' => $hash,
-            'rewrapped-keys' => null,
+            'rewrapped-keys' => $rewrappedKeys,
             'witnesses' => $this->merkleState->getCosignatures($leaf->primaryKey),
         ]);
     }

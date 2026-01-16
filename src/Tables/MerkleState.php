@@ -16,6 +16,7 @@ use FediE2EE\PKDServer\Exceptions\{
     ProtocolException,
     TableException
 };
+use FediE2EE\PKDServer\Protocol\KeyWrapping;
 use FediE2EE\PKD\Crypto\Merkle\{
     InclusionProof,
     IncrementalTree,
@@ -271,7 +272,7 @@ class MerkleState extends Table
         }
         $data = $this->db->row(
             "SELECT 
-                    merkleleafid, root, contents, contenthash, signature, publickeyhash, inclusionproof, created
+                    merkleleafid, root, contents, contenthash, signature, publickeyhash, inclusionproof, wrappedkeys, created
                 FROM pkd_merkle_leaves
                 WHERE root = ?",
             $root
@@ -292,7 +293,7 @@ class MerkleState extends Table
         }
         $data = $this->db->row(
             "SELECT 
-                    merkleleafid, root, contents, contenthash, signature, publickeyhash, inclusionproof, created
+                    merkleleafid, root, contents, contenthash, signature, publickeyhash, inclusionproof, wrappedkeys, created
                 FROM pkd_merkle_leaves
                 WHERE merkleleafid = ?",
             $primaryKey
@@ -305,14 +306,16 @@ class MerkleState extends Table
 
     protected function cacheLeaf(array $data): MerkleLeaf
     {
-        $ip = json_decode($data['inclusionproof'], true);
         $leaf = new MerkleLeaf(
             $data['contents'],
             $data['contenthash'],
             $data['signature'],
             $data['publickeyhash'],
-            new InclusionProof($ip['index'] ?? 0, $ip['proof'] ?? []),
+            is_null($data['inclusionproof'])
+                ? null
+                : InclusionProof::fromString($data['inclusionproof']),
             (string) $data['created'],
+            $data['wrappedkeys'],
             $data['merkleleafid']
         );
         // Cache for future queries
@@ -323,6 +326,8 @@ class MerkleState extends Table
 
     /**
      * @api
+     *
+     * @throws DependencyException
      */
     public function getHashesSince(string $oldRoot, int $limit, int $offset = 0): array
     {
@@ -344,23 +349,28 @@ class MerkleState extends Table
             }
         }
         $oldRecords = $this->db->run(
-            "SELECT publickeyhash, contents, contenthash, root, created, signature
+            "SELECT publickeyhash, contents, contenthash, wrappedkeys, root, created, signature
             FROM pkd_merkle_leaves
             WHERE merkleleafid > ?
             LIMIT {$limit} OFFSET {$offset}",
             $oldRootID
         );
         $return = [];
+        $keyWrapping = new KeyWrapping($this->config());
         foreach ($oldRecords as $row) {
+            [$message, $rewrappedKeys] = $keyWrapping->decryptAndGetRewrapped(
+                $row['root'],
+                $row['wrappedkeys'] ?? null
+            );
             $return[] = [
                 'created' => $row['created'],
                 'encrypted-message' => $row['contents'],
                 'contenthash' => $row['contenthash'],
                 'publickeyhash' => $row['publickeyhash'],
                 'signature' => $row['signature'],
-                'message' => null,
+                'message' => $message,
                 'merkle-root' => $row['root'],
-                'rewrapped-keys' => null,
+                'rewrapped-keys' => $rewrappedKeys,
             ];
         }
         return $return;
@@ -466,6 +476,7 @@ class MerkleState extends Table
                     $inclusion,
                     JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE
                 ),
+                'wrappedkeys' => $leaf->wrappedKeys,
                 'root' => $root,
             ],
             $sequenceId

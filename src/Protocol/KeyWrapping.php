@@ -3,9 +3,14 @@ declare(strict_types=1);
 namespace FediE2EE\PKDServer\Protocol;
 
 use FediE2EE\PKD\Crypto\AttributeEncryption\AttributeKeyMap;
+use FediE2EE\PKD\Crypto\Exceptions\BundleException;
+use FediE2EE\PKD\Crypto\Exceptions\CryptoException;
+use FediE2EE\PKD\Crypto\Exceptions\InputException;
 use FediE2EE\PKD\Crypto\Exceptions\JsonException;
+use FediE2EE\PKD\Crypto\Protocol\Bundle;
 use FediE2EE\PKD\Crypto\Protocol\HPKEAdapter;
 use FediE2EE\PKD\Crypto\SymmetricKey;
+use FediE2EE\PKD\Crypto\UtilTrait;
 use FediE2EE\PKDServer\Dependency\HPKE;
 use FediE2EE\PKDServer\Exceptions\DependencyException;
 use FediE2EE\PKDServer\Exceptions\TableException;
@@ -15,12 +20,13 @@ use FediE2EE\PKDServer\Traits\ConfigTrait;
 use ParagonIE\ConstantTime\Base64UrlSafe;
 use ParagonIE\EasyDB\EasyDB;
 use ParagonIE\HPKE\HPKEException;
-use PDOException;
 use SensitiveParameter;
 
 class KeyWrapping
 {
     use ConfigTrait;
+    use UtilTrait;
+
     private EasyDB $db;
     private HPKE $hpke;
 
@@ -36,12 +42,10 @@ class KeyWrapping
      *
      * @throws DependencyException
      */
+    /*
     public function localKeyWrap(string $merkleRoot, AttributeKeyMap $keyMap): void
     {
-        $ciphertext = (new HPKEAdapter($this->hpke->cs))->seal(
-            $this->hpke->encapsKey,
-            $this->serializeKeyMap($keyMap)
-        );
+        $ciphertext = $this->hpkeWrapSymmetricKeys($keyMap);
         $this->db->update(
             'pkd_merkle_leaves',
             [
@@ -52,6 +56,7 @@ class KeyWrapping
             ]
         );
     }
+    */
 
     /**
      * Initiate a rewrapping of the symmetric keys associated with a record.
@@ -99,9 +104,25 @@ class KeyWrapping
         if (!is_string($cipher)) {
             throw new TableException('Wrapped keys not stored on merkle leaf');
         }
-        $plaintext = (new HPKEAdapter($this->hpke->cs))
-            ->open($this->hpke->decapsKey, $this->hpke->encapsKey, $cipher);
+        $plaintext = $this->hpkeUnwrap($cipher);
         return $this->deserializeKeyMap($plaintext);
+    }
+
+    public function hpkeWrapSymmetricKeys(AttributeKeyMap $keyMap): string
+    {
+        return (new HPKEAdapter($this->hpke->cs))->seal(
+            $this->hpke->encapsKey,
+            $this->serializeKeyMap($keyMap)
+        );
+    }
+
+    /**
+     * @throws HPKEException
+     */
+    public function hpkeUnwrap(string $ciphertext): string
+    {
+        return (new HPKEAdapter($this->hpke->cs))
+            ->open($this->hpke->decapsKey, $this->hpke->encapsKey, $ciphertext);
     }
 
     public function serializeKeyMap(AttributeKeyMap $keyMap): string
@@ -132,5 +153,79 @@ class KeyWrapping
             $keyMap->addKey($name, $key);
         }
         return $keyMap;
+    }
+
+    /**
+     * Usage:
+     *
+     * [$message, $rewrappedKeys] = $keyWrapping->decryptAndRewrapp
+     */
+    public function decryptAndGetRewrapped(string $merkleRoot, ?string $wrappedKeys = null): array
+    {
+        // TODO: Cache!
+        if (is_null($wrappedKeys)) {
+            // Cannot decrypt!
+            return [null, null];
+        }
+
+        // We assume the rewrapping occurred on insert.
+        $encryptedMessage = $this->db->cell(
+            "SELECT contents FROM pkd_merkle_leaves WHERE root = ?",
+            $merkleRoot
+        );
+        $message = $this->unwrapLocalMessage($encryptedMessage, $wrappedKeys);
+        $rewrappedKeys = $this->getRewrappedFor($merkleRoot);
+        return [$message, $rewrappedKeys];
+    }
+
+    /**
+     * @throws BundleException
+     * @throws CryptoException
+     * @throws HPKEException
+     * @throws InputException
+     * @throws JsonException
+     */
+    public function unwrapLocalMessage(string $encryptedMessage, string $wrappedKeys): array
+    {
+        $unwrappedKeys = $this->hpkeUnwrap($wrappedKeys);
+        $keyMap = $this->deserializeKeyMap($unwrappedKeys);
+        return Bundle::fromJson($encryptedMessage, $keyMap)
+            ->toSignedMessage()
+            ->getDecryptedContents($keyMap);
+    }
+
+    /**
+     * @throws InputException
+     */
+    public function getRewrappedFor(string $merkleRoot): array
+    {
+        $rewrappedFlat = $this->db->run(
+            "SELECT
+                    p.uniqueid,
+                    rw.pkdattrname,
+                    rw.rewrapped
+                FROM pkd_merkle_leaf_rewrapped_keys rw
+                JOIN pkd_merkle_leaves ml ON rw.leaf = ml.merkleleafid
+                JOIN pkd_peers p ON rw.peer = p.peerid 
+                WHERE ml.root = ?
+                ORDER BY p.uniqueid ASC",
+            $merkleRoot
+        );
+        $rewrappedShaped = [];
+        foreach ($rewrappedFlat as $row) {
+            self::assertAllArrayKeysExist($row, '
+                uniqueid',
+                'pkdattrname',
+                'rewrapped'
+            );
+            $uniqueid = $row['uniqueid'];
+            $attr = $row['pkdattrname'];
+            $rewrapped = $row['rewrapped'];
+            if (!array_key_exists($uniqueid, $rewrappedShaped)) {
+                $rewrappedShaped[$uniqueid] = [];
+            }
+            $rewrappedShaped[$row['uniqueid']][$attr] = $rewrapped;
+        }
+        return $rewrappedShaped;
     }
 }
