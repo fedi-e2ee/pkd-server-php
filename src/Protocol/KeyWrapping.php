@@ -213,8 +213,9 @@ class KeyWrapping
         );
         $rewrappedShaped = [];
         foreach ($rewrappedFlat as $row) {
-            self::assertAllArrayKeysExist($row, '
-                uniqueid',
+            self::assertAllArrayKeysExist(
+                $row,
+                'uniqueid',
                 'pkdattrname',
                 'rewrapped'
             );
