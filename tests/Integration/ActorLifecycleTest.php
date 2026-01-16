@@ -140,8 +140,8 @@ class ActorLifecycleTest extends TestCase
         // 1. AddKey (self-signed)
         $addKey1 = new AddKey($canonical, $keypair1->getPublicKey());
         $akm1 = new AttributeKeyMap()
-            ->addKey('actor', SymmetricKey::generate())
-            ->addKey('public-key', SymmetricKey::generate());
+            ->addRandomKey('actor')
+            ->addRandomKey('public-key');
         $encryptedMsg1 = $addKey1->encrypt($akm1);
         $bundle1 = $handler->handle($encryptedMsg1, $keypair1, $akm1, $latestRoot1);
         $encryptedForServer1 = $handler->hpkeEncrypt(
