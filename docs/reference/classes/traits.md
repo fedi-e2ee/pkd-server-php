@@ -46,11 +46,16 @@ Namespace: `FediE2EE\PKDServer\Traits`
 - `CertaintyException`
 - `SodiumException`
 
-#### `appCache(string $namespace): FediE2EE\PKDServer\AppCache`
+#### `appCache(string $namespace, int $defaultTTL = 60): FediE2EE\PKDServer\AppCache`
 
 **Parameters:**
 
 - `$namespace`: `string`
+- `$defaultTTL`: `int`
+
+**Throws:**
+
+- `DependencyException`
 
 #### `table(string $tableName): FediE2EE\PKDServer\Table`
 
@@ -112,11 +117,16 @@ This is intended for mocking in unit tests
 
 ### Methods
 
-#### `appCache(string $namespace): FediE2EE\PKDServer\AppCache`
+#### `appCache(string $namespace, int $defaultTTL = 60): FediE2EE\PKDServer\AppCache`
 
 **Parameters:**
 
 - `$namespace`: `string`
+- `$defaultTTL`: `int`
+
+**Throws:**
+
+- `DependencyException`
 
 #### `table(string $tableName): FediE2EE\PKDServer\Table`
 
@@ -267,11 +277,16 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 - `RuntimeError`
 - `SyntaxError`
 
-#### `appCache(string $namespace): FediE2EE\PKDServer\AppCache`
+#### `appCache(string $namespace, int $defaultTTL = 60): FediE2EE\PKDServer\AppCache`
 
 **Parameters:**
 
 - `$namespace`: `string`
+- `$defaultTTL`: `int`
+
+**Throws:**
+
+- `DependencyException`
 
 #### `table(string $tableName): FediE2EE\PKDServer\Table`
 

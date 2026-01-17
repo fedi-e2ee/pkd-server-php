@@ -89,11 +89,16 @@ Perform witness co-signatures for third-porty Public Key Directory instances.
 - `ProtocolException`
 - `SodiumException`
 
-#### `appCache(string $namespace): FediE2EE\PKDServer\AppCache`
+#### `appCache(string $namespace, int $defaultTTL = 60): FediE2EE\PKDServer\AppCache`
 
 **Parameters:**
 
 - `$namespace`: `string`
+- `$defaultTTL`: `int`
+
+**Throws:**
+
+- `DependencyException`
 
 #### `table(string $tableName): FediE2EE\PKDServer\Table`
 

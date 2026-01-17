@@ -32,7 +32,7 @@ Namespace: `FediE2EE\PKDServer`
 - `$namespace`: `string`
 - `$defaultTTL`: `int`
 
-#### `cache(string $lookup, callable $fallback): mixed`
+#### `cache(string $lookup, callable $fallback, DateInterval|int|null $ttl = null): mixed`
 
 If there is a cache-hit, it returns the value.
 
@@ -40,6 +40,7 @@ If there is a cache-hit, it returns the value.
 
 - `$lookup`: `string`
 - `$fallback`: `callable`
+- `$ttl`: `DateInterval|int|null` (nullable)
 
 #### `deriveKey(string $input): string`
 
@@ -388,11 +389,16 @@ This is intended for mocking in unit tests
 - `SodiumException`
 - `TableException`
 
-#### `appCache(string $namespace): FediE2EE\PKDServer\AppCache`
+#### `appCache(string $namespace, int $defaultTTL = 60): FediE2EE\PKDServer\AppCache`
 
 **Parameters:**
 
 - `$namespace`: `string`
+- `$defaultTTL`: `int`
+
+**Throws:**
+
+- `DependencyException`
 
 #### `table(string $tableName): FediE2EE\PKDServer\Table`
 
@@ -649,11 +655,16 @@ Abstracts an HTTP Redirect
 - `$merkleRoot`: `string`
 - `$isHighVolume`: `bool`
 
-#### `appCache(string $namespace): FediE2EE\PKDServer\AppCache`
+#### `appCache(string $namespace, int $defaultTTL = 60): FediE2EE\PKDServer\AppCache`
 
 **Parameters:**
 
 - `$namespace`: `string`
+- `$defaultTTL`: `int`
+
+**Throws:**
+
+- `DependencyException`
 
 #### `table(string $tableName): FediE2EE\PKDServer\Table`
 

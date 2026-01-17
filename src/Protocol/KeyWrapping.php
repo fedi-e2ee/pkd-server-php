@@ -179,7 +179,7 @@ class KeyWrapping
         $lookupKey = $merkleRoot . ':' . $wrappedKeys;
 
         /** @var string|null $cached */
-        $cached = $cache->cache($lookupKey, function() use ($merkleRoot, $wrappedKeys) {
+        $cached = $cache->cache($lookupKey, function () use ($merkleRoot, $wrappedKeys) {
             // We assume the rewrapping occurred on insert.
             $encryptedMessage = $this->db->cell(
                 "SELECT contents FROM pkd_merkle_leaves WHERE root = ?",

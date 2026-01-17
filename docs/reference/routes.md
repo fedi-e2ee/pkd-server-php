@@ -16,6 +16,13 @@ This document lists all API routes defined via `#[Route]` attributes.
 | `/api/info` | [`RequestHandlers\Api\Info`](../../src/RequestHandlers/Api/Info.php) | `handle` |
 | `/api/replicas` | [`RequestHandlers\Api\Replicas`](../../src/RequestHandlers/Api/Replicas.php) | `handle` |
 | `/api/replicas/{replica_id}` | [`RequestHandlers\Api\ReplicaInfo`](../../src/RequestHandlers/Api/ReplicaInfo.php) | `handle` |
+| `/api/replicas/{replica_id}/actor/{actor_id}` | [`RequestHandlers\Api\ReplicaInfo`](../../src/RequestHandlers/Api/ReplicaInfo.php) | `actor` |
+| `/api/replicas/{replica_id}/actor/{actor_id}/auxiliary` | [`RequestHandlers\Api\ReplicaInfo`](../../src/RequestHandlers/Api/ReplicaInfo.php) | `actorAuxiliary` |
+| `/api/replicas/{replica_id}/actor/{actor_id}/auxiliary/{aux_data_id}` | [`RequestHandlers\Api\ReplicaInfo`](../../src/RequestHandlers/Api/ReplicaInfo.php) | `actorAuxiliaryItem` |
+| `/api/replicas/{replica_id}/actor/{actor_id}/keys` | [`RequestHandlers\Api\ReplicaInfo`](../../src/RequestHandlers/Api/ReplicaInfo.php) | `actorKeys` |
+| `/api/replicas/{replica_id}/actor/{actor_id}/keys/key/{key_id}` | [`RequestHandlers\Api\ReplicaInfo`](../../src/RequestHandlers/Api/ReplicaInfo.php) | `actorKey` |
+| `/api/replicas/{replica_id}/history` | [`RequestHandlers\Api\ReplicaInfo`](../../src/RequestHandlers/Api/ReplicaInfo.php) | `history` |
+| `/api/replicas/{replica_id}/history/since/{hash}` | [`RequestHandlers\Api\ReplicaInfo`](../../src/RequestHandlers/Api/ReplicaInfo.php) | `historySince` |
 | `/api/revoke` | [`RequestHandlers\Api\Revoke`](../../src/RequestHandlers/Api/Revoke.php) | `handle` |
 | `/api/server-public-key` | [`RequestHandlers\Api\ServerPublicKey`](../../src/RequestHandlers/Api/ServerPublicKey.php) | `handle` |
 | `/api/totp/disenroll` | [`RequestHandlers\Api\TotpDisenroll`](../../src/RequestHandlers/Api/TotpDisenroll.php) | `handle` |

@@ -90,6 +90,15 @@ Usage:
 - `$merkleRoot`: `string`
 - `$wrappedKeys`: `?string` (nullable)
 
+**Throws:**
+
+- `BundleException`
+- `CryptoException`
+- `DependencyException`
+- `HPKEException`
+- `InputException`
+- `JsonException`
+
 #### `unwrapLocalMessage(string $encryptedMessage, string $wrappedKeys): array`
 
 **Parameters:**
@@ -115,11 +124,16 @@ Usage:
 
 - `InputException`
 
-#### `appCache(string $namespace): FediE2EE\PKDServer\AppCache`
+#### `appCache(string $namespace, int $defaultTTL = 60): FediE2EE\PKDServer\AppCache`
 
 **Parameters:**
 
 - `$namespace`: `string`
+- `$defaultTTL`: `int`
+
+**Throws:**
+
+- `DependencyException`
 
 #### `table(string $tableName): FediE2EE\PKDServer\Table`
 

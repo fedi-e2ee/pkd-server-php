@@ -738,6 +738,30 @@ Strip all newlines (CR, LF) characters from a string.
 
 #### `getNextPrimaryKey(): int`
 
+#### `searchForActor(int $peerID, string $activityPubID): ?FediE2EE\PKDServer\Tables\Records\ReplicaActor`
+
+**Parameters:**
+
+- `$peerID`: `int`
+- `$activityPubID`: `string`
+
+**Throws:**
+
+- `ArrayKeyException`
+- `BlindIndexNotFoundException`
+- `CipherSweetException`
+- `CryptoException`
+- `CryptoOperationException`
+- `InvalidCiphertextException`
+- `SodiumException`
+
+#### `getCounts(int $peerID, int $actorID): array`
+
+**Parameters:**
+
+- `$peerID`: `int`
+- `$actorID`: `int`
+
 #### `createForPeer(FediE2EE\PKDServer\Tables\Records\Peer $peer, string $activityPubID, FediE2EE\PKDServer\Protocol\Payload $payload, ?FediE2EE\PKD\Crypto\PublicKey $key = null): int`
 
 **Parameters:**
@@ -746,6 +770,14 @@ Strip all newlines (CR, LF) characters from a string.
 - `$activityPubID`: `string`
 - `$payload`: `FediE2EE\PKDServer\Protocol\Payload`
 - `$key`: `?FediE2EE\PKD\Crypto\PublicKey` (nullable)
+
+**Throws:**
+
+- `ArrayKeyException`
+- `CipherSweetException`
+- `CryptoOperationException`
+- `SodiumException`
+- `TableException`
 
 ---
 
@@ -762,6 +794,34 @@ Strip all newlines (CR, LF) characters from a string.
 #### `getCipher(): FediE2EE\PKDServer\Dependency\WrappedEncryptedRow`
 
 **Attributes:** `#[Override]`
+
+#### `getAuxDataForActor(int $peerID, int $actorID): array`
+
+**Parameters:**
+
+- `$peerID`: `int`
+- `$actorID`: `int`
+
+**Throws:**
+
+- `DateMalformedStringException`
+
+#### `getAuxDataById(int $peerID, int $actorID, string $auxId): array`
+
+**Parameters:**
+
+- `$peerID`: `int`
+- `$actorID`: `int`
+- `$auxId`: `string`
+
+**Throws:**
+
+- `CipherSweetException`
+- `CryptoOperationException`
+- `DateMalformedStringException`
+- `InvalidCiphertextException`
+- `JsonException`
+- `SodiumException`
 
 ---
 
@@ -794,6 +854,31 @@ Strip all newlines (CR, LF) characters from a string.
 - `$peer`: `FediE2EE\PKDServer\Tables\Records\Peer`
 - `$leaf`: `FediE2EE\PKDServer\Tables\Records\ReplicaLeaf`
 
+#### `getHistory(int $peerID, int $limit = 100, int $offset = 0): array`
+
+**Parameters:**
+
+- `$peerID`: `int`
+- `$limit`: `int`
+- `$offset`: `int`
+
+**Throws:**
+
+- `JsonException`
+
+#### `getHistorySince(int $peerID, string $hash, int $limit = 100, int $offset = 0): array`
+
+**Parameters:**
+
+- `$peerID`: `int`
+- `$hash`: `string`
+- `$limit`: `int`
+- `$offset`: `int`
+
+**Throws:**
+
+- `JsonException`
+
 ---
 
 ## ReplicaPublicKeys
@@ -809,6 +894,40 @@ Strip all newlines (CR, LF) characters from a string.
 #### `getCipher(): FediE2EE\PKDServer\Dependency\WrappedEncryptedRow`
 
 **Attributes:** `#[Override]`
+
+#### `lookup(int $peerID, int $actorID, string $keyID): array`
+
+**Parameters:**
+
+- `$peerID`: `int`
+- `$actorID`: `int`
+- `$keyID`: `string`
+
+**Throws:**
+
+- `CipherSweetException`
+- `CryptoOperationException`
+- `DateMalformedStringException`
+- `InvalidCiphertextException`
+- `JsonException`
+- `SodiumException`
+
+#### `getPublicKeysFor(int $peerID, int $actorID, string $keyId = ''): array`
+
+**Parameters:**
+
+- `$peerID`: `int`
+- `$actorID`: `int`
+- `$keyId`: `string`
+
+**Throws:**
+
+- `CipherSweetException`
+- `CryptoOperationException`
+- `DateMalformedStringException`
+- `InvalidCiphertextException`
+- `JsonException`
+- `SodiumException`
 
 ---
 
