@@ -10,9 +10,10 @@ use FediE2EE\PKDServer\{
     Exceptions\CacheException,
     Exceptions\DependencyException,
     Exceptions\TableException,
+    Interfaces\HttpCacheInterface,
     Meta\Route,
     Redirect,
-    Traits\ReqTrait,
+    Traits\HttpCacheTrait
 };
 use FediE2EE\PKDServer\Tables\Actors;
 use Override;
@@ -32,9 +33,9 @@ use SodiumException;
 use Throwable;
 use TypeError;
 
-class Actor implements RequestHandlerInterface
+class Actor implements RequestHandlerInterface, HttpCacheInterface
 {
-    use ReqTrait;
+    use HttpCacheTrait;
 
     protected Actors $actorsTable;
 
@@ -50,6 +51,12 @@ class Actor implements RequestHandlerInterface
             throw new TypeError('Could not load Actors table at runtime');
         }
         $this->actorsTable = $actorsTable;
+    }
+
+    #[Override]
+    public function getPrimaryCacheKey(): string
+    {
+        return 'api:actor';
     }
 
     /**
@@ -83,19 +90,28 @@ class Actor implements RequestHandlerInterface
             return $this->error('A WebFinger error occurred: ' . $ex->getMessage());
         }
 
-        // Look up actor object
-        $actor = $this->actorsTable->searchForActor($actorID);
-        if (is_null($actor)) {
+        // Cache actor lookup and counts
+        $response = $this->getCache()->cache(
+            $actorID,
+            function () use ($actorID) {
+                $actor = $this->actorsTable->searchForActor($actorID);
+                if (is_null($actor)) {
+                    return null;
+                }
+                $counts = $this->actorsTable->getCounts($actor->getPrimaryKey());
+                return [
+                    '!pkd-context' => 'fedi-e2ee:v1/api/actor/info',
+                    'actor-id' => $actorID,
+                    'count-aux' => $counts['count-aux'],
+                    'count-keys' => $counts['count-keys'],
+                ];
+            }
+        );
+
+        if (is_null($response)) {
             return $this->error('Actor not found', 404);
         }
 
-        // Return data specified:
-        $counts = $this->actorsTable->getCounts($actor->getPrimaryKey());
-        return $this->json([
-            '!pkd-context' => 'fedi-e2ee:v1/api/actor/info',
-            'actor-id' => $actorID,
-            'count-aux' => $counts['count-aux'],
-            'count-keys' => $counts['count-keys'],
-        ]);
+        return $this->json($response);
     }
 }

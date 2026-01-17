@@ -53,6 +53,29 @@ class ParamsTest extends TestCase
         $this->assertInstanceOf(Params::class, new Params(hashAlgo: 'sha256', otpMaxLife: $maxLife));
     }
 
+    public static function invalidHttpCacheTtlProvider(): array
+    {
+        return [
+            [-1, false],
+            [0, false],
+            [1, true],
+            [2, true],
+            [30, true],
+            [300, true],
+            [301, false],
+            [PHP_INT_MAX, false]
+        ];
+    }
+
+    #[DataProvider("invalidHttpCacheTtlProvider")]
+    public function testHttpCacheTtl(int $ttl, bool $expectPass = false): void
+    {
+        if (!$expectPass) {
+            $this->expectException(DependencyException::class);
+        }
+        $this->assertInstanceOf(Params::class, new Params(hashAlgo: 'sha256', httpCacheTtl: $ttl));
+    }
+
     public static function hostnameProvider(): array
     {
         return [

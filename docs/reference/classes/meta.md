@@ -27,10 +27,11 @@ Server configuration parameters
 | `$actorUsername` | `string` | (readonly)  |
 | `$hostname` | `string` | (readonly)  |
 | `$cacheKey` | `string` | (readonly)  |
+| `$httpCacheTtl` | `int` | (readonly)  |
 
 ### Methods
 
-#### `__construct(string $hashAlgo = 'sha256', int $otpMaxLife = 120, string $actorUsername = 'pubkeydir', string $hostname = 'localhost', string $cacheKey = ''): void`
+#### `__construct(string $hashAlgo = 'sha256', int $otpMaxLife = 120, string $actorUsername = 'pubkeydir', string $hostname = 'localhost', string $cacheKey = '', int $httpCacheTtl = 60): void`
 
 These parameters MUST be public and MUST have a default value
 
@@ -41,6 +42,7 @@ These parameters MUST be public and MUST have a default value
 - `$actorUsername`: `string`
 - `$hostname`: `string`
 - `$cacheKey`: `string`
+- `$httpCacheTtl`: `int`
 
 **Throws:**
 

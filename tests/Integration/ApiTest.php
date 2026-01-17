@@ -533,6 +533,7 @@ class ApiTest extends TestCase
         $this->assertNotInTransaction();
         $request = $this->makeGetRequest('/api/history/since/' . urlencode($latestRoot));
         $request = $request->withAttribute('hash', $latestRoot);
+        $this->assertTrue($sinceHandler->clearCache());
         $response = $sinceHandler->handle($request);
         $this->assertNotInTransaction();
         $this->assertSame(200, $response->getStatusCode());

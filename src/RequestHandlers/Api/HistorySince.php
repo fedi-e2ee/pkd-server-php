@@ -2,33 +2,35 @@
 declare(strict_types=1);
 namespace FediE2EE\PKDServer\RequestHandlers\Api;
 
-use DateTime;
 use FediE2EE\PKD\Crypto\Exceptions\{
     JsonException,
     NotImplementedException
 };
+use FediE2EE\PKDServer\AppCache;
 use FediE2EE\PKDServer\Exceptions\{
     CacheException,
     DependencyException,
     TableException
 };
 use FediE2EE\PKDServer\Tables\MerkleState;
-use SodiumException;
-use TypeError;
+use FediE2EE\PKDServer\Interfaces\HttpCacheInterface;
 use FediE2EE\PKDServer\Meta\Route;
-use FediE2EE\PKDServer\Traits\ReqTrait;
+use FediE2EE\PKDServer\Traits\HttpCacheTrait;
 use Override;
 use Psr\Http\Message\{
     ResponseInterface,
     ServerRequestInterface
 };
 use Psr\Http\Server\RequestHandlerInterface;
+use SodiumException;
+use TypeError;
 
-class HistorySince implements RequestHandlerInterface
+class HistorySince implements RequestHandlerInterface, HttpCacheInterface
 {
-    use ReqTrait;
+    use HttpCacheTrait;
 
     protected MerkleState $merkleState;
+    protected ?AppCache $cache = null;
 
     /**
      * @throws DependencyException
@@ -44,6 +46,12 @@ class HistorySince implements RequestHandlerInterface
         $this->merkleState = $merkleState;
     }
 
+    #[Override]
+    public function getPrimaryCacheKey(): string
+    {
+        return 'api:history-since';
+    }
+
     /**
      * @throws DependencyException
      * @throws JsonException
@@ -56,13 +64,20 @@ class HistorySince implements RequestHandlerInterface
     {
         $lastHash = $request->getAttribute('hash') ?? '';
         if (empty($lastHash)) {
-            return $this->error('No hash provided', 400);
+            return $this->error('No hash provided');
         }
-        $records = $this->merkleState->getHashesSince($lastHash, 100);
-        return $this->json([
-            '!pkd-context' => 'fedi-e2ee:v1/api/history/since',
-            'current-time' => $this->time(),
-            'records' => $records,
-        ]);
+        // Cache the history-since response (hot path for replication)
+        $response = $this->getCache()->cache(
+            $lastHash,
+            function () use ($lastHash) {
+                $records = $this->merkleState->getHashesSince($lastHash, 100);
+                return [
+                    '!pkd-context' => 'fedi-e2ee:v1/api/history/since',
+                    'current-time' => $this->time(),
+                    'records' => $records,
+                ];
+            }
+        );
+        return $this->json($response);
     }
 }

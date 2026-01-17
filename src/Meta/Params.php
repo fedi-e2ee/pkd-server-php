@@ -21,6 +21,7 @@ readonly class Params
         public string $actorUsername = 'pubkeydir',
         public string $hostname = 'localhost',
         public string $cacheKey = '',
+        public int $httpCacheTtl = 60,
     ) {
         if (!Tree::isHashFunctionAllowed($this->hashAlgo)) {
             throw new DependencyException('Disallowed hash algorithm');
@@ -30,6 +31,12 @@ readonly class Params
         }
         if ($this->otpMaxLife > 300) {
             throw new DependencyException('OTP max life cannot be larger than 300 seconds');
+        }
+        if ($this->httpCacheTtl < 1) {
+            throw new DependencyException('HTTP cache TTL cannot be less than 1 second');
+        }
+        if ($this->httpCacheTtl > 300) {
+            throw new DependencyException('HTTP cache TTL cannot be greater than 300 seconds');
         }
         if (!filter_var($this->hostname, FILTER_VALIDATE_DOMAIN, FILTER_FLAG_HOSTNAME)) {
             throw new DependencyException('Hostname is not valid');
