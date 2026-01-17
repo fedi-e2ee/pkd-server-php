@@ -55,6 +55,8 @@ Namespace: `FediE2EE\PKDServer\RequestHandlers\Api`
 
 #### `getPrimaryCacheKey(): string`
 
+**Attributes:** `#[Override]`
+
 #### `handle(Psr\Http\Message\ServerRequestInterface $request): Psr\Http\Message\ResponseInterface`
 
 **API Method**
@@ -1485,6 +1487,8 @@ This is intended for mocking in unit tests
 
 #### `getPrimaryCacheKey(): string`
 
+**Attributes:** `#[Override]`
+
 #### `handle(Psr\Http\Message\ServerRequestInterface $request): Psr\Http\Message\ResponseInterface`
 
 **Attributes:** `#[Route]`, `#[Override]`
@@ -1667,6 +1671,8 @@ This is intended for mocking in unit tests
 - `CacheException`
 
 #### `getPrimaryCacheKey(): string`
+
+**Attributes:** `#[Override]`
 
 #### `handle(Psr\Http\Message\ServerRequestInterface $request): Psr\Http\Message\ResponseInterface`
 
