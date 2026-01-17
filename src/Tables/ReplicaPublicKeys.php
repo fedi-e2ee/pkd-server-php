@@ -79,7 +79,7 @@ class ReplicaPublicKeys extends Table
         }
         $decrypted = $this->getCipher()->decryptRow($row);
         $insertTime = (string) (
-            new DateTimeImmutable((string) $decrypted['inserttime'] ?? 'now')->getTimestamp()
+            new DateTimeImmutable((string) ($decrypted['inserttime'] ?? 'now'))->getTimestamp()
         );
         $revokeTime = is_string($decrypted['revoketime'] ?? null)
             ? (string) new DateTimeImmutable((string) $decrypted['revoketime'])->getTimestamp()

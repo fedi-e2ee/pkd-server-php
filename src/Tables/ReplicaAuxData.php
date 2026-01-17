@@ -109,7 +109,9 @@ class ReplicaAuxData extends Table
             return [];
         }
         $decrypted = $this->getCipher()->decryptRow($row);
-        $insertTime = (string) new DateTimeImmutable((string) $decrypted['inserttime'] ?? 'now')->getTimestamp();
+        $insertTime = (string) new DateTimeImmutable(
+            (string) ($decrypted['inserttime'] ?? 'now')
+        )->getTimestamp();
         $revokeTime = is_string($decrypted['revoketime'] ?? null)
             ? (string) new DateTimeImmutable((string) $decrypted['revoketime'])->getTimestamp()
             : null;

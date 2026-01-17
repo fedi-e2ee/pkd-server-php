@@ -48,6 +48,11 @@ jobs:
       - name: Install Composer dependencies
         uses: "ramsey/composer-install@v3"
 
+      - name: Configure Redis
+        run: |
+          mkdir -p config/local
+          echo "<?php return null;" > config/local/redis.php
+
       - name: Configure Database
         run: |
           mkdir -p config/local
@@ -147,6 +152,17 @@ jobs:
 
       - name: Install Composer dependencies
         uses: "ramsey/composer-install@v3"
+
+      - name: Configure Redis
+        run: |
+          mkdir -p config/local
+          echo "<?php
+          declare(strict_types=1);
+          namespace FediE2EE\PKDServer\Config;
+
+          use Predis\Client as PredisClient;
+
+          return new PredisClient('tcp://127.0.0.1:6379');" > config/local/redis.php
 
       - name: Configure Database
         run: |
