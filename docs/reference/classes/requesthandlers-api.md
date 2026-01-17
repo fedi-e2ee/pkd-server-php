@@ -33,9 +33,9 @@ Namespace: `FediE2EE\PKDServer\RequestHandlers\Api`
 
 **File:** [`src/RequestHandlers/Api/Actor.php`](../../../src/RequestHandlers/Api/Actor.php)
 
-**Implements:** `Psr\Http\Server\RequestHandlerInterface`
+**Implements:** `Psr\Http\Server\RequestHandlerInterface`, `FediE2EE\PKDServer\Interfaces\HttpCacheInterface`
 
-**Uses:** `FediE2EE\PKDServer\Traits\ReqTrait`
+**Uses:** `FediE2EE\PKDServer\Traits\HttpCacheTrait`
 
 ### Properties
 
@@ -52,6 +52,8 @@ Namespace: `FediE2EE\PKDServer\RequestHandlers\Api`
 - `CacheException`
 - `DependencyException`
 - `TableException`
+
+#### `getPrimaryCacheKey(): string`
 
 #### `handle(Psr\Http\Message\ServerRequestInterface $request): Psr\Http\Message\ResponseInterface`
 
@@ -75,6 +77,12 @@ Namespace: `FediE2EE\PKDServer\RequestHandlers\Api`
 - `NotImplementedException`
 - `SodiumException`
 - `TableException`
+
+#### `clearCache(): bool`
+
+**Throws:**
+
+- `DependencyException`
 
 #### `time(): string`
 
@@ -1455,9 +1463,9 @@ This is intended for mocking in unit tests
 
 **File:** [`src/RequestHandlers/Api/HistorySince.php`](../../../src/RequestHandlers/Api/HistorySince.php)
 
-**Implements:** `Psr\Http\Server\RequestHandlerInterface`
+**Implements:** `Psr\Http\Server\RequestHandlerInterface`, `FediE2EE\PKDServer\Interfaces\HttpCacheInterface`
 
-**Uses:** `FediE2EE\PKDServer\Traits\ReqTrait`
+**Uses:** `FediE2EE\PKDServer\Traits\HttpCacheTrait`
 
 ### Properties
 
@@ -1475,6 +1483,8 @@ This is intended for mocking in unit tests
 - `TableException`
 - `CacheException`
 
+#### `getPrimaryCacheKey(): string`
+
 #### `handle(Psr\Http\Message\ServerRequestInterface $request): Psr\Http\Message\ResponseInterface`
 
 **Attributes:** `#[Route]`, `#[Override]`
@@ -1489,6 +1499,12 @@ This is intended for mocking in unit tests
 - `JsonException`
 - `NotImplementedException`
 - `SodiumException`
+
+#### `clearCache(): bool`
+
+**Throws:**
+
+- `DependencyException`
 
 #### `time(): string`
 
@@ -1630,9 +1646,9 @@ This is intended for mocking in unit tests
 
 **File:** [`src/RequestHandlers/Api/HistoryView.php`](../../../src/RequestHandlers/Api/HistoryView.php)
 
-**Implements:** `Psr\Http\Server\RequestHandlerInterface`
+**Implements:** `Psr\Http\Server\RequestHandlerInterface`, `FediE2EE\PKDServer\Interfaces\HttpCacheInterface`
 
-**Uses:** `FediE2EE\PKDServer\Traits\ReqTrait`
+**Uses:** `FediE2EE\PKDServer\Traits\HttpCacheTrait`
 
 ### Properties
 
@@ -1650,6 +1666,8 @@ This is intended for mocking in unit tests
 - `TableException`
 - `CacheException`
 
+#### `getPrimaryCacheKey(): string`
+
 #### `handle(Psr\Http\Message\ServerRequestInterface $request): Psr\Http\Message\ResponseInterface`
 
 **Attributes:** `#[Route]`, `#[Override]`
@@ -1660,10 +1678,20 @@ This is intended for mocking in unit tests
 
 **Throws:**
 
+- `BundleException`
+- `CryptoException`
 - `DependencyException`
+- `HPKEException`
+- `InputException`
 - `JsonException`
 - `NotImplementedException`
 - `SodiumException`
+
+#### `clearCache(): bool`
+
+**Throws:**
+
+- `DependencyException`
 
 #### `time(): string`
 
