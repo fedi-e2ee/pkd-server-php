@@ -22,7 +22,8 @@ use FediE2EE\PKDServer\{
 };
 use FediE2EE\PKDServer\Dependency\{
     HPKE,
-    SigningKeys
+    SigningKeys,
+    WrappedEncryptedRow
 };
 use FediE2EE\PKDServer\Exceptions\{
     CacheException,
@@ -30,8 +31,18 @@ use FediE2EE\PKDServer\Exceptions\{
     ProtocolException,
     TableException,
 };
-use FediE2EE\PKDServer\Tables\MerkleState;
-use FediE2EE\PKDServer\Tables\Records\ActorKey;
+use FediE2EE\PKDServer\Protocol\Payload;
+use FediE2EE\PKDServer\Tables\{
+    Actors,
+    MerkleState,
+    Peers,
+    PublicKeys
+};
+use FediE2EE\PKDServer\Tables\Records\{
+    Actor,
+    ActorKey,
+    MerkleLeaf
+};
 use FediE2EE\PKDServer\Tests\HttpTestTrait;
 use FediE2EE\PKDServer\Traits\ConfigTrait;
 use ParagonIE\Certainty\Exception\CertaintyException;
@@ -48,14 +59,21 @@ use SodiumException;
 #[CoversClass(KeyWrapping::class)]
 #[UsesClass(ServerConfig::class)]
 #[UsesClass(Protocol::class)]
+#[UsesClass(Payload::class)]
 #[UsesClass(AppCache::class)]
+#[UsesClass(Actors::class)]
+#[UsesClass(Peers::class)]
+#[UsesClass(PublicKeys::class)]
 #[UsesClass(MerkleState::class)]
+#[UsesClass(Actor::class)]
 #[UsesClass(ActorKey::class)]
+#[UsesClass(MerkleLeaf::class)]
 #[UsesClass(Table::class)]
 #[UsesClass(TableCache::class)]
 #[UsesClass(Params::class)]
 #[UsesClass(HPKE::class)]
 #[UsesClass(SigningKeys::class)]
+#[UsesClass(WrappedEncryptedRow::class)]
 #[UsesClass(Math::class)]
 #[UsesClass(WebFinger::class)]
 class KeyWrappingTest extends TestCase

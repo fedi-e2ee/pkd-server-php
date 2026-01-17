@@ -12,6 +12,7 @@ use FediE2EE\PKDServer\{
     Protocol,
     Protocol\KeyWrapping,
     Protocol\Payload,
+    Protocol\RewrapConfig,
     ServerConfig,
     Table,
     TableCache
@@ -60,6 +61,7 @@ use PHPUnit\Framework\TestCase;
 #[UsesClass(ActorKey::class)]
 #[UsesClass(MerkleLeaf::class)]
 #[UsesClass(Math::class)]
+#[UsesClass(RewrapConfig::class)]
 class GetKeyTest extends TestCase
 {
     use ConfigTrait;

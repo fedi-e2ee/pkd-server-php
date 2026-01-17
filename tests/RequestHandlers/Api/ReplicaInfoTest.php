@@ -50,7 +50,9 @@ use FediE2EE\PKDServer\Tables\Records\{
     Actor,
     ActorKey,
     MerkleLeaf,
-    Peer
+    Peer,
+    ReplicaActor,
+    ReplicaLeaf
 };
 use PHPUnit\Framework\Attributes\{
     BeforeClass,
@@ -84,9 +86,12 @@ use SodiumException;
 #[UsesClass(Actor::class)]
 #[UsesClass(ActorKey::class)]
 #[UsesClass(MerkleLeaf::class)]
+#[UsesClass(ReplicaActor::class)]
+#[UsesClass(ReplicaLeaf::class)]
 #[UsesClass(Math::class)]
 #[UsesClass(RewrapConfig::class)]
 #[UsesClass(Peer::class)]
+#[UsesClass(Witness::class)]
 class ReplicaInfoTest extends TestCase
 {
     use ConfigTrait;

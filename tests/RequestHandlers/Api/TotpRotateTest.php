@@ -26,6 +26,7 @@ use FediE2EE\PKDServer\{
     Protocol,
     Protocol\KeyWrapping,
     Protocol\Payload,
+    Protocol\RewrapConfig,
     ServerConfig,
     Table,
     TableCache
@@ -41,7 +42,8 @@ use FediE2EE\PKDServer\Traits\TOTPTrait;
 use FediE2EE\PKDServer\Tables\Records\{
     Actor,
     ActorKey,
-    MerkleLeaf
+    MerkleLeaf,
+    Peer
 };
 use FediE2EE\PKDServer\Tests\HttpTestTrait;
 use FediE2EE\PKDServer\Traits\ConfigTrait;
@@ -76,9 +78,11 @@ use PHPUnit\Framework\TestCase;
 #[UsesClass(Actor::class)]
 #[UsesClass(ActorKey::class)]
 #[UsesClass(MerkleLeaf::class)]
+#[UsesClass(Peer::class)]
 #[UsesClass(TOTP::class)]
 #[UsesClass(WebFinger::class)]
 #[UsesClass(Math::class)]
+#[UsesClass(RewrapConfig::class)]
 class TotpRotateTest extends TestCase
 {
     use HttpTestTrait;

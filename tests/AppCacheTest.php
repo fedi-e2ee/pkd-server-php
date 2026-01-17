@@ -14,6 +14,7 @@ use PHPUnit\Framework\Attributes\{
 };
 use PHPUnit\Framework\TestCase;
 use Psr\SimpleCache\InvalidArgumentException;
+use Random\RandomException;
 use SodiumException;
 
 #[CoversClass(AppCache::class)]
@@ -144,5 +145,40 @@ class AppCacheTest extends TestCase
         // DateInterval
         $interval = new DateInterval('PT1H');
         $this->assertSame(3600, $cache->processTTL($interval));
+    }
+
+    /**
+     * @throws InvalidArgumentException
+     */
+    public function testCacheMissReturnValue(): void
+    {
+        $cache = $this->getConfiguredCache();
+        $val = $cache->cache('miss-key', function () {
+            return 'miss-value';
+        });
+        $this->assertSame('miss-value', $val, 'cache() should return fallback value on miss');
+    }
+
+    /**
+     * @return void
+     * @throws RandomException
+     */
+    public function testConstructorInitializesInMemoryCache(): void
+    {
+        $conf = $this->getConfig();
+        $namespace = 'unique-ns-' . bin2hex(random_bytes(8));
+
+        // This will call constructor
+        new AppCache($conf, $namespace);
+
+        // Use reflection to check static inMemoryCache
+        $ref = new \ReflectionClass(AppCache::class);
+        $prop = $ref->getProperty('inMemoryCache');
+        $prop->setAccessible(true);
+        $inMemoryCache = $prop->getValue();
+
+        $this->assertArrayHasKey($namespace, $inMemoryCache);
+        $this->assertIsArray($inMemoryCache[$namespace]);
+        $this->assertEmpty($inMemoryCache[$namespace]);
     }
 }
