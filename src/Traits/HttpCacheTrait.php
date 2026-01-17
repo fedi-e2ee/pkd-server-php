@@ -1,5 +1,5 @@
 <?php
-
+declare(strict_types=1);
 namespace FediE2EE\PKDServer\Traits;
 
 use FediE2EE\PKDServer\AppCache;
@@ -22,7 +22,7 @@ trait HttpCacheTrait
         if ($this->cache === null) {
             $this->cache = $this->appCache(
                 $this->getPrimaryCacheKey(),
-                90
+                $this->config()->getParams()->httpCacheTtl
             );
         }
         return $this->cache;

@@ -20,4 +20,5 @@ return new Params(
     actorUsername: 'pubkeydir',
     hostname: 'localhost',
     cacheKey: $key,
+    httpCacheTtl: 15,
 );
