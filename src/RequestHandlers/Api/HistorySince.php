@@ -46,6 +46,7 @@ class HistorySince implements RequestHandlerInterface, HttpCacheInterface
         $this->merkleState = $merkleState;
     }
 
+    #[Override]
     public function getPrimaryCacheKey(): string
     {
         return 'api:history-since';

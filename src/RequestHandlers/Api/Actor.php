@@ -53,6 +53,7 @@ class Actor implements RequestHandlerInterface, HttpCacheInterface
         $this->actorsTable = $actorsTable;
     }
 
+    #[Override]
     public function getPrimaryCacheKey(): string
     {
         return 'api:actor';
