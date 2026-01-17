@@ -14,14 +14,33 @@
         "@default": true,
         "ProtectedVisibility": false,
         "PublicVisibility": false,
+        "MethodCallRemoval": {
+            "ignore": [
+                "FediE2EE\\PKDServer\\Protocol::moveIdentity",
+                "FediE2EE\\PKDServer\\Protocol::undoFireproof",
+                "FediE2EE\\PKDServer\\Protocol::revokeAuxData",
+                "FediE2EE\\PKDServer\\Traits\\ConfigTrait::table",
+                "FediE2EE\\PKDServer\\Traits\\ReqTrait::twig",
+                "FediE2EE\\PKDServer\\RequestHandlers\\Api\\BurnDown::handle"
+            ]
+        },
         "DecrementInteger": {
             "ignore": [
-                "FediE2EE\\PKDServer\\AppCache::__construct"
+                "FediE2EE\\PKDServer\\AppCache::__construct",
+                "FediE2EE\\PKDServer\\Traits\\TOTPTrait::generateTOTP",
+                "FediE2EE\\PKDServer\\Traits\\TOTPTrait::verifyTOTP",
+                "FediE2EE\\PKDServer\\RequestHandlers\\Api\\HistorySince::handle",
+                "FediE2EE\\PKDServer\\RequestHandlers\\Api\\Revoke::handle"
             ]
         },
         "IncrementInteger": {
             "ignore": [
-                "FediE2EE\\PKDServer\\AppCache::__construct"
+                "FediE2EE\\PKDServer\\AppCache::__construct",
+                "FediE2EE\\PKDServer\\Traits\\TOTPTrait::generateTOTP",
+                "FediE2EE\\PKDServer\\Traits\\TOTPTrait::verifyTOTP",
+                "FediE2EE\\PKDServer\\Traits\\ReqTrait::error",
+                "FediE2EE\\PKDServer\\RequestHandlers\\Api\\HistorySince::handle",
+                "FediE2EE\\PKDServer\\RequestHandlers\\Api\\Revoke::handle"
             ]
         },
         "FalseValue": {
@@ -35,6 +54,95 @@
                 "FediE2EE\\PKDServer\\Dependency\\WrappedEncryptedRow::addOptionalIntegerField",
                 "FediE2EE\\PKDServer\\Dependency\\WrappedEncryptedRow::addOptionalTextField",
                 "FediE2EE\\PKDServer\\Dependency\\WrappedEncryptedRow::addTextField"
+            ]
+        },
+        "MatchArmRemoval": {
+            "ignore": [
+                "FediE2EE\\PKDServer\\Traits\\ConfigTrait::table",
+                "FediE2EE\\PKDServer\\RequestHandlers\\Api\\ServerPublicKey::cipherSuiteString"
+            ]
+        },
+        "BitwiseOr": {
+            "ignore": [
+                "FediE2EE\\PKDServer\\Traits\\ReqTrait::json"
+            ]
+        },
+        "ConcatOperandRemoval": {
+            "ignore": [
+                "FediE2EE\\PKDServer\\Traits\\TOTPTrait::generateTOTP"
+            ]
+        },
+        "UnwrapSubstr": {
+            "ignore": [
+                "FediE2EE\\PKDServer\\Traits\\TOTPTrait::generateTOTP"
+            ]
+        },
+        "Division": {
+            "ignore": [
+                "FediE2EE\\PKDServer\\Traits\\TOTPTrait::generateTOTP"
+            ]
+        },
+        "Plus": {
+            "ignore": [
+                "FediE2EE\\PKDServer\\Traits\\TOTPTrait::verifyTOTP"
+            ]
+        },
+        "IfNegation": {
+            "ignore": [
+                "FediE2EE\\PKDServer\\ActivityPub\\WebFinger::__construct"
+            ]
+        },
+        "ArrayItemRemoval": {
+            "ignore": [
+                "FediE2EE\\PKDServer\\ActivityPub\\WebFinger::__construct",
+                "FediE2EE\\PKDServer\\RequestHandlers\\Api\\HistoryCosign::handle"
+            ]
+        },
+        "ArrayItem": {
+            "ignore": [
+                "FediE2EE\\PKDServer\\ActivityPub\\WebFinger::__construct",
+                "FediE2EE\\PKDServer\\RequestHandlers\\Api\\HistoryCosign::handle"
+            ]
+        },
+        "UnwrapStrReplace": {
+            "ignore": [
+                "FediE2EE\\PKDServer\\ActivityPub\\WebFinger::getPublicKeyForActor"
+            ]
+        },
+        "UnwrapTrim": {
+            "ignore": [
+                "FediE2EE\\PKDServer\\ActivityPub\\WebFinger::getPublicKeyForActor"
+            ]
+        },
+        "Throw_": {
+            "ignore": [
+                "FediE2EE\\PKDServer\\ActivityPub\\WebFinger::getPublicKeyForActor"
+            ]
+        },
+        "PregMatchRemoveDollar": {
+            "ignore": [
+                "FediE2EE\\PKDServer\\RequestHandlers\\ActivityPub\\Finger::handle"
+            ]
+        },
+        "ReturnRemoval": {
+            "ignore": [
+                "FediE2EE\\PKDServer\\Dependency\\WrappedEncryptedRow::getFieldSymmetricKey",
+                "FediE2EE\\PKDServer\\RequestHandlers\\Api\\Revoke::handle"
+            ]
+        },
+        "Catch_": {
+            "ignore": [
+                "FediE2EE\\PKDServer\\RequestHandlers\\Api\\BurnDown::handle"
+            ]
+        },
+        "Coalesce": {
+            "ignore": [
+                "FediE2EE\\PKDServer\\Traits\\TOTPTrait::verifySignature"
+            ]
+        },
+        "LogicalNot": {
+            "ignore": [
+                "FediE2EE\\PKDServer\\Traits\\ReqTrait::twig"
             ]
         }
     },

@@ -17,16 +17,18 @@ use FediE2EE\PKDServer\Exceptions\{
 use FediE2EE\PKDServer\{
     ActivityPub\ActivityStream,
     ActivityPub\WebFinger,
+    Protocol\KeyWrapping,
     Protocol\Payload,
     Traits\ConfigTrait
 };
-use GuzzleHttp\Client;
+use FediE2EE\PKDServer\Exceptions\CacheException;
 use FediE2EE\PKDServer\Tables\{
     AuxData,
     MerkleState,
     PublicKeys,
     Records\ActorKey
 };
+use GuzzleHttp\Client;
 use ParagonIE\Certainty\Exception\CertaintyException;
 use ParagonIE\HPKE\HPKEException;
 use SodiumException;
@@ -182,8 +184,35 @@ class Protocol
         // You'll notice that Checkpoint is allowed, but not require, to be HPKE encrypted.
         $merkleRoot = $merkleState->getLatestRoot();
 
+        // Trigger a rewrap on the new record immediately:
+        if (!empty($result)) {
+            $this->wrapLocalKeys($payload);
+        }
+
         // Return the results as an array so other processes can shape a response:
         return ['action' => $action, 'result' => $result, 'latest-root' => $merkleRoot];
+    }
+
+    /**
+     * @param Payload $payload
+     * @return void
+     * @throws DependencyException
+     * @throws CacheException
+     * @throws TableException
+     */
+    protected function wrapLocalKeys(Payload $payload): void
+    {
+        /** @var MerkleState $merkleState */
+        $merkleState = $this->table('MerkleState');
+
+        $keyWrapping = new KeyWrapping($this->config);
+        $merkleRoot = $merkleState->getLatestRoot();
+
+        // $keyWrapping->localKeyWrap($merkleRoot, $payload->keyMap);
+        $keyWrapping->rewrapSymmetricKeys($merkleRoot, $payload->keyMap);
+        if ($this->config->getDb()->inTransaction()) {
+            $this->config->getDb()->commit();
+        }
     }
 
     /**
@@ -243,6 +272,7 @@ class Protocol
         $payload = $this->hpkeUnwrap($body);
         $table = new PublicKeys($this->config);
         $return = $table->addKey($payload, $outerActor);
+        $this->wrapLocalKeys($payload);
         $this->cleanUpAfterAction();
         return $return;
     }
@@ -262,6 +292,7 @@ class Protocol
         $payload = $this->hpkeUnwrap($body);
         $table = new PublicKeys($this->config);
         $return = $table->revokeKey($payload, $outerActor);
+        $this->wrapLocalKeys($payload);
         $this->cleanUpAfterAction();
         return $return;
     }
@@ -287,6 +318,7 @@ class Protocol
 
         $table = new PublicKeys($this->config);
         $return = $table->revokeKeyThirdParty($payload);
+        $this->wrapLocalKeys($payload);
         $this->cleanUpAfterAction();
         return $return;
     }
@@ -306,6 +338,7 @@ class Protocol
         $payload = $this->hpkeUnwrap($body);
         $table = new PublicKeys($this->config);
         $return = $table->moveIdentity($payload, $outerActor);
+        $this->wrapLocalKeys($payload);
         $this->cleanUpAfterAction();
         return $return;
     }
@@ -329,6 +362,7 @@ class Protocol
         $payload = $this->hpkeUnwrap($body);
         $table = new PublicKeys($this->config);
         $return = $table->burnDown($payload, $outerActor);
+        $this->wrapLocalKeys($payload);
         $this->cleanUpAfterAction();
         return $return;
     }
@@ -348,6 +382,7 @@ class Protocol
         $payload = $this->hpkeUnwrap($body);
         $table = new PublicKeys($this->config);
         $return = $table->fireproof($payload, $outerActor);
+        $this->wrapLocalKeys($payload);
         $this->cleanUpAfterAction();
         return $return;
     }
@@ -367,6 +402,7 @@ class Protocol
         $payload = $this->hpkeUnwrap($body);
         $table = new PublicKeys($this->config);
         $return = $table->undoFireproof($payload, $outerActor);
+        $this->wrapLocalKeys($payload);
         $this->cleanUpAfterAction();
         return $return;
     }
@@ -386,6 +422,7 @@ class Protocol
         $payload = $this->hpkeUnwrap($body);
         $table = new AuxData($this->config);
         $return = $table->addAuxData($payload, $outerActor);
+        $this->wrapLocalKeys($payload);
         $this->cleanUpAfterAction();
         return $return;
     }
@@ -405,6 +442,7 @@ class Protocol
         $payload = $this->hpkeUnwrap($body);
         $table = new AuxData($this->config);
         $return = $table->revokeAuxData($payload, $outerActor);
+        $this->wrapLocalKeys($payload);
         $this->cleanUpAfterAction();
         return $return;
     }
@@ -428,6 +466,7 @@ class Protocol
         }
         $table = new PublicKeys($this->config);
         $return = $table->checkpoint($payload);
+        $this->wrapLocalKeys($payload);
         $this->cleanUpAfterAction();
         return $return;
     }

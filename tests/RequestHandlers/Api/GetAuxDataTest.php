@@ -22,7 +22,9 @@ use FediE2EE\PKDServer\{ActivityPub\WebFinger,
     Dependency\WrappedEncryptedRow,
     Math,
     Protocol,
+    Protocol\KeyWrapping,
     Protocol\Payload,
+    Protocol\RewrapConfig,
     ServerConfig,
     Table,
     TableCache};
@@ -30,12 +32,14 @@ use FediE2EE\PKDServer\Tables\{
     Actors,
     AuxData,
     MerkleState,
+    Peers,
     PublicKeys
 };
 use FediE2EE\PKDServer\Tables\Records\{
     Actor,
     ActorKey,
-    MerkleLeaf
+    MerkleLeaf,
+    Peer
 };
 use FediE2EE\PKDServer\Tests\HttpTestTrait;
 use FediE2EE\PKDServer\Traits\ConfigTrait;
@@ -52,6 +56,8 @@ use ReflectionClass;
 #[UsesClass(WebFinger::class)]
 #[UsesClass(WrappedEncryptedRow::class)]
 #[UsesClass(Protocol::class)]
+#[UsesClass(KeyWrapping::class)]
+#[UsesClass(Peers::class)]
 #[UsesClass(Payload::class)]
 #[UsesClass(ListAuxData::class)]
 #[UsesClass(ServerConfig::class)]
@@ -64,7 +70,9 @@ use ReflectionClass;
 #[UsesClass(Actor::class)]
 #[UsesClass(ActorKey::class)]
 #[UsesClass(MerkleLeaf::class)]
+#[UsesClass(Peer::class)]
 #[UsesClass(Math::class)]
+#[UsesClass(RewrapConfig::class)]
 class GetAuxDataTest extends TestCase
 {
     use ConfigTrait;

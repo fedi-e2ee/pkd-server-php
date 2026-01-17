@@ -18,7 +18,9 @@ use FediE2EE\PKDServer\{ActivityPub\WebFinger,
     Dependency\WrappedEncryptedRow,
     Math,
     Protocol,
+    Protocol\KeyWrapping,
     Protocol\Payload,
+    Protocol\RewrapConfig,
     ServerConfig,
     Table,
     TableCache};
@@ -27,12 +29,14 @@ use FediE2EE\PKDServer\Tables\{
     Actors,
     AuxData,
     MerkleState,
+    Peers,
     PublicKeys
 };
 use FediE2EE\PKDServer\Tables\Records\{
     Actor as ActorRecord,
     ActorKey,
-    MerkleLeaf
+    MerkleLeaf,
+    Peer
 };
 use FediE2EE\PKDServer\Traits\ConfigTrait;
 use FediE2EE\PKDServer\Tests\HttpTestTrait;
@@ -57,11 +61,15 @@ use ReflectionClass;
 #[UsesClass(Actors::class)]
 #[UsesClass(AuxData::class)]
 #[UsesClass(MerkleState::class)]
+#[UsesClass(KeyWrapping::class)]
+#[UsesClass(Peers::class)]
 #[UsesClass(PublicKeys::class)]
 #[UsesClass(ActorRecord::class)]
 #[UsesClass(ActorKey::class)]
 #[UsesClass(MerkleLeaf::class)]
+#[UsesClass(Peer::class)]
 #[UsesClass(Math::class)]
+#[UsesClass(RewrapConfig::class)]
 class ActorTest extends TestCase
 {
     use ConfigTrait;

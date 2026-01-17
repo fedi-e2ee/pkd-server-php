@@ -27,6 +27,7 @@ use FediE2EE\PKDServer\{ActivityPub\WebFinger,
     Dependency\WrappedEncryptedRow,
     Math,
     Protocol,
+    Protocol\KeyWrapping,
     ServerConfig,
     Table,
     TableCache};
@@ -39,6 +40,7 @@ use FediE2EE\PKDServer\Exceptions\{
 use FediE2EE\PKDServer\Tables\{
     Actors,
     MerkleState,
+    Peers,
     PublicKeys
 };
 use FediE2EE\PKDServer\Tables\Records\{
@@ -84,6 +86,8 @@ use SodiumException;
 #[UsesClass(Table::class)]
 #[UsesClass(WrappedEncryptedRow::class)]
 #[UsesClass(Math::class)]
+#[UsesClass(KeyWrapping::class)]
+#[UsesClass(Peers::class)]
 class ActorLifecycleTest extends TestCase
 {
     use ConfigTrait;
@@ -140,8 +144,8 @@ class ActorLifecycleTest extends TestCase
         // 1. AddKey (self-signed)
         $addKey1 = new AddKey($canonical, $keypair1->getPublicKey());
         $akm1 = new AttributeKeyMap()
-            ->addKey('actor', SymmetricKey::generate())
-            ->addKey('public-key', SymmetricKey::generate());
+            ->addRandomKey('actor')
+            ->addRandomKey('public-key');
         $encryptedMsg1 = $addKey1->encrypt($akm1);
         $bundle1 = $handler->handle($encryptedMsg1, $keypair1, $akm1, $latestRoot1);
         $encryptedForServer1 = $handler->hpkeEncrypt(

@@ -2,13 +2,19 @@
 declare(strict_types=1);
 namespace FediE2EE\PKDServer\Tests;
 
-use FediE2EE\PKDServer\AppCache;
+use DateInterval;
+use FediE2EE\PKDServer\{
+    AppCache,
+    ServerConfig
+};
 use FediE2EE\PKDServer\Meta\Params;
-use FediE2EE\PKDServer\ServerConfig;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\UsesClass;
+use PHPUnit\Framework\Attributes\{
+    CoversClass,
+    UsesClass
+};
 use PHPUnit\Framework\TestCase;
 use Psr\SimpleCache\InvalidArgumentException;
+use Random\RandomException;
 use SodiumException;
 
 #[CoversClass(AppCache::class)]
@@ -110,5 +116,69 @@ class AppCacheTest extends TestCase
         }
         $this->assertSame('bar', $out);
         $this->assertSame(1, $misses);
+    }
+
+    /**
+     * @throws InvalidArgumentException
+     * @throws SodiumException
+     */
+    public function testCacheWithTTL(): void
+    {
+        $cache = $this->getConfiguredCache();
+        $out = $cache->cache('foo-ttl', function () {
+            return 'bar-ttl';
+        }, 3600);
+        $this->assertSame('bar-ttl', $out);
+        $this->assertTrue($cache->has($cache->deriveKey('foo-ttl')));
+    }
+
+    public function testProcessTTL(): void
+    {
+        $cache = $this->getConfiguredCache();
+
+        // Null uses default
+        $this->assertSame(60, $cache->processTTL(null));
+
+        // Integer returns as is
+        $this->assertSame(123, $cache->processTTL(123));
+
+        // DateInterval
+        $interval = new DateInterval('PT1H');
+        $this->assertSame(3600, $cache->processTTL($interval));
+    }
+
+    /**
+     * @throws InvalidArgumentException
+     */
+    public function testCacheMissReturnValue(): void
+    {
+        $cache = $this->getConfiguredCache();
+        $val = $cache->cache('miss-key', function () {
+            return 'miss-value';
+        });
+        $this->assertSame('miss-value', $val, 'cache() should return fallback value on miss');
+    }
+
+    /**
+     * @return void
+     * @throws RandomException
+     */
+    public function testConstructorInitializesInMemoryCache(): void
+    {
+        $conf = $this->getConfig();
+        $namespace = 'unique-ns-' . bin2hex(random_bytes(8));
+
+        // This will call constructor
+        new AppCache($conf, $namespace);
+
+        // Use reflection to check static inMemoryCache
+        $ref = new \ReflectionClass(AppCache::class);
+        $prop = $ref->getProperty('inMemoryCache');
+        $prop->setAccessible(true);
+        $inMemoryCache = $prop->getValue();
+
+        $this->assertArrayHasKey($namespace, $inMemoryCache);
+        $this->assertIsArray($inMemoryCache[$namespace]);
+        $this->assertEmpty($inMemoryCache[$namespace]);
     }
 }

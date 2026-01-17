@@ -15,7 +15,8 @@ use FediE2EE\PKD\Crypto\{
 use FediE2EE\PKDServer\RequestHandlers\Api\{
     TotpEnroll
 };
-use FediE2EE\PKDServer\{ActivityPub\WebFinger,
+use FediE2EE\PKDServer\{
+    ActivityPub\WebFinger,
     AppCache,
     Dependency\EasyDBHandler,
     Dependency\HPKE,
@@ -23,13 +24,17 @@ use FediE2EE\PKDServer\{ActivityPub\WebFinger,
     Dependency\WrappedEncryptedRow,
     Math,
     Protocol,
+    Protocol\KeyWrapping,
     Protocol\Payload,
+    Protocol\RewrapConfig,
     ServerConfig,
     Table,
-    TableCache};
+    TableCache
+};
 use FediE2EE\PKDServer\Tables\{
     Actors,
     MerkleState,
+    Peers,
     PublicKeys,
     TOTP
 };
@@ -37,7 +42,8 @@ use FediE2EE\PKDServer\Traits\TOTPTrait;
 use FediE2EE\PKDServer\Tables\Records\{
     Actor,
     ActorKey,
-    MerkleLeaf
+    MerkleLeaf,
+    Peer
 };
 use FediE2EE\PKDServer\Tests\HttpTestTrait;
 use FediE2EE\PKDServer\Traits\ConfigTrait;
@@ -61,6 +67,8 @@ use PHPUnit\Framework\TestCase;
 #[UsesClass(WrappedEncryptedRow::class)]
 #[UsesClass(InjectConfigStrategy::class)]
 #[UsesClass(Protocol::class)]
+#[UsesClass(KeyWrapping::class)]
+#[UsesClass(Peers::class)]
 #[UsesClass(Payload::class)]
 #[UsesClass(ServerConfig::class)]
 #[UsesClass(Table::class)]
@@ -71,8 +79,10 @@ use PHPUnit\Framework\TestCase;
 #[UsesClass(Actor::class)]
 #[UsesClass(ActorKey::class)]
 #[UsesClass(MerkleLeaf::class)]
+#[UsesClass(Peer::class)]
 #[UsesClass(TOTP::class)]
 #[UsesClass(Math::class)]
+#[UsesClass(RewrapConfig::class)]
 class TotpEnrollTest extends TestCase
 {
     use ConfigTrait;
@@ -445,6 +455,7 @@ class TotpEnrollTest extends TestCase
         $request = new ServerRequest([], [], '/api/totp/enroll', 'POST')
             ->withHeader('Content-Type', 'application/json')
             ->withBody(new StreamFactory()->createStream('not valid json'));
+        $this->clearOldTransaction($this->config);
         $response = $this->dispatchRequest($request);
 
         $this->assertSame(400, $response->getStatusCode());

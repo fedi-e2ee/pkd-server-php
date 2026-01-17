@@ -10,7 +10,9 @@ use FediE2EE\PKDServer\{
     Dependency\WrappedEncryptedRow,
     Math,
     Protocol,
+    Protocol\KeyWrapping,
     Protocol\Payload,
+    Protocol\RewrapConfig,
     ServerConfig,
     Table,
     TableCache
@@ -22,11 +24,13 @@ use FediE2EE\PKDServer\RequestHandlers\Api\{
 use FediE2EE\PKDServer\Tables\{
     Actors,
     MerkleState,
+    Peers,
     PublicKeys
 };
 use FediE2EE\PKDServer\Tables\Records\{
     Actor,
     ActorKey,
+    Peer,
     MerkleLeaf
 };
 use FediE2EE\PKDServer\Tests\HttpTestTrait;
@@ -42,6 +46,9 @@ use PHPUnit\Framework\TestCase;
 #[UsesClass(WebFinger::class)]
 #[UsesClass(WrappedEncryptedRow::class)]
 #[UsesClass(Protocol::class)]
+#[UsesClass(KeyWrapping::class)]
+#[UsesClass(Peers::class)]
+#[UsesClass(Peer::class)]
 #[UsesClass(Payload::class)]
 #[UsesClass(ListKeys::class)]
 #[UsesClass(ServerConfig::class)]
@@ -54,6 +61,7 @@ use PHPUnit\Framework\TestCase;
 #[UsesClass(ActorKey::class)]
 #[UsesClass(MerkleLeaf::class)]
 #[UsesClass(Math::class)]
+#[UsesClass(RewrapConfig::class)]
 class GetKeyTest extends TestCase
 {
     use ConfigTrait;

@@ -34,15 +34,18 @@ use FediE2EE\PKDServer\RequestHandlers\Api\{
     Revoke,
     ServerPublicKey
 };
-use FediE2EE\PKDServer\{ActivityPub\WebFinger,
+use FediE2EE\PKDServer\{
+    ActivityPub\WebFinger,
     AppCache,
     Dependency\WrappedEncryptedRow,
     Math,
     Protocol,
+    Protocol\KeyWrapping,
     Protocol\Payload,
     ServerConfig,
     Table,
-    TableCache};
+    TableCache
+};
 use FediE2EE\PKDServer\Exceptions\{
     CacheException,
     DependencyException,
@@ -53,6 +56,7 @@ use FediE2EE\PKDServer\Tables\{
     Actors,
     AuxData,
     MerkleState,
+    Peers,
     PublicKeys
 };
 use FediE2EE\PKDServer\Tables\Records\{
@@ -60,10 +64,13 @@ use FediE2EE\PKDServer\Tables\Records\{
     ActorKey,
     MerkleLeaf
 };
-use FediE2EE\PKD\Extensions\ExtensionInterface;
 use FediE2EE\PKDServer\Tests\HttpTestTrait;
 use FediE2EE\PKDServer\Traits\ConfigTrait;
-use PHPUnit\Framework\Attributes\{After, CoversClass, UsesClass};
+use PHPUnit\Framework\Attributes\{
+    After,
+    CoversClass,
+    UsesClass
+};
 use Mdanter\Ecc\Exception\InsecureCurveException;
 use ParagonIE\Certainty\Exception\CertaintyException;
 use ParagonIE\CipherSweet\Exception\{
@@ -74,7 +81,6 @@ use ParagonIE\CipherSweet\Exception\{
     InvalidCiphertextException
 };
 use ParagonIE\HPKE\HPKEException;
-use PHPStan\Rules\Registry;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use GuzzleHttp\Psr7\Response;
@@ -97,9 +103,11 @@ use SodiumException;
 #[UsesClass(Actors::class)]
 #[UsesClass(AppCache::class)]
 #[UsesClass(AuxData::class)]
+#[UsesClass(KeyWrapping::class)]
 #[UsesClass(MerkleLeaf::class)]
 #[UsesClass(MerkleState::class)]
 #[UsesClass(Payload::class)]
+#[UsesClass(Peers::class)]
 #[UsesClass(PublicKeys::class)]
 #[UsesClass(Protocol::class)]
 #[UsesClass(ServerConfig::class)]

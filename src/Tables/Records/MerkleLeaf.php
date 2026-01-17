@@ -29,6 +29,7 @@ class MerkleLeaf
         public readonly string $publicKeyHash,
         public ?InclusionProof $inclusionProof = null,
         public readonly string $created = '',
+        public ?string $wrappedKeys = null,
         ?int $primaryKey = null
     ) {
         $this->primaryKey = $primaryKey;
@@ -40,7 +41,8 @@ class MerkleLeaf
      */
     public static function from(
         string $contents,
-        SecretKey $sk
+        SecretKey $sk,
+        ?string $rewrappedKeys = null,
     ): self {
         $contentHash = hash('sha256', $contents);
         $signature = sodium_bin2hex($sk->sign(sodium_hex2bin($contentHash)));
@@ -51,16 +53,27 @@ class MerkleLeaf
             $signature,
             $publicKeyHash,
             null,
-            (string) time()
+            (string) time(),
+            $rewrappedKeys,
         );
     }
 
     /**
      * @api
+     *
+     * @throws NotImplementedException
+     * @throws SodiumException
      */
-    public static function fromPayload(Payload $payload, SecretKey $sk): self
-    {
-        return self::from($payload->getMerkleTreePayload(), $sk);
+    public static function fromPayload(
+        Payload $payload,
+        SecretKey $sk,
+        ?string $rewrappedKeys = null
+    ): self {
+        return self::from(
+            $payload->getMerkleTreePayload(),
+            $sk,
+            $rewrappedKeys
+        );
     }
 
     public function setPrimaryKey(?int $primary): static
@@ -87,6 +100,9 @@ class MerkleLeaf
         return Base64UrlSafe::encodeUnpadded(sodium_hex2bin($this->signature));
     }
 
+    /**
+     * @throws SodiumException
+     */
     public function serializeForMerkle(): string
     {
         return $this->preAuthEncode([

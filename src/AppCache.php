@@ -33,11 +33,13 @@ class AppCache implements CacheInterface
      *
      * Otherwise, it invokes the fallback to determine the value.
      */
-    public function cache(string $lookup, callable $fallback): mixed
+    public function cache(string $lookup, callable $fallback, DateInterval|int|null $ttl = null): mixed
     {
         $key = $this->deriveKey($lookup);
         if (!$this->has($key)) {
-            $this->set($key, $fallback());
+            $value = $fallback();
+            $this->set($key, $value, $ttl);
+            return $value;
         }
         return $this->get($key);
     }

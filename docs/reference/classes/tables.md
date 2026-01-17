@@ -10,6 +10,10 @@ Namespace: `FediE2EE\PKDServer\Tables`
 - [MerkleState](#merklestate) - class
 - [Peers](#peers) - class
 - [PublicKeys](#publickeys) - class
+- [ReplicaActors](#replicaactors) - class
+- [ReplicaAuxData](#replicaauxdata) - class
+- [ReplicaHistory](#replicahistory) - class
+- [ReplicaPublicKeys](#replicapublickeys) - class
 - [TOTP](#totp) - class
 
 ---
@@ -319,6 +323,10 @@ Insert leaf with retry logic for deadlocks
 - `$limit`: `int`
 - `$offset`: `int`
 
+**Throws:**
+
+- `DependencyException`
+
 ---
 
 ## Peers
@@ -337,7 +345,7 @@ Insert leaf with retry logic for deadlocks
 
 #### `getNextPeerId(): int`
 
-#### `create(FediE2EE\PKD\Crypto\PublicKey $publicKey, string $hostname): FediE2EE\PKDServer\Tables\Records\Peer`
+#### `create(FediE2EE\PKD\Crypto\PublicKey $publicKey, string $hostname, bool $cosign = false, bool $replicate = false, ?FediE2EE\PKDServer\Protocol\RewrapConfig $rewrapConfig = null): FediE2EE\PKDServer\Tables\Records\Peer`
 
 **API Method**
 
@@ -345,6 +353,24 @@ Insert leaf with retry logic for deadlocks
 
 - `$publicKey`: `FediE2EE\PKD\Crypto\PublicKey`
 - `$hostname`: `string`
+- `$cosign`: `bool`
+- `$replicate`: `bool`
+- `$rewrapConfig`: `?FediE2EE\PKDServer\Protocol\RewrapConfig` (nullable)
+
+#### `getPeerByUniqueId(string $uniqueId): FediE2EE\PKDServer\Tables\Records\Peer`
+
+**API Method**
+
+**Parameters:**
+
+- `$uniqueId`: `string`
+
+**Throws:**
+
+- `CryptoException`
+- `DateMalformedStringException`
+- `SodiumException`
+- `TableException`
 
 #### `getPeer(string $hostname): FediE2EE\PKDServer\Tables\Records\Peer`
 
@@ -358,13 +384,35 @@ Insert leaf with retry logic for deadlocks
 
 **Throws:**
 
+- `CryptoException`
 - `DateMalformedStringException`
+- `SodiumException`
+
+#### `listReplicatingPeers(): array`
+
+Lists which peers we replicate.
+
+**Throws:**
+
+- `CryptoException`
+- `DateMalformedStringException`
+- `SodiumException`
 
 #### `save(FediE2EE\PKDServer\Tables\Records\Peer $peer): bool`
 
 **Parameters:**
 
 - `$peer`: `FediE2EE\PKDServer\Tables\Records\Peer`
+
+#### `getRewrapCandidates(): array`
+
+#### `rewrapKeyMap(FediE2EE\PKDServer\Tables\Records\Peer $peer, FediE2EE\PKD\Crypto\AttributeEncryption\AttributeKeyMap $keyMap, int $leafId): void`
+
+**Parameters:**
+
+- `$peer`: `FediE2EE\PKDServer\Tables\Records\Peer`
+- `$keyMap`: `FediE2EE\PKD\Crypto\AttributeEncryption\AttributeKeyMap`
+- `$leafId`: `int`
 
 ---
 
@@ -671,6 +719,215 @@ Strip all newlines (CR, LF) characters from a string.
 **Parameters:**
 
 - `$input`: `string`
+
+---
+
+## ReplicaActors
+
+**class** `FediE2EE\PKDServer\Tables\ReplicaActors`
+
+**File:** [`src/Tables/ReplicaActors.php`](../../../src/Tables/ReplicaActors.php)
+
+**Extends:** `FediE2EE\PKDServer\Table`
+
+### Methods
+
+#### `getCipher(): FediE2EE\PKDServer\Dependency\WrappedEncryptedRow`
+
+**Attributes:** `#[Override]`
+
+#### `getNextPrimaryKey(): int`
+
+#### `searchForActor(int $peerID, string $activityPubID): ?FediE2EE\PKDServer\Tables\Records\ReplicaActor`
+
+**Parameters:**
+
+- `$peerID`: `int`
+- `$activityPubID`: `string`
+
+**Throws:**
+
+- `ArrayKeyException`
+- `BlindIndexNotFoundException`
+- `CipherSweetException`
+- `CryptoException`
+- `CryptoOperationException`
+- `InvalidCiphertextException`
+- `SodiumException`
+
+#### `getCounts(int $peerID, int $actorID): array`
+
+**Parameters:**
+
+- `$peerID`: `int`
+- `$actorID`: `int`
+
+#### `createForPeer(FediE2EE\PKDServer\Tables\Records\Peer $peer, string $activityPubID, FediE2EE\PKDServer\Protocol\Payload $payload, ?FediE2EE\PKD\Crypto\PublicKey $key = null): int`
+
+**Parameters:**
+
+- `$peer`: `FediE2EE\PKDServer\Tables\Records\Peer`
+- `$activityPubID`: `string`
+- `$payload`: `FediE2EE\PKDServer\Protocol\Payload`
+- `$key`: `?FediE2EE\PKD\Crypto\PublicKey` (nullable)
+
+**Throws:**
+
+- `ArrayKeyException`
+- `CipherSweetException`
+- `CryptoOperationException`
+- `SodiumException`
+- `TableException`
+
+---
+
+## ReplicaAuxData
+
+**class** `FediE2EE\PKDServer\Tables\ReplicaAuxData`
+
+**File:** [`src/Tables/ReplicaAuxData.php`](../../../src/Tables/ReplicaAuxData.php)
+
+**Extends:** `FediE2EE\PKDServer\Table`
+
+### Methods
+
+#### `getCipher(): FediE2EE\PKDServer\Dependency\WrappedEncryptedRow`
+
+**Attributes:** `#[Override]`
+
+#### `getAuxDataForActor(int $peerID, int $actorID): array`
+
+**Parameters:**
+
+- `$peerID`: `int`
+- `$actorID`: `int`
+
+**Throws:**
+
+- `DateMalformedStringException`
+
+#### `getAuxDataById(int $peerID, int $actorID, string $auxId): array`
+
+**Parameters:**
+
+- `$peerID`: `int`
+- `$actorID`: `int`
+- `$auxId`: `string`
+
+**Throws:**
+
+- `CipherSweetException`
+- `CryptoOperationException`
+- `DateMalformedStringException`
+- `InvalidCiphertextException`
+- `JsonException`
+- `SodiumException`
+
+---
+
+## ReplicaHistory
+
+**class** `FediE2EE\PKDServer\Tables\ReplicaHistory`
+
+**File:** [`src/Tables/ReplicaHistory.php`](../../../src/Tables/ReplicaHistory.php)
+
+**Extends:** `FediE2EE\PKDServer\Table`
+
+### Methods
+
+#### `getCipher(): FediE2EE\PKDServer\Dependency\WrappedEncryptedRow`
+
+**Attributes:** `#[Override]`
+
+#### `createLeaf(array $apiResponseRecord, string $cosignature, FediE2EE\PKD\Crypto\Merkle\InclusionProof $proof): FediE2EE\PKDServer\Tables\Records\ReplicaLeaf`
+
+**Parameters:**
+
+- `$apiResponseRecord`: `array`
+- `$cosignature`: `string`
+- `$proof`: `FediE2EE\PKD\Crypto\Merkle\InclusionProof`
+
+#### `save(FediE2EE\PKDServer\Tables\Records\Peer $peer, FediE2EE\PKDServer\Tables\Records\ReplicaLeaf $leaf): void`
+
+**Parameters:**
+
+- `$peer`: `FediE2EE\PKDServer\Tables\Records\Peer`
+- `$leaf`: `FediE2EE\PKDServer\Tables\Records\ReplicaLeaf`
+
+#### `getHistory(int $peerID, int $limit = 100, int $offset = 0): array`
+
+**Parameters:**
+
+- `$peerID`: `int`
+- `$limit`: `int`
+- `$offset`: `int`
+
+**Throws:**
+
+- `JsonException`
+
+#### `getHistorySince(int $peerID, string $hash, int $limit = 100, int $offset = 0): array`
+
+**Parameters:**
+
+- `$peerID`: `int`
+- `$hash`: `string`
+- `$limit`: `int`
+- `$offset`: `int`
+
+**Throws:**
+
+- `JsonException`
+
+---
+
+## ReplicaPublicKeys
+
+**class** `FediE2EE\PKDServer\Tables\ReplicaPublicKeys`
+
+**File:** [`src/Tables/ReplicaPublicKeys.php`](../../../src/Tables/ReplicaPublicKeys.php)
+
+**Extends:** `FediE2EE\PKDServer\Table`
+
+### Methods
+
+#### `getCipher(): FediE2EE\PKDServer\Dependency\WrappedEncryptedRow`
+
+**Attributes:** `#[Override]`
+
+#### `lookup(int $peerID, int $actorID, string $keyID): array`
+
+**Parameters:**
+
+- `$peerID`: `int`
+- `$actorID`: `int`
+- `$keyID`: `string`
+
+**Throws:**
+
+- `CipherSweetException`
+- `CryptoOperationException`
+- `DateMalformedStringException`
+- `InvalidCiphertextException`
+- `JsonException`
+- `SodiumException`
+
+#### `getPublicKeysFor(int $peerID, int $actorID, string $keyId = ''): array`
+
+**Parameters:**
+
+- `$peerID`: `int`
+- `$actorID`: `int`
+- `$keyId`: `string`
+
+**Throws:**
+
+- `CipherSweetException`
+- `CryptoOperationException`
+- `DateMalformedStringException`
+- `InvalidCiphertextException`
+- `JsonException`
+- `SodiumException`
 
 ---
 

@@ -36,7 +36,9 @@ class ParamsTest extends TestCase
             [-1, false],
             [0, false],
             [1, false],
+            [2, true],
             [30, true],
+            [300, true],
             [301, false],
             [PHP_INT_MAX, false]
         ];

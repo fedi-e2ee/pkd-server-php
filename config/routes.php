@@ -50,6 +50,13 @@ $router->group('/api', function(RouteGroup $r) use ($router) {
     $r->map('GET', '/actor/{actor_id}', Actor::class);
     $r->map('GET', '/extensions', Extensions::class);
     $r->map('GET', '/info', Info::class);
+    $r->map('GET', '/replicas/{replica_id}/actor/{actor_id}/keys/key/{key_id}', [ReplicaInfo::class, 'actorKey']);
+    $r->map('GET', '/replicas/{replica_id}/actor/{actor_id}/keys', [ReplicaInfo::class, 'actorKeys']);
+    $r->map('GET', '/replicas/{replica_id}/actor/{actor_id}/auxiliary/{aux_data_id}', [ReplicaInfo::class, 'actorAuxiliaryItem']);
+    $r->map('GET', '/replicas/{replica_id}/actor/{actor_id}/auxiliary', [ReplicaInfo::class, 'actorAuxiliary']);
+    $r->map('GET', '/replicas/{replica_id}/actor/{actor_id}', [ReplicaInfo::class, 'actor']);
+    $r->map('GET', '/replicas/{replica_id}/history/since/{hash}', [ReplicaInfo::class, 'historySince']);
+    $r->map('GET', '/replicas/{replica_id}/history', [ReplicaInfo::class, 'history']);
     $r->map('GET', '/replicas/{replica_id}', ReplicaInfo::class);
     $r->map('GET', '/replicas', Replicas::class);
     $r->map('GET', '/server-public-key', ServerPublicKey::class);

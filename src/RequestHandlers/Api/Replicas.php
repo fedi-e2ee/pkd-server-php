@@ -3,25 +3,49 @@ declare(strict_types=1);
 namespace FediE2EE\PKDServer\RequestHandlers\Api;
 
 use FediE2EE\PKD\Crypto\Exceptions\NotImplementedException;
-use FediE2EE\PKDServer\{
-    Meta\Route,
-    Traits\ReqTrait
-};
+use FediE2EE\PKDServer\{Meta\Route, ServerConfig, Tables\Peers, Traits\ReqTrait};
 use Override;
 use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Http\Message\{
     ServerRequestInterface,
     ResponseInterface
 };
+use TypeError;
 
 class Replicas implements RequestHandlerInterface
 {
     use ReqTrait;
 
+    protected Peers $peersTable;
+
+    public function __construct(?ServerConfig $config = null)
+    {
+        if (is_null($config)) {
+            $config = $GLOBALS['pkdConfig'];
+        }
+        $this->config = $config;
+        $peersTable = $this->table('Peers');
+        if (!($peersTable instanceof Peers)) {
+            throw new TypeError('Wrong table returned');
+        }
+        $this->peersTable = $peersTable;
+    }
+
     #[Route("/api/replicas")]
     #[Override]
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        throw new NotImplementedException('foo');
+        $peers = [];
+        foreach ($this->peersTable->listReplicatingPeers() as $peer) {
+            $peers [] = [
+                'id' => $peer->uniqueId,
+                'ref' => 'https://' . $peer->hostname,
+            ];
+        }
+        return $this->json([
+            '!pkd-context' => 'fedi-e2ee:v1/api/replicas',
+            'time' => $this->time(),
+            'replicas' => $peers,
+        ]);
     }
 }

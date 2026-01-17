@@ -23,16 +23,12 @@ use FediE2EE\PKD\Crypto\Protocol\{
     Actions\UndoFireproof,
     Handler
 };
-use ParagonIE\Certainty\Exception\CertaintyException;
-use Psr\SimpleCache\InvalidArgumentException;
-use Random\RandomException;
 use FediE2EE\PKD\Crypto\{
     SecretKey,
     SymmetricKey
 };
 use FediE2EE\PKDServer\Traits\ConfigTrait;
 use FediE2EE\PKDServer\Exceptions\{
-    ActivityPubException,
     CacheException,
     DependencyException,
     ProtocolException,
@@ -44,19 +40,25 @@ use FediE2EE\PKDServer\{
     AppCache,
     Math,
     Protocol,
+    Protocol\RewrapConfig,
     ServerConfig,
     Table,
     TableCache
 };
-use FediE2EE\PKDServer\Protocol\Payload;
+use FediE2EE\PKDServer\Protocol\{
+    KeyWrapping,
+    Payload,
+};
 use FediE2EE\PKDServer\Tables\{
     Actors,
     AuxData,
     MerkleState,
+    Peers,
     PublicKeys,
     Records\Actor as ActorRecord,
     Records\ActorKey,
     Records\MerkleLeaf,
+    Records\Peer,
     TOTP
 };
 use JsonException as BaseJsonException;
@@ -81,10 +83,14 @@ use SodiumException;
 #[UsesClass(ActorRecord::class)]
 #[UsesClass(Actors::class)]
 #[UsesClass(AuxData::class)]
+#[UsesClass(KeyWrapping::class)]
 #[UsesClass(MerkleLeaf::class)]
 #[UsesClass(MerkleState::class)]
 #[UsesClass(Payload::class)]
+#[UsesClass(Peer::class)]
+#[UsesClass(Peers::class)]
 #[UsesClass(PublicKeys::class)]
+#[UsesClass(RewrapConfig::class)]
 #[UsesClass(ServerConfig::class)]
 #[UsesClass(Table::class)]
 #[UsesClass(TableCache::class)]

@@ -62,11 +62,16 @@ Namespace: `FediE2EE\PKDServer\RequestHandlers\ActivityPub`
 - `CertaintyException`
 - `SodiumException`
 
-#### `appCache(string $namespace): FediE2EE\PKDServer\AppCache`
+#### `appCache(string $namespace, int $defaultTTL = 60): FediE2EE\PKDServer\AppCache`
 
 **Parameters:**
 
 - `$namespace`: `string`
+- `$defaultTTL`: `int`
+
+**Throws:**
+
+- `DependencyException`
 
 #### `table(string $tableName): FediE2EE\PKDServer\Table`
 
@@ -252,11 +257,16 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 - `CertaintyException`
 - `SodiumException`
 
-#### `appCache(string $namespace): FediE2EE\PKDServer\AppCache`
+#### `appCache(string $namespace, int $defaultTTL = 60): FediE2EE\PKDServer\AppCache`
 
 **Parameters:**
 
 - `$namespace`: `string`
+- `$defaultTTL`: `int`
+
+**Throws:**
+
+- `DependencyException`
 
 #### `table(string $tableName): FediE2EE\PKDServer\Table`
 
@@ -424,11 +434,16 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 - `CertaintyException`
 - `SodiumException`
 
-#### `appCache(string $namespace): FediE2EE\PKDServer\AppCache`
+#### `appCache(string $namespace, int $defaultTTL = 60): FediE2EE\PKDServer\AppCache`
 
 **Parameters:**
 
 - `$namespace`: `string`
+- `$defaultTTL`: `int`
+
+**Throws:**
+
+- `DependencyException`
 
 #### `table(string $tableName): FediE2EE\PKDServer\Table`
 

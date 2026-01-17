@@ -41,7 +41,9 @@ use FediE2EE\PKDServer\{
     Traits\ConfigTrait,
     Math,
     Protocol,
+    Protocol\KeyWrapping,
     Protocol\Payload,
+    Protocol\RewrapConfig,
     ServerConfig,
     Table,
     TableCache,
@@ -50,13 +52,15 @@ use FediE2EE\PKDServer\RequestHandlers\Api\BurnDown;
 use FediE2EE\PKDServer\Tables\{
     Actors,
     MerkleState,
+    Peers,
     PublicKeys,
     TOTP
 };
 use FediE2EE\PKDServer\Tables\Records\{
     Actor,
     ActorKey,
-    MerkleLeaf
+    MerkleLeaf,
+    Peer
 };
 use FediE2EE\PKDServer\Tests\HttpTestTrait;
 use GuzzleHttp\Psr7\{
@@ -90,6 +94,8 @@ use SodiumException;
 #[UsesClass(EasyDBHandler::class)]
 #[UsesClass(WrappedEncryptedRow::class)]
 #[UsesClass(Protocol::class)]
+#[UsesClass(KeyWrapping::class)]
+#[UsesClass(Peers::class)]
 #[UsesClass(Payload::class)]
 #[UsesClass(ServerConfig::class)]
 #[UsesClass(Table::class)]
@@ -102,6 +108,8 @@ use SodiumException;
 #[UsesClass(ActorKey::class)]
 #[UsesClass(MerkleLeaf::class)]
 #[UsesClass(Math::class)]
+#[UsesClass(RewrapConfig::class)]
+#[UsesClass(Peer::class)]
 class BurnDownTest extends TestCase
 {
     use ConfigTrait;
@@ -335,6 +343,7 @@ class BurnDownTest extends TestCase
         $burnDownHandler = $this->instantiateHandler(BurnDown::class, $config, $webFinger);
 
         // Handle request - should fail signature verification
+        $this->clearOldTransaction($config);
         $response = $burnDownHandler->handle($request);
         $this->assertSame(200, $response->getStatusCode());
 

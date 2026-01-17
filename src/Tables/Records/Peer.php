@@ -7,6 +7,7 @@ use FediE2EE\PKD\Crypto\Merkle\IncrementalTree;
 use FediE2EE\PKD\Crypto\PublicKey;
 use FediE2EE\PKD\Crypto\UtilTrait;
 use FediE2EE\PKDServer\Meta\RecordForTable;
+use FediE2EE\PKDServer\Protocol\RewrapConfig;
 use FediE2EE\PKDServer\Tables\Peers;
 use FediE2EE\PKDServer\Traits\TableRecordTrait;
 use ParagonIE\ConstantTime\Base64UrlSafe;
@@ -19,11 +20,15 @@ class Peer
 
     public function __construct(
         public string $hostname,
+        public string $uniqueId,
         public PublicKey $publicKey,
         public IncrementalTree $tree,
         public string $latestRoot,
+        public bool $cosign,
+        public bool $replicate,
         public DateTimeImmutable $created,
         public DateTimeImmutable $modified,
+        public ?RewrapConfig $wrapConfig = null,
         ?int $primaryKey = null,
     ) {
         $this->primaryKey = $primaryKey;
@@ -32,14 +37,24 @@ class Peer
     public function toArray(): array
     {
         return [
+            'uniqueid' =>
+                $this->uniqueId,
             'hostname' =>
                 $this->hostname,
-            'publicKey' =>
+            'publickey' =>
                 $this->publicKey->toString(),
             'incrementaltreestate' =>
                 Base64UrlSafe::encodeUnpadded($this->tree->toJson()),
             'latestroot' =>
                 $this->latestRoot,
+            'rewrap' =>
+                is_null($this->wrapConfig)
+                    ? null
+                    : json_encode($this->wrapConfig),
+            'cosign' =>
+                $this->cosign,
+            'replicate' =>
+                $this->replicate,
             'created' =>
                 $this->created->format(DateTimeImmutable::ATOM),
             'modified' =>

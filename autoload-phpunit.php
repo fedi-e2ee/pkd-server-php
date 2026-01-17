@@ -64,6 +64,20 @@ if (!($GLOBALS['pkdConfig'] instanceof ServerConfig)) {
 
         // Create second DB connection for testing concurrency
         $GLOBALS['PKD_PHPUNIT_DB'] = new EasyDBCache(new PDO('sqlite:' . $temp));
+
+        // Call cleanup-test-db.php to cleanup test file after phpunit is finished.
+        if (getenv('AUTO_CLEANUP_TEST_DB')) {
+            register_shutdown_function(function () use ($temp) {
+                $script = __DIR__ . '/cmd/cleanup-test-db.php';
+                if (DIRECTORY_SEPARATOR === '\\') {
+                    // Windows: use start with /B (background) flag
+                    pclose(popen("start /B " . PHP_BINARY . " " . escapeshellarg($script) . " " . escapeshellarg($temp), "r"));
+                } else {
+                    // Unix: use nohup and redirect to /dev/null
+                    shell_exec(PHP_BINARY . " " . escapeshellarg($script) . " " . escapeshellarg($temp) . " > /dev/null 2>&1 &");
+                }
+            });
+        }
     } else {
         // Create second DB connection for testing concurrency
         $GLOBALS['PKD_PHPUNIT_DB'] = require __DIR__ . '/config/database.php';
@@ -75,7 +89,7 @@ if (!($GLOBALS['pkdConfig'] instanceof ServerConfig)) {
         $_SERVER['argv'] = [$_SERVER['argv'][0]];
         require __DIR__ . '/cmd/init-database.php';
         $_SERVER['argv'] = $argv_backup;
-        if (tableExists($db, 'pkd_log')) {
+        if (tableExists($db, 'pkd_replica_actors_auxdata')) {
             echo 'Imported!', PHP_EOL;
         } else {
             // This is normally dangerous, but we need to trigger it again just to be sure:

@@ -27,20 +27,24 @@ use FediE2EE\PKDServer\Exceptions\{
     ProtocolException,
     TableException
 };
-use FediE2EE\PKDServer\{ActivityPub\WebFinger,
+use FediE2EE\PKDServer\{
+    ActivityPub\WebFinger,
     AppCache,
     Dependency\WrappedEncryptedRow,
     Math,
     Protocol,
+    Protocol\KeyWrapping,
     Protocol\Payload,
     ServerConfig,
     Table,
     TableCache,
-    Traits\ConfigTrait};
+    Traits\ConfigTrait
+};
 use FediE2EE\PKDServer\Tables\{
     Actors,
     AuxData,
     MerkleState,
+    Peers,
     PublicKeys
 };
 use FediE2EE\PKDServer\Tables\Records\{
@@ -78,6 +82,8 @@ use SodiumException;
 #[UsesClass(Payload::class)]
 #[UsesClass(PublicKeys::class)]
 #[UsesClass(Protocol::class)]
+#[UsesClass(KeyWrapping::class)]
+#[UsesClass(Peers::class)]
 #[UsesClass(ServerConfig::class)]
 #[UsesClass(Table::class)]
 #[UsesClass(TableCache::class)]

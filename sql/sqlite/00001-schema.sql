@@ -13,6 +13,7 @@ CREATE TABLE IF NOT EXISTS pkd_merkle_leaves (
     signature TEXT, -- Ed25519 signature of contenthash and publickey
     contents TEXT, -- Protocol Message being hashes
     inclusionproof TEXT, -- JSON: encodes a proof of inclusion
+    wrappedkeys TEXT, -- Optional: Wrapped symmetric keys
     created TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 CREATE UNIQUE INDEX IF NOT EXISTS pkd_merkle_leaves_idx ON pkd_merkle_leaves (publickeyhash, contenthash, signature);
@@ -124,14 +125,113 @@ CREATE TABLE IF NOT EXISTS pkd_log (
 
 CREATE TABLE IF NOT EXISTS pkd_peers (
     peerid INTEGER PRIMARY KEY AUTOINCREMENT,
+    uniqueid TEXT NOT NULL UNIQUE,
     hostname TEXT,
     publickey TEXT,
     incrementaltreestate TEXT,
     latestroot TEXT,
+    rewrap TEXT NULL,
+    cosign BOOLEAN DEFAULT FALSE,
     replicate BOOLEAN DEFAULT FALSE,
     created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE IF NOT EXISTS pkd_merkle_leaf_rewrapped_keys (
+    rewrappedkeyid INTEGER PRIMARY KEY AUTOINCREMENT,
+    peer INTEGER NOT NULL,
+    leaf INTEGER NOT NULL,
+    pkdattrname TEXT,
+    rewrapped TEXT,
+    created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (peer) REFERENCES pkd_peers (peerid),
+    FOREIGN KEY (leaf) REFERENCES pkd_merkle_leaves (merkleleafid)
+);
+
+CREATE TABLE IF NOT EXISTS pkd_replica_history (
+    replicahistoryid INTEGER PRIMARY KEY AUTOINCREMENT,
+    peer INTEGER NOT NULL,
+    root TEXT,
+    publickeyhash TEXT,
+    contenthash TEXT,
+    signature TEXT,
+    contents TEXT,
+    cosignature TEXT,
+    inclusionproof TEXT,
+    created TIMESTAMP,
+    replicated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (peer) REFERENCES pkd_peers (peerid)
+);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_pkd_replica_history_peer_root
+    ON pkd_replica_history (peer, root);
+
+CREATE TABLE IF NOT EXISTS pkd_replica_actors (
+    replicaactorid INTEGER PRIMARY KEY AUTOINCREMENT,
+    peer INTEGER NOT NULL,
+    activitypubid TEXT,
+    activitypubid_idx TEXT,
+    rfc9421pubkey TEXT,
+    wrap_activitypubid TEXT,
+    fireproof BOOLEAN DEFAULT 0,
+    fireproofleaf INTEGER,
+    undofireproofleaf INTEGER,
+    movedleaf INTEGER,
+    created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (peer) REFERENCES pkd_peers (peerid),
+    FOREIGN KEY (fireproofleaf) REFERENCES pkd_replica_history (replicahistoryid),
+    FOREIGN KEY (undofireproofleaf) REFERENCES pkd_replica_history (replicahistoryid),
+    FOREIGN KEY (movedleaf) REFERENCES pkd_replica_history (replicahistoryid)
+);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_pkd_replica_actors_peer_activitypubid
+    ON pkd_replica_actors (peer, activitypubid);
+CREATE INDEX IF NOT EXISTS idx_pkd_replica_actors_peer_activitypubid_idx
+    ON pkd_replica_actors (peer, activitypubid_idx);
+
+CREATE TABLE IF NOT EXISTS pkd_replica_actors_publickeys (
+    replicaactorpublickeyid INTEGER PRIMARY KEY AUTOINCREMENT,
+    peer INTEGER NOT NULL,
+    actor INTEGER NOT NULL,
+    publickey TEXT,
+    publickey_idx TEXT,
+    wrap_publickey TEXT,
+    key_id TEXT,
+    insertleaf INTEGER,
+    revokeleaf INTEGER,
+    trusted BOOLEAN DEFAULT 0,
+    created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (peer) REFERENCES pkd_peers (peerid),
+    FOREIGN KEY (actor) REFERENCES pkd_replica_actors (replicaactorid),
+    FOREIGN KEY (insertleaf) REFERENCES pkd_replica_history (replicahistoryid),
+    FOREIGN KEY (revokeleaf) REFERENCES pkd_replica_history (replicahistoryid)
+);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_pkd_replica_actors_publickeys_peer_publickey
+    ON pkd_replica_actors_publickeys (peer, publickey);
+CREATE INDEX IF NOT EXISTS idx_pkd_replica_actors_publickeys_peer_publickey_idx
+    ON pkd_replica_actors_publickeys (peer, publickey_idx);
+
+CREATE TABLE IF NOT EXISTS pkd_replica_actors_auxdata (
+    replicaactorauxdataid INTEGER PRIMARY KEY AUTOINCREMENT,
+    peer INTEGER NOT NULL,
+    actor INTEGER NOT NULL,
+    auxdatatype TEXT,
+    auxdata TEXT,
+    wrap_auxdata TEXT,
+    auxdata_idx TEXT,
+    insertleaf INTEGER,
+    revokeleaf INTEGER,
+    trusted BOOLEAN DEFAULT 0,
+    created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (peer) REFERENCES pkd_peers (peerid),
+    FOREIGN KEY (actor) REFERENCES pkd_replica_actors (replicaactorid),
+    FOREIGN KEY (insertleaf) REFERENCES pkd_replica_history (replicahistoryid),
+    FOREIGN KEY (revokeleaf) REFERENCES pkd_replica_history (replicahistoryid)
+);
+CREATE INDEX IF NOT EXISTS idx_pkd_replica_actors_auxdata_peer_auxdata_idx
+    ON pkd_replica_actors_auxdata (peer, auxdata_idx);
 
 -- Update modification time triggers
 CREATE TRIGGER IF NOT EXISTS update_pkd_actors_modtime

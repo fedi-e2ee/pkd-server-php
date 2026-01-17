@@ -13,24 +13,30 @@ use FediE2EE\PKD\Crypto\{
 use FediE2EE\PKDServer\RequestHandlers\Api\{
     HistoryView
 };
-use FediE2EE\PKDServer\{ActivityPub\WebFinger,
+use FediE2EE\PKDServer\{
+    ActivityPub\WebFinger,
     AppCache,
     Dependency\WrappedEncryptedRow,
     Math,
     Protocol,
+    Protocol\KeyWrapping,
     Protocol\Payload,
+    Protocol\RewrapConfig,
     ServerConfig,
     Table,
-    TableCache};
+    TableCache
+};
 use FediE2EE\PKDServer\Tables\{
     Actors,
     MerkleState,
+    Peers,
     PublicKeys
 };
 use FediE2EE\PKDServer\Tables\Records\{
     Actor,
     ActorKey,
-    MerkleLeaf
+    MerkleLeaf,
+    Peer
 };
 use FediE2EE\PKDServer\Tests\HttpTestTrait;
 use FediE2EE\PKDServer\Traits\ConfigTrait;
@@ -47,6 +53,8 @@ use ReflectionClass;
 #[UsesClass(WebFinger::class)]
 #[UsesClass(WrappedEncryptedRow::class)]
 #[UsesClass(Protocol::class)]
+#[UsesClass(KeyWrapping::class)]
+#[UsesClass(Peers::class)]
 #[UsesClass(Payload::class)]
 #[UsesClass(ServerConfig::class)]
 #[UsesClass(Table::class)]
@@ -58,6 +66,8 @@ use ReflectionClass;
 #[UsesClass(ActorKey::class)]
 #[UsesClass(MerkleLeaf::class)]
 #[UsesClass(Math::class)]
+#[UsesClass(RewrapConfig::class)]
+#[UsesClass(Peer::class)]
 class HistoryViewTest extends TestCase
 {
     use ConfigTrait;
@@ -126,6 +136,7 @@ class HistoryViewTest extends TestCase
         $this->assertArrayHasKey('rewrapped-keys', $body);
         $this->assertArrayHasKey('witnesses', $body);
         $this->assertIsArray($body['witnesses']);
+        $this->assertIsArray($body['message']);
 
         $this->assertNotInTransaction();
     }

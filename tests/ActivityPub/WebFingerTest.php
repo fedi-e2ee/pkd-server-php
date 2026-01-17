@@ -615,4 +615,45 @@ class WebFingerTest extends TestCase
         $this->expectExceptionMessage('Could not find public key for https://example.com/users/alice');
         $webFinger->getPublicKey('https://example.com/users/alice');
     }
+
+    /**
+     * @throws CertaintyException
+     * @throws CryptoException
+     * @throws DependencyException
+     * @throws FetchException
+     * @throws NotImplementedException
+     * @throws SodiumException
+     */
+    public function testGetPublicKeyWithSlashesInPath(): void
+    {
+        $sk = SecretKey::generate();
+        $pk = $sk->getPublicKey();
+
+        // The path will be /users/alice
+        $actorUrl = 'https://example.com/users/alice';
+
+        $mockHttp = $this->getMockClient([
+            // First call to WebFinger (triggered by getPublicKey)
+            new Response(200, ['Content-Type' => 'application/json'], json_encode([
+                'links' => [
+                    [
+                        'rel' => 'self',
+                        'type' => 'application/activity+json',
+                        'href' => $actorUrl
+                    ]
+                ]
+            ])),
+            // Second call to ActivityPub actor
+            new Response(200, ['Content-Type' => 'application/activity+json'], json_encode([
+                'publicKey' => [
+                    'publicKeyPem' => $pk->encodePem()
+                ]
+            ]))
+        ]);
+
+        $webFinger = new WebFinger($this->getConfig(), $mockHttp);
+        $fetchedPk = $webFinger->getPublicKey($actorUrl);
+
+        $this->assertSame($pk->toString(), $fetchedPk->toString());
+    }
 }

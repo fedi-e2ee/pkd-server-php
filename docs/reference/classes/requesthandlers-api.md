@@ -153,11 +153,16 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 - `RuntimeError`
 - `SyntaxError`
 
-#### `appCache(string $namespace): FediE2EE\PKDServer\AppCache`
+#### `appCache(string $namespace, int $defaultTTL = 60): FediE2EE\PKDServer\AppCache`
 
 **Parameters:**
 
 - `$namespace`: `string`
+- `$defaultTTL`: `int`
+
+**Throws:**
+
+- `DependencyException`
 
 #### `table(string $tableName): FediE2EE\PKDServer\Table`
 
@@ -267,11 +272,16 @@ This is intended for mocking in unit tests
 - `CertaintyException`
 - `SodiumException`
 
-#### `appCache(string $namespace): FediE2EE\PKDServer\AppCache`
+#### `appCache(string $namespace, int $defaultTTL = 60): FediE2EE\PKDServer\AppCache`
 
 **Parameters:**
 
 - `$namespace`: `string`
+- `$defaultTTL`: `int`
+
+**Throws:**
+
+- `DependencyException`
 
 #### `table(string $tableName): FediE2EE\PKDServer\Table`
 
@@ -499,11 +509,16 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 - `RuntimeError`
 - `SyntaxError`
 
-#### `appCache(string $namespace): FediE2EE\PKDServer\AppCache`
+#### `appCache(string $namespace, int $defaultTTL = 60): FediE2EE\PKDServer\AppCache`
 
 **Parameters:**
 
 - `$namespace`: `string`
+- `$defaultTTL`: `int`
+
+**Throws:**
+
+- `DependencyException`
 
 #### `table(string $tableName): FediE2EE\PKDServer\Table`
 
@@ -661,11 +676,16 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 - `RuntimeError`
 - `SyntaxError`
 
-#### `appCache(string $namespace): FediE2EE\PKDServer\AppCache`
+#### `appCache(string $namespace, int $defaultTTL = 60): FediE2EE\PKDServer\AppCache`
 
 **Parameters:**
 
 - `$namespace`: `string`
+- `$defaultTTL`: `int`
+
+**Throws:**
+
+- `DependencyException`
 
 #### `table(string $tableName): FediE2EE\PKDServer\Table`
 
@@ -839,11 +859,16 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 - `RuntimeError`
 - `SyntaxError`
 
-#### `appCache(string $namespace): FediE2EE\PKDServer\AppCache`
+#### `appCache(string $namespace, int $defaultTTL = 60): FediE2EE\PKDServer\AppCache`
 
 **Parameters:**
 
 - `$namespace`: `string`
+- `$defaultTTL`: `int`
+
+**Throws:**
+
+- `DependencyException`
 
 #### `table(string $tableName): FediE2EE\PKDServer\Table`
 
@@ -1017,11 +1042,16 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 - `RuntimeError`
 - `SyntaxError`
 
-#### `appCache(string $namespace): FediE2EE\PKDServer\AppCache`
+#### `appCache(string $namespace, int $defaultTTL = 60): FediE2EE\PKDServer\AppCache`
 
 **Parameters:**
 
 - `$namespace`: `string`
+- `$defaultTTL`: `int`
+
+**Throws:**
+
+- `DependencyException`
 
 #### `table(string $tableName): FediE2EE\PKDServer\Table`
 
@@ -1187,11 +1217,16 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 - `RuntimeError`
 - `SyntaxError`
 
-#### `appCache(string $namespace): FediE2EE\PKDServer\AppCache`
+#### `appCache(string $namespace, int $defaultTTL = 60): FediE2EE\PKDServer\AppCache`
 
 **Parameters:**
 
 - `$namespace`: `string`
+- `$defaultTTL`: `int`
+
+**Throws:**
+
+- `DependencyException`
 
 #### `table(string $tableName): FediE2EE\PKDServer\Table`
 
@@ -1357,11 +1392,16 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 - `RuntimeError`
 - `SyntaxError`
 
-#### `appCache(string $namespace): FediE2EE\PKDServer\AppCache`
+#### `appCache(string $namespace, int $defaultTTL = 60): FediE2EE\PKDServer\AppCache`
 
 **Parameters:**
 
 - `$namespace`: `string`
+- `$defaultTTL`: `int`
+
+**Throws:**
+
+- `DependencyException`
 
 #### `table(string $tableName): FediE2EE\PKDServer\Table`
 
@@ -1527,11 +1567,16 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 - `RuntimeError`
 - `SyntaxError`
 
-#### `appCache(string $namespace): FediE2EE\PKDServer\AppCache`
+#### `appCache(string $namespace, int $defaultTTL = 60): FediE2EE\PKDServer\AppCache`
 
 **Parameters:**
 
 - `$namespace`: `string`
+- `$defaultTTL`: `int`
+
+**Throws:**
+
+- `DependencyException`
 
 #### `table(string $tableName): FediE2EE\PKDServer\Table`
 
@@ -1697,11 +1742,16 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 - `RuntimeError`
 - `SyntaxError`
 
-#### `appCache(string $namespace): FediE2EE\PKDServer\AppCache`
+#### `appCache(string $namespace, int $defaultTTL = 60): FediE2EE\PKDServer\AppCache`
 
 **Parameters:**
 
 - `$namespace`: `string`
+- `$defaultTTL`: `int`
+
+**Throws:**
+
+- `DependencyException`
 
 #### `table(string $tableName): FediE2EE\PKDServer\Table`
 
@@ -1852,11 +1902,16 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 - `RuntimeError`
 - `SyntaxError`
 
-#### `appCache(string $namespace): FediE2EE\PKDServer\AppCache`
+#### `appCache(string $namespace, int $defaultTTL = 60): FediE2EE\PKDServer\AppCache`
 
 **Parameters:**
 
 - `$namespace`: `string`
+- `$defaultTTL`: `int`
+
+**Throws:**
+
+- `DependencyException`
 
 #### `table(string $tableName): FediE2EE\PKDServer\Table`
 
@@ -2030,11 +2085,16 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 - `RuntimeError`
 - `SyntaxError`
 
-#### `appCache(string $namespace): FediE2EE\PKDServer\AppCache`
+#### `appCache(string $namespace, int $defaultTTL = 60): FediE2EE\PKDServer\AppCache`
 
 **Parameters:**
 
 - `$namespace`: `string`
+- `$defaultTTL`: `int`
+
+**Throws:**
+
+- `DependencyException`
 
 #### `table(string $tableName): FediE2EE\PKDServer\Table`
 
@@ -2208,11 +2268,16 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 - `RuntimeError`
 - `SyntaxError`
 
-#### `appCache(string $namespace): FediE2EE\PKDServer\AppCache`
+#### `appCache(string $namespace, int $defaultTTL = 60): FediE2EE\PKDServer\AppCache`
 
 **Parameters:**
 
 - `$namespace`: `string`
+- `$defaultTTL`: `int`
+
+**Throws:**
+
+- `DependencyException`
 
 #### `table(string $tableName): FediE2EE\PKDServer\Table`
 
@@ -2286,6 +2351,179 @@ This is intended for mocking in unit tests
 
 - `$request`: `Psr\Http\Message\ServerRequestInterface`
 
+**Throws:**
+
+- `CacheException`
+- `CryptoException`
+- `DateMalformedStringException`
+- `DependencyException`
+- `JsonException`
+- `NotImplementedException`
+- `SodiumException`
+
+#### `actor(Psr\Http\Message\ServerRequestInterface $request): Psr\Http\Message\ResponseInterface`
+
+**Attributes:** `#[Route]`
+
+**Parameters:**
+
+- `$request`: `Psr\Http\Message\ServerRequestInterface`
+
+**Throws:**
+
+- `ArrayKeyException`
+- `BlindIndexNotFoundException`
+- `CacheException`
+- `CipherSweetException`
+- `CryptoException`
+- `CryptoOperationException`
+- `DateMalformedStringException`
+- `DependencyException`
+- `InvalidCiphertextException`
+- `JsonException`
+- `NotImplementedException`
+- `SodiumException`
+- `TableException`
+
+#### `actorKeys(Psr\Http\Message\ServerRequestInterface $request): Psr\Http\Message\ResponseInterface`
+
+**Attributes:** `#[Route]`
+
+**Parameters:**
+
+- `$request`: `Psr\Http\Message\ServerRequestInterface`
+
+**Throws:**
+
+- `ArrayKeyException`
+- `BaseJsonException`
+- `BlindIndexNotFoundException`
+- `CacheException`
+- `CipherSweetException`
+- `CryptoException`
+- `CryptoOperationException`
+- `DateMalformedStringException`
+- `DependencyException`
+- `InvalidCiphertextException`
+- `JsonException`
+- `NotImplementedException`
+- `SodiumException`
+- `TableException`
+
+#### `actorKey(Psr\Http\Message\ServerRequestInterface $request): Psr\Http\Message\ResponseInterface`
+
+**Attributes:** `#[Route]`
+
+**Parameters:**
+
+- `$request`: `Psr\Http\Message\ServerRequestInterface`
+
+**Throws:**
+
+- `ArrayKeyException`
+- `BaseJsonException`
+- `BlindIndexNotFoundException`
+- `CacheException`
+- `CipherSweetException`
+- `CryptoException`
+- `CryptoOperationException`
+- `DateMalformedStringException`
+- `DependencyException`
+- `InvalidCiphertextException`
+- `JsonException`
+- `NotImplementedException`
+- `SodiumException`
+- `TableException`
+
+#### `actorAuxiliary(Psr\Http\Message\ServerRequestInterface $request): Psr\Http\Message\ResponseInterface`
+
+**Attributes:** `#[Route]`
+
+**Parameters:**
+
+- `$request`: `Psr\Http\Message\ServerRequestInterface`
+
+**Throws:**
+
+- `ArrayKeyException`
+- `BlindIndexNotFoundException`
+- `CacheException`
+- `CipherSweetException`
+- `CryptoException`
+- `CryptoOperationException`
+- `DateMalformedStringException`
+- `DependencyException`
+- `InvalidCiphertextException`
+- `JsonException`
+- `NotImplementedException`
+- `SodiumException`
+- `TableException`
+
+#### `actorAuxiliaryItem(Psr\Http\Message\ServerRequestInterface $request): Psr\Http\Message\ResponseInterface`
+
+**Attributes:** `#[Route]`
+
+**Parameters:**
+
+- `$request`: `Psr\Http\Message\ServerRequestInterface`
+
+**Throws:**
+
+- `ArrayKeyException`
+- `BaseJsonException`
+- `BlindIndexNotFoundException`
+- `CacheException`
+- `CipherSweetException`
+- `CryptoException`
+- `CryptoOperationException`
+- `DateMalformedStringException`
+- `DependencyException`
+- `InvalidCiphertextException`
+- `JsonException`
+- `NotImplementedException`
+- `SodiumException`
+- `TableException`
+
+#### `history(Psr\Http\Message\ServerRequestInterface $request): Psr\Http\Message\ResponseInterface`
+
+**Attributes:** `#[Route]`
+
+**Parameters:**
+
+- `$request`: `Psr\Http\Message\ServerRequestInterface`
+
+**Throws:**
+
+- `BaseJsonException`
+- `CacheException`
+- `CryptoException`
+- `DateMalformedStringException`
+- `DependencyException`
+- `JsonException`
+- `NotImplementedException`
+- `SodiumException`
+- `TableException`
+
+#### `historySince(Psr\Http\Message\ServerRequestInterface $request): Psr\Http\Message\ResponseInterface`
+
+**Attributes:** `#[Route]`
+
+**Parameters:**
+
+- `$request`: `Psr\Http\Message\ServerRequestInterface`
+
+**Throws:**
+
+- `BaseJsonException`
+- `CacheException`
+- `CryptoException`
+- `DateMalformedStringException`
+- `DependencyException`
+- `JsonException`
+- `NotImplementedException`
+- `SodiumException`
+- `TableException`
+
 #### `time(): string`
 
 #### `canonicalizeActor(string $actor): string`
@@ -2363,11 +2601,16 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 - `RuntimeError`
 - `SyntaxError`
 
-#### `appCache(string $namespace): FediE2EE\PKDServer\AppCache`
+#### `appCache(string $namespace, int $defaultTTL = 60): FediE2EE\PKDServer\AppCache`
 
 **Parameters:**
 
 - `$namespace`: `string`
+- `$defaultTTL`: `int`
+
+**Throws:**
+
+- `DependencyException`
 
 #### `table(string $tableName): FediE2EE\PKDServer\Table`
 
@@ -2432,6 +2675,12 @@ This is intended for mocking in unit tests
 | `$config` | `?FediE2EE\PKDServer\ServerConfig` |  |
 
 ### Methods
+
+#### `__construct(?FediE2EE\PKDServer\ServerConfig $config = null): void`
+
+**Parameters:**
+
+- `$config`: `?FediE2EE\PKDServer\ServerConfig` (nullable)
 
 #### `handle(Psr\Http\Message\ServerRequestInterface $request): Psr\Http\Message\ResponseInterface`
 
@@ -2518,11 +2767,16 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 - `RuntimeError`
 - `SyntaxError`
 
-#### `appCache(string $namespace): FediE2EE\PKDServer\AppCache`
+#### `appCache(string $namespace, int $defaultTTL = 60): FediE2EE\PKDServer\AppCache`
 
 **Parameters:**
 
 - `$namespace`: `string`
+- `$defaultTTL`: `int`
+
+**Throws:**
+
+- `DependencyException`
 
 #### `table(string $tableName): FediE2EE\PKDServer\Table`
 
@@ -2689,11 +2943,16 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 - `RuntimeError`
 - `SyntaxError`
 
-#### `appCache(string $namespace): FediE2EE\PKDServer\AppCache`
+#### `appCache(string $namespace, int $defaultTTL = 60): FediE2EE\PKDServer\AppCache`
 
 **Parameters:**
 
 - `$namespace`: `string`
+- `$defaultTTL`: `int`
+
+**Throws:**
+
+- `DependencyException`
 
 #### `table(string $tableName): FediE2EE\PKDServer\Table`
 
@@ -2859,11 +3118,16 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 - `RuntimeError`
 - `SyntaxError`
 
-#### `appCache(string $namespace): FediE2EE\PKDServer\AppCache`
+#### `appCache(string $namespace, int $defaultTTL = 60): FediE2EE\PKDServer\AppCache`
 
 **Parameters:**
 
 - `$namespace`: `string`
+- `$defaultTTL`: `int`
+
+**Throws:**
+
+- `DependencyException`
 
 #### `table(string $tableName): FediE2EE\PKDServer\Table`
 
@@ -3037,11 +3301,16 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 - `RuntimeError`
 - `SyntaxError`
 
-#### `appCache(string $namespace): FediE2EE\PKDServer\AppCache`
+#### `appCache(string $namespace, int $defaultTTL = 60): FediE2EE\PKDServer\AppCache`
 
 **Parameters:**
 
 - `$namespace`: `string`
+- `$defaultTTL`: `int`
+
+**Throws:**
+
+- `DependencyException`
 
 #### `table(string $tableName): FediE2EE\PKDServer\Table`
 
@@ -3319,11 +3588,16 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 - `RuntimeError`
 - `SyntaxError`
 
-#### `appCache(string $namespace): FediE2EE\PKDServer\AppCache`
+#### `appCache(string $namespace, int $defaultTTL = 60): FediE2EE\PKDServer\AppCache`
 
 **Parameters:**
 
 - `$namespace`: `string`
+- `$defaultTTL`: `int`
+
+**Throws:**
+
+- `DependencyException`
 
 #### `table(string $tableName): FediE2EE\PKDServer\Table`
 
@@ -3602,11 +3876,16 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 - `RuntimeError`
 - `SyntaxError`
 
-#### `appCache(string $namespace): FediE2EE\PKDServer\AppCache`
+#### `appCache(string $namespace, int $defaultTTL = 60): FediE2EE\PKDServer\AppCache`
 
 **Parameters:**
 
 - `$namespace`: `string`
+- `$defaultTTL`: `int`
+
+**Throws:**
+
+- `DependencyException`
 
 #### `table(string $tableName): FediE2EE\PKDServer\Table`
 
