@@ -6,8 +6,11 @@ use FediE2EE\PKD\Crypto\AttributeEncryption\AttributeKeyMap;
 use FediE2EE\PKD\Crypto\Merkle\InclusionProof;
 use FediE2EE\PKDServer\Dependency\WrappedEncryptedRow;
 use FediE2EE\PKDServer\Table;
-use FediE2EE\PKDServer\Tables\Records\Peer;
-use FediE2EE\PKDServer\Tables\Records\ReplicaLeaf;
+use JsonException;
+use FediE2EE\PKDServer\Tables\Records\{
+    Peer,
+    ReplicaLeaf
+};
 use Override;
 
 class ReplicaHistory extends Table
@@ -50,5 +53,73 @@ class ReplicaHistory extends Table
             'pkd_replica_history',
             $params
         );
+    }
+
+    /**
+     * @throws JsonException
+     */
+    public function getHistory(int $peerID, int $limit = 100, int $offset = 0): array
+    {
+        $results = $this->db->run(
+            "SELECT *
+                FROM pkd_replica_history
+                WHERE peer = ?
+                ORDER BY replicahistoryid DESC
+                LIMIT {$limit} OFFSET {$offset}",
+            $peerID
+        );
+        return $this->formatHistory($results);
+    }
+
+    /**
+     * @throws JsonException
+     */
+    public function getHistorySince(int $peerID, string $hash, int $limit = 100, int $offset = 0): array
+    {
+        $afterId = $this->db->cell(
+            "SELECT replicahistoryid FROM pkd_replica_history WHERE peer = ? AND root = ?",
+            $peerID,
+            $hash
+        );
+        if (empty($afterId)) {
+            return [];
+        }
+        $results = $this->db->run(
+            "SELECT *
+                FROM pkd_replica_history
+                WHERE peer = ? AND replicahistoryid > ?
+                ORDER BY replicahistoryid
+                LIMIT {$limit} OFFSET {$offset}",
+            $peerID,
+            $afterId
+        );
+        return $this->formatHistory($results);
+    }
+
+    /**
+     * @throws JsonException
+     */
+    protected function formatHistory(array $rows): array
+    {
+        $return = [];
+        foreach ($rows as $row) {
+            $return[] = [
+                'created' => $row['created'],
+                'replicated' => $row['replicated'],
+                'encrypted-message' => $row['contents'],
+                'contenthash' => $row['contenthash'],
+                'publickeyhash' => $row['publickeyhash'],
+                'signature' => $row['signature'],
+                'merkle-root' => $row['root'],
+                'cosignature' => $row['cosignature'],
+                'inclusion-proof' => json_decode(
+                    (string) ($row['inclusionproof'] ?? '[]'),
+                    true,
+                    512,
+                    JSON_THROW_ON_ERROR
+                ),
+            ];
+        }
+        return $return;
     }
 }

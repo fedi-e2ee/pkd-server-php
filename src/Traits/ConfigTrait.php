@@ -36,9 +36,12 @@ trait ConfigTrait
     public ?ServerConfig $config = null;
     protected ?WebFinger $webFinger = null;
 
-    public function appCache(string $namespace): AppCache
+    /**
+     * @throws DependencyException
+     */
+    public function appCache(string $namespace, int $defaultTTL = 60): AppCache
     {
-        return new AppCache($this->config(), $namespace);
+        return new AppCache($this->config(), $namespace, $defaultTTL);
     }
 
     /**

@@ -1,0 +1,154 @@
+<?php
+declare(strict_types=1);
+namespace FediE2EE\PKDServer\Tests\Protocol;
+
+use FediE2EE\PKD\Crypto\Exceptions\{
+    CryptoException,
+    JsonException,
+    NotImplementedException,
+    ParserException
+};
+use FediE2EE\PKD\Crypto\SecretKey;
+use FediE2EE\PKDServer\{
+    ActivityPub\WebFinger,
+    AppCache,
+    Math,
+    Meta\Params,
+    Protocol\KeyWrapping,
+    Protocol,
+    ServerConfig,
+    Table,
+    TableCache
+};
+use FediE2EE\PKDServer\Dependency\{
+    HPKE,
+    SigningKeys
+};
+use FediE2EE\PKDServer\Exceptions\{
+    CacheException,
+    DependencyException,
+    ProtocolException,
+    TableException,
+};
+use FediE2EE\PKDServer\Tables\MerkleState;
+use FediE2EE\PKDServer\Tables\Records\ActorKey;
+use FediE2EE\PKDServer\Tests\HttpTestTrait;
+use FediE2EE\PKDServer\Traits\ConfigTrait;
+use ParagonIE\Certainty\Exception\CertaintyException;
+use ParagonIE\HPKE\HPKEException;
+use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\{
+    CoversClass,
+    UsesClass
+};
+use Psr\SimpleCache\InvalidArgumentException;
+use Random\RandomException;
+use SodiumException;
+
+#[CoversClass(KeyWrapping::class)]
+#[UsesClass(ServerConfig::class)]
+#[UsesClass(Protocol::class)]
+#[UsesClass(AppCache::class)]
+#[UsesClass(MerkleState::class)]
+#[UsesClass(ActorKey::class)]
+#[UsesClass(Table::class)]
+#[UsesClass(TableCache::class)]
+#[UsesClass(Params::class)]
+#[UsesClass(HPKE::class)]
+#[UsesClass(SigningKeys::class)]
+#[UsesClass(Math::class)]
+#[UsesClass(WebFinger::class)]
+class KeyWrappingTest extends TestCase
+{
+    use ConfigTrait;
+    use HttpTestTrait;
+
+    /**
+     * @throws DependencyException
+     * @throws SodiumException
+     */
+    public function setUp(): void
+    {
+        $this->config = $this->getConfig();
+        $this->truncateTables();
+    }
+
+    /**
+     * @throws CacheException
+     * @throws CertaintyException
+     * @throws CryptoException
+     * @throws DependencyException
+     * @throws HPKEException
+     * @throws InvalidArgumentException
+     * @throws JsonException
+     * @throws NotImplementedException
+     * @throws ParserException
+     * @throws ProtocolException
+     * @throws RandomException
+     * @throws SodiumException
+     * @throws TableException
+     */
+    public function testDecryptAndGetRewrappedCaching(): void
+    {
+        $keyWrapping = new KeyWrapping($this->config);
+
+        [, $canonical] = $this->makeDummyActor();
+        $keypair = SecretKey::generate();
+
+        $protocol = new Protocol($this->config);
+        $this->addKeyForActor($canonical, $keypair, $protocol, $this->config);
+
+        /** @var MerkleState $merkleState */
+        $merkleState = $this->table('MerkleState');
+        $root = $merkleState->getLatestRoot();
+
+        // Get the wrapped keys for this root
+        $wrappedKeys = $this->config->getDb()->cell(
+            "SELECT wrappedkeys FROM pkd_merkle_leaves WHERE root = ?",
+            $root
+        );
+
+        $this->assertNotEmpty($wrappedKeys);
+
+        // First call - should populate cache
+        [$message1, $rewrapped1] = $keyWrapping->decryptAndGetRewrapped($root, $wrappedKeys);
+        $this->assertNotNull($message1);
+
+        $cache = $this->appCache('key-wrapping-decrypt');
+        $lookupKey = $root . ':' . $wrappedKeys;
+        $deriveKey = $cache->deriveKey($lookupKey);
+
+        $this->assertTrue($cache->has($deriveKey), 'Cache should have the key after first call');
+        $cachedValue = $cache->get($deriveKey);
+        $this->assertIsString($cachedValue);
+
+        $decoded = json_decode($cachedValue, true);
+        $this->assertEquals([$message1, $rewrapped1], $decoded);
+
+        // Second call - should use cache
+        [$message2, $rewrapped2] = $keyWrapping->decryptAndGetRewrapped($root, $wrappedKeys);
+        $this->assertEquals($message1, $message2);
+        $this->assertEquals($rewrapped1, $rewrapped2);
+    }
+
+    /**
+     * @throws SodiumException
+     */
+    public function testDifferentKeysResultInDifferentCacheEntries(): void
+    {
+        $cache = $this->appCache('key-wrapping-decrypt');
+
+        $root1 = 'root1';
+        $wrapped1 = 'wrapped1';
+        $root2 = 'root2';
+        $wrapped2 = 'wrapped2';
+
+        $key1 = $cache->deriveKey($root1 . ':' . $wrapped1);
+        $key2 = $cache->deriveKey($root1 . ':' . $wrapped2);
+        $key3 = $cache->deriveKey($root2 . ':' . $wrapped1);
+
+        $this->assertNotEquals($key1, $key2);
+        $this->assertNotEquals($key1, $key3);
+        $this->assertNotEquals($key2, $key3);
+    }
+}

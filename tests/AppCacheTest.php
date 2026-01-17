@@ -2,11 +2,16 @@
 declare(strict_types=1);
 namespace FediE2EE\PKDServer\Tests;
 
-use FediE2EE\PKDServer\AppCache;
+use DateInterval;
+use FediE2EE\PKDServer\{
+    AppCache,
+    ServerConfig
+};
 use FediE2EE\PKDServer\Meta\Params;
-use FediE2EE\PKDServer\ServerConfig;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\UsesClass;
+use PHPUnit\Framework\Attributes\{
+    CoversClass,
+    UsesClass
+};
 use PHPUnit\Framework\TestCase;
 use Psr\SimpleCache\InvalidArgumentException;
 use SodiumException;
@@ -110,5 +115,34 @@ class AppCacheTest extends TestCase
         }
         $this->assertSame('bar', $out);
         $this->assertSame(1, $misses);
+    }
+
+    /**
+     * @throws InvalidArgumentException
+     * @throws SodiumException
+     */
+    public function testCacheWithTTL(): void
+    {
+        $cache = $this->getConfiguredCache();
+        $out = $cache->cache('foo-ttl', function () {
+            return 'bar-ttl';
+        }, 3600);
+        $this->assertSame('bar-ttl', $out);
+        $this->assertTrue($cache->has($cache->deriveKey('foo-ttl')));
+    }
+
+    public function testProcessTTL(): void
+    {
+        $cache = $this->getConfiguredCache();
+
+        // Null uses default
+        $this->assertSame(60, $cache->processTTL(null));
+
+        // Integer returns as is
+        $this->assertSame(123, $cache->processTTL(123));
+
+        // DateInterval
+        $interval = new DateInterval('PT1H');
+        $this->assertSame(3600, $cache->processTTL($interval));
     }
 }

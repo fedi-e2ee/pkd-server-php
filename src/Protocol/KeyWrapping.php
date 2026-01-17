@@ -122,7 +122,7 @@ class KeyWrapping
     public function hpkeUnwrap(string $ciphertext): string
     {
         return (new HPKEAdapter($this->hpke->cs))
-                ->open($this->hpke->decapsKey, $this->hpke->encapsKey, $ciphertext);
+            ->open($this->hpke->decapsKey, $this->hpke->encapsKey, $ciphertext);
     }
 
     public function serializeKeyMap(AttributeKeyMap $keyMap): string
@@ -159,23 +159,41 @@ class KeyWrapping
      * Usage:
      *
      * [$message, $rewrappedKeys] = $keyWrapping->decryptAndRewrapp
+     *
+     * @return array|null[]
+     * @throws BundleException
+     * @throws CryptoException
+     * @throws DependencyException
+     * @throws HPKEException
+     * @throws InputException
+     * @throws JsonException
      */
     public function decryptAndGetRewrapped(string $merkleRoot, ?string $wrappedKeys = null): array
     {
-        // TODO: Cache!
         if (is_null($wrappedKeys)) {
             // Cannot decrypt!
             return [null, null];
         }
 
-        // We assume the rewrapping occurred on insert.
-        $encryptedMessage = $this->db->cell(
-            "SELECT contents FROM pkd_merkle_leaves WHERE root = ?",
-            $merkleRoot
-        );
-        $message = $this->unwrapLocalMessage($encryptedMessage, $wrappedKeys);
-        $rewrappedKeys = $this->getRewrappedFor($merkleRoot);
-        return [$message, $rewrappedKeys];
+        $cache = $this->appCache('key-wrapping-decrypt');
+        $lookupKey = $merkleRoot . ':' . $wrappedKeys;
+
+        /** @var string|null $cached */
+        $cached = $cache->cache($lookupKey, function() use ($merkleRoot, $wrappedKeys) {
+            // We assume the rewrapping occurred on insert.
+            $encryptedMessage = $this->db->cell(
+                "SELECT contents FROM pkd_merkle_leaves WHERE root = ?",
+                $merkleRoot
+            );
+            $message = $this->unwrapLocalMessage($encryptedMessage, $wrappedKeys);
+            $rewrappedKeys = $this->getRewrappedFor($merkleRoot);
+            return json_encode([$message, $rewrappedKeys]);
+        }, 43200);
+
+        if (is_string($cached)) {
+            return (array) json_decode($cached, true);
+        }
+        return [null, null];
     }
 
     /**
@@ -190,8 +208,8 @@ class KeyWrapping
         $unwrappedKeys = $this->hpkeUnwrap($wrappedKeys);
         $keyMap = $this->deserializeKeyMap($unwrappedKeys);
         return Bundle::fromJson($encryptedMessage, $keyMap)
-                ->toSignedMessage()
-                ->getDecryptedContents($keyMap);
+            ->toSignedMessage()
+            ->getDecryptedContents($keyMap);
     }
 
     /**

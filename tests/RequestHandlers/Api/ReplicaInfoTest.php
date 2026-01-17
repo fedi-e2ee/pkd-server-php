@@ -60,7 +60,7 @@ use PHPUnit\Framework\Attributes\{
 use PHPUnit\Framework\TestCase;
 use SodiumException;
 
-#[CoversClass(Replicas::class)]
+#[CoversClass(ReplicaInfo::class)]
 #[UsesClass(ActivityStream::class)]
 #[UsesClass(AppCache::class)]
 #[UsesClass(WebFinger::class)]
@@ -76,6 +76,10 @@ use SodiumException;
 #[UsesClass(Actors::class)]
 #[UsesClass(MerkleState::class)]
 #[UsesClass(PublicKeys::class)]
+#[UsesClass(\FediE2EE\PKDServer\Tables\ReplicaActors::class)]
+#[UsesClass(\FediE2EE\PKDServer\Tables\ReplicaAuxData::class)]
+#[UsesClass(\FediE2EE\PKDServer\Tables\ReplicaHistory::class)]
+#[UsesClass(\FediE2EE\PKDServer\Tables\ReplicaPublicKeys::class)]
 #[UsesClass(TOTP::class)]
 #[UsesClass(Actor::class)]
 #[UsesClass(ActorKey::class)]
@@ -161,6 +165,99 @@ class ReplicaInfoTest extends TestCase
         $this->assertIsString($decoded['time']);
         $this->assertIsArray($decoded['replica-urls']);
         $this->assertSame('fedi-e2ee:v1/api/replica-info', $decoded['!pkd-context']);
+    }
+
+    public function testHistoryEndpoints(): void
+    {
+        if (empty($this->replicaId)) {
+            $this->beforeTests();
+        }
+        $peer = $this->table('Peers')->getPeerByUniqueId($this->replicaId);
+        $historyTable = $this->table('ReplicaHistory');
+
+        // Insert root0 first
+        $leaf0 = $historyTable->createLeaf([
+            'merkle-root' => 'root0',
+            'publickeyhash' => 'pkh0',
+            'contenthash' => 'ch0',
+            'signature' => 'sig0',
+            'encrypted-message' => 'msg0',
+            'created' => date('Y-m-d H:i:s'),
+        ], 'cosig0', $this->createStub(\FediE2EE\PKD\Crypto\Merkle\InclusionProof::class));
+        $historyTable->save($peer, $leaf0);
+
+        // Then insert root1
+        $leaf = $historyTable->createLeaf([
+            'merkle-root' => 'root1',
+            'publickeyhash' => 'pkh1',
+            'contenthash' => 'ch1',
+            'signature' => 'sig1',
+            'encrypted-message' => 'msg1',
+            'created' => date('Y-m-d H:i:s'),
+        ], 'cosig1', $this->createStub(\FediE2EE\PKD\Crypto\Merkle\InclusionProof::class));
+        $historyTable->save($peer, $leaf);
+
+        $request = $this->makeGetRequest('/api/replicas/' . $this->replicaId . '/history')
+            ->withAttribute('replica_id', $this->replicaId);
+        $handler = new ReplicaInfo();
+        $response = $handler->history($request);
+
+        $this->assertSame(200, $response->getStatusCode());
+        $decoded = json_decode($response->getBody()->getContents(), true);
+        $this->assertGreaterThanOrEqual(2, count($decoded['records']));
+        $this->assertSame('root1', $decoded['records'][0]['merkle-root']);
+
+        // Test historySince
+        $requestSince = $this->makeGetRequest('/api/replicas/' . $this->replicaId . '/history/since/root0')
+            ->withAttribute('replica_id', $this->replicaId)
+            ->withAttribute('hash', 'root0');
+
+        $responseSince = $handler->historySince($requestSince);
+        $this->assertSame(200, $responseSince->getStatusCode());
+        $decodedSince = json_decode($responseSince->getBody()->getContents(), true);
+        $this->assertCount(1, $decodedSince['records']);
+        $this->assertSame('root1', $decodedSince['records'][0]['merkle-root']);
+    }
+
+    public function testActorEndpoints(): void
+    {
+        if (empty($this->replicaId)) {
+            $this->beforeTests();
+        }
+        $peer = $this->table('Peers')->getPeerByUniqueId($this->replicaId);
+        /** @var \FediE2EE\PKDServer\Tables\ReplicaActors $replicaActors */
+        $replicaActors = $this->table('ReplicaActors');
+
+        $akm = new AttributeKeyMap();
+        $akm->addKey('actor', SymmetricKey::generate());
+        $payload = new Payload(
+            $this->createStub(\FediE2EE\PKD\Crypto\Protocol\ProtocolMessageInterface::class),
+            $akm,
+            '{}'
+        );
+
+        $actorId = $replicaActors->createForPeer($peer, 'actor1', $payload);
+
+        $request = $this->makeGetRequest('/api/replicas/' . $this->replicaId . '/actor/actor1')
+            ->withAttribute('replica_id', $this->replicaId)
+            ->withAttribute('actor_id', 'actor1');
+        $handler = new ReplicaInfo();
+        $response = $handler->actor($request);
+
+        $this->assertSame(200, $response->getStatusCode());
+        $decoded = json_decode($response->getBody()->getContents(), true);
+        $this->assertSame('actor1', $decoded['actor-id']);
+        $this->assertSame(0, $decoded['count-keys']);
+
+        // Test actorKeys
+        $requestKeys = $this->makeGetRequest('/api/replicas/' . $this->replicaId . '/actor/actor1/keys')
+            ->withAttribute('replica_id', $this->replicaId)
+            ->withAttribute('actor_id', 'actor1');
+        $responseKeys = $handler->actorKeys($requestKeys);
+        $this->assertSame(200, $responseKeys->getStatusCode());
+        $decodedKeys = json_decode($responseKeys->getBody()->getContents(), true);
+        $this->assertIsArray($decodedKeys['public-keys']);
+        $this->assertEmpty($decodedKeys['public-keys']);
     }
 
     protected function makeAndStoreDummyActor(): array
