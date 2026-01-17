@@ -25,6 +25,7 @@
             <file>src/Traits/ActivityStreamsTrait.php</file>
             <file>src/Traits/ConfigTrait.php</file>
             <file>src/Traits/ProtocolMethodTrait.php</file>
+            <file>src/Traits/HttpCacheTrait.php</file>
             <file>src/Traits/ReqTrait.php</file>
             <file>src/Traits/TOTPTrait.php</file>
             <file>src/Traits/TableRecordTrait.php</file>

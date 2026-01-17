@@ -2,9 +2,14 @@
 declare(strict_types=1);
 namespace FediE2EE\PKDServer\RequestHandlers\Api;
 
-use DateTime;
-use FediE2EE\PKDServer\Protocol\KeyWrapping;
+use FediE2EE\PKDServer\{
+    AppCache,
+    Protocol\KeyWrapping,
+};
 use FediE2EE\PKD\Crypto\Exceptions\{
+    BundleException,
+    CryptoException,
+    InputException,
     JsonException,
     NotImplementedException
 };
@@ -13,11 +18,13 @@ use FediE2EE\PKDServer\Exceptions\{
     DependencyException,
     TableException
 };
+use FediE2EE\PKDServer\Interfaces\HttpCacheInterface;
 use FediE2EE\PKDServer\Tables\MerkleState;
+use ParagonIE\HPKE\HPKEException;
 use SodiumException;
 use TypeError;
 use FediE2EE\PKDServer\Meta\Route;
-use FediE2EE\PKDServer\Traits\ReqTrait;
+use FediE2EE\PKDServer\Traits\HttpCacheTrait;
 use Override;
 use Psr\Http\Message\{
     ResponseInterface,
@@ -25,11 +32,12 @@ use Psr\Http\Message\{
 };
 use Psr\Http\Server\RequestHandlerInterface;
 
-class HistoryView implements RequestHandlerInterface
+class HistoryView implements RequestHandlerInterface, HttpCacheInterface
 {
-    use ReqTrait;
+    use HttpCacheTrait;
 
     protected MerkleState $merkleState;
+    protected ?AppCache $cache = null;
 
     /**
      * @throws DependencyException
@@ -45,8 +53,18 @@ class HistoryView implements RequestHandlerInterface
         $this->merkleState = $merkleState;
     }
 
+
+    public function getPrimaryCacheKey(): string
+    {
+        return 'api:history-view';
+    }
+
     /**
+     * @throws BundleException
+     * @throws CryptoException
      * @throws DependencyException
+     * @throws HPKEException
+     * @throws InputException
      * @throws JsonException
      * @throws NotImplementedException
      * @throws SodiumException
@@ -59,21 +77,31 @@ class HistoryView implements RequestHandlerInterface
         if (empty($hash)) {
             return $this->error('No hash provided', 400);
         }
-        $leaf = $this->merkleState->getLeafByRoot($hash);
-        if (is_null($leaf)) {
+        // Cache the history view response (hot path for replication)
+        $response = $this->getCache()->cache(
+            $hash,
+            function () use ($hash) {
+                $leaf = $this->merkleState->getLeafByRoot($hash);
+                if (is_null($leaf)) {
+                    return null;
+                }
+                [$message, $rewrappedKeys] = (new KeyWrapping($this->config()))
+                    ->decryptAndGetRewrapped($hash, $leaf->wrappedKeys);
+                return [
+                    '!pkd-context' => 'fedi-e2ee:v1/api/history/view',
+                    'created' => $leaf->created,
+                    'encrypted-message' => $leaf->contents,
+                    'inclusion-proof' => $leaf->inclusionProof,
+                    'message' => $message,
+                    'merkle-root' => $hash,
+                    'rewrapped-keys' => $rewrappedKeys,
+                    'witnesses' => $this->merkleState->getCosignatures($leaf->primaryKey),
+                ];
+            }
+        );
+        if (is_null($response)) {
             return $this->error('Not found', 404);
         }
-        [$message, $rewrappedKeys] = (new KeyWrapping($this->config()))
-            ->decryptAndGetRewrapped($hash, $leaf->wrappedKeys);
-        return $this->json([
-            '!pkd-context' => 'fedi-e2ee:v1/api/history/view',
-            'created' => $leaf->created,
-            'encrypted-message' => $leaf->contents,
-            'inclusion-proof' => $leaf->inclusionProof,
-            'message' => $message,
-            'merkle-root' => $hash,
-            'rewrapped-keys' => $rewrappedKeys,
-            'witnesses' => $this->merkleState->getCosignatures($leaf->primaryKey),
-        ]);
+        return $this->json($response);
     }
 }

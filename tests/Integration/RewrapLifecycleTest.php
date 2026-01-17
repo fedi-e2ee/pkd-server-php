@@ -200,6 +200,7 @@ class RewrapLifecycleTest extends TestCase
 
         // 4. Verify history/since
         $sinceHandler = new HistorySince();
+        $this->assertTrue($sinceHandler->clearCache());
         $requestSince = $this->makeGetRequest('/api/history/since/' . urlencode($latestRootBefore))
             ->withAttribute('hash', $latestRootBefore);
         $responseSince = $sinceHandler->handle($requestSince);
