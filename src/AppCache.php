@@ -7,6 +7,7 @@ use DateTime;
 use Override;
 use Predis\Client as RedisClient;
 use Psr\SimpleCache\CacheInterface;
+use Psr\SimpleCache\InvalidArgumentException;
 use SodiumException;
 
 class AppCache implements CacheInterface
@@ -29,9 +30,32 @@ class AppCache implements CacheInterface
     }
 
     /**
+     * Cache as a JSON-serialized string, deserialize from cache.
+     *
+     * Used for caching entire HTTP response data (arrays, etc.).)
+     *
+     * @throws SodiumException
+     * @throws InvalidArgumentException
+     */
+    public function cacheJson(string $lookup, callable $fallback, DateInterval|int|null $ttl = null): mixed
+    {
+        $key = $this->deriveKey($lookup);
+        if (!$this->has($key)) {
+            $value = $fallback();
+            $encoded = json_encode($value, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_UNICODE);
+            $this->set($key, $encoded, $ttl);
+            return $value;
+        }
+        return json_decode($this->get($key), true);
+    }
+
+    /**
      * If there is a cache-hit, it returns the value.
      *
      * Otherwise, it invokes the fallback to determine the value.
+     *
+     * @throws InvalidArgumentException
+     * @throws SodiumException
      */
     public function cache(string $lookup, callable $fallback, DateInterval|int|null $ttl = null): mixed
     {

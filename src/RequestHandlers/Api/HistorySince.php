@@ -67,7 +67,7 @@ class HistorySince implements RequestHandlerInterface, HttpCacheInterface
             return $this->error('No hash provided');
         }
         // Cache the history-since response (hot path for replication)
-        $response = $this->getCache()->cache(
+        $response = $this->getCache()->cacheJson(
             $lastHash,
             function () use ($lastHash) {
                 $records = $this->merkleState->getHashesSince($lastHash, 100);

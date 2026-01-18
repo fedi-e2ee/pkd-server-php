@@ -21,6 +21,7 @@ use FediE2EE\PKDServer\Exceptions\{
 use FediE2EE\PKDServer\Interfaces\HttpCacheInterface;
 use FediE2EE\PKDServer\Tables\MerkleState;
 use ParagonIE\HPKE\HPKEException;
+use Psr\SimpleCache\InvalidArgumentException;
 use SodiumException;
 use TypeError;
 use FediE2EE\PKDServer\Meta\Route;
@@ -65,6 +66,7 @@ class HistoryView implements RequestHandlerInterface, HttpCacheInterface
      * @throws DependencyException
      * @throws HPKEException
      * @throws InputException
+     * @throws InvalidArgumentException
      * @throws JsonException
      * @throws NotImplementedException
      * @throws SodiumException
@@ -78,7 +80,7 @@ class HistoryView implements RequestHandlerInterface, HttpCacheInterface
             return $this->error('No hash provided', 400);
         }
         // Cache the history view response (hot path for replication)
-        $response = $this->getCache()->cache(
+        $response = $this->getCache()->cacheJson(
             $hash,
             function () use ($hash) {
                 $leaf = $this->merkleState->getLeafByRoot($hash);
