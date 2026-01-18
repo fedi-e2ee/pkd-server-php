@@ -25,7 +25,7 @@ jobs:
         with:
           php-version: '8.4'
       - name: Setup PHP-Fuzzer
-        run: composer global require nikic/php-fuzzer
+        run: composer global require --dev nikic/php-fuzzer
       - name: Install dependencies
         run: composer install --optimize-autoloader
       - name: Run FuzzProtocol
