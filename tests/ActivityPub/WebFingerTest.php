@@ -657,6 +657,49 @@ class WebFingerTest extends TestCase
     }
 
     /**
+     * @throws CacheException
+     * @throws CertaintyException
+     * @throws DependencyException
+     * @throws GuzzleException
+     * @throws InvalidArgumentException
+     * @throws NetworkException
+     * @throws NotImplementedException
+     * @throws SodiumException
+     */
+    public function testMixedValidAndInvalid(): void
+    {
+        $sk = SecretKey::generate();
+        $pk = $sk->getPublicKey();
+        $mockHttp = $this->getMockClient([
+            new Response(
+                200,
+                ['Content-Type' => 'application/json'],
+                json_encode([
+                    'inbox' => 'https://example.com/users/alice/inbox',
+                    'links' => [
+                        // invalid type
+                        ['rel' => 'self', 'type' => 'application/json', 'href' => 'https://example.com/users/alice'],
+                        // invalid rel
+                        ['rel' => 'other', 'type' => 'application/activity+json', 'href' => 'https://example.com/users/alice'],
+                        // valid:
+                        ['rel' => 'self', 'type' => 'application/activity+json', 'href' => 'https://example.com/users/alice'],
+                    ]
+                ])
+            ),
+            new Response(200, ['Content-Type' => 'application/activity+json'], json_encode([
+                'publicKey' => [
+                    'publicKeyPem' => $pk->encodePem()
+                ]
+            ]))
+        ]);
+        $webFinger = new WebFinger($this->getConfig(), $mockHttp);
+        $webFinger->clearCaches();
+        $webFinger->setCanonicalForTesting('https://example.com/users/alice', 'https://example.com/users/alice');
+        $got = $webFinger->getPublicKey('https://example.com/users/alice');
+        $this->assertSame($pk->toString(), $got->toString());
+    }
+
+    /**
      * @throws CertaintyException
      * @throws CryptoException
      * @throws DependencyException
