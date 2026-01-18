@@ -13,33 +13,37 @@ components (such as [The League's Router](https://route.thephpleague.com/5.x/)).
 ### Runtime Configuration
 
 The runtime configuration is defined in [`autoload.php`](../../autoload.php), which instantiates 
-a [`ServerConfig`](../../src/ServerConfig.php) object with the various files inside [`config/`](../../config).
+a [`ServerConfig`](../reference/classes/core.md#serverconfig) object with the various files inside 
+[`config/`](../reference/configuration.md).
 
 The `ServerConfig` object contains several classes used throughout the entire application.
 
 ### Request Handlers
 
 Commonly called "Controllers" in MVC frameworks, we instead have a bunch of classes inside 
-[`src/RequestHandlers](../../src/RequestHandlers) that implement [PSR-15](https://www.php-fig.org/psr/psr-15/).
+[`src/RequestHandlers](../reference/classes/requesthandlers.md) that implement [PSR-15](https://www.php-fig.org/psr/psr-15/).
 
 The routes are defined in [`config/routes.php`](../../config/routes.php), although you may override this by creating
 a `routes.php` file inside [`config/local/`](../../config/local).
 
 ### Tables
 
-Commonly called "Models" in MVC frameworks, the classes inside [`src/Tables`](../../src/Tables) extend the base
-[`Table`](../../src/Table.php) class.
+Commonly called "Models" in MVC frameworks, the classes inside [`src/Tables`](../reference/classes/tables.md) 
+extend the base [`Table`](../reference/classes/core.md#table) class.
 
 Generally, each `Table` class corresponds to a distinct table in the SQL database.
 
-`MerkleState` is a bit of an exception to this rule, but it generally holds.
-
-Most updates to other tables are guarded by `MerkleState::insertLeaf()`. This is to ensure the exclusive locking of the
-`pkd_merkle_state` table is respected by concurrent PHP processes, and (more to the point) to keep the "append only"
-nature of the Merkle Tree intact (whereas multiple concurrent writes would create an invalid state). 
-
-Each change to an Actor, their list of currently-trusted Public Keys, or their list of currently-valid Auxiliary Data 
-MUST be tied to a specific, unique record in the Merkle Tree history.
+> [!IMPORTANT]
+> **[`MerkleState`](../reference/classes/tables.md#merklestate)** is a bit of an exception to this rule, but it 
+> generally holds.
+>
+> Most updates to other tables are guarded by [`MerkleState::insertLeaf()`](../reference/classes/tables.md#insertleaf). 
+> This is to ensure the exclusive locking of the `pkd_merkle_state` database table is respected by concurrent PHP 
+> processes, and (more to the point) to keep the "append only" nature of the Merkle Tree intact (whereas multiple
+> concurrent writes would result in an invalid state).
+>
+> Each change to an Actor, their list of currently-trusted Public Keys, or their list of currently-valid Auxiliary Data 
+> **MUST** be tied to a specific, unique record in the Merkle Tree history.
 
 #### Symmetric Key Wrapping
 
@@ -51,8 +55,8 @@ this is required in order for [attributes to be crypto-shreddable](https://githu
 using [CipherSweet](https://github.com/paragonie/ciphersweet).
 
 Specifically, we have a custom implementation of CipherSweet's `EncryptedRow` class called 
-[WrappedEncryptedRow](../../src/Dependency/WrappedEncryptedRow.php) that reads/writes the per-field key to another field
-in the same SQL row.
+[WrappedEncryptedRow](../reference/classes/dependency.md#wrappedencryptedrow) that reads/writes the per-field key to 
+another field in the same SQL row.
 
 ## How To Write Protocol Messages
 
