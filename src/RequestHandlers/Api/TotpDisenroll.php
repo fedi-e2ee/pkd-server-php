@@ -68,7 +68,6 @@ class TotpDisenroll implements RequestHandlerInterface
      * @throws InvalidCiphertextException
      * @throws JsonException
      * @throws NotImplementedException
-     * @throws ProtocolException
      * @throws SodiumException
      * @throws TableException
      */
@@ -77,7 +76,7 @@ class TotpDisenroll implements RequestHandlerInterface
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         try {
-            $body = json_decode((string) $request->getBody(), true, 512, JSON_THROW_ON_ERROR);
+            $body = $this->jsonDecode($request->getBody()->getContents());
             $disenrollment = $body['disenrollment'] ?? [];
             $actorId = $disenrollment['actor-id'] ?? '';
             $keyId = $disenrollment['key-id'] ?? '';
@@ -98,7 +97,11 @@ class TotpDisenroll implements RequestHandlerInterface
             return $this->error('Invalid JSON', 400);
         }
 
-        $this->verifySignature($body, $actorId, $keyId);
+        try {
+            $this->verifySignature($body, $actorId, $keyId);
+        } catch (ProtocolException $ex) {
+            return $this->error($ex->getMessage(), 400);
+        }
 
         // Validate inputs:
         if (!hash_equals('fedi-e2ee:v1/api/totp/disenroll', $body['!pkd-context'])) {

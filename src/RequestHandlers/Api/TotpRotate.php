@@ -73,7 +73,6 @@ class TotpRotate implements RequestHandlerInterface
      * @throws InvalidCiphertextException
      * @throws JsonException
      * @throws NotImplementedException
-     * @throws ProtocolException
      * @throws RandomException
      * @throws SodiumException
      * @throws TableException
@@ -83,7 +82,7 @@ class TotpRotate implements RequestHandlerInterface
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         try {
-            $body = json_decode((string) $request->getBody(), true, 512, JSON_THROW_ON_ERROR);
+            $body = $this->jsonDecode($request->getBody()->getContents());
             $rotation = $body['rotation'] ?? [];
             $actorId = $rotation['actor-id'] ?? '';
             $keyId = $rotation['key-id'] ?? '';
@@ -109,7 +108,11 @@ class TotpRotate implements RequestHandlerInterface
             return $this->error('Invalid JSON', 400);
         }
 
-        $this->verifySignature($body, $actorId, $keyId);
+        try {
+            $this->verifySignature($body, $actorId, $keyId);
+        } catch (ProtocolException $ex) {
+            return $this->error($ex->getMessage(), 400);
+        }
 
         // Validate inputs:
         if (!hash_equals('fedi-e2ee:v1/api/totp/rotate', $body['!pkd-context'])) {

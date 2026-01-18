@@ -132,6 +132,10 @@ class ReplicasTest extends TestCase
         $this->assertSame('fedi-e2ee:v1/api/replicas', $decoded['!pkd-context']);
         $found = false;
         foreach ($decoded['replicas'] as $replica) {
+            $this->assertArrayHasKey('id', $replica);
+            $this->assertArrayHasKey('ref', $replica);
+            $this->assertStringStartsWith('https://', $replica['ref']);
+            $this->assertNotSame('https://', $replica['ref']);
             if ($replica['id'] === $newPeer->uniqueId) {
                 $found = true;
             }

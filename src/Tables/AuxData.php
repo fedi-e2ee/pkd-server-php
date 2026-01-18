@@ -138,11 +138,10 @@ class AuxData extends Table
         $revokeTime = is_string($decrypted['revoketime'])
             ? (string) new DateTimeImmutable($decrypted['revoketime'])->getTimestamp()
             : null;
-        $inclusionProof = json_decode((string) $decrypted['inclusionproof'], true, 512, JSON_THROW_ON_ERROR);
-        if (!is_array($inclusionProof)) {
-            $inclusionProof = [];
+        $inclusionProof = null;
+        if (is_string($decrypted['inclusionproof'])) {
+            $inclusionProof = $this->jsonDecode($decrypted['inclusionproof']);
         }
-
         return [
             'aux-data' => $decrypted['auxdata'],
             'aux-id' => $auxId,

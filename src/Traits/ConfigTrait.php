@@ -28,8 +28,10 @@ use FediE2EE\PKDServer\{
     TableCache
 };
 use GuzzleHttp\Client;
+use JsonException as BaseJsonException;
 use ParagonIE\Certainty\Exception\CertaintyException;
 use SodiumException;
+use Throwable;
 
 trait ConfigTrait
 {
@@ -77,6 +79,30 @@ trait ConfigTrait
     public function injectConfig(ServerConfig $config): void
     {
         $this->config = $config;
+    }
+
+    /**
+     * @throws BaseJsonException
+     */
+    public function jsonDecode(string $json): array
+    {
+        try {
+            return json_decode($json, true, 512, JSON_THROW_ON_ERROR);
+        } catch (Throwable $e) {
+            throw new BaseJsonException($e->getMessage(), $e->getCode(), $e);
+        }
+    }
+
+    /**
+     * @throws BaseJsonException
+     */
+    public function jsonDecodeObject(string $json): object
+    {
+        try {
+            return json_decode($json, false, 512, JSON_THROW_ON_ERROR);
+        } catch (Throwable $e) {
+            throw new BaseJsonException($e->getMessage(), $e->getCode(), $e);
+        }
     }
 
     /**

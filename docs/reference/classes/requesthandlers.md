@@ -100,7 +100,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `DependencyException`, `LoaderError`, `RuntimeError`, `SyntaxError`
 
-#### [`appCache`](../../../src/RequestHandlers/IndexPage.php#L42-L45)
+#### [`appCache`](../../../src/RequestHandlers/IndexPage.php#L44-L47)
 
 Returns `FediE2EE\PKDServer\AppCache`
 
@@ -111,7 +111,7 @@ Returns `FediE2EE\PKDServer\AppCache`
 
 **Throws:** `DependencyException`
 
-#### [`table`](../../../src/RequestHandlers/IndexPage.php#L52-L75)
+#### [`table`](../../../src/RequestHandlers/IndexPage.php#L54-L77)
 
 Returns `FediE2EE\PKDServer\Table`
 
@@ -121,7 +121,7 @@ Returns `FediE2EE\PKDServer\Table`
 
 **Throws:** `CacheException`, `DependencyException`, `TableException`
 
-#### [`injectConfig`](../../../src/RequestHandlers/IndexPage.php#L77-L80)
+#### [`injectConfig`](../../../src/RequestHandlers/IndexPage.php#L79-L82)
 
 Returns `void`
 
@@ -129,13 +129,33 @@ Returns `void`
 
 - `$config`: `FediE2EE\PKDServer\ServerConfig`
 
-#### [`config`](../../../src/RequestHandlers/IndexPage.php#L85-L95)
+#### [`jsonDecode`](../../../src/RequestHandlers/IndexPage.php#L87-L94)
+
+Returns `array`
+
+**Parameters:**
+
+- `$json`: `string`
+
+**Throws:** `BaseJsonException`
+
+#### [`jsonDecodeObject`](../../../src/RequestHandlers/IndexPage.php#L99-L106)
+
+Returns `object`
+
+**Parameters:**
+
+- `$json`: `string`
+
+**Throws:** `BaseJsonException`
+
+#### [`config`](../../../src/RequestHandlers/IndexPage.php#L111-L121)
 
 Returns `FediE2EE\PKDServer\ServerConfig`
 
 **Throws:** `DependencyException`
 
-#### [`setWebFinger`](../../../src/RequestHandlers/IndexPage.php#L100-L104)
+#### [`setWebFinger`](../../../src/RequestHandlers/IndexPage.php#L126-L130)
 
 Returns `self`
 
@@ -145,7 +165,7 @@ This is intended for mocking in unit tests
 
 - `$wf`: `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
-#### [`webfinger`](../../../src/RequestHandlers/IndexPage.php#L111-L118)
+#### [`webfinger`](../../../src/RequestHandlers/IndexPage.php#L137-L144)
 
 Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 

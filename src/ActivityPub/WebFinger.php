@@ -169,7 +169,9 @@ class WebFinger
     /**
      * @throws CacheException
      * @throws GuzzleException
+     * @throws InvalidArgumentException
      * @throws NetworkException
+     * @throws SodiumException
      */
     public function getInboxUrl(string $actorUrl): string
     {
@@ -194,6 +196,8 @@ class WebFinger
     /**
      * @throws CryptoException
      * @throws FetchException
+     * @throws InvalidArgumentException
+     * @throws SodiumException
      */
     public function getPublicKey(string $actorUrl): PublicKey
     {
@@ -201,7 +205,7 @@ class WebFinger
             $parsed = parse_url($actorUrl);
             $host = $parsed['host'];
             $path = $parsed['path'];
-            $username = trim(str_replace('/', '', $path));
+            $username = $this->trimUsername($path);
 
             try {
                 $url = "https://{$host}/.well-known/webfinger?resource=acct:{$username}@{$host}";
@@ -217,16 +221,30 @@ class WebFinger
                 throw new FetchException("Could not parse WebFinger data for {$actorUrl}");
             }
             foreach ($jrd['links'] as $link) {
+                if (!array_key_exists('rel', $link)) {
+                    continue;
+                }
+                if (!array_key_exists('type', $link)) {
+                    continue;
+                }
+                if (!array_key_exists('href', $link)) {
+                    continue;
+                }
                 if ($link['rel'] === 'self' && $link['type'] === 'application/activity+json') {
                     return $this->getPublicKeyFromActivityPub($link['href'])->toString();
                 }
             }
-            throw new FetchException("Could not fetch public key for {$actorUrl}");
+            throw new FetchException("No valid self href found for {$actorUrl}");
         });
         if (!$publicKey) {
             throw new FetchException("Could not fetch public key for {$actorUrl}");
         }
         return PublicKey::fromString($publicKey);
+    }
+
+    public function trimUsername(string $username): string
+    {
+        return trim(str_replace('/', '', $username));
     }
 
     /**
@@ -278,6 +296,7 @@ class WebFinger
      * @param string $value
      * @return void
      *
+     * @throws CacheException
      * @throws SodiumException
      * @throws InvalidArgumentException
      */

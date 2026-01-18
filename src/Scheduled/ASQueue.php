@@ -14,6 +14,7 @@ use FediE2EE\PKDServer\{
     Protocol,
     ServerConfig
 };
+use FediE2EE\PKDServer\Traits\ConfigTrait;
 use GuzzleHttp\{
     Client,
     Psr7\Request
@@ -25,6 +26,7 @@ use Throwable;
 
 class ASQueue
 {
+    use ConfigTrait;
     private EasyDB $db;
     private Client $http;
     protected ?WebFinger $webFinger = null;
@@ -34,8 +36,11 @@ class ASQueue
      * @throws DependencyException
      * @throws SodiumException
      */
-    public function __construct(private readonly ServerConfig $config)
+    public function __construct(?ServerConfig $config = null)
     {
+        if (is_null($config)) {
+            $config = $GLOBALS['pkdConfig'];
+        }
         $this->db = $config->getDB();
         $this->http = $this->config->getGuzzle();
         $this->webFinger = new WebFinger($config, $this->http, $this->config->getCaCertFetch());
@@ -60,7 +65,7 @@ class ASQueue
         foreach ($workload as $queue) {
             $success = false;
             try {
-                $decoded = json_decode($queue['message'], false, 512, JSON_THROW_ON_ERROR);
+                $decoded = $this->jsonDecodeObject($queue['message']);
                 $enqueued = ActivityStream::fromDecoded($decoded);
                 try {
                     $results = $protocol->process($enqueued);

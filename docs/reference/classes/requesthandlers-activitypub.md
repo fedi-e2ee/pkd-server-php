@@ -50,7 +50,7 @@ Returns `FediE2EE\PKDServer\ActivityPub\ActivityStream`
 
 **Throws:** `ActivityPubException`, `DependencyException`, `FetchException`, `CryptoException`, `HttpSignatureException`, `NotImplementedException`, `CertaintyException`, `SodiumException`
 
-#### [`appCache`](../../../src/RequestHandlers/ActivityPub/Finger.php#L42-L45)
+#### [`appCache`](../../../src/RequestHandlers/ActivityPub/Finger.php#L44-L47)
 
 Returns `FediE2EE\PKDServer\AppCache`
 
@@ -61,7 +61,7 @@ Returns `FediE2EE\PKDServer\AppCache`
 
 **Throws:** `DependencyException`
 
-#### [`table`](../../../src/RequestHandlers/ActivityPub/Finger.php#L52-L75)
+#### [`table`](../../../src/RequestHandlers/ActivityPub/Finger.php#L54-L77)
 
 Returns `FediE2EE\PKDServer\Table`
 
@@ -71,7 +71,7 @@ Returns `FediE2EE\PKDServer\Table`
 
 **Throws:** `CacheException`, `DependencyException`, `TableException`
 
-#### [`injectConfig`](../../../src/RequestHandlers/ActivityPub/Finger.php#L77-L80)
+#### [`injectConfig`](../../../src/RequestHandlers/ActivityPub/Finger.php#L79-L82)
 
 Returns `void`
 
@@ -79,13 +79,33 @@ Returns `void`
 
 - `$config`: `FediE2EE\PKDServer\ServerConfig`
 
-#### [`config`](../../../src/RequestHandlers/ActivityPub/Finger.php#L85-L95)
+#### [`jsonDecode`](../../../src/RequestHandlers/ActivityPub/Finger.php#L87-L94)
+
+Returns `array`
+
+**Parameters:**
+
+- `$json`: `string`
+
+**Throws:** `BaseJsonException`
+
+#### [`jsonDecodeObject`](../../../src/RequestHandlers/ActivityPub/Finger.php#L99-L106)
+
+Returns `object`
+
+**Parameters:**
+
+- `$json`: `string`
+
+**Throws:** `BaseJsonException`
+
+#### [`config`](../../../src/RequestHandlers/ActivityPub/Finger.php#L111-L121)
 
 Returns `FediE2EE\PKDServer\ServerConfig`
 
 **Throws:** `DependencyException`
 
-#### [`setWebFinger`](../../../src/RequestHandlers/ActivityPub/Finger.php#L100-L104)
+#### [`setWebFinger`](../../../src/RequestHandlers/ActivityPub/Finger.php#L126-L130)
 
 Returns `self`
 
@@ -95,7 +115,7 @@ This is intended for mocking in unit tests
 
 - `$wf`: `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
-#### [`webfinger`](../../../src/RequestHandlers/ActivityPub/Finger.php#L111-L118)
+#### [`webfinger`](../../../src/RequestHandlers/ActivityPub/Finger.php#L137-L144)
 
 Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
@@ -217,7 +237,7 @@ Returns `FediE2EE\PKDServer\ActivityPub\ActivityStream`
 
 **Throws:** `ActivityPubException`, `DependencyException`, `FetchException`, `CryptoException`, `HttpSignatureException`, `NotImplementedException`, `CertaintyException`, `SodiumException`
 
-#### [`appCache`](../../../src/RequestHandlers/ActivityPub/Inbox.php#L42-L45)
+#### [`appCache`](../../../src/RequestHandlers/ActivityPub/Inbox.php#L44-L47)
 
 Returns `FediE2EE\PKDServer\AppCache`
 
@@ -228,7 +248,7 @@ Returns `FediE2EE\PKDServer\AppCache`
 
 **Throws:** `DependencyException`
 
-#### [`table`](../../../src/RequestHandlers/ActivityPub/Inbox.php#L52-L75)
+#### [`table`](../../../src/RequestHandlers/ActivityPub/Inbox.php#L54-L77)
 
 Returns `FediE2EE\PKDServer\Table`
 
@@ -238,7 +258,7 @@ Returns `FediE2EE\PKDServer\Table`
 
 **Throws:** `CacheException`, `DependencyException`, `TableException`
 
-#### [`injectConfig`](../../../src/RequestHandlers/ActivityPub/Inbox.php#L77-L80)
+#### [`injectConfig`](../../../src/RequestHandlers/ActivityPub/Inbox.php#L79-L82)
 
 Returns `void`
 
@@ -246,13 +266,33 @@ Returns `void`
 
 - `$config`: `FediE2EE\PKDServer\ServerConfig`
 
-#### [`config`](../../../src/RequestHandlers/ActivityPub/Inbox.php#L85-L95)
+#### [`jsonDecode`](../../../src/RequestHandlers/ActivityPub/Inbox.php#L87-L94)
+
+Returns `array`
+
+**Parameters:**
+
+- `$json`: `string`
+
+**Throws:** `BaseJsonException`
+
+#### [`jsonDecodeObject`](../../../src/RequestHandlers/ActivityPub/Inbox.php#L99-L106)
+
+Returns `object`
+
+**Parameters:**
+
+- `$json`: `string`
+
+**Throws:** `BaseJsonException`
+
+#### [`config`](../../../src/RequestHandlers/ActivityPub/Inbox.php#L111-L121)
 
 Returns `FediE2EE\PKDServer\ServerConfig`
 
 **Throws:** `DependencyException`
 
-#### [`setWebFinger`](../../../src/RequestHandlers/ActivityPub/Inbox.php#L100-L104)
+#### [`setWebFinger`](../../../src/RequestHandlers/ActivityPub/Inbox.php#L126-L130)
 
 Returns `self`
 
@@ -262,7 +302,7 @@ This is intended for mocking in unit tests
 
 - `$wf`: `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
-#### [`webfinger`](../../../src/RequestHandlers/ActivityPub/Inbox.php#L111-L118)
+#### [`webfinger`](../../../src/RequestHandlers/ActivityPub/Inbox.php#L137-L144)
 
 Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
@@ -376,7 +416,7 @@ Returns `FediE2EE\PKDServer\ActivityPub\ActivityStream`
 
 **Throws:** `ActivityPubException`, `DependencyException`, `FetchException`, `CryptoException`, `HttpSignatureException`, `NotImplementedException`, `CertaintyException`, `SodiumException`
 
-#### [`appCache`](../../../src/RequestHandlers/ActivityPub/UserPage.php#L42-L45)
+#### [`appCache`](../../../src/RequestHandlers/ActivityPub/UserPage.php#L44-L47)
 
 Returns `FediE2EE\PKDServer\AppCache`
 
@@ -387,7 +427,7 @@ Returns `FediE2EE\PKDServer\AppCache`
 
 **Throws:** `DependencyException`
 
-#### [`table`](../../../src/RequestHandlers/ActivityPub/UserPage.php#L52-L75)
+#### [`table`](../../../src/RequestHandlers/ActivityPub/UserPage.php#L54-L77)
 
 Returns `FediE2EE\PKDServer\Table`
 
@@ -397,7 +437,7 @@ Returns `FediE2EE\PKDServer\Table`
 
 **Throws:** `CacheException`, `DependencyException`, `TableException`
 
-#### [`injectConfig`](../../../src/RequestHandlers/ActivityPub/UserPage.php#L77-L80)
+#### [`injectConfig`](../../../src/RequestHandlers/ActivityPub/UserPage.php#L79-L82)
 
 Returns `void`
 
@@ -405,13 +445,33 @@ Returns `void`
 
 - `$config`: `FediE2EE\PKDServer\ServerConfig`
 
-#### [`config`](../../../src/RequestHandlers/ActivityPub/UserPage.php#L85-L95)
+#### [`jsonDecode`](../../../src/RequestHandlers/ActivityPub/UserPage.php#L87-L94)
+
+Returns `array`
+
+**Parameters:**
+
+- `$json`: `string`
+
+**Throws:** `BaseJsonException`
+
+#### [`jsonDecodeObject`](../../../src/RequestHandlers/ActivityPub/UserPage.php#L99-L106)
+
+Returns `object`
+
+**Parameters:**
+
+- `$json`: `string`
+
+**Throws:** `BaseJsonException`
+
+#### [`config`](../../../src/RequestHandlers/ActivityPub/UserPage.php#L111-L121)
 
 Returns `FediE2EE\PKDServer\ServerConfig`
 
 **Throws:** `DependencyException`
 
-#### [`setWebFinger`](../../../src/RequestHandlers/ActivityPub/UserPage.php#L100-L104)
+#### [`setWebFinger`](../../../src/RequestHandlers/ActivityPub/UserPage.php#L126-L130)
 
 Returns `self`
 
@@ -421,7 +481,7 @@ This is intended for mocking in unit tests
 
 - `$wf`: `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
-#### [`webfinger`](../../../src/RequestHandlers/ActivityPub/UserPage.php#L111-L118)
+#### [`webfinger`](../../../src/RequestHandlers/ActivityPub/UserPage.php#L137-L144)
 
 Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 

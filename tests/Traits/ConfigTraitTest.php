@@ -4,11 +4,17 @@ namespace FediE2EE\PKDServer\Tests\Traits;
 
 use FediE2EE\PKDServer\ActivityPub\WebFinger;
 use FediE2EE\PKDServer\Exceptions\TableException;
-use FediE2EE\PKDServer\Tables\{Actors, TOTP};
+use FediE2EE\PKDServer\Tables\{
+    Actors,
+    TOTP
+};
 use FediE2EE\PKDServer\Tests\HttpTestTrait;
 use FediE2EE\PKDServer\Traits\ConfigTrait;
 use PHPUnit\Framework\Attributes\CoversNothing;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use JsonException as BaseJsonException;
+use Throwable;
 
 #[CoversNothing]
 class ConfigTraitTest extends TestCase
@@ -48,6 +54,39 @@ class ConfigTraitTest extends TestCase
         $config = $this->getConfig();
         $mock->injectConfig($config);
         $this->assertSame($config, $mock->config());
+    }
+
+    public static function jsonDecodeProvider(): array
+    {
+        return [
+            ['{"test":"foo"}', true],
+            ['"test","foo"}]', false],
+            [random_bytes(40), false],
+        ];
+    }
+
+    #[DataProvider("jsonDecodeProvider")]
+    public function testJsonDecode(string $input, bool $expectPass): void
+    {
+        $mock = new class() {
+            use ConfigTrait;
+        };
+        if (!$expectPass) {
+            $this->expectException(BaseJsonException::class);
+        }
+        $this->assertIsArray($mock->jsonDecode($input));
+    }
+
+    #[DataProvider("jsonDecodeProvider")]
+    public function testJsonDecodeObject(string $input, bool $expectPass): void
+    {
+        $mock = new class() {
+            use ConfigTrait;
+        };
+        if (!$expectPass) {
+            $this->expectException(BaseJsonException::class);
+        }
+        $this->assertIsObject($mock->jsonDecodeObject($input));
     }
 
     public function testWebFinger(): void

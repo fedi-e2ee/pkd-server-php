@@ -5,6 +5,7 @@ namespace FediE2EE\PKDServer\Tests;
 use DateInterval;
 use FediE2EE\PKDServer\{
     AppCache,
+    Exceptions\DependencyException,
     ServerConfig
 };
 use FediE2EE\PKDServer\Meta\Params;
@@ -180,5 +181,40 @@ class AppCacheTest extends TestCase
         $this->assertArrayHasKey($namespace, $inMemoryCache);
         $this->assertIsArray($inMemoryCache[$namespace]);
         $this->assertEmpty($inMemoryCache[$namespace]);
+    }
+
+    public function testParamsCacheTtlTooSmall(): void
+    {
+        $this->expectException(DependencyException::class);
+        $this->expectExceptionMessage('HTTP cache TTL cannot be less than 1 second');
+        new Params(hashAlgo: 'sha256', httpCacheTtl: 0);
+    }
+
+    public function testParamsCacheTtlJustSmallEnough(): void
+    {
+        $this->assertInstanceOf(Params::class, new Params(httpCacheTtl: 2));
+    }
+
+    public function testParamsCacheTtlJustLargeEnough(): void
+    {
+        $this->assertInstanceOf(Params::class, new Params(httpCacheTtl: 300));
+    }
+
+    public function testParamsCacheTtlTooLarge(): void
+    {
+        $this->expectException(DependencyException::class);
+        $this->expectExceptionMessage('HTTP cache TTL cannot be greater than 300 seconds');
+        new Params(httpCacheTtl: 301);
+    }
+
+    public function testDefaultParams(): void
+    {
+        $params = new Params();
+        $this->assertSame('sha256', $params->hashAlgo);
+        $this->assertSame(120, $params->otpMaxLife);
+        $this->assertSame('pubkeydir', $params->actorUsername);
+        $this->assertSame('localhost', $params->hostname);
+        $this->assertSame('', $params->cacheKey);
+        $this->assertSame(60, $params->httpCacheTtl);
     }
 }

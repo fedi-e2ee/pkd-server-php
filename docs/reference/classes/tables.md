@@ -156,7 +156,7 @@ Returns `array`
 
 **Throws:** `DateMalformedStringException`
 
-#### [`getAuxDataById`](../../../src/Tables/AuxData.php#L111-L156)
+#### [`getAuxDataById`](../../../src/Tables/AuxData.php#L111-L155)
 
 **API** · Returns `array`
 
@@ -167,7 +167,7 @@ Returns `array`
 
 **Throws:** `CipherSweetException`, `CryptoOperationException`, `DateMalformedStringException`, `InvalidCiphertextException`, `JsonException`, `SodiumException`
 
-#### [`addAuxData`](../../../src/Tables/AuxData.php#L166-L173)
+#### [`addAuxData`](../../../src/Tables/AuxData.php#L165-L172)
 
 Returns `bool`
 
@@ -178,7 +178,7 @@ Returns `bool`
 
 **Throws:** `CryptoException`, `DependencyException`, `NotImplementedException`, `ProtocolException`, `SodiumException`, `TableException`
 
-#### [`revokeAuxData`](../../../src/Tables/AuxData.php#L285-L293)
+#### [`revokeAuxData`](../../../src/Tables/AuxData.php#L284-L292)
 
 Returns `bool`
 
@@ -710,6 +710,22 @@ Returns `int`
 - `$key`: `?FediE2EE\PKD\Crypto\PublicKey` = null
 
 **Throws:** `ArrayKeyException`, `CipherSweetException`, `CryptoOperationException`, `SodiumException`, `TableException`
+
+#### [`createSimpleForPeer`](../../../src/Tables/ReplicaActors.php#L178-L197)
+
+Returns `int`
+
+Create a replica actor without requiring a Payload.
+
+Used when replicating from source server where we have decrypted data.
+
+**Parameters:**
+
+- `$peer`: `FediE2EE\PKDServer\Tables\Records\Peer`
+- `$activityPubID`: `string`
+- `$key`: `?FediE2EE\PKD\Crypto\PublicKey` = null
+
+**Throws:** `ArrayKeyException`, `BlindIndexNotFoundException`, `CipherSweetException`, `CryptoOperationException`, `SodiumException`, `TableException`
 
 ---
 

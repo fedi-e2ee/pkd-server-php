@@ -17,7 +17,15 @@ class ParamsTest extends TestCase
             ['', false],
             ['adler32', false],
             ['md5', false],
+            ['blake2b', true],
             ['sha256', true],
+            ['sha384', true],
+            ['sha512', true],
+            ['sha512/224', true],
+            ['sha512/256', true],
+            ['sha3-256', true],
+            ['sha3-384', true],
+            ['sha3-512', true],
         ];
     }
 
@@ -26,6 +34,7 @@ class ParamsTest extends TestCase
     {
         if (!$expectPass) {
             $this->expectException(DependencyException::class);
+            $this->expectExceptionMessage('Disallowed hash algorithm');
         }
         $this->assertInstanceOf(Params::class, new Params($hashAlgo));
     }
@@ -50,7 +59,7 @@ class ParamsTest extends TestCase
         if (!$expectPass) {
             $this->expectException(DependencyException::class);
         }
-        $this->assertInstanceOf(Params::class, new Params(hashAlgo: 'sha256', otpMaxLife: $maxLife));
+        $this->assertInstanceOf(Params::class, new Params(otpMaxLife: $maxLife));
     }
 
     public static function invalidHttpCacheTtlProvider(): array
@@ -60,7 +69,9 @@ class ParamsTest extends TestCase
             [0, false],
             [1, true],
             [2, true],
+            [3, true],
             [30, true],
+            [299, true],
             [300, true],
             [301, false],
             [PHP_INT_MAX, false]
@@ -73,7 +84,7 @@ class ParamsTest extends TestCase
         if (!$expectPass) {
             $this->expectException(DependencyException::class);
         }
-        $this->assertInstanceOf(Params::class, new Params(hashAlgo: 'sha256', httpCacheTtl: $ttl));
+        $this->assertInstanceOf(Params::class, new Params(httpCacheTtl: $ttl));
     }
 
     public static function hostnameProvider(): array
@@ -92,6 +103,41 @@ class ParamsTest extends TestCase
         if (!$expectPass) {
             $this->expectException(DependencyException::class);
         }
-        $this->assertInstanceOf(Params::class, new Params(hashAlgo: 'sha256', otpMaxLife: 120, hostname: $host));
+        $this->assertInstanceOf(Params::class, new Params(hostname: $host));
+    }
+
+    public function testParamsCacheTtlTooSmall(): void
+    {
+        $this->expectException(DependencyException::class);
+        $this->expectExceptionMessage('HTTP cache TTL cannot be less than 1 second');
+        new Params(hashAlgo: 'sha256', httpCacheTtl: 0);
+    }
+
+    public function testParamsCacheTtlJustSmallEnough(): void
+    {
+        $this->assertInstanceOf(Params::class, new Params(httpCacheTtl: 2));
+    }
+
+    public function testParamsCacheTtlJustLargeEnough(): void
+    {
+        $this->assertInstanceOf(Params::class, new Params(httpCacheTtl: 300));
+    }
+
+    public function testParamsCacheTtlTooLarge(): void
+    {
+        $this->expectException(DependencyException::class);
+        $this->expectExceptionMessage('HTTP cache TTL cannot be greater than 300 seconds');
+        new Params(httpCacheTtl: 301);
+    }
+
+    public function testDefaults(): void
+    {
+        $params = new Params();
+        $this->assertSame('sha256', $params->hashAlgo);
+        $this->assertSame(120, $params->otpMaxLife);
+        $this->assertSame('pubkeydir', $params->actorUsername);
+        $this->assertSame('localhost', $params->hostname);
+        $this->assertSame('', $params->cacheKey);
+        $this->assertSame(60, $params->httpCacheTtl);
     }
 }

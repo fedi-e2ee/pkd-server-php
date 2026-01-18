@@ -76,7 +76,7 @@ class HistorySinceTest extends TestCase
      */
     public function testHandle(): void
     {
-        [$actorId, $canonical] = $this->makeDummyActor('example.com');
+        [$actorId, $canonical] = $this->makeDummyActor('history-since-example.com');
         $keypair = SecretKey::generate();
         $config = $this->getConfig();
         $this->clearOldTransaction($config);
