@@ -111,7 +111,7 @@ PHPUnit test case classes, it will bail out before any mutation tests are actual
 For this reason, you are not required to run mutation tests locally. If anything breaks, we'll assume responsibility for
 playing attribute whack-a-mole with the PHPUnit coverage driver that our mutation testing framework uses.
 
-> ![CAUTION]
+> [!CAUTION]
 > Mutation testing is also somewhat resource-intensive. If you run it on a laptop, we cannot guarantee your battery
 > will remain at full charge.
 
