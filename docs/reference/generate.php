@@ -297,6 +297,8 @@ final class DocGenerator
             visibility: $this->getVisibility($method),
             attributes: $attributes,
             isApi: isset($parsed['tags']['api']),
+            startLine: $method->getStartLine() ?: 0,
+            endLine: $method->getEndLine() ?: 0,
         );
     }
 
@@ -653,7 +655,7 @@ final class DocGenerator
         if (!empty($publicMethods)) {
             $out .= "### Methods\n\n";
             foreach ($publicMethods as $method) {
-                $out .= $this->renderMethodDoc($method);
+                $out .= $this->renderMethodDoc($method, $doc->filepath, $relativePrefix);
             }
         }
 
@@ -661,8 +663,23 @@ final class DocGenerator
         return $out;
     }
 
-    private function renderMethodDoc(MethodDoc $method): string
-    {
+    private function renderMethodDoc(
+        MethodDoc $method,
+        string $filepath,
+        string $relativePrefix
+    ): string {
+        // Build line number fragment for GitHub-compatible links
+        $lineFragment = '';
+        if ($method->startLine > 0) {
+            $lineFragment = $method->endLine > $method->startLine
+                ? "#L{$method->startLine}-L{$method->endLine}"
+                : "#L{$method->startLine}";
+        }
+
+        // Header: just the method name as a link
+        $out = "#### [`{$method->name}`]({$relativePrefix}/{$filepath}{$lineFragment})\n\n";
+
+        // Modifiers and return type on a single line
         $modifiers = [];
         if ($method->isStatic) {
             $modifiers[] = 'static';
@@ -673,23 +690,12 @@ final class DocGenerator
         if ($method->isFinal) {
             $modifiers[] = 'final';
         }
-        $modifierStr = !empty($modifiers) ? implode(' ', $modifiers) . ' ' : '';
-
-        $params = [];
-        foreach ($method->parameters as $param) {
-            $paramStr = "{$param->type} \${$param->name}";
-            if ($param->hasDefault) {
-                $paramStr .= " = {$param->default}";
-            }
-            $params[] = $paramStr;
-        }
-        $paramStr = implode(', ', $params);
-
-        $out = "#### `{$modifierStr}{$method->name}({$paramStr}): {$method->returnType}`\n\n";
-
         if ($method->isApi) {
-            $out .= "**API Method**\n\n";
+            $modifiers[] = '**API**';
         }
+
+        $modifierStr = !empty($modifiers) ? implode(' ', $modifiers) . ' · ' : '';
+        $out .= "{$modifierStr}Returns `{$method->returnType}`\n\n";
 
         if (!empty($method->attributes)) {
             $attrs = array_map(fn($a) => '`#[' . basename(str_replace('\\', '/', $a)) . ']`', $method->attributes);
@@ -700,22 +706,22 @@ final class DocGenerator
             $out .= "{$method->summary}\n\n";
         }
 
+        if ($method->description) {
+            $out .= "{$method->description}\n\n";
+        }
+
         if (!empty($method->parameters)) {
             $out .= "**Parameters:**\n\n";
             foreach ($method->parameters as $param) {
-                $nullable = $param->isNullable ? ' (nullable)' : '';
                 $variadic = $param->isVariadic ? '...' : '';
-                $out .= "- `{$variadic}\${$param->name}`: `{$param->type}`{$nullable}\n";
+                $defaultStr = $param->hasDefault ? " = {$param->default}" : '';
+                $out .= "- `{$variadic}\${$param->name}`: `{$param->type}`{$defaultStr}\n";
             }
             $out .= "\n";
         }
 
         if (!empty($method->throws)) {
-            $out .= "**Throws:**\n\n";
-            foreach ($method->throws as $throw) {
-                $out .= "- `{$throw}`\n";
-            }
-            $out .= "\n";
+            $out .= "**Throws:** " . implode(', ', array_map(fn($t) => "`{$t}`", $method->throws)) . "\n\n";
         }
 
         return $out;
@@ -867,6 +873,8 @@ final readonly class MethodDoc
         public string $visibility,
         public array $attributes,
         public bool $isApi,
+        public int $startLine,
+        public int $endLine,
     ) {}
 }
 
