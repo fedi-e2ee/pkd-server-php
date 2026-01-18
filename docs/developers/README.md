@@ -78,7 +78,7 @@ Finally, updates to the appropriate SQL table will occur in a transaction on the
 
 Make sure you update your dependencies with Composer, then run PHPUnit:
 
-```console
+```bash
 vendor/bin/phpunit
 ```
 
@@ -90,13 +90,13 @@ See [.github/workflows/fuzz.yml](../../.github/workflows/fuzz.yml) for an up-to-
 
 Next, install [PHP-Fuzzer](https://github.com/nikic/PHP-Fuzzer) globally:
 
-```console
+```bash
 composer global require --dev nikic/php-fuzzer
 ```
 
 Once PHP-Fuzzer is installed, you can run this in a terminal window:
 
-```console
+```bash
 php-fuzzer fuzz --max-runs 100000000 fuzzing/PHP_SCRIPT_NAME_GOES_HERE
 ```
 
@@ -120,13 +120,13 @@ installed on your device.
 
 Next, install [Infection](https://infection.github.io/guide/), like so:
 
-```console
+```bash
 composer require --dev infection/infection 
 ```
 
 Finally, run this command:
 
-```console
+```bash
 vendor/bin/infection
 ```
 
@@ -141,7 +141,7 @@ We currently employ three different static analysis tools in CI.
 
 Psalm is installed by default. You can run it like so:
 
-```console
+```bash
 vendor/bin/psalm
 ```
 
@@ -149,7 +149,7 @@ vendor/bin/psalm
 
 PHPStan is installed by default. You can run it like so:
 
-```console
+```bash
 vendor/bin/phpstan analyze --level 5 --memory-limit 1024M
 ```
 
@@ -159,7 +159,7 @@ See [the Semgrep website](https://semgrep.dev/) for setup instructions.
 
 Once you have Semgrep installed locally, you can run the following command to generate a SARIF file.
 
-```console
+```bash
 semgrep scan \
     --config auto \
     --config p/phpcs-security-audit \
@@ -182,13 +182,13 @@ style. The desired code style is similar to PSR-12, with a few tweaks (for perso
 
 To identify code style violations:
 
-```console
+```bash
 vendor/bin/php-cs-fixer fix --dry-run --allow-risky=yes
 ```
 
 To automatically fix code style violations, simply drop `--dry-run`:
 
-```console
+```bash
 vendor/bin/php-cs-fixer fix --allow-risky=yes
 ```
 
@@ -200,6 +200,6 @@ vendor/bin/php-cs-fixer fix --allow-risky=yes
 
 To regenerate the reference docs, simply run this PHP script:
 
-```console
+```bash
 php docs/reference/generate.php
 ```
