@@ -17,21 +17,23 @@ Namespace: `FediE2EE\PKDServer\Scheduled`
 
 ### Methods
 
-#### `__construct(FediE2EE\PKDServer\ServerConfig $config): void`
+#### [`__construct`](../../../src/Scheduled/ASQueue.php#L37-L42)
+
+Returns `void`
 
 **Parameters:**
 
 - `$config`: `FediE2EE\PKDServer\ServerConfig`
 
-**Throws:**
+**Throws:** `CertaintyException`, `DependencyException`, `SodiumException`
 
-- `CertaintyException`
-- `DependencyException`
-- `SodiumException`
+#### [`run`](../../../src/Scheduled/ASQueue.php#L52-L87)
 
-#### `run(): void`
+Returns `void`
 
 ASQueue::run() is a very dumb method.
+
+All this method does is grab the unprocessed messages, order them, decode them, and then pass them onto Protocol::process(). The logic is entirely contained to Protocol and the Table classes.
 
 ---
 
@@ -53,78 +55,70 @@ Perform witness co-signatures for third-porty Public Key Directory instances.
 
 ### Methods
 
-#### `__construct(?FediE2EE\PKDServer\ServerConfig $config): void`
+#### [`__construct`](../../../src/Scheduled/Witness.php#L70-L104)
+
+Returns `void`
 
 **Parameters:**
 
-- `$config`: `?FediE2EE\PKDServer\ServerConfig` (nullable)
+- `$config`: `?FediE2EE\PKDServer\ServerConfig`
 
-**Throws:**
+**Throws:** `CacheException`, `DependencyException`, `TableException`
 
-- `CacheException`
-- `DependencyException`
-- `TableException`
+#### [`run`](../../../src/Scheduled/Witness.php#L111-L123)
 
-#### `run(): void`
+Returns `void`
 
-**Throws:**
+**Throws:** `CryptoException`, `DateMalformedStringException`, `SodiumException`
 
-- `CryptoException`
-- `DateMalformedStringException`
-- `SodiumException`
+#### [`getHashesSince`](../../../src/Scheduled/Witness.php#L277-L294)
 
-#### `getHashesSince(FediE2EE\PKDServer\Tables\Records\Peer $peer): array`
+Returns `array`
 
 **Parameters:**
 
 - `$peer`: `FediE2EE\PKDServer\Tables\Records\Peer`
 
-**Throws:**
+**Throws:** `CryptoException`, `GuzzleException`, `HttpSignatureException`, `JsonException`, `NotImplementedException`, `ProtocolException`, `SodiumException`
 
-- `CryptoException`
-- `GuzzleException`
-- `HttpSignatureException`
-- `JsonException`
-- `NotImplementedException`
-- `ProtocolException`
-- `SodiumException`
+#### [`appCache`](../../../src/Scheduled/Witness.php#L42-L45)
 
-#### `appCache(string $namespace, int $defaultTTL = 60): FediE2EE\PKDServer\AppCache`
+Returns `FediE2EE\PKDServer\AppCache`
 
 **Parameters:**
 
 - `$namespace`: `string`
-- `$defaultTTL`: `int`
+- `$defaultTTL`: `int` = 60
 
-**Throws:**
+**Throws:** `DependencyException`
 
-- `DependencyException`
+#### [`table`](../../../src/Scheduled/Witness.php#L52-L75)
 
-#### `table(string $tableName): FediE2EE\PKDServer\Table`
+Returns `FediE2EE\PKDServer\Table`
 
 **Parameters:**
 
 - `$tableName`: `string`
 
-**Throws:**
+**Throws:** `CacheException`, `DependencyException`, `TableException`
 
-- `CacheException`
-- `DependencyException`
-- `TableException`
+#### [`injectConfig`](../../../src/Scheduled/Witness.php#L77-L80)
 
-#### `injectConfig(FediE2EE\PKDServer\ServerConfig $config): void`
+Returns `void`
 
 **Parameters:**
 
 - `$config`: `FediE2EE\PKDServer\ServerConfig`
 
-#### `config(): FediE2EE\PKDServer\ServerConfig`
+#### [`config`](../../../src/Scheduled/Witness.php#L85-L95)
 
-**Throws:**
+Returns `FediE2EE\PKDServer\ServerConfig`
 
-- `DependencyException`
+**Throws:** `DependencyException`
 
-#### `setWebFinger(FediE2EE\PKDServer\ActivityPub\WebFinger $wf): self`
+#### [`setWebFinger`](../../../src/Scheduled/Witness.php#L100-L104)
+
+Returns `self`
 
 This is intended for mocking in unit tests
 
@@ -132,17 +126,15 @@ This is intended for mocking in unit tests
 
 - `$wf`: `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
-#### `webfinger(?GuzzleHttp\Client $http = null): FediE2EE\PKDServer\ActivityPub\WebFinger`
+#### [`webfinger`](../../../src/Scheduled/Witness.php#L111-L118)
+
+Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
 **Parameters:**
 
-- `$http`: `?GuzzleHttp\Client` (nullable)
+- `$http`: `?GuzzleHttp\Client` = null
 
-**Throws:**
-
-- `CertaintyException`
-- `DependencyException`
-- `SodiumException`
+**Throws:** `CertaintyException`, `DependencyException`, `SodiumException`
 
 ---
 

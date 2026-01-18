@@ -38,70 +38,81 @@ Abstraction for a row in the Actors table
 
 ### Methods
 
-#### `__construct(string $actorID, ?FediE2EE\PKD\Crypto\PublicKey $rfc9421pk = null, bool $fireProof = false, ?int $primaryKey = null): void`
+#### [`__construct`](../../../src/Tables/Records/Actor.php#L24-L31)
+
+Returns `void`
 
 **Parameters:**
 
 - `$actorID`: `string`
-- `$rfc9421pk`: `?FediE2EE\PKD\Crypto\PublicKey` (nullable)
-- `$fireProof`: `bool`
-- `$primaryKey`: `?int` (nullable)
+- `$rfc9421pk`: `?FediE2EE\PKD\Crypto\PublicKey` = null
+- `$fireProof`: `bool` = false
+- `$primaryKey`: `?int` = null
 
-#### `static create(string $actorID, string $rfc9421pk = '', bool $fireProof = false): self`
+#### [`create`](../../../src/Tables/Records/Actor.php#L36-L46)
+
+static · Returns `self`
 
 Instantiate a new object without a primary key
 
 **Parameters:**
 
 - `$actorID`: `string`
-- `$rfc9421pk`: `string`
-- `$fireProof`: `bool`
+- `$rfc9421pk`: `string` = ''
+- `$fireProof`: `bool` = false
 
-#### `toArray(): array`
+#### [`toArray`](../../../src/Tables/Records/Actor.php#L48-L55)
 
-#### `hasPrimaryKey(): bool`
+Returns `array`
 
-#### `getPrimaryKey(): int`
+#### [`hasPrimaryKey`](../../../src/Tables/Records/Actor.php#L31-L34)
 
-**Throws:**
+Returns `bool`
 
-- `TableException`
+#### [`getPrimaryKey`](../../../src/Tables/Records/Actor.php#L40-L46)
 
-#### `attachSymmetricKey(string $property, FediE2EE\PKD\Crypto\SymmetricKey $key): self`
+Returns `int`
+
+**Throws:** `TableException`
+
+#### [`attachSymmetricKey`](../../../src/Tables/Records/Actor.php#L52-L62)
+
+Returns `self`
 
 **Parameters:**
 
 - `$property`: `string`
 - `$key`: `FediE2EE\PKD\Crypto\SymmetricKey`
 
-**Throws:**
+**Throws:** `TableException`
 
-- `TableException`
+#### [`getSymmetricKeyForProperty`](../../../src/Tables/Records/Actor.php#L68-L77)
 
-#### `getSymmetricKeyForProperty(string $property): FediE2EE\PKD\Crypto\SymmetricKey`
+Returns `FediE2EE\PKD\Crypto\SymmetricKey`
 
 **Parameters:**
 
 - `$property`: `string`
 
-**Throws:**
+**Throws:** `TableException`
 
-- `TableException`
+#### [`getSymmetricKeys`](../../../src/Tables/Records/Actor.php#L79-L82)
 
-#### `getSymmetricKeys(): array`
+Returns `array`
 
-#### `getRfc9421PublicKeys(string $actorId): FediE2EE\PKD\Crypto\PublicKey`
+#### [`getRfc9421PublicKeys`](../../../src/Tables/Records/Actor.php#L96-L99)
+
+Returns `FediE2EE\PKD\Crypto\PublicKey`
 
 Fetch the RFC 9421 public keys for an actor.
+
+If multiple are returned (e.g., via FEP-521a), this will cycle through them until the first Ed25519 public key is found. We do not support JWS, RSA, or ECDSA keys.
 
 **Parameters:**
 
 - `$actorId`: `string`
 
-**Throws:**
-
-- `CryptoException`
-- `FetchException`
+**Throws:** `CryptoException`, `FetchException`
 
 ---
 
@@ -130,7 +141,9 @@ Abstraction for a row in the PublicKeys table
 
 ### Methods
 
-#### `__construct(FediE2EE\PKDServer\Tables\Records\Actor $actor, FediE2EE\PKD\Crypto\PublicKey $publicKey, bool $trusted, FediE2EE\PKDServer\Tables\Records\MerkleLeaf $insertLeaf, ?FediE2EE\PKDServer\Tables\Records\MerkleLeaf $revokeLeaf = null, ?string $keyID = null, ?int $primaryKey = null): void`
+#### [`__construct`](../../../src/Tables/Records/ActorKey.php#L18-L28)
+
+Returns `void`
 
 **Parameters:**
 
@@ -138,53 +151,58 @@ Abstraction for a row in the PublicKeys table
 - `$publicKey`: `FediE2EE\PKD\Crypto\PublicKey`
 - `$trusted`: `bool`
 - `$insertLeaf`: `FediE2EE\PKDServer\Tables\Records\MerkleLeaf`
-- `$revokeLeaf`: `?FediE2EE\PKDServer\Tables\Records\MerkleLeaf` (nullable)
-- `$keyID`: `?string` (nullable)
-- `$primaryKey`: `?int` (nullable)
+- `$revokeLeaf`: `?FediE2EE\PKDServer\Tables\Records\MerkleLeaf` = null
+- `$keyID`: `?string` = null
+- `$primaryKey`: `?int` = null
 
-#### `hasPrimaryKey(): bool`
+#### [`hasPrimaryKey`](../../../src/Tables/Records/ActorKey.php#L31-L34)
 
-#### `getPrimaryKey(): int`
+Returns `bool`
 
-**Throws:**
+#### [`getPrimaryKey`](../../../src/Tables/Records/ActorKey.php#L40-L46)
 
-- `TableException`
+Returns `int`
 
-#### `attachSymmetricKey(string $property, FediE2EE\PKD\Crypto\SymmetricKey $key): self`
+**Throws:** `TableException`
+
+#### [`attachSymmetricKey`](../../../src/Tables/Records/ActorKey.php#L52-L62)
+
+Returns `self`
 
 **Parameters:**
 
 - `$property`: `string`
 - `$key`: `FediE2EE\PKD\Crypto\SymmetricKey`
 
-**Throws:**
+**Throws:** `TableException`
 
-- `TableException`
+#### [`getSymmetricKeyForProperty`](../../../src/Tables/Records/ActorKey.php#L68-L77)
 
-#### `getSymmetricKeyForProperty(string $property): FediE2EE\PKD\Crypto\SymmetricKey`
+Returns `FediE2EE\PKD\Crypto\SymmetricKey`
 
 **Parameters:**
 
 - `$property`: `string`
 
-**Throws:**
+**Throws:** `TableException`
 
-- `TableException`
+#### [`getSymmetricKeys`](../../../src/Tables/Records/ActorKey.php#L79-L82)
 
-#### `getSymmetricKeys(): array`
+Returns `array`
 
-#### `getRfc9421PublicKeys(string $actorId): FediE2EE\PKD\Crypto\PublicKey`
+#### [`getRfc9421PublicKeys`](../../../src/Tables/Records/ActorKey.php#L96-L99)
+
+Returns `FediE2EE\PKD\Crypto\PublicKey`
 
 Fetch the RFC 9421 public keys for an actor.
+
+If multiple are returned (e.g., via FEP-521a), this will cycle through them until the first Ed25519 public key is found. We do not support JWS, RSA, or ECDSA keys.
 
 **Parameters:**
 
 - `$actorId`: `string`
 
-**Throws:**
-
-- `CryptoException`
-- `FetchException`
+**Throws:** `CryptoException`, `FetchException`
 
 ---
 
@@ -213,7 +231,9 @@ Abstraction for a row in the AuxData table
 
 ### Methods
 
-#### `__construct(FediE2EE\PKDServer\Tables\Records\Actor $actor, string $auxDataType, string $auxData, bool $trusted, FediE2EE\PKDServer\Tables\Records\MerkleLeaf $insertLeaf, ?FediE2EE\PKDServer\Tables\Records\MerkleLeaf $revokeLeaf = null, ?int $primaryKey = null): void`
+#### [`__construct`](../../../src/Tables/Records/AuxDatum.php#L17-L27)
+
+Returns `void`
 
 **Parameters:**
 
@@ -222,54 +242,61 @@ Abstraction for a row in the AuxData table
 - `$auxData`: `string`
 - `$trusted`: `bool`
 - `$insertLeaf`: `FediE2EE\PKDServer\Tables\Records\MerkleLeaf`
-- `$revokeLeaf`: `?FediE2EE\PKDServer\Tables\Records\MerkleLeaf` (nullable)
-- `$primaryKey`: `?int` (nullable)
+- `$revokeLeaf`: `?FediE2EE\PKDServer\Tables\Records\MerkleLeaf` = null
+- `$primaryKey`: `?int` = null
 
-#### `getActor(): FediE2EE\PKDServer\Tables\Records\Actor`
+#### [`getActor`](../../../src/Tables/Records/AuxDatum.php#L29-L32)
 
-#### `hasPrimaryKey(): bool`
+Returns `FediE2EE\PKDServer\Tables\Records\Actor`
 
-#### `getPrimaryKey(): int`
+#### [`hasPrimaryKey`](../../../src/Tables/Records/AuxDatum.php#L31-L34)
 
-**Throws:**
+Returns `bool`
 
-- `TableException`
+#### [`getPrimaryKey`](../../../src/Tables/Records/AuxDatum.php#L40-L46)
 
-#### `attachSymmetricKey(string $property, FediE2EE\PKD\Crypto\SymmetricKey $key): self`
+Returns `int`
+
+**Throws:** `TableException`
+
+#### [`attachSymmetricKey`](../../../src/Tables/Records/AuxDatum.php#L52-L62)
+
+Returns `self`
 
 **Parameters:**
 
 - `$property`: `string`
 - `$key`: `FediE2EE\PKD\Crypto\SymmetricKey`
 
-**Throws:**
+**Throws:** `TableException`
 
-- `TableException`
+#### [`getSymmetricKeyForProperty`](../../../src/Tables/Records/AuxDatum.php#L68-L77)
 
-#### `getSymmetricKeyForProperty(string $property): FediE2EE\PKD\Crypto\SymmetricKey`
+Returns `FediE2EE\PKD\Crypto\SymmetricKey`
 
 **Parameters:**
 
 - `$property`: `string`
 
-**Throws:**
+**Throws:** `TableException`
 
-- `TableException`
+#### [`getSymmetricKeys`](../../../src/Tables/Records/AuxDatum.php#L79-L82)
 
-#### `getSymmetricKeys(): array`
+Returns `array`
 
-#### `getRfc9421PublicKeys(string $actorId): FediE2EE\PKD\Crypto\PublicKey`
+#### [`getRfc9421PublicKeys`](../../../src/Tables/Records/AuxDatum.php#L96-L99)
+
+Returns `FediE2EE\PKD\Crypto\PublicKey`
 
 Fetch the RFC 9421 public keys for an actor.
+
+If multiple are returned (e.g., via FEP-521a), this will cycle through them until the first Ed25519 public key is found. We do not support JWS, RSA, or ECDSA keys.
 
 **Parameters:**
 
 - `$actorId`: `string`
 
-**Throws:**
-
-- `CryptoException`
-- `FetchException`
+**Throws:** `CryptoException`, `FetchException`
 
 ---
 
@@ -299,7 +326,9 @@ Abstraction for a row in the MerkleState table
 
 ### Methods
 
-#### `__construct(string $contents, string $contentHash, string $signature, string $publicKeyHash, ?FediE2EE\PKD\Crypto\Merkle\InclusionProof $inclusionProof = null, string $created = '', ?string $wrappedKeys = null, ?int $primaryKey = null): void`
+#### [`__construct`](../../../src/Tables/Records/MerkleLeaf.php#L25-L36)
+
+Returns `void`
 
 **Parameters:**
 
@@ -307,122 +336,133 @@ Abstraction for a row in the MerkleState table
 - `$contentHash`: `string`
 - `$signature`: `string`
 - `$publicKeyHash`: `string`
-- `$inclusionProof`: `?FediE2EE\PKD\Crypto\Merkle\InclusionProof` (nullable)
-- `$created`: `string`
-- `$wrappedKeys`: `?string` (nullable)
-- `$primaryKey`: `?int` (nullable)
+- `$inclusionProof`: `?FediE2EE\PKD\Crypto\Merkle\InclusionProof` = null
+- `$created`: `string` = ''
+- `$wrappedKeys`: `?string` = null
+- `$primaryKey`: `?int` = null
 
-#### `static from(string $contents, FediE2EE\PKD\Crypto\SecretKey $sk, ?string $rewrappedKeys = null): self`
+#### [`from`](../../../src/Tables/Records/MerkleLeaf.php#L42-L59)
+
+static · Returns `self`
 
 **Parameters:**
 
 - `$contents`: `string`
 - `$sk`: `FediE2EE\PKD\Crypto\SecretKey`
-- `$rewrappedKeys`: `?string` (nullable)
+- `$rewrappedKeys`: `?string` = null
 
-**Throws:**
+**Throws:** `NotImplementedException`, `SodiumException`
 
-- `NotImplementedException`
-- `SodiumException`
+#### [`fromPayload`](../../../src/Tables/Records/MerkleLeaf.php#L67-L77)
 
-#### `static fromPayload(FediE2EE\PKDServer\Protocol\Payload $payload, FediE2EE\PKD\Crypto\SecretKey $sk, ?string $rewrappedKeys = null): self`
-
-**API Method**
+static **API** · Returns `self`
 
 **Parameters:**
 
 - `$payload`: `FediE2EE\PKDServer\Protocol\Payload`
 - `$sk`: `FediE2EE\PKD\Crypto\SecretKey`
-- `$rewrappedKeys`: `?string` (nullable)
+- `$rewrappedKeys`: `?string` = null
 
-**Throws:**
+**Throws:** `NotImplementedException`, `SodiumException`
 
-- `NotImplementedException`
-- `SodiumException`
+#### [`setPrimaryKey`](../../../src/Tables/Records/MerkleLeaf.php#L79-L83)
 
-#### `setPrimaryKey(?int $primary): static`
+Returns `static`
 
 **Parameters:**
 
-- `$primary`: `?int` (nullable)
+- `$primary`: `?int`
 
-#### `getContents(): array`
+#### [`getContents`](../../../src/Tables/Records/MerkleLeaf.php#L85-L88)
 
-#### `getInclusionProof(): ?FediE2EE\PKD\Crypto\Merkle\InclusionProof`
+Returns `array`
 
-**API Method**
+#### [`getInclusionProof`](../../../src/Tables/Records/MerkleLeaf.php#L93-L96)
 
-#### `getSignature(): string`
+**API** · Returns `?FediE2EE\PKD\Crypto\Merkle\InclusionProof`
 
-#### `serializeForMerkle(): string`
+#### [`getSignature`](../../../src/Tables/Records/MerkleLeaf.php#L98-L101)
 
-**Throws:**
+Returns `string`
 
-- `SodiumException`
+#### [`serializeForMerkle`](../../../src/Tables/Records/MerkleLeaf.php#L106-L113)
 
-#### `hasPrimaryKey(): bool`
+Returns `string`
 
-#### `getPrimaryKey(): int`
+**Throws:** `SodiumException`
 
-**Throws:**
+#### [`hasPrimaryKey`](../../../src/Tables/Records/MerkleLeaf.php#L31-L34)
 
-- `TableException`
+Returns `bool`
 
-#### `attachSymmetricKey(string $property, FediE2EE\PKD\Crypto\SymmetricKey $key): self`
+#### [`getPrimaryKey`](../../../src/Tables/Records/MerkleLeaf.php#L40-L46)
+
+Returns `int`
+
+**Throws:** `TableException`
+
+#### [`attachSymmetricKey`](../../../src/Tables/Records/MerkleLeaf.php#L52-L62)
+
+Returns `self`
 
 **Parameters:**
 
 - `$property`: `string`
 - `$key`: `FediE2EE\PKD\Crypto\SymmetricKey`
 
-**Throws:**
+**Throws:** `TableException`
 
-- `TableException`
+#### [`getSymmetricKeyForProperty`](../../../src/Tables/Records/MerkleLeaf.php#L68-L77)
 
-#### `getSymmetricKeyForProperty(string $property): FediE2EE\PKD\Crypto\SymmetricKey`
+Returns `FediE2EE\PKD\Crypto\SymmetricKey`
 
 **Parameters:**
 
 - `$property`: `string`
 
-**Throws:**
+**Throws:** `TableException`
 
-- `TableException`
+#### [`getSymmetricKeys`](../../../src/Tables/Records/MerkleLeaf.php#L79-L82)
 
-#### `getSymmetricKeys(): array`
+Returns `array`
 
-#### `getRfc9421PublicKeys(string $actorId): FediE2EE\PKD\Crypto\PublicKey`
+#### [`getRfc9421PublicKeys`](../../../src/Tables/Records/MerkleLeaf.php#L96-L99)
+
+Returns `FediE2EE\PKD\Crypto\PublicKey`
 
 Fetch the RFC 9421 public keys for an actor.
+
+If multiple are returned (e.g., via FEP-521a), this will cycle through them until the first Ed25519 public key is found. We do not support JWS, RSA, or ECDSA keys.
 
 **Parameters:**
 
 - `$actorId`: `string`
 
-**Throws:**
+**Throws:** `CryptoException`, `FetchException`
 
-- `CryptoException`
-- `FetchException`
+#### [`assertAllArrayKeysExist`](../../../src/Tables/Records/MerkleLeaf.php#L14-L19)
 
-#### `static assertAllArrayKeysExist(array $target, string $arrayKeys): void`
-
-**Parameters:**
-
-- `$target`: `array`
-- `...$arrayKeys`: `string`
-
-**Throws:**
-
-- `InputException`
-
-#### `static allArrayKeysExist(array $target, string $arrayKeys): bool`
+static · Returns `void`
 
 **Parameters:**
 
 - `$target`: `array`
 - `...$arrayKeys`: `string`
 
-#### `constantTimeSelect(int $select, string $left, string $right): string`
+**Throws:** `InputException`
+
+#### [`allArrayKeysExist`](../../../src/Tables/Records/MerkleLeaf.php#L21-L28)
+
+static · Returns `bool`
+
+**Parameters:**
+
+- `$target`: `array`
+- `...$arrayKeys`: `string`
+
+#### [`constantTimeSelect`](../../../src/Tables/Records/MerkleLeaf.php#L35-L52)
+
+Returns `string`
 
 **Parameters:**
 
@@ -430,11 +470,11 @@ Fetch the RFC 9421 public keys for an actor.
 - `$left`: `string`
 - `$right`: `string`
 
-**Throws:**
+**Throws:** `CryptoException`
 
-- `CryptoException`
+#### [`dos2unix`](../../../src/Tables/Records/MerkleLeaf.php#L60-L63)
 
-#### `static dos2unix(string $in): string`
+static · Returns `string`
 
 Normalize line-endings to UNIX-style (LF rather than CRLF).
 
@@ -442,31 +482,41 @@ Normalize line-endings to UNIX-style (LF rather than CRLF).
 
 - `$in`: `string`
 
-#### `static preAuthEncode(array $pieces): string`
+#### [`preAuthEncode`](../../../src/Tables/Records/MerkleLeaf.php#L69-L78)
+
+static · Returns `string`
 
 **Parameters:**
 
 - `$pieces`: `array`
 
-#### `static sortByKey(array $arr): void`
+#### [`sortByKey`](../../../src/Tables/Records/MerkleLeaf.php#L80-L88)
+
+static · Returns `void`
 
 **Parameters:**
 
 - `$arr`: `array`
 
-#### `static LE64(int $n): string`
+#### [`LE64`](../../../src/Tables/Records/MerkleLeaf.php#L90-L93)
+
+static · Returns `string`
 
 **Parameters:**
 
 - `$n`: `int`
 
-#### `stringToByteArray(string $str): array`
+#### [`stringToByteArray`](../../../src/Tables/Records/MerkleLeaf.php#L95-L99)
+
+Returns `array`
 
 **Parameters:**
 
 - `$str`: `string`
 
-#### `static stripNewlines(string $input): string`
+#### [`stripNewlines`](../../../src/Tables/Records/MerkleLeaf.php#L107-L141)
+
+static · Returns `string`
 
 Strip all newlines (CR, LF) characters from a string.
 
@@ -503,7 +553,9 @@ Strip all newlines (CR, LF) characters from a string.
 
 ### Methods
 
-#### `__construct(string $hostname, string $uniqueId, FediE2EE\PKD\Crypto\PublicKey $publicKey, FediE2EE\PKD\Crypto\Merkle\IncrementalTree $tree, string $latestRoot, bool $cosign, bool $replicate, DateTimeImmutable $created, DateTimeImmutable $modified, ?FediE2EE\PKDServer\Protocol\RewrapConfig $wrapConfig = null, ?int $primaryKey = null): void`
+#### [`__construct`](../../../src/Tables/Records/Peer.php#L21-L35)
+
+Returns `void`
 
 **Parameters:**
 
@@ -516,74 +568,85 @@ Strip all newlines (CR, LF) characters from a string.
 - `$replicate`: `bool`
 - `$created`: `DateTimeImmutable`
 - `$modified`: `DateTimeImmutable`
-- `$wrapConfig`: `?FediE2EE\PKDServer\Protocol\RewrapConfig` (nullable)
-- `$primaryKey`: `?int` (nullable)
+- `$wrapConfig`: `?FediE2EE\PKDServer\Protocol\RewrapConfig` = null
+- `$primaryKey`: `?int` = null
 
-#### `toArray(): array`
+#### [`toArray`](../../../src/Tables/Records/Peer.php#L37-L63)
 
-#### `hasPrimaryKey(): bool`
+Returns `array`
 
-#### `getPrimaryKey(): int`
+#### [`hasPrimaryKey`](../../../src/Tables/Records/Peer.php#L31-L34)
 
-**Throws:**
+Returns `bool`
 
-- `TableException`
+#### [`getPrimaryKey`](../../../src/Tables/Records/Peer.php#L40-L46)
 
-#### `attachSymmetricKey(string $property, FediE2EE\PKD\Crypto\SymmetricKey $key): self`
+Returns `int`
+
+**Throws:** `TableException`
+
+#### [`attachSymmetricKey`](../../../src/Tables/Records/Peer.php#L52-L62)
+
+Returns `self`
 
 **Parameters:**
 
 - `$property`: `string`
 - `$key`: `FediE2EE\PKD\Crypto\SymmetricKey`
 
-**Throws:**
+**Throws:** `TableException`
 
-- `TableException`
+#### [`getSymmetricKeyForProperty`](../../../src/Tables/Records/Peer.php#L68-L77)
 
-#### `getSymmetricKeyForProperty(string $property): FediE2EE\PKD\Crypto\SymmetricKey`
+Returns `FediE2EE\PKD\Crypto\SymmetricKey`
 
 **Parameters:**
 
 - `$property`: `string`
 
-**Throws:**
+**Throws:** `TableException`
 
-- `TableException`
+#### [`getSymmetricKeys`](../../../src/Tables/Records/Peer.php#L79-L82)
 
-#### `getSymmetricKeys(): array`
+Returns `array`
 
-#### `getRfc9421PublicKeys(string $actorId): FediE2EE\PKD\Crypto\PublicKey`
+#### [`getRfc9421PublicKeys`](../../../src/Tables/Records/Peer.php#L96-L99)
+
+Returns `FediE2EE\PKD\Crypto\PublicKey`
 
 Fetch the RFC 9421 public keys for an actor.
+
+If multiple are returned (e.g., via FEP-521a), this will cycle through them until the first Ed25519 public key is found. We do not support JWS, RSA, or ECDSA keys.
 
 **Parameters:**
 
 - `$actorId`: `string`
 
-**Throws:**
+**Throws:** `CryptoException`, `FetchException`
 
-- `CryptoException`
-- `FetchException`
+#### [`assertAllArrayKeysExist`](../../../src/Tables/Records/Peer.php#L14-L19)
 
-#### `static assertAllArrayKeysExist(array $target, string $arrayKeys): void`
-
-**Parameters:**
-
-- `$target`: `array`
-- `...$arrayKeys`: `string`
-
-**Throws:**
-
-- `InputException`
-
-#### `static allArrayKeysExist(array $target, string $arrayKeys): bool`
+static · Returns `void`
 
 **Parameters:**
 
 - `$target`: `array`
 - `...$arrayKeys`: `string`
 
-#### `constantTimeSelect(int $select, string $left, string $right): string`
+**Throws:** `InputException`
+
+#### [`allArrayKeysExist`](../../../src/Tables/Records/Peer.php#L21-L28)
+
+static · Returns `bool`
+
+**Parameters:**
+
+- `$target`: `array`
+- `...$arrayKeys`: `string`
+
+#### [`constantTimeSelect`](../../../src/Tables/Records/Peer.php#L35-L52)
+
+Returns `string`
 
 **Parameters:**
 
@@ -591,11 +654,11 @@ Fetch the RFC 9421 public keys for an actor.
 - `$left`: `string`
 - `$right`: `string`
 
-**Throws:**
+**Throws:** `CryptoException`
 
-- `CryptoException`
+#### [`dos2unix`](../../../src/Tables/Records/Peer.php#L60-L63)
 
-#### `static dos2unix(string $in): string`
+static · Returns `string`
 
 Normalize line-endings to UNIX-style (LF rather than CRLF).
 
@@ -603,31 +666,41 @@ Normalize line-endings to UNIX-style (LF rather than CRLF).
 
 - `$in`: `string`
 
-#### `static preAuthEncode(array $pieces): string`
+#### [`preAuthEncode`](../../../src/Tables/Records/Peer.php#L69-L78)
+
+static · Returns `string`
 
 **Parameters:**
 
 - `$pieces`: `array`
 
-#### `static sortByKey(array $arr): void`
+#### [`sortByKey`](../../../src/Tables/Records/Peer.php#L80-L88)
+
+static · Returns `void`
 
 **Parameters:**
 
 - `$arr`: `array`
 
-#### `static LE64(int $n): string`
+#### [`LE64`](../../../src/Tables/Records/Peer.php#L90-L93)
+
+static · Returns `string`
 
 **Parameters:**
 
 - `$n`: `int`
 
-#### `stringToByteArray(string $str): array`
+#### [`stringToByteArray`](../../../src/Tables/Records/Peer.php#L95-L99)
+
+Returns `array`
 
 **Parameters:**
 
 - `$str`: `string`
 
-#### `static stripNewlines(string $input): string`
+#### [`stripNewlines`](../../../src/Tables/Records/Peer.php#L107-L141)
+
+static · Returns `string`
 
 Strip all newlines (CR, LF) characters from a string.
 
@@ -657,80 +730,93 @@ Strip all newlines (CR, LF) characters from a string.
 
 ### Methods
 
-#### `__construct(string $actorID, ?FediE2EE\PKD\Crypto\PublicKey $rfc9421pk = null, bool $fireProof = false, ?int $primaryKey = null): void`
+#### [`__construct`](../../../src/Tables/Records/ReplicaActor.php#L16-L23)
+
+Returns `void`
 
 **Parameters:**
 
 - `$actorID`: `string`
-- `$rfc9421pk`: `?FediE2EE\PKD\Crypto\PublicKey` (nullable)
-- `$fireProof`: `bool`
-- `$primaryKey`: `?int` (nullable)
+- `$rfc9421pk`: `?FediE2EE\PKD\Crypto\PublicKey` = null
+- `$fireProof`: `bool` = false
+- `$primaryKey`: `?int` = null
 
-#### `toArray(): array`
+#### [`toArray`](../../../src/Tables/Records/ReplicaActor.php#L25-L32)
 
-#### `hasPrimaryKey(): bool`
+Returns `array`
 
-#### `getPrimaryKey(): int`
+#### [`hasPrimaryKey`](../../../src/Tables/Records/ReplicaActor.php#L31-L34)
 
-**Throws:**
+Returns `bool`
 
-- `TableException`
+#### [`getPrimaryKey`](../../../src/Tables/Records/ReplicaActor.php#L40-L46)
 
-#### `attachSymmetricKey(string $property, FediE2EE\PKD\Crypto\SymmetricKey $key): self`
+Returns `int`
+
+**Throws:** `TableException`
+
+#### [`attachSymmetricKey`](../../../src/Tables/Records/ReplicaActor.php#L52-L62)
+
+Returns `self`
 
 **Parameters:**
 
 - `$property`: `string`
 - `$key`: `FediE2EE\PKD\Crypto\SymmetricKey`
 
-**Throws:**
+**Throws:** `TableException`
 
-- `TableException`
+#### [`getSymmetricKeyForProperty`](../../../src/Tables/Records/ReplicaActor.php#L68-L77)
 
-#### `getSymmetricKeyForProperty(string $property): FediE2EE\PKD\Crypto\SymmetricKey`
+Returns `FediE2EE\PKD\Crypto\SymmetricKey`
 
 **Parameters:**
 
 - `$property`: `string`
 
-**Throws:**
+**Throws:** `TableException`
 
-- `TableException`
+#### [`getSymmetricKeys`](../../../src/Tables/Records/ReplicaActor.php#L79-L82)
 
-#### `getSymmetricKeys(): array`
+Returns `array`
 
-#### `getRfc9421PublicKeys(string $actorId): FediE2EE\PKD\Crypto\PublicKey`
+#### [`getRfc9421PublicKeys`](../../../src/Tables/Records/ReplicaActor.php#L96-L99)
+
+Returns `FediE2EE\PKD\Crypto\PublicKey`
 
 Fetch the RFC 9421 public keys for an actor.
+
+If multiple are returned (e.g., via FEP-521a), this will cycle through them until the first Ed25519 public key is found. We do not support JWS, RSA, or ECDSA keys.
 
 **Parameters:**
 
 - `$actorId`: `string`
 
-**Throws:**
+**Throws:** `CryptoException`, `FetchException`
 
-- `CryptoException`
-- `FetchException`
+#### [`assertAllArrayKeysExist`](../../../src/Tables/Records/ReplicaActor.php#L14-L19)
 
-#### `static assertAllArrayKeysExist(array $target, string $arrayKeys): void`
-
-**Parameters:**
-
-- `$target`: `array`
-- `...$arrayKeys`: `string`
-
-**Throws:**
-
-- `InputException`
-
-#### `static allArrayKeysExist(array $target, string $arrayKeys): bool`
+static · Returns `void`
 
 **Parameters:**
 
 - `$target`: `array`
 - `...$arrayKeys`: `string`
 
-#### `constantTimeSelect(int $select, string $left, string $right): string`
+**Throws:** `InputException`
+
+#### [`allArrayKeysExist`](../../../src/Tables/Records/ReplicaActor.php#L21-L28)
+
+static · Returns `bool`
+
+**Parameters:**
+
+- `$target`: `array`
+- `...$arrayKeys`: `string`
+
+#### [`constantTimeSelect`](../../../src/Tables/Records/ReplicaActor.php#L35-L52)
+
+Returns `string`
 
 **Parameters:**
 
@@ -738,11 +824,11 @@ Fetch the RFC 9421 public keys for an actor.
 - `$left`: `string`
 - `$right`: `string`
 
-**Throws:**
+**Throws:** `CryptoException`
 
-- `CryptoException`
+#### [`dos2unix`](../../../src/Tables/Records/ReplicaActor.php#L60-L63)
 
-#### `static dos2unix(string $in): string`
+static · Returns `string`
 
 Normalize line-endings to UNIX-style (LF rather than CRLF).
 
@@ -750,31 +836,41 @@ Normalize line-endings to UNIX-style (LF rather than CRLF).
 
 - `$in`: `string`
 
-#### `static preAuthEncode(array $pieces): string`
+#### [`preAuthEncode`](../../../src/Tables/Records/ReplicaActor.php#L69-L78)
+
+static · Returns `string`
 
 **Parameters:**
 
 - `$pieces`: `array`
 
-#### `static sortByKey(array $arr): void`
+#### [`sortByKey`](../../../src/Tables/Records/ReplicaActor.php#L80-L88)
+
+static · Returns `void`
 
 **Parameters:**
 
 - `$arr`: `array`
 
-#### `static LE64(int $n): string`
+#### [`LE64`](../../../src/Tables/Records/ReplicaActor.php#L90-L93)
+
+static · Returns `string`
 
 **Parameters:**
 
 - `$n`: `int`
 
-#### `stringToByteArray(string $str): array`
+#### [`stringToByteArray`](../../../src/Tables/Records/ReplicaActor.php#L95-L99)
+
+Returns `array`
 
 **Parameters:**
 
 - `$str`: `string`
 
-#### `static stripNewlines(string $input): string`
+#### [`stripNewlines`](../../../src/Tables/Records/ReplicaActor.php#L107-L141)
+
+static · Returns `string`
 
 Strip all newlines (CR, LF) characters from a string.
 
@@ -808,7 +904,9 @@ Strip all newlines (CR, LF) characters from a string.
 
 ### Methods
 
-#### `__construct(FediE2EE\PKDServer\Tables\Records\Peer $peer, FediE2EE\PKDServer\Tables\Records\ReplicaActor $actor, string $auxDataType, string $auxData, bool $trusted, FediE2EE\PKDServer\Tables\Records\ReplicaLeaf $insertLeaf, ?FediE2EE\PKDServer\Tables\Records\ReplicaLeaf $revokeLeaf = null, ?int $primaryKey = null): void`
+#### [`__construct`](../../../src/Tables/Records/ReplicaAuxDatum.php#L16-L27)
+
+Returns `void`
 
 **Parameters:**
 
@@ -818,72 +916,81 @@ Strip all newlines (CR, LF) characters from a string.
 - `$auxData`: `string`
 - `$trusted`: `bool`
 - `$insertLeaf`: `FediE2EE\PKDServer\Tables\Records\ReplicaLeaf`
-- `$revokeLeaf`: `?FediE2EE\PKDServer\Tables\Records\ReplicaLeaf` (nullable)
-- `$primaryKey`: `?int` (nullable)
+- `$revokeLeaf`: `?FediE2EE\PKDServer\Tables\Records\ReplicaLeaf` = null
+- `$primaryKey`: `?int` = null
 
-#### `hasPrimaryKey(): bool`
+#### [`hasPrimaryKey`](../../../src/Tables/Records/ReplicaAuxDatum.php#L31-L34)
 
-#### `getPrimaryKey(): int`
+Returns `bool`
 
-**Throws:**
+#### [`getPrimaryKey`](../../../src/Tables/Records/ReplicaAuxDatum.php#L40-L46)
 
-- `TableException`
+Returns `int`
 
-#### `attachSymmetricKey(string $property, FediE2EE\PKD\Crypto\SymmetricKey $key): self`
+**Throws:** `TableException`
+
+#### [`attachSymmetricKey`](../../../src/Tables/Records/ReplicaAuxDatum.php#L52-L62)
+
+Returns `self`
 
 **Parameters:**
 
 - `$property`: `string`
 - `$key`: `FediE2EE\PKD\Crypto\SymmetricKey`
 
-**Throws:**
+**Throws:** `TableException`
 
-- `TableException`
+#### [`getSymmetricKeyForProperty`](../../../src/Tables/Records/ReplicaAuxDatum.php#L68-L77)
 
-#### `getSymmetricKeyForProperty(string $property): FediE2EE\PKD\Crypto\SymmetricKey`
+Returns `FediE2EE\PKD\Crypto\SymmetricKey`
 
 **Parameters:**
 
 - `$property`: `string`
 
-**Throws:**
+**Throws:** `TableException`
 
-- `TableException`
+#### [`getSymmetricKeys`](../../../src/Tables/Records/ReplicaAuxDatum.php#L79-L82)
 
-#### `getSymmetricKeys(): array`
+Returns `array`
 
-#### `getRfc9421PublicKeys(string $actorId): FediE2EE\PKD\Crypto\PublicKey`
+#### [`getRfc9421PublicKeys`](../../../src/Tables/Records/ReplicaAuxDatum.php#L96-L99)
+
+Returns `FediE2EE\PKD\Crypto\PublicKey`
 
 Fetch the RFC 9421 public keys for an actor.
+
+If multiple are returned (e.g., via FEP-521a), this will cycle through them until the first Ed25519 public key is found. We do not support JWS, RSA, or ECDSA keys.
 
 **Parameters:**
 
 - `$actorId`: `string`
 
-**Throws:**
+**Throws:** `CryptoException`, `FetchException`
 
-- `CryptoException`
-- `FetchException`
+#### [`assertAllArrayKeysExist`](../../../src/Tables/Records/ReplicaAuxDatum.php#L14-L19)
 
-#### `static assertAllArrayKeysExist(array $target, string $arrayKeys): void`
-
-**Parameters:**
-
-- `$target`: `array`
-- `...$arrayKeys`: `string`
-
-**Throws:**
-
-- `InputException`
-
-#### `static allArrayKeysExist(array $target, string $arrayKeys): bool`
+static · Returns `void`
 
 **Parameters:**
 
 - `$target`: `array`
 - `...$arrayKeys`: `string`
 
-#### `constantTimeSelect(int $select, string $left, string $right): string`
+**Throws:** `InputException`
+
+#### [`allArrayKeysExist`](../../../src/Tables/Records/ReplicaAuxDatum.php#L21-L28)
+
+static · Returns `bool`
+
+**Parameters:**
+
+- `$target`: `array`
+- `...$arrayKeys`: `string`
+
+#### [`constantTimeSelect`](../../../src/Tables/Records/ReplicaAuxDatum.php#L35-L52)
+
+Returns `string`
 
 **Parameters:**
 
@@ -891,11 +998,11 @@ Fetch the RFC 9421 public keys for an actor.
 - `$left`: `string`
 - `$right`: `string`
 
-**Throws:**
+**Throws:** `CryptoException`
 
-- `CryptoException`
+#### [`dos2unix`](../../../src/Tables/Records/ReplicaAuxDatum.php#L60-L63)
 
-#### `static dos2unix(string $in): string`
+static · Returns `string`
 
 Normalize line-endings to UNIX-style (LF rather than CRLF).
 
@@ -903,31 +1010,41 @@ Normalize line-endings to UNIX-style (LF rather than CRLF).
 
 - `$in`: `string`
 
-#### `static preAuthEncode(array $pieces): string`
+#### [`preAuthEncode`](../../../src/Tables/Records/ReplicaAuxDatum.php#L69-L78)
+
+static · Returns `string`
 
 **Parameters:**
 
 - `$pieces`: `array`
 
-#### `static sortByKey(array $arr): void`
+#### [`sortByKey`](../../../src/Tables/Records/ReplicaAuxDatum.php#L80-L88)
+
+static · Returns `void`
 
 **Parameters:**
 
 - `$arr`: `array`
 
-#### `static LE64(int $n): string`
+#### [`LE64`](../../../src/Tables/Records/ReplicaAuxDatum.php#L90-L93)
+
+static · Returns `string`
 
 **Parameters:**
 
 - `$n`: `int`
 
-#### `stringToByteArray(string $str): array`
+#### [`stringToByteArray`](../../../src/Tables/Records/ReplicaAuxDatum.php#L95-L99)
+
+Returns `array`
 
 **Parameters:**
 
 - `$str`: `string`
 
-#### `static stripNewlines(string $input): string`
+#### [`stripNewlines`](../../../src/Tables/Records/ReplicaAuxDatum.php#L107-L141)
+
+static · Returns `string`
 
 Strip all newlines (CR, LF) characters from a string.
 
@@ -963,7 +1080,9 @@ Strip all newlines (CR, LF) characters from a string.
 
 ### Methods
 
-#### `__construct(string $root, string $publicKeyHash, string $contentHash, string $signature, string $contents, string $cosignature, ?FediE2EE\PKD\Crypto\Merkle\InclusionProof $inclusionProof = null, string $created = '', string $replicated = '', ?int $primaryKey = null): void`
+#### [`__construct`](../../../src/Tables/Records/ReplicaLeaf.php#L18-L31)
+
+Returns `void`
 
 **Parameters:**
 
@@ -973,82 +1092,93 @@ Strip all newlines (CR, LF) characters from a string.
 - `$signature`: `string`
 - `$contents`: `string`
 - `$cosignature`: `string`
-- `$inclusionProof`: `?FediE2EE\PKD\Crypto\Merkle\InclusionProof` (nullable)
-- `$created`: `string`
-- `$replicated`: `string`
-- `$primaryKey`: `?int` (nullable)
+- `$inclusionProof`: `?FediE2EE\PKD\Crypto\Merkle\InclusionProof` = null
+- `$created`: `string` = ''
+- `$replicated`: `string` = ''
+- `$primaryKey`: `?int` = null
 
-#### `toArray(): array`
+#### [`toArray`](../../../src/Tables/Records/ReplicaLeaf.php#L33-L57)
 
-#### `serializeForMerkle(): string`
+Returns `array`
 
-**Throws:**
+#### [`serializeForMerkle`](../../../src/Tables/Records/ReplicaLeaf.php#L62-L69)
 
-- `SodiumException`
+Returns `string`
 
-#### `hasPrimaryKey(): bool`
+**Throws:** `SodiumException`
 
-#### `getPrimaryKey(): int`
+#### [`hasPrimaryKey`](../../../src/Tables/Records/ReplicaLeaf.php#L31-L34)
 
-**Throws:**
+Returns `bool`
 
-- `TableException`
+#### [`getPrimaryKey`](../../../src/Tables/Records/ReplicaLeaf.php#L40-L46)
 
-#### `attachSymmetricKey(string $property, FediE2EE\PKD\Crypto\SymmetricKey $key): self`
+Returns `int`
+
+**Throws:** `TableException`
+
+#### [`attachSymmetricKey`](../../../src/Tables/Records/ReplicaLeaf.php#L52-L62)
+
+Returns `self`
 
 **Parameters:**
 
 - `$property`: `string`
 - `$key`: `FediE2EE\PKD\Crypto\SymmetricKey`
 
-**Throws:**
+**Throws:** `TableException`
 
-- `TableException`
+#### [`getSymmetricKeyForProperty`](../../../src/Tables/Records/ReplicaLeaf.php#L68-L77)
 
-#### `getSymmetricKeyForProperty(string $property): FediE2EE\PKD\Crypto\SymmetricKey`
+Returns `FediE2EE\PKD\Crypto\SymmetricKey`
 
 **Parameters:**
 
 - `$property`: `string`
 
-**Throws:**
+**Throws:** `TableException`
 
-- `TableException`
+#### [`getSymmetricKeys`](../../../src/Tables/Records/ReplicaLeaf.php#L79-L82)
 
-#### `getSymmetricKeys(): array`
+Returns `array`
 
-#### `getRfc9421PublicKeys(string $actorId): FediE2EE\PKD\Crypto\PublicKey`
+#### [`getRfc9421PublicKeys`](../../../src/Tables/Records/ReplicaLeaf.php#L96-L99)
+
+Returns `FediE2EE\PKD\Crypto\PublicKey`
 
 Fetch the RFC 9421 public keys for an actor.
+
+If multiple are returned (e.g., via FEP-521a), this will cycle through them until the first Ed25519 public key is found. We do not support JWS, RSA, or ECDSA keys.
 
 **Parameters:**
 
 - `$actorId`: `string`
 
-**Throws:**
+**Throws:** `CryptoException`, `FetchException`
 
-- `CryptoException`
-- `FetchException`
+#### [`assertAllArrayKeysExist`](../../../src/Tables/Records/ReplicaLeaf.php#L14-L19)
 
-#### `static assertAllArrayKeysExist(array $target, string $arrayKeys): void`
-
-**Parameters:**
-
-- `$target`: `array`
-- `...$arrayKeys`: `string`
-
-**Throws:**
-
-- `InputException`
-
-#### `static allArrayKeysExist(array $target, string $arrayKeys): bool`
+static · Returns `void`
 
 **Parameters:**
 
 - `$target`: `array`
 - `...$arrayKeys`: `string`
 
-#### `constantTimeSelect(int $select, string $left, string $right): string`
+**Throws:** `InputException`
+
+#### [`allArrayKeysExist`](../../../src/Tables/Records/ReplicaLeaf.php#L21-L28)
+
+static · Returns `bool`
+
+**Parameters:**
+
+- `$target`: `array`
+- `...$arrayKeys`: `string`
+
+#### [`constantTimeSelect`](../../../src/Tables/Records/ReplicaLeaf.php#L35-L52)
+
+Returns `string`
 
 **Parameters:**
 
@@ -1056,11 +1186,11 @@ Fetch the RFC 9421 public keys for an actor.
 - `$left`: `string`
 - `$right`: `string`
 
-**Throws:**
+**Throws:** `CryptoException`
 
-- `CryptoException`
+#### [`dos2unix`](../../../src/Tables/Records/ReplicaLeaf.php#L60-L63)
 
-#### `static dos2unix(string $in): string`
+static · Returns `string`
 
 Normalize line-endings to UNIX-style (LF rather than CRLF).
 
@@ -1068,31 +1198,41 @@ Normalize line-endings to UNIX-style (LF rather than CRLF).
 
 - `$in`: `string`
 
-#### `static preAuthEncode(array $pieces): string`
+#### [`preAuthEncode`](../../../src/Tables/Records/ReplicaLeaf.php#L69-L78)
+
+static · Returns `string`
 
 **Parameters:**
 
 - `$pieces`: `array`
 
-#### `static sortByKey(array $arr): void`
+#### [`sortByKey`](../../../src/Tables/Records/ReplicaLeaf.php#L80-L88)
+
+static · Returns `void`
 
 **Parameters:**
 
 - `$arr`: `array`
 
-#### `static LE64(int $n): string`
+#### [`LE64`](../../../src/Tables/Records/ReplicaLeaf.php#L90-L93)
+
+static · Returns `string`
 
 **Parameters:**
 
 - `$n`: `int`
 
-#### `stringToByteArray(string $str): array`
+#### [`stringToByteArray`](../../../src/Tables/Records/ReplicaLeaf.php#L95-L99)
+
+Returns `array`
 
 **Parameters:**
 
 - `$str`: `string`
 
-#### `static stripNewlines(string $input): string`
+#### [`stripNewlines`](../../../src/Tables/Records/ReplicaLeaf.php#L107-L141)
+
+static · Returns `string`
 
 Strip all newlines (CR, LF) characters from a string.
 
@@ -1126,7 +1266,9 @@ Strip all newlines (CR, LF) characters from a string.
 
 ### Methods
 
-#### `__construct(FediE2EE\PKDServer\Tables\Records\Peer $peer, FediE2EE\PKDServer\Tables\Records\ReplicaActor $actor, FediE2EE\PKD\Crypto\PublicKey $publicKey, bool $trusted, FediE2EE\PKDServer\Tables\Records\ReplicaLeaf $insertLeaf, ?FediE2EE\PKDServer\Tables\Records\ReplicaLeaf $revokeLeaf = null, ?string $keyID = null, ?int $primaryKey = null): void`
+#### [`__construct`](../../../src/Tables/Records/ReplicaPublicKey.php#L17-L28)
+
+Returns `void`
 
 **Parameters:**
 
@@ -1135,73 +1277,82 @@ Strip all newlines (CR, LF) characters from a string.
 - `$publicKey`: `FediE2EE\PKD\Crypto\PublicKey`
 - `$trusted`: `bool`
 - `$insertLeaf`: `FediE2EE\PKDServer\Tables\Records\ReplicaLeaf`
-- `$revokeLeaf`: `?FediE2EE\PKDServer\Tables\Records\ReplicaLeaf` (nullable)
-- `$keyID`: `?string` (nullable)
-- `$primaryKey`: `?int` (nullable)
+- `$revokeLeaf`: `?FediE2EE\PKDServer\Tables\Records\ReplicaLeaf` = null
+- `$keyID`: `?string` = null
+- `$primaryKey`: `?int` = null
 
-#### `hasPrimaryKey(): bool`
+#### [`hasPrimaryKey`](../../../src/Tables/Records/ReplicaPublicKey.php#L31-L34)
 
-#### `getPrimaryKey(): int`
+Returns `bool`
 
-**Throws:**
+#### [`getPrimaryKey`](../../../src/Tables/Records/ReplicaPublicKey.php#L40-L46)
 
-- `TableException`
+Returns `int`
 
-#### `attachSymmetricKey(string $property, FediE2EE\PKD\Crypto\SymmetricKey $key): self`
+**Throws:** `TableException`
+
+#### [`attachSymmetricKey`](../../../src/Tables/Records/ReplicaPublicKey.php#L52-L62)
+
+Returns `self`
 
 **Parameters:**
 
 - `$property`: `string`
 - `$key`: `FediE2EE\PKD\Crypto\SymmetricKey`
 
-**Throws:**
+**Throws:** `TableException`
 
-- `TableException`
+#### [`getSymmetricKeyForProperty`](../../../src/Tables/Records/ReplicaPublicKey.php#L68-L77)
 
-#### `getSymmetricKeyForProperty(string $property): FediE2EE\PKD\Crypto\SymmetricKey`
+Returns `FediE2EE\PKD\Crypto\SymmetricKey`
 
 **Parameters:**
 
 - `$property`: `string`
 
-**Throws:**
+**Throws:** `TableException`
 
-- `TableException`
+#### [`getSymmetricKeys`](../../../src/Tables/Records/ReplicaPublicKey.php#L79-L82)
 
-#### `getSymmetricKeys(): array`
+Returns `array`
 
-#### `getRfc9421PublicKeys(string $actorId): FediE2EE\PKD\Crypto\PublicKey`
+#### [`getRfc9421PublicKeys`](../../../src/Tables/Records/ReplicaPublicKey.php#L96-L99)
+
+Returns `FediE2EE\PKD\Crypto\PublicKey`
 
 Fetch the RFC 9421 public keys for an actor.
+
+If multiple are returned (e.g., via FEP-521a), this will cycle through them until the first Ed25519 public key is found. We do not support JWS, RSA, or ECDSA keys.
 
 **Parameters:**
 
 - `$actorId`: `string`
 
-**Throws:**
+**Throws:** `CryptoException`, `FetchException`
 
-- `CryptoException`
-- `FetchException`
+#### [`assertAllArrayKeysExist`](../../../src/Tables/Records/ReplicaPublicKey.php#L14-L19)
 
-#### `static assertAllArrayKeysExist(array $target, string $arrayKeys): void`
-
-**Parameters:**
-
-- `$target`: `array`
-- `...$arrayKeys`: `string`
-
-**Throws:**
-
-- `InputException`
-
-#### `static allArrayKeysExist(array $target, string $arrayKeys): bool`
+static · Returns `void`
 
 **Parameters:**
 
 - `$target`: `array`
 - `...$arrayKeys`: `string`
 
-#### `constantTimeSelect(int $select, string $left, string $right): string`
+**Throws:** `InputException`
+
+#### [`allArrayKeysExist`](../../../src/Tables/Records/ReplicaPublicKey.php#L21-L28)
+
+static · Returns `bool`
+
+**Parameters:**
+
+- `$target`: `array`
+- `...$arrayKeys`: `string`
+
+#### [`constantTimeSelect`](../../../src/Tables/Records/ReplicaPublicKey.php#L35-L52)
+
+Returns `string`
 
 **Parameters:**
 
@@ -1209,11 +1360,11 @@ Fetch the RFC 9421 public keys for an actor.
 - `$left`: `string`
 - `$right`: `string`
 
-**Throws:**
+**Throws:** `CryptoException`
 
-- `CryptoException`
+#### [`dos2unix`](../../../src/Tables/Records/ReplicaPublicKey.php#L60-L63)
 
-#### `static dos2unix(string $in): string`
+static · Returns `string`
 
 Normalize line-endings to UNIX-style (LF rather than CRLF).
 
@@ -1221,31 +1372,41 @@ Normalize line-endings to UNIX-style (LF rather than CRLF).
 
 - `$in`: `string`
 
-#### `static preAuthEncode(array $pieces): string`
+#### [`preAuthEncode`](../../../src/Tables/Records/ReplicaPublicKey.php#L69-L78)
+
+static · Returns `string`
 
 **Parameters:**
 
 - `$pieces`: `array`
 
-#### `static sortByKey(array $arr): void`
+#### [`sortByKey`](../../../src/Tables/Records/ReplicaPublicKey.php#L80-L88)
+
+static · Returns `void`
 
 **Parameters:**
 
 - `$arr`: `array`
 
-#### `static LE64(int $n): string`
+#### [`LE64`](../../../src/Tables/Records/ReplicaPublicKey.php#L90-L93)
+
+static · Returns `string`
 
 **Parameters:**
 
 - `$n`: `int`
 
-#### `stringToByteArray(string $str): array`
+#### [`stringToByteArray`](../../../src/Tables/Records/ReplicaPublicKey.php#L95-L99)
+
+Returns `array`
 
 **Parameters:**
 
 - `$str`: `string`
 
-#### `static stripNewlines(string $input): string`
+#### [`stripNewlines`](../../../src/Tables/Records/ReplicaPublicKey.php#L107-L141)
+
+static · Returns `string`
 
 Strip all newlines (CR, LF) characters from a string.
 

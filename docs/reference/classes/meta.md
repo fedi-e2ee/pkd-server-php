@@ -31,22 +31,22 @@ Server configuration parameters
 
 ### Methods
 
-#### `__construct(string $hashAlgo = 'sha256', int $otpMaxLife = 120, string $actorUsername = 'pubkeydir', string $hostname = 'localhost', string $cacheKey = '', int $httpCacheTtl = 60): void`
+#### [`__construct`](../../../src/Meta/Params.php#L18-L44)
+
+Returns `void`
 
 These parameters MUST be public and MUST have a default value
 
 **Parameters:**
 
-- `$hashAlgo`: `string`
-- `$otpMaxLife`: `int`
-- `$actorUsername`: `string`
-- `$hostname`: `string`
-- `$cacheKey`: `string`
-- `$httpCacheTtl`: `int`
+- `$hashAlgo`: `string` = 'sha256'
+- `$otpMaxLife`: `int` = 120
+- `$actorUsername`: `string` = 'pubkeydir'
+- `$hostname`: `string` = 'localhost'
+- `$cacheKey`: `string` = ''
+- `$httpCacheTtl`: `int` = 60
 
-**Throws:**
-
-- `DependencyException`
+**Throws:** `DependencyException`
 
 ---
 
@@ -64,11 +64,13 @@ These parameters MUST be public and MUST have a default value
 
 ### Methods
 
-#### `__construct(string $tableName = ''): void`
+#### [`__construct`](../../../src/Meta/RecordForTable.php#L10)
+
+Returns `void`
 
 **Parameters:**
 
-- `$tableName`: `string`
+- `$tableName`: `string` = ''
 
 ---
 
@@ -86,11 +88,13 @@ These parameters MUST be public and MUST have a default value
 
 ### Methods
 
-#### `__construct(string $uriPattern = ''): void`
+#### [`__construct`](../../../src/Meta/Route.php#L10)
+
+Returns `void`
 
 **Parameters:**
 
-- `$uriPattern`: `string`
+- `$uriPattern`: `string` = ''
 
 ---
 

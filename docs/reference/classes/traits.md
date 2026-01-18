@@ -30,59 +30,54 @@ Namespace: `FediE2EE\PKDServer\Traits`
 
 ### Methods
 
-#### `getVerifiedStream(Psr\Http\Message\ServerRequestInterface $message): FediE2EE\PKDServer\ActivityPub\ActivityStream`
+#### [`getVerifiedStream`](../../../src/Traits/ActivityStreamsTrait.php#L35-L58)
+
+Returns `FediE2EE\PKDServer\ActivityPub\ActivityStream`
 
 **Parameters:**
 
 - `$message`: `Psr\Http\Message\ServerRequestInterface`
 
-**Throws:**
+**Throws:** `ActivityPubException`, `DependencyException`, `FetchException`, `CryptoException`, `HttpSignatureException`, `NotImplementedException`, `CertaintyException`, `SodiumException`
 
-- `ActivityPubException`
-- `DependencyException`
-- `FetchException`
-- `CryptoException`
-- `HttpSignatureException`
-- `NotImplementedException`
-- `CertaintyException`
-- `SodiumException`
+#### [`appCache`](../../../src/Traits/ActivityStreamsTrait.php#L42-L45)
 
-#### `appCache(string $namespace, int $defaultTTL = 60): FediE2EE\PKDServer\AppCache`
+Returns `FediE2EE\PKDServer\AppCache`
 
 **Parameters:**
 
 - `$namespace`: `string`
-- `$defaultTTL`: `int`
+- `$defaultTTL`: `int` = 60
 
-**Throws:**
+**Throws:** `DependencyException`
 
-- `DependencyException`
+#### [`table`](../../../src/Traits/ActivityStreamsTrait.php#L52-L75)
 
-#### `table(string $tableName): FediE2EE\PKDServer\Table`
+Returns `FediE2EE\PKDServer\Table`
 
 **Parameters:**
 
 - `$tableName`: `string`
 
-**Throws:**
+**Throws:** `CacheException`, `DependencyException`, `TableException`
 
-- `CacheException`
-- `DependencyException`
-- `TableException`
+#### [`injectConfig`](../../../src/Traits/ActivityStreamsTrait.php#L77-L80)
 
-#### `injectConfig(FediE2EE\PKDServer\ServerConfig $config): void`
+Returns `void`
 
 **Parameters:**
 
 - `$config`: `FediE2EE\PKDServer\ServerConfig`
 
-#### `config(): FediE2EE\PKDServer\ServerConfig`
+#### [`config`](../../../src/Traits/ActivityStreamsTrait.php#L85-L95)
 
-**Throws:**
+Returns `FediE2EE\PKDServer\ServerConfig`
 
-- `DependencyException`
+**Throws:** `DependencyException`
 
-#### `setWebFinger(FediE2EE\PKDServer\ActivityPub\WebFinger $wf): self`
+#### [`setWebFinger`](../../../src/Traits/ActivityStreamsTrait.php#L100-L104)
+
+Returns `self`
 
 This is intended for mocking in unit tests
 
@@ -90,17 +85,15 @@ This is intended for mocking in unit tests
 
 - `$wf`: `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
-#### `webfinger(?GuzzleHttp\Client $http = null): FediE2EE\PKDServer\ActivityPub\WebFinger`
+#### [`webfinger`](../../../src/Traits/ActivityStreamsTrait.php#L111-L118)
+
+Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
 **Parameters:**
 
-- `$http`: `?GuzzleHttp\Client` (nullable)
+- `$http`: `?GuzzleHttp\Client` = null
 
-**Throws:**
-
-- `CertaintyException`
-- `DependencyException`
-- `SodiumException`
+**Throws:** `CertaintyException`, `DependencyException`, `SodiumException`
 
 ---
 
@@ -118,42 +111,44 @@ This is intended for mocking in unit tests
 
 ### Methods
 
-#### `appCache(string $namespace, int $defaultTTL = 60): FediE2EE\PKDServer\AppCache`
+#### [`appCache`](../../../src/Traits/ConfigTrait.php#L42-L45)
+
+Returns `FediE2EE\PKDServer\AppCache`
 
 **Parameters:**
 
 - `$namespace`: `string`
-- `$defaultTTL`: `int`
+- `$defaultTTL`: `int` = 60
 
-**Throws:**
+**Throws:** `DependencyException`
 
-- `DependencyException`
+#### [`table`](../../../src/Traits/ConfigTrait.php#L52-L75)
 
-#### `table(string $tableName): FediE2EE\PKDServer\Table`
+Returns `FediE2EE\PKDServer\Table`
 
 **Parameters:**
 
 - `$tableName`: `string`
 
-**Throws:**
+**Throws:** `CacheException`, `DependencyException`, `TableException`
 
-- `CacheException`
-- `DependencyException`
-- `TableException`
+#### [`injectConfig`](../../../src/Traits/ConfigTrait.php#L77-L80)
 
-#### `injectConfig(FediE2EE\PKDServer\ServerConfig $config): void`
+Returns `void`
 
 **Parameters:**
 
 - `$config`: `FediE2EE\PKDServer\ServerConfig`
 
-#### `config(): FediE2EE\PKDServer\ServerConfig`
+#### [`config`](../../../src/Traits/ConfigTrait.php#L85-L95)
 
-**Throws:**
+Returns `FediE2EE\PKDServer\ServerConfig`
 
-- `DependencyException`
+**Throws:** `DependencyException`
 
-#### `setWebFinger(FediE2EE\PKDServer\ActivityPub\WebFinger $wf): self`
+#### [`setWebFinger`](../../../src/Traits/ConfigTrait.php#L100-L104)
+
+Returns `self`
 
 This is intended for mocking in unit tests
 
@@ -161,17 +156,15 @@ This is intended for mocking in unit tests
 
 - `$wf`: `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
-#### `webfinger(?GuzzleHttp\Client $http = null): FediE2EE\PKDServer\ActivityPub\WebFinger`
+#### [`webfinger`](../../../src/Traits/ConfigTrait.php#L111-L118)
+
+Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
 **Parameters:**
 
-- `$http`: `?GuzzleHttp\Client` (nullable)
+- `$http`: `?GuzzleHttp\Client` = null
 
-**Throws:**
-
-- `CertaintyException`
-- `DependencyException`
-- `SodiumException`
+**Throws:** `CertaintyException`, `DependencyException`, `SodiumException`
 
 ---
 
@@ -191,43 +184,40 @@ This is intended for mocking in unit tests
 
 ### Methods
 
-#### `clearCache(): bool`
+#### [`clearCache`](../../../src/Traits/HttpCacheTrait.php#L34-L37)
 
-**Throws:**
+Returns `bool`
 
-- `DependencyException`
+**Throws:** `DependencyException`
 
-#### `time(): string`
+#### [`time`](../../../src/Traits/HttpCacheTrait.php#L34-L37)
 
-#### `canonicalizeActor(string $actor): string`
+Returns `string`
+
+#### [`canonicalizeActor`](../../../src/Traits/HttpCacheTrait.php#L46-L50)
+
+Returns `string`
 
 **Parameters:**
 
 - `$actor`: `string`
 
-**Throws:**
+**Throws:** `DependencyException`, `GuzzleException`, `NetworkException`, `SodiumException`, `CertaintyException`
 
-- `DependencyException`
-- `GuzzleException`
-- `NetworkException`
-- `SodiumException`
-- `CertaintyException`
+#### [`error`](../../../src/Traits/HttpCacheTrait.php#L58-L61)
 
-#### `error(string $message, int $code = 400): Psr\Http\Message\ResponseInterface`
+Returns `Psr\Http\Message\ResponseInterface`
 
 **Parameters:**
 
 - `$message`: `string`
-- `$code`: `int`
+- `$code`: `int` = 400
 
-**Throws:**
+**Throws:** `DependencyException`, `JsonException`, `NotImplementedException`, `SodiumException`
 
-- `DependencyException`
-- `JsonException`
-- `NotImplementedException`
-- `SodiumException`
+#### [`signResponse`](../../../src/Traits/HttpCacheTrait.php#L72-L84)
 
-#### `signResponse(Psr\Http\Message\ResponseInterface $response): Psr\Http\Message\ResponseInterface`
+Returns `Psr\Http\Message\ResponseInterface`
 
 Implements an RFC 9421 HTTP Message Signature with Ed25519.
 
@@ -235,81 +225,73 @@ Implements an RFC 9421 HTTP Message Signature with Ed25519.
 
 - `$response`: `Psr\Http\Message\ResponseInterface`
 
-**Throws:**
+**Throws:** `DependencyException`, `NotImplementedException`, `SodiumException`
 
-- `DependencyException`
-- `NotImplementedException`
-- `SodiumException`
+#### [`json`](../../../src/Traits/HttpCacheTrait.php#L94-L119)
 
-#### `json(object|array $data, int $status = 200, array $headers = []): Psr\Http\Message\ResponseInterface`
+Returns `Psr\Http\Message\ResponseInterface`
 
 Return a JSON response with HTTP Message Signature (from signResponse())
 
 **Parameters:**
 
 - `$data`: `object|array`
-- `$status`: `int`
-- `$headers`: `array`
+- `$status`: `int` = 200
+- `$headers`: `array` = []
 
-**Throws:**
+**Throws:** `DependencyException`, `JsonException`, `NotImplementedException`, `SodiumException`
 
-- `DependencyException`
-- `JsonException`
-- `NotImplementedException`
-- `SodiumException`
+#### [`twig`](../../../src/Traits/HttpCacheTrait.php#L127-L144)
 
-#### `twig(string $template, array $vars = [], array $headers = [], int $status = 200): Psr\Http\Message\ResponseInterface`
+Returns `Psr\Http\Message\ResponseInterface`
 
 **Parameters:**
 
 - `$template`: `string`
-- `$vars`: `array`
-- `$headers`: `array`
-- `$status`: `int`
+- `$vars`: `array` = []
+- `$headers`: `array` = []
+- `$status`: `int` = 200
 
-**Throws:**
+**Throws:** `DependencyException`, `LoaderError`, `RuntimeError`, `SyntaxError`
 
-- `DependencyException`
-- `LoaderError`
-- `RuntimeError`
-- `SyntaxError`
+#### [`appCache`](../../../src/Traits/HttpCacheTrait.php#L42-L45)
 
-#### `appCache(string $namespace, int $defaultTTL = 60): FediE2EE\PKDServer\AppCache`
+Returns `FediE2EE\PKDServer\AppCache`
 
 **Parameters:**
 
 - `$namespace`: `string`
-- `$defaultTTL`: `int`
+- `$defaultTTL`: `int` = 60
 
-**Throws:**
+**Throws:** `DependencyException`
 
-- `DependencyException`
+#### [`table`](../../../src/Traits/HttpCacheTrait.php#L52-L75)
 
-#### `table(string $tableName): FediE2EE\PKDServer\Table`
+Returns `FediE2EE\PKDServer\Table`
 
 **Parameters:**
 
 - `$tableName`: `string`
 
-**Throws:**
+**Throws:** `CacheException`, `DependencyException`, `TableException`
 
-- `CacheException`
-- `DependencyException`
-- `TableException`
+#### [`injectConfig`](../../../src/Traits/HttpCacheTrait.php#L77-L80)
 
-#### `injectConfig(FediE2EE\PKDServer\ServerConfig $config): void`
+Returns `void`
 
 **Parameters:**
 
 - `$config`: `FediE2EE\PKDServer\ServerConfig`
 
-#### `config(): FediE2EE\PKDServer\ServerConfig`
+#### [`config`](../../../src/Traits/HttpCacheTrait.php#L85-L95)
 
-**Throws:**
+Returns `FediE2EE\PKDServer\ServerConfig`
 
-- `DependencyException`
+**Throws:** `DependencyException`
 
-#### `setWebFinger(FediE2EE\PKDServer\ActivityPub\WebFinger $wf): self`
+#### [`setWebFinger`](../../../src/Traits/HttpCacheTrait.php#L100-L104)
+
+Returns `self`
 
 This is intended for mocking in unit tests
 
@@ -317,17 +299,15 @@ This is intended for mocking in unit tests
 
 - `$wf`: `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
-#### `webfinger(?GuzzleHttp\Client $http = null): FediE2EE\PKDServer\ActivityPub\WebFinger`
+#### [`webfinger`](../../../src/Traits/HttpCacheTrait.php#L111-L118)
+
+Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
 **Parameters:**
 
-- `$http`: `?GuzzleHttp\Client` (nullable)
+- `$http`: `?GuzzleHttp\Client` = null
 
-**Throws:**
-
-- `CertaintyException`
-- `DependencyException`
-- `SodiumException`
+**Throws:** `CertaintyException`, `DependencyException`, `SodiumException`
 
 ---
 
@@ -357,37 +337,34 @@ Request Handler trait
 
 ### Methods
 
-#### `time(): string`
+#### [`time`](../../../src/Traits/ReqTrait.php#L34-L37)
 
-#### `canonicalizeActor(string $actor): string`
+Returns `string`
+
+#### [`canonicalizeActor`](../../../src/Traits/ReqTrait.php#L46-L50)
+
+Returns `string`
 
 **Parameters:**
 
 - `$actor`: `string`
 
-**Throws:**
+**Throws:** `DependencyException`, `GuzzleException`, `NetworkException`, `SodiumException`, `CertaintyException`
 
-- `DependencyException`
-- `GuzzleException`
-- `NetworkException`
-- `SodiumException`
-- `CertaintyException`
+#### [`error`](../../../src/Traits/ReqTrait.php#L58-L61)
 
-#### `error(string $message, int $code = 400): Psr\Http\Message\ResponseInterface`
+Returns `Psr\Http\Message\ResponseInterface`
 
 **Parameters:**
 
 - `$message`: `string`
-- `$code`: `int`
+- `$code`: `int` = 400
 
-**Throws:**
+**Throws:** `DependencyException`, `JsonException`, `NotImplementedException`, `SodiumException`
 
-- `DependencyException`
-- `JsonException`
-- `NotImplementedException`
-- `SodiumException`
+#### [`signResponse`](../../../src/Traits/ReqTrait.php#L72-L84)
 
-#### `signResponse(Psr\Http\Message\ResponseInterface $response): Psr\Http\Message\ResponseInterface`
+Returns `Psr\Http\Message\ResponseInterface`
 
 Implements an RFC 9421 HTTP Message Signature with Ed25519.
 
@@ -395,81 +372,73 @@ Implements an RFC 9421 HTTP Message Signature with Ed25519.
 
 - `$response`: `Psr\Http\Message\ResponseInterface`
 
-**Throws:**
+**Throws:** `DependencyException`, `NotImplementedException`, `SodiumException`
 
-- `DependencyException`
-- `NotImplementedException`
-- `SodiumException`
+#### [`json`](../../../src/Traits/ReqTrait.php#L94-L119)
 
-#### `json(object|array $data, int $status = 200, array $headers = []): Psr\Http\Message\ResponseInterface`
+Returns `Psr\Http\Message\ResponseInterface`
 
 Return a JSON response with HTTP Message Signature (from signResponse())
 
 **Parameters:**
 
 - `$data`: `object|array`
-- `$status`: `int`
-- `$headers`: `array`
+- `$status`: `int` = 200
+- `$headers`: `array` = []
 
-**Throws:**
+**Throws:** `DependencyException`, `JsonException`, `NotImplementedException`, `SodiumException`
 
-- `DependencyException`
-- `JsonException`
-- `NotImplementedException`
-- `SodiumException`
+#### [`twig`](../../../src/Traits/ReqTrait.php#L127-L144)
 
-#### `twig(string $template, array $vars = [], array $headers = [], int $status = 200): Psr\Http\Message\ResponseInterface`
+Returns `Psr\Http\Message\ResponseInterface`
 
 **Parameters:**
 
 - `$template`: `string`
-- `$vars`: `array`
-- `$headers`: `array`
-- `$status`: `int`
+- `$vars`: `array` = []
+- `$headers`: `array` = []
+- `$status`: `int` = 200
 
-**Throws:**
+**Throws:** `DependencyException`, `LoaderError`, `RuntimeError`, `SyntaxError`
 
-- `DependencyException`
-- `LoaderError`
-- `RuntimeError`
-- `SyntaxError`
+#### [`appCache`](../../../src/Traits/ReqTrait.php#L42-L45)
 
-#### `appCache(string $namespace, int $defaultTTL = 60): FediE2EE\PKDServer\AppCache`
+Returns `FediE2EE\PKDServer\AppCache`
 
 **Parameters:**
 
 - `$namespace`: `string`
-- `$defaultTTL`: `int`
+- `$defaultTTL`: `int` = 60
 
-**Throws:**
+**Throws:** `DependencyException`
 
-- `DependencyException`
+#### [`table`](../../../src/Traits/ReqTrait.php#L52-L75)
 
-#### `table(string $tableName): FediE2EE\PKDServer\Table`
+Returns `FediE2EE\PKDServer\Table`
 
 **Parameters:**
 
 - `$tableName`: `string`
 
-**Throws:**
+**Throws:** `CacheException`, `DependencyException`, `TableException`
 
-- `CacheException`
-- `DependencyException`
-- `TableException`
+#### [`injectConfig`](../../../src/Traits/ReqTrait.php#L77-L80)
 
-#### `injectConfig(FediE2EE\PKDServer\ServerConfig $config): void`
+Returns `void`
 
 **Parameters:**
 
 - `$config`: `FediE2EE\PKDServer\ServerConfig`
 
-#### `config(): FediE2EE\PKDServer\ServerConfig`
+#### [`config`](../../../src/Traits/ReqTrait.php#L85-L95)
 
-**Throws:**
+Returns `FediE2EE\PKDServer\ServerConfig`
 
-- `DependencyException`
+**Throws:** `DependencyException`
 
-#### `setWebFinger(FediE2EE\PKDServer\ActivityPub\WebFinger $wf): self`
+#### [`setWebFinger`](../../../src/Traits/ReqTrait.php#L100-L104)
+
+Returns `self`
 
 This is intended for mocking in unit tests
 
@@ -477,17 +446,15 @@ This is intended for mocking in unit tests
 
 - `$wf`: `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
-#### `webfinger(?GuzzleHttp\Client $http = null): FediE2EE\PKDServer\ActivityPub\WebFinger`
+#### [`webfinger`](../../../src/Traits/ReqTrait.php#L111-L118)
+
+Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
 **Parameters:**
 
-- `$http`: `?GuzzleHttp\Client` (nullable)
+- `$http`: `?GuzzleHttp\Client` = null
 
-**Throws:**
-
-- `CertaintyException`
-- `DependencyException`
-- `SodiumException`
+**Throws:** `CertaintyException`, `DependencyException`, `SodiumException`
 
 ---
 
@@ -501,22 +468,28 @@ This is intended for mocking in unit tests
 
 ### Methods
 
-#### `static verifyTOTP(string $secret, string $otp, int $windows = 2): bool`
+#### [`verifyTOTP`](../../../src/Traits/TOTPTrait.php#L42-L56)
+
+static · Returns `bool`
 
 **Parameters:**
 
 - `$secret`: `string`
 - `$otp`: `string`
-- `$windows`: `int`
+- `$windows`: `int` = 2
 
-#### `static generateTOTP(string $secret, ?int $time = null): string`
+#### [`generateTOTP`](../../../src/Traits/TOTPTrait.php#L58-L73)
+
+static · Returns `string`
 
 **Parameters:**
 
 - `$secret`: `string`
-- `$time`: `?int` (nullable)
+- `$time`: `?int` = null
 
-#### `static ord(string $chr): int`
+#### [`ord`](../../../src/Traits/TOTPTrait.php#L78-L81)
+
+static · Returns `int`
 
 Avoid cache-timing leaks in ord() by using unpack()
 
@@ -524,35 +497,39 @@ Avoid cache-timing leaks in ord() by using unpack()
 
 - `$chr`: `string`
 
-#### `throwIfTimeOutsideWindow(int $currentTime): void`
+#### [`throwIfTimeOutsideWindow`](../../../src/Traits/TOTPTrait.php#L139-L148)
+
+Returns `void`
 
 **Parameters:**
 
 - `$currentTime`: `int`
 
-**Throws:**
+**Throws:** `ProtocolException`
 
-- `ProtocolException`
+#### [`assertAllArrayKeysExist`](../../../src/Traits/TOTPTrait.php#L14-L19)
 
-#### `static assertAllArrayKeysExist(array $target, string $arrayKeys): void`
-
-**Parameters:**
-
-- `$target`: `array`
-- `...$arrayKeys`: `string`
-
-**Throws:**
-
-- `InputException`
-
-#### `static allArrayKeysExist(array $target, string $arrayKeys): bool`
+static · Returns `void`
 
 **Parameters:**
 
 - `$target`: `array`
 - `...$arrayKeys`: `string`
 
-#### `constantTimeSelect(int $select, string $left, string $right): string`
+**Throws:** `InputException`
+
+#### [`allArrayKeysExist`](../../../src/Traits/TOTPTrait.php#L21-L28)
+
+static · Returns `bool`
+
+**Parameters:**
+
+- `$target`: `array`
+- `...$arrayKeys`: `string`
+
+#### [`constantTimeSelect`](../../../src/Traits/TOTPTrait.php#L35-L52)
+
+Returns `string`
 
 **Parameters:**
 
@@ -560,11 +537,11 @@ Avoid cache-timing leaks in ord() by using unpack()
 - `$left`: `string`
 - `$right`: `string`
 
-**Throws:**
+**Throws:** `CryptoException`
 
-- `CryptoException`
+#### [`dos2unix`](../../../src/Traits/TOTPTrait.php#L60-L63)
 
-#### `static dos2unix(string $in): string`
+static · Returns `string`
 
 Normalize line-endings to UNIX-style (LF rather than CRLF).
 
@@ -572,31 +549,41 @@ Normalize line-endings to UNIX-style (LF rather than CRLF).
 
 - `$in`: `string`
 
-#### `static preAuthEncode(array $pieces): string`
+#### [`preAuthEncode`](../../../src/Traits/TOTPTrait.php#L69-L78)
+
+static · Returns `string`
 
 **Parameters:**
 
 - `$pieces`: `array`
 
-#### `static sortByKey(array $arr): void`
+#### [`sortByKey`](../../../src/Traits/TOTPTrait.php#L80-L88)
+
+static · Returns `void`
 
 **Parameters:**
 
 - `$arr`: `array`
 
-#### `static LE64(int $n): string`
+#### [`LE64`](../../../src/Traits/TOTPTrait.php#L90-L93)
+
+static · Returns `string`
 
 **Parameters:**
 
 - `$n`: `int`
 
-#### `stringToByteArray(string $str): array`
+#### [`stringToByteArray`](../../../src/Traits/TOTPTrait.php#L95-L99)
+
+Returns `array`
 
 **Parameters:**
 
 - `$str`: `string`
 
-#### `static stripNewlines(string $input): string`
+#### [`stripNewlines`](../../../src/Traits/TOTPTrait.php#L107-L141)
+
+static · Returns `string`
 
 Strip all newlines (CR, LF) characters from a string.
 
@@ -621,49 +608,54 @@ Strip all newlines (CR, LF) characters from a string.
 
 ### Methods
 
-#### `hasPrimaryKey(): bool`
+#### [`hasPrimaryKey`](../../../src/Traits/TableRecordTrait.php#L31-L34)
 
-#### `getPrimaryKey(): int`
+Returns `bool`
 
-**Throws:**
+#### [`getPrimaryKey`](../../../src/Traits/TableRecordTrait.php#L40-L46)
 
-- `TableException`
+Returns `int`
 
-#### `attachSymmetricKey(string $property, FediE2EE\PKD\Crypto\SymmetricKey $key): self`
+**Throws:** `TableException`
+
+#### [`attachSymmetricKey`](../../../src/Traits/TableRecordTrait.php#L52-L62)
+
+Returns `self`
 
 **Parameters:**
 
 - `$property`: `string`
 - `$key`: `FediE2EE\PKD\Crypto\SymmetricKey`
 
-**Throws:**
+**Throws:** `TableException`
 
-- `TableException`
+#### [`getSymmetricKeyForProperty`](../../../src/Traits/TableRecordTrait.php#L68-L77)
 
-#### `getSymmetricKeyForProperty(string $property): FediE2EE\PKD\Crypto\SymmetricKey`
+Returns `FediE2EE\PKD\Crypto\SymmetricKey`
 
 **Parameters:**
 
 - `$property`: `string`
 
-**Throws:**
+**Throws:** `TableException`
 
-- `TableException`
+#### [`getSymmetricKeys`](../../../src/Traits/TableRecordTrait.php#L79-L82)
 
-#### `getSymmetricKeys(): array`
+Returns `array`
 
-#### `getRfc9421PublicKeys(string $actorId): FediE2EE\PKD\Crypto\PublicKey`
+#### [`getRfc9421PublicKeys`](../../../src/Traits/TableRecordTrait.php#L96-L99)
+
+Returns `FediE2EE\PKD\Crypto\PublicKey`
 
 Fetch the RFC 9421 public keys for an actor.
+
+If multiple are returned (e.g., via FEP-521a), this will cycle through them until the first Ed25519 public key is found. We do not support JWS, RSA, or ECDSA keys.
 
 **Parameters:**
 
 - `$actorId`: `string`
 
-**Throws:**
-
-- `CryptoException`
-- `FetchException`
+**Throws:** `CryptoException`, `FetchException`
 
 ---
 

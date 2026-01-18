@@ -16,7 +16,9 @@ Namespace: `FediE2EE\PKDServer\Interfaces`
 
 ### Methods
 
-#### `abstract getPrimaryCacheKey(): string`
+#### [`getPrimaryCacheKey`](../../../src/Interfaces/HttpCacheInterface.php#L7)
+
+abstract · Returns `string`
 
 ---
 
