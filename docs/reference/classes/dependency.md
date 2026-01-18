@@ -27,7 +27,9 @@ Namespace: `FediE2EE\PKDServer\Dependency`
 
 ### Methods
 
-#### `__construct(ParagonIE\HPKE\HPKE $cs, ParagonIE\HPKE\Interfaces\DecapsKeyInterface $decapsKey, ParagonIE\HPKE\Interfaces\EncapsKeyInterface $encapsKey): void`
+#### [`__construct`](../../../src/Dependency/HPKE.php#L11-L15)
+
+Returns `void`
 
 **Parameters:**
 
@@ -35,17 +37,17 @@ Namespace: `FediE2EE\PKDServer\Dependency`
 - `$decapsKey`: `ParagonIE\HPKE\Interfaces\DecapsKeyInterface`
 - `$encapsKey`: `ParagonIE\HPKE\Interfaces\EncapsKeyInterface`
 
-#### `getCipherSuite(): ParagonIE\HPKE\HPKE`
+#### [`getCipherSuite`](../../../src/Dependency/HPKE.php#L20-L23)
 
-**API Method**
+**API** · Returns `ParagonIE\HPKE\HPKE`
 
-#### `getDecapsKey(): ParagonIE\HPKE\Interfaces\DecapsKeyInterface`
+#### [`getDecapsKey`](../../../src/Dependency/HPKE.php#L28-L31)
 
-**API Method**
+**API** · Returns `ParagonIE\HPKE\Interfaces\DecapsKeyInterface`
 
-#### `getEncapsKey(): ParagonIE\HPKE\Interfaces\EncapsKeyInterface`
+#### [`getEncapsKey`](../../../src/Dependency/HPKE.php#L36-L39)
 
-**API Method**
+**API** · Returns `ParagonIE\HPKE\Interfaces\EncapsKeyInterface`
 
 ---
 
@@ -61,13 +63,15 @@ Namespace: `FediE2EE\PKDServer\Dependency`
 
 ### Methods
 
-#### `__construct(): void`
+#### [`__construct`](../../../src/Dependency/InjectConfigStrategy.php#L20-L27)
 
-**Throws:**
+Returns `void`
 
-- `DependencyException`
+**Throws:** `DependencyException`
 
-#### `invokeRouteCallable(League\Route\Route $route, Psr\Http\Message\ServerRequestInterface $request): Psr\Http\Message\ResponseInterface`
+#### [`invokeRouteCallable`](../../../src/Dependency/InjectConfigStrategy.php#L33-L56)
+
+Returns `Psr\Http\Message\ResponseInterface`
 
 **Attributes:** `#[Override]`
 
@@ -76,9 +80,7 @@ Namespace: `FediE2EE\PKDServer\Dependency`
 - `$route`: `League\Route\Route`
 - `$request`: `Psr\Http\Message\ServerRequestInterface`
 
-**Throws:**
-
-- `DependencyException`
+**Throws:** `DependencyException`
 
 ---
 
@@ -97,7 +99,9 @@ Namespace: `FediE2EE\PKDServer\Dependency`
 
 ### Methods
 
-#### `__construct(FediE2EE\PKD\Crypto\SecretKey $secretKey, FediE2EE\PKD\Crypto\PublicKey $publicKey): void`
+#### [`__construct`](../../../src/Dependency/SigningKeys.php#L10-L13)
+
+Returns `void`
 
 **Parameters:**
 
@@ -118,9 +122,13 @@ Extends the CipherSweet EncryptedRow class to support key-wrapping
 
 ### Methods
 
-#### `getWrappedColumnNames(): array`
+#### [`getWrappedColumnNames`](../../../src/Dependency/WrappedEncryptedRow.php#L31-L34)
 
-#### `addField(string $fieldName, string $type = 'string', ParagonIE\CipherSweet\AAD|string $aadSource = '', bool $autoBindContext = false, ?string $wrappedKeyColumnName = null): static`
+Returns `array`
+
+#### [`addField`](../../../src/Dependency/WrappedEncryptedRow.php#L47-L59)
+
+Returns `static`
 
 **Attributes:** `#[Override]`
 
@@ -129,165 +137,159 @@ Define a field that will be encrypted.
 **Parameters:**
 
 - `$fieldName`: `string`
-- `$type`: `string`
-- `$aadSource`: `ParagonIE\CipherSweet\AAD|string`
-- `$autoBindContext`: `bool`
-- `$wrappedKeyColumnName`: `?string` (nullable)
+- `$type`: `string` = 'string'
+- `$aadSource`: `ParagonIE\CipherSweet\AAD|string` = ''
+- `$autoBindContext`: `bool` = false
+- `$wrappedKeyColumnName`: `?string` = null
 
-#### `getExtensionKey(): ParagonIE\CipherSweet\Backend\Key\SymmetricKey`
+#### [`getExtensionKey`](../../../src/Dependency/WrappedEncryptedRow.php#L67-L70)
+
+Returns `ParagonIE\CipherSweet\Backend\Key\SymmetricKey`
 
 Get the key used to encrypt/decrypt the field symmetric key.
 
-**Throws:**
+**Throws:** `CipherSweetException`, `CryptoOperationException`
 
-- `CipherSweetException`
-- `CryptoOperationException`
+#### [`wrapKey`](../../../src/Dependency/WrappedEncryptedRow.php#L76-L88)
 
-#### `wrapKey(ParagonIE\CipherSweet\Backend\Key\SymmetricKey $key, string $fieldName): string`
+Returns `string`
 
 **Parameters:**
 
 - `$key`: `ParagonIE\CipherSweet\Backend\Key\SymmetricKey`
 - `$fieldName`: `string`
 
-**Throws:**
+**Throws:** `CipherSweetException`, `CryptoOperationException`
 
-- `CipherSweetException`
-- `CryptoOperationException`
+#### [`unwrapKey`](../../../src/Dependency/WrappedEncryptedRow.php#L94-L107)
 
-#### `unwrapKey(string $wrapped, string $fieldName): ParagonIE\CipherSweet\Backend\Key\SymmetricKey`
+Returns `ParagonIE\CipherSweet\Backend\Key\SymmetricKey`
 
 **Parameters:**
 
 - `$wrapped`: `string`
 - `$fieldName`: `string`
 
-**Throws:**
+**Throws:** `CipherSweetException`, `CryptoOperationException`
 
-- `CipherSweetException`
-- `CryptoOperationException`
+#### [`wrapBeforeEncrypt`](../../../src/Dependency/WrappedEncryptedRow.php#L119-L141)
 
-#### `wrapBeforeEncrypt(array $row, array $symmetricKeyMap = []): array`
-
-**API Method**
+**API** · Returns `array`
 
 **Parameters:**
 
 - `$row`: `array`
-- `$symmetricKeyMap`: `array`
+- `$symmetricKeyMap`: `array` = []
 
-**Throws:**
+**Throws:** `CipherSweetException`, `CryptoOperationException`
 
-- `CipherSweetException`
-- `CryptoOperationException`
+#### [`purgeWrapKeyCache`](../../../src/Dependency/WrappedEncryptedRow.php#L147-L151)
 
-#### `purgeWrapKeyCache(): static`
+**API** · Returns `static`
 
-**API Method**
+#### [`addBooleanField`](../../../src/Dependency/WrappedEncryptedRow.php#L177-L190)
 
-#### `addBooleanField(string $fieldName, ParagonIE\CipherSweet\AAD|string $aadSource = '', ?string $wrappedKeyColumnName = null, bool $autoBindContext = false): static`
-
-**API Method**
+**API** · Returns `static`
 
 **Attributes:** `#[Override]`
 
 **Parameters:**
 
 - `$fieldName`: `string`
-- `$aadSource`: `ParagonIE\CipherSweet\AAD|string`
-- `$wrappedKeyColumnName`: `?string` (nullable)
-- `$autoBindContext`: `bool`
+- `$aadSource`: `ParagonIE\CipherSweet\AAD|string` = ''
+- `$wrappedKeyColumnName`: `?string` = null
+- `$autoBindContext`: `bool` = false
 
-#### `addFloatField(string $fieldName, ParagonIE\CipherSweet\AAD|string $aadSource = '', ?string $wrappedKeyColumnName = null, bool $autoBindContext = false): static`
+#### [`addFloatField`](../../../src/Dependency/WrappedEncryptedRow.php#L196-L209)
 
-**API Method**
-
-**Attributes:** `#[Override]`
-
-**Parameters:**
-
-- `$fieldName`: `string`
-- `$aadSource`: `ParagonIE\CipherSweet\AAD|string`
-- `$wrappedKeyColumnName`: `?string` (nullable)
-- `$autoBindContext`: `bool`
-
-#### `addIntegerField(string $fieldName, ParagonIE\CipherSweet\AAD|string $aadSource = '', ?string $wrappedKeyColumnName = null, bool $autoBindContext = false): static`
-
-**API Method**
+**API** · Returns `static`
 
 **Attributes:** `#[Override]`
 
 **Parameters:**
 
 - `$fieldName`: `string`
-- `$aadSource`: `ParagonIE\CipherSweet\AAD|string`
-- `$wrappedKeyColumnName`: `?string` (nullable)
-- `$autoBindContext`: `bool`
+- `$aadSource`: `ParagonIE\CipherSweet\AAD|string` = ''
+- `$wrappedKeyColumnName`: `?string` = null
+- `$autoBindContext`: `bool` = false
 
-#### `addOptionalBooleanField(string $fieldName, ParagonIE\CipherSweet\AAD|string $aadSource = '', ?string $wrappedKeyColumnName = null, bool $autoBindContext = false): static`
+#### [`addIntegerField`](../../../src/Dependency/WrappedEncryptedRow.php#L215-L228)
 
-**API Method**
-
-**Attributes:** `#[Override]`
-
-**Parameters:**
-
-- `$fieldName`: `string`
-- `$aadSource`: `ParagonIE\CipherSweet\AAD|string`
-- `$wrappedKeyColumnName`: `?string` (nullable)
-- `$autoBindContext`: `bool`
-
-#### `addOptionalFloatField(string $fieldName, ParagonIE\CipherSweet\AAD|string $aadSource = '', ?string $wrappedKeyColumnName = null, bool $autoBindContext = false): static`
-
-**API Method**
+**API** · Returns `static`
 
 **Attributes:** `#[Override]`
 
 **Parameters:**
 
 - `$fieldName`: `string`
-- `$aadSource`: `ParagonIE\CipherSweet\AAD|string`
-- `$wrappedKeyColumnName`: `?string` (nullable)
-- `$autoBindContext`: `bool`
+- `$aadSource`: `ParagonIE\CipherSweet\AAD|string` = ''
+- `$wrappedKeyColumnName`: `?string` = null
+- `$autoBindContext`: `bool` = false
 
-#### `addOptionalIntegerField(string $fieldName, ParagonIE\CipherSweet\AAD|string $aadSource = '', ?string $wrappedKeyColumnName = null, bool $autoBindContext = false): static`
+#### [`addOptionalBooleanField`](../../../src/Dependency/WrappedEncryptedRow.php#L234-L247)
 
-**API Method**
-
-**Attributes:** `#[Override]`
-
-**Parameters:**
-
-- `$fieldName`: `string`
-- `$aadSource`: `ParagonIE\CipherSweet\AAD|string`
-- `$wrappedKeyColumnName`: `?string` (nullable)
-- `$autoBindContext`: `bool`
-
-#### `addOptionalTextField(string $fieldName, ParagonIE\CipherSweet\AAD|string $aadSource = '', ?string $wrappedKeyColumnName = null, bool $autoBindContext = false): static`
-
-**API Method**
+**API** · Returns `static`
 
 **Attributes:** `#[Override]`
 
 **Parameters:**
 
 - `$fieldName`: `string`
-- `$aadSource`: `ParagonIE\CipherSweet\AAD|string`
-- `$wrappedKeyColumnName`: `?string` (nullable)
-- `$autoBindContext`: `bool`
+- `$aadSource`: `ParagonIE\CipherSweet\AAD|string` = ''
+- `$wrappedKeyColumnName`: `?string` = null
+- `$autoBindContext`: `bool` = false
 
-#### `addTextField(string $fieldName, ParagonIE\CipherSweet\AAD|string $aadSource = '', ?string $wrappedKeyColumnName = null, bool $autoBindContext = false): static`
+#### [`addOptionalFloatField`](../../../src/Dependency/WrappedEncryptedRow.php#L253-L266)
 
-**API Method**
+**API** · Returns `static`
 
 **Attributes:** `#[Override]`
 
 **Parameters:**
 
 - `$fieldName`: `string`
-- `$aadSource`: `ParagonIE\CipherSweet\AAD|string`
-- `$wrappedKeyColumnName`: `?string` (nullable)
-- `$autoBindContext`: `bool`
+- `$aadSource`: `ParagonIE\CipherSweet\AAD|string` = ''
+- `$wrappedKeyColumnName`: `?string` = null
+- `$autoBindContext`: `bool` = false
+
+#### [`addOptionalIntegerField`](../../../src/Dependency/WrappedEncryptedRow.php#L272-L285)
+
+**API** · Returns `static`
+
+**Attributes:** `#[Override]`
+
+**Parameters:**
+
+- `$fieldName`: `string`
+- `$aadSource`: `ParagonIE\CipherSweet\AAD|string` = ''
+- `$wrappedKeyColumnName`: `?string` = null
+- `$autoBindContext`: `bool` = false
+
+#### [`addOptionalTextField`](../../../src/Dependency/WrappedEncryptedRow.php#L291-L304)
+
+**API** · Returns `static`
+
+**Attributes:** `#[Override]`
+
+**Parameters:**
+
+- `$fieldName`: `string`
+- `$aadSource`: `ParagonIE\CipherSweet\AAD|string` = ''
+- `$wrappedKeyColumnName`: `?string` = null
+- `$autoBindContext`: `bool` = false
+
+#### [`addTextField`](../../../src/Dependency/WrappedEncryptedRow.php#L310-L323)
+
+**API** · Returns `static`
+
+**Attributes:** `#[Override]`
+
+**Parameters:**
+
+- `$fieldName`: `string`
+- `$aadSource`: `ParagonIE\CipherSweet\AAD|string` = ''
+- `$wrappedKeyColumnName`: `?string` = null
+- `$autoBindContext`: `bool` = false
 
 ---
 

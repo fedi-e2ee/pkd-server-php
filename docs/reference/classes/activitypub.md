@@ -28,37 +28,41 @@ Namespace: `FediE2EE\PKDServer\ActivityPub`
 
 ### Methods
 
-#### `static fromDecoded(stdClass $decoded): self`
+#### [`fromDecoded`](../../../src/ActivityPub/ActivityStream.php#L25-L40)
+
+static · Returns `self`
 
 **Parameters:**
 
 - `$decoded`: `stdClass`
 
-**Throws:**
+**Throws:** `ActivityPubException`
 
-- `ActivityPubException`
+#### [`fromString`](../../../src/ActivityPub/ActivityStream.php#L45-L48)
 
-#### `static fromString(string $input): self`
+static · Returns `self`
 
 **Parameters:**
 
 - `$input`: `string`
 
-**Throws:**
+**Throws:** `ActivityPubException`
 
-- `ActivityPubException`
+#### [`jsonSerialize`](../../../src/ActivityPub/ActivityStream.php#L51-L61)
 
-#### `jsonSerialize(): stdClass`
+Returns `stdClass`
 
 **Attributes:** `#[Override]`
 
-#### `__toString(): string`
+#### [`__toString`](../../../src/ActivityPub/ActivityStream.php#L66-L72)
 
-**Throws:**
+Returns `string`
 
-- `JsonException`
+**Throws:** `JsonException`
 
-#### `isDirectMessage(): bool`
+#### [`isDirectMessage`](../../../src/ActivityPub/ActivityStream.php#L77-L111)
+
+Returns `bool`
 
 ---
 
@@ -70,36 +74,35 @@ Namespace: `FediE2EE\PKDServer\ActivityPub`
 
 ### Methods
 
-#### `__construct(?FediE2EE\PKDServer\ServerConfig $config = null, ?GuzzleHttp\Client $client = null, ?ParagonIE\Certainty\Fetch $fetch = null): void`
+#### [`__construct`](../../../src/ActivityPub/WebFinger.php#L42-L61)
+
+Returns `void`
 
 **Parameters:**
 
-- `$config`: `?FediE2EE\PKDServer\ServerConfig` (nullable)
-- `$client`: `?GuzzleHttp\Client` (nullable)
-- `$fetch`: `?ParagonIE\Certainty\Fetch` (nullable)
+- `$config`: `?FediE2EE\PKDServer\ServerConfig` = null
+- `$client`: `?GuzzleHttp\Client` = null
+- `$fetch`: `?ParagonIE\Certainty\Fetch` = null
 
-**Throws:**
+**Throws:** `CertaintyException`, `DependencyException`, `SodiumException`
 
-- `CertaintyException`
-- `DependencyException`
-- `SodiumException`
+#### [`clearCaches`](../../../src/ActivityPub/WebFinger.php#L66-L73)
 
-#### `clearCaches(): void`
+**API** · Returns `void`
 
-**API Method**
+#### [`canonicalize`](../../../src/ActivityPub/WebFinger.php#L79-L89)
 
-#### `canonicalize(string $actorUsernameOrUrl): string`
+Returns `string`
 
 **Parameters:**
 
 - `$actorUsernameOrUrl`: `string`
 
-**Throws:**
+**Throws:** `NetworkException`, `GuzzleException`
 
-- `NetworkException`
-- `GuzzleException`
+#### [`fetch`](../../../src/ActivityPub/WebFinger.php#L112-L125)
 
-#### `fetch(string $identifier): array`
+Returns `array`
 
 Fetch an entire remote WebFinger response.
 
@@ -107,35 +110,31 @@ Fetch an entire remote WebFinger response.
 
 - `$identifier`: `string`
 
-**Throws:**
+**Throws:** `GuzzleException`, `NetworkException`
 
-- `GuzzleException`
-- `NetworkException`
+#### [`getInboxUrl`](../../../src/ActivityPub/WebFinger.php#L174-L192)
 
-#### `getInboxUrl(string $actorUrl): string`
-
-**Parameters:**
-
-- `$actorUrl`: `string`
-
-**Throws:**
-
-- `CacheException`
-- `GuzzleException`
-- `NetworkException`
-
-#### `getPublicKey(string $actorUrl): FediE2EE\PKD\Crypto\PublicKey`
+Returns `string`
 
 **Parameters:**
 
 - `$actorUrl`: `string`
 
-**Throws:**
+**Throws:** `CacheException`, `GuzzleException`, `NetworkException`
 
-- `CryptoException`
-- `FetchException`
+#### [`getPublicKey`](../../../src/ActivityPub/WebFinger.php#L198-L230)
 
-#### `setCanonicalForTesting(string $index, string $value): void`
+Returns `FediE2EE\PKD\Crypto\PublicKey`
+
+**Parameters:**
+
+- `$actorUrl`: `string`
+
+**Throws:** `CryptoException`, `FetchException`
+
+#### [`setCanonicalForTesting`](../../../src/ActivityPub/WebFinger.php#L284-L291)
+
+Returns `void`
 
 Used for unit tests. Sets a canonical value to bypass the live webfinger query.
 
@@ -144,10 +143,7 @@ Used for unit tests. Sets a canonical value to bypass the live webfinger query.
 - `$index`: `string`
 - `$value`: `string`
 
-**Throws:**
-
-- `SodiumException`
-- `InvalidArgumentException`
+**Throws:** `SodiumException`, `InvalidArgumentException`
 
 ---
 

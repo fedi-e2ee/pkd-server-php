@@ -45,21 +45,21 @@ Namespace: `FediE2EE\PKDServer\RequestHandlers\Api`
 
 ### Methods
 
-#### `__construct(): void`
+#### [`__construct`](../../../src/RequestHandlers/Api/Actor.php#L48-L55)
 
-**Throws:**
+Returns `void`
 
-- `CacheException`
-- `DependencyException`
-- `TableException`
+**Throws:** `CacheException`, `DependencyException`, `TableException`
 
-#### `getPrimaryCacheKey(): string`
+#### [`getPrimaryCacheKey`](../../../src/RequestHandlers/Api/Actor.php#L58-L61)
+
+Returns `string`
 
 **Attributes:** `#[Override]`
 
-#### `handle(Psr\Http\Message\ServerRequestInterface $request): Psr\Http\Message\ResponseInterface`
+#### [`handle`](../../../src/RequestHandlers/Api/Actor.php#L80-L118)
 
-**API Method**
+**API** · Returns `Psr\Http\Message\ResponseInterface`
 
 **Attributes:** `#[Route]`, `#[Override]`
 
@@ -67,56 +67,42 @@ Namespace: `FediE2EE\PKDServer\RequestHandlers\Api`
 
 - `$request`: `Psr\Http\Message\ServerRequestInterface`
 
-**Throws:**
+**Throws:** `ArrayKeyException`, `BlindIndexNotFoundException`, `CipherSweetException`, `CryptoOperationException`, `DependencyException`, `InvalidArgumentException`, `InvalidCiphertextException`, `JsonException`, `NotImplementedException`, `SodiumException`, `TableException`
 
-- `ArrayKeyException`
-- `BlindIndexNotFoundException`
-- `CipherSweetException`
-- `CryptoOperationException`
-- `DependencyException`
-- `InvalidCiphertextException`
-- `JsonException`
-- `NotImplementedException`
-- `SodiumException`
-- `TableException`
+#### [`clearCache`](../../../src/RequestHandlers/Api/Actor.php#L34-L37)
 
-#### `clearCache(): bool`
+Returns `bool`
 
-**Throws:**
+**Throws:** `DependencyException`
 
-- `DependencyException`
+#### [`time`](../../../src/RequestHandlers/Api/Actor.php#L34-L37)
 
-#### `time(): string`
+Returns `string`
 
-#### `canonicalizeActor(string $actor): string`
+#### [`canonicalizeActor`](../../../src/RequestHandlers/Api/Actor.php#L46-L50)
+
+Returns `string`
 
 **Parameters:**
 
 - `$actor`: `string`
 
-**Throws:**
+**Throws:** `DependencyException`, `GuzzleException`, `NetworkException`, `SodiumException`, `CertaintyException`
 
-- `DependencyException`
-- `GuzzleException`
-- `NetworkException`
-- `SodiumException`
-- `CertaintyException`
+#### [`error`](../../../src/RequestHandlers/Api/Actor.php#L58-L61)
 
-#### `error(string $message, int $code = 400): Psr\Http\Message\ResponseInterface`
+Returns `Psr\Http\Message\ResponseInterface`
 
 **Parameters:**
 
 - `$message`: `string`
-- `$code`: `int`
+- `$code`: `int` = 400
 
-**Throws:**
+**Throws:** `DependencyException`, `JsonException`, `NotImplementedException`, `SodiumException`
 
-- `DependencyException`
-- `JsonException`
-- `NotImplementedException`
-- `SodiumException`
+#### [`signResponse`](../../../src/RequestHandlers/Api/Actor.php#L72-L84)
 
-#### `signResponse(Psr\Http\Message\ResponseInterface $response): Psr\Http\Message\ResponseInterface`
+Returns `Psr\Http\Message\ResponseInterface`
 
 Implements an RFC 9421 HTTP Message Signature with Ed25519.
 
@@ -124,81 +110,73 @@ Implements an RFC 9421 HTTP Message Signature with Ed25519.
 
 - `$response`: `Psr\Http\Message\ResponseInterface`
 
-**Throws:**
+**Throws:** `DependencyException`, `NotImplementedException`, `SodiumException`
 
-- `DependencyException`
-- `NotImplementedException`
-- `SodiumException`
+#### [`json`](../../../src/RequestHandlers/Api/Actor.php#L94-L119)
 
-#### `json(object|array $data, int $status = 200, array $headers = []): Psr\Http\Message\ResponseInterface`
+Returns `Psr\Http\Message\ResponseInterface`
 
 Return a JSON response with HTTP Message Signature (from signResponse())
 
 **Parameters:**
 
 - `$data`: `object|array`
-- `$status`: `int`
-- `$headers`: `array`
+- `$status`: `int` = 200
+- `$headers`: `array` = []
 
-**Throws:**
+**Throws:** `DependencyException`, `JsonException`, `NotImplementedException`, `SodiumException`
 
-- `DependencyException`
-- `JsonException`
-- `NotImplementedException`
-- `SodiumException`
+#### [`twig`](../../../src/RequestHandlers/Api/Actor.php#L127-L144)
 
-#### `twig(string $template, array $vars = [], array $headers = [], int $status = 200): Psr\Http\Message\ResponseInterface`
+Returns `Psr\Http\Message\ResponseInterface`
 
 **Parameters:**
 
 - `$template`: `string`
-- `$vars`: `array`
-- `$headers`: `array`
-- `$status`: `int`
+- `$vars`: `array` = []
+- `$headers`: `array` = []
+- `$status`: `int` = 200
 
-**Throws:**
+**Throws:** `DependencyException`, `LoaderError`, `RuntimeError`, `SyntaxError`
 
-- `DependencyException`
-- `LoaderError`
-- `RuntimeError`
-- `SyntaxError`
+#### [`appCache`](../../../src/RequestHandlers/Api/Actor.php#L42-L45)
 
-#### `appCache(string $namespace, int $defaultTTL = 60): FediE2EE\PKDServer\AppCache`
+Returns `FediE2EE\PKDServer\AppCache`
 
 **Parameters:**
 
 - `$namespace`: `string`
-- `$defaultTTL`: `int`
+- `$defaultTTL`: `int` = 60
 
-**Throws:**
+**Throws:** `DependencyException`
 
-- `DependencyException`
+#### [`table`](../../../src/RequestHandlers/Api/Actor.php#L52-L75)
 
-#### `table(string $tableName): FediE2EE\PKDServer\Table`
+Returns `FediE2EE\PKDServer\Table`
 
 **Parameters:**
 
 - `$tableName`: `string`
 
-**Throws:**
+**Throws:** `CacheException`, `DependencyException`, `TableException`
 
-- `CacheException`
-- `DependencyException`
-- `TableException`
+#### [`injectConfig`](../../../src/RequestHandlers/Api/Actor.php#L77-L80)
 
-#### `injectConfig(FediE2EE\PKDServer\ServerConfig $config): void`
+Returns `void`
 
 **Parameters:**
 
 - `$config`: `FediE2EE\PKDServer\ServerConfig`
 
-#### `config(): FediE2EE\PKDServer\ServerConfig`
+#### [`config`](../../../src/RequestHandlers/Api/Actor.php#L85-L95)
 
-**Throws:**
+Returns `FediE2EE\PKDServer\ServerConfig`
 
-- `DependencyException`
+**Throws:** `DependencyException`
 
-#### `setWebFinger(FediE2EE\PKDServer\ActivityPub\WebFinger $wf): self`
+#### [`setWebFinger`](../../../src/RequestHandlers/Api/Actor.php#L100-L104)
+
+Returns `self`
 
 This is intended for mocking in unit tests
 
@@ -206,17 +184,15 @@ This is intended for mocking in unit tests
 
 - `$wf`: `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
-#### `webfinger(?GuzzleHttp\Client $http = null): FediE2EE\PKDServer\ActivityPub\WebFinger`
+#### [`webfinger`](../../../src/RequestHandlers/Api/Actor.php#L111-L118)
+
+Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
 **Parameters:**
 
-- `$http`: `?GuzzleHttp\Client` (nullable)
+- `$http`: `?GuzzleHttp\Client` = null
 
-**Throws:**
-
-- `CertaintyException`
-- `DependencyException`
-- `SodiumException`
+**Throws:** `CertaintyException`, `DependencyException`, `SodiumException`
 
 ---
 
@@ -238,13 +214,15 @@ This is intended for mocking in unit tests
 
 ### Methods
 
-#### `__construct(): void`
+#### [`__construct`](../../../src/RequestHandlers/Api/BurnDown.php#L44-L47)
 
-**Throws:**
+Returns `void`
 
-- `DependencyException`
+**Throws:** `DependencyException`
 
-#### `handle(Psr\Http\Message\ServerRequestInterface $request): Psr\Http\Message\ResponseInterface`
+#### [`handle`](../../../src/RequestHandlers/Api/BurnDown.php#L63-L85)
+
+Returns `Psr\Http\Message\ResponseInterface`
 
 **Attributes:** `#[Route]`, `#[Override]`
 
@@ -252,72 +230,56 @@ This is intended for mocking in unit tests
 
 - `$request`: `Psr\Http\Message\ServerRequestInterface`
 
-**Throws:**
+**Throws:** `CacheException`, `CertaintyException`, `CryptoException`, `DependencyException`, `HPKEException`, `JsonException`, `NotImplementedException`, `ParserException`, `SodiumException`, `TableException`
 
-- `CacheException`
-- `CertaintyException`
-- `CryptoException`
-- `DependencyException`
-- `HPKEException`
-- `JsonException`
-- `NotImplementedException`
-- `ParserException`
-- `SodiumException`
-- `TableException`
+#### [`getVerifiedStream`](../../../src/RequestHandlers/Api/BurnDown.php#L35-L58)
 
-#### `getVerifiedStream(Psr\Http\Message\ServerRequestInterface $message): FediE2EE\PKDServer\ActivityPub\ActivityStream`
+Returns `FediE2EE\PKDServer\ActivityPub\ActivityStream`
 
 **Parameters:**
 
 - `$message`: `Psr\Http\Message\ServerRequestInterface`
 
-**Throws:**
+**Throws:** `ActivityPubException`, `DependencyException`, `FetchException`, `CryptoException`, `HttpSignatureException`, `NotImplementedException`, `CertaintyException`, `SodiumException`
 
-- `ActivityPubException`
-- `DependencyException`
-- `FetchException`
-- `CryptoException`
-- `HttpSignatureException`
-- `NotImplementedException`
-- `CertaintyException`
-- `SodiumException`
+#### [`appCache`](../../../src/RequestHandlers/Api/BurnDown.php#L42-L45)
 
-#### `appCache(string $namespace, int $defaultTTL = 60): FediE2EE\PKDServer\AppCache`
+Returns `FediE2EE\PKDServer\AppCache`
 
 **Parameters:**
 
 - `$namespace`: `string`
-- `$defaultTTL`: `int`
+- `$defaultTTL`: `int` = 60
 
-**Throws:**
+**Throws:** `DependencyException`
 
-- `DependencyException`
+#### [`table`](../../../src/RequestHandlers/Api/BurnDown.php#L52-L75)
 
-#### `table(string $tableName): FediE2EE\PKDServer\Table`
+Returns `FediE2EE\PKDServer\Table`
 
 **Parameters:**
 
 - `$tableName`: `string`
 
-**Throws:**
+**Throws:** `CacheException`, `DependencyException`, `TableException`
 
-- `CacheException`
-- `DependencyException`
-- `TableException`
+#### [`injectConfig`](../../../src/RequestHandlers/Api/BurnDown.php#L77-L80)
 
-#### `injectConfig(FediE2EE\PKDServer\ServerConfig $config): void`
+Returns `void`
 
 **Parameters:**
 
 - `$config`: `FediE2EE\PKDServer\ServerConfig`
 
-#### `config(): FediE2EE\PKDServer\ServerConfig`
+#### [`config`](../../../src/RequestHandlers/Api/BurnDown.php#L85-L95)
 
-**Throws:**
+Returns `FediE2EE\PKDServer\ServerConfig`
 
-- `DependencyException`
+**Throws:** `DependencyException`
 
-#### `setWebFinger(FediE2EE\PKDServer\ActivityPub\WebFinger $wf): self`
+#### [`setWebFinger`](../../../src/RequestHandlers/Api/BurnDown.php#L100-L104)
+
+Returns `self`
 
 This is intended for mocking in unit tests
 
@@ -325,49 +287,44 @@ This is intended for mocking in unit tests
 
 - `$wf`: `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
-#### `webfinger(?GuzzleHttp\Client $http = null): FediE2EE\PKDServer\ActivityPub\WebFinger`
+#### [`webfinger`](../../../src/RequestHandlers/Api/BurnDown.php#L111-L118)
+
+Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
 **Parameters:**
 
-- `$http`: `?GuzzleHttp\Client` (nullable)
+- `$http`: `?GuzzleHttp\Client` = null
 
-**Throws:**
+**Throws:** `CertaintyException`, `DependencyException`, `SodiumException`
 
-- `CertaintyException`
-- `DependencyException`
-- `SodiumException`
+#### [`time`](../../../src/RequestHandlers/Api/BurnDown.php#L34-L37)
 
-#### `time(): string`
+Returns `string`
 
-#### `canonicalizeActor(string $actor): string`
+#### [`canonicalizeActor`](../../../src/RequestHandlers/Api/BurnDown.php#L46-L50)
+
+Returns `string`
 
 **Parameters:**
 
 - `$actor`: `string`
 
-**Throws:**
+**Throws:** `DependencyException`, `GuzzleException`, `NetworkException`, `SodiumException`, `CertaintyException`
 
-- `DependencyException`
-- `GuzzleException`
-- `NetworkException`
-- `SodiumException`
-- `CertaintyException`
+#### [`error`](../../../src/RequestHandlers/Api/BurnDown.php#L58-L61)
 
-#### `error(string $message, int $code = 400): Psr\Http\Message\ResponseInterface`
+Returns `Psr\Http\Message\ResponseInterface`
 
 **Parameters:**
 
 - `$message`: `string`
-- `$code`: `int`
+- `$code`: `int` = 400
 
-**Throws:**
+**Throws:** `DependencyException`, `JsonException`, `NotImplementedException`, `SodiumException`
 
-- `DependencyException`
-- `JsonException`
-- `NotImplementedException`
-- `SodiumException`
+#### [`signResponse`](../../../src/RequestHandlers/Api/BurnDown.php#L72-L84)
 
-#### `signResponse(Psr\Http\Message\ResponseInterface $response): Psr\Http\Message\ResponseInterface`
+Returns `Psr\Http\Message\ResponseInterface`
 
 Implements an RFC 9421 HTTP Message Signature with Ed25519.
 
@@ -375,44 +332,34 @@ Implements an RFC 9421 HTTP Message Signature with Ed25519.
 
 - `$response`: `Psr\Http\Message\ResponseInterface`
 
-**Throws:**
+**Throws:** `DependencyException`, `NotImplementedException`, `SodiumException`
 
-- `DependencyException`
-- `NotImplementedException`
-- `SodiumException`
+#### [`json`](../../../src/RequestHandlers/Api/BurnDown.php#L94-L119)
 
-#### `json(object|array $data, int $status = 200, array $headers = []): Psr\Http\Message\ResponseInterface`
+Returns `Psr\Http\Message\ResponseInterface`
 
 Return a JSON response with HTTP Message Signature (from signResponse())
 
 **Parameters:**
 
 - `$data`: `object|array`
-- `$status`: `int`
-- `$headers`: `array`
+- `$status`: `int` = 200
+- `$headers`: `array` = []
 
-**Throws:**
+**Throws:** `DependencyException`, `JsonException`, `NotImplementedException`, `SodiumException`
 
-- `DependencyException`
-- `JsonException`
-- `NotImplementedException`
-- `SodiumException`
+#### [`twig`](../../../src/RequestHandlers/Api/BurnDown.php#L127-L144)
 
-#### `twig(string $template, array $vars = [], array $headers = [], int $status = 200): Psr\Http\Message\ResponseInterface`
+Returns `Psr\Http\Message\ResponseInterface`
 
 **Parameters:**
 
 - `$template`: `string`
-- `$vars`: `array`
-- `$headers`: `array`
-- `$status`: `int`
+- `$vars`: `array` = []
+- `$headers`: `array` = []
+- `$status`: `int` = 200
 
-**Throws:**
-
-- `DependencyException`
-- `LoaderError`
-- `RuntimeError`
-- `SyntaxError`
+**Throws:** `DependencyException`, `LoaderError`, `RuntimeError`, `SyntaxError`
 
 ---
 
@@ -434,7 +381,9 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 
 ### Methods
 
-#### `handle(Psr\Http\Message\ServerRequestInterface $request): Psr\Http\Message\ResponseInterface`
+#### [`handle`](../../../src/RequestHandlers/Api/Checkpoint.php#L23-L26)
+
+Returns `Psr\Http\Message\ResponseInterface`
 
 **Attributes:** `#[Route]`, `#[Override]`
 
@@ -442,37 +391,34 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 
 - `$request`: `Psr\Http\Message\ServerRequestInterface`
 
-#### `time(): string`
+#### [`time`](../../../src/RequestHandlers/Api/Checkpoint.php#L34-L37)
 
-#### `canonicalizeActor(string $actor): string`
+Returns `string`
+
+#### [`canonicalizeActor`](../../../src/RequestHandlers/Api/Checkpoint.php#L46-L50)
+
+Returns `string`
 
 **Parameters:**
 
 - `$actor`: `string`
 
-**Throws:**
+**Throws:** `DependencyException`, `GuzzleException`, `NetworkException`, `SodiumException`, `CertaintyException`
 
-- `DependencyException`
-- `GuzzleException`
-- `NetworkException`
-- `SodiumException`
-- `CertaintyException`
+#### [`error`](../../../src/RequestHandlers/Api/Checkpoint.php#L58-L61)
 
-#### `error(string $message, int $code = 400): Psr\Http\Message\ResponseInterface`
+Returns `Psr\Http\Message\ResponseInterface`
 
 **Parameters:**
 
 - `$message`: `string`
-- `$code`: `int`
+- `$code`: `int` = 400
 
-**Throws:**
+**Throws:** `DependencyException`, `JsonException`, `NotImplementedException`, `SodiumException`
 
-- `DependencyException`
-- `JsonException`
-- `NotImplementedException`
-- `SodiumException`
+#### [`signResponse`](../../../src/RequestHandlers/Api/Checkpoint.php#L72-L84)
 
-#### `signResponse(Psr\Http\Message\ResponseInterface $response): Psr\Http\Message\ResponseInterface`
+Returns `Psr\Http\Message\ResponseInterface`
 
 Implements an RFC 9421 HTTP Message Signature with Ed25519.
 
@@ -480,81 +426,73 @@ Implements an RFC 9421 HTTP Message Signature with Ed25519.
 
 - `$response`: `Psr\Http\Message\ResponseInterface`
 
-**Throws:**
+**Throws:** `DependencyException`, `NotImplementedException`, `SodiumException`
 
-- `DependencyException`
-- `NotImplementedException`
-- `SodiumException`
+#### [`json`](../../../src/RequestHandlers/Api/Checkpoint.php#L94-L119)
 
-#### `json(object|array $data, int $status = 200, array $headers = []): Psr\Http\Message\ResponseInterface`
+Returns `Psr\Http\Message\ResponseInterface`
 
 Return a JSON response with HTTP Message Signature (from signResponse())
 
 **Parameters:**
 
 - `$data`: `object|array`
-- `$status`: `int`
-- `$headers`: `array`
+- `$status`: `int` = 200
+- `$headers`: `array` = []
 
-**Throws:**
+**Throws:** `DependencyException`, `JsonException`, `NotImplementedException`, `SodiumException`
 
-- `DependencyException`
-- `JsonException`
-- `NotImplementedException`
-- `SodiumException`
+#### [`twig`](../../../src/RequestHandlers/Api/Checkpoint.php#L127-L144)
 
-#### `twig(string $template, array $vars = [], array $headers = [], int $status = 200): Psr\Http\Message\ResponseInterface`
+Returns `Psr\Http\Message\ResponseInterface`
 
 **Parameters:**
 
 - `$template`: `string`
-- `$vars`: `array`
-- `$headers`: `array`
-- `$status`: `int`
+- `$vars`: `array` = []
+- `$headers`: `array` = []
+- `$status`: `int` = 200
 
-**Throws:**
+**Throws:** `DependencyException`, `LoaderError`, `RuntimeError`, `SyntaxError`
 
-- `DependencyException`
-- `LoaderError`
-- `RuntimeError`
-- `SyntaxError`
+#### [`appCache`](../../../src/RequestHandlers/Api/Checkpoint.php#L42-L45)
 
-#### `appCache(string $namespace, int $defaultTTL = 60): FediE2EE\PKDServer\AppCache`
+Returns `FediE2EE\PKDServer\AppCache`
 
 **Parameters:**
 
 - `$namespace`: `string`
-- `$defaultTTL`: `int`
+- `$defaultTTL`: `int` = 60
 
-**Throws:**
+**Throws:** `DependencyException`
 
-- `DependencyException`
+#### [`table`](../../../src/RequestHandlers/Api/Checkpoint.php#L52-L75)
 
-#### `table(string $tableName): FediE2EE\PKDServer\Table`
+Returns `FediE2EE\PKDServer\Table`
 
 **Parameters:**
 
 - `$tableName`: `string`
 
-**Throws:**
+**Throws:** `CacheException`, `DependencyException`, `TableException`
 
-- `CacheException`
-- `DependencyException`
-- `TableException`
+#### [`injectConfig`](../../../src/RequestHandlers/Api/Checkpoint.php#L77-L80)
 
-#### `injectConfig(FediE2EE\PKDServer\ServerConfig $config): void`
+Returns `void`
 
 **Parameters:**
 
 - `$config`: `FediE2EE\PKDServer\ServerConfig`
 
-#### `config(): FediE2EE\PKDServer\ServerConfig`
+#### [`config`](../../../src/RequestHandlers/Api/Checkpoint.php#L85-L95)
 
-**Throws:**
+Returns `FediE2EE\PKDServer\ServerConfig`
 
-- `DependencyException`
+**Throws:** `DependencyException`
 
-#### `setWebFinger(FediE2EE\PKDServer\ActivityPub\WebFinger $wf): self`
+#### [`setWebFinger`](../../../src/RequestHandlers/Api/Checkpoint.php#L100-L104)
+
+Returns `self`
 
 This is intended for mocking in unit tests
 
@@ -562,17 +500,15 @@ This is intended for mocking in unit tests
 
 - `$wf`: `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
-#### `webfinger(?GuzzleHttp\Client $http = null): FediE2EE\PKDServer\ActivityPub\WebFinger`
+#### [`webfinger`](../../../src/RequestHandlers/Api/Checkpoint.php#L111-L118)
+
+Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
 **Parameters:**
 
-- `$http`: `?GuzzleHttp\Client` (nullable)
+- `$http`: `?GuzzleHttp\Client` = null
 
-**Throws:**
-
-- `CertaintyException`
-- `DependencyException`
-- `SodiumException`
+**Throws:** `CertaintyException`, `DependencyException`, `SodiumException`
 
 ---
 
@@ -594,7 +530,9 @@ This is intended for mocking in unit tests
 
 ### Methods
 
-#### `handle(Psr\Http\Message\ServerRequestInterface $request): Psr\Http\Message\ResponseInterface`
+#### [`handle`](../../../src/RequestHandlers/Api/Extensions.php#L31-L38)
+
+Returns `Psr\Http\Message\ResponseInterface`
 
 **Attributes:** `#[Route]`, `#[Override]`
 
@@ -602,44 +540,36 @@ This is intended for mocking in unit tests
 
 - `$request`: `Psr\Http\Message\ServerRequestInterface`
 
-**Throws:**
+**Throws:** `DependencyException`, `JsonException`, `NotImplementedException`, `SodiumException`
 
-- `DependencyException`
-- `JsonException`
-- `NotImplementedException`
-- `SodiumException`
+#### [`time`](../../../src/RequestHandlers/Api/Extensions.php#L34-L37)
 
-#### `time(): string`
+Returns `string`
 
-#### `canonicalizeActor(string $actor): string`
+#### [`canonicalizeActor`](../../../src/RequestHandlers/Api/Extensions.php#L46-L50)
+
+Returns `string`
 
 **Parameters:**
 
 - `$actor`: `string`
 
-**Throws:**
+**Throws:** `DependencyException`, `GuzzleException`, `NetworkException`, `SodiumException`, `CertaintyException`
 
-- `DependencyException`
-- `GuzzleException`
-- `NetworkException`
-- `SodiumException`
-- `CertaintyException`
+#### [`error`](../../../src/RequestHandlers/Api/Extensions.php#L58-L61)
 
-#### `error(string $message, int $code = 400): Psr\Http\Message\ResponseInterface`
+Returns `Psr\Http\Message\ResponseInterface`
 
 **Parameters:**
 
 - `$message`: `string`
-- `$code`: `int`
+- `$code`: `int` = 400
 
-**Throws:**
+**Throws:** `DependencyException`, `JsonException`, `NotImplementedException`, `SodiumException`
 
-- `DependencyException`
-- `JsonException`
-- `NotImplementedException`
-- `SodiumException`
+#### [`signResponse`](../../../src/RequestHandlers/Api/Extensions.php#L72-L84)
 
-#### `signResponse(Psr\Http\Message\ResponseInterface $response): Psr\Http\Message\ResponseInterface`
+Returns `Psr\Http\Message\ResponseInterface`
 
 Implements an RFC 9421 HTTP Message Signature with Ed25519.
 
@@ -647,81 +577,73 @@ Implements an RFC 9421 HTTP Message Signature with Ed25519.
 
 - `$response`: `Psr\Http\Message\ResponseInterface`
 
-**Throws:**
+**Throws:** `DependencyException`, `NotImplementedException`, `SodiumException`
 
-- `DependencyException`
-- `NotImplementedException`
-- `SodiumException`
+#### [`json`](../../../src/RequestHandlers/Api/Extensions.php#L94-L119)
 
-#### `json(object|array $data, int $status = 200, array $headers = []): Psr\Http\Message\ResponseInterface`
+Returns `Psr\Http\Message\ResponseInterface`
 
 Return a JSON response with HTTP Message Signature (from signResponse())
 
 **Parameters:**
 
 - `$data`: `object|array`
-- `$status`: `int`
-- `$headers`: `array`
+- `$status`: `int` = 200
+- `$headers`: `array` = []
 
-**Throws:**
+**Throws:** `DependencyException`, `JsonException`, `NotImplementedException`, `SodiumException`
 
-- `DependencyException`
-- `JsonException`
-- `NotImplementedException`
-- `SodiumException`
+#### [`twig`](../../../src/RequestHandlers/Api/Extensions.php#L127-L144)
 
-#### `twig(string $template, array $vars = [], array $headers = [], int $status = 200): Psr\Http\Message\ResponseInterface`
+Returns `Psr\Http\Message\ResponseInterface`
 
 **Parameters:**
 
 - `$template`: `string`
-- `$vars`: `array`
-- `$headers`: `array`
-- `$status`: `int`
+- `$vars`: `array` = []
+- `$headers`: `array` = []
+- `$status`: `int` = 200
 
-**Throws:**
+**Throws:** `DependencyException`, `LoaderError`, `RuntimeError`, `SyntaxError`
 
-- `DependencyException`
-- `LoaderError`
-- `RuntimeError`
-- `SyntaxError`
+#### [`appCache`](../../../src/RequestHandlers/Api/Extensions.php#L42-L45)
 
-#### `appCache(string $namespace, int $defaultTTL = 60): FediE2EE\PKDServer\AppCache`
+Returns `FediE2EE\PKDServer\AppCache`
 
 **Parameters:**
 
 - `$namespace`: `string`
-- `$defaultTTL`: `int`
+- `$defaultTTL`: `int` = 60
 
-**Throws:**
+**Throws:** `DependencyException`
 
-- `DependencyException`
+#### [`table`](../../../src/RequestHandlers/Api/Extensions.php#L52-L75)
 
-#### `table(string $tableName): FediE2EE\PKDServer\Table`
+Returns `FediE2EE\PKDServer\Table`
 
 **Parameters:**
 
 - `$tableName`: `string`
 
-**Throws:**
+**Throws:** `CacheException`, `DependencyException`, `TableException`
 
-- `CacheException`
-- `DependencyException`
-- `TableException`
+#### [`injectConfig`](../../../src/RequestHandlers/Api/Extensions.php#L77-L80)
 
-#### `injectConfig(FediE2EE\PKDServer\ServerConfig $config): void`
+Returns `void`
 
 **Parameters:**
 
 - `$config`: `FediE2EE\PKDServer\ServerConfig`
 
-#### `config(): FediE2EE\PKDServer\ServerConfig`
+#### [`config`](../../../src/RequestHandlers/Api/Extensions.php#L85-L95)
 
-**Throws:**
+Returns `FediE2EE\PKDServer\ServerConfig`
 
-- `DependencyException`
+**Throws:** `DependencyException`
 
-#### `setWebFinger(FediE2EE\PKDServer\ActivityPub\WebFinger $wf): self`
+#### [`setWebFinger`](../../../src/RequestHandlers/Api/Extensions.php#L100-L104)
+
+Returns `self`
 
 This is intended for mocking in unit tests
 
@@ -729,17 +651,15 @@ This is intended for mocking in unit tests
 
 - `$wf`: `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
-#### `webfinger(?GuzzleHttp\Client $http = null): FediE2EE\PKDServer\ActivityPub\WebFinger`
+#### [`webfinger`](../../../src/RequestHandlers/Api/Extensions.php#L111-L118)
+
+Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
 **Parameters:**
 
-- `$http`: `?GuzzleHttp\Client` (nullable)
+- `$http`: `?GuzzleHttp\Client` = null
 
-**Throws:**
-
-- `CertaintyException`
-- `DependencyException`
-- `SodiumException`
+**Throws:** `CertaintyException`, `DependencyException`, `SodiumException`
 
 ---
 
@@ -761,17 +681,15 @@ This is intended for mocking in unit tests
 
 ### Methods
 
-#### `__construct(): void`
+#### [`__construct`](../../../src/RequestHandlers/Api/GetAuxData.php#L50-L63)
 
-**Throws:**
+Returns `void`
 
-- `CacheException`
-- `DependencyException`
-- `TableException`
+**Throws:** `CacheException`, `DependencyException`, `TableException`
 
-#### `handle(Psr\Http\Message\ServerRequestInterface $request): Psr\Http\Message\ResponseInterface`
+#### [`handle`](../../../src/RequestHandlers/Api/GetAuxData.php#L81-L116)
 
-**API Method**
+**API** · Returns `Psr\Http\Message\ResponseInterface`
 
 **Attributes:** `#[Route]`, `#[Override]`
 
@@ -779,50 +697,36 @@ This is intended for mocking in unit tests
 
 - `$request`: `Psr\Http\Message\ServerRequestInterface`
 
-**Throws:**
+**Throws:** `ArrayKeyException`, `BlindIndexNotFoundException`, `CipherSweetException`, `CryptoOperationException`, `DependencyException`, `InvalidCiphertextException`, `JsonException`, `NotImplementedException`, `SodiumException`, `TableException`
 
-- `ArrayKeyException`
-- `BlindIndexNotFoundException`
-- `CipherSweetException`
-- `CryptoOperationException`
-- `DependencyException`
-- `InvalidCiphertextException`
-- `JsonException`
-- `NotImplementedException`
-- `SodiumException`
-- `TableException`
+#### [`time`](../../../src/RequestHandlers/Api/GetAuxData.php#L34-L37)
 
-#### `time(): string`
+Returns `string`
 
-#### `canonicalizeActor(string $actor): string`
+#### [`canonicalizeActor`](../../../src/RequestHandlers/Api/GetAuxData.php#L46-L50)
+
+Returns `string`
 
 **Parameters:**
 
 - `$actor`: `string`
 
-**Throws:**
+**Throws:** `DependencyException`, `GuzzleException`, `NetworkException`, `SodiumException`, `CertaintyException`
 
-- `DependencyException`
-- `GuzzleException`
-- `NetworkException`
-- `SodiumException`
-- `CertaintyException`
+#### [`error`](../../../src/RequestHandlers/Api/GetAuxData.php#L58-L61)
 
-#### `error(string $message, int $code = 400): Psr\Http\Message\ResponseInterface`
+Returns `Psr\Http\Message\ResponseInterface`
 
 **Parameters:**
 
 - `$message`: `string`
-- `$code`: `int`
+- `$code`: `int` = 400
 
-**Throws:**
+**Throws:** `DependencyException`, `JsonException`, `NotImplementedException`, `SodiumException`
 
-- `DependencyException`
-- `JsonException`
-- `NotImplementedException`
-- `SodiumException`
+#### [`signResponse`](../../../src/RequestHandlers/Api/GetAuxData.php#L72-L84)
 
-#### `signResponse(Psr\Http\Message\ResponseInterface $response): Psr\Http\Message\ResponseInterface`
+Returns `Psr\Http\Message\ResponseInterface`
 
 Implements an RFC 9421 HTTP Message Signature with Ed25519.
 
@@ -830,81 +734,73 @@ Implements an RFC 9421 HTTP Message Signature with Ed25519.
 
 - `$response`: `Psr\Http\Message\ResponseInterface`
 
-**Throws:**
+**Throws:** `DependencyException`, `NotImplementedException`, `SodiumException`
 
-- `DependencyException`
-- `NotImplementedException`
-- `SodiumException`
+#### [`json`](../../../src/RequestHandlers/Api/GetAuxData.php#L94-L119)
 
-#### `json(object|array $data, int $status = 200, array $headers = []): Psr\Http\Message\ResponseInterface`
+Returns `Psr\Http\Message\ResponseInterface`
 
 Return a JSON response with HTTP Message Signature (from signResponse())
 
 **Parameters:**
 
 - `$data`: `object|array`
-- `$status`: `int`
-- `$headers`: `array`
+- `$status`: `int` = 200
+- `$headers`: `array` = []
 
-**Throws:**
+**Throws:** `DependencyException`, `JsonException`, `NotImplementedException`, `SodiumException`
 
-- `DependencyException`
-- `JsonException`
-- `NotImplementedException`
-- `SodiumException`
+#### [`twig`](../../../src/RequestHandlers/Api/GetAuxData.php#L127-L144)
 
-#### `twig(string $template, array $vars = [], array $headers = [], int $status = 200): Psr\Http\Message\ResponseInterface`
+Returns `Psr\Http\Message\ResponseInterface`
 
 **Parameters:**
 
 - `$template`: `string`
-- `$vars`: `array`
-- `$headers`: `array`
-- `$status`: `int`
+- `$vars`: `array` = []
+- `$headers`: `array` = []
+- `$status`: `int` = 200
 
-**Throws:**
+**Throws:** `DependencyException`, `LoaderError`, `RuntimeError`, `SyntaxError`
 
-- `DependencyException`
-- `LoaderError`
-- `RuntimeError`
-- `SyntaxError`
+#### [`appCache`](../../../src/RequestHandlers/Api/GetAuxData.php#L42-L45)
 
-#### `appCache(string $namespace, int $defaultTTL = 60): FediE2EE\PKDServer\AppCache`
+Returns `FediE2EE\PKDServer\AppCache`
 
 **Parameters:**
 
 - `$namespace`: `string`
-- `$defaultTTL`: `int`
+- `$defaultTTL`: `int` = 60
 
-**Throws:**
+**Throws:** `DependencyException`
 
-- `DependencyException`
+#### [`table`](../../../src/RequestHandlers/Api/GetAuxData.php#L52-L75)
 
-#### `table(string $tableName): FediE2EE\PKDServer\Table`
+Returns `FediE2EE\PKDServer\Table`
 
 **Parameters:**
 
 - `$tableName`: `string`
 
-**Throws:**
+**Throws:** `CacheException`, `DependencyException`, `TableException`
 
-- `CacheException`
-- `DependencyException`
-- `TableException`
+#### [`injectConfig`](../../../src/RequestHandlers/Api/GetAuxData.php#L77-L80)
 
-#### `injectConfig(FediE2EE\PKDServer\ServerConfig $config): void`
+Returns `void`
 
 **Parameters:**
 
 - `$config`: `FediE2EE\PKDServer\ServerConfig`
 
-#### `config(): FediE2EE\PKDServer\ServerConfig`
+#### [`config`](../../../src/RequestHandlers/Api/GetAuxData.php#L85-L95)
 
-**Throws:**
+Returns `FediE2EE\PKDServer\ServerConfig`
 
-- `DependencyException`
+**Throws:** `DependencyException`
 
-#### `setWebFinger(FediE2EE\PKDServer\ActivityPub\WebFinger $wf): self`
+#### [`setWebFinger`](../../../src/RequestHandlers/Api/GetAuxData.php#L100-L104)
+
+Returns `self`
 
 This is intended for mocking in unit tests
 
@@ -912,17 +808,15 @@ This is intended for mocking in unit tests
 
 - `$wf`: `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
-#### `webfinger(?GuzzleHttp\Client $http = null): FediE2EE\PKDServer\ActivityPub\WebFinger`
+#### [`webfinger`](../../../src/RequestHandlers/Api/GetAuxData.php#L111-L118)
+
+Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
 **Parameters:**
 
-- `$http`: `?GuzzleHttp\Client` (nullable)
+- `$http`: `?GuzzleHttp\Client` = null
 
-**Throws:**
-
-- `CertaintyException`
-- `DependencyException`
-- `SodiumException`
+**Throws:** `CertaintyException`, `DependencyException`, `SodiumException`
 
 ---
 
@@ -944,17 +838,15 @@ This is intended for mocking in unit tests
 
 ### Methods
 
-#### `__construct(): void`
+#### [`__construct`](../../../src/RequestHandlers/Api/GetKey.php#L50-L63)
 
-**Throws:**
+Returns `void`
 
-- `CacheException`
-- `DependencyException`
-- `TableException`
+**Throws:** `CacheException`, `DependencyException`, `TableException`
 
-#### `handle(Psr\Http\Message\ServerRequestInterface $request): Psr\Http\Message\ResponseInterface`
+#### [`handle`](../../../src/RequestHandlers/Api/GetKey.php#L81-L117)
 
-**API Method**
+**API** · Returns `Psr\Http\Message\ResponseInterface`
 
 **Attributes:** `#[Route]`, `#[Override]`
 
@@ -962,50 +854,36 @@ This is intended for mocking in unit tests
 
 - `$request`: `Psr\Http\Message\ServerRequestInterface`
 
-**Throws:**
+**Throws:** `ArrayKeyException`, `BlindIndexNotFoundException`, `CipherSweetException`, `CryptoOperationException`, `DependencyException`, `InvalidCiphertextException`, `JsonException`, `NotImplementedException`, `SodiumException`, `TableException`
 
-- `ArrayKeyException`
-- `BlindIndexNotFoundException`
-- `CipherSweetException`
-- `CryptoOperationException`
-- `DependencyException`
-- `InvalidCiphertextException`
-- `JsonException`
-- `NotImplementedException`
-- `SodiumException`
-- `TableException`
+#### [`time`](../../../src/RequestHandlers/Api/GetKey.php#L34-L37)
 
-#### `time(): string`
+Returns `string`
 
-#### `canonicalizeActor(string $actor): string`
+#### [`canonicalizeActor`](../../../src/RequestHandlers/Api/GetKey.php#L46-L50)
+
+Returns `string`
 
 **Parameters:**
 
 - `$actor`: `string`
 
-**Throws:**
+**Throws:** `DependencyException`, `GuzzleException`, `NetworkException`, `SodiumException`, `CertaintyException`
 
-- `DependencyException`
-- `GuzzleException`
-- `NetworkException`
-- `SodiumException`
-- `CertaintyException`
+#### [`error`](../../../src/RequestHandlers/Api/GetKey.php#L58-L61)
 
-#### `error(string $message, int $code = 400): Psr\Http\Message\ResponseInterface`
+Returns `Psr\Http\Message\ResponseInterface`
 
 **Parameters:**
 
 - `$message`: `string`
-- `$code`: `int`
+- `$code`: `int` = 400
 
-**Throws:**
+**Throws:** `DependencyException`, `JsonException`, `NotImplementedException`, `SodiumException`
 
-- `DependencyException`
-- `JsonException`
-- `NotImplementedException`
-- `SodiumException`
+#### [`signResponse`](../../../src/RequestHandlers/Api/GetKey.php#L72-L84)
 
-#### `signResponse(Psr\Http\Message\ResponseInterface $response): Psr\Http\Message\ResponseInterface`
+Returns `Psr\Http\Message\ResponseInterface`
 
 Implements an RFC 9421 HTTP Message Signature with Ed25519.
 
@@ -1013,81 +891,73 @@ Implements an RFC 9421 HTTP Message Signature with Ed25519.
 
 - `$response`: `Psr\Http\Message\ResponseInterface`
 
-**Throws:**
+**Throws:** `DependencyException`, `NotImplementedException`, `SodiumException`
 
-- `DependencyException`
-- `NotImplementedException`
-- `SodiumException`
+#### [`json`](../../../src/RequestHandlers/Api/GetKey.php#L94-L119)
 
-#### `json(object|array $data, int $status = 200, array $headers = []): Psr\Http\Message\ResponseInterface`
+Returns `Psr\Http\Message\ResponseInterface`
 
 Return a JSON response with HTTP Message Signature (from signResponse())
 
 **Parameters:**
 
 - `$data`: `object|array`
-- `$status`: `int`
-- `$headers`: `array`
+- `$status`: `int` = 200
+- `$headers`: `array` = []
 
-**Throws:**
+**Throws:** `DependencyException`, `JsonException`, `NotImplementedException`, `SodiumException`
 
-- `DependencyException`
-- `JsonException`
-- `NotImplementedException`
-- `SodiumException`
+#### [`twig`](../../../src/RequestHandlers/Api/GetKey.php#L127-L144)
 
-#### `twig(string $template, array $vars = [], array $headers = [], int $status = 200): Psr\Http\Message\ResponseInterface`
+Returns `Psr\Http\Message\ResponseInterface`
 
 **Parameters:**
 
 - `$template`: `string`
-- `$vars`: `array`
-- `$headers`: `array`
-- `$status`: `int`
+- `$vars`: `array` = []
+- `$headers`: `array` = []
+- `$status`: `int` = 200
 
-**Throws:**
+**Throws:** `DependencyException`, `LoaderError`, `RuntimeError`, `SyntaxError`
 
-- `DependencyException`
-- `LoaderError`
-- `RuntimeError`
-- `SyntaxError`
+#### [`appCache`](../../../src/RequestHandlers/Api/GetKey.php#L42-L45)
 
-#### `appCache(string $namespace, int $defaultTTL = 60): FediE2EE\PKDServer\AppCache`
+Returns `FediE2EE\PKDServer\AppCache`
 
 **Parameters:**
 
 - `$namespace`: `string`
-- `$defaultTTL`: `int`
+- `$defaultTTL`: `int` = 60
 
-**Throws:**
+**Throws:** `DependencyException`
 
-- `DependencyException`
+#### [`table`](../../../src/RequestHandlers/Api/GetKey.php#L52-L75)
 
-#### `table(string $tableName): FediE2EE\PKDServer\Table`
+Returns `FediE2EE\PKDServer\Table`
 
 **Parameters:**
 
 - `$tableName`: `string`
 
-**Throws:**
+**Throws:** `CacheException`, `DependencyException`, `TableException`
 
-- `CacheException`
-- `DependencyException`
-- `TableException`
+#### [`injectConfig`](../../../src/RequestHandlers/Api/GetKey.php#L77-L80)
 
-#### `injectConfig(FediE2EE\PKDServer\ServerConfig $config): void`
+Returns `void`
 
 **Parameters:**
 
 - `$config`: `FediE2EE\PKDServer\ServerConfig`
 
-#### `config(): FediE2EE\PKDServer\ServerConfig`
+#### [`config`](../../../src/RequestHandlers/Api/GetKey.php#L85-L95)
 
-**Throws:**
+Returns `FediE2EE\PKDServer\ServerConfig`
 
-- `DependencyException`
+**Throws:** `DependencyException`
 
-#### `setWebFinger(FediE2EE\PKDServer\ActivityPub\WebFinger $wf): self`
+#### [`setWebFinger`](../../../src/RequestHandlers/Api/GetKey.php#L100-L104)
+
+Returns `self`
 
 This is intended for mocking in unit tests
 
@@ -1095,17 +965,15 @@ This is intended for mocking in unit tests
 
 - `$wf`: `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
-#### `webfinger(?GuzzleHttp\Client $http = null): FediE2EE\PKDServer\ActivityPub\WebFinger`
+#### [`webfinger`](../../../src/RequestHandlers/Api/GetKey.php#L111-L118)
+
+Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
 **Parameters:**
 
-- `$http`: `?GuzzleHttp\Client` (nullable)
+- `$http`: `?GuzzleHttp\Client` = null
 
-**Throws:**
-
-- `CertaintyException`
-- `DependencyException`
-- `SodiumException`
+**Throws:** `CertaintyException`, `DependencyException`, `SodiumException`
 
 ---
 
@@ -1127,15 +995,15 @@ This is intended for mocking in unit tests
 
 ### Methods
 
-#### `__construct(): void`
+#### [`__construct`](../../../src/RequestHandlers/Api/History.php#L38-L45)
 
-**Throws:**
+Returns `void`
 
-- `DependencyException`
-- `TableException`
-- `CacheException`
+**Throws:** `DependencyException`, `TableException`, `CacheException`
 
-#### `handle(Psr\Http\Message\ServerRequestInterface $request): Psr\Http\Message\ResponseInterface`
+#### [`handle`](../../../src/RequestHandlers/Api/History.php#L55-L65)
+
+Returns `Psr\Http\Message\ResponseInterface`
 
 **Attributes:** `#[Route]`, `#[Override]`
 
@@ -1143,44 +1011,36 @@ This is intended for mocking in unit tests
 
 - `$request`: `Psr\Http\Message\ServerRequestInterface`
 
-**Throws:**
+**Throws:** `DependencyException`, `JsonException`, `NotImplementedException`, `SodiumException`
 
-- `DependencyException`
-- `JsonException`
-- `NotImplementedException`
-- `SodiumException`
+#### [`time`](../../../src/RequestHandlers/Api/History.php#L34-L37)
 
-#### `time(): string`
+Returns `string`
 
-#### `canonicalizeActor(string $actor): string`
+#### [`canonicalizeActor`](../../../src/RequestHandlers/Api/History.php#L46-L50)
+
+Returns `string`
 
 **Parameters:**
 
 - `$actor`: `string`
 
-**Throws:**
+**Throws:** `DependencyException`, `GuzzleException`, `NetworkException`, `SodiumException`, `CertaintyException`
 
-- `DependencyException`
-- `GuzzleException`
-- `NetworkException`
-- `SodiumException`
-- `CertaintyException`
+#### [`error`](../../../src/RequestHandlers/Api/History.php#L58-L61)
 
-#### `error(string $message, int $code = 400): Psr\Http\Message\ResponseInterface`
+Returns `Psr\Http\Message\ResponseInterface`
 
 **Parameters:**
 
 - `$message`: `string`
-- `$code`: `int`
+- `$code`: `int` = 400
 
-**Throws:**
+**Throws:** `DependencyException`, `JsonException`, `NotImplementedException`, `SodiumException`
 
-- `DependencyException`
-- `JsonException`
-- `NotImplementedException`
-- `SodiumException`
+#### [`signResponse`](../../../src/RequestHandlers/Api/History.php#L72-L84)
 
-#### `signResponse(Psr\Http\Message\ResponseInterface $response): Psr\Http\Message\ResponseInterface`
+Returns `Psr\Http\Message\ResponseInterface`
 
 Implements an RFC 9421 HTTP Message Signature with Ed25519.
 
@@ -1188,81 +1048,73 @@ Implements an RFC 9421 HTTP Message Signature with Ed25519.
 
 - `$response`: `Psr\Http\Message\ResponseInterface`
 
-**Throws:**
+**Throws:** `DependencyException`, `NotImplementedException`, `SodiumException`
 
-- `DependencyException`
-- `NotImplementedException`
-- `SodiumException`
+#### [`json`](../../../src/RequestHandlers/Api/History.php#L94-L119)
 
-#### `json(object|array $data, int $status = 200, array $headers = []): Psr\Http\Message\ResponseInterface`
+Returns `Psr\Http\Message\ResponseInterface`
 
 Return a JSON response with HTTP Message Signature (from signResponse())
 
 **Parameters:**
 
 - `$data`: `object|array`
-- `$status`: `int`
-- `$headers`: `array`
+- `$status`: `int` = 200
+- `$headers`: `array` = []
 
-**Throws:**
+**Throws:** `DependencyException`, `JsonException`, `NotImplementedException`, `SodiumException`
 
-- `DependencyException`
-- `JsonException`
-- `NotImplementedException`
-- `SodiumException`
+#### [`twig`](../../../src/RequestHandlers/Api/History.php#L127-L144)
 
-#### `twig(string $template, array $vars = [], array $headers = [], int $status = 200): Psr\Http\Message\ResponseInterface`
+Returns `Psr\Http\Message\ResponseInterface`
 
 **Parameters:**
 
 - `$template`: `string`
-- `$vars`: `array`
-- `$headers`: `array`
-- `$status`: `int`
+- `$vars`: `array` = []
+- `$headers`: `array` = []
+- `$status`: `int` = 200
 
-**Throws:**
+**Throws:** `DependencyException`, `LoaderError`, `RuntimeError`, `SyntaxError`
 
-- `DependencyException`
-- `LoaderError`
-- `RuntimeError`
-- `SyntaxError`
+#### [`appCache`](../../../src/RequestHandlers/Api/History.php#L42-L45)
 
-#### `appCache(string $namespace, int $defaultTTL = 60): FediE2EE\PKDServer\AppCache`
+Returns `FediE2EE\PKDServer\AppCache`
 
 **Parameters:**
 
 - `$namespace`: `string`
-- `$defaultTTL`: `int`
+- `$defaultTTL`: `int` = 60
 
-**Throws:**
+**Throws:** `DependencyException`
 
-- `DependencyException`
+#### [`table`](../../../src/RequestHandlers/Api/History.php#L52-L75)
 
-#### `table(string $tableName): FediE2EE\PKDServer\Table`
+Returns `FediE2EE\PKDServer\Table`
 
 **Parameters:**
 
 - `$tableName`: `string`
 
-**Throws:**
+**Throws:** `CacheException`, `DependencyException`, `TableException`
 
-- `CacheException`
-- `DependencyException`
-- `TableException`
+#### [`injectConfig`](../../../src/RequestHandlers/Api/History.php#L77-L80)
 
-#### `injectConfig(FediE2EE\PKDServer\ServerConfig $config): void`
+Returns `void`
 
 **Parameters:**
 
 - `$config`: `FediE2EE\PKDServer\ServerConfig`
 
-#### `config(): FediE2EE\PKDServer\ServerConfig`
+#### [`config`](../../../src/RequestHandlers/Api/History.php#L85-L95)
 
-**Throws:**
+Returns `FediE2EE\PKDServer\ServerConfig`
 
-- `DependencyException`
+**Throws:** `DependencyException`
 
-#### `setWebFinger(FediE2EE\PKDServer\ActivityPub\WebFinger $wf): self`
+#### [`setWebFinger`](../../../src/RequestHandlers/Api/History.php#L100-L104)
+
+Returns `self`
 
 This is intended for mocking in unit tests
 
@@ -1270,17 +1122,15 @@ This is intended for mocking in unit tests
 
 - `$wf`: `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
-#### `webfinger(?GuzzleHttp\Client $http = null): FediE2EE\PKDServer\ActivityPub\WebFinger`
+#### [`webfinger`](../../../src/RequestHandlers/Api/History.php#L111-L118)
+
+Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
 **Parameters:**
 
-- `$http`: `?GuzzleHttp\Client` (nullable)
+- `$http`: `?GuzzleHttp\Client` = null
 
-**Throws:**
-
-- `CertaintyException`
-- `DependencyException`
-- `SodiumException`
+**Throws:** `CertaintyException`, `DependencyException`, `SodiumException`
 
 ---
 
@@ -1302,15 +1152,15 @@ This is intended for mocking in unit tests
 
 ### Methods
 
-#### `__construct(): void`
+#### [`__construct`](../../../src/RequestHandlers/Api/HistoryCosign.php#L38-L45)
 
-**Throws:**
+Returns `void`
 
-- `DependencyException`
-- `TableException`
-- `CacheException`
+**Throws:** `DependencyException`, `TableException`, `CacheException`
 
-#### `handle(Psr\Http\Message\ServerRequestInterface $request): Psr\Http\Message\ResponseInterface`
+#### [`handle`](../../../src/RequestHandlers/Api/HistoryCosign.php#L55-L102)
+
+Returns `Psr\Http\Message\ResponseInterface`
 
 **Attributes:** `#[Override]`, `#[Route]`
 
@@ -1318,44 +1168,36 @@ This is intended for mocking in unit tests
 
 - `$request`: `Psr\Http\Message\ServerRequestInterface`
 
-**Throws:**
+**Throws:** `DependencyException`, `JsonException`, `NotImplementedException`, `SodiumException`
 
-- `DependencyException`
-- `JsonException`
-- `NotImplementedException`
-- `SodiumException`
+#### [`time`](../../../src/RequestHandlers/Api/HistoryCosign.php#L34-L37)
 
-#### `time(): string`
+Returns `string`
 
-#### `canonicalizeActor(string $actor): string`
+#### [`canonicalizeActor`](../../../src/RequestHandlers/Api/HistoryCosign.php#L46-L50)
+
+Returns `string`
 
 **Parameters:**
 
 - `$actor`: `string`
 
-**Throws:**
+**Throws:** `DependencyException`, `GuzzleException`, `NetworkException`, `SodiumException`, `CertaintyException`
 
-- `DependencyException`
-- `GuzzleException`
-- `NetworkException`
-- `SodiumException`
-- `CertaintyException`
+#### [`error`](../../../src/RequestHandlers/Api/HistoryCosign.php#L58-L61)
 
-#### `error(string $message, int $code = 400): Psr\Http\Message\ResponseInterface`
+Returns `Psr\Http\Message\ResponseInterface`
 
 **Parameters:**
 
 - `$message`: `string`
-- `$code`: `int`
+- `$code`: `int` = 400
 
-**Throws:**
+**Throws:** `DependencyException`, `JsonException`, `NotImplementedException`, `SodiumException`
 
-- `DependencyException`
-- `JsonException`
-- `NotImplementedException`
-- `SodiumException`
+#### [`signResponse`](../../../src/RequestHandlers/Api/HistoryCosign.php#L72-L84)
 
-#### `signResponse(Psr\Http\Message\ResponseInterface $response): Psr\Http\Message\ResponseInterface`
+Returns `Psr\Http\Message\ResponseInterface`
 
 Implements an RFC 9421 HTTP Message Signature with Ed25519.
 
@@ -1363,81 +1205,73 @@ Implements an RFC 9421 HTTP Message Signature with Ed25519.
 
 - `$response`: `Psr\Http\Message\ResponseInterface`
 
-**Throws:**
+**Throws:** `DependencyException`, `NotImplementedException`, `SodiumException`
 
-- `DependencyException`
-- `NotImplementedException`
-- `SodiumException`
+#### [`json`](../../../src/RequestHandlers/Api/HistoryCosign.php#L94-L119)
 
-#### `json(object|array $data, int $status = 200, array $headers = []): Psr\Http\Message\ResponseInterface`
+Returns `Psr\Http\Message\ResponseInterface`
 
 Return a JSON response with HTTP Message Signature (from signResponse())
 
 **Parameters:**
 
 - `$data`: `object|array`
-- `$status`: `int`
-- `$headers`: `array`
+- `$status`: `int` = 200
+- `$headers`: `array` = []
 
-**Throws:**
+**Throws:** `DependencyException`, `JsonException`, `NotImplementedException`, `SodiumException`
 
-- `DependencyException`
-- `JsonException`
-- `NotImplementedException`
-- `SodiumException`
+#### [`twig`](../../../src/RequestHandlers/Api/HistoryCosign.php#L127-L144)
 
-#### `twig(string $template, array $vars = [], array $headers = [], int $status = 200): Psr\Http\Message\ResponseInterface`
+Returns `Psr\Http\Message\ResponseInterface`
 
 **Parameters:**
 
 - `$template`: `string`
-- `$vars`: `array`
-- `$headers`: `array`
-- `$status`: `int`
+- `$vars`: `array` = []
+- `$headers`: `array` = []
+- `$status`: `int` = 200
 
-**Throws:**
+**Throws:** `DependencyException`, `LoaderError`, `RuntimeError`, `SyntaxError`
 
-- `DependencyException`
-- `LoaderError`
-- `RuntimeError`
-- `SyntaxError`
+#### [`appCache`](../../../src/RequestHandlers/Api/HistoryCosign.php#L42-L45)
 
-#### `appCache(string $namespace, int $defaultTTL = 60): FediE2EE\PKDServer\AppCache`
+Returns `FediE2EE\PKDServer\AppCache`
 
 **Parameters:**
 
 - `$namespace`: `string`
-- `$defaultTTL`: `int`
+- `$defaultTTL`: `int` = 60
 
-**Throws:**
+**Throws:** `DependencyException`
 
-- `DependencyException`
+#### [`table`](../../../src/RequestHandlers/Api/HistoryCosign.php#L52-L75)
 
-#### `table(string $tableName): FediE2EE\PKDServer\Table`
+Returns `FediE2EE\PKDServer\Table`
 
 **Parameters:**
 
 - `$tableName`: `string`
 
-**Throws:**
+**Throws:** `CacheException`, `DependencyException`, `TableException`
 
-- `CacheException`
-- `DependencyException`
-- `TableException`
+#### [`injectConfig`](../../../src/RequestHandlers/Api/HistoryCosign.php#L77-L80)
 
-#### `injectConfig(FediE2EE\PKDServer\ServerConfig $config): void`
+Returns `void`
 
 **Parameters:**
 
 - `$config`: `FediE2EE\PKDServer\ServerConfig`
 
-#### `config(): FediE2EE\PKDServer\ServerConfig`
+#### [`config`](../../../src/RequestHandlers/Api/HistoryCosign.php#L85-L95)
 
-**Throws:**
+Returns `FediE2EE\PKDServer\ServerConfig`
 
-- `DependencyException`
+**Throws:** `DependencyException`
 
-#### `setWebFinger(FediE2EE\PKDServer\ActivityPub\WebFinger $wf): self`
+#### [`setWebFinger`](../../../src/RequestHandlers/Api/HistoryCosign.php#L100-L104)
+
+Returns `self`
 
 This is intended for mocking in unit tests
 
@@ -1445,17 +1279,15 @@ This is intended for mocking in unit tests
 
 - `$wf`: `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
-#### `webfinger(?GuzzleHttp\Client $http = null): FediE2EE\PKDServer\ActivityPub\WebFinger`
+#### [`webfinger`](../../../src/RequestHandlers/Api/HistoryCosign.php#L111-L118)
+
+Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
 **Parameters:**
 
-- `$http`: `?GuzzleHttp\Client` (nullable)
+- `$http`: `?GuzzleHttp\Client` = null
 
-**Throws:**
-
-- `CertaintyException`
-- `DependencyException`
-- `SodiumException`
+**Throws:** `CertaintyException`, `DependencyException`, `SodiumException`
 
 ---
 
@@ -1477,19 +1309,21 @@ This is intended for mocking in unit tests
 
 ### Methods
 
-#### `__construct(): void`
+#### [`__construct`](../../../src/RequestHandlers/Api/HistorySince.php#L40-L47)
 
-**Throws:**
+Returns `void`
 
-- `DependencyException`
-- `TableException`
-- `CacheException`
+**Throws:** `DependencyException`, `TableException`, `CacheException`
 
-#### `getPrimaryCacheKey(): string`
+#### [`getPrimaryCacheKey`](../../../src/RequestHandlers/Api/HistorySince.php#L50-L53)
+
+Returns `string`
 
 **Attributes:** `#[Override]`
 
-#### `handle(Psr\Http\Message\ServerRequestInterface $request): Psr\Http\Message\ResponseInterface`
+#### [`handle`](../../../src/RequestHandlers/Api/HistorySince.php#L63-L82)
+
+Returns `Psr\Http\Message\ResponseInterface`
 
 **Attributes:** `#[Route]`, `#[Override]`
 
@@ -1497,50 +1331,42 @@ This is intended for mocking in unit tests
 
 - `$request`: `Psr\Http\Message\ServerRequestInterface`
 
-**Throws:**
+**Throws:** `DependencyException`, `JsonException`, `NotImplementedException`, `SodiumException`
 
-- `DependencyException`
-- `JsonException`
-- `NotImplementedException`
-- `SodiumException`
+#### [`clearCache`](../../../src/RequestHandlers/Api/HistorySince.php#L34-L37)
 
-#### `clearCache(): bool`
+Returns `bool`
 
-**Throws:**
+**Throws:** `DependencyException`
 
-- `DependencyException`
+#### [`time`](../../../src/RequestHandlers/Api/HistorySince.php#L34-L37)
 
-#### `time(): string`
+Returns `string`
 
-#### `canonicalizeActor(string $actor): string`
+#### [`canonicalizeActor`](../../../src/RequestHandlers/Api/HistorySince.php#L46-L50)
+
+Returns `string`
 
 **Parameters:**
 
 - `$actor`: `string`
 
-**Throws:**
+**Throws:** `DependencyException`, `GuzzleException`, `NetworkException`, `SodiumException`, `CertaintyException`
 
-- `DependencyException`
-- `GuzzleException`
-- `NetworkException`
-- `SodiumException`
-- `CertaintyException`
+#### [`error`](../../../src/RequestHandlers/Api/HistorySince.php#L58-L61)
 
-#### `error(string $message, int $code = 400): Psr\Http\Message\ResponseInterface`
+Returns `Psr\Http\Message\ResponseInterface`
 
 **Parameters:**
 
 - `$message`: `string`
-- `$code`: `int`
+- `$code`: `int` = 400
 
-**Throws:**
+**Throws:** `DependencyException`, `JsonException`, `NotImplementedException`, `SodiumException`
 
-- `DependencyException`
-- `JsonException`
-- `NotImplementedException`
-- `SodiumException`
+#### [`signResponse`](../../../src/RequestHandlers/Api/HistorySince.php#L72-L84)
 
-#### `signResponse(Psr\Http\Message\ResponseInterface $response): Psr\Http\Message\ResponseInterface`
+Returns `Psr\Http\Message\ResponseInterface`
 
 Implements an RFC 9421 HTTP Message Signature with Ed25519.
 
@@ -1548,81 +1374,73 @@ Implements an RFC 9421 HTTP Message Signature with Ed25519.
 
 - `$response`: `Psr\Http\Message\ResponseInterface`
 
-**Throws:**
+**Throws:** `DependencyException`, `NotImplementedException`, `SodiumException`
 
-- `DependencyException`
-- `NotImplementedException`
-- `SodiumException`
+#### [`json`](../../../src/RequestHandlers/Api/HistorySince.php#L94-L119)
 
-#### `json(object|array $data, int $status = 200, array $headers = []): Psr\Http\Message\ResponseInterface`
+Returns `Psr\Http\Message\ResponseInterface`
 
 Return a JSON response with HTTP Message Signature (from signResponse())
 
 **Parameters:**
 
 - `$data`: `object|array`
-- `$status`: `int`
-- `$headers`: `array`
+- `$status`: `int` = 200
+- `$headers`: `array` = []
 
-**Throws:**
+**Throws:** `DependencyException`, `JsonException`, `NotImplementedException`, `SodiumException`
 
-- `DependencyException`
-- `JsonException`
-- `NotImplementedException`
-- `SodiumException`
+#### [`twig`](../../../src/RequestHandlers/Api/HistorySince.php#L127-L144)
 
-#### `twig(string $template, array $vars = [], array $headers = [], int $status = 200): Psr\Http\Message\ResponseInterface`
+Returns `Psr\Http\Message\ResponseInterface`
 
 **Parameters:**
 
 - `$template`: `string`
-- `$vars`: `array`
-- `$headers`: `array`
-- `$status`: `int`
+- `$vars`: `array` = []
+- `$headers`: `array` = []
+- `$status`: `int` = 200
 
-**Throws:**
+**Throws:** `DependencyException`, `LoaderError`, `RuntimeError`, `SyntaxError`
 
-- `DependencyException`
-- `LoaderError`
-- `RuntimeError`
-- `SyntaxError`
+#### [`appCache`](../../../src/RequestHandlers/Api/HistorySince.php#L42-L45)
 
-#### `appCache(string $namespace, int $defaultTTL = 60): FediE2EE\PKDServer\AppCache`
+Returns `FediE2EE\PKDServer\AppCache`
 
 **Parameters:**
 
 - `$namespace`: `string`
-- `$defaultTTL`: `int`
+- `$defaultTTL`: `int` = 60
 
-**Throws:**
+**Throws:** `DependencyException`
 
-- `DependencyException`
+#### [`table`](../../../src/RequestHandlers/Api/HistorySince.php#L52-L75)
 
-#### `table(string $tableName): FediE2EE\PKDServer\Table`
+Returns `FediE2EE\PKDServer\Table`
 
 **Parameters:**
 
 - `$tableName`: `string`
 
-**Throws:**
+**Throws:** `CacheException`, `DependencyException`, `TableException`
 
-- `CacheException`
-- `DependencyException`
-- `TableException`
+#### [`injectConfig`](../../../src/RequestHandlers/Api/HistorySince.php#L77-L80)
 
-#### `injectConfig(FediE2EE\PKDServer\ServerConfig $config): void`
+Returns `void`
 
 **Parameters:**
 
 - `$config`: `FediE2EE\PKDServer\ServerConfig`
 
-#### `config(): FediE2EE\PKDServer\ServerConfig`
+#### [`config`](../../../src/RequestHandlers/Api/HistorySince.php#L85-L95)
 
-**Throws:**
+Returns `FediE2EE\PKDServer\ServerConfig`
 
-- `DependencyException`
+**Throws:** `DependencyException`
 
-#### `setWebFinger(FediE2EE\PKDServer\ActivityPub\WebFinger $wf): self`
+#### [`setWebFinger`](../../../src/RequestHandlers/Api/HistorySince.php#L100-L104)
+
+Returns `self`
 
 This is intended for mocking in unit tests
 
@@ -1630,17 +1448,15 @@ This is intended for mocking in unit tests
 
 - `$wf`: `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
-#### `webfinger(?GuzzleHttp\Client $http = null): FediE2EE\PKDServer\ActivityPub\WebFinger`
+#### [`webfinger`](../../../src/RequestHandlers/Api/HistorySince.php#L111-L118)
+
+Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
 **Parameters:**
 
-- `$http`: `?GuzzleHttp\Client` (nullable)
+- `$http`: `?GuzzleHttp\Client` = null
 
-**Throws:**
-
-- `CertaintyException`
-- `DependencyException`
-- `SodiumException`
+**Throws:** `CertaintyException`, `DependencyException`, `SodiumException`
 
 ---
 
@@ -1662,19 +1478,21 @@ This is intended for mocking in unit tests
 
 ### Methods
 
-#### `__construct(): void`
+#### [`__construct`](../../../src/RequestHandlers/Api/HistoryView.php#L48-L55)
 
-**Throws:**
+Returns `void`
 
-- `DependencyException`
-- `TableException`
-- `CacheException`
+**Throws:** `DependencyException`, `TableException`, `CacheException`
 
-#### `getPrimaryCacheKey(): string`
+#### [`getPrimaryCacheKey`](../../../src/RequestHandlers/Api/HistoryView.php#L58-L61)
+
+Returns `string`
 
 **Attributes:** `#[Override]`
 
-#### `handle(Psr\Http\Message\ServerRequestInterface $request): Psr\Http\Message\ResponseInterface`
+#### [`handle`](../../../src/RequestHandlers/Api/HistoryView.php#L76-L108)
+
+Returns `Psr\Http\Message\ResponseInterface`
 
 **Attributes:** `#[Route]`, `#[Override]`
 
@@ -1682,54 +1500,42 @@ This is intended for mocking in unit tests
 
 - `$request`: `Psr\Http\Message\ServerRequestInterface`
 
-**Throws:**
+**Throws:** `BundleException`, `CryptoException`, `DependencyException`, `HPKEException`, `InputException`, `InvalidArgumentException`, `JsonException`, `NotImplementedException`, `SodiumException`
 
-- `BundleException`
-- `CryptoException`
-- `DependencyException`
-- `HPKEException`
-- `InputException`
-- `JsonException`
-- `NotImplementedException`
-- `SodiumException`
+#### [`clearCache`](../../../src/RequestHandlers/Api/HistoryView.php#L34-L37)
 
-#### `clearCache(): bool`
+Returns `bool`
 
-**Throws:**
+**Throws:** `DependencyException`
 
-- `DependencyException`
+#### [`time`](../../../src/RequestHandlers/Api/HistoryView.php#L34-L37)
 
-#### `time(): string`
+Returns `string`
 
-#### `canonicalizeActor(string $actor): string`
+#### [`canonicalizeActor`](../../../src/RequestHandlers/Api/HistoryView.php#L46-L50)
+
+Returns `string`
 
 **Parameters:**
 
 - `$actor`: `string`
 
-**Throws:**
+**Throws:** `DependencyException`, `GuzzleException`, `NetworkException`, `SodiumException`, `CertaintyException`
 
-- `DependencyException`
-- `GuzzleException`
-- `NetworkException`
-- `SodiumException`
-- `CertaintyException`
+#### [`error`](../../../src/RequestHandlers/Api/HistoryView.php#L58-L61)
 
-#### `error(string $message, int $code = 400): Psr\Http\Message\ResponseInterface`
+Returns `Psr\Http\Message\ResponseInterface`
 
 **Parameters:**
 
 - `$message`: `string`
-- `$code`: `int`
+- `$code`: `int` = 400
 
-**Throws:**
+**Throws:** `DependencyException`, `JsonException`, `NotImplementedException`, `SodiumException`
 
-- `DependencyException`
-- `JsonException`
-- `NotImplementedException`
-- `SodiumException`
+#### [`signResponse`](../../../src/RequestHandlers/Api/HistoryView.php#L72-L84)
 
-#### `signResponse(Psr\Http\Message\ResponseInterface $response): Psr\Http\Message\ResponseInterface`
+Returns `Psr\Http\Message\ResponseInterface`
 
 Implements an RFC 9421 HTTP Message Signature with Ed25519.
 
@@ -1737,81 +1543,73 @@ Implements an RFC 9421 HTTP Message Signature with Ed25519.
 
 - `$response`: `Psr\Http\Message\ResponseInterface`
 
-**Throws:**
+**Throws:** `DependencyException`, `NotImplementedException`, `SodiumException`
 
-- `DependencyException`
-- `NotImplementedException`
-- `SodiumException`
+#### [`json`](../../../src/RequestHandlers/Api/HistoryView.php#L94-L119)
 
-#### `json(object|array $data, int $status = 200, array $headers = []): Psr\Http\Message\ResponseInterface`
+Returns `Psr\Http\Message\ResponseInterface`
 
 Return a JSON response with HTTP Message Signature (from signResponse())
 
 **Parameters:**
 
 - `$data`: `object|array`
-- `$status`: `int`
-- `$headers`: `array`
+- `$status`: `int` = 200
+- `$headers`: `array` = []
 
-**Throws:**
+**Throws:** `DependencyException`, `JsonException`, `NotImplementedException`, `SodiumException`
 
-- `DependencyException`
-- `JsonException`
-- `NotImplementedException`
-- `SodiumException`
+#### [`twig`](../../../src/RequestHandlers/Api/HistoryView.php#L127-L144)
 
-#### `twig(string $template, array $vars = [], array $headers = [], int $status = 200): Psr\Http\Message\ResponseInterface`
+Returns `Psr\Http\Message\ResponseInterface`
 
 **Parameters:**
 
 - `$template`: `string`
-- `$vars`: `array`
-- `$headers`: `array`
-- `$status`: `int`
+- `$vars`: `array` = []
+- `$headers`: `array` = []
+- `$status`: `int` = 200
 
-**Throws:**
+**Throws:** `DependencyException`, `LoaderError`, `RuntimeError`, `SyntaxError`
 
-- `DependencyException`
-- `LoaderError`
-- `RuntimeError`
-- `SyntaxError`
+#### [`appCache`](../../../src/RequestHandlers/Api/HistoryView.php#L42-L45)
 
-#### `appCache(string $namespace, int $defaultTTL = 60): FediE2EE\PKDServer\AppCache`
+Returns `FediE2EE\PKDServer\AppCache`
 
 **Parameters:**
 
 - `$namespace`: `string`
-- `$defaultTTL`: `int`
+- `$defaultTTL`: `int` = 60
 
-**Throws:**
+**Throws:** `DependencyException`
 
-- `DependencyException`
+#### [`table`](../../../src/RequestHandlers/Api/HistoryView.php#L52-L75)
 
-#### `table(string $tableName): FediE2EE\PKDServer\Table`
+Returns `FediE2EE\PKDServer\Table`
 
 **Parameters:**
 
 - `$tableName`: `string`
 
-**Throws:**
+**Throws:** `CacheException`, `DependencyException`, `TableException`
 
-- `CacheException`
-- `DependencyException`
-- `TableException`
+#### [`injectConfig`](../../../src/RequestHandlers/Api/HistoryView.php#L77-L80)
 
-#### `injectConfig(FediE2EE\PKDServer\ServerConfig $config): void`
+Returns `void`
 
 **Parameters:**
 
 - `$config`: `FediE2EE\PKDServer\ServerConfig`
 
-#### `config(): FediE2EE\PKDServer\ServerConfig`
+#### [`config`](../../../src/RequestHandlers/Api/HistoryView.php#L85-L95)
 
-**Throws:**
+Returns `FediE2EE\PKDServer\ServerConfig`
 
-- `DependencyException`
+**Throws:** `DependencyException`
 
-#### `setWebFinger(FediE2EE\PKDServer\ActivityPub\WebFinger $wf): self`
+#### [`setWebFinger`](../../../src/RequestHandlers/Api/HistoryView.php#L100-L104)
+
+Returns `self`
 
 This is intended for mocking in unit tests
 
@@ -1819,17 +1617,15 @@ This is intended for mocking in unit tests
 
 - `$wf`: `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
-#### `webfinger(?GuzzleHttp\Client $http = null): FediE2EE\PKDServer\ActivityPub\WebFinger`
+#### [`webfinger`](../../../src/RequestHandlers/Api/HistoryView.php#L111-L118)
+
+Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
 **Parameters:**
 
-- `$http`: `?GuzzleHttp\Client` (nullable)
+- `$http`: `?GuzzleHttp\Client` = null
 
-**Throws:**
-
-- `CertaintyException`
-- `DependencyException`
-- `SodiumException`
+**Throws:** `CertaintyException`, `DependencyException`, `SodiumException`
 
 ---
 
@@ -1851,7 +1647,9 @@ This is intended for mocking in unit tests
 
 ### Methods
 
-#### `handle(Psr\Http\Message\ServerRequestInterface $request): Psr\Http\Message\ResponseInterface`
+#### [`handle`](../../../src/RequestHandlers/Api/Info.php#L22-L33)
+
+Returns `Psr\Http\Message\ResponseInterface`
 
 **Attributes:** `#[Route]`, `#[Override]`
 
@@ -1859,37 +1657,34 @@ This is intended for mocking in unit tests
 
 - `$request`: `Psr\Http\Message\ServerRequestInterface`
 
-#### `time(): string`
+#### [`time`](../../../src/RequestHandlers/Api/Info.php#L34-L37)
 
-#### `canonicalizeActor(string $actor): string`
+Returns `string`
+
+#### [`canonicalizeActor`](../../../src/RequestHandlers/Api/Info.php#L46-L50)
+
+Returns `string`
 
 **Parameters:**
 
 - `$actor`: `string`
 
-**Throws:**
+**Throws:** `DependencyException`, `GuzzleException`, `NetworkException`, `SodiumException`, `CertaintyException`
 
-- `DependencyException`
-- `GuzzleException`
-- `NetworkException`
-- `SodiumException`
-- `CertaintyException`
+#### [`error`](../../../src/RequestHandlers/Api/Info.php#L58-L61)
 
-#### `error(string $message, int $code = 400): Psr\Http\Message\ResponseInterface`
+Returns `Psr\Http\Message\ResponseInterface`
 
 **Parameters:**
 
 - `$message`: `string`
-- `$code`: `int`
+- `$code`: `int` = 400
 
-**Throws:**
+**Throws:** `DependencyException`, `JsonException`, `NotImplementedException`, `SodiumException`
 
-- `DependencyException`
-- `JsonException`
-- `NotImplementedException`
-- `SodiumException`
+#### [`signResponse`](../../../src/RequestHandlers/Api/Info.php#L72-L84)
 
-#### `signResponse(Psr\Http\Message\ResponseInterface $response): Psr\Http\Message\ResponseInterface`
+Returns `Psr\Http\Message\ResponseInterface`
 
 Implements an RFC 9421 HTTP Message Signature with Ed25519.
 
@@ -1897,81 +1692,73 @@ Implements an RFC 9421 HTTP Message Signature with Ed25519.
 
 - `$response`: `Psr\Http\Message\ResponseInterface`
 
-**Throws:**
+**Throws:** `DependencyException`, `NotImplementedException`, `SodiumException`
 
-- `DependencyException`
-- `NotImplementedException`
-- `SodiumException`
+#### [`json`](../../../src/RequestHandlers/Api/Info.php#L94-L119)
 
-#### `json(object|array $data, int $status = 200, array $headers = []): Psr\Http\Message\ResponseInterface`
+Returns `Psr\Http\Message\ResponseInterface`
 
 Return a JSON response with HTTP Message Signature (from signResponse())
 
 **Parameters:**
 
 - `$data`: `object|array`
-- `$status`: `int`
-- `$headers`: `array`
+- `$status`: `int` = 200
+- `$headers`: `array` = []
 
-**Throws:**
+**Throws:** `DependencyException`, `JsonException`, `NotImplementedException`, `SodiumException`
 
-- `DependencyException`
-- `JsonException`
-- `NotImplementedException`
-- `SodiumException`
+#### [`twig`](../../../src/RequestHandlers/Api/Info.php#L127-L144)
 
-#### `twig(string $template, array $vars = [], array $headers = [], int $status = 200): Psr\Http\Message\ResponseInterface`
+Returns `Psr\Http\Message\ResponseInterface`
 
 **Parameters:**
 
 - `$template`: `string`
-- `$vars`: `array`
-- `$headers`: `array`
-- `$status`: `int`
+- `$vars`: `array` = []
+- `$headers`: `array` = []
+- `$status`: `int` = 200
 
-**Throws:**
+**Throws:** `DependencyException`, `LoaderError`, `RuntimeError`, `SyntaxError`
 
-- `DependencyException`
-- `LoaderError`
-- `RuntimeError`
-- `SyntaxError`
+#### [`appCache`](../../../src/RequestHandlers/Api/Info.php#L42-L45)
 
-#### `appCache(string $namespace, int $defaultTTL = 60): FediE2EE\PKDServer\AppCache`
+Returns `FediE2EE\PKDServer\AppCache`
 
 **Parameters:**
 
 - `$namespace`: `string`
-- `$defaultTTL`: `int`
+- `$defaultTTL`: `int` = 60
 
-**Throws:**
+**Throws:** `DependencyException`
 
-- `DependencyException`
+#### [`table`](../../../src/RequestHandlers/Api/Info.php#L52-L75)
 
-#### `table(string $tableName): FediE2EE\PKDServer\Table`
+Returns `FediE2EE\PKDServer\Table`
 
 **Parameters:**
 
 - `$tableName`: `string`
 
-**Throws:**
+**Throws:** `CacheException`, `DependencyException`, `TableException`
 
-- `CacheException`
-- `DependencyException`
-- `TableException`
+#### [`injectConfig`](../../../src/RequestHandlers/Api/Info.php#L77-L80)
 
-#### `injectConfig(FediE2EE\PKDServer\ServerConfig $config): void`
+Returns `void`
 
 **Parameters:**
 
 - `$config`: `FediE2EE\PKDServer\ServerConfig`
 
-#### `config(): FediE2EE\PKDServer\ServerConfig`
+#### [`config`](../../../src/RequestHandlers/Api/Info.php#L85-L95)
 
-**Throws:**
+Returns `FediE2EE\PKDServer\ServerConfig`
 
-- `DependencyException`
+**Throws:** `DependencyException`
 
-#### `setWebFinger(FediE2EE\PKDServer\ActivityPub\WebFinger $wf): self`
+#### [`setWebFinger`](../../../src/RequestHandlers/Api/Info.php#L100-L104)
+
+Returns `self`
 
 This is intended for mocking in unit tests
 
@@ -1979,17 +1766,15 @@ This is intended for mocking in unit tests
 
 - `$wf`: `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
-#### `webfinger(?GuzzleHttp\Client $http = null): FediE2EE\PKDServer\ActivityPub\WebFinger`
+#### [`webfinger`](../../../src/RequestHandlers/Api/Info.php#L111-L118)
+
+Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
 **Parameters:**
 
-- `$http`: `?GuzzleHttp\Client` (nullable)
+- `$http`: `?GuzzleHttp\Client` = null
 
-**Throws:**
-
-- `CertaintyException`
-- `DependencyException`
-- `SodiumException`
+**Throws:** `CertaintyException`, `DependencyException`, `SodiumException`
 
 ---
 
@@ -2011,17 +1796,15 @@ This is intended for mocking in unit tests
 
 ### Methods
 
-#### `__construct(): void`
+#### [`__construct`](../../../src/RequestHandlers/Api/ListAuxData.php#L50-L63)
 
-**Throws:**
+Returns `void`
 
-- `CacheException`
-- `DependencyException`
-- `TableException`
+**Throws:** `CacheException`, `DependencyException`, `TableException`
 
-#### `handle(Psr\Http\Message\ServerRequestInterface $request): Psr\Http\Message\ResponseInterface`
+#### [`handle`](../../../src/RequestHandlers/Api/ListAuxData.php#L81-L108)
 
-**API Method**
+**API** · Returns `Psr\Http\Message\ResponseInterface`
 
 **Attributes:** `#[Route]`, `#[Override]`
 
@@ -2029,50 +1812,36 @@ This is intended for mocking in unit tests
 
 - `$request`: `Psr\Http\Message\ServerRequestInterface`
 
-**Throws:**
+**Throws:** `ArrayKeyException`, `BlindIndexNotFoundException`, `CipherSweetException`, `CryptoOperationException`, `DependencyException`, `InvalidCiphertextException`, `JsonException`, `NotImplementedException`, `SodiumException`, `TableException`
 
-- `ArrayKeyException`
-- `BlindIndexNotFoundException`
-- `CipherSweetException`
-- `CryptoOperationException`
-- `DependencyException`
-- `InvalidCiphertextException`
-- `JsonException`
-- `NotImplementedException`
-- `SodiumException`
-- `TableException`
+#### [`time`](../../../src/RequestHandlers/Api/ListAuxData.php#L34-L37)
 
-#### `time(): string`
+Returns `string`
 
-#### `canonicalizeActor(string $actor): string`
+#### [`canonicalizeActor`](../../../src/RequestHandlers/Api/ListAuxData.php#L46-L50)
+
+Returns `string`
 
 **Parameters:**
 
 - `$actor`: `string`
 
-**Throws:**
+**Throws:** `DependencyException`, `GuzzleException`, `NetworkException`, `SodiumException`, `CertaintyException`
 
-- `DependencyException`
-- `GuzzleException`
-- `NetworkException`
-- `SodiumException`
-- `CertaintyException`
+#### [`error`](../../../src/RequestHandlers/Api/ListAuxData.php#L58-L61)
 
-#### `error(string $message, int $code = 400): Psr\Http\Message\ResponseInterface`
+Returns `Psr\Http\Message\ResponseInterface`
 
 **Parameters:**
 
 - `$message`: `string`
-- `$code`: `int`
+- `$code`: `int` = 400
 
-**Throws:**
+**Throws:** `DependencyException`, `JsonException`, `NotImplementedException`, `SodiumException`
 
-- `DependencyException`
-- `JsonException`
-- `NotImplementedException`
-- `SodiumException`
+#### [`signResponse`](../../../src/RequestHandlers/Api/ListAuxData.php#L72-L84)
 
-#### `signResponse(Psr\Http\Message\ResponseInterface $response): Psr\Http\Message\ResponseInterface`
+Returns `Psr\Http\Message\ResponseInterface`
 
 Implements an RFC 9421 HTTP Message Signature with Ed25519.
 
@@ -2080,81 +1849,73 @@ Implements an RFC 9421 HTTP Message Signature with Ed25519.
 
 - `$response`: `Psr\Http\Message\ResponseInterface`
 
-**Throws:**
+**Throws:** `DependencyException`, `NotImplementedException`, `SodiumException`
 
-- `DependencyException`
-- `NotImplementedException`
-- `SodiumException`
+#### [`json`](../../../src/RequestHandlers/Api/ListAuxData.php#L94-L119)
 
-#### `json(object|array $data, int $status = 200, array $headers = []): Psr\Http\Message\ResponseInterface`
+Returns `Psr\Http\Message\ResponseInterface`
 
 Return a JSON response with HTTP Message Signature (from signResponse())
 
 **Parameters:**
 
 - `$data`: `object|array`
-- `$status`: `int`
-- `$headers`: `array`
+- `$status`: `int` = 200
+- `$headers`: `array` = []
 
-**Throws:**
+**Throws:** `DependencyException`, `JsonException`, `NotImplementedException`, `SodiumException`
 
-- `DependencyException`
-- `JsonException`
-- `NotImplementedException`
-- `SodiumException`
+#### [`twig`](../../../src/RequestHandlers/Api/ListAuxData.php#L127-L144)
 
-#### `twig(string $template, array $vars = [], array $headers = [], int $status = 200): Psr\Http\Message\ResponseInterface`
+Returns `Psr\Http\Message\ResponseInterface`
 
 **Parameters:**
 
 - `$template`: `string`
-- `$vars`: `array`
-- `$headers`: `array`
-- `$status`: `int`
+- `$vars`: `array` = []
+- `$headers`: `array` = []
+- `$status`: `int` = 200
 
-**Throws:**
+**Throws:** `DependencyException`, `LoaderError`, `RuntimeError`, `SyntaxError`
 
-- `DependencyException`
-- `LoaderError`
-- `RuntimeError`
-- `SyntaxError`
+#### [`appCache`](../../../src/RequestHandlers/Api/ListAuxData.php#L42-L45)
 
-#### `appCache(string $namespace, int $defaultTTL = 60): FediE2EE\PKDServer\AppCache`
+Returns `FediE2EE\PKDServer\AppCache`
 
 **Parameters:**
 
 - `$namespace`: `string`
-- `$defaultTTL`: `int`
+- `$defaultTTL`: `int` = 60
 
-**Throws:**
+**Throws:** `DependencyException`
 
-- `DependencyException`
+#### [`table`](../../../src/RequestHandlers/Api/ListAuxData.php#L52-L75)
 
-#### `table(string $tableName): FediE2EE\PKDServer\Table`
+Returns `FediE2EE\PKDServer\Table`
 
 **Parameters:**
 
 - `$tableName`: `string`
 
-**Throws:**
+**Throws:** `CacheException`, `DependencyException`, `TableException`
 
-- `CacheException`
-- `DependencyException`
-- `TableException`
+#### [`injectConfig`](../../../src/RequestHandlers/Api/ListAuxData.php#L77-L80)
 
-#### `injectConfig(FediE2EE\PKDServer\ServerConfig $config): void`
+Returns `void`
 
 **Parameters:**
 
 - `$config`: `FediE2EE\PKDServer\ServerConfig`
 
-#### `config(): FediE2EE\PKDServer\ServerConfig`
+#### [`config`](../../../src/RequestHandlers/Api/ListAuxData.php#L85-L95)
 
-**Throws:**
+Returns `FediE2EE\PKDServer\ServerConfig`
 
-- `DependencyException`
+**Throws:** `DependencyException`
 
-#### `setWebFinger(FediE2EE\PKDServer\ActivityPub\WebFinger $wf): self`
+#### [`setWebFinger`](../../../src/RequestHandlers/Api/ListAuxData.php#L100-L104)
+
+Returns `self`
 
 This is intended for mocking in unit tests
 
@@ -2162,17 +1923,15 @@ This is intended for mocking in unit tests
 
 - `$wf`: `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
-#### `webfinger(?GuzzleHttp\Client $http = null): FediE2EE\PKDServer\ActivityPub\WebFinger`
+#### [`webfinger`](../../../src/RequestHandlers/Api/ListAuxData.php#L111-L118)
+
+Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
 **Parameters:**
 
-- `$http`: `?GuzzleHttp\Client` (nullable)
+- `$http`: `?GuzzleHttp\Client` = null
 
-**Throws:**
-
-- `CertaintyException`
-- `DependencyException`
-- `SodiumException`
+**Throws:** `CertaintyException`, `DependencyException`, `SodiumException`
 
 ---
 
@@ -2194,17 +1953,15 @@ This is intended for mocking in unit tests
 
 ### Methods
 
-#### `__construct(): void`
+#### [`__construct`](../../../src/RequestHandlers/Api/ListKeys.php#L51-L64)
 
-**Throws:**
+Returns `void`
 
-- `CacheException`
-- `DependencyException`
-- `TableException`
+**Throws:** `CacheException`, `DependencyException`, `TableException`
 
-#### `handle(Psr\Http\Message\ServerRequestInterface $request): Psr\Http\Message\ResponseInterface`
+#### [`handle`](../../../src/RequestHandlers/Api/ListKeys.php#L82-L119)
 
-**API Method**
+**API** · Returns `Psr\Http\Message\ResponseInterface`
 
 **Attributes:** `#[Route]`, `#[Override]`
 
@@ -2212,50 +1969,36 @@ This is intended for mocking in unit tests
 
 - `$request`: `Psr\Http\Message\ServerRequestInterface`
 
-**Throws:**
+**Throws:** `ArrayKeyException`, `BlindIndexNotFoundException`, `CipherSweetException`, `CryptoOperationException`, `DependencyException`, `InvalidCiphertextException`, `JsonException`, `NotImplementedException`, `SodiumException`, `TableException`
 
-- `ArrayKeyException`
-- `BlindIndexNotFoundException`
-- `CipherSweetException`
-- `CryptoOperationException`
-- `DependencyException`
-- `InvalidCiphertextException`
-- `JsonException`
-- `NotImplementedException`
-- `SodiumException`
-- `TableException`
+#### [`time`](../../../src/RequestHandlers/Api/ListKeys.php#L34-L37)
 
-#### `time(): string`
+Returns `string`
 
-#### `canonicalizeActor(string $actor): string`
+#### [`canonicalizeActor`](../../../src/RequestHandlers/Api/ListKeys.php#L46-L50)
+
+Returns `string`
 
 **Parameters:**
 
 - `$actor`: `string`
 
-**Throws:**
+**Throws:** `DependencyException`, `GuzzleException`, `NetworkException`, `SodiumException`, `CertaintyException`
 
-- `DependencyException`
-- `GuzzleException`
-- `NetworkException`
-- `SodiumException`
-- `CertaintyException`
+#### [`error`](../../../src/RequestHandlers/Api/ListKeys.php#L58-L61)
 
-#### `error(string $message, int $code = 400): Psr\Http\Message\ResponseInterface`
+Returns `Psr\Http\Message\ResponseInterface`
 
 **Parameters:**
 
 - `$message`: `string`
-- `$code`: `int`
+- `$code`: `int` = 400
 
-**Throws:**
+**Throws:** `DependencyException`, `JsonException`, `NotImplementedException`, `SodiumException`
 
-- `DependencyException`
-- `JsonException`
-- `NotImplementedException`
-- `SodiumException`
+#### [`signResponse`](../../../src/RequestHandlers/Api/ListKeys.php#L72-L84)
 
-#### `signResponse(Psr\Http\Message\ResponseInterface $response): Psr\Http\Message\ResponseInterface`
+Returns `Psr\Http\Message\ResponseInterface`
 
 Implements an RFC 9421 HTTP Message Signature with Ed25519.
 
@@ -2263,81 +2006,73 @@ Implements an RFC 9421 HTTP Message Signature with Ed25519.
 
 - `$response`: `Psr\Http\Message\ResponseInterface`
 
-**Throws:**
+**Throws:** `DependencyException`, `NotImplementedException`, `SodiumException`
 
-- `DependencyException`
-- `NotImplementedException`
-- `SodiumException`
+#### [`json`](../../../src/RequestHandlers/Api/ListKeys.php#L94-L119)
 
-#### `json(object|array $data, int $status = 200, array $headers = []): Psr\Http\Message\ResponseInterface`
+Returns `Psr\Http\Message\ResponseInterface`
 
 Return a JSON response with HTTP Message Signature (from signResponse())
 
 **Parameters:**
 
 - `$data`: `object|array`
-- `$status`: `int`
-- `$headers`: `array`
+- `$status`: `int` = 200
+- `$headers`: `array` = []
 
-**Throws:**
+**Throws:** `DependencyException`, `JsonException`, `NotImplementedException`, `SodiumException`
 
-- `DependencyException`
-- `JsonException`
-- `NotImplementedException`
-- `SodiumException`
+#### [`twig`](../../../src/RequestHandlers/Api/ListKeys.php#L127-L144)
 
-#### `twig(string $template, array $vars = [], array $headers = [], int $status = 200): Psr\Http\Message\ResponseInterface`
+Returns `Psr\Http\Message\ResponseInterface`
 
 **Parameters:**
 
 - `$template`: `string`
-- `$vars`: `array`
-- `$headers`: `array`
-- `$status`: `int`
+- `$vars`: `array` = []
+- `$headers`: `array` = []
+- `$status`: `int` = 200
 
-**Throws:**
+**Throws:** `DependencyException`, `LoaderError`, `RuntimeError`, `SyntaxError`
 
-- `DependencyException`
-- `LoaderError`
-- `RuntimeError`
-- `SyntaxError`
+#### [`appCache`](../../../src/RequestHandlers/Api/ListKeys.php#L42-L45)
 
-#### `appCache(string $namespace, int $defaultTTL = 60): FediE2EE\PKDServer\AppCache`
+Returns `FediE2EE\PKDServer\AppCache`
 
 **Parameters:**
 
 - `$namespace`: `string`
-- `$defaultTTL`: `int`
+- `$defaultTTL`: `int` = 60
 
-**Throws:**
+**Throws:** `DependencyException`
 
-- `DependencyException`
+#### [`table`](../../../src/RequestHandlers/Api/ListKeys.php#L52-L75)
 
-#### `table(string $tableName): FediE2EE\PKDServer\Table`
+Returns `FediE2EE\PKDServer\Table`
 
 **Parameters:**
 
 - `$tableName`: `string`
 
-**Throws:**
+**Throws:** `CacheException`, `DependencyException`, `TableException`
 
-- `CacheException`
-- `DependencyException`
-- `TableException`
+#### [`injectConfig`](../../../src/RequestHandlers/Api/ListKeys.php#L77-L80)
 
-#### `injectConfig(FediE2EE\PKDServer\ServerConfig $config): void`
+Returns `void`
 
 **Parameters:**
 
 - `$config`: `FediE2EE\PKDServer\ServerConfig`
 
-#### `config(): FediE2EE\PKDServer\ServerConfig`
+#### [`config`](../../../src/RequestHandlers/Api/ListKeys.php#L85-L95)
 
-**Throws:**
+Returns `FediE2EE\PKDServer\ServerConfig`
 
-- `DependencyException`
+**Throws:** `DependencyException`
 
-#### `setWebFinger(FediE2EE\PKDServer\ActivityPub\WebFinger $wf): self`
+#### [`setWebFinger`](../../../src/RequestHandlers/Api/ListKeys.php#L100-L104)
+
+Returns `self`
 
 This is intended for mocking in unit tests
 
@@ -2345,17 +2080,15 @@ This is intended for mocking in unit tests
 
 - `$wf`: `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
-#### `webfinger(?GuzzleHttp\Client $http = null): FediE2EE\PKDServer\ActivityPub\WebFinger`
+#### [`webfinger`](../../../src/RequestHandlers/Api/ListKeys.php#L111-L118)
+
+Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
 **Parameters:**
 
-- `$http`: `?GuzzleHttp\Client` (nullable)
+- `$http`: `?GuzzleHttp\Client` = null
 
-**Throws:**
-
-- `CertaintyException`
-- `DependencyException`
-- `SodiumException`
+**Throws:** `CertaintyException`, `DependencyException`, `SodiumException`
 
 ---
 
@@ -2377,7 +2110,9 @@ This is intended for mocking in unit tests
 
 ### Methods
 
-#### `handle(Psr\Http\Message\ServerRequestInterface $request): Psr\Http\Message\ResponseInterface`
+#### [`handle`](../../../src/RequestHandlers/Api/ReplicaInfo.php#L86-L107)
+
+Returns `Psr\Http\Message\ResponseInterface`
 
 **Attributes:** `#[Route]`, `#[Override]`
 
@@ -2385,17 +2120,11 @@ This is intended for mocking in unit tests
 
 - `$request`: `Psr\Http\Message\ServerRequestInterface`
 
-**Throws:**
+**Throws:** `CacheException`, `CryptoException`, `DateMalformedStringException`, `DependencyException`, `JsonException`, `NotImplementedException`, `SodiumException`
 
-- `CacheException`
-- `CryptoException`
-- `DateMalformedStringException`
-- `DependencyException`
-- `JsonException`
-- `NotImplementedException`
-- `SodiumException`
+#### [`actor`](../../../src/RequestHandlers/Api/ReplicaInfo.php#L125-L148)
 
-#### `actor(Psr\Http\Message\ServerRequestInterface $request): Psr\Http\Message\ResponseInterface`
+Returns `Psr\Http\Message\ResponseInterface`
 
 **Attributes:** `#[Route]`
 
@@ -2403,23 +2132,11 @@ This is intended for mocking in unit tests
 
 - `$request`: `Psr\Http\Message\ServerRequestInterface`
 
-**Throws:**
+**Throws:** `ArrayKeyException`, `BlindIndexNotFoundException`, `CacheException`, `CipherSweetException`, `CryptoException`, `CryptoOperationException`, `DateMalformedStringException`, `DependencyException`, `InvalidCiphertextException`, `JsonException`, `NotImplementedException`, `SodiumException`, `TableException`
 
-- `ArrayKeyException`
-- `BlindIndexNotFoundException`
-- `CacheException`
-- `CipherSweetException`
-- `CryptoException`
-- `CryptoOperationException`
-- `DateMalformedStringException`
-- `DependencyException`
-- `InvalidCiphertextException`
-- `JsonException`
-- `NotImplementedException`
-- `SodiumException`
-- `TableException`
+#### [`actorKeys`](../../../src/RequestHandlers/Api/ReplicaInfo.php#L167-L191)
 
-#### `actorKeys(Psr\Http\Message\ServerRequestInterface $request): Psr\Http\Message\ResponseInterface`
+Returns `Psr\Http\Message\ResponseInterface`
 
 **Attributes:** `#[Route]`
 
@@ -2427,24 +2144,11 @@ This is intended for mocking in unit tests
 
 - `$request`: `Psr\Http\Message\ServerRequestInterface`
 
-**Throws:**
+**Throws:** `ArrayKeyException`, `BaseJsonException`, `BlindIndexNotFoundException`, `CacheException`, `CipherSweetException`, `CryptoException`, `CryptoOperationException`, `DateMalformedStringException`, `DependencyException`, `InvalidCiphertextException`, `JsonException`, `NotImplementedException`, `SodiumException`, `TableException`
 
-- `ArrayKeyException`
-- `BaseJsonException`
-- `BlindIndexNotFoundException`
-- `CacheException`
-- `CipherSweetException`
-- `CryptoException`
-- `CryptoOperationException`
-- `DateMalformedStringException`
-- `DependencyException`
-- `InvalidCiphertextException`
-- `JsonException`
-- `NotImplementedException`
-- `SodiumException`
-- `TableException`
+#### [`actorKey`](../../../src/RequestHandlers/Api/ReplicaInfo.php#L211-L240)
 
-#### `actorKey(Psr\Http\Message\ServerRequestInterface $request): Psr\Http\Message\ResponseInterface`
+Returns `Psr\Http\Message\ResponseInterface`
 
 **Attributes:** `#[Route]`
 
@@ -2452,24 +2156,11 @@ This is intended for mocking in unit tests
 
 - `$request`: `Psr\Http\Message\ServerRequestInterface`
 
-**Throws:**
+**Throws:** `ArrayKeyException`, `BaseJsonException`, `BlindIndexNotFoundException`, `CacheException`, `CipherSweetException`, `CryptoException`, `CryptoOperationException`, `DateMalformedStringException`, `DependencyException`, `InvalidCiphertextException`, `JsonException`, `NotImplementedException`, `SodiumException`, `TableException`
 
-- `ArrayKeyException`
-- `BaseJsonException`
-- `BlindIndexNotFoundException`
-- `CacheException`
-- `CipherSweetException`
-- `CryptoException`
-- `CryptoOperationException`
-- `DateMalformedStringException`
-- `DependencyException`
-- `InvalidCiphertextException`
-- `JsonException`
-- `NotImplementedException`
-- `SodiumException`
-- `TableException`
+#### [`actorAuxiliary`](../../../src/RequestHandlers/Api/ReplicaInfo.php#L258-L282)
 
-#### `actorAuxiliary(Psr\Http\Message\ServerRequestInterface $request): Psr\Http\Message\ResponseInterface`
+Returns `Psr\Http\Message\ResponseInterface`
 
 **Attributes:** `#[Route]`
 
@@ -2477,23 +2168,11 @@ This is intended for mocking in unit tests
 
 - `$request`: `Psr\Http\Message\ServerRequestInterface`
 
-**Throws:**
+**Throws:** `ArrayKeyException`, `BlindIndexNotFoundException`, `CacheException`, `CipherSweetException`, `CryptoException`, `CryptoOperationException`, `DateMalformedStringException`, `DependencyException`, `InvalidCiphertextException`, `JsonException`, `NotImplementedException`, `SodiumException`, `TableException`
 
-- `ArrayKeyException`
-- `BlindIndexNotFoundException`
-- `CacheException`
-- `CipherSweetException`
-- `CryptoException`
-- `CryptoOperationException`
-- `DateMalformedStringException`
-- `DependencyException`
-- `InvalidCiphertextException`
-- `JsonException`
-- `NotImplementedException`
-- `SodiumException`
-- `TableException`
+#### [`actorAuxiliaryItem`](../../../src/RequestHandlers/Api/ReplicaInfo.php#L301-L330)
 
-#### `actorAuxiliaryItem(Psr\Http\Message\ServerRequestInterface $request): Psr\Http\Message\ResponseInterface`
+Returns `Psr\Http\Message\ResponseInterface`
 
 **Attributes:** `#[Route]`
 
@@ -2501,24 +2180,11 @@ This is intended for mocking in unit tests
 
 - `$request`: `Psr\Http\Message\ServerRequestInterface`
 
-**Throws:**
+**Throws:** `ArrayKeyException`, `BaseJsonException`, `BlindIndexNotFoundException`, `CacheException`, `CipherSweetException`, `CryptoException`, `CryptoOperationException`, `DateMalformedStringException`, `DependencyException`, `InvalidCiphertextException`, `JsonException`, `NotImplementedException`, `SodiumException`, `TableException`
 
-- `ArrayKeyException`
-- `BaseJsonException`
-- `BlindIndexNotFoundException`
-- `CacheException`
-- `CipherSweetException`
-- `CryptoException`
-- `CryptoOperationException`
-- `DateMalformedStringException`
-- `DependencyException`
-- `InvalidCiphertextException`
-- `JsonException`
-- `NotImplementedException`
-- `SodiumException`
-- `TableException`
+#### [`history`](../../../src/RequestHandlers/Api/ReplicaInfo.php#L344-L360)
 
-#### `history(Psr\Http\Message\ServerRequestInterface $request): Psr\Http\Message\ResponseInterface`
+Returns `Psr\Http\Message\ResponseInterface`
 
 **Attributes:** `#[Route]`
 
@@ -2526,19 +2192,11 @@ This is intended for mocking in unit tests
 
 - `$request`: `Psr\Http\Message\ServerRequestInterface`
 
-**Throws:**
+**Throws:** `BaseJsonException`, `CacheException`, `CryptoException`, `DateMalformedStringException`, `DependencyException`, `JsonException`, `NotImplementedException`, `SodiumException`, `TableException`
 
-- `BaseJsonException`
-- `CacheException`
-- `CryptoException`
-- `DateMalformedStringException`
-- `DependencyException`
-- `JsonException`
-- `NotImplementedException`
-- `SodiumException`
-- `TableException`
+#### [`historySince`](../../../src/RequestHandlers/Api/ReplicaInfo.php#L374-L391)
 
-#### `historySince(Psr\Http\Message\ServerRequestInterface $request): Psr\Http\Message\ResponseInterface`
+Returns `Psr\Http\Message\ResponseInterface`
 
 **Attributes:** `#[Route]`
 
@@ -2546,49 +2204,36 @@ This is intended for mocking in unit tests
 
 - `$request`: `Psr\Http\Message\ServerRequestInterface`
 
-**Throws:**
+**Throws:** `BaseJsonException`, `CacheException`, `CryptoException`, `DateMalformedStringException`, `DependencyException`, `JsonException`, `NotImplementedException`, `SodiumException`, `TableException`
 
-- `BaseJsonException`
-- `CacheException`
-- `CryptoException`
-- `DateMalformedStringException`
-- `DependencyException`
-- `JsonException`
-- `NotImplementedException`
-- `SodiumException`
-- `TableException`
+#### [`time`](../../../src/RequestHandlers/Api/ReplicaInfo.php#L34-L37)
 
-#### `time(): string`
+Returns `string`
 
-#### `canonicalizeActor(string $actor): string`
+#### [`canonicalizeActor`](../../../src/RequestHandlers/Api/ReplicaInfo.php#L46-L50)
+
+Returns `string`
 
 **Parameters:**
 
 - `$actor`: `string`
 
-**Throws:**
+**Throws:** `DependencyException`, `GuzzleException`, `NetworkException`, `SodiumException`, `CertaintyException`
 
-- `DependencyException`
-- `GuzzleException`
-- `NetworkException`
-- `SodiumException`
-- `CertaintyException`
+#### [`error`](../../../src/RequestHandlers/Api/ReplicaInfo.php#L58-L61)
 
-#### `error(string $message, int $code = 400): Psr\Http\Message\ResponseInterface`
+Returns `Psr\Http\Message\ResponseInterface`
 
 **Parameters:**
 
 - `$message`: `string`
-- `$code`: `int`
+- `$code`: `int` = 400
 
-**Throws:**
+**Throws:** `DependencyException`, `JsonException`, `NotImplementedException`, `SodiumException`
 
-- `DependencyException`
-- `JsonException`
-- `NotImplementedException`
-- `SodiumException`
+#### [`signResponse`](../../../src/RequestHandlers/Api/ReplicaInfo.php#L72-L84)
 
-#### `signResponse(Psr\Http\Message\ResponseInterface $response): Psr\Http\Message\ResponseInterface`
+Returns `Psr\Http\Message\ResponseInterface`
 
 Implements an RFC 9421 HTTP Message Signature with Ed25519.
 
@@ -2596,81 +2241,73 @@ Implements an RFC 9421 HTTP Message Signature with Ed25519.
 
 - `$response`: `Psr\Http\Message\ResponseInterface`
 
-**Throws:**
+**Throws:** `DependencyException`, `NotImplementedException`, `SodiumException`
 
-- `DependencyException`
-- `NotImplementedException`
-- `SodiumException`
+#### [`json`](../../../src/RequestHandlers/Api/ReplicaInfo.php#L94-L119)
 
-#### `json(object|array $data, int $status = 200, array $headers = []): Psr\Http\Message\ResponseInterface`
+Returns `Psr\Http\Message\ResponseInterface`
 
 Return a JSON response with HTTP Message Signature (from signResponse())
 
 **Parameters:**
 
 - `$data`: `object|array`
-- `$status`: `int`
-- `$headers`: `array`
+- `$status`: `int` = 200
+- `$headers`: `array` = []
 
-**Throws:**
+**Throws:** `DependencyException`, `JsonException`, `NotImplementedException`, `SodiumException`
 
-- `DependencyException`
-- `JsonException`
-- `NotImplementedException`
-- `SodiumException`
+#### [`twig`](../../../src/RequestHandlers/Api/ReplicaInfo.php#L127-L144)
 
-#### `twig(string $template, array $vars = [], array $headers = [], int $status = 200): Psr\Http\Message\ResponseInterface`
+Returns `Psr\Http\Message\ResponseInterface`
 
 **Parameters:**
 
 - `$template`: `string`
-- `$vars`: `array`
-- `$headers`: `array`
-- `$status`: `int`
+- `$vars`: `array` = []
+- `$headers`: `array` = []
+- `$status`: `int` = 200
 
-**Throws:**
+**Throws:** `DependencyException`, `LoaderError`, `RuntimeError`, `SyntaxError`
 
-- `DependencyException`
-- `LoaderError`
-- `RuntimeError`
-- `SyntaxError`
+#### [`appCache`](../../../src/RequestHandlers/Api/ReplicaInfo.php#L42-L45)
 
-#### `appCache(string $namespace, int $defaultTTL = 60): FediE2EE\PKDServer\AppCache`
+Returns `FediE2EE\PKDServer\AppCache`
 
 **Parameters:**
 
 - `$namespace`: `string`
-- `$defaultTTL`: `int`
+- `$defaultTTL`: `int` = 60
 
-**Throws:**
+**Throws:** `DependencyException`
 
-- `DependencyException`
+#### [`table`](../../../src/RequestHandlers/Api/ReplicaInfo.php#L52-L75)
 
-#### `table(string $tableName): FediE2EE\PKDServer\Table`
+Returns `FediE2EE\PKDServer\Table`
 
 **Parameters:**
 
 - `$tableName`: `string`
 
-**Throws:**
+**Throws:** `CacheException`, `DependencyException`, `TableException`
 
-- `CacheException`
-- `DependencyException`
-- `TableException`
+#### [`injectConfig`](../../../src/RequestHandlers/Api/ReplicaInfo.php#L77-L80)
 
-#### `injectConfig(FediE2EE\PKDServer\ServerConfig $config): void`
+Returns `void`
 
 **Parameters:**
 
 - `$config`: `FediE2EE\PKDServer\ServerConfig`
 
-#### `config(): FediE2EE\PKDServer\ServerConfig`
+#### [`config`](../../../src/RequestHandlers/Api/ReplicaInfo.php#L85-L95)
 
-**Throws:**
+Returns `FediE2EE\PKDServer\ServerConfig`
 
-- `DependencyException`
+**Throws:** `DependencyException`
 
-#### `setWebFinger(FediE2EE\PKDServer\ActivityPub\WebFinger $wf): self`
+#### [`setWebFinger`](../../../src/RequestHandlers/Api/ReplicaInfo.php#L100-L104)
+
+Returns `self`
 
 This is intended for mocking in unit tests
 
@@ -2678,17 +2315,15 @@ This is intended for mocking in unit tests
 
 - `$wf`: `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
-#### `webfinger(?GuzzleHttp\Client $http = null): FediE2EE\PKDServer\ActivityPub\WebFinger`
+#### [`webfinger`](../../../src/RequestHandlers/Api/ReplicaInfo.php#L111-L118)
+
+Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
 **Parameters:**
 
-- `$http`: `?GuzzleHttp\Client` (nullable)
+- `$http`: `?GuzzleHttp\Client` = null
 
-**Throws:**
-
-- `CertaintyException`
-- `DependencyException`
-- `SodiumException`
+**Throws:** `CertaintyException`, `DependencyException`, `SodiumException`
 
 ---
 
@@ -2710,13 +2345,17 @@ This is intended for mocking in unit tests
 
 ### Methods
 
-#### `__construct(?FediE2EE\PKDServer\ServerConfig $config = null): void`
+#### [`__construct`](../../../src/RequestHandlers/Api/Replicas.php#L21-L32)
+
+Returns `void`
 
 **Parameters:**
 
-- `$config`: `?FediE2EE\PKDServer\ServerConfig` (nullable)
+- `$config`: `?FediE2EE\PKDServer\ServerConfig` = null
 
-#### `handle(Psr\Http\Message\ServerRequestInterface $request): Psr\Http\Message\ResponseInterface`
+#### [`handle`](../../../src/RequestHandlers/Api/Replicas.php#L36-L50)
+
+Returns `Psr\Http\Message\ResponseInterface`
 
 **Attributes:** `#[Route]`, `#[Override]`
 
@@ -2724,37 +2363,34 @@ This is intended for mocking in unit tests
 
 - `$request`: `Psr\Http\Message\ServerRequestInterface`
 
-#### `time(): string`
+#### [`time`](../../../src/RequestHandlers/Api/Replicas.php#L34-L37)
 
-#### `canonicalizeActor(string $actor): string`
+Returns `string`
+
+#### [`canonicalizeActor`](../../../src/RequestHandlers/Api/Replicas.php#L46-L50)
+
+Returns `string`
 
 **Parameters:**
 
 - `$actor`: `string`
 
-**Throws:**
+**Throws:** `DependencyException`, `GuzzleException`, `NetworkException`, `SodiumException`, `CertaintyException`
 
-- `DependencyException`
-- `GuzzleException`
-- `NetworkException`
-- `SodiumException`
-- `CertaintyException`
+#### [`error`](../../../src/RequestHandlers/Api/Replicas.php#L58-L61)
 
-#### `error(string $message, int $code = 400): Psr\Http\Message\ResponseInterface`
+Returns `Psr\Http\Message\ResponseInterface`
 
 **Parameters:**
 
 - `$message`: `string`
-- `$code`: `int`
+- `$code`: `int` = 400
 
-**Throws:**
+**Throws:** `DependencyException`, `JsonException`, `NotImplementedException`, `SodiumException`
 
-- `DependencyException`
-- `JsonException`
-- `NotImplementedException`
-- `SodiumException`
+#### [`signResponse`](../../../src/RequestHandlers/Api/Replicas.php#L72-L84)
 
-#### `signResponse(Psr\Http\Message\ResponseInterface $response): Psr\Http\Message\ResponseInterface`
+Returns `Psr\Http\Message\ResponseInterface`
 
 Implements an RFC 9421 HTTP Message Signature with Ed25519.
 
@@ -2762,81 +2398,73 @@ Implements an RFC 9421 HTTP Message Signature with Ed25519.
 
 - `$response`: `Psr\Http\Message\ResponseInterface`
 
-**Throws:**
+**Throws:** `DependencyException`, `NotImplementedException`, `SodiumException`
 
-- `DependencyException`
-- `NotImplementedException`
-- `SodiumException`
+#### [`json`](../../../src/RequestHandlers/Api/Replicas.php#L94-L119)
 
-#### `json(object|array $data, int $status = 200, array $headers = []): Psr\Http\Message\ResponseInterface`
+Returns `Psr\Http\Message\ResponseInterface`
 
 Return a JSON response with HTTP Message Signature (from signResponse())
 
 **Parameters:**
 
 - `$data`: `object|array`
-- `$status`: `int`
-- `$headers`: `array`
+- `$status`: `int` = 200
+- `$headers`: `array` = []
 
-**Throws:**
+**Throws:** `DependencyException`, `JsonException`, `NotImplementedException`, `SodiumException`
 
-- `DependencyException`
-- `JsonException`
-- `NotImplementedException`
-- `SodiumException`
+#### [`twig`](../../../src/RequestHandlers/Api/Replicas.php#L127-L144)
 
-#### `twig(string $template, array $vars = [], array $headers = [], int $status = 200): Psr\Http\Message\ResponseInterface`
+Returns `Psr\Http\Message\ResponseInterface`
 
 **Parameters:**
 
 - `$template`: `string`
-- `$vars`: `array`
-- `$headers`: `array`
-- `$status`: `int`
+- `$vars`: `array` = []
+- `$headers`: `array` = []
+- `$status`: `int` = 200
 
-**Throws:**
+**Throws:** `DependencyException`, `LoaderError`, `RuntimeError`, `SyntaxError`
 
-- `DependencyException`
-- `LoaderError`
-- `RuntimeError`
-- `SyntaxError`
+#### [`appCache`](../../../src/RequestHandlers/Api/Replicas.php#L42-L45)
 
-#### `appCache(string $namespace, int $defaultTTL = 60): FediE2EE\PKDServer\AppCache`
+Returns `FediE2EE\PKDServer\AppCache`
 
 **Parameters:**
 
 - `$namespace`: `string`
-- `$defaultTTL`: `int`
+- `$defaultTTL`: `int` = 60
 
-**Throws:**
+**Throws:** `DependencyException`
 
-- `DependencyException`
+#### [`table`](../../../src/RequestHandlers/Api/Replicas.php#L52-L75)
 
-#### `table(string $tableName): FediE2EE\PKDServer\Table`
+Returns `FediE2EE\PKDServer\Table`
 
 **Parameters:**
 
 - `$tableName`: `string`
 
-**Throws:**
+**Throws:** `CacheException`, `DependencyException`, `TableException`
 
-- `CacheException`
-- `DependencyException`
-- `TableException`
+#### [`injectConfig`](../../../src/RequestHandlers/Api/Replicas.php#L77-L80)
 
-#### `injectConfig(FediE2EE\PKDServer\ServerConfig $config): void`
+Returns `void`
 
 **Parameters:**
 
 - `$config`: `FediE2EE\PKDServer\ServerConfig`
 
-#### `config(): FediE2EE\PKDServer\ServerConfig`
+#### [`config`](../../../src/RequestHandlers/Api/Replicas.php#L85-L95)
 
-**Throws:**
+Returns `FediE2EE\PKDServer\ServerConfig`
 
-- `DependencyException`
+**Throws:** `DependencyException`
 
-#### `setWebFinger(FediE2EE\PKDServer\ActivityPub\WebFinger $wf): self`
+#### [`setWebFinger`](../../../src/RequestHandlers/Api/Replicas.php#L100-L104)
+
+Returns `self`
 
 This is intended for mocking in unit tests
 
@@ -2844,17 +2472,15 @@ This is intended for mocking in unit tests
 
 - `$wf`: `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
-#### `webfinger(?GuzzleHttp\Client $http = null): FediE2EE\PKDServer\ActivityPub\WebFinger`
+#### [`webfinger`](../../../src/RequestHandlers/Api/Replicas.php#L111-L118)
+
+Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
 **Parameters:**
 
-- `$http`: `?GuzzleHttp\Client` (nullable)
+- `$http`: `?GuzzleHttp\Client` = null
 
-**Throws:**
-
-- `CertaintyException`
-- `DependencyException`
-- `SodiumException`
+**Throws:** `CertaintyException`, `DependencyException`, `SodiumException`
 
 ---
 
@@ -2876,13 +2502,15 @@ This is intended for mocking in unit tests
 
 ### Methods
 
-#### `__construct(): void`
+#### [`__construct`](../../../src/RequestHandlers/Api/Revoke.php#L39-L42)
 
-**Throws:**
+Returns `void`
 
-- `DependencyException`
+**Throws:** `DependencyException`
 
-#### `handle(Psr\Http\Message\ServerRequestInterface $request): Psr\Http\Message\ResponseInterface`
+#### [`handle`](../../../src/RequestHandlers/Api/Revoke.php#L55-L67)
+
+Returns `Psr\Http\Message\ResponseInterface`
 
 **Attributes:** `#[Route]`, `#[Override]`
 
@@ -2890,47 +2518,36 @@ This is intended for mocking in unit tests
 
 - `$request`: `Psr\Http\Message\ServerRequestInterface`
 
-**Throws:**
+**Throws:** `DependencyException`, `NotImplementedException`, `TableException`, `CryptoException`, `ParserException`, `HPKEException`, `SodiumException`
 
-- `DependencyException`
-- `NotImplementedException`
-- `TableException`
-- `CryptoException`
-- `ParserException`
-- `HPKEException`
-- `SodiumException`
+#### [`time`](../../../src/RequestHandlers/Api/Revoke.php#L34-L37)
 
-#### `time(): string`
+Returns `string`
 
-#### `canonicalizeActor(string $actor): string`
+#### [`canonicalizeActor`](../../../src/RequestHandlers/Api/Revoke.php#L46-L50)
+
+Returns `string`
 
 **Parameters:**
 
 - `$actor`: `string`
 
-**Throws:**
+**Throws:** `DependencyException`, `GuzzleException`, `NetworkException`, `SodiumException`, `CertaintyException`
 
-- `DependencyException`
-- `GuzzleException`
-- `NetworkException`
-- `SodiumException`
-- `CertaintyException`
+#### [`error`](../../../src/RequestHandlers/Api/Revoke.php#L58-L61)
 
-#### `error(string $message, int $code = 400): Psr\Http\Message\ResponseInterface`
+Returns `Psr\Http\Message\ResponseInterface`
 
 **Parameters:**
 
 - `$message`: `string`
-- `$code`: `int`
+- `$code`: `int` = 400
 
-**Throws:**
+**Throws:** `DependencyException`, `JsonException`, `NotImplementedException`, `SodiumException`
 
-- `DependencyException`
-- `JsonException`
-- `NotImplementedException`
-- `SodiumException`
+#### [`signResponse`](../../../src/RequestHandlers/Api/Revoke.php#L72-L84)
 
-#### `signResponse(Psr\Http\Message\ResponseInterface $response): Psr\Http\Message\ResponseInterface`
+Returns `Psr\Http\Message\ResponseInterface`
 
 Implements an RFC 9421 HTTP Message Signature with Ed25519.
 
@@ -2938,81 +2555,73 @@ Implements an RFC 9421 HTTP Message Signature with Ed25519.
 
 - `$response`: `Psr\Http\Message\ResponseInterface`
 
-**Throws:**
+**Throws:** `DependencyException`, `NotImplementedException`, `SodiumException`
 
-- `DependencyException`
-- `NotImplementedException`
-- `SodiumException`
+#### [`json`](../../../src/RequestHandlers/Api/Revoke.php#L94-L119)
 
-#### `json(object|array $data, int $status = 200, array $headers = []): Psr\Http\Message\ResponseInterface`
+Returns `Psr\Http\Message\ResponseInterface`
 
 Return a JSON response with HTTP Message Signature (from signResponse())
 
 **Parameters:**
 
 - `$data`: `object|array`
-- `$status`: `int`
-- `$headers`: `array`
+- `$status`: `int` = 200
+- `$headers`: `array` = []
 
-**Throws:**
+**Throws:** `DependencyException`, `JsonException`, `NotImplementedException`, `SodiumException`
 
-- `DependencyException`
-- `JsonException`
-- `NotImplementedException`
-- `SodiumException`
+#### [`twig`](../../../src/RequestHandlers/Api/Revoke.php#L127-L144)
 
-#### `twig(string $template, array $vars = [], array $headers = [], int $status = 200): Psr\Http\Message\ResponseInterface`
+Returns `Psr\Http\Message\ResponseInterface`
 
 **Parameters:**
 
 - `$template`: `string`
-- `$vars`: `array`
-- `$headers`: `array`
-- `$status`: `int`
+- `$vars`: `array` = []
+- `$headers`: `array` = []
+- `$status`: `int` = 200
 
-**Throws:**
+**Throws:** `DependencyException`, `LoaderError`, `RuntimeError`, `SyntaxError`
 
-- `DependencyException`
-- `LoaderError`
-- `RuntimeError`
-- `SyntaxError`
+#### [`appCache`](../../../src/RequestHandlers/Api/Revoke.php#L42-L45)
 
-#### `appCache(string $namespace, int $defaultTTL = 60): FediE2EE\PKDServer\AppCache`
+Returns `FediE2EE\PKDServer\AppCache`
 
 **Parameters:**
 
 - `$namespace`: `string`
-- `$defaultTTL`: `int`
+- `$defaultTTL`: `int` = 60
 
-**Throws:**
+**Throws:** `DependencyException`
 
-- `DependencyException`
+#### [`table`](../../../src/RequestHandlers/Api/Revoke.php#L52-L75)
 
-#### `table(string $tableName): FediE2EE\PKDServer\Table`
+Returns `FediE2EE\PKDServer\Table`
 
 **Parameters:**
 
 - `$tableName`: `string`
 
-**Throws:**
+**Throws:** `CacheException`, `DependencyException`, `TableException`
 
-- `CacheException`
-- `DependencyException`
-- `TableException`
+#### [`injectConfig`](../../../src/RequestHandlers/Api/Revoke.php#L77-L80)
 
-#### `injectConfig(FediE2EE\PKDServer\ServerConfig $config): void`
+Returns `void`
 
 **Parameters:**
 
 - `$config`: `FediE2EE\PKDServer\ServerConfig`
 
-#### `config(): FediE2EE\PKDServer\ServerConfig`
+#### [`config`](../../../src/RequestHandlers/Api/Revoke.php#L85-L95)
 
-**Throws:**
+Returns `FediE2EE\PKDServer\ServerConfig`
 
-- `DependencyException`
+**Throws:** `DependencyException`
 
-#### `setWebFinger(FediE2EE\PKDServer\ActivityPub\WebFinger $wf): self`
+#### [`setWebFinger`](../../../src/RequestHandlers/Api/Revoke.php#L100-L104)
+
+Returns `self`
 
 This is intended for mocking in unit tests
 
@@ -3020,17 +2629,15 @@ This is intended for mocking in unit tests
 
 - `$wf`: `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
-#### `webfinger(?GuzzleHttp\Client $http = null): FediE2EE\PKDServer\ActivityPub\WebFinger`
+#### [`webfinger`](../../../src/RequestHandlers/Api/Revoke.php#L111-L118)
+
+Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
 **Parameters:**
 
-- `$http`: `?GuzzleHttp\Client` (nullable)
+- `$http`: `?GuzzleHttp\Client` = null
 
-**Throws:**
-
-- `CertaintyException`
-- `DependencyException`
-- `SodiumException`
+**Throws:** `CertaintyException`, `DependencyException`, `SodiumException`
 
 ---
 
@@ -3052,7 +2659,9 @@ This is intended for mocking in unit tests
 
 ### Methods
 
-#### `handle(Psr\Http\Message\ServerRequestInterface $request): Psr\Http\Message\ResponseInterface`
+#### [`handle`](../../../src/RequestHandlers/Api/ServerPublicKey.php#L43-L57)
+
+Returns `Psr\Http\Message\ResponseInterface`
 
 **Attributes:** `#[Route]`, `#[Override]`
 
@@ -3060,52 +2669,44 @@ This is intended for mocking in unit tests
 
 - `$request`: `Psr\Http\Message\ServerRequestInterface`
 
-**Throws:**
+**Throws:** `DependencyException`, `HPKEException`, `InsecureCurveException`, `JsonException`, `NotImplementedException`, `SodiumException`
 
-- `DependencyException`
-- `HPKEException`
-- `InsecureCurveException`
-- `JsonException`
-- `NotImplementedException`
-- `SodiumException`
+#### [`cipherSuiteString`](../../../src/RequestHandlers/Api/ServerPublicKey.php#L59-L80)
 
-#### `cipherSuiteString(ParagonIE\HPKE\HPKE $hpke): string`
+Returns `string`
 
 **Parameters:**
 
 - `$hpke`: `ParagonIE\HPKE\HPKE`
 
-#### `time(): string`
+#### [`time`](../../../src/RequestHandlers/Api/ServerPublicKey.php#L34-L37)
 
-#### `canonicalizeActor(string $actor): string`
+Returns `string`
+
+#### [`canonicalizeActor`](../../../src/RequestHandlers/Api/ServerPublicKey.php#L46-L50)
+
+Returns `string`
 
 **Parameters:**
 
 - `$actor`: `string`
 
-**Throws:**
+**Throws:** `DependencyException`, `GuzzleException`, `NetworkException`, `SodiumException`, `CertaintyException`
 
-- `DependencyException`
-- `GuzzleException`
-- `NetworkException`
-- `SodiumException`
-- `CertaintyException`
+#### [`error`](../../../src/RequestHandlers/Api/ServerPublicKey.php#L58-L61)
 
-#### `error(string $message, int $code = 400): Psr\Http\Message\ResponseInterface`
+Returns `Psr\Http\Message\ResponseInterface`
 
 **Parameters:**
 
 - `$message`: `string`
-- `$code`: `int`
+- `$code`: `int` = 400
 
-**Throws:**
+**Throws:** `DependencyException`, `JsonException`, `NotImplementedException`, `SodiumException`
 
-- `DependencyException`
-- `JsonException`
-- `NotImplementedException`
-- `SodiumException`
+#### [`signResponse`](../../../src/RequestHandlers/Api/ServerPublicKey.php#L72-L84)
 
-#### `signResponse(Psr\Http\Message\ResponseInterface $response): Psr\Http\Message\ResponseInterface`
+Returns `Psr\Http\Message\ResponseInterface`
 
 Implements an RFC 9421 HTTP Message Signature with Ed25519.
 
@@ -3113,81 +2714,73 @@ Implements an RFC 9421 HTTP Message Signature with Ed25519.
 
 - `$response`: `Psr\Http\Message\ResponseInterface`
 
-**Throws:**
+**Throws:** `DependencyException`, `NotImplementedException`, `SodiumException`
 
-- `DependencyException`
-- `NotImplementedException`
-- `SodiumException`
+#### [`json`](../../../src/RequestHandlers/Api/ServerPublicKey.php#L94-L119)
 
-#### `json(object|array $data, int $status = 200, array $headers = []): Psr\Http\Message\ResponseInterface`
+Returns `Psr\Http\Message\ResponseInterface`
 
 Return a JSON response with HTTP Message Signature (from signResponse())
 
 **Parameters:**
 
 - `$data`: `object|array`
-- `$status`: `int`
-- `$headers`: `array`
+- `$status`: `int` = 200
+- `$headers`: `array` = []
 
-**Throws:**
+**Throws:** `DependencyException`, `JsonException`, `NotImplementedException`, `SodiumException`
 
-- `DependencyException`
-- `JsonException`
-- `NotImplementedException`
-- `SodiumException`
+#### [`twig`](../../../src/RequestHandlers/Api/ServerPublicKey.php#L127-L144)
 
-#### `twig(string $template, array $vars = [], array $headers = [], int $status = 200): Psr\Http\Message\ResponseInterface`
+Returns `Psr\Http\Message\ResponseInterface`
 
 **Parameters:**
 
 - `$template`: `string`
-- `$vars`: `array`
-- `$headers`: `array`
-- `$status`: `int`
+- `$vars`: `array` = []
+- `$headers`: `array` = []
+- `$status`: `int` = 200
 
-**Throws:**
+**Throws:** `DependencyException`, `LoaderError`, `RuntimeError`, `SyntaxError`
 
-- `DependencyException`
-- `LoaderError`
-- `RuntimeError`
-- `SyntaxError`
+#### [`appCache`](../../../src/RequestHandlers/Api/ServerPublicKey.php#L42-L45)
 
-#### `appCache(string $namespace, int $defaultTTL = 60): FediE2EE\PKDServer\AppCache`
+Returns `FediE2EE\PKDServer\AppCache`
 
 **Parameters:**
 
 - `$namespace`: `string`
-- `$defaultTTL`: `int`
+- `$defaultTTL`: `int` = 60
 
-**Throws:**
+**Throws:** `DependencyException`
 
-- `DependencyException`
+#### [`table`](../../../src/RequestHandlers/Api/ServerPublicKey.php#L52-L75)
 
-#### `table(string $tableName): FediE2EE\PKDServer\Table`
+Returns `FediE2EE\PKDServer\Table`
 
 **Parameters:**
 
 - `$tableName`: `string`
 
-**Throws:**
+**Throws:** `CacheException`, `DependencyException`, `TableException`
 
-- `CacheException`
-- `DependencyException`
-- `TableException`
+#### [`injectConfig`](../../../src/RequestHandlers/Api/ServerPublicKey.php#L77-L80)
 
-#### `injectConfig(FediE2EE\PKDServer\ServerConfig $config): void`
+Returns `void`
 
 **Parameters:**
 
 - `$config`: `FediE2EE\PKDServer\ServerConfig`
 
-#### `config(): FediE2EE\PKDServer\ServerConfig`
+#### [`config`](../../../src/RequestHandlers/Api/ServerPublicKey.php#L85-L95)
 
-**Throws:**
+Returns `FediE2EE\PKDServer\ServerConfig`
 
-- `DependencyException`
+**Throws:** `DependencyException`
 
-#### `setWebFinger(FediE2EE\PKDServer\ActivityPub\WebFinger $wf): self`
+#### [`setWebFinger`](../../../src/RequestHandlers/Api/ServerPublicKey.php#L100-L104)
+
+Returns `self`
 
 This is intended for mocking in unit tests
 
@@ -3195,17 +2788,15 @@ This is intended for mocking in unit tests
 
 - `$wf`: `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
-#### `webfinger(?GuzzleHttp\Client $http = null): FediE2EE\PKDServer\ActivityPub\WebFinger`
+#### [`webfinger`](../../../src/RequestHandlers/Api/ServerPublicKey.php#L111-L118)
+
+Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
 **Parameters:**
 
-- `$http`: `?GuzzleHttp\Client` (nullable)
+- `$http`: `?GuzzleHttp\Client` = null
 
-**Throws:**
-
-- `CertaintyException`
-- `DependencyException`
-- `SodiumException`
+**Throws:** `CertaintyException`, `DependencyException`, `SodiumException`
 
 ---
 
@@ -3227,15 +2818,15 @@ This is intended for mocking in unit tests
 
 ### Methods
 
-#### `__construct(): void`
+#### [`__construct`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L52-L59)
 
-**Throws:**
+Returns `void`
 
-- `DependencyException`
-- `TableException`
-- `CacheException`
+**Throws:** `DependencyException`, `TableException`, `CacheException`
 
-#### `handle(Psr\Http\Message\ServerRequestInterface $request): Psr\Http\Message\ResponseInterface`
+#### [`handle`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L77-L136)
+
+Returns `Psr\Http\Message\ResponseInterface`
 
 **Attributes:** `#[Route]`, `#[Override]`
 
@@ -3243,52 +2834,36 @@ This is intended for mocking in unit tests
 
 - `$request`: `Psr\Http\Message\ServerRequestInterface`
 
-**Throws:**
+**Throws:** `ArrayKeyException`, `BlindIndexNotFoundException`, `CacheException`, `CipherSweetException`, `CryptoOperationException`, `DependencyException`, `InvalidCiphertextException`, `JsonException`, `NotImplementedException`, `ProtocolException`, `SodiumException`, `TableException`
 
-- `ArrayKeyException`
-- `BlindIndexNotFoundException`
-- `CacheException`
-- `CipherSweetException`
-- `CryptoOperationException`
-- `DependencyException`
-- `InvalidCiphertextException`
-- `JsonException`
-- `NotImplementedException`
-- `ProtocolException`
-- `SodiumException`
-- `TableException`
+#### [`time`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L34-L37)
 
-#### `time(): string`
+Returns `string`
 
-#### `canonicalizeActor(string $actor): string`
+#### [`canonicalizeActor`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L46-L50)
+
+Returns `string`
 
 **Parameters:**
 
 - `$actor`: `string`
 
-**Throws:**
+**Throws:** `DependencyException`, `GuzzleException`, `NetworkException`, `SodiumException`, `CertaintyException`
 
-- `DependencyException`
-- `GuzzleException`
-- `NetworkException`
-- `SodiumException`
-- `CertaintyException`
+#### [`error`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L58-L61)
 
-#### `error(string $message, int $code = 400): Psr\Http\Message\ResponseInterface`
+Returns `Psr\Http\Message\ResponseInterface`
 
 **Parameters:**
 
 - `$message`: `string`
-- `$code`: `int`
+- `$code`: `int` = 400
 
-**Throws:**
+**Throws:** `DependencyException`, `JsonException`, `NotImplementedException`, `SodiumException`
 
-- `DependencyException`
-- `JsonException`
-- `NotImplementedException`
-- `SodiumException`
+#### [`signResponse`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L72-L84)
 
-#### `signResponse(Psr\Http\Message\ResponseInterface $response): Psr\Http\Message\ResponseInterface`
+Returns `Psr\Http\Message\ResponseInterface`
 
 Implements an RFC 9421 HTTP Message Signature with Ed25519.
 
@@ -3296,81 +2871,73 @@ Implements an RFC 9421 HTTP Message Signature with Ed25519.
 
 - `$response`: `Psr\Http\Message\ResponseInterface`
 
-**Throws:**
+**Throws:** `DependencyException`, `NotImplementedException`, `SodiumException`
 
-- `DependencyException`
-- `NotImplementedException`
-- `SodiumException`
+#### [`json`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L94-L119)
 
-#### `json(object|array $data, int $status = 200, array $headers = []): Psr\Http\Message\ResponseInterface`
+Returns `Psr\Http\Message\ResponseInterface`
 
 Return a JSON response with HTTP Message Signature (from signResponse())
 
 **Parameters:**
 
 - `$data`: `object|array`
-- `$status`: `int`
-- `$headers`: `array`
+- `$status`: `int` = 200
+- `$headers`: `array` = []
 
-**Throws:**
+**Throws:** `DependencyException`, `JsonException`, `NotImplementedException`, `SodiumException`
 
-- `DependencyException`
-- `JsonException`
-- `NotImplementedException`
-- `SodiumException`
+#### [`twig`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L127-L144)
 
-#### `twig(string $template, array $vars = [], array $headers = [], int $status = 200): Psr\Http\Message\ResponseInterface`
+Returns `Psr\Http\Message\ResponseInterface`
 
 **Parameters:**
 
 - `$template`: `string`
-- `$vars`: `array`
-- `$headers`: `array`
-- `$status`: `int`
+- `$vars`: `array` = []
+- `$headers`: `array` = []
+- `$status`: `int` = 200
 
-**Throws:**
+**Throws:** `DependencyException`, `LoaderError`, `RuntimeError`, `SyntaxError`
 
-- `DependencyException`
-- `LoaderError`
-- `RuntimeError`
-- `SyntaxError`
+#### [`appCache`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L42-L45)
 
-#### `appCache(string $namespace, int $defaultTTL = 60): FediE2EE\PKDServer\AppCache`
+Returns `FediE2EE\PKDServer\AppCache`
 
 **Parameters:**
 
 - `$namespace`: `string`
-- `$defaultTTL`: `int`
+- `$defaultTTL`: `int` = 60
 
-**Throws:**
+**Throws:** `DependencyException`
 
-- `DependencyException`
+#### [`table`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L52-L75)
 
-#### `table(string $tableName): FediE2EE\PKDServer\Table`
+Returns `FediE2EE\PKDServer\Table`
 
 **Parameters:**
 
 - `$tableName`: `string`
 
-**Throws:**
+**Throws:** `CacheException`, `DependencyException`, `TableException`
 
-- `CacheException`
-- `DependencyException`
-- `TableException`
+#### [`injectConfig`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L77-L80)
 
-#### `injectConfig(FediE2EE\PKDServer\ServerConfig $config): void`
+Returns `void`
 
 **Parameters:**
 
 - `$config`: `FediE2EE\PKDServer\ServerConfig`
 
-#### `config(): FediE2EE\PKDServer\ServerConfig`
+#### [`config`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L85-L95)
 
-**Throws:**
+Returns `FediE2EE\PKDServer\ServerConfig`
 
-- `DependencyException`
+**Throws:** `DependencyException`
 
-#### `setWebFinger(FediE2EE\PKDServer\ActivityPub\WebFinger $wf): self`
+#### [`setWebFinger`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L100-L104)
+
+Returns `self`
 
 This is intended for mocking in unit tests
 
@@ -3378,34 +2945,38 @@ This is intended for mocking in unit tests
 
 - `$wf`: `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
-#### `webfinger(?GuzzleHttp\Client $http = null): FediE2EE\PKDServer\ActivityPub\WebFinger`
+#### [`webfinger`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L111-L118)
+
+Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
 **Parameters:**
 
-- `$http`: `?GuzzleHttp\Client` (nullable)
+- `$http`: `?GuzzleHttp\Client` = null
 
-**Throws:**
+**Throws:** `CertaintyException`, `DependencyException`, `SodiumException`
 
-- `CertaintyException`
-- `DependencyException`
-- `SodiumException`
+#### [`verifyTOTP`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L42-L56)
 
-#### `static verifyTOTP(string $secret, string $otp, int $windows = 2): bool`
+static · Returns `bool`
 
 **Parameters:**
 
 - `$secret`: `string`
 - `$otp`: `string`
-- `$windows`: `int`
+- `$windows`: `int` = 2
 
-#### `static generateTOTP(string $secret, ?int $time = null): string`
+#### [`generateTOTP`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L58-L73)
+
+static · Returns `string`
 
 **Parameters:**
 
 - `$secret`: `string`
-- `$time`: `?int` (nullable)
+- `$time`: `?int` = null
 
-#### `static ord(string $chr): int`
+#### [`ord`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L78-L81)
+
+static · Returns `int`
 
 Avoid cache-timing leaks in ord() by using unpack()
 
@@ -3413,35 +2984,39 @@ Avoid cache-timing leaks in ord() by using unpack()
 
 - `$chr`: `string`
 
-#### `throwIfTimeOutsideWindow(int $currentTime): void`
+#### [`throwIfTimeOutsideWindow`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L139-L148)
+
+Returns `void`
 
 **Parameters:**
 
 - `$currentTime`: `int`
 
-**Throws:**
+**Throws:** `ProtocolException`
 
-- `ProtocolException`
+#### [`assertAllArrayKeysExist`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L14-L19)
 
-#### `static assertAllArrayKeysExist(array $target, string $arrayKeys): void`
-
-**Parameters:**
-
-- `$target`: `array`
-- `...$arrayKeys`: `string`
-
-**Throws:**
-
-- `InputException`
-
-#### `static allArrayKeysExist(array $target, string $arrayKeys): bool`
+static · Returns `void`
 
 **Parameters:**
 
 - `$target`: `array`
 - `...$arrayKeys`: `string`
 
-#### `constantTimeSelect(int $select, string $left, string $right): string`
+**Throws:** `InputException`
+
+#### [`allArrayKeysExist`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L21-L28)
+
+static · Returns `bool`
+
+**Parameters:**
+
+- `$target`: `array`
+- `...$arrayKeys`: `string`
+
+#### [`constantTimeSelect`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L35-L52)
+
+Returns `string`
 
 **Parameters:**
 
@@ -3449,11 +3024,11 @@ Avoid cache-timing leaks in ord() by using unpack()
 - `$left`: `string`
 - `$right`: `string`
 
-**Throws:**
+**Throws:** `CryptoException`
 
-- `CryptoException`
+#### [`dos2unix`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L60-L63)
 
-#### `static dos2unix(string $in): string`
+static · Returns `string`
 
 Normalize line-endings to UNIX-style (LF rather than CRLF).
 
@@ -3461,31 +3036,41 @@ Normalize line-endings to UNIX-style (LF rather than CRLF).
 
 - `$in`: `string`
 
-#### `static preAuthEncode(array $pieces): string`
+#### [`preAuthEncode`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L69-L78)
+
+static · Returns `string`
 
 **Parameters:**
 
 - `$pieces`: `array`
 
-#### `static sortByKey(array $arr): void`
+#### [`sortByKey`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L80-L88)
+
+static · Returns `void`
 
 **Parameters:**
 
 - `$arr`: `array`
 
-#### `static LE64(int $n): string`
+#### [`LE64`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L90-L93)
+
+static · Returns `string`
 
 **Parameters:**
 
 - `$n`: `int`
 
-#### `stringToByteArray(string $str): array`
+#### [`stringToByteArray`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L95-L99)
+
+Returns `array`
 
 **Parameters:**
 
 - `$str`: `string`
 
-#### `static stripNewlines(string $input): string`
+#### [`stripNewlines`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L107-L141)
+
+static · Returns `string`
 
 Strip all newlines (CR, LF) characters from a string.
 
@@ -3513,15 +3098,15 @@ Strip all newlines (CR, LF) characters from a string.
 
 ### Methods
 
-#### `__construct(): void`
+#### [`__construct`](../../../src/RequestHandlers/Api/TotpEnroll.php#L55-L62)
 
-**Throws:**
+Returns `void`
 
-- `DependencyException`
-- `TableException`
-- `CacheException`
+**Throws:** `DependencyException`, `TableException`, `CacheException`
 
-#### `handle(Psr\Http\Message\ServerRequestInterface $request): Psr\Http\Message\ResponseInterface`
+#### [`handle`](../../../src/RequestHandlers/Api/TotpEnroll.php#L81-L151)
+
+Returns `Psr\Http\Message\ResponseInterface`
 
 **Attributes:** `#[Route]`, `#[Override]`
 
@@ -3529,53 +3114,36 @@ Strip all newlines (CR, LF) characters from a string.
 
 - `$request`: `Psr\Http\Message\ServerRequestInterface`
 
-**Throws:**
+**Throws:** `ArrayKeyException`, `BlindIndexNotFoundException`, `CacheException`, `CipherSweetException`, `CryptoOperationException`, `DependencyException`, `InvalidCiphertextException`, `JsonException`, `NotImplementedException`, `ProtocolException`, `SodiumException`, `TableException`, `HPKEException`
 
-- `ArrayKeyException`
-- `BlindIndexNotFoundException`
-- `CacheException`
-- `CipherSweetException`
-- `CryptoOperationException`
-- `DependencyException`
-- `InvalidCiphertextException`
-- `JsonException`
-- `NotImplementedException`
-- `ProtocolException`
-- `SodiumException`
-- `TableException`
-- `HPKEException`
+#### [`time`](../../../src/RequestHandlers/Api/TotpEnroll.php#L34-L37)
 
-#### `time(): string`
+Returns `string`
 
-#### `canonicalizeActor(string $actor): string`
+#### [`canonicalizeActor`](../../../src/RequestHandlers/Api/TotpEnroll.php#L46-L50)
+
+Returns `string`
 
 **Parameters:**
 
 - `$actor`: `string`
 
-**Throws:**
+**Throws:** `DependencyException`, `GuzzleException`, `NetworkException`, `SodiumException`, `CertaintyException`
 
-- `DependencyException`
-- `GuzzleException`
-- `NetworkException`
-- `SodiumException`
-- `CertaintyException`
+#### [`error`](../../../src/RequestHandlers/Api/TotpEnroll.php#L58-L61)
 
-#### `error(string $message, int $code = 400): Psr\Http\Message\ResponseInterface`
+Returns `Psr\Http\Message\ResponseInterface`
 
 **Parameters:**
 
 - `$message`: `string`
-- `$code`: `int`
+- `$code`: `int` = 400
 
-**Throws:**
+**Throws:** `DependencyException`, `JsonException`, `NotImplementedException`, `SodiumException`
 
-- `DependencyException`
-- `JsonException`
-- `NotImplementedException`
-- `SodiumException`
+#### [`signResponse`](../../../src/RequestHandlers/Api/TotpEnroll.php#L72-L84)
 
-#### `signResponse(Psr\Http\Message\ResponseInterface $response): Psr\Http\Message\ResponseInterface`
+Returns `Psr\Http\Message\ResponseInterface`
 
 Implements an RFC 9421 HTTP Message Signature with Ed25519.
 
@@ -3583,81 +3151,73 @@ Implements an RFC 9421 HTTP Message Signature with Ed25519.
 
 - `$response`: `Psr\Http\Message\ResponseInterface`
 
-**Throws:**
+**Throws:** `DependencyException`, `NotImplementedException`, `SodiumException`
 
-- `DependencyException`
-- `NotImplementedException`
-- `SodiumException`
+#### [`json`](../../../src/RequestHandlers/Api/TotpEnroll.php#L94-L119)
 
-#### `json(object|array $data, int $status = 200, array $headers = []): Psr\Http\Message\ResponseInterface`
+Returns `Psr\Http\Message\ResponseInterface`
 
 Return a JSON response with HTTP Message Signature (from signResponse())
 
 **Parameters:**
 
 - `$data`: `object|array`
-- `$status`: `int`
-- `$headers`: `array`
+- `$status`: `int` = 200
+- `$headers`: `array` = []
 
-**Throws:**
+**Throws:** `DependencyException`, `JsonException`, `NotImplementedException`, `SodiumException`
 
-- `DependencyException`
-- `JsonException`
-- `NotImplementedException`
-- `SodiumException`
+#### [`twig`](../../../src/RequestHandlers/Api/TotpEnroll.php#L127-L144)
 
-#### `twig(string $template, array $vars = [], array $headers = [], int $status = 200): Psr\Http\Message\ResponseInterface`
+Returns `Psr\Http\Message\ResponseInterface`
 
 **Parameters:**
 
 - `$template`: `string`
-- `$vars`: `array`
-- `$headers`: `array`
-- `$status`: `int`
+- `$vars`: `array` = []
+- `$headers`: `array` = []
+- `$status`: `int` = 200
 
-**Throws:**
+**Throws:** `DependencyException`, `LoaderError`, `RuntimeError`, `SyntaxError`
 
-- `DependencyException`
-- `LoaderError`
-- `RuntimeError`
-- `SyntaxError`
+#### [`appCache`](../../../src/RequestHandlers/Api/TotpEnroll.php#L42-L45)
 
-#### `appCache(string $namespace, int $defaultTTL = 60): FediE2EE\PKDServer\AppCache`
+Returns `FediE2EE\PKDServer\AppCache`
 
 **Parameters:**
 
 - `$namespace`: `string`
-- `$defaultTTL`: `int`
+- `$defaultTTL`: `int` = 60
 
-**Throws:**
+**Throws:** `DependencyException`
 
-- `DependencyException`
+#### [`table`](../../../src/RequestHandlers/Api/TotpEnroll.php#L52-L75)
 
-#### `table(string $tableName): FediE2EE\PKDServer\Table`
+Returns `FediE2EE\PKDServer\Table`
 
 **Parameters:**
 
 - `$tableName`: `string`
 
-**Throws:**
+**Throws:** `CacheException`, `DependencyException`, `TableException`
 
-- `CacheException`
-- `DependencyException`
-- `TableException`
+#### [`injectConfig`](../../../src/RequestHandlers/Api/TotpEnroll.php#L77-L80)
 
-#### `injectConfig(FediE2EE\PKDServer\ServerConfig $config): void`
+Returns `void`
 
 **Parameters:**
 
 - `$config`: `FediE2EE\PKDServer\ServerConfig`
 
-#### `config(): FediE2EE\PKDServer\ServerConfig`
+#### [`config`](../../../src/RequestHandlers/Api/TotpEnroll.php#L85-L95)
 
-**Throws:**
+Returns `FediE2EE\PKDServer\ServerConfig`
 
-- `DependencyException`
+**Throws:** `DependencyException`
 
-#### `setWebFinger(FediE2EE\PKDServer\ActivityPub\WebFinger $wf): self`
+#### [`setWebFinger`](../../../src/RequestHandlers/Api/TotpEnroll.php#L100-L104)
+
+Returns `self`
 
 This is intended for mocking in unit tests
 
@@ -3665,34 +3225,38 @@ This is intended for mocking in unit tests
 
 - `$wf`: `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
-#### `webfinger(?GuzzleHttp\Client $http = null): FediE2EE\PKDServer\ActivityPub\WebFinger`
+#### [`webfinger`](../../../src/RequestHandlers/Api/TotpEnroll.php#L111-L118)
+
+Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
 **Parameters:**
 
-- `$http`: `?GuzzleHttp\Client` (nullable)
+- `$http`: `?GuzzleHttp\Client` = null
 
-**Throws:**
+**Throws:** `CertaintyException`, `DependencyException`, `SodiumException`
 
-- `CertaintyException`
-- `DependencyException`
-- `SodiumException`
+#### [`verifyTOTP`](../../../src/RequestHandlers/Api/TotpEnroll.php#L42-L56)
 
-#### `static verifyTOTP(string $secret, string $otp, int $windows = 2): bool`
+static · Returns `bool`
 
 **Parameters:**
 
 - `$secret`: `string`
 - `$otp`: `string`
-- `$windows`: `int`
+- `$windows`: `int` = 2
 
-#### `static generateTOTP(string $secret, ?int $time = null): string`
+#### [`generateTOTP`](../../../src/RequestHandlers/Api/TotpEnroll.php#L58-L73)
+
+static · Returns `string`
 
 **Parameters:**
 
 - `$secret`: `string`
-- `$time`: `?int` (nullable)
+- `$time`: `?int` = null
 
-#### `static ord(string $chr): int`
+#### [`ord`](../../../src/RequestHandlers/Api/TotpEnroll.php#L78-L81)
+
+static · Returns `int`
 
 Avoid cache-timing leaks in ord() by using unpack()
 
@@ -3700,35 +3264,39 @@ Avoid cache-timing leaks in ord() by using unpack()
 
 - `$chr`: `string`
 
-#### `throwIfTimeOutsideWindow(int $currentTime): void`
+#### [`throwIfTimeOutsideWindow`](../../../src/RequestHandlers/Api/TotpEnroll.php#L139-L148)
+
+Returns `void`
 
 **Parameters:**
 
 - `$currentTime`: `int`
 
-**Throws:**
+**Throws:** `ProtocolException`
 
-- `ProtocolException`
+#### [`assertAllArrayKeysExist`](../../../src/RequestHandlers/Api/TotpEnroll.php#L14-L19)
 
-#### `static assertAllArrayKeysExist(array $target, string $arrayKeys): void`
-
-**Parameters:**
-
-- `$target`: `array`
-- `...$arrayKeys`: `string`
-
-**Throws:**
-
-- `InputException`
-
-#### `static allArrayKeysExist(array $target, string $arrayKeys): bool`
+static · Returns `void`
 
 **Parameters:**
 
 - `$target`: `array`
 - `...$arrayKeys`: `string`
 
-#### `constantTimeSelect(int $select, string $left, string $right): string`
+**Throws:** `InputException`
+
+#### [`allArrayKeysExist`](../../../src/RequestHandlers/Api/TotpEnroll.php#L21-L28)
+
+static · Returns `bool`
+
+**Parameters:**
+
+- `$target`: `array`
+- `...$arrayKeys`: `string`
+
+#### [`constantTimeSelect`](../../../src/RequestHandlers/Api/TotpEnroll.php#L35-L52)
+
+Returns `string`
 
 **Parameters:**
 
@@ -3736,11 +3304,11 @@ Avoid cache-timing leaks in ord() by using unpack()
 - `$left`: `string`
 - `$right`: `string`
 
-**Throws:**
+**Throws:** `CryptoException`
 
-- `CryptoException`
+#### [`dos2unix`](../../../src/RequestHandlers/Api/TotpEnroll.php#L60-L63)
 
-#### `static dos2unix(string $in): string`
+static · Returns `string`
 
 Normalize line-endings to UNIX-style (LF rather than CRLF).
 
@@ -3748,31 +3316,41 @@ Normalize line-endings to UNIX-style (LF rather than CRLF).
 
 - `$in`: `string`
 
-#### `static preAuthEncode(array $pieces): string`
+#### [`preAuthEncode`](../../../src/RequestHandlers/Api/TotpEnroll.php#L69-L78)
+
+static · Returns `string`
 
 **Parameters:**
 
 - `$pieces`: `array`
 
-#### `static sortByKey(array $arr): void`
+#### [`sortByKey`](../../../src/RequestHandlers/Api/TotpEnroll.php#L80-L88)
+
+static · Returns `void`
 
 **Parameters:**
 
 - `$arr`: `array`
 
-#### `static LE64(int $n): string`
+#### [`LE64`](../../../src/RequestHandlers/Api/TotpEnroll.php#L90-L93)
+
+static · Returns `string`
 
 **Parameters:**
 
 - `$n`: `int`
 
-#### `stringToByteArray(string $str): array`
+#### [`stringToByteArray`](../../../src/RequestHandlers/Api/TotpEnroll.php#L95-L99)
+
+Returns `array`
 
 **Parameters:**
 
 - `$str`: `string`
 
-#### `static stripNewlines(string $input): string`
+#### [`stripNewlines`](../../../src/RequestHandlers/Api/TotpEnroll.php#L107-L141)
+
+static · Returns `string`
 
 Strip all newlines (CR, LF) characters from a string.
 
@@ -3800,15 +3378,15 @@ Strip all newlines (CR, LF) characters from a string.
 
 ### Methods
 
-#### `__construct(): void`
+#### [`__construct`](../../../src/RequestHandlers/Api/TotpRotate.php#L56-L63)
 
-**Throws:**
+Returns `void`
 
-- `DependencyException`
-- `TableException`
-- `CacheException`
+**Throws:** `DependencyException`, `TableException`, `CacheException`
 
-#### `handle(Psr\Http\Message\ServerRequestInterface $request): Psr\Http\Message\ResponseInterface`
+#### [`handle`](../../../src/RequestHandlers/Api/TotpRotate.php#L83-L158)
+
+Returns `Psr\Http\Message\ResponseInterface`
 
 **Attributes:** `#[Route]`, `#[Override]`
 
@@ -3816,54 +3394,36 @@ Strip all newlines (CR, LF) characters from a string.
 
 - `$request`: `Psr\Http\Message\ServerRequestInterface`
 
-**Throws:**
+**Throws:** `ArrayKeyException`, `BlindIndexNotFoundException`, `CacheException`, `CipherSweetException`, `CryptoOperationException`, `DependencyException`, `HPKEException`, `InvalidCiphertextException`, `JsonException`, `NotImplementedException`, `ProtocolException`, `RandomException`, `SodiumException`, `TableException`
 
-- `ArrayKeyException`
-- `BlindIndexNotFoundException`
-- `CacheException`
-- `CipherSweetException`
-- `CryptoOperationException`
-- `DependencyException`
-- `HPKEException`
-- `InvalidCiphertextException`
-- `JsonException`
-- `NotImplementedException`
-- `ProtocolException`
-- `RandomException`
-- `SodiumException`
-- `TableException`
+#### [`time`](../../../src/RequestHandlers/Api/TotpRotate.php#L34-L37)
 
-#### `time(): string`
+Returns `string`
 
-#### `canonicalizeActor(string $actor): string`
+#### [`canonicalizeActor`](../../../src/RequestHandlers/Api/TotpRotate.php#L46-L50)
+
+Returns `string`
 
 **Parameters:**
 
 - `$actor`: `string`
 
-**Throws:**
+**Throws:** `DependencyException`, `GuzzleException`, `NetworkException`, `SodiumException`, `CertaintyException`
 
-- `DependencyException`
-- `GuzzleException`
-- `NetworkException`
-- `SodiumException`
-- `CertaintyException`
+#### [`error`](../../../src/RequestHandlers/Api/TotpRotate.php#L58-L61)
 
-#### `error(string $message, int $code = 400): Psr\Http\Message\ResponseInterface`
+Returns `Psr\Http\Message\ResponseInterface`
 
 **Parameters:**
 
 - `$message`: `string`
-- `$code`: `int`
+- `$code`: `int` = 400
 
-**Throws:**
+**Throws:** `DependencyException`, `JsonException`, `NotImplementedException`, `SodiumException`
 
-- `DependencyException`
-- `JsonException`
-- `NotImplementedException`
-- `SodiumException`
+#### [`signResponse`](../../../src/RequestHandlers/Api/TotpRotate.php#L72-L84)
 
-#### `signResponse(Psr\Http\Message\ResponseInterface $response): Psr\Http\Message\ResponseInterface`
+Returns `Psr\Http\Message\ResponseInterface`
 
 Implements an RFC 9421 HTTP Message Signature with Ed25519.
 
@@ -3871,81 +3431,73 @@ Implements an RFC 9421 HTTP Message Signature with Ed25519.
 
 - `$response`: `Psr\Http\Message\ResponseInterface`
 
-**Throws:**
+**Throws:** `DependencyException`, `NotImplementedException`, `SodiumException`
 
-- `DependencyException`
-- `NotImplementedException`
-- `SodiumException`
+#### [`json`](../../../src/RequestHandlers/Api/TotpRotate.php#L94-L119)
 
-#### `json(object|array $data, int $status = 200, array $headers = []): Psr\Http\Message\ResponseInterface`
+Returns `Psr\Http\Message\ResponseInterface`
 
 Return a JSON response with HTTP Message Signature (from signResponse())
 
 **Parameters:**
 
 - `$data`: `object|array`
-- `$status`: `int`
-- `$headers`: `array`
+- `$status`: `int` = 200
+- `$headers`: `array` = []
 
-**Throws:**
+**Throws:** `DependencyException`, `JsonException`, `NotImplementedException`, `SodiumException`
 
-- `DependencyException`
-- `JsonException`
-- `NotImplementedException`
-- `SodiumException`
+#### [`twig`](../../../src/RequestHandlers/Api/TotpRotate.php#L127-L144)
 
-#### `twig(string $template, array $vars = [], array $headers = [], int $status = 200): Psr\Http\Message\ResponseInterface`
+Returns `Psr\Http\Message\ResponseInterface`
 
 **Parameters:**
 
 - `$template`: `string`
-- `$vars`: `array`
-- `$headers`: `array`
-- `$status`: `int`
+- `$vars`: `array` = []
+- `$headers`: `array` = []
+- `$status`: `int` = 200
 
-**Throws:**
+**Throws:** `DependencyException`, `LoaderError`, `RuntimeError`, `SyntaxError`
 
-- `DependencyException`
-- `LoaderError`
-- `RuntimeError`
-- `SyntaxError`
+#### [`appCache`](../../../src/RequestHandlers/Api/TotpRotate.php#L42-L45)
 
-#### `appCache(string $namespace, int $defaultTTL = 60): FediE2EE\PKDServer\AppCache`
+Returns `FediE2EE\PKDServer\AppCache`
 
 **Parameters:**
 
 - `$namespace`: `string`
-- `$defaultTTL`: `int`
+- `$defaultTTL`: `int` = 60
 
-**Throws:**
+**Throws:** `DependencyException`
 
-- `DependencyException`
+#### [`table`](../../../src/RequestHandlers/Api/TotpRotate.php#L52-L75)
 
-#### `table(string $tableName): FediE2EE\PKDServer\Table`
+Returns `FediE2EE\PKDServer\Table`
 
 **Parameters:**
 
 - `$tableName`: `string`
 
-**Throws:**
+**Throws:** `CacheException`, `DependencyException`, `TableException`
 
-- `CacheException`
-- `DependencyException`
-- `TableException`
+#### [`injectConfig`](../../../src/RequestHandlers/Api/TotpRotate.php#L77-L80)
 
-#### `injectConfig(FediE2EE\PKDServer\ServerConfig $config): void`
+Returns `void`
 
 **Parameters:**
 
 - `$config`: `FediE2EE\PKDServer\ServerConfig`
 
-#### `config(): FediE2EE\PKDServer\ServerConfig`
+#### [`config`](../../../src/RequestHandlers/Api/TotpRotate.php#L85-L95)
 
-**Throws:**
+Returns `FediE2EE\PKDServer\ServerConfig`
 
-- `DependencyException`
+**Throws:** `DependencyException`
 
-#### `setWebFinger(FediE2EE\PKDServer\ActivityPub\WebFinger $wf): self`
+#### [`setWebFinger`](../../../src/RequestHandlers/Api/TotpRotate.php#L100-L104)
+
+Returns `self`
 
 This is intended for mocking in unit tests
 
@@ -3953,34 +3505,38 @@ This is intended for mocking in unit tests
 
 - `$wf`: `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
-#### `webfinger(?GuzzleHttp\Client $http = null): FediE2EE\PKDServer\ActivityPub\WebFinger`
+#### [`webfinger`](../../../src/RequestHandlers/Api/TotpRotate.php#L111-L118)
+
+Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
 **Parameters:**
 
-- `$http`: `?GuzzleHttp\Client` (nullable)
+- `$http`: `?GuzzleHttp\Client` = null
 
-**Throws:**
+**Throws:** `CertaintyException`, `DependencyException`, `SodiumException`
 
-- `CertaintyException`
-- `DependencyException`
-- `SodiumException`
+#### [`verifyTOTP`](../../../src/RequestHandlers/Api/TotpRotate.php#L42-L56)
 
-#### `static verifyTOTP(string $secret, string $otp, int $windows = 2): bool`
+static · Returns `bool`
 
 **Parameters:**
 
 - `$secret`: `string`
 - `$otp`: `string`
-- `$windows`: `int`
+- `$windows`: `int` = 2
 
-#### `static generateTOTP(string $secret, ?int $time = null): string`
+#### [`generateTOTP`](../../../src/RequestHandlers/Api/TotpRotate.php#L58-L73)
+
+static · Returns `string`
 
 **Parameters:**
 
 - `$secret`: `string`
-- `$time`: `?int` (nullable)
+- `$time`: `?int` = null
 
-#### `static ord(string $chr): int`
+#### [`ord`](../../../src/RequestHandlers/Api/TotpRotate.php#L78-L81)
+
+static · Returns `int`
 
 Avoid cache-timing leaks in ord() by using unpack()
 
@@ -3988,35 +3544,39 @@ Avoid cache-timing leaks in ord() by using unpack()
 
 - `$chr`: `string`
 
-#### `throwIfTimeOutsideWindow(int $currentTime): void`
+#### [`throwIfTimeOutsideWindow`](../../../src/RequestHandlers/Api/TotpRotate.php#L139-L148)
+
+Returns `void`
 
 **Parameters:**
 
 - `$currentTime`: `int`
 
-**Throws:**
+**Throws:** `ProtocolException`
 
-- `ProtocolException`
+#### [`assertAllArrayKeysExist`](../../../src/RequestHandlers/Api/TotpRotate.php#L14-L19)
 
-#### `static assertAllArrayKeysExist(array $target, string $arrayKeys): void`
-
-**Parameters:**
-
-- `$target`: `array`
-- `...$arrayKeys`: `string`
-
-**Throws:**
-
-- `InputException`
-
-#### `static allArrayKeysExist(array $target, string $arrayKeys): bool`
+static · Returns `void`
 
 **Parameters:**
 
 - `$target`: `array`
 - `...$arrayKeys`: `string`
 
-#### `constantTimeSelect(int $select, string $left, string $right): string`
+**Throws:** `InputException`
+
+#### [`allArrayKeysExist`](../../../src/RequestHandlers/Api/TotpRotate.php#L21-L28)
+
+static · Returns `bool`
+
+**Parameters:**
+
+- `$target`: `array`
+- `...$arrayKeys`: `string`
+
+#### [`constantTimeSelect`](../../../src/RequestHandlers/Api/TotpRotate.php#L35-L52)
+
+Returns `string`
 
 **Parameters:**
 
@@ -4024,11 +3584,11 @@ Avoid cache-timing leaks in ord() by using unpack()
 - `$left`: `string`
 - `$right`: `string`
 
-**Throws:**
+**Throws:** `CryptoException`
 
-- `CryptoException`
+#### [`dos2unix`](../../../src/RequestHandlers/Api/TotpRotate.php#L60-L63)
 
-#### `static dos2unix(string $in): string`
+static · Returns `string`
 
 Normalize line-endings to UNIX-style (LF rather than CRLF).
 
@@ -4036,31 +3596,41 @@ Normalize line-endings to UNIX-style (LF rather than CRLF).
 
 - `$in`: `string`
 
-#### `static preAuthEncode(array $pieces): string`
+#### [`preAuthEncode`](../../../src/RequestHandlers/Api/TotpRotate.php#L69-L78)
+
+static · Returns `string`
 
 **Parameters:**
 
 - `$pieces`: `array`
 
-#### `static sortByKey(array $arr): void`
+#### [`sortByKey`](../../../src/RequestHandlers/Api/TotpRotate.php#L80-L88)
+
+static · Returns `void`
 
 **Parameters:**
 
 - `$arr`: `array`
 
-#### `static LE64(int $n): string`
+#### [`LE64`](../../../src/RequestHandlers/Api/TotpRotate.php#L90-L93)
+
+static · Returns `string`
 
 **Parameters:**
 
 - `$n`: `int`
 
-#### `stringToByteArray(string $str): array`
+#### [`stringToByteArray`](../../../src/RequestHandlers/Api/TotpRotate.php#L95-L99)
+
+Returns `array`
 
 **Parameters:**
 
 - `$str`: `string`
 
-#### `static stripNewlines(string $input): string`
+#### [`stripNewlines`](../../../src/RequestHandlers/Api/TotpRotate.php#L107-L141)
+
+static · Returns `string`
 
 Strip all newlines (CR, LF) characters from a string.
 
