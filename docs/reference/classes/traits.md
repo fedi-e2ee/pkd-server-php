@@ -40,7 +40,7 @@ Returns `FediE2EE\PKDServer\ActivityPub\ActivityStream`
 
 **Throws:** `ActivityPubException`, `DependencyException`, `FetchException`, `CryptoException`, `HttpSignatureException`, `NotImplementedException`, `CertaintyException`, `SodiumException`
 
-#### [`appCache`](../../../src/Traits/ActivityStreamsTrait.php#L42-L45)
+#### [`appCache`](../../../src/Traits/ActivityStreamsTrait.php#L44-L47)
 
 Returns `FediE2EE\PKDServer\AppCache`
 
@@ -51,7 +51,7 @@ Returns `FediE2EE\PKDServer\AppCache`
 
 **Throws:** `DependencyException`
 
-#### [`table`](../../../src/Traits/ActivityStreamsTrait.php#L52-L75)
+#### [`table`](../../../src/Traits/ActivityStreamsTrait.php#L54-L77)
 
 Returns `FediE2EE\PKDServer\Table`
 
@@ -61,7 +61,7 @@ Returns `FediE2EE\PKDServer\Table`
 
 **Throws:** `CacheException`, `DependencyException`, `TableException`
 
-#### [`injectConfig`](../../../src/Traits/ActivityStreamsTrait.php#L77-L80)
+#### [`injectConfig`](../../../src/Traits/ActivityStreamsTrait.php#L79-L82)
 
 Returns `void`
 
@@ -69,13 +69,33 @@ Returns `void`
 
 - `$config`: `FediE2EE\PKDServer\ServerConfig`
 
-#### [`config`](../../../src/Traits/ActivityStreamsTrait.php#L85-L95)
+#### [`jsonDecode`](../../../src/Traits/ActivityStreamsTrait.php#L87-L94)
+
+Returns `array`
+
+**Parameters:**
+
+- `$json`: `string`
+
+**Throws:** `BaseJsonException`
+
+#### [`jsonDecodeObject`](../../../src/Traits/ActivityStreamsTrait.php#L99-L106)
+
+Returns `object`
+
+**Parameters:**
+
+- `$json`: `string`
+
+**Throws:** `BaseJsonException`
+
+#### [`config`](../../../src/Traits/ActivityStreamsTrait.php#L111-L121)
 
 Returns `FediE2EE\PKDServer\ServerConfig`
 
 **Throws:** `DependencyException`
 
-#### [`setWebFinger`](../../../src/Traits/ActivityStreamsTrait.php#L100-L104)
+#### [`setWebFinger`](../../../src/Traits/ActivityStreamsTrait.php#L126-L130)
 
 Returns `self`
 
@@ -85,7 +105,7 @@ This is intended for mocking in unit tests
 
 - `$wf`: `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
-#### [`webfinger`](../../../src/Traits/ActivityStreamsTrait.php#L111-L118)
+#### [`webfinger`](../../../src/Traits/ActivityStreamsTrait.php#L137-L144)
 
 Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
@@ -111,7 +131,7 @@ Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
 ### Methods
 
-#### [`appCache`](../../../src/Traits/ConfigTrait.php#L42-L45)
+#### [`appCache`](../../../src/Traits/ConfigTrait.php#L44-L47)
 
 Returns `FediE2EE\PKDServer\AppCache`
 
@@ -122,7 +142,7 @@ Returns `FediE2EE\PKDServer\AppCache`
 
 **Throws:** `DependencyException`
 
-#### [`table`](../../../src/Traits/ConfigTrait.php#L52-L75)
+#### [`table`](../../../src/Traits/ConfigTrait.php#L54-L77)
 
 Returns `FediE2EE\PKDServer\Table`
 
@@ -132,7 +152,7 @@ Returns `FediE2EE\PKDServer\Table`
 
 **Throws:** `CacheException`, `DependencyException`, `TableException`
 
-#### [`injectConfig`](../../../src/Traits/ConfigTrait.php#L77-L80)
+#### [`injectConfig`](../../../src/Traits/ConfigTrait.php#L79-L82)
 
 Returns `void`
 
@@ -140,13 +160,33 @@ Returns `void`
 
 - `$config`: `FediE2EE\PKDServer\ServerConfig`
 
-#### [`config`](../../../src/Traits/ConfigTrait.php#L85-L95)
+#### [`jsonDecode`](../../../src/Traits/ConfigTrait.php#L87-L94)
+
+Returns `array`
+
+**Parameters:**
+
+- `$json`: `string`
+
+**Throws:** `BaseJsonException`
+
+#### [`jsonDecodeObject`](../../../src/Traits/ConfigTrait.php#L99-L106)
+
+Returns `object`
+
+**Parameters:**
+
+- `$json`: `string`
+
+**Throws:** `BaseJsonException`
+
+#### [`config`](../../../src/Traits/ConfigTrait.php#L111-L121)
 
 Returns `FediE2EE\PKDServer\ServerConfig`
 
 **Throws:** `DependencyException`
 
-#### [`setWebFinger`](../../../src/Traits/ConfigTrait.php#L100-L104)
+#### [`setWebFinger`](../../../src/Traits/ConfigTrait.php#L126-L130)
 
 Returns `self`
 
@@ -156,7 +196,7 @@ This is intended for mocking in unit tests
 
 - `$wf`: `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
-#### [`webfinger`](../../../src/Traits/ConfigTrait.php#L111-L118)
+#### [`webfinger`](../../../src/Traits/ConfigTrait.php#L137-L144)
 
 Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
@@ -254,7 +294,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `DependencyException`, `LoaderError`, `RuntimeError`, `SyntaxError`
 
-#### [`appCache`](../../../src/Traits/HttpCacheTrait.php#L42-L45)
+#### [`appCache`](../../../src/Traits/HttpCacheTrait.php#L44-L47)
 
 Returns `FediE2EE\PKDServer\AppCache`
 
@@ -265,7 +305,7 @@ Returns `FediE2EE\PKDServer\AppCache`
 
 **Throws:** `DependencyException`
 
-#### [`table`](../../../src/Traits/HttpCacheTrait.php#L52-L75)
+#### [`table`](../../../src/Traits/HttpCacheTrait.php#L54-L77)
 
 Returns `FediE2EE\PKDServer\Table`
 
@@ -275,7 +315,7 @@ Returns `FediE2EE\PKDServer\Table`
 
 **Throws:** `CacheException`, `DependencyException`, `TableException`
 
-#### [`injectConfig`](../../../src/Traits/HttpCacheTrait.php#L77-L80)
+#### [`injectConfig`](../../../src/Traits/HttpCacheTrait.php#L79-L82)
 
 Returns `void`
 
@@ -283,13 +323,33 @@ Returns `void`
 
 - `$config`: `FediE2EE\PKDServer\ServerConfig`
 
-#### [`config`](../../../src/Traits/HttpCacheTrait.php#L85-L95)
+#### [`jsonDecode`](../../../src/Traits/HttpCacheTrait.php#L87-L94)
+
+Returns `array`
+
+**Parameters:**
+
+- `$json`: `string`
+
+**Throws:** `BaseJsonException`
+
+#### [`jsonDecodeObject`](../../../src/Traits/HttpCacheTrait.php#L99-L106)
+
+Returns `object`
+
+**Parameters:**
+
+- `$json`: `string`
+
+**Throws:** `BaseJsonException`
+
+#### [`config`](../../../src/Traits/HttpCacheTrait.php#L111-L121)
 
 Returns `FediE2EE\PKDServer\ServerConfig`
 
 **Throws:** `DependencyException`
 
-#### [`setWebFinger`](../../../src/Traits/HttpCacheTrait.php#L100-L104)
+#### [`setWebFinger`](../../../src/Traits/HttpCacheTrait.php#L126-L130)
 
 Returns `self`
 
@@ -299,7 +359,7 @@ This is intended for mocking in unit tests
 
 - `$wf`: `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
-#### [`webfinger`](../../../src/Traits/HttpCacheTrait.php#L111-L118)
+#### [`webfinger`](../../../src/Traits/HttpCacheTrait.php#L137-L144)
 
 Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
@@ -401,7 +461,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `DependencyException`, `LoaderError`, `RuntimeError`, `SyntaxError`
 
-#### [`appCache`](../../../src/Traits/ReqTrait.php#L42-L45)
+#### [`appCache`](../../../src/Traits/ReqTrait.php#L44-L47)
 
 Returns `FediE2EE\PKDServer\AppCache`
 
@@ -412,7 +472,7 @@ Returns `FediE2EE\PKDServer\AppCache`
 
 **Throws:** `DependencyException`
 
-#### [`table`](../../../src/Traits/ReqTrait.php#L52-L75)
+#### [`table`](../../../src/Traits/ReqTrait.php#L54-L77)
 
 Returns `FediE2EE\PKDServer\Table`
 
@@ -422,7 +482,7 @@ Returns `FediE2EE\PKDServer\Table`
 
 **Throws:** `CacheException`, `DependencyException`, `TableException`
 
-#### [`injectConfig`](../../../src/Traits/ReqTrait.php#L77-L80)
+#### [`injectConfig`](../../../src/Traits/ReqTrait.php#L79-L82)
 
 Returns `void`
 
@@ -430,13 +490,33 @@ Returns `void`
 
 - `$config`: `FediE2EE\PKDServer\ServerConfig`
 
-#### [`config`](../../../src/Traits/ReqTrait.php#L85-L95)
+#### [`jsonDecode`](../../../src/Traits/ReqTrait.php#L87-L94)
+
+Returns `array`
+
+**Parameters:**
+
+- `$json`: `string`
+
+**Throws:** `BaseJsonException`
+
+#### [`jsonDecodeObject`](../../../src/Traits/ReqTrait.php#L99-L106)
+
+Returns `object`
+
+**Parameters:**
+
+- `$json`: `string`
+
+**Throws:** `BaseJsonException`
+
+#### [`config`](../../../src/Traits/ReqTrait.php#L111-L121)
 
 Returns `FediE2EE\PKDServer\ServerConfig`
 
 **Throws:** `DependencyException`
 
-#### [`setWebFinger`](../../../src/Traits/ReqTrait.php#L100-L104)
+#### [`setWebFinger`](../../../src/Traits/ReqTrait.php#L126-L130)
 
 Returns `self`
 
@@ -446,7 +526,7 @@ This is intended for mocking in unit tests
 
 - `$wf`: `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
-#### [`webfinger`](../../../src/Traits/ReqTrait.php#L111-L118)
+#### [`webfinger`](../../../src/Traits/ReqTrait.php#L137-L144)
 
 Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 

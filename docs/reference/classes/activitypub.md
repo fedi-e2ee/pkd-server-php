@@ -112,7 +112,7 @@ Fetch an entire remote WebFinger response.
 
 **Throws:** `GuzzleException`, `NetworkException`
 
-#### [`getInboxUrl`](../../../src/ActivityPub/WebFinger.php#L174-L192)
+#### [`getInboxUrl`](../../../src/ActivityPub/WebFinger.php#L176-L194)
 
 Returns `string`
 
@@ -120,9 +120,9 @@ Returns `string`
 
 - `$actorUrl`: `string`
 
-**Throws:** `CacheException`, `GuzzleException`, `NetworkException`
+**Throws:** `CacheException`, `GuzzleException`, `InvalidArgumentException`, `NetworkException`, `SodiumException`
 
-#### [`getPublicKey`](../../../src/ActivityPub/WebFinger.php#L198-L230)
+#### [`getPublicKey`](../../../src/ActivityPub/WebFinger.php#L202-L243)
 
 Returns `FediE2EE\PKD\Crypto\PublicKey`
 
@@ -130,9 +130,17 @@ Returns `FediE2EE\PKD\Crypto\PublicKey`
 
 - `$actorUrl`: `string`
 
-**Throws:** `CryptoException`, `FetchException`
+**Throws:** `CryptoException`, `FetchException`, `InvalidArgumentException`, `SodiumException`
 
-#### [`setCanonicalForTesting`](../../../src/ActivityPub/WebFinger.php#L284-L291)
+#### [`trimUsername`](../../../src/ActivityPub/WebFinger.php#L245-L248)
+
+Returns `string`
+
+**Parameters:**
+
+- `$username`: `string`
+
+#### [`setCanonicalForTesting`](../../../src/ActivityPub/WebFinger.php#L303-L310)
 
 Returns `void`
 
@@ -143,7 +151,7 @@ Used for unit tests. Sets a canonical value to bypass the live webfinger query.
 - `$index`: `string`
 - `$value`: `string`
 
-**Throws:** `SodiumException`, `InvalidArgumentException`
+**Throws:** `CacheException`, `SodiumException`, `InvalidArgumentException`
 
 ---
 

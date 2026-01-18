@@ -139,7 +139,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `DependencyException`, `LoaderError`, `RuntimeError`, `SyntaxError`
 
-#### [`appCache`](../../../src/RequestHandlers/Api/Actor.php#L42-L45)
+#### [`appCache`](../../../src/RequestHandlers/Api/Actor.php#L44-L47)
 
 Returns `FediE2EE\PKDServer\AppCache`
 
@@ -150,7 +150,7 @@ Returns `FediE2EE\PKDServer\AppCache`
 
 **Throws:** `DependencyException`
 
-#### [`table`](../../../src/RequestHandlers/Api/Actor.php#L52-L75)
+#### [`table`](../../../src/RequestHandlers/Api/Actor.php#L54-L77)
 
 Returns `FediE2EE\PKDServer\Table`
 
@@ -160,7 +160,7 @@ Returns `FediE2EE\PKDServer\Table`
 
 **Throws:** `CacheException`, `DependencyException`, `TableException`
 
-#### [`injectConfig`](../../../src/RequestHandlers/Api/Actor.php#L77-L80)
+#### [`injectConfig`](../../../src/RequestHandlers/Api/Actor.php#L79-L82)
 
 Returns `void`
 
@@ -168,13 +168,33 @@ Returns `void`
 
 - `$config`: `FediE2EE\PKDServer\ServerConfig`
 
-#### [`config`](../../../src/RequestHandlers/Api/Actor.php#L85-L95)
+#### [`jsonDecode`](../../../src/RequestHandlers/Api/Actor.php#L87-L94)
+
+Returns `array`
+
+**Parameters:**
+
+- `$json`: `string`
+
+**Throws:** `BaseJsonException`
+
+#### [`jsonDecodeObject`](../../../src/RequestHandlers/Api/Actor.php#L99-L106)
+
+Returns `object`
+
+**Parameters:**
+
+- `$json`: `string`
+
+**Throws:** `BaseJsonException`
+
+#### [`config`](../../../src/RequestHandlers/Api/Actor.php#L111-L121)
 
 Returns `FediE2EE\PKDServer\ServerConfig`
 
 **Throws:** `DependencyException`
 
-#### [`setWebFinger`](../../../src/RequestHandlers/Api/Actor.php#L100-L104)
+#### [`setWebFinger`](../../../src/RequestHandlers/Api/Actor.php#L126-L130)
 
 Returns `self`
 
@@ -184,7 +204,7 @@ This is intended for mocking in unit tests
 
 - `$wf`: `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
-#### [`webfinger`](../../../src/RequestHandlers/Api/Actor.php#L111-L118)
+#### [`webfinger`](../../../src/RequestHandlers/Api/Actor.php#L137-L144)
 
 Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
@@ -242,7 +262,7 @@ Returns `FediE2EE\PKDServer\ActivityPub\ActivityStream`
 
 **Throws:** `ActivityPubException`, `DependencyException`, `FetchException`, `CryptoException`, `HttpSignatureException`, `NotImplementedException`, `CertaintyException`, `SodiumException`
 
-#### [`appCache`](../../../src/RequestHandlers/Api/BurnDown.php#L42-L45)
+#### [`appCache`](../../../src/RequestHandlers/Api/BurnDown.php#L44-L47)
 
 Returns `FediE2EE\PKDServer\AppCache`
 
@@ -253,7 +273,7 @@ Returns `FediE2EE\PKDServer\AppCache`
 
 **Throws:** `DependencyException`
 
-#### [`table`](../../../src/RequestHandlers/Api/BurnDown.php#L52-L75)
+#### [`table`](../../../src/RequestHandlers/Api/BurnDown.php#L54-L77)
 
 Returns `FediE2EE\PKDServer\Table`
 
@@ -263,7 +283,7 @@ Returns `FediE2EE\PKDServer\Table`
 
 **Throws:** `CacheException`, `DependencyException`, `TableException`
 
-#### [`injectConfig`](../../../src/RequestHandlers/Api/BurnDown.php#L77-L80)
+#### [`injectConfig`](../../../src/RequestHandlers/Api/BurnDown.php#L79-L82)
 
 Returns `void`
 
@@ -271,13 +291,33 @@ Returns `void`
 
 - `$config`: `FediE2EE\PKDServer\ServerConfig`
 
-#### [`config`](../../../src/RequestHandlers/Api/BurnDown.php#L85-L95)
+#### [`jsonDecode`](../../../src/RequestHandlers/Api/BurnDown.php#L87-L94)
+
+Returns `array`
+
+**Parameters:**
+
+- `$json`: `string`
+
+**Throws:** `BaseJsonException`
+
+#### [`jsonDecodeObject`](../../../src/RequestHandlers/Api/BurnDown.php#L99-L106)
+
+Returns `object`
+
+**Parameters:**
+
+- `$json`: `string`
+
+**Throws:** `BaseJsonException`
+
+#### [`config`](../../../src/RequestHandlers/Api/BurnDown.php#L111-L121)
 
 Returns `FediE2EE\PKDServer\ServerConfig`
 
 **Throws:** `DependencyException`
 
-#### [`setWebFinger`](../../../src/RequestHandlers/Api/BurnDown.php#L100-L104)
+#### [`setWebFinger`](../../../src/RequestHandlers/Api/BurnDown.php#L126-L130)
 
 Returns `self`
 
@@ -287,7 +327,7 @@ This is intended for mocking in unit tests
 
 - `$wf`: `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
-#### [`webfinger`](../../../src/RequestHandlers/Api/BurnDown.php#L111-L118)
+#### [`webfinger`](../../../src/RequestHandlers/Api/BurnDown.php#L137-L144)
 
 Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
@@ -455,7 +495,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `DependencyException`, `LoaderError`, `RuntimeError`, `SyntaxError`
 
-#### [`appCache`](../../../src/RequestHandlers/Api/Checkpoint.php#L42-L45)
+#### [`appCache`](../../../src/RequestHandlers/Api/Checkpoint.php#L44-L47)
 
 Returns `FediE2EE\PKDServer\AppCache`
 
@@ -466,7 +506,7 @@ Returns `FediE2EE\PKDServer\AppCache`
 
 **Throws:** `DependencyException`
 
-#### [`table`](../../../src/RequestHandlers/Api/Checkpoint.php#L52-L75)
+#### [`table`](../../../src/RequestHandlers/Api/Checkpoint.php#L54-L77)
 
 Returns `FediE2EE\PKDServer\Table`
 
@@ -476,7 +516,7 @@ Returns `FediE2EE\PKDServer\Table`
 
 **Throws:** `CacheException`, `DependencyException`, `TableException`
 
-#### [`injectConfig`](../../../src/RequestHandlers/Api/Checkpoint.php#L77-L80)
+#### [`injectConfig`](../../../src/RequestHandlers/Api/Checkpoint.php#L79-L82)
 
 Returns `void`
 
@@ -484,13 +524,33 @@ Returns `void`
 
 - `$config`: `FediE2EE\PKDServer\ServerConfig`
 
-#### [`config`](../../../src/RequestHandlers/Api/Checkpoint.php#L85-L95)
+#### [`jsonDecode`](../../../src/RequestHandlers/Api/Checkpoint.php#L87-L94)
+
+Returns `array`
+
+**Parameters:**
+
+- `$json`: `string`
+
+**Throws:** `BaseJsonException`
+
+#### [`jsonDecodeObject`](../../../src/RequestHandlers/Api/Checkpoint.php#L99-L106)
+
+Returns `object`
+
+**Parameters:**
+
+- `$json`: `string`
+
+**Throws:** `BaseJsonException`
+
+#### [`config`](../../../src/RequestHandlers/Api/Checkpoint.php#L111-L121)
 
 Returns `FediE2EE\PKDServer\ServerConfig`
 
 **Throws:** `DependencyException`
 
-#### [`setWebFinger`](../../../src/RequestHandlers/Api/Checkpoint.php#L100-L104)
+#### [`setWebFinger`](../../../src/RequestHandlers/Api/Checkpoint.php#L126-L130)
 
 Returns `self`
 
@@ -500,7 +560,7 @@ This is intended for mocking in unit tests
 
 - `$wf`: `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
-#### [`webfinger`](../../../src/RequestHandlers/Api/Checkpoint.php#L111-L118)
+#### [`webfinger`](../../../src/RequestHandlers/Api/Checkpoint.php#L137-L144)
 
 Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
@@ -606,7 +666,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `DependencyException`, `LoaderError`, `RuntimeError`, `SyntaxError`
 
-#### [`appCache`](../../../src/RequestHandlers/Api/Extensions.php#L42-L45)
+#### [`appCache`](../../../src/RequestHandlers/Api/Extensions.php#L44-L47)
 
 Returns `FediE2EE\PKDServer\AppCache`
 
@@ -617,7 +677,7 @@ Returns `FediE2EE\PKDServer\AppCache`
 
 **Throws:** `DependencyException`
 
-#### [`table`](../../../src/RequestHandlers/Api/Extensions.php#L52-L75)
+#### [`table`](../../../src/RequestHandlers/Api/Extensions.php#L54-L77)
 
 Returns `FediE2EE\PKDServer\Table`
 
@@ -627,7 +687,7 @@ Returns `FediE2EE\PKDServer\Table`
 
 **Throws:** `CacheException`, `DependencyException`, `TableException`
 
-#### [`injectConfig`](../../../src/RequestHandlers/Api/Extensions.php#L77-L80)
+#### [`injectConfig`](../../../src/RequestHandlers/Api/Extensions.php#L79-L82)
 
 Returns `void`
 
@@ -635,13 +695,33 @@ Returns `void`
 
 - `$config`: `FediE2EE\PKDServer\ServerConfig`
 
-#### [`config`](../../../src/RequestHandlers/Api/Extensions.php#L85-L95)
+#### [`jsonDecode`](../../../src/RequestHandlers/Api/Extensions.php#L87-L94)
+
+Returns `array`
+
+**Parameters:**
+
+- `$json`: `string`
+
+**Throws:** `BaseJsonException`
+
+#### [`jsonDecodeObject`](../../../src/RequestHandlers/Api/Extensions.php#L99-L106)
+
+Returns `object`
+
+**Parameters:**
+
+- `$json`: `string`
+
+**Throws:** `BaseJsonException`
+
+#### [`config`](../../../src/RequestHandlers/Api/Extensions.php#L111-L121)
 
 Returns `FediE2EE\PKDServer\ServerConfig`
 
 **Throws:** `DependencyException`
 
-#### [`setWebFinger`](../../../src/RequestHandlers/Api/Extensions.php#L100-L104)
+#### [`setWebFinger`](../../../src/RequestHandlers/Api/Extensions.php#L126-L130)
 
 Returns `self`
 
@@ -651,7 +731,7 @@ This is intended for mocking in unit tests
 
 - `$wf`: `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
-#### [`webfinger`](../../../src/RequestHandlers/Api/Extensions.php#L111-L118)
+#### [`webfinger`](../../../src/RequestHandlers/Api/Extensions.php#L137-L144)
 
 Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
@@ -763,7 +843,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `DependencyException`, `LoaderError`, `RuntimeError`, `SyntaxError`
 
-#### [`appCache`](../../../src/RequestHandlers/Api/GetAuxData.php#L42-L45)
+#### [`appCache`](../../../src/RequestHandlers/Api/GetAuxData.php#L44-L47)
 
 Returns `FediE2EE\PKDServer\AppCache`
 
@@ -774,7 +854,7 @@ Returns `FediE2EE\PKDServer\AppCache`
 
 **Throws:** `DependencyException`
 
-#### [`table`](../../../src/RequestHandlers/Api/GetAuxData.php#L52-L75)
+#### [`table`](../../../src/RequestHandlers/Api/GetAuxData.php#L54-L77)
 
 Returns `FediE2EE\PKDServer\Table`
 
@@ -784,7 +864,7 @@ Returns `FediE2EE\PKDServer\Table`
 
 **Throws:** `CacheException`, `DependencyException`, `TableException`
 
-#### [`injectConfig`](../../../src/RequestHandlers/Api/GetAuxData.php#L77-L80)
+#### [`injectConfig`](../../../src/RequestHandlers/Api/GetAuxData.php#L79-L82)
 
 Returns `void`
 
@@ -792,13 +872,33 @@ Returns `void`
 
 - `$config`: `FediE2EE\PKDServer\ServerConfig`
 
-#### [`config`](../../../src/RequestHandlers/Api/GetAuxData.php#L85-L95)
+#### [`jsonDecode`](../../../src/RequestHandlers/Api/GetAuxData.php#L87-L94)
+
+Returns `array`
+
+**Parameters:**
+
+- `$json`: `string`
+
+**Throws:** `BaseJsonException`
+
+#### [`jsonDecodeObject`](../../../src/RequestHandlers/Api/GetAuxData.php#L99-L106)
+
+Returns `object`
+
+**Parameters:**
+
+- `$json`: `string`
+
+**Throws:** `BaseJsonException`
+
+#### [`config`](../../../src/RequestHandlers/Api/GetAuxData.php#L111-L121)
 
 Returns `FediE2EE\PKDServer\ServerConfig`
 
 **Throws:** `DependencyException`
 
-#### [`setWebFinger`](../../../src/RequestHandlers/Api/GetAuxData.php#L100-L104)
+#### [`setWebFinger`](../../../src/RequestHandlers/Api/GetAuxData.php#L126-L130)
 
 Returns `self`
 
@@ -808,7 +908,7 @@ This is intended for mocking in unit tests
 
 - `$wf`: `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
-#### [`webfinger`](../../../src/RequestHandlers/Api/GetAuxData.php#L111-L118)
+#### [`webfinger`](../../../src/RequestHandlers/Api/GetAuxData.php#L137-L144)
 
 Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
@@ -838,13 +938,13 @@ Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
 ### Methods
 
-#### [`__construct`](../../../src/RequestHandlers/Api/GetKey.php#L50-L63)
+#### [`__construct`](../../../src/RequestHandlers/Api/GetKey.php#L52-L65)
 
 Returns `void`
 
 **Throws:** `CacheException`, `DependencyException`, `TableException`
 
-#### [`handle`](../../../src/RequestHandlers/Api/GetKey.php#L81-L117)
+#### [`handle`](../../../src/RequestHandlers/Api/GetKey.php#L85-L121)
 
 **API** · Returns `Psr\Http\Message\ResponseInterface`
 
@@ -854,7 +954,7 @@ Returns `void`
 
 - `$request`: `Psr\Http\Message\ServerRequestInterface`
 
-**Throws:** `ArrayKeyException`, `BlindIndexNotFoundException`, `CipherSweetException`, `CryptoOperationException`, `DependencyException`, `InvalidCiphertextException`, `JsonException`, `NotImplementedException`, `SodiumException`, `TableException`
+**Throws:** `ArrayKeyException`, `BaseJsonException`, `BlindIndexNotFoundException`, `CipherSweetException`, `CryptoOperationException`, `DateMalformedStringException`, `DependencyException`, `InvalidCiphertextException`, `JsonException`, `NotImplementedException`, `SodiumException`, `TableException`
 
 #### [`time`](../../../src/RequestHandlers/Api/GetKey.php#L34-L37)
 
@@ -920,7 +1020,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `DependencyException`, `LoaderError`, `RuntimeError`, `SyntaxError`
 
-#### [`appCache`](../../../src/RequestHandlers/Api/GetKey.php#L42-L45)
+#### [`appCache`](../../../src/RequestHandlers/Api/GetKey.php#L44-L47)
 
 Returns `FediE2EE\PKDServer\AppCache`
 
@@ -931,7 +1031,7 @@ Returns `FediE2EE\PKDServer\AppCache`
 
 **Throws:** `DependencyException`
 
-#### [`table`](../../../src/RequestHandlers/Api/GetKey.php#L52-L75)
+#### [`table`](../../../src/RequestHandlers/Api/GetKey.php#L54-L77)
 
 Returns `FediE2EE\PKDServer\Table`
 
@@ -941,7 +1041,7 @@ Returns `FediE2EE\PKDServer\Table`
 
 **Throws:** `CacheException`, `DependencyException`, `TableException`
 
-#### [`injectConfig`](../../../src/RequestHandlers/Api/GetKey.php#L77-L80)
+#### [`injectConfig`](../../../src/RequestHandlers/Api/GetKey.php#L79-L82)
 
 Returns `void`
 
@@ -949,13 +1049,33 @@ Returns `void`
 
 - `$config`: `FediE2EE\PKDServer\ServerConfig`
 
-#### [`config`](../../../src/RequestHandlers/Api/GetKey.php#L85-L95)
+#### [`jsonDecode`](../../../src/RequestHandlers/Api/GetKey.php#L87-L94)
+
+Returns `array`
+
+**Parameters:**
+
+- `$json`: `string`
+
+**Throws:** `BaseJsonException`
+
+#### [`jsonDecodeObject`](../../../src/RequestHandlers/Api/GetKey.php#L99-L106)
+
+Returns `object`
+
+**Parameters:**
+
+- `$json`: `string`
+
+**Throws:** `BaseJsonException`
+
+#### [`config`](../../../src/RequestHandlers/Api/GetKey.php#L111-L121)
 
 Returns `FediE2EE\PKDServer\ServerConfig`
 
 **Throws:** `DependencyException`
 
-#### [`setWebFinger`](../../../src/RequestHandlers/Api/GetKey.php#L100-L104)
+#### [`setWebFinger`](../../../src/RequestHandlers/Api/GetKey.php#L126-L130)
 
 Returns `self`
 
@@ -965,7 +1085,7 @@ This is intended for mocking in unit tests
 
 - `$wf`: `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
-#### [`webfinger`](../../../src/RequestHandlers/Api/GetKey.php#L111-L118)
+#### [`webfinger`](../../../src/RequestHandlers/Api/GetKey.php#L137-L144)
 
 Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
@@ -1077,7 +1197,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `DependencyException`, `LoaderError`, `RuntimeError`, `SyntaxError`
 
-#### [`appCache`](../../../src/RequestHandlers/Api/History.php#L42-L45)
+#### [`appCache`](../../../src/RequestHandlers/Api/History.php#L44-L47)
 
 Returns `FediE2EE\PKDServer\AppCache`
 
@@ -1088,7 +1208,7 @@ Returns `FediE2EE\PKDServer\AppCache`
 
 **Throws:** `DependencyException`
 
-#### [`table`](../../../src/RequestHandlers/Api/History.php#L52-L75)
+#### [`table`](../../../src/RequestHandlers/Api/History.php#L54-L77)
 
 Returns `FediE2EE\PKDServer\Table`
 
@@ -1098,7 +1218,7 @@ Returns `FediE2EE\PKDServer\Table`
 
 **Throws:** `CacheException`, `DependencyException`, `TableException`
 
-#### [`injectConfig`](../../../src/RequestHandlers/Api/History.php#L77-L80)
+#### [`injectConfig`](../../../src/RequestHandlers/Api/History.php#L79-L82)
 
 Returns `void`
 
@@ -1106,13 +1226,33 @@ Returns `void`
 
 - `$config`: `FediE2EE\PKDServer\ServerConfig`
 
-#### [`config`](../../../src/RequestHandlers/Api/History.php#L85-L95)
+#### [`jsonDecode`](../../../src/RequestHandlers/Api/History.php#L87-L94)
+
+Returns `array`
+
+**Parameters:**
+
+- `$json`: `string`
+
+**Throws:** `BaseJsonException`
+
+#### [`jsonDecodeObject`](../../../src/RequestHandlers/Api/History.php#L99-L106)
+
+Returns `object`
+
+**Parameters:**
+
+- `$json`: `string`
+
+**Throws:** `BaseJsonException`
+
+#### [`config`](../../../src/RequestHandlers/Api/History.php#L111-L121)
 
 Returns `FediE2EE\PKDServer\ServerConfig`
 
 **Throws:** `DependencyException`
 
-#### [`setWebFinger`](../../../src/RequestHandlers/Api/History.php#L100-L104)
+#### [`setWebFinger`](../../../src/RequestHandlers/Api/History.php#L126-L130)
 
 Returns `self`
 
@@ -1122,7 +1262,7 @@ This is intended for mocking in unit tests
 
 - `$wf`: `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
-#### [`webfinger`](../../../src/RequestHandlers/Api/History.php#L111-L118)
+#### [`webfinger`](../../../src/RequestHandlers/Api/History.php#L137-L144)
 
 Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
@@ -1234,7 +1374,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `DependencyException`, `LoaderError`, `RuntimeError`, `SyntaxError`
 
-#### [`appCache`](../../../src/RequestHandlers/Api/HistoryCosign.php#L42-L45)
+#### [`appCache`](../../../src/RequestHandlers/Api/HistoryCosign.php#L44-L47)
 
 Returns `FediE2EE\PKDServer\AppCache`
 
@@ -1245,7 +1385,7 @@ Returns `FediE2EE\PKDServer\AppCache`
 
 **Throws:** `DependencyException`
 
-#### [`table`](../../../src/RequestHandlers/Api/HistoryCosign.php#L52-L75)
+#### [`table`](../../../src/RequestHandlers/Api/HistoryCosign.php#L54-L77)
 
 Returns `FediE2EE\PKDServer\Table`
 
@@ -1255,7 +1395,7 @@ Returns `FediE2EE\PKDServer\Table`
 
 **Throws:** `CacheException`, `DependencyException`, `TableException`
 
-#### [`injectConfig`](../../../src/RequestHandlers/Api/HistoryCosign.php#L77-L80)
+#### [`injectConfig`](../../../src/RequestHandlers/Api/HistoryCosign.php#L79-L82)
 
 Returns `void`
 
@@ -1263,13 +1403,33 @@ Returns `void`
 
 - `$config`: `FediE2EE\PKDServer\ServerConfig`
 
-#### [`config`](../../../src/RequestHandlers/Api/HistoryCosign.php#L85-L95)
+#### [`jsonDecode`](../../../src/RequestHandlers/Api/HistoryCosign.php#L87-L94)
+
+Returns `array`
+
+**Parameters:**
+
+- `$json`: `string`
+
+**Throws:** `BaseJsonException`
+
+#### [`jsonDecodeObject`](../../../src/RequestHandlers/Api/HistoryCosign.php#L99-L106)
+
+Returns `object`
+
+**Parameters:**
+
+- `$json`: `string`
+
+**Throws:** `BaseJsonException`
+
+#### [`config`](../../../src/RequestHandlers/Api/HistoryCosign.php#L111-L121)
 
 Returns `FediE2EE\PKDServer\ServerConfig`
 
 **Throws:** `DependencyException`
 
-#### [`setWebFinger`](../../../src/RequestHandlers/Api/HistoryCosign.php#L100-L104)
+#### [`setWebFinger`](../../../src/RequestHandlers/Api/HistoryCosign.php#L126-L130)
 
 Returns `self`
 
@@ -1279,7 +1439,7 @@ This is intended for mocking in unit tests
 
 - `$wf`: `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
-#### [`webfinger`](../../../src/RequestHandlers/Api/HistoryCosign.php#L111-L118)
+#### [`webfinger`](../../../src/RequestHandlers/Api/HistoryCosign.php#L137-L144)
 
 Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
@@ -1403,7 +1563,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `DependencyException`, `LoaderError`, `RuntimeError`, `SyntaxError`
 
-#### [`appCache`](../../../src/RequestHandlers/Api/HistorySince.php#L42-L45)
+#### [`appCache`](../../../src/RequestHandlers/Api/HistorySince.php#L44-L47)
 
 Returns `FediE2EE\PKDServer\AppCache`
 
@@ -1414,7 +1574,7 @@ Returns `FediE2EE\PKDServer\AppCache`
 
 **Throws:** `DependencyException`
 
-#### [`table`](../../../src/RequestHandlers/Api/HistorySince.php#L52-L75)
+#### [`table`](../../../src/RequestHandlers/Api/HistorySince.php#L54-L77)
 
 Returns `FediE2EE\PKDServer\Table`
 
@@ -1424,7 +1584,7 @@ Returns `FediE2EE\PKDServer\Table`
 
 **Throws:** `CacheException`, `DependencyException`, `TableException`
 
-#### [`injectConfig`](../../../src/RequestHandlers/Api/HistorySince.php#L77-L80)
+#### [`injectConfig`](../../../src/RequestHandlers/Api/HistorySince.php#L79-L82)
 
 Returns `void`
 
@@ -1432,13 +1592,33 @@ Returns `void`
 
 - `$config`: `FediE2EE\PKDServer\ServerConfig`
 
-#### [`config`](../../../src/RequestHandlers/Api/HistorySince.php#L85-L95)
+#### [`jsonDecode`](../../../src/RequestHandlers/Api/HistorySince.php#L87-L94)
+
+Returns `array`
+
+**Parameters:**
+
+- `$json`: `string`
+
+**Throws:** `BaseJsonException`
+
+#### [`jsonDecodeObject`](../../../src/RequestHandlers/Api/HistorySince.php#L99-L106)
+
+Returns `object`
+
+**Parameters:**
+
+- `$json`: `string`
+
+**Throws:** `BaseJsonException`
+
+#### [`config`](../../../src/RequestHandlers/Api/HistorySince.php#L111-L121)
 
 Returns `FediE2EE\PKDServer\ServerConfig`
 
 **Throws:** `DependencyException`
 
-#### [`setWebFinger`](../../../src/RequestHandlers/Api/HistorySince.php#L100-L104)
+#### [`setWebFinger`](../../../src/RequestHandlers/Api/HistorySince.php#L126-L130)
 
 Returns `self`
 
@@ -1448,7 +1628,7 @@ This is intended for mocking in unit tests
 
 - `$wf`: `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
-#### [`webfinger`](../../../src/RequestHandlers/Api/HistorySince.php#L111-L118)
+#### [`webfinger`](../../../src/RequestHandlers/Api/HistorySince.php#L137-L144)
 
 Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
@@ -1572,7 +1752,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `DependencyException`, `LoaderError`, `RuntimeError`, `SyntaxError`
 
-#### [`appCache`](../../../src/RequestHandlers/Api/HistoryView.php#L42-L45)
+#### [`appCache`](../../../src/RequestHandlers/Api/HistoryView.php#L44-L47)
 
 Returns `FediE2EE\PKDServer\AppCache`
 
@@ -1583,7 +1763,7 @@ Returns `FediE2EE\PKDServer\AppCache`
 
 **Throws:** `DependencyException`
 
-#### [`table`](../../../src/RequestHandlers/Api/HistoryView.php#L52-L75)
+#### [`table`](../../../src/RequestHandlers/Api/HistoryView.php#L54-L77)
 
 Returns `FediE2EE\PKDServer\Table`
 
@@ -1593,7 +1773,7 @@ Returns `FediE2EE\PKDServer\Table`
 
 **Throws:** `CacheException`, `DependencyException`, `TableException`
 
-#### [`injectConfig`](../../../src/RequestHandlers/Api/HistoryView.php#L77-L80)
+#### [`injectConfig`](../../../src/RequestHandlers/Api/HistoryView.php#L79-L82)
 
 Returns `void`
 
@@ -1601,13 +1781,33 @@ Returns `void`
 
 - `$config`: `FediE2EE\PKDServer\ServerConfig`
 
-#### [`config`](../../../src/RequestHandlers/Api/HistoryView.php#L85-L95)
+#### [`jsonDecode`](../../../src/RequestHandlers/Api/HistoryView.php#L87-L94)
+
+Returns `array`
+
+**Parameters:**
+
+- `$json`: `string`
+
+**Throws:** `BaseJsonException`
+
+#### [`jsonDecodeObject`](../../../src/RequestHandlers/Api/HistoryView.php#L99-L106)
+
+Returns `object`
+
+**Parameters:**
+
+- `$json`: `string`
+
+**Throws:** `BaseJsonException`
+
+#### [`config`](../../../src/RequestHandlers/Api/HistoryView.php#L111-L121)
 
 Returns `FediE2EE\PKDServer\ServerConfig`
 
 **Throws:** `DependencyException`
 
-#### [`setWebFinger`](../../../src/RequestHandlers/Api/HistoryView.php#L100-L104)
+#### [`setWebFinger`](../../../src/RequestHandlers/Api/HistoryView.php#L126-L130)
 
 Returns `self`
 
@@ -1617,7 +1817,7 @@ This is intended for mocking in unit tests
 
 - `$wf`: `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
-#### [`webfinger`](../../../src/RequestHandlers/Api/HistoryView.php#L111-L118)
+#### [`webfinger`](../../../src/RequestHandlers/Api/HistoryView.php#L137-L144)
 
 Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
@@ -1721,7 +1921,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `DependencyException`, `LoaderError`, `RuntimeError`, `SyntaxError`
 
-#### [`appCache`](../../../src/RequestHandlers/Api/Info.php#L42-L45)
+#### [`appCache`](../../../src/RequestHandlers/Api/Info.php#L44-L47)
 
 Returns `FediE2EE\PKDServer\AppCache`
 
@@ -1732,7 +1932,7 @@ Returns `FediE2EE\PKDServer\AppCache`
 
 **Throws:** `DependencyException`
 
-#### [`table`](../../../src/RequestHandlers/Api/Info.php#L52-L75)
+#### [`table`](../../../src/RequestHandlers/Api/Info.php#L54-L77)
 
 Returns `FediE2EE\PKDServer\Table`
 
@@ -1742,7 +1942,7 @@ Returns `FediE2EE\PKDServer\Table`
 
 **Throws:** `CacheException`, `DependencyException`, `TableException`
 
-#### [`injectConfig`](../../../src/RequestHandlers/Api/Info.php#L77-L80)
+#### [`injectConfig`](../../../src/RequestHandlers/Api/Info.php#L79-L82)
 
 Returns `void`
 
@@ -1750,13 +1950,33 @@ Returns `void`
 
 - `$config`: `FediE2EE\PKDServer\ServerConfig`
 
-#### [`config`](../../../src/RequestHandlers/Api/Info.php#L85-L95)
+#### [`jsonDecode`](../../../src/RequestHandlers/Api/Info.php#L87-L94)
+
+Returns `array`
+
+**Parameters:**
+
+- `$json`: `string`
+
+**Throws:** `BaseJsonException`
+
+#### [`jsonDecodeObject`](../../../src/RequestHandlers/Api/Info.php#L99-L106)
+
+Returns `object`
+
+**Parameters:**
+
+- `$json`: `string`
+
+**Throws:** `BaseJsonException`
+
+#### [`config`](../../../src/RequestHandlers/Api/Info.php#L111-L121)
 
 Returns `FediE2EE\PKDServer\ServerConfig`
 
 **Throws:** `DependencyException`
 
-#### [`setWebFinger`](../../../src/RequestHandlers/Api/Info.php#L100-L104)
+#### [`setWebFinger`](../../../src/RequestHandlers/Api/Info.php#L126-L130)
 
 Returns `self`
 
@@ -1766,7 +1986,7 @@ This is intended for mocking in unit tests
 
 - `$wf`: `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
-#### [`webfinger`](../../../src/RequestHandlers/Api/Info.php#L111-L118)
+#### [`webfinger`](../../../src/RequestHandlers/Api/Info.php#L137-L144)
 
 Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
@@ -1878,7 +2098,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `DependencyException`, `LoaderError`, `RuntimeError`, `SyntaxError`
 
-#### [`appCache`](../../../src/RequestHandlers/Api/ListAuxData.php#L42-L45)
+#### [`appCache`](../../../src/RequestHandlers/Api/ListAuxData.php#L44-L47)
 
 Returns `FediE2EE\PKDServer\AppCache`
 
@@ -1889,7 +2109,7 @@ Returns `FediE2EE\PKDServer\AppCache`
 
 **Throws:** `DependencyException`
 
-#### [`table`](../../../src/RequestHandlers/Api/ListAuxData.php#L52-L75)
+#### [`table`](../../../src/RequestHandlers/Api/ListAuxData.php#L54-L77)
 
 Returns `FediE2EE\PKDServer\Table`
 
@@ -1899,7 +2119,7 @@ Returns `FediE2EE\PKDServer\Table`
 
 **Throws:** `CacheException`, `DependencyException`, `TableException`
 
-#### [`injectConfig`](../../../src/RequestHandlers/Api/ListAuxData.php#L77-L80)
+#### [`injectConfig`](../../../src/RequestHandlers/Api/ListAuxData.php#L79-L82)
 
 Returns `void`
 
@@ -1907,13 +2127,33 @@ Returns `void`
 
 - `$config`: `FediE2EE\PKDServer\ServerConfig`
 
-#### [`config`](../../../src/RequestHandlers/Api/ListAuxData.php#L85-L95)
+#### [`jsonDecode`](../../../src/RequestHandlers/Api/ListAuxData.php#L87-L94)
+
+Returns `array`
+
+**Parameters:**
+
+- `$json`: `string`
+
+**Throws:** `BaseJsonException`
+
+#### [`jsonDecodeObject`](../../../src/RequestHandlers/Api/ListAuxData.php#L99-L106)
+
+Returns `object`
+
+**Parameters:**
+
+- `$json`: `string`
+
+**Throws:** `BaseJsonException`
+
+#### [`config`](../../../src/RequestHandlers/Api/ListAuxData.php#L111-L121)
 
 Returns `FediE2EE\PKDServer\ServerConfig`
 
 **Throws:** `DependencyException`
 
-#### [`setWebFinger`](../../../src/RequestHandlers/Api/ListAuxData.php#L100-L104)
+#### [`setWebFinger`](../../../src/RequestHandlers/Api/ListAuxData.php#L126-L130)
 
 Returns `self`
 
@@ -1923,7 +2163,7 @@ This is intended for mocking in unit tests
 
 - `$wf`: `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
-#### [`webfinger`](../../../src/RequestHandlers/Api/ListAuxData.php#L111-L118)
+#### [`webfinger`](../../../src/RequestHandlers/Api/ListAuxData.php#L137-L144)
 
 Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
@@ -2035,7 +2275,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `DependencyException`, `LoaderError`, `RuntimeError`, `SyntaxError`
 
-#### [`appCache`](../../../src/RequestHandlers/Api/ListKeys.php#L42-L45)
+#### [`appCache`](../../../src/RequestHandlers/Api/ListKeys.php#L44-L47)
 
 Returns `FediE2EE\PKDServer\AppCache`
 
@@ -2046,7 +2286,7 @@ Returns `FediE2EE\PKDServer\AppCache`
 
 **Throws:** `DependencyException`
 
-#### [`table`](../../../src/RequestHandlers/Api/ListKeys.php#L52-L75)
+#### [`table`](../../../src/RequestHandlers/Api/ListKeys.php#L54-L77)
 
 Returns `FediE2EE\PKDServer\Table`
 
@@ -2056,7 +2296,7 @@ Returns `FediE2EE\PKDServer\Table`
 
 **Throws:** `CacheException`, `DependencyException`, `TableException`
 
-#### [`injectConfig`](../../../src/RequestHandlers/Api/ListKeys.php#L77-L80)
+#### [`injectConfig`](../../../src/RequestHandlers/Api/ListKeys.php#L79-L82)
 
 Returns `void`
 
@@ -2064,13 +2304,33 @@ Returns `void`
 
 - `$config`: `FediE2EE\PKDServer\ServerConfig`
 
-#### [`config`](../../../src/RequestHandlers/Api/ListKeys.php#L85-L95)
+#### [`jsonDecode`](../../../src/RequestHandlers/Api/ListKeys.php#L87-L94)
+
+Returns `array`
+
+**Parameters:**
+
+- `$json`: `string`
+
+**Throws:** `BaseJsonException`
+
+#### [`jsonDecodeObject`](../../../src/RequestHandlers/Api/ListKeys.php#L99-L106)
+
+Returns `object`
+
+**Parameters:**
+
+- `$json`: `string`
+
+**Throws:** `BaseJsonException`
+
+#### [`config`](../../../src/RequestHandlers/Api/ListKeys.php#L111-L121)
 
 Returns `FediE2EE\PKDServer\ServerConfig`
 
 **Throws:** `DependencyException`
 
-#### [`setWebFinger`](../../../src/RequestHandlers/Api/ListKeys.php#L100-L104)
+#### [`setWebFinger`](../../../src/RequestHandlers/Api/ListKeys.php#L126-L130)
 
 Returns `self`
 
@@ -2080,7 +2340,7 @@ This is intended for mocking in unit tests
 
 - `$wf`: `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
-#### [`webfinger`](../../../src/RequestHandlers/Api/ListKeys.php#L111-L118)
+#### [`webfinger`](../../../src/RequestHandlers/Api/ListKeys.php#L137-L144)
 
 Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
@@ -2270,7 +2530,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `DependencyException`, `LoaderError`, `RuntimeError`, `SyntaxError`
 
-#### [`appCache`](../../../src/RequestHandlers/Api/ReplicaInfo.php#L42-L45)
+#### [`appCache`](../../../src/RequestHandlers/Api/ReplicaInfo.php#L44-L47)
 
 Returns `FediE2EE\PKDServer\AppCache`
 
@@ -2281,7 +2541,7 @@ Returns `FediE2EE\PKDServer\AppCache`
 
 **Throws:** `DependencyException`
 
-#### [`table`](../../../src/RequestHandlers/Api/ReplicaInfo.php#L52-L75)
+#### [`table`](../../../src/RequestHandlers/Api/ReplicaInfo.php#L54-L77)
 
 Returns `FediE2EE\PKDServer\Table`
 
@@ -2291,7 +2551,7 @@ Returns `FediE2EE\PKDServer\Table`
 
 **Throws:** `CacheException`, `DependencyException`, `TableException`
 
-#### [`injectConfig`](../../../src/RequestHandlers/Api/ReplicaInfo.php#L77-L80)
+#### [`injectConfig`](../../../src/RequestHandlers/Api/ReplicaInfo.php#L79-L82)
 
 Returns `void`
 
@@ -2299,13 +2559,33 @@ Returns `void`
 
 - `$config`: `FediE2EE\PKDServer\ServerConfig`
 
-#### [`config`](../../../src/RequestHandlers/Api/ReplicaInfo.php#L85-L95)
+#### [`jsonDecode`](../../../src/RequestHandlers/Api/ReplicaInfo.php#L87-L94)
+
+Returns `array`
+
+**Parameters:**
+
+- `$json`: `string`
+
+**Throws:** `BaseJsonException`
+
+#### [`jsonDecodeObject`](../../../src/RequestHandlers/Api/ReplicaInfo.php#L99-L106)
+
+Returns `object`
+
+**Parameters:**
+
+- `$json`: `string`
+
+**Throws:** `BaseJsonException`
+
+#### [`config`](../../../src/RequestHandlers/Api/ReplicaInfo.php#L111-L121)
 
 Returns `FediE2EE\PKDServer\ServerConfig`
 
 **Throws:** `DependencyException`
 
-#### [`setWebFinger`](../../../src/RequestHandlers/Api/ReplicaInfo.php#L100-L104)
+#### [`setWebFinger`](../../../src/RequestHandlers/Api/ReplicaInfo.php#L126-L130)
 
 Returns `self`
 
@@ -2315,7 +2595,7 @@ This is intended for mocking in unit tests
 
 - `$wf`: `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
-#### [`webfinger`](../../../src/RequestHandlers/Api/ReplicaInfo.php#L111-L118)
+#### [`webfinger`](../../../src/RequestHandlers/Api/ReplicaInfo.php#L137-L144)
 
 Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
@@ -2427,7 +2707,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `DependencyException`, `LoaderError`, `RuntimeError`, `SyntaxError`
 
-#### [`appCache`](../../../src/RequestHandlers/Api/Replicas.php#L42-L45)
+#### [`appCache`](../../../src/RequestHandlers/Api/Replicas.php#L44-L47)
 
 Returns `FediE2EE\PKDServer\AppCache`
 
@@ -2438,7 +2718,7 @@ Returns `FediE2EE\PKDServer\AppCache`
 
 **Throws:** `DependencyException`
 
-#### [`table`](../../../src/RequestHandlers/Api/Replicas.php#L52-L75)
+#### [`table`](../../../src/RequestHandlers/Api/Replicas.php#L54-L77)
 
 Returns `FediE2EE\PKDServer\Table`
 
@@ -2448,7 +2728,7 @@ Returns `FediE2EE\PKDServer\Table`
 
 **Throws:** `CacheException`, `DependencyException`, `TableException`
 
-#### [`injectConfig`](../../../src/RequestHandlers/Api/Replicas.php#L77-L80)
+#### [`injectConfig`](../../../src/RequestHandlers/Api/Replicas.php#L79-L82)
 
 Returns `void`
 
@@ -2456,13 +2736,33 @@ Returns `void`
 
 - `$config`: `FediE2EE\PKDServer\ServerConfig`
 
-#### [`config`](../../../src/RequestHandlers/Api/Replicas.php#L85-L95)
+#### [`jsonDecode`](../../../src/RequestHandlers/Api/Replicas.php#L87-L94)
+
+Returns `array`
+
+**Parameters:**
+
+- `$json`: `string`
+
+**Throws:** `BaseJsonException`
+
+#### [`jsonDecodeObject`](../../../src/RequestHandlers/Api/Replicas.php#L99-L106)
+
+Returns `object`
+
+**Parameters:**
+
+- `$json`: `string`
+
+**Throws:** `BaseJsonException`
+
+#### [`config`](../../../src/RequestHandlers/Api/Replicas.php#L111-L121)
 
 Returns `FediE2EE\PKDServer\ServerConfig`
 
 **Throws:** `DependencyException`
 
-#### [`setWebFinger`](../../../src/RequestHandlers/Api/Replicas.php#L100-L104)
+#### [`setWebFinger`](../../../src/RequestHandlers/Api/Replicas.php#L126-L130)
 
 Returns `self`
 
@@ -2472,7 +2772,7 @@ This is intended for mocking in unit tests
 
 - `$wf`: `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
-#### [`webfinger`](../../../src/RequestHandlers/Api/Replicas.php#L111-L118)
+#### [`webfinger`](../../../src/RequestHandlers/Api/Replicas.php#L137-L144)
 
 Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
@@ -2584,7 +2884,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `DependencyException`, `LoaderError`, `RuntimeError`, `SyntaxError`
 
-#### [`appCache`](../../../src/RequestHandlers/Api/Revoke.php#L42-L45)
+#### [`appCache`](../../../src/RequestHandlers/Api/Revoke.php#L44-L47)
 
 Returns `FediE2EE\PKDServer\AppCache`
 
@@ -2595,7 +2895,7 @@ Returns `FediE2EE\PKDServer\AppCache`
 
 **Throws:** `DependencyException`
 
-#### [`table`](../../../src/RequestHandlers/Api/Revoke.php#L52-L75)
+#### [`table`](../../../src/RequestHandlers/Api/Revoke.php#L54-L77)
 
 Returns `FediE2EE\PKDServer\Table`
 
@@ -2605,7 +2905,7 @@ Returns `FediE2EE\PKDServer\Table`
 
 **Throws:** `CacheException`, `DependencyException`, `TableException`
 
-#### [`injectConfig`](../../../src/RequestHandlers/Api/Revoke.php#L77-L80)
+#### [`injectConfig`](../../../src/RequestHandlers/Api/Revoke.php#L79-L82)
 
 Returns `void`
 
@@ -2613,13 +2913,33 @@ Returns `void`
 
 - `$config`: `FediE2EE\PKDServer\ServerConfig`
 
-#### [`config`](../../../src/RequestHandlers/Api/Revoke.php#L85-L95)
+#### [`jsonDecode`](../../../src/RequestHandlers/Api/Revoke.php#L87-L94)
+
+Returns `array`
+
+**Parameters:**
+
+- `$json`: `string`
+
+**Throws:** `BaseJsonException`
+
+#### [`jsonDecodeObject`](../../../src/RequestHandlers/Api/Revoke.php#L99-L106)
+
+Returns `object`
+
+**Parameters:**
+
+- `$json`: `string`
+
+**Throws:** `BaseJsonException`
+
+#### [`config`](../../../src/RequestHandlers/Api/Revoke.php#L111-L121)
 
 Returns `FediE2EE\PKDServer\ServerConfig`
 
 **Throws:** `DependencyException`
 
-#### [`setWebFinger`](../../../src/RequestHandlers/Api/Revoke.php#L100-L104)
+#### [`setWebFinger`](../../../src/RequestHandlers/Api/Revoke.php#L126-L130)
 
 Returns `self`
 
@@ -2629,7 +2949,7 @@ This is intended for mocking in unit tests
 
 - `$wf`: `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
-#### [`webfinger`](../../../src/RequestHandlers/Api/Revoke.php#L111-L118)
+#### [`webfinger`](../../../src/RequestHandlers/Api/Revoke.php#L137-L144)
 
 Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
@@ -2743,7 +3063,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `DependencyException`, `LoaderError`, `RuntimeError`, `SyntaxError`
 
-#### [`appCache`](../../../src/RequestHandlers/Api/ServerPublicKey.php#L42-L45)
+#### [`appCache`](../../../src/RequestHandlers/Api/ServerPublicKey.php#L44-L47)
 
 Returns `FediE2EE\PKDServer\AppCache`
 
@@ -2754,7 +3074,7 @@ Returns `FediE2EE\PKDServer\AppCache`
 
 **Throws:** `DependencyException`
 
-#### [`table`](../../../src/RequestHandlers/Api/ServerPublicKey.php#L52-L75)
+#### [`table`](../../../src/RequestHandlers/Api/ServerPublicKey.php#L54-L77)
 
 Returns `FediE2EE\PKDServer\Table`
 
@@ -2764,7 +3084,7 @@ Returns `FediE2EE\PKDServer\Table`
 
 **Throws:** `CacheException`, `DependencyException`, `TableException`
 
-#### [`injectConfig`](../../../src/RequestHandlers/Api/ServerPublicKey.php#L77-L80)
+#### [`injectConfig`](../../../src/RequestHandlers/Api/ServerPublicKey.php#L79-L82)
 
 Returns `void`
 
@@ -2772,13 +3092,33 @@ Returns `void`
 
 - `$config`: `FediE2EE\PKDServer\ServerConfig`
 
-#### [`config`](../../../src/RequestHandlers/Api/ServerPublicKey.php#L85-L95)
+#### [`jsonDecode`](../../../src/RequestHandlers/Api/ServerPublicKey.php#L87-L94)
+
+Returns `array`
+
+**Parameters:**
+
+- `$json`: `string`
+
+**Throws:** `BaseJsonException`
+
+#### [`jsonDecodeObject`](../../../src/RequestHandlers/Api/ServerPublicKey.php#L99-L106)
+
+Returns `object`
+
+**Parameters:**
+
+- `$json`: `string`
+
+**Throws:** `BaseJsonException`
+
+#### [`config`](../../../src/RequestHandlers/Api/ServerPublicKey.php#L111-L121)
 
 Returns `FediE2EE\PKDServer\ServerConfig`
 
 **Throws:** `DependencyException`
 
-#### [`setWebFinger`](../../../src/RequestHandlers/Api/ServerPublicKey.php#L100-L104)
+#### [`setWebFinger`](../../../src/RequestHandlers/Api/ServerPublicKey.php#L126-L130)
 
 Returns `self`
 
@@ -2788,7 +3128,7 @@ This is intended for mocking in unit tests
 
 - `$wf`: `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
-#### [`webfinger`](../../../src/RequestHandlers/Api/ServerPublicKey.php#L111-L118)
+#### [`webfinger`](../../../src/RequestHandlers/Api/ServerPublicKey.php#L137-L144)
 
 Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
@@ -2824,7 +3164,7 @@ Returns `void`
 
 **Throws:** `DependencyException`, `TableException`, `CacheException`
 
-#### [`handle`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L77-L136)
+#### [`handle`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L76-L139)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -2834,7 +3174,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 - `$request`: `Psr\Http\Message\ServerRequestInterface`
 
-**Throws:** `ArrayKeyException`, `BlindIndexNotFoundException`, `CacheException`, `CipherSweetException`, `CryptoOperationException`, `DependencyException`, `InvalidCiphertextException`, `JsonException`, `NotImplementedException`, `ProtocolException`, `SodiumException`, `TableException`
+**Throws:** `ArrayKeyException`, `BlindIndexNotFoundException`, `CacheException`, `CipherSweetException`, `CryptoOperationException`, `DependencyException`, `InvalidCiphertextException`, `JsonException`, `NotImplementedException`, `SodiumException`, `TableException`
 
 #### [`time`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L34-L37)
 
@@ -2900,7 +3240,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `DependencyException`, `LoaderError`, `RuntimeError`, `SyntaxError`
 
-#### [`appCache`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L42-L45)
+#### [`appCache`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L44-L47)
 
 Returns `FediE2EE\PKDServer\AppCache`
 
@@ -2911,7 +3251,7 @@ Returns `FediE2EE\PKDServer\AppCache`
 
 **Throws:** `DependencyException`
 
-#### [`table`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L52-L75)
+#### [`table`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L54-L77)
 
 Returns `FediE2EE\PKDServer\Table`
 
@@ -2921,7 +3261,7 @@ Returns `FediE2EE\PKDServer\Table`
 
 **Throws:** `CacheException`, `DependencyException`, `TableException`
 
-#### [`injectConfig`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L77-L80)
+#### [`injectConfig`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L79-L82)
 
 Returns `void`
 
@@ -2929,13 +3269,33 @@ Returns `void`
 
 - `$config`: `FediE2EE\PKDServer\ServerConfig`
 
-#### [`config`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L85-L95)
+#### [`jsonDecode`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L87-L94)
+
+Returns `array`
+
+**Parameters:**
+
+- `$json`: `string`
+
+**Throws:** `BaseJsonException`
+
+#### [`jsonDecodeObject`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L99-L106)
+
+Returns `object`
+
+**Parameters:**
+
+- `$json`: `string`
+
+**Throws:** `BaseJsonException`
+
+#### [`config`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L111-L121)
 
 Returns `FediE2EE\PKDServer\ServerConfig`
 
 **Throws:** `DependencyException`
 
-#### [`setWebFinger`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L100-L104)
+#### [`setWebFinger`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L126-L130)
 
 Returns `self`
 
@@ -2945,7 +3305,7 @@ This is intended for mocking in unit tests
 
 - `$wf`: `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
-#### [`webfinger`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L111-L118)
+#### [`webfinger`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L137-L144)
 
 Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
@@ -3098,13 +3458,13 @@ Strip all newlines (CR, LF) characters from a string.
 
 ### Methods
 
-#### [`__construct`](../../../src/RequestHandlers/Api/TotpEnroll.php#L55-L62)
+#### [`__construct`](../../../src/RequestHandlers/Api/TotpEnroll.php#L56-L63)
 
 Returns `void`
 
 **Throws:** `DependencyException`, `TableException`, `CacheException`
 
-#### [`handle`](../../../src/RequestHandlers/Api/TotpEnroll.php#L81-L151)
+#### [`handle`](../../../src/RequestHandlers/Api/TotpEnroll.php#L82-L156)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -3114,7 +3474,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 - `$request`: `Psr\Http\Message\ServerRequestInterface`
 
-**Throws:** `ArrayKeyException`, `BlindIndexNotFoundException`, `CacheException`, `CipherSweetException`, `CryptoOperationException`, `DependencyException`, `InvalidCiphertextException`, `JsonException`, `NotImplementedException`, `ProtocolException`, `SodiumException`, `TableException`, `HPKEException`
+**Throws:** `ArrayKeyException`, `BlindIndexNotFoundException`, `CacheException`, `CipherSweetException`, `CryptoOperationException`, `DependencyException`, `HPKEException`, `InvalidCiphertextException`, `JsonException`, `NotImplementedException`, `RandomException`, `SodiumException`, `TableException`
 
 #### [`time`](../../../src/RequestHandlers/Api/TotpEnroll.php#L34-L37)
 
@@ -3180,7 +3540,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `DependencyException`, `LoaderError`, `RuntimeError`, `SyntaxError`
 
-#### [`appCache`](../../../src/RequestHandlers/Api/TotpEnroll.php#L42-L45)
+#### [`appCache`](../../../src/RequestHandlers/Api/TotpEnroll.php#L44-L47)
 
 Returns `FediE2EE\PKDServer\AppCache`
 
@@ -3191,7 +3551,7 @@ Returns `FediE2EE\PKDServer\AppCache`
 
 **Throws:** `DependencyException`
 
-#### [`table`](../../../src/RequestHandlers/Api/TotpEnroll.php#L52-L75)
+#### [`table`](../../../src/RequestHandlers/Api/TotpEnroll.php#L54-L77)
 
 Returns `FediE2EE\PKDServer\Table`
 
@@ -3201,7 +3561,7 @@ Returns `FediE2EE\PKDServer\Table`
 
 **Throws:** `CacheException`, `DependencyException`, `TableException`
 
-#### [`injectConfig`](../../../src/RequestHandlers/Api/TotpEnroll.php#L77-L80)
+#### [`injectConfig`](../../../src/RequestHandlers/Api/TotpEnroll.php#L79-L82)
 
 Returns `void`
 
@@ -3209,13 +3569,33 @@ Returns `void`
 
 - `$config`: `FediE2EE\PKDServer\ServerConfig`
 
-#### [`config`](../../../src/RequestHandlers/Api/TotpEnroll.php#L85-L95)
+#### [`jsonDecode`](../../../src/RequestHandlers/Api/TotpEnroll.php#L87-L94)
+
+Returns `array`
+
+**Parameters:**
+
+- `$json`: `string`
+
+**Throws:** `BaseJsonException`
+
+#### [`jsonDecodeObject`](../../../src/RequestHandlers/Api/TotpEnroll.php#L99-L106)
+
+Returns `object`
+
+**Parameters:**
+
+- `$json`: `string`
+
+**Throws:** `BaseJsonException`
+
+#### [`config`](../../../src/RequestHandlers/Api/TotpEnroll.php#L111-L121)
 
 Returns `FediE2EE\PKDServer\ServerConfig`
 
 **Throws:** `DependencyException`
 
-#### [`setWebFinger`](../../../src/RequestHandlers/Api/TotpEnroll.php#L100-L104)
+#### [`setWebFinger`](../../../src/RequestHandlers/Api/TotpEnroll.php#L126-L130)
 
 Returns `self`
 
@@ -3225,7 +3605,7 @@ This is intended for mocking in unit tests
 
 - `$wf`: `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
-#### [`webfinger`](../../../src/RequestHandlers/Api/TotpEnroll.php#L111-L118)
+#### [`webfinger`](../../../src/RequestHandlers/Api/TotpEnroll.php#L137-L144)
 
 Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
@@ -3384,7 +3764,7 @@ Returns `void`
 
 **Throws:** `DependencyException`, `TableException`, `CacheException`
 
-#### [`handle`](../../../src/RequestHandlers/Api/TotpRotate.php#L83-L158)
+#### [`handle`](../../../src/RequestHandlers/Api/TotpRotate.php#L82-L161)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -3394,7 +3774,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 - `$request`: `Psr\Http\Message\ServerRequestInterface`
 
-**Throws:** `ArrayKeyException`, `BlindIndexNotFoundException`, `CacheException`, `CipherSweetException`, `CryptoOperationException`, `DependencyException`, `HPKEException`, `InvalidCiphertextException`, `JsonException`, `NotImplementedException`, `ProtocolException`, `RandomException`, `SodiumException`, `TableException`
+**Throws:** `ArrayKeyException`, `BlindIndexNotFoundException`, `CacheException`, `CipherSweetException`, `CryptoOperationException`, `DependencyException`, `HPKEException`, `InvalidCiphertextException`, `JsonException`, `NotImplementedException`, `RandomException`, `SodiumException`, `TableException`
 
 #### [`time`](../../../src/RequestHandlers/Api/TotpRotate.php#L34-L37)
 
@@ -3460,7 +3840,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `DependencyException`, `LoaderError`, `RuntimeError`, `SyntaxError`
 
-#### [`appCache`](../../../src/RequestHandlers/Api/TotpRotate.php#L42-L45)
+#### [`appCache`](../../../src/RequestHandlers/Api/TotpRotate.php#L44-L47)
 
 Returns `FediE2EE\PKDServer\AppCache`
 
@@ -3471,7 +3851,7 @@ Returns `FediE2EE\PKDServer\AppCache`
 
 **Throws:** `DependencyException`
 
-#### [`table`](../../../src/RequestHandlers/Api/TotpRotate.php#L52-L75)
+#### [`table`](../../../src/RequestHandlers/Api/TotpRotate.php#L54-L77)
 
 Returns `FediE2EE\PKDServer\Table`
 
@@ -3481,7 +3861,7 @@ Returns `FediE2EE\PKDServer\Table`
 
 **Throws:** `CacheException`, `DependencyException`, `TableException`
 
-#### [`injectConfig`](../../../src/RequestHandlers/Api/TotpRotate.php#L77-L80)
+#### [`injectConfig`](../../../src/RequestHandlers/Api/TotpRotate.php#L79-L82)
 
 Returns `void`
 
@@ -3489,13 +3869,33 @@ Returns `void`
 
 - `$config`: `FediE2EE\PKDServer\ServerConfig`
 
-#### [`config`](../../../src/RequestHandlers/Api/TotpRotate.php#L85-L95)
+#### [`jsonDecode`](../../../src/RequestHandlers/Api/TotpRotate.php#L87-L94)
+
+Returns `array`
+
+**Parameters:**
+
+- `$json`: `string`
+
+**Throws:** `BaseJsonException`
+
+#### [`jsonDecodeObject`](../../../src/RequestHandlers/Api/TotpRotate.php#L99-L106)
+
+Returns `object`
+
+**Parameters:**
+
+- `$json`: `string`
+
+**Throws:** `BaseJsonException`
+
+#### [`config`](../../../src/RequestHandlers/Api/TotpRotate.php#L111-L121)
 
 Returns `FediE2EE\PKDServer\ServerConfig`
 
 **Throws:** `DependencyException`
 
-#### [`setWebFinger`](../../../src/RequestHandlers/Api/TotpRotate.php#L100-L104)
+#### [`setWebFinger`](../../../src/RequestHandlers/Api/TotpRotate.php#L126-L130)
 
 Returns `self`
 
@@ -3505,7 +3905,7 @@ This is intended for mocking in unit tests
 
 - `$wf`: `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
-#### [`webfinger`](../../../src/RequestHandlers/Api/TotpRotate.php#L111-L118)
+#### [`webfinger`](../../../src/RequestHandlers/Api/TotpRotate.php#L137-L144)
 
 Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 

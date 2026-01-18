@@ -15,9 +15,56 @@ Namespace: `FediE2EE\PKDServer\Scheduled`
 
 **File:** [`src/Scheduled/ASQueue.php`](../../../src/Scheduled/ASQueue.php)
 
+**Uses:** `FediE2EE\PKDServer\Traits\ConfigTrait`
+
+### Properties
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `$config` | `?FediE2EE\PKDServer\ServerConfig` |  |
+
 ### Methods
 
-#### [`__construct`](../../../src/Scheduled/ASQueue.php#L37-L42)
+#### [`__construct`](../../../src/Scheduled/ASQueue.php#L39-L47)
+
+Returns `void`
+
+**Parameters:**
+
+- `$config`: `?FediE2EE\PKDServer\ServerConfig` = null
+
+**Throws:** `CertaintyException`, `DependencyException`, `SodiumException`
+
+#### [`run`](../../../src/Scheduled/ASQueue.php#L57-L92)
+
+Returns `void`
+
+ASQueue::run() is a very dumb method.
+
+All this method does is grab the unprocessed messages, order them, decode them, and then pass them onto Protocol::process(). The logic is entirely contained to Protocol and the Table classes.
+
+#### [`appCache`](../../../src/Scheduled/ASQueue.php#L44-L47)
+
+Returns `FediE2EE\PKDServer\AppCache`
+
+**Parameters:**
+
+- `$namespace`: `string`
+- `$defaultTTL`: `int` = 60
+
+**Throws:** `DependencyException`
+
+#### [`table`](../../../src/Scheduled/ASQueue.php#L54-L77)
+
+Returns `FediE2EE\PKDServer\Table`
+
+**Parameters:**
+
+- `$tableName`: `string`
+
+**Throws:** `CacheException`, `DependencyException`, `TableException`
+
+#### [`injectConfig`](../../../src/Scheduled/ASQueue.php#L79-L82)
 
 Returns `void`
 
@@ -25,15 +72,51 @@ Returns `void`
 
 - `$config`: `FediE2EE\PKDServer\ServerConfig`
 
+#### [`jsonDecode`](../../../src/Scheduled/ASQueue.php#L87-L94)
+
+Returns `array`
+
+**Parameters:**
+
+- `$json`: `string`
+
+**Throws:** `BaseJsonException`
+
+#### [`jsonDecodeObject`](../../../src/Scheduled/ASQueue.php#L99-L106)
+
+Returns `object`
+
+**Parameters:**
+
+- `$json`: `string`
+
+**Throws:** `BaseJsonException`
+
+#### [`config`](../../../src/Scheduled/ASQueue.php#L111-L121)
+
+Returns `FediE2EE\PKDServer\ServerConfig`
+
+**Throws:** `DependencyException`
+
+#### [`setWebFinger`](../../../src/Scheduled/ASQueue.php#L126-L130)
+
+Returns `self`
+
+This is intended for mocking in unit tests
+
+**Parameters:**
+
+- `$wf`: `FediE2EE\PKDServer\ActivityPub\WebFinger`
+
+#### [`webfinger`](../../../src/Scheduled/ASQueue.php#L137-L144)
+
+Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
+
+**Parameters:**
+
+- `$http`: `?GuzzleHttp\Client` = null
+
 **Throws:** `CertaintyException`, `DependencyException`, `SodiumException`
-
-#### [`run`](../../../src/Scheduled/ASQueue.php#L52-L87)
-
-Returns `void`
-
-ASQueue::run() is a very dumb method.
-
-All this method does is grab the unprocessed messages, order them, decode them, and then pass them onto Protocol::process(). The logic is entirely contained to Protocol and the Table classes.
 
 ---
 
@@ -55,7 +138,7 @@ Perform witness co-signatures for third-porty Public Key Directory instances.
 
 ### Methods
 
-#### [`__construct`](../../../src/Scheduled/Witness.php#L70-L104)
+#### [`__construct`](../../../src/Scheduled/Witness.php#L79-L113)
 
 Returns `void`
 
@@ -65,13 +148,13 @@ Returns `void`
 
 **Throws:** `CacheException`, `DependencyException`, `TableException`
 
-#### [`run`](../../../src/Scheduled/Witness.php#L111-L123)
+#### [`run`](../../../src/Scheduled/Witness.php#L120-L132)
 
 Returns `void`
 
 **Throws:** `CryptoException`, `DateMalformedStringException`, `SodiumException`
 
-#### [`getHashesSince`](../../../src/Scheduled/Witness.php#L277-L294)
+#### [`getHashesSince`](../../../src/Scheduled/Witness.php#L721-L738)
 
 Returns `array`
 
@@ -81,7 +164,7 @@ Returns `array`
 
 **Throws:** `CryptoException`, `GuzzleException`, `HttpSignatureException`, `JsonException`, `NotImplementedException`, `ProtocolException`, `SodiumException`
 
-#### [`appCache`](../../../src/Scheduled/Witness.php#L42-L45)
+#### [`appCache`](../../../src/Scheduled/Witness.php#L44-L47)
 
 Returns `FediE2EE\PKDServer\AppCache`
 
@@ -92,7 +175,7 @@ Returns `FediE2EE\PKDServer\AppCache`
 
 **Throws:** `DependencyException`
 
-#### [`table`](../../../src/Scheduled/Witness.php#L52-L75)
+#### [`table`](../../../src/Scheduled/Witness.php#L54-L77)
 
 Returns `FediE2EE\PKDServer\Table`
 
@@ -102,7 +185,7 @@ Returns `FediE2EE\PKDServer\Table`
 
 **Throws:** `CacheException`, `DependencyException`, `TableException`
 
-#### [`injectConfig`](../../../src/Scheduled/Witness.php#L77-L80)
+#### [`injectConfig`](../../../src/Scheduled/Witness.php#L79-L82)
 
 Returns `void`
 
@@ -110,13 +193,33 @@ Returns `void`
 
 - `$config`: `FediE2EE\PKDServer\ServerConfig`
 
-#### [`config`](../../../src/Scheduled/Witness.php#L85-L95)
+#### [`jsonDecode`](../../../src/Scheduled/Witness.php#L87-L94)
+
+Returns `array`
+
+**Parameters:**
+
+- `$json`: `string`
+
+**Throws:** `BaseJsonException`
+
+#### [`jsonDecodeObject`](../../../src/Scheduled/Witness.php#L99-L106)
+
+Returns `object`
+
+**Parameters:**
+
+- `$json`: `string`
+
+**Throws:** `BaseJsonException`
+
+#### [`config`](../../../src/Scheduled/Witness.php#L111-L121)
 
 Returns `FediE2EE\PKDServer\ServerConfig`
 
 **Throws:** `DependencyException`
 
-#### [`setWebFinger`](../../../src/Scheduled/Witness.php#L100-L104)
+#### [`setWebFinger`](../../../src/Scheduled/Witness.php#L126-L130)
 
 Returns `self`
 
@@ -126,7 +229,7 @@ This is intended for mocking in unit tests
 
 - `$wf`: `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
-#### [`webfinger`](../../../src/Scheduled/Witness.php#L111-L118)
+#### [`webfinger`](../../../src/Scheduled/Witness.php#L137-L144)
 
 Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
