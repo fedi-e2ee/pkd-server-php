@@ -120,24 +120,28 @@ class HistorySinceTest extends TestCase
 
         $request = $this->makeGetRequest('/api/history/since/' . urlencode($latestRoot));
         $request = $request->withAttribute('hash', $latestRoot);
-        $response = $sinceHandler->handle($request);
-        $this->assertSame(200, $response->getStatusCode());
-        $body = json_decode($response->getBody()->getContents(), true);
-        $this->assertSame('fedi-e2ee:v1/api/history/since', $body['!pkd-context']);
-        // Verify current-time field
-        $this->assertArrayHasKey('current-time', $body);
-        $this->assertIsString($body['current-time']);
-        $this->assertCount(1, $body['records']);
-        $this->assertArrayHasKey('created', $body['records'][0]);
-        $this->assertArrayHasKey('encrypted-message', $body['records'][0]);
-        $this->assertArrayHasKey('contenthash', $body['records'][0]);
-        $this->assertSame(64, strlen($body['records'][0]['contenthash']));
-        $this->assertArrayHasKey('publickeyhash', $body['records'][0]);
-        $this->assertSame(64, strlen($body['records'][0]['publickeyhash']));
-        $this->assertArrayHasKey('signature', $body['records'][0]);
-        $this->assertSame(86, strlen($body['records'][0]['signature']));
-        $this->assertSame($newRoot, $body['records'][0]['merkle-root']);
-        $this->assertNotInTransaction();
+        $sinceHandler->clearCache();
+        // Test without cache and then with cache:
+        for ($i = 0; $i < 3; ++$i) {
+            $response = $sinceHandler->handle($request);
+            $this->assertSame(200, $response->getStatusCode());
+            $body = json_decode($response->getBody()->getContents(), true);
+            $this->assertSame('fedi-e2ee:v1/api/history/since', $body['!pkd-context']);
+            // Verify current-time field
+            $this->assertArrayHasKey('current-time', $body);
+            $this->assertIsString($body['current-time']);
+            $this->assertCount(1, $body['records']);
+            $this->assertArrayHasKey('created', $body['records'][0]);
+            $this->assertArrayHasKey('encrypted-message', $body['records'][0]);
+            $this->assertArrayHasKey('contenthash', $body['records'][0]);
+            $this->assertSame(64, strlen($body['records'][0]['contenthash']));
+            $this->assertArrayHasKey('publickeyhash', $body['records'][0]);
+            $this->assertSame(64, strlen($body['records'][0]['publickeyhash']));
+            $this->assertArrayHasKey('signature', $body['records'][0]);
+            $this->assertSame(86, strlen($body['records'][0]['signature']));
+            $this->assertSame($newRoot, $body['records'][0]['merkle-root']);
+            $this->assertNotInTransaction();
+        }
     }
 
     /**

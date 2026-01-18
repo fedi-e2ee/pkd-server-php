@@ -24,6 +24,7 @@ use ParagonIE\CipherSweet\Exception\{
     CryptoOperationException,
     InvalidCiphertextException
 };
+use Psr\SimpleCache\InvalidArgumentException;
 use Psr\Http\Message\{
     ResponseInterface,
     ServerRequestInterface
@@ -67,6 +68,7 @@ class Actor implements RequestHandlerInterface, HttpCacheInterface
      * @throws CipherSweetException
      * @throws CryptoOperationException
      * @throws DependencyException
+     * @throws InvalidArgumentException
      * @throws InvalidCiphertextException
      * @throws JsonException
      * @throws NotImplementedException
@@ -91,7 +93,7 @@ class Actor implements RequestHandlerInterface, HttpCacheInterface
         }
 
         // Cache actor lookup and counts
-        $response = $this->getCache()->cache(
+        $response = $this->getCache()->cacheJson(
             $actorID,
             function () use ($actorID) {
                 $actor = $this->actorsTable->searchForActor($actorID);
