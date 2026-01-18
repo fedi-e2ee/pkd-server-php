@@ -194,7 +194,7 @@ vendor/bin/php-cs-fixer fix --allow-risky=yes
 
 ### Regenerating the Reference Documentation 
 
-> ![TIP]
+> [!TIP]
 > This is optional for third-party contributors. If a PR fails because the reference docs are out of date, don't sweat
 > it. We'll run it on the `main` branch after merging.
 
