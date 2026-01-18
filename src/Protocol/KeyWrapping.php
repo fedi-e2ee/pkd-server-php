@@ -3,24 +3,35 @@ declare(strict_types=1);
 namespace FediE2EE\PKDServer\Protocol;
 
 use FediE2EE\PKD\Crypto\AttributeEncryption\AttributeKeyMap;
-use FediE2EE\PKD\Crypto\Exceptions\BundleException;
-use FediE2EE\PKD\Crypto\Exceptions\CryptoException;
-use FediE2EE\PKD\Crypto\Exceptions\InputException;
-use FediE2EE\PKD\Crypto\Exceptions\JsonException;
-use FediE2EE\PKD\Crypto\Protocol\Bundle;
-use FediE2EE\PKD\Crypto\Protocol\HPKEAdapter;
-use FediE2EE\PKD\Crypto\SymmetricKey;
-use FediE2EE\PKD\Crypto\UtilTrait;
+use FediE2EE\PKD\Crypto\Exceptions\{
+    BundleException,
+    CryptoException,
+    InputException,
+    JsonException,
+};
+use FediE2EE\PKD\Crypto\Protocol\{
+    Bundle,
+    HPKEAdapter
+};
+use FediE2EE\PKD\Crypto\{
+    SymmetricKey,
+    UtilTrait
+};
 use FediE2EE\PKDServer\Dependency\HPKE;
-use FediE2EE\PKDServer\Exceptions\DependencyException;
-use FediE2EE\PKDServer\Exceptions\TableException;
+use FediE2EE\PKDServer\Exceptions\{
+    CacheException,
+    DependencyException,
+    TableException
+};
 use FediE2EE\PKDServer\ServerConfig;
 use FediE2EE\PKDServer\Tables\Peers;
 use FediE2EE\PKDServer\Traits\ConfigTrait;
 use ParagonIE\ConstantTime\Base64UrlSafe;
 use ParagonIE\EasyDB\EasyDB;
 use ParagonIE\HPKE\HPKEException;
+use Psr\SimpleCache\InvalidArgumentException;
 use SensitiveParameter;
+use SodiumException;
 
 class KeyWrapping
 {
@@ -38,28 +49,13 @@ class KeyWrapping
     }
 
     /**
-     * Wrap the local symmetric keys in 'wrappedkeys'
-     *
-     * @throws DependencyException
-     */
-    /*
-    public function localKeyWrap(string $merkleRoot, AttributeKeyMap $keyMap): void
-    {
-        $ciphertext = $this->hpkeWrapSymmetricKeys($keyMap);
-        $this->db->update(
-            'pkd_merkle_leaves',
-            [
-                'wrappedkeys' => $ciphertext,
-            ],
-            [
-                'root' => $merkleRoot,
-            ]
-        );
-    }
-    */
-
-    /**
      * Initiate a rewrapping of the symmetric keys associated with a record.
+     *
+     * @throws CacheException
+     * @throws DependencyException
+     * @throws HPKEException
+     * @throws JsonException
+     * @throws TableException
      */
     public function rewrapSymmetricKeys(string $merkleRoot, ?AttributeKeyMap $keyMap = null): void
     {
@@ -166,7 +162,9 @@ class KeyWrapping
      * @throws DependencyException
      * @throws HPKEException
      * @throws InputException
+     * @throws InvalidArgumentException
      * @throws JsonException
+     * @throws SodiumException
      */
     public function decryptAndGetRewrapped(string $merkleRoot, ?string $wrappedKeys = null): array
     {

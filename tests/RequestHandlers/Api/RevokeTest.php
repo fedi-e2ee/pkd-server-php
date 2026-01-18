@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace FediE2EE\PKDServer\Tests\RequestHandlers\Api;
 
 use Exception;
+use FediE2EE\PKD\Crypto\Exceptions\BundleException;
 use FediE2EE\PKD\Crypto\Protocol\Actions\{
     AddKey,
     RevokeKeyThirdParty
@@ -140,6 +141,135 @@ class RevokeTest extends TestCase
 
         $pks = $this->table('PublicKeys');
         $this->assertEmpty($pks->getPublicKeysFor($canonical));
+        $this->assertNotInTransaction();
+    }
+
+    /**
+     * Test that an empty body throws BundleException
+     *
+     * @throws Exception
+     */
+    public function testEmptyBodyThrowsException(): void
+    {
+        $config = $this->getConfig();
+        $this->clearOldTransaction($config);
+
+        $reflector = new ReflectionClass(Revoke::class);
+        $revokeHandler = $reflector->newInstanceWithoutConstructor();
+        $revokeHandler->injectConfig($config);
+        $constructor = $reflector->getConstructor();
+        if ($constructor) {
+            $constructor->invoke($revokeHandler);
+        }
+
+        $request = $this->makePostRequest(
+            '/api/revoke',
+            '',
+            ['Content-Type' => 'application/json']
+        );
+
+        // Empty body causes BundleException (not caught by handler)
+        $this->expectException(BundleException::class);
+        $this->expectExceptionMessage('Empty JSON string');
+        $revokeHandler->handle($request);
+    }
+
+    /**
+     * Test that invalid JSON body throws BundleException
+     *
+     * @throws Exception
+     */
+    public function testInvalidJsonThrowsException(): void
+    {
+        $config = $this->getConfig();
+        $this->clearOldTransaction($config);
+
+        $reflector = new ReflectionClass(Revoke::class);
+        $revokeHandler = $reflector->newInstanceWithoutConstructor();
+        $revokeHandler->injectConfig($config);
+        $constructor = $reflector->getConstructor();
+        if ($constructor) {
+            $constructor->invoke($revokeHandler);
+        }
+
+        $request = $this->makePostRequest(
+            '/api/revoke',
+            'not-valid-json',
+            ['Content-Type' => 'application/json']
+        );
+
+        // Invalid JSON causes BundleException (not caught by handler)
+        $this->expectException(BundleException::class);
+        $this->expectExceptionMessage('Invalid JSON string');
+        $revokeHandler->handle($request);
+    }
+
+    /**
+     * Test that a GET request with empty body throws BundleException
+     *
+     * @throws Exception
+     */
+    public function testGetRequestThrowsException(): void
+    {
+        $config = $this->getConfig();
+        $this->clearOldTransaction($config);
+
+        $reflector = new ReflectionClass(Revoke::class);
+        $revokeHandler = $reflector->newInstanceWithoutConstructor();
+        $revokeHandler->injectConfig($config);
+        $constructor = $reflector->getConstructor();
+        if ($constructor) {
+            $constructor->invoke($revokeHandler);
+        }
+
+        $request = $this->makeGetRequest('/api/revoke');
+
+        // GET with empty body causes BundleException (not caught by handler)
+        $this->expectException(BundleException::class);
+        $this->expectExceptionMessage('Empty JSON string');
+        $revokeHandler->handle($request);
+    }
+
+    /**
+     * Test that a valid token for non-existent key returns 404
+     *
+     * @throws Exception
+     */
+    public function testNonExistentKeyReturns404(): void
+    {
+        $config = $this->getConfig();
+        $this->clearOldTransaction($config);
+
+        // Generate a fresh keypair that's never been registered
+        $keypair = SecretKey::generate();
+
+        /** @var MerkleState $merkleState */
+        $merkleState = $this->table('MerkleState');
+        $latestRoot = $merkleState->getLatestRoot();
+
+        $handler = new Handler();
+        $revocation = new Revocation();
+        $token = $revocation->revokeThirdParty($keypair);
+        $message = new RevokeKeyThirdParty($token);
+        $bundle = $handler->handle($message, $keypair, new AttributeKeyMap(), $latestRoot);
+
+        $reflector = new ReflectionClass(Revoke::class);
+        $revokeHandler = $reflector->newInstanceWithoutConstructor();
+        $revokeHandler->injectConfig($config);
+        $constructor = $reflector->getConstructor();
+        if ($constructor) {
+            $constructor->invoke($revokeHandler);
+        }
+
+        $request = $this->makePostRequest(
+            '/api/revoke',
+            $bundle->toString(),
+            ['Content-Type' => 'application/json']
+        );
+        $response = $revokeHandler->handle($request);
+
+        // Non-existent key returns 404
+        $this->assertSame(404, $response->getStatusCode());
         $this->assertNotInTransaction();
     }
 }

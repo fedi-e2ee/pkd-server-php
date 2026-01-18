@@ -10,6 +10,8 @@ use FediE2EE\PKD\Crypto\Protocol\{
 };
 use FediE2EE\PKD\Crypto\{
     AttributeEncryption\AttributeKeyMap,
+    Exceptions\JsonException,
+    Exceptions\NotImplementedException,
     SecretKey,
     SymmetricKey,
 };
@@ -17,11 +19,14 @@ use FediE2EE\PKDServer\{
     ActivityPub\WebFinger,
     AppCache,
     Dependency\WrappedEncryptedRow,
+    Exceptions\DependencyException,
+    Exceptions\TableException,
     Math,
     Protocol,
     Protocol\KeyWrapping,
     Protocol\Payload,
     Protocol\RewrapConfig,
+    Redirect,
     ServerConfig,
     Table,
     TableCache
@@ -48,8 +53,20 @@ use PHPUnit\Framework\Attributes\{
     CoversClass,
     UsesClass
 };
+use ParagonIE\Certainty\Exception\CertaintyException;
+use ParagonIE\CipherSweet\Exception\{
+    ArrayKeyException,
+    BlindIndexNotFoundException,
+    CipherSweetException,
+    CryptoOperationException,
+    InvalidCiphertextException
+};
 use PHPUnit\Framework\TestCase;
+use Psr\SimpleCache\InvalidArgumentException;
+use Random\RandomException;
 use ReflectionClass;
+use ReflectionException;
+use SodiumException;
 
 #[CoversClass(Actor::class)]
 #[UsesClass(AppCache::class)]
@@ -66,6 +83,7 @@ use ReflectionClass;
 #[UsesClass(KeyWrapping::class)]
 #[UsesClass(Peers::class)]
 #[UsesClass(PublicKeys::class)]
+#[UsesClass(Redirect::class)]
 #[UsesClass(ActorRecord::class)]
 #[UsesClass(ActorKey::class)]
 #[UsesClass(MerkleLeaf::class)]
@@ -159,6 +177,145 @@ class ActorTest extends TestCase
         $this->assertSame($canonical, $body['actor-id']);
         $this->assertSame(1, $body['count-aux']);
         $this->assertSame(1, $body['count-keys']);
+        $this->assertNotInTransaction();
+    }
+
+    /**
+     * @throws ArrayKeyException
+     * @throws BlindIndexNotFoundException
+     * @throws CipherSweetException
+     * @throws CryptoOperationException
+     * @throws DependencyException
+     * @throws InvalidArgumentException
+     * @throws InvalidCiphertextException
+     * @throws JsonException
+     * @throws NotImplementedException
+     * @throws ReflectionException
+     * @throws SodiumException
+     * @throws TableException
+     */
+    public function testEmptyActorIdRedirects(): void
+    {
+        $config = $this->getConfig();
+        $this->clearOldTransaction($config);
+
+        $reflector = new ReflectionClass(Actor::class);
+        $actorHandler = $reflector->newInstanceWithoutConstructor();
+        $actorHandler->injectConfig($config);
+        $constructor = $reflector->getConstructor();
+        if ($constructor) {
+            $constructor->invoke($actorHandler);
+        }
+
+        $request = $this->makeGetRequest('/api/actor/')
+            ->withAttribute('actor_id', '');
+        $response = $actorHandler->handle($request);
+
+        // 300 <= Status code < 400
+        $this->assertGreaterThanOrEqual(300, $response->getStatusCode());
+        $this->assertLessThan(400, $response->getStatusCode());
+        $this->assertNotInTransaction();
+    }
+
+    /**
+     * @throws ArrayKeyException
+     * @throws BlindIndexNotFoundException
+     * @throws CertaintyException
+     * @throws CipherSweetException
+     * @throws CryptoOperationException
+     * @throws DependencyException
+     * @throws InvalidArgumentException
+     * @throws InvalidCiphertextException
+     * @throws JsonException
+     * @throws NotImplementedException
+     * @throws RandomException
+     * @throws ReflectionException
+     * @throws SodiumException
+     * @throws TableException
+     */
+    public function testActorNotFoundReturns404(): void
+    {
+        $config = $this->getConfig();
+        $this->clearOldTransaction($config);
+
+        $nonExistentActor = 'nonexistent' . bin2hex(random_bytes(8)) . '@example.com';
+        $canonical = 'https://example.com/users/nonexistent' . bin2hex(random_bytes(8));
+
+        $webFinger = new WebFinger($config, $this->getMockClient([
+            new Response(200, ['Content-Type' => 'application/json'], json_encode([
+                'subject' => 'acct:' . $nonExistentActor,
+                'links' => [
+                    [
+                        'rel' => 'self',
+                        'type' => 'application/activity+json',
+                        'href' => $canonical
+                    ]
+                ]
+            ])),
+        ]));
+
+        $reflector = new ReflectionClass(Actor::class);
+        $actorHandler = $reflector->newInstanceWithoutConstructor();
+        $actorHandler->injectConfig($config);
+        $actorHandler->setWebFinger($webFinger);
+        $constructor = $reflector->getConstructor();
+        if ($constructor) {
+            $constructor->invoke($actorHandler);
+        }
+
+        $request = $this->makeGetRequest('/api/actor/' . urlencode($nonExistentActor))
+            ->withAttribute('actor_id', $nonExistentActor);
+        $response = $actorHandler->handle($request);
+
+        $this->assertSame(404, $response->getStatusCode());
+        $body = json_decode($response->getBody()->getContents(), true);
+        $this->assertArrayHasKey('error', $body);
+        $this->assertStringContainsString('not found', strtolower($body['error']));
+        $this->assertNotInTransaction();
+    }
+
+    /**
+     * @throws ArrayKeyException
+     * @throws BlindIndexNotFoundException
+     * @throws CertaintyException
+     * @throws CipherSweetException
+     * @throws CryptoOperationException
+     * @throws DependencyException
+     * @throws InvalidArgumentException
+     * @throws InvalidCiphertextException
+     * @throws JsonException
+     * @throws NotImplementedException
+     * @throws ReflectionException
+     * @throws SodiumException
+     * @throws TableException
+     */
+    public function testWebFingerErrorReturnsError(): void
+    {
+        $config = $this->getConfig();
+        $this->clearOldTransaction($config);
+
+        // Mock WebFinger to return an error
+        $webFinger = new WebFinger($config, $this->getMockClient([
+            new Response(500, [], 'Internal Server Error')
+        ]));
+
+        $reflector = new ReflectionClass(Actor::class);
+        $actorHandler = $reflector->newInstanceWithoutConstructor();
+        $actorHandler->injectConfig($config);
+        $actorHandler->setWebFinger($webFinger);
+        $constructor = $reflector->getConstructor();
+        if ($constructor) {
+            $constructor->invoke($actorHandler);
+        }
+
+        $request = $this->makeGetRequest('/api/actor/test@example.com')
+            ->withAttribute('actor_id', 'test@example.com');
+        $response = $actorHandler->handle($request);
+
+        $this->assertSame(400, $response->getStatusCode());
+        $body = json_decode($response->getBody()->getContents(), true);
+        $this->assertArrayHasKey('error', $body);
+        $this->assertStringContainsString('WebFinger', $body['error']);
         $this->assertNotInTransaction();
     }
 }

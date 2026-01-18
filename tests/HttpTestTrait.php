@@ -14,6 +14,8 @@ use FediE2EE\PKD\Crypto\Protocol\{
     Actions\AddKey,
     Handler
 };
+use ParagonIE\Certainty\Fetch;
+use ParagonIE\Certainty\RemoteFetch;
 use FediE2EE\PKD\Crypto\{
     SecretKey,
     SymmetricKey
@@ -55,6 +57,8 @@ use ReflectionClass;
 use ReflectionException;
 use SodiumException;
 use TypeError;
+
+use const FediE2EE\PKDServer\PKD_SERVER_ROOT;
 
 /**
  * Helper methods for writing unit tests with HTTP messages
@@ -133,7 +137,19 @@ trait HttpTestTrait
         }
         $input = $username . '@' . $domain;
         $canon = 'https://' . $domain . '/users/' . $username;
-        $wf = new WebFinger($this->getConfig());
+        if (file_exists(PKD_SERVER_ROOT . '/tmp/ca-certs.json')) {
+            $fetch = new Fetch(PKD_SERVER_ROOT . '/tmp');
+        } else {
+
+            $fetch = new RemoteFetch(PKD_SERVER_ROOT . '/tmp');
+        }
+        $wf = new WebFinger(
+            $this->getConfig(),
+            new Client([
+                'verify' => $fetch->getLatestBundle(false, false)->getFilePath()
+            ]),
+            $fetch
+        );
         $wf->setCanonicalForTesting($input, $canon);
         return [$input, $canon];
     }

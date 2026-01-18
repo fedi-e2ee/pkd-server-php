@@ -210,6 +210,21 @@ class WebFingerTest extends TestCase
         $this->assertSame('https://example.com/users/alice', $result2);
     }
 
+    public static function trimUsernameProvider(): array
+    {
+        return [
+            ['alice', 'alice'],
+            ['     alice/in/chains/    ', 'aliceinchains'],
+        ];
+    }
+
+    #[DataProvider("trimUsernameProvider")]
+    public function testTrimUsername(string $input, string $expected): void
+    {
+        $wf = new WebFinger();
+        $this->assertSame($expected, $wf->trimUsername($input));
+    }
+
     /**
      * @throws CertaintyException
      * @throws CryptoException
@@ -246,11 +261,69 @@ class WebFingerTest extends TestCase
         $this->assertSame($pk->toString(), $fetchedPk->toString());
     }
 
-    public function testGetPublicKeyInvalidBecauseRsa(): void
+    public function testGetPublicKeyNoSelf(): void
     {
         $sk = SecretKey::generate();
         $pk = $sk->getPublicKey();
 
+        $mockHttp = $this->getMockClient([
+            new Response(200, ['Content-Type' => 'application/json'], json_encode([
+                'links' => [
+                    [
+                        'type' => 'application/json',
+                        'href' => 'https://example.com/users/alicenoself'
+                    ],
+                    [
+                        'rel' => 'self',
+                        'type' => 'text/html',
+                        'href' => 'https://soatok.blog',
+                    ]
+                ]
+            ]))
+        ]);
+        $webFinger = new WebFinger($this->getConfig(), $mockHttp);
+        $webFinger->clearCaches();
+        $this->expectException(FetchException::class);
+        $this->expectExceptionMessage('No valid self href found for https://example.com/users/alicenoself');
+        $webFinger->getPublicKey('https://example.com/users/alicenoself');
+    }
+
+    public function testGetPublicKeyEmpty(): void
+    {
+        $sk = SecretKey::generate();
+        $pk = $sk->getPublicKey();
+
+        $mockHttp = $this->getMockClient([
+            new Response(200, ['Content-Type' => 'application/json'], json_encode([
+                'links' => [
+                    [
+                        'rel' => 'self',
+                        'type' => 'application/activity+json',
+                        'href' => 'https://example.com/users/alice'
+                    ]
+                ]
+            ])),
+            new Response(200, ['Content-Type' => 'application/activity+json'], json_encode([
+                'assertionMethod' => [
+                ]
+            ]))
+        ]);
+        $webFinger = new WebFinger($this->getConfig(), $mockHttp);
+        $this->expectException(FetchException::class);
+        $this->expectExceptionMessage('Could not find public key for https://example.com/users/alice');
+        $webFinger->getPublicKey('https://example.com/users/alice');
+    }
+
+    /**
+     * @throws CertaintyException
+     * @throws CryptoException
+     * @throws DependencyException
+     * @throws FetchException
+     * @throws InvalidArgumentException
+     * @throws SodiumException
+     */
+    public function testGetPublicKeyInvalidBecauseRsa(): void
+    {
         $mockHttp = $this->getMockClient([
             new Response(200, ['Content-Type' => 'application/json'], json_encode([
                 'links' => [
@@ -272,6 +345,7 @@ class WebFingerTest extends TestCase
         ]);
         $webFinger = new WebFinger($this->getConfig(), $mockHttp);
         $this->expectException(FetchException::class);
+        $this->expectExceptionMessage('Could not find public key for https://example.com/users/alice');
         $webFinger->getPublicKey('https://example.com/users/alice');
     }
 
@@ -576,8 +650,9 @@ class WebFingerTest extends TestCase
             ]))
         ]);
         $webFinger = new WebFinger($this->getConfig(), $mockHttp);
+        $webFinger->clearCaches();
         $this->expectException(FetchException::class);
-        $this->expectExceptionMessage('Could not fetch public key for https://example.com/users/alice');
+        $this->expectExceptionMessage('No valid self href found for https://example.com/users/alice');
         $webFinger->getPublicKey('https://example.com/users/alice');
     }
 

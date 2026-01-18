@@ -12,11 +12,21 @@ use FediE2EE\PKDServer\Dependency\{
     WrappedEncryptedRow
 };
 use FediE2EE\PKD\Crypto\AttributeEncryption\AttributeKeyMap;
-use FediE2EE\PKD\Crypto\Exceptions\CryptoException;
-use FediE2EE\PKD\Crypto\Protocol\Actions\AddKey;
-use FediE2EE\PKD\Crypto\Protocol\Handler;
-use FediE2EE\PKD\Crypto\SecretKey;
-use FediE2EE\PKD\Crypto\SymmetricKey;
+use FediE2EE\PKD\Crypto\Exceptions\{
+    CryptoException,
+    JsonException,
+    NotImplementedException,
+    ParserException
+};
+use FediE2EE\PKD\Crypto\Protocol\{
+    Actions\AddKey,
+    Handler,
+    ProtocolMessageInterface
+};
+use FediE2EE\PKD\Crypto\{
+    SecretKey,
+    SymmetricKey
+};
 use GuzzleHttp\Psr7\Response;
 use FediE2EE\PKDServer\Protocol\{
     KeyWrapping,
@@ -36,14 +46,18 @@ use FediE2EE\PKDServer\{AppCache,
 use FediE2EE\PKDServer\Exceptions\{
     CacheException,
     DependencyException,
-    TableException,
+    ProtocolException,
+    TableException
 };
-use FediE2EE\PKDServer\RequestHandlers\Api\Replicas;
 use FediE2EE\PKDServer\Tables\{
     Actors,
     MerkleState,
     Peers,
     PublicKeys,
+    ReplicaActors,
+    ReplicaAuxData,
+    ReplicaHistory,
+    ReplicaPublicKeys,
     TOTP
 };
 use FediE2EE\PKDServer\Tables\Records\{
@@ -54,12 +68,23 @@ use FediE2EE\PKDServer\Tables\Records\{
     ReplicaActor,
     ReplicaLeaf
 };
+use JsonException as BaseJsonException;
 use PHPUnit\Framework\Attributes\{
     BeforeClass,
     CoversClass,
     UsesClass
 };
+use ParagonIE\Certainty\Exception\CertaintyException;
+use ParagonIE\CipherSweet\Exception\ArrayKeyException;
+use ParagonIE\CipherSweet\Exception\BlindIndexNotFoundException;
+use ParagonIE\CipherSweet\Exception\CipherSweetException;
+use ParagonIE\CipherSweet\Exception\CryptoOperationException;
+use ParagonIE\CipherSweet\Exception\InvalidCiphertextException;
+use ParagonIE\HPKE\HPKEException;
+use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
+use Psr\SimpleCache\InvalidArgumentException;
+use Random\RandomException;
 use SodiumException;
 
 #[CoversClass(ReplicaInfo::class)]
@@ -78,10 +103,10 @@ use SodiumException;
 #[UsesClass(Actors::class)]
 #[UsesClass(MerkleState::class)]
 #[UsesClass(PublicKeys::class)]
-#[UsesClass(\FediE2EE\PKDServer\Tables\ReplicaActors::class)]
-#[UsesClass(\FediE2EE\PKDServer\Tables\ReplicaAuxData::class)]
-#[UsesClass(\FediE2EE\PKDServer\Tables\ReplicaHistory::class)]
-#[UsesClass(\FediE2EE\PKDServer\Tables\ReplicaPublicKeys::class)]
+#[UsesClass(ReplicaActors::class)]
+#[UsesClass(ReplicaAuxData::class)]
+#[UsesClass(ReplicaHistory::class)]
+#[UsesClass(ReplicaPublicKeys::class)]
 #[UsesClass(TOTP::class)]
 #[UsesClass(Actor::class)]
 #[UsesClass(ActorKey::class)]
@@ -91,7 +116,6 @@ use SodiumException;
 #[UsesClass(Math::class)]
 #[UsesClass(RewrapConfig::class)]
 #[UsesClass(Peer::class)]
-#[UsesClass(Witness::class)]
 class ReplicaInfoTest extends TestCase
 {
     use ConfigTrait;
@@ -224,19 +248,36 @@ class ReplicaInfoTest extends TestCase
         $this->assertSame('root1', $decodedSince['records'][0]['merkle-root']);
     }
 
+    /**
+     * @throws CacheException
+     * @throws CryptoException
+     * @throws DateMalformedStringException
+     * @throws DependencyException
+     * @throws JsonException
+     * @throws NotImplementedException
+     * @throws SodiumException
+     * @throws TableException
+     * @throws BaseJsonException
+     * @throws Exception
+     * @throws ArrayKeyException
+     * @throws BlindIndexNotFoundException
+     * @throws CipherSweetException
+     * @throws CryptoOperationException
+     * @throws InvalidCiphertextException
+     */
     public function testActorEndpoints(): void
     {
         if (empty($this->replicaId)) {
             $this->beforeTests();
         }
         $peer = $this->table('Peers')->getPeerByUniqueId($this->replicaId);
-        /** @var \FediE2EE\PKDServer\Tables\ReplicaActors $replicaActors */
+        /** @var ReplicaActors $replicaActors */
         $replicaActors = $this->table('ReplicaActors');
 
         $akm = new AttributeKeyMap();
         $akm->addKey('actor', SymmetricKey::generate());
         $payload = new Payload(
-            $this->createStub(\FediE2EE\PKD\Crypto\Protocol\ProtocolMessageInterface::class),
+            $this->createStub(ProtocolMessageInterface::class),
             $akm,
             '{}'
         );
@@ -265,6 +306,21 @@ class ReplicaInfoTest extends TestCase
         $this->assertEmpty($decodedKeys['public-keys']);
     }
 
+    /**
+     * @throws CacheException
+     * @throws CertaintyException
+     * @throws CryptoException
+     * @throws DependencyException
+     * @throws HPKEException
+     * @throws InvalidArgumentException
+     * @throws JsonException
+     * @throws NotImplementedException
+     * @throws ParserException
+     * @throws ProtocolException
+     * @throws RandomException
+     * @throws SodiumException
+     * @throws TableException
+     */
     protected function makeAndStoreDummyActor(): array
     {
         [, $canonical] = $this->makeDummyActor();

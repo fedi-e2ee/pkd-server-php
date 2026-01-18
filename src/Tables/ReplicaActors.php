@@ -162,4 +162,37 @@ class ReplicaActors extends Table
         $this->db->insert('pkd_replica_actors', $fields);
         return $newActorId;
     }
+
+    /**
+     * Create a replica actor without requiring a Payload.
+     *
+     * Used when replicating from source server where we have decrypted data.
+     *
+     * @throws ArrayKeyException
+     * @throws BlindIndexNotFoundException
+     * @throws CipherSweetException
+     * @throws CryptoOperationException
+     * @throws SodiumException
+     * @throws TableException
+     */
+    public function createSimpleForPeer(
+        Peer $peer,
+        string $activityPubID,
+        ?PublicKey $key = null
+    ): int {
+        $newActorId = $this->getNextPrimaryKey();
+        $cipher = $this->getCipher();
+        $plaintext = [
+            'replicaactorid' => $newActorId,
+            'peer' => $peer->getPrimaryKey(),
+            'activitypubid' => $activityPubID,
+            'rfc9421pubkey' => is_null($key) ? null : $key->toString(),
+        ];
+        [$fields, $blindIndexes] = $cipher->prepareRowForStorage($plaintext);
+        $fields['activitypubid_idx'] = (string) $blindIndexes['activitypubid_idx'];
+        $fields['peer'] = $peer->getPrimaryKey();
+
+        $this->db->insert('pkd_replica_actors', $fields);
+        return $newActorId;
+    }
 }

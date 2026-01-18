@@ -31,6 +31,7 @@ use ParagonIE\CipherSweet\Exception\{
 };
 use ParagonIE\ConstantTime\Base32;
 use ParagonIE\HPKE\HPKEException;
+use Random\RandomException;
 use Psr\Http\Message\{
     ResponseInterface,
     ServerRequestInterface
@@ -68,20 +69,20 @@ class TotpEnroll implements RequestHandlerInterface
      * @throws CipherSweetException
      * @throws CryptoOperationException
      * @throws DependencyException
+     * @throws HPKEException
      * @throws InvalidCiphertextException
      * @throws JsonException
      * @throws NotImplementedException
-     * @throws ProtocolException
+     * @throws RandomException
      * @throws SodiumException
      * @throws TableException
-     * @throws HPKEException
      */
     #[Route("/api/totp/enroll")]
     #[Override]
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         try {
-            $body = json_decode((string) $request->getBody(), true, 512, JSON_THROW_ON_ERROR);
+            $body = $this->jsonDecode($request->getBody()->getContents());
             $enrollment = $body['enrollment'] ?? [];
             $actorId = $enrollment['actor-id'] ?? '';
             $keyId = $enrollment['key-id'] ?? '';
@@ -106,7 +107,11 @@ class TotpEnroll implements RequestHandlerInterface
             return $this->error('Invalid JSON', 400);
         }
 
-        $this->verifySignature($body, $actorId, $keyId);
+        try {
+            $this->verifySignature($body, $actorId, $keyId);
+        } catch (ProtocolException $ex) {
+            return $this->error($ex->getMessage(), 400);
+        }
 
         // Validate inputs:
         if (!hash_equals('fedi-e2ee:v1/api/totp/enroll', $body['!pkd-context'])) {

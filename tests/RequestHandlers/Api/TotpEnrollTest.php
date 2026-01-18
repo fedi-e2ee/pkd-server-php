@@ -596,8 +596,11 @@ class TotpEnrollTest extends TestCase
             ->withHeader('Content-Type', 'application/json')
             ->withBody(new StreamFactory()->createStream(json_encode($body)));
 
-        $this->expectException(\FediE2EE\PKDServer\Exceptions\ProtocolException::class);
-        $this->dispatchRequest($request);
+        $response = $this->dispatchRequest($request);
+        $body = json_decode($response->getBody()->getContents(), true);
+        $this->assertSame(400, $response->getStatusCode());
+        $this->assertArrayHasKey('error', $body);
+        $this->assertSame('Invalid signature', $body['error']);
     }
 
     /**

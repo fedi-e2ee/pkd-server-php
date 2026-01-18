@@ -78,7 +78,6 @@ use SodiumException;
 
 #[CoversClass(HistorySince::class)]
 #[CoversClass(HistoryView::class)]
-#[CoversClass(Witness::class)]
 #[UsesClass(ActorKey::class)]
 #[UsesClass(ActorRecord::class)]
 #[UsesClass(Actors::class)]

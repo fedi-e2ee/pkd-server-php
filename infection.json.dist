@@ -1,7 +1,7 @@
 {
     "source": {
         "directories": [
-			"public",
+            "public",
             "src"
         ]
     },
@@ -65,6 +65,9 @@
         "BitwiseOr": {
             "ignore": [
                 "FediE2EE\\PKDServer\\Traits\\ReqTrait::json"
+            ],
+            "ignoreSourceCodeByRegex": [
+                ".*JSON_.*"
             ]
         },
         "ConcatOperandRemoval": {

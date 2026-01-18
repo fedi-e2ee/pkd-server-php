@@ -12,6 +12,12 @@ use FediE2EE\PKD\Crypto\{
     SymmetricKey,
     UtilTrait
 };
+use FediE2EE\PKD\Crypto\Exceptions\{
+    CryptoException,
+    JsonException,
+    NotImplementedException,
+    ParserException
+};
 use FediE2EE\PKDServer\RequestHandlers\Api\{
     TotpRotate
 };
@@ -31,6 +37,12 @@ use FediE2EE\PKDServer\{
     Table,
     TableCache
 };
+use FediE2EE\PKDServer\Exceptions\{
+    CacheException,
+    DependencyException,
+    ProtocolException,
+    TableException
+};
 use FediE2EE\PKDServer\Tables\{
     Actors,
     MerkleState,
@@ -49,15 +61,22 @@ use FediE2EE\PKDServer\Tests\HttpTestTrait;
 use FediE2EE\PKDServer\Traits\ConfigTrait;
 use Laminas\Diactoros\ServerRequest;
 use Laminas\Diactoros\StreamFactory;
+use ParagonIE\Certainty\Exception\CertaintyException;
+use ParagonIE\CipherSweet\Exception\{
+    ArrayKeyException,
+    CipherSweetException,
+    CryptoOperationException
+};
 use ParagonIE\ConstantTime\{
     Base32,
     Base64UrlSafe
 };
-use PHPUnit\Framework\Attributes\{
-    CoversClass,
-    UsesClass
-};
+use ParagonIE\HPKE\HPKEException;
+use PHPUnit\Framework\Attributes\{CoversClass, DataProvider, UsesClass};
 use PHPUnit\Framework\TestCase;
+use Psr\SimpleCache\InvalidArgumentException;
+use Random\RandomException;
+use SodiumException;
 
 #[CoversClass(TotpRotate::class)]
 #[UsesClass(AppCache::class)]
@@ -89,14 +108,26 @@ class TotpRotateTest extends TestCase
     use ConfigTrait;
     use UtilTrait;
 
+    public static function timeOffsetProvider(): array
+    {
+        return [
+            [0],
+            [-86400],
+            [86400],
+        ];
+    }
+
     /**
      * @throws Exception
      */
-    public function testHandle(): void
+    #[DataProvider("timeOffsetProvider")]
+    public function testHandle(int $timeOffset): void
     {
         $sk = SecretKey::generate();
         $pk = $sk->getPublicKey();
-        [, $canonical] = $this->makeDummyActor('rotate-example.com');
+        $hash = hash('sha256', pack('q', $timeOffset));
+        $rotatedomain = substr($hash, 0, 10) . '.rotate-example.com';
+        [, $canonical] = $this->makeDummyActor($rotatedomain);
 
         /** @var TOTP $totpTable */
         $totpTable = $this->table('TOTP');
@@ -134,7 +165,7 @@ class TotpRotateTest extends TestCase
         $keyId = $addKeyResult->keyID;
 
         $domain = parse_url($canonical)['host'];
-        $this->assertSame('rotate-example.com', $domain);
+        $this->assertSame($rotatedomain, $domain);
         $oldSecret = random_bytes(20);
         $totpTable->saveSecret($domain, $oldSecret);
 
@@ -154,7 +185,7 @@ class TotpRotateTest extends TestCase
             $newSecret
         );
 
-        $time = (string) time();
+        $time = (string) (time() + $timeOffset);
         $rotation = [
             'actor-id' => $canonical,
             'key-id' => $keyId,
@@ -191,19 +222,29 @@ class TotpRotateTest extends TestCase
             $encodedBody
         );
         $response = $this->dispatchRequest($request);
-        $this->assertSame(200, $response->getStatusCode());
-        $body = json_decode((string) $response->getBody(), true);
-        $this->assertTrue($body['success']);
-        // Verify response format includes !pkd-context
-        $this->assertSame('fedi-e2ee:v1/api/totp/rotate', $body['!pkd-context']);
-        $this->assertArrayHasKey('time', $body);
-        $this->assertIsString($body['time']);
+        $body = json_decode((string)$response->getBody(), true);
+        if (abs($timeOffset) < 300) {
+            $this->assertSame(200, $response->getStatusCode());
+            $this->assertTrue($body['success']);
+            // Verify response format includes !pkd-context
+            $this->assertSame('fedi-e2ee:v1/api/totp/rotate', $body['!pkd-context']);
+            $this->assertArrayHasKey('time', $body);
+            $this->assertIsString($body['time']);
 
-        $dbSecret = $totpTable->getSecretByDomain($domain);
-        $this->assertSame(
-            bin2hex($newSecret),
-            bin2hex($dbSecret)
-        );
+            $dbSecret = $totpTable->getSecretByDomain($domain);
+            $this->assertSame(
+                bin2hex($newSecret),
+                bin2hex($dbSecret)
+            );
+        } elseif ($timeOffset < 0) {
+            $this->assertSame(400, $response->getStatusCode());
+            $this->assertArrayHasKey('error', $body);
+            $this->assertSame('OTP is too stale', $body['error']);
+        } else {
+            $this->assertSame(400, $response->getStatusCode());
+            $this->assertArrayHasKey('error', $body);
+            $this->assertSame('OTP is too new; did you time travel?', $body['error']);
+        }
         $this->assertNotInTransaction();
     }
 
@@ -494,5 +535,130 @@ class TotpRotateTest extends TestCase
         $this->assertSame(400, $response->getStatusCode());
         $responseBody = json_decode((string) $response->getBody(), true);
         $this->assertArrayHasKey('error', $responseBody);
+    }
+
+    /**
+     * @throws ArrayKeyException
+     * @throws CacheException
+     * @throws CertaintyException
+     * @throws CipherSweetException
+     * @throws CryptoException
+     * @throws CryptoOperationException
+     * @throws DependencyException
+     * @throws HPKEException
+     * @throws InvalidArgumentException
+     * @throws JsonException
+     * @throws NotImplementedException
+     * @throws ParserException
+     * @throws ProtocolException
+     * @throws RandomException
+     * @throws SodiumException
+     * @throws TableException
+     */
+    public function testInvalidSignature(): void
+    {
+        $sk = SecretKey::generate();
+        $pk = $sk->getPublicKey();
+        [, $canonical] = $this->makeDummyActor('invalid-sig-rotate-example.com');
+
+        /** @var TOTP $totpTable */
+        $totpTable = $this->table('TOTP');
+        if (!($totpTable instanceof TOTP)) {
+            $this->fail('type error: table() result not instance of TOTP table class');
+        }
+
+        /** @var MerkleState $merkleState */
+        $merkleState = $this->table('MerkleState');
+        if (!($merkleState instanceof MerkleState)) {
+            $this->fail('type error: table() result not instance of MerkleState table class');
+        }
+
+        $config = $this->getConfig();
+        $this->clearOldTransaction($config);
+        $protocol = new Protocol($config);
+        $latestRoot = $merkleState->getLatestRoot();
+
+        $serverHpke = $config->getHPKE();
+        $handler = new Handler();
+
+        $addKey = new AddKey($canonical, $pk);
+        $akm = new AttributeKeyMap()
+            ->addKey('actor', SymmetricKey::generate())
+            ->addKey('public-key', SymmetricKey::generate());
+        $encryptedMsg = $addKey->encrypt($akm);
+        $this->clearOldTransaction($config);
+        $bundle = $handler->handle($encryptedMsg, $sk, $akm, $latestRoot);
+        $encryptedForServer = $handler->hpkeEncrypt(
+            $bundle,
+            $serverHpke->encapsKey,
+            $serverHpke->cs,
+        );
+        $addKeyResult = $protocol->addKey($encryptedForServer, $canonical);
+        $keyId = $addKeyResult->keyID;
+
+        $domain = parse_url($canonical)['host'];
+        $this->assertSame('invalid-sig-rotate-example.com', $domain);
+        $oldSecret = random_bytes(20);
+        $totpTable->saveSecret($domain, $oldSecret);
+
+        $totpGenerator = new class() {
+            use TOTPTrait;
+        };
+
+        $oldOtp = $totpGenerator->generateTOTP($oldSecret, time());
+
+        $newSecret = random_bytes(20);
+        $newOtpCurrent = $totpGenerator->generateTOTP($newSecret, time());
+        $newOtpPrevious = $totpGenerator->generateTOTP($newSecret, time() - 30);
+
+        $hpke = $this->config()->getHPKE();
+        $encryptedSecret = new HPKEAdapter($hpke->cs, 'fedi-e2ee:v1/api/totp/rotate')->seal(
+            $hpke->getEncapsKey(),
+            $newSecret
+        );
+
+        $rotation = [
+            'actor-id' => $canonical,
+            'key-id' => $keyId,
+            'old-otp' => $oldOtp,
+            'new-otp-current' => $newOtpCurrent,
+            'new-otp-previous' => $newOtpPrevious,
+            'new-totp-secret' => Base32::encode($encryptedSecret),
+        ];
+
+        $time = (string) time();
+        $message = [
+            '!pkd-context' => 'fedi-e2ee:v1/api/totp/rotate',
+            'action' => 'TOTP-Rotate',
+            'current-time' => (string) $time,
+            'rotation' => $rotation,
+        ];
+
+        $toSign = $this->preAuthEncode([
+            '!pkd-context',
+            'fedi-e2ee:v1/api/totp/rotate',
+            'action',
+            'TOTP-Rotate',
+            'message',
+            json_encode($rotation)
+        ]);
+        $signature = $sk->sign($toSign);
+        // Flip all bits to make invalid:
+        $signature ^= str_repeat("\xFF", 64);
+        $message['signature'] = Base64UrlSafe::encodeUnpadded($signature);
+
+        $encodedBody = json_encode($message);
+        if ($encodedBody === false) {
+            $this->fail('Failed to encode message');
+        }
+        $request = $this->makePostRequest(
+            '/api/totp/rotate',
+            $encodedBody
+        );
+        $response = $this->dispatchRequest($request);
+        $body = json_decode((string)$response->getBody(), true);
+        $this->assertSame(400, $response->getStatusCode());
+        $this->assertArrayHasKey('error', $body);
+        $this->assertSame('Invalid signature', $body['error']);
     }
 }
