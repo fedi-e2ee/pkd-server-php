@@ -5,6 +5,7 @@ Namespace: `FediE2EE\PKDServer\Traits`
 ## Classes
 
 - [ActivityStreamsTrait](#activitystreamstrait) - trait
+- [AuxDataIdTrait](#auxdataidtrait) - trait
 - [ConfigTrait](#configtrait) - trait
 - [HttpCacheTrait](#httpcachetrait) - trait
 - [ProtocolMethodTrait](#protocolmethodtrait) - trait
@@ -114,6 +115,111 @@ Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 - `$http`: `?GuzzleHttp\Client` = null
 
 **Throws:** `CertaintyException`, `DependencyException`, `SodiumException`
+
+---
+
+## AuxDataIdTrait
+
+**trait** `FediE2EE\PKDServer\Traits\AuxDataIdTrait`
+
+**File:** [`src/Traits/AuxDataIdTrait.php`](../../../src/Traits/AuxDataIdTrait.php)
+
+**Uses:** `FediE2EE\PKD\Crypto\UtilTrait`
+
+### Methods
+
+#### [`getAuxDataId`](../../../src/Traits/AuxDataIdTrait.php#L12-L22)
+
+static · Returns `string`
+
+**Parameters:**
+
+- `$auxDataType`: `string`
+- `$data`: `string`
+
+#### [`assertAllArrayKeysExist`](../../../src/Traits/AuxDataIdTrait.php#L14-L19)
+
+static · Returns `void`
+
+**Parameters:**
+
+- `$target`: `array`
+- `...$arrayKeys`: `string`
+
+**Throws:** `InputException`
+
+#### [`allArrayKeysExist`](../../../src/Traits/AuxDataIdTrait.php#L21-L28)
+
+static · Returns `bool`
+
+**Parameters:**
+
+- `$target`: `array`
+- `...$arrayKeys`: `string`
+
+#### [`constantTimeSelect`](../../../src/Traits/AuxDataIdTrait.php#L35-L52)
+
+Returns `string`
+
+**Parameters:**
+
+- `$select`: `int`
+- `$left`: `string`
+- `$right`: `string`
+
+**Throws:** `CryptoException`
+
+#### [`dos2unix`](../../../src/Traits/AuxDataIdTrait.php#L60-L63)
+
+static · Returns `string`
+
+Normalize line-endings to UNIX-style (LF rather than CRLF).
+
+**Parameters:**
+
+- `$in`: `string`
+
+#### [`preAuthEncode`](../../../src/Traits/AuxDataIdTrait.php#L69-L78)
+
+static · Returns `string`
+
+**Parameters:**
+
+- `$pieces`: `array`
+
+#### [`sortByKey`](../../../src/Traits/AuxDataIdTrait.php#L80-L88)
+
+static · Returns `void`
+
+**Parameters:**
+
+- `$arr`: `array`
+
+#### [`LE64`](../../../src/Traits/AuxDataIdTrait.php#L90-L93)
+
+static · Returns `string`
+
+**Parameters:**
+
+- `$n`: `int`
+
+#### [`stringToByteArray`](../../../src/Traits/AuxDataIdTrait.php#L95-L99)
+
+Returns `array`
+
+**Parameters:**
+
+- `$str`: `string`
+
+#### [`stripNewlines`](../../../src/Traits/AuxDataIdTrait.php#L107-L141)
+
+static · Returns `string`
+
+Strip all newlines (CR, LF) characters from a string.
+
+**Parameters:**
+
+- `$input`: `string`
 
 ---
 

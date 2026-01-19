@@ -17,4 +17,4 @@ Technical reference for all classes in the PKD Server, organized by namespace.
 - [Scheduled](classes/scheduled.md) (2 classes)
 - [Tables](classes/tables.md) (11 classes)
 - [Tables / Records](classes/tables-records.md) (9 classes)
-- [Traits](classes/traits.md) (7 classes)
+- [Traits](classes/traits.md) (8 classes)

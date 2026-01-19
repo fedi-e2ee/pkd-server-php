@@ -136,17 +136,17 @@ Returns `void`
 
 **Extends:** `FediE2EE\PKDServer\Table`
 
-**Uses:** `FediE2EE\PKDServer\Traits\ProtocolMethodTrait`
+**Uses:** `FediE2EE\PKDServer\Traits\AuxDataIdTrait`, `FediE2EE\PKDServer\Traits\ProtocolMethodTrait`
 
 ### Methods
 
-#### [`getCipher`](../../../src/Tables/AuxData.php#L53-L64)
+#### [`getCipher`](../../../src/Tables/AuxData.php#L57-L68)
 
 Returns `FediE2EE\PKDServer\Dependency\WrappedEncryptedRow`
 
 **Attributes:** `#[Override]`
 
-#### [`getAuxDataForActor`](../../../src/Tables/AuxData.php#L79-L104)
+#### [`getAuxDataForActor`](../../../src/Tables/AuxData.php#L83-L109)
 
 Returns `array`
 
@@ -156,7 +156,7 @@ Returns `array`
 
 **Throws:** `DateMalformedStringException`
 
-#### [`getAuxDataById`](../../../src/Tables/AuxData.php#L115-L159)
+#### [`getAuxDataById`](../../../src/Tables/AuxData.php#L120-L165)
 
 **API** · Returns `array`
 
@@ -167,7 +167,7 @@ Returns `array`
 
 **Throws:** `CipherSweetException`, `CryptoOperationException`, `DateMalformedStringException`, `InvalidCiphertextException`, `JsonException`, `SodiumException`
 
-#### [`addAuxData`](../../../src/Tables/AuxData.php#L171-L178)
+#### [`addAuxData`](../../../src/Tables/AuxData.php#L177-L184)
 
 Returns `bool`
 
@@ -178,7 +178,7 @@ Returns `bool`
 
 **Throws:** `ConcurrentException`, `CryptoException`, `DependencyException`, `NotImplementedException`, `ProtocolException`, `RandomException`, `SodiumException`, `TableException`
 
-#### [`revokeAuxData`](../../../src/Tables/AuxData.php#L294-L302)
+#### [`revokeAuxData`](../../../src/Tables/AuxData.php#L302-L310)
 
 Returns `bool`
 
@@ -188,6 +188,99 @@ Returns `bool`
 - `$outerActor`: `string`
 
 **Throws:** `ConcurrentException`, `CryptoException`, `DependencyException`, `NotImplementedException`, `ProtocolException`, `RandomException`, `SodiumException`, `TableException`
+
+#### [`getAuxDataId`](../../../src/Tables/AuxData.php#L12-L22)
+
+static · Returns `string`
+
+**Parameters:**
+
+- `$auxDataType`: `string`
+- `$data`: `string`
+
+#### [`assertAllArrayKeysExist`](../../../src/Tables/AuxData.php#L14-L19)
+
+static · Returns `void`
+
+**Parameters:**
+
+- `$target`: `array`
+- `...$arrayKeys`: `string`
+
+**Throws:** `InputException`
+
+#### [`allArrayKeysExist`](../../../src/Tables/AuxData.php#L21-L28)
+
+static · Returns `bool`
+
+**Parameters:**
+
+- `$target`: `array`
+- `...$arrayKeys`: `string`
+
+#### [`constantTimeSelect`](../../../src/Tables/AuxData.php#L35-L52)
+
+Returns `string`
+
+**Parameters:**
+
+- `$select`: `int`
+- `$left`: `string`
+- `$right`: `string`
+
+**Throws:** `CryptoException`
+
+#### [`dos2unix`](../../../src/Tables/AuxData.php#L60-L63)
+
+static · Returns `string`
+
+Normalize line-endings to UNIX-style (LF rather than CRLF).
+
+**Parameters:**
+
+- `$in`: `string`
+
+#### [`preAuthEncode`](../../../src/Tables/AuxData.php#L69-L78)
+
+static · Returns `string`
+
+**Parameters:**
+
+- `$pieces`: `array`
+
+#### [`sortByKey`](../../../src/Tables/AuxData.php#L80-L88)
+
+static · Returns `void`
+
+**Parameters:**
+
+- `$arr`: `array`
+
+#### [`LE64`](../../../src/Tables/AuxData.php#L90-L93)
+
+static · Returns `string`
+
+**Parameters:**
+
+- `$n`: `int`
+
+#### [`stringToByteArray`](../../../src/Tables/AuxData.php#L95-L99)
+
+Returns `array`
+
+**Parameters:**
+
+- `$str`: `string`
+
+#### [`stripNewlines`](../../../src/Tables/AuxData.php#L107-L141)
+
+static · Returns `string`
+
+Strip all newlines (CR, LF) characters from a string.
+
+**Parameters:**
+
+- `$input`: `string`
 
 ---
 
