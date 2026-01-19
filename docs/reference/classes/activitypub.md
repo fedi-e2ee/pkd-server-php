@@ -90,7 +90,7 @@ Returns `void`
 
 **API** · Returns `void`
 
-#### [`canonicalize`](../../../src/ActivityPub/WebFinger.php#L79-L89)
+#### [`canonicalize`](../../../src/ActivityPub/WebFinger.php#L82-L92)
 
 Returns `string`
 
@@ -98,9 +98,9 @@ Returns `string`
 
 - `$actorUsernameOrUrl`: `string`
 
-**Throws:** `NetworkException`, `GuzzleException`
+**Throws:** `CacheException`, `GuzzleException`, `InvalidArgumentException`, `NetworkException`, `SodiumException`
 
-#### [`fetch`](../../../src/ActivityPub/WebFinger.php#L112-L125)
+#### [`fetch`](../../../src/ActivityPub/WebFinger.php#L115-L128)
 
 Returns `array`
 
@@ -112,7 +112,7 @@ Fetch an entire remote WebFinger response.
 
 **Throws:** `GuzzleException`, `NetworkException`
 
-#### [`getInboxUrl`](../../../src/ActivityPub/WebFinger.php#L176-L194)
+#### [`getInboxUrl`](../../../src/ActivityPub/WebFinger.php#L175-L193)
 
 Returns `string`
 
@@ -122,7 +122,7 @@ Returns `string`
 
 **Throws:** `CacheException`, `GuzzleException`, `InvalidArgumentException`, `NetworkException`, `SodiumException`
 
-#### [`getPublicKey`](../../../src/ActivityPub/WebFinger.php#L202-L243)
+#### [`getPublicKey`](../../../src/ActivityPub/WebFinger.php#L201-L242)
 
 Returns `FediE2EE\PKD\Crypto\PublicKey`
 
@@ -132,7 +132,7 @@ Returns `FediE2EE\PKD\Crypto\PublicKey`
 
 **Throws:** `CryptoException`, `FetchException`, `InvalidArgumentException`, `SodiumException`
 
-#### [`trimUsername`](../../../src/ActivityPub/WebFinger.php#L245-L248)
+#### [`trimUsername`](../../../src/ActivityPub/WebFinger.php#L244-L247)
 
 Returns `string`
 
@@ -140,7 +140,7 @@ Returns `string`
 
 - `$username`: `string`
 
-#### [`setCanonicalForTesting`](../../../src/ActivityPub/WebFinger.php#L303-L310)
+#### [`setCanonicalForTesting`](../../../src/ActivityPub/WebFinger.php#L302-L309)
 
 Returns `void`
 

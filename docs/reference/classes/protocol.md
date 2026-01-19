@@ -26,7 +26,7 @@ Namespace: `FediE2EE\PKDServer\Protocol`
 
 ### Methods
 
-#### [`__construct`](../../../src/Protocol/KeyWrapping.php#L44-L49)
+#### [`__construct`](../../../src/Protocol/KeyWrapping.php#L45-L50)
 
 Returns `void`
 
@@ -34,7 +34,7 @@ Returns `void`
 
 - `$config`: `?FediE2EE\PKDServer\ServerConfig` = null
 
-#### [`rewrapSymmetricKeys`](../../../src/Protocol/KeyWrapping.php#L60-L87)
+#### [`rewrapSymmetricKeys`](../../../src/Protocol/KeyWrapping.php#L64-L91)
 
 Returns `void`
 
@@ -45,9 +45,9 @@ Initiate a rewrapping of the symmetric keys associated with a record.
 - `$merkleRoot`: `string`
 - `$keyMap`: `?FediE2EE\PKD\Crypto\AttributeEncryption\AttributeKeyMap` = null
 
-**Throws:** `CacheException`, `DependencyException`, `HPKEException`, `JsonException`, `TableException`
+**Throws:** `CacheException`, `CryptoException`, `DateMalformedStringException`, `DependencyException`, `HPKEException`, `JsonException`, `SodiumException`, `TableException`
 
-#### [`retrieveLocalWrappedKeys`](../../../src/Protocol/KeyWrapping.php#L94-L105)
+#### [`retrieveLocalWrappedKeys`](../../../src/Protocol/KeyWrapping.php#L98-L109)
 
 Returns `FediE2EE\PKD\Crypto\AttributeEncryption\AttributeKeyMap`
 
@@ -57,7 +57,7 @@ Returns `FediE2EE\PKD\Crypto\AttributeEncryption\AttributeKeyMap`
 
 **Throws:** `HPKEException`, `JsonException`, `TableException`
 
-#### [`hpkeWrapSymmetricKeys`](../../../src/Protocol/KeyWrapping.php#L107-L113)
+#### [`hpkeWrapSymmetricKeys`](../../../src/Protocol/KeyWrapping.php#L111-L117)
 
 Returns `string`
 
@@ -65,7 +65,7 @@ Returns `string`
 
 - `$keyMap`: `FediE2EE\PKD\Crypto\AttributeEncryption\AttributeKeyMap`
 
-#### [`hpkeUnwrap`](../../../src/Protocol/KeyWrapping.php#L118-L122)
+#### [`hpkeUnwrap`](../../../src/Protocol/KeyWrapping.php#L122-L126)
 
 Returns `string`
 
@@ -75,7 +75,7 @@ Returns `string`
 
 **Throws:** `HPKEException`
 
-#### [`serializeKeyMap`](../../../src/Protocol/KeyWrapping.php#L124-L136)
+#### [`serializeKeyMap`](../../../src/Protocol/KeyWrapping.php#L128-L140)
 
 Returns `string`
 
@@ -83,7 +83,7 @@ Returns `string`
 
 - `$keyMap`: `FediE2EE\PKD\Crypto\AttributeEncryption\AttributeKeyMap`
 
-#### [`deserializeKeyMap`](../../../src/Protocol/KeyWrapping.php#L138-L152)
+#### [`deserializeKeyMap`](../../../src/Protocol/KeyWrapping.php#L145-L159)
 
 Returns `FediE2EE\PKD\Crypto\AttributeEncryption\AttributeKeyMap`
 
@@ -91,7 +91,9 @@ Returns `FediE2EE\PKD\Crypto\AttributeEncryption\AttributeKeyMap`
 
 - `$plaintextJsonString`: `string`
 
-#### [`decryptAndGetRewrapped`](../../../src/Protocol/KeyWrapping.php#L169-L195)
+**Throws:** `JsonException`
+
+#### [`decryptAndGetRewrapped`](../../../src/Protocol/KeyWrapping.php#L176-L202)
 
 Returns `array`
 
@@ -106,7 +108,7 @@ Usage:
 
 **Throws:** `BundleException`, `CryptoException`, `DependencyException`, `HPKEException`, `InputException`, `InvalidArgumentException`, `JsonException`, `SodiumException`
 
-#### [`unwrapLocalMessage`](../../../src/Protocol/KeyWrapping.php#L204-L211)
+#### [`unwrapLocalMessage`](../../../src/Protocol/KeyWrapping.php#L211-L218)
 
 Returns `array`
 
@@ -117,7 +119,7 @@ Returns `array`
 
 **Throws:** `BundleException`, `CryptoException`, `HPKEException`, `InputException`, `JsonException`
 
-#### [`getRewrappedFor`](../../../src/Protocol/KeyWrapping.php#L216-L247)
+#### [`getRewrappedFor`](../../../src/Protocol/KeyWrapping.php#L223-L254)
 
 Returns `array`
 

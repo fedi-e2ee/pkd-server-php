@@ -30,7 +30,7 @@ Namespace: `FediE2EE\PKDServer\Traits`
 
 ### Methods
 
-#### [`getVerifiedStream`](../../../src/Traits/ActivityStreamsTrait.php#L35-L58)
+#### [`getVerifiedStream`](../../../src/Traits/ActivityStreamsTrait.php#L37-L60)
 
 Returns `FediE2EE\PKDServer\ActivityPub\ActivityStream`
 
@@ -38,7 +38,7 @@ Returns `FediE2EE\PKDServer\ActivityPub\ActivityStream`
 
 - `$message`: `Psr\Http\Message\ServerRequestInterface`
 
-**Throws:** `ActivityPubException`, `DependencyException`, `FetchException`, `CryptoException`, `HttpSignatureException`, `NotImplementedException`, `CertaintyException`, `SodiumException`
+**Throws:** `ActivityPubException`, `CertaintyException`, `CryptoException`, `DependencyException`, `FetchException`, `HttpSignatureException`, `InvalidArgumentException`, `NotImplementedException`, `SodiumException`
 
 #### [`appCache`](../../../src/Traits/ActivityStreamsTrait.php#L44-L47)
 
@@ -548,7 +548,7 @@ Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
 ### Methods
 
-#### [`verifyTOTP`](../../../src/Traits/TOTPTrait.php#L42-L56)
+#### [`verifyTOTP`](../../../src/Traits/TOTPTrait.php#L39-L53)
 
 static · Returns `bool`
 
@@ -558,7 +558,7 @@ static · Returns `bool`
 - `$otp`: `string`
 - `$windows`: `int` = 2
 
-#### [`generateTOTP`](../../../src/Traits/TOTPTrait.php#L58-L73)
+#### [`generateTOTP`](../../../src/Traits/TOTPTrait.php#L55-L70)
 
 static · Returns `string`
 
@@ -567,7 +567,7 @@ static · Returns `string`
 - `$secret`: `string`
 - `$time`: `?int` = null
 
-#### [`ord`](../../../src/Traits/TOTPTrait.php#L78-L81)
+#### [`ord`](../../../src/Traits/TOTPTrait.php#L75-L78)
 
 static · Returns `int`
 
@@ -577,7 +577,7 @@ Avoid cache-timing leaks in ord() by using unpack()
 
 - `$chr`: `string`
 
-#### [`throwIfTimeOutsideWindow`](../../../src/Traits/TOTPTrait.php#L139-L148)
+#### [`throwIfTimeOutsideWindow`](../../../src/Traits/TOTPTrait.php#L135-L144)
 
 Returns `void`
 
@@ -688,17 +688,17 @@ Strip all newlines (CR, LF) characters from a string.
 
 ### Methods
 
-#### [`hasPrimaryKey`](../../../src/Traits/TableRecordTrait.php#L31-L34)
+#### [`hasPrimaryKey`](../../../src/Traits/TableRecordTrait.php#L33-L36)
 
 Returns `bool`
 
-#### [`getPrimaryKey`](../../../src/Traits/TableRecordTrait.php#L40-L46)
+#### [`getPrimaryKey`](../../../src/Traits/TableRecordTrait.php#L42-L48)
 
 Returns `int`
 
 **Throws:** `TableException`
 
-#### [`attachSymmetricKey`](../../../src/Traits/TableRecordTrait.php#L52-L62)
+#### [`attachSymmetricKey`](../../../src/Traits/TableRecordTrait.php#L54-L64)
 
 Returns `self`
 
@@ -709,7 +709,7 @@ Returns `self`
 
 **Throws:** `TableException`
 
-#### [`getSymmetricKeyForProperty`](../../../src/Traits/TableRecordTrait.php#L68-L77)
+#### [`getSymmetricKeyForProperty`](../../../src/Traits/TableRecordTrait.php#L70-L79)
 
 Returns `FediE2EE\PKD\Crypto\SymmetricKey`
 
@@ -719,11 +719,11 @@ Returns `FediE2EE\PKD\Crypto\SymmetricKey`
 
 **Throws:** `TableException`
 
-#### [`getSymmetricKeys`](../../../src/Traits/TableRecordTrait.php#L79-L82)
+#### [`getSymmetricKeys`](../../../src/Traits/TableRecordTrait.php#L81-L84)
 
 Returns `array`
 
-#### [`getRfc9421PublicKeys`](../../../src/Traits/TableRecordTrait.php#L96-L99)
+#### [`getRfc9421PublicKeys`](../../../src/Traits/TableRecordTrait.php#L100-L103)
 
 Returns `FediE2EE\PKD\Crypto\PublicKey`
 
@@ -735,7 +735,7 @@ If multiple are returned (e.g., via FEP-521a), this will cycle through them unti
 
 - `$actorId`: `string`
 
-**Throws:** `CryptoException`, `FetchException`
+**Throws:** `CryptoException`, `FetchException`, `InvalidArgumentException`, `SodiumException`
 
 ---
 

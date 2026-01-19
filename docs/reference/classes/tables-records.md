@@ -65,17 +65,17 @@ Instantiate a new object without a primary key
 
 Returns `array`
 
-#### [`hasPrimaryKey`](../../../src/Tables/Records/Actor.php#L31-L34)
+#### [`hasPrimaryKey`](../../../src/Tables/Records/Actor.php#L33-L36)
 
 Returns `bool`
 
-#### [`getPrimaryKey`](../../../src/Tables/Records/Actor.php#L40-L46)
+#### [`getPrimaryKey`](../../../src/Tables/Records/Actor.php#L42-L48)
 
 Returns `int`
 
 **Throws:** `TableException`
 
-#### [`attachSymmetricKey`](../../../src/Tables/Records/Actor.php#L52-L62)
+#### [`attachSymmetricKey`](../../../src/Tables/Records/Actor.php#L54-L64)
 
 Returns `self`
 
@@ -86,7 +86,7 @@ Returns `self`
 
 **Throws:** `TableException`
 
-#### [`getSymmetricKeyForProperty`](../../../src/Tables/Records/Actor.php#L68-L77)
+#### [`getSymmetricKeyForProperty`](../../../src/Tables/Records/Actor.php#L70-L79)
 
 Returns `FediE2EE\PKD\Crypto\SymmetricKey`
 
@@ -96,11 +96,11 @@ Returns `FediE2EE\PKD\Crypto\SymmetricKey`
 
 **Throws:** `TableException`
 
-#### [`getSymmetricKeys`](../../../src/Tables/Records/Actor.php#L79-L82)
+#### [`getSymmetricKeys`](../../../src/Tables/Records/Actor.php#L81-L84)
 
 Returns `array`
 
-#### [`getRfc9421PublicKeys`](../../../src/Tables/Records/Actor.php#L96-L99)
+#### [`getRfc9421PublicKeys`](../../../src/Tables/Records/Actor.php#L100-L103)
 
 Returns `FediE2EE\PKD\Crypto\PublicKey`
 
@@ -112,7 +112,7 @@ If multiple are returned (e.g., via FEP-521a), this will cycle through them unti
 
 - `$actorId`: `string`
 
-**Throws:** `CryptoException`, `FetchException`
+**Throws:** `CryptoException`, `FetchException`, `InvalidArgumentException`, `SodiumException`
 
 ---
 
@@ -155,17 +155,17 @@ Returns `void`
 - `$keyID`: `?string` = null
 - `$primaryKey`: `?int` = null
 
-#### [`hasPrimaryKey`](../../../src/Tables/Records/ActorKey.php#L31-L34)
+#### [`hasPrimaryKey`](../../../src/Tables/Records/ActorKey.php#L33-L36)
 
 Returns `bool`
 
-#### [`getPrimaryKey`](../../../src/Tables/Records/ActorKey.php#L40-L46)
+#### [`getPrimaryKey`](../../../src/Tables/Records/ActorKey.php#L42-L48)
 
 Returns `int`
 
 **Throws:** `TableException`
 
-#### [`attachSymmetricKey`](../../../src/Tables/Records/ActorKey.php#L52-L62)
+#### [`attachSymmetricKey`](../../../src/Tables/Records/ActorKey.php#L54-L64)
 
 Returns `self`
 
@@ -176,7 +176,7 @@ Returns `self`
 
 **Throws:** `TableException`
 
-#### [`getSymmetricKeyForProperty`](../../../src/Tables/Records/ActorKey.php#L68-L77)
+#### [`getSymmetricKeyForProperty`](../../../src/Tables/Records/ActorKey.php#L70-L79)
 
 Returns `FediE2EE\PKD\Crypto\SymmetricKey`
 
@@ -186,11 +186,11 @@ Returns `FediE2EE\PKD\Crypto\SymmetricKey`
 
 **Throws:** `TableException`
 
-#### [`getSymmetricKeys`](../../../src/Tables/Records/ActorKey.php#L79-L82)
+#### [`getSymmetricKeys`](../../../src/Tables/Records/ActorKey.php#L81-L84)
 
 Returns `array`
 
-#### [`getRfc9421PublicKeys`](../../../src/Tables/Records/ActorKey.php#L96-L99)
+#### [`getRfc9421PublicKeys`](../../../src/Tables/Records/ActorKey.php#L100-L103)
 
 Returns `FediE2EE\PKD\Crypto\PublicKey`
 
@@ -202,7 +202,7 @@ If multiple are returned (e.g., via FEP-521a), this will cycle through them unti
 
 - `$actorId`: `string`
 
-**Throws:** `CryptoException`, `FetchException`
+**Throws:** `CryptoException`, `FetchException`, `InvalidArgumentException`, `SodiumException`
 
 ---
 
@@ -245,21 +245,21 @@ Returns `void`
 - `$revokeLeaf`: `?FediE2EE\PKDServer\Tables\Records\MerkleLeaf` = null
 - `$primaryKey`: `?int` = null
 
-#### [`getActor`](../../../src/Tables/Records/AuxDatum.php#L29-L32)
+#### [`getActor`](../../../src/Tables/Records/AuxDatum.php#L32-L35)
 
-Returns `FediE2EE\PKDServer\Tables\Records\Actor`
+**API** · Returns `FediE2EE\PKDServer\Tables\Records\Actor`
 
-#### [`hasPrimaryKey`](../../../src/Tables/Records/AuxDatum.php#L31-L34)
+#### [`hasPrimaryKey`](../../../src/Tables/Records/AuxDatum.php#L33-L36)
 
 Returns `bool`
 
-#### [`getPrimaryKey`](../../../src/Tables/Records/AuxDatum.php#L40-L46)
+#### [`getPrimaryKey`](../../../src/Tables/Records/AuxDatum.php#L42-L48)
 
 Returns `int`
 
 **Throws:** `TableException`
 
-#### [`attachSymmetricKey`](../../../src/Tables/Records/AuxDatum.php#L52-L62)
+#### [`attachSymmetricKey`](../../../src/Tables/Records/AuxDatum.php#L54-L64)
 
 Returns `self`
 
@@ -270,7 +270,7 @@ Returns `self`
 
 **Throws:** `TableException`
 
-#### [`getSymmetricKeyForProperty`](../../../src/Tables/Records/AuxDatum.php#L68-L77)
+#### [`getSymmetricKeyForProperty`](../../../src/Tables/Records/AuxDatum.php#L70-L79)
 
 Returns `FediE2EE\PKD\Crypto\SymmetricKey`
 
@@ -280,11 +280,11 @@ Returns `FediE2EE\PKD\Crypto\SymmetricKey`
 
 **Throws:** `TableException`
 
-#### [`getSymmetricKeys`](../../../src/Tables/Records/AuxDatum.php#L79-L82)
+#### [`getSymmetricKeys`](../../../src/Tables/Records/AuxDatum.php#L81-L84)
 
 Returns `array`
 
-#### [`getRfc9421PublicKeys`](../../../src/Tables/Records/AuxDatum.php#L96-L99)
+#### [`getRfc9421PublicKeys`](../../../src/Tables/Records/AuxDatum.php#L100-L103)
 
 Returns `FediE2EE\PKD\Crypto\PublicKey`
 
@@ -296,7 +296,7 @@ If multiple are returned (e.g., via FEP-521a), this will cycle through them unti
 
 - `$actorId`: `string`
 
-**Throws:** `CryptoException`, `FetchException`
+**Throws:** `CryptoException`, `FetchException`, `InvalidArgumentException`, `SodiumException`
 
 ---
 
@@ -326,7 +326,7 @@ Abstraction for a row in the MerkleState table
 
 ### Methods
 
-#### [`__construct`](../../../src/Tables/Records/MerkleLeaf.php#L25-L36)
+#### [`__construct`](../../../src/Tables/Records/MerkleLeaf.php#L27-L38)
 
 Returns `void`
 
@@ -341,7 +341,7 @@ Returns `void`
 - `$wrappedKeys`: `?string` = null
 - `$primaryKey`: `?int` = null
 
-#### [`from`](../../../src/Tables/Records/MerkleLeaf.php#L42-L59)
+#### [`from`](../../../src/Tables/Records/MerkleLeaf.php#L44-L61)
 
 static · Returns `self`
 
@@ -353,7 +353,7 @@ static · Returns `self`
 
 **Throws:** `NotImplementedException`, `SodiumException`
 
-#### [`fromPayload`](../../../src/Tables/Records/MerkleLeaf.php#L67-L77)
+#### [`fromPayload`](../../../src/Tables/Records/MerkleLeaf.php#L69-L79)
 
 static **API** · Returns `self`
 
@@ -365,7 +365,7 @@ static **API** · Returns `self`
 
 **Throws:** `NotImplementedException`, `SodiumException`
 
-#### [`setPrimaryKey`](../../../src/Tables/Records/MerkleLeaf.php#L79-L83)
+#### [`setPrimaryKey`](../../../src/Tables/Records/MerkleLeaf.php#L81-L85)
 
 Returns `static`
 
@@ -373,35 +373,35 @@ Returns `static`
 
 - `$primary`: `?int`
 
-#### [`getContents`](../../../src/Tables/Records/MerkleLeaf.php#L85-L88)
+#### [`getContents`](../../../src/Tables/Records/MerkleLeaf.php#L87-L90)
 
 Returns `array`
 
-#### [`getInclusionProof`](../../../src/Tables/Records/MerkleLeaf.php#L93-L96)
+#### [`getInclusionProof`](../../../src/Tables/Records/MerkleLeaf.php#L95-L98)
 
 **API** · Returns `?FediE2EE\PKD\Crypto\Merkle\InclusionProof`
 
-#### [`getSignature`](../../../src/Tables/Records/MerkleLeaf.php#L98-L101)
+#### [`getSignature`](../../../src/Tables/Records/MerkleLeaf.php#L100-L103)
 
 Returns `string`
 
-#### [`serializeForMerkle`](../../../src/Tables/Records/MerkleLeaf.php#L106-L113)
+#### [`serializeForMerkle`](../../../src/Tables/Records/MerkleLeaf.php#L108-L115)
 
 Returns `string`
 
 **Throws:** `SodiumException`
 
-#### [`hasPrimaryKey`](../../../src/Tables/Records/MerkleLeaf.php#L31-L34)
+#### [`hasPrimaryKey`](../../../src/Tables/Records/MerkleLeaf.php#L33-L36)
 
 Returns `bool`
 
-#### [`getPrimaryKey`](../../../src/Tables/Records/MerkleLeaf.php#L40-L46)
+#### [`getPrimaryKey`](../../../src/Tables/Records/MerkleLeaf.php#L42-L48)
 
 Returns `int`
 
 **Throws:** `TableException`
 
-#### [`attachSymmetricKey`](../../../src/Tables/Records/MerkleLeaf.php#L52-L62)
+#### [`attachSymmetricKey`](../../../src/Tables/Records/MerkleLeaf.php#L54-L64)
 
 Returns `self`
 
@@ -412,7 +412,7 @@ Returns `self`
 
 **Throws:** `TableException`
 
-#### [`getSymmetricKeyForProperty`](../../../src/Tables/Records/MerkleLeaf.php#L68-L77)
+#### [`getSymmetricKeyForProperty`](../../../src/Tables/Records/MerkleLeaf.php#L70-L79)
 
 Returns `FediE2EE\PKD\Crypto\SymmetricKey`
 
@@ -422,11 +422,11 @@ Returns `FediE2EE\PKD\Crypto\SymmetricKey`
 
 **Throws:** `TableException`
 
-#### [`getSymmetricKeys`](../../../src/Tables/Records/MerkleLeaf.php#L79-L82)
+#### [`getSymmetricKeys`](../../../src/Tables/Records/MerkleLeaf.php#L81-L84)
 
 Returns `array`
 
-#### [`getRfc9421PublicKeys`](../../../src/Tables/Records/MerkleLeaf.php#L96-L99)
+#### [`getRfc9421PublicKeys`](../../../src/Tables/Records/MerkleLeaf.php#L100-L103)
 
 Returns `FediE2EE\PKD\Crypto\PublicKey`
 
@@ -438,7 +438,7 @@ If multiple are returned (e.g., via FEP-521a), this will cycle through them unti
 
 - `$actorId`: `string`
 
-**Throws:** `CryptoException`, `FetchException`
+**Throws:** `CryptoException`, `FetchException`, `InvalidArgumentException`, `SodiumException`
 
 #### [`assertAllArrayKeysExist`](../../../src/Tables/Records/MerkleLeaf.php#L14-L19)
 
@@ -553,7 +553,7 @@ Strip all newlines (CR, LF) characters from a string.
 
 ### Methods
 
-#### [`__construct`](../../../src/Tables/Records/Peer.php#L21-L35)
+#### [`__construct`](../../../src/Tables/Records/Peer.php#L23-L37)
 
 Returns `void`
 
@@ -571,21 +571,21 @@ Returns `void`
 - `$wrapConfig`: `?FediE2EE\PKDServer\Protocol\RewrapConfig` = null
 - `$primaryKey`: `?int` = null
 
-#### [`toArray`](../../../src/Tables/Records/Peer.php#L37-L63)
+#### [`toArray`](../../../src/Tables/Records/Peer.php#L39-L65)
 
 Returns `array`
 
-#### [`hasPrimaryKey`](../../../src/Tables/Records/Peer.php#L31-L34)
+#### [`hasPrimaryKey`](../../../src/Tables/Records/Peer.php#L33-L36)
 
 Returns `bool`
 
-#### [`getPrimaryKey`](../../../src/Tables/Records/Peer.php#L40-L46)
+#### [`getPrimaryKey`](../../../src/Tables/Records/Peer.php#L42-L48)
 
 Returns `int`
 
 **Throws:** `TableException`
 
-#### [`attachSymmetricKey`](../../../src/Tables/Records/Peer.php#L52-L62)
+#### [`attachSymmetricKey`](../../../src/Tables/Records/Peer.php#L54-L64)
 
 Returns `self`
 
@@ -596,7 +596,7 @@ Returns `self`
 
 **Throws:** `TableException`
 
-#### [`getSymmetricKeyForProperty`](../../../src/Tables/Records/Peer.php#L68-L77)
+#### [`getSymmetricKeyForProperty`](../../../src/Tables/Records/Peer.php#L70-L79)
 
 Returns `FediE2EE\PKD\Crypto\SymmetricKey`
 
@@ -606,11 +606,11 @@ Returns `FediE2EE\PKD\Crypto\SymmetricKey`
 
 **Throws:** `TableException`
 
-#### [`getSymmetricKeys`](../../../src/Tables/Records/Peer.php#L79-L82)
+#### [`getSymmetricKeys`](../../../src/Tables/Records/Peer.php#L81-L84)
 
 Returns `array`
 
-#### [`getRfc9421PublicKeys`](../../../src/Tables/Records/Peer.php#L96-L99)
+#### [`getRfc9421PublicKeys`](../../../src/Tables/Records/Peer.php#L100-L103)
 
 Returns `FediE2EE\PKD\Crypto\PublicKey`
 
@@ -622,7 +622,7 @@ If multiple are returned (e.g., via FEP-521a), this will cycle through them unti
 
 - `$actorId`: `string`
 
-**Throws:** `CryptoException`, `FetchException`
+**Throws:** `CryptoException`, `FetchException`, `InvalidArgumentException`, `SodiumException`
 
 #### [`assertAllArrayKeysExist`](../../../src/Tables/Records/Peer.php#L14-L19)
 
@@ -730,7 +730,7 @@ Strip all newlines (CR, LF) characters from a string.
 
 ### Methods
 
-#### [`__construct`](../../../src/Tables/Records/ReplicaActor.php#L16-L23)
+#### [`__construct`](../../../src/Tables/Records/ReplicaActor.php#L18-L25)
 
 Returns `void`
 
@@ -741,21 +741,21 @@ Returns `void`
 - `$fireProof`: `bool` = false
 - `$primaryKey`: `?int` = null
 
-#### [`toArray`](../../../src/Tables/Records/ReplicaActor.php#L25-L32)
+#### [`toArray`](../../../src/Tables/Records/ReplicaActor.php#L27-L34)
 
 Returns `array`
 
-#### [`hasPrimaryKey`](../../../src/Tables/Records/ReplicaActor.php#L31-L34)
+#### [`hasPrimaryKey`](../../../src/Tables/Records/ReplicaActor.php#L33-L36)
 
 Returns `bool`
 
-#### [`getPrimaryKey`](../../../src/Tables/Records/ReplicaActor.php#L40-L46)
+#### [`getPrimaryKey`](../../../src/Tables/Records/ReplicaActor.php#L42-L48)
 
 Returns `int`
 
 **Throws:** `TableException`
 
-#### [`attachSymmetricKey`](../../../src/Tables/Records/ReplicaActor.php#L52-L62)
+#### [`attachSymmetricKey`](../../../src/Tables/Records/ReplicaActor.php#L54-L64)
 
 Returns `self`
 
@@ -766,7 +766,7 @@ Returns `self`
 
 **Throws:** `TableException`
 
-#### [`getSymmetricKeyForProperty`](../../../src/Tables/Records/ReplicaActor.php#L68-L77)
+#### [`getSymmetricKeyForProperty`](../../../src/Tables/Records/ReplicaActor.php#L70-L79)
 
 Returns `FediE2EE\PKD\Crypto\SymmetricKey`
 
@@ -776,11 +776,11 @@ Returns `FediE2EE\PKD\Crypto\SymmetricKey`
 
 **Throws:** `TableException`
 
-#### [`getSymmetricKeys`](../../../src/Tables/Records/ReplicaActor.php#L79-L82)
+#### [`getSymmetricKeys`](../../../src/Tables/Records/ReplicaActor.php#L81-L84)
 
 Returns `array`
 
-#### [`getRfc9421PublicKeys`](../../../src/Tables/Records/ReplicaActor.php#L96-L99)
+#### [`getRfc9421PublicKeys`](../../../src/Tables/Records/ReplicaActor.php#L100-L103)
 
 Returns `FediE2EE\PKD\Crypto\PublicKey`
 
@@ -792,7 +792,7 @@ If multiple are returned (e.g., via FEP-521a), this will cycle through them unti
 
 - `$actorId`: `string`
 
-**Throws:** `CryptoException`, `FetchException`
+**Throws:** `CryptoException`, `FetchException`, `InvalidArgumentException`, `SodiumException`
 
 #### [`assertAllArrayKeysExist`](../../../src/Tables/Records/ReplicaActor.php#L14-L19)
 
@@ -919,17 +919,17 @@ Returns `void`
 - `$revokeLeaf`: `?FediE2EE\PKDServer\Tables\Records\ReplicaLeaf` = null
 - `$primaryKey`: `?int` = null
 
-#### [`hasPrimaryKey`](../../../src/Tables/Records/ReplicaAuxDatum.php#L31-L34)
+#### [`hasPrimaryKey`](../../../src/Tables/Records/ReplicaAuxDatum.php#L33-L36)
 
 Returns `bool`
 
-#### [`getPrimaryKey`](../../../src/Tables/Records/ReplicaAuxDatum.php#L40-L46)
+#### [`getPrimaryKey`](../../../src/Tables/Records/ReplicaAuxDatum.php#L42-L48)
 
 Returns `int`
 
 **Throws:** `TableException`
 
-#### [`attachSymmetricKey`](../../../src/Tables/Records/ReplicaAuxDatum.php#L52-L62)
+#### [`attachSymmetricKey`](../../../src/Tables/Records/ReplicaAuxDatum.php#L54-L64)
 
 Returns `self`
 
@@ -940,7 +940,7 @@ Returns `self`
 
 **Throws:** `TableException`
 
-#### [`getSymmetricKeyForProperty`](../../../src/Tables/Records/ReplicaAuxDatum.php#L68-L77)
+#### [`getSymmetricKeyForProperty`](../../../src/Tables/Records/ReplicaAuxDatum.php#L70-L79)
 
 Returns `FediE2EE\PKD\Crypto\SymmetricKey`
 
@@ -950,11 +950,11 @@ Returns `FediE2EE\PKD\Crypto\SymmetricKey`
 
 **Throws:** `TableException`
 
-#### [`getSymmetricKeys`](../../../src/Tables/Records/ReplicaAuxDatum.php#L79-L82)
+#### [`getSymmetricKeys`](../../../src/Tables/Records/ReplicaAuxDatum.php#L81-L84)
 
 Returns `array`
 
-#### [`getRfc9421PublicKeys`](../../../src/Tables/Records/ReplicaAuxDatum.php#L96-L99)
+#### [`getRfc9421PublicKeys`](../../../src/Tables/Records/ReplicaAuxDatum.php#L100-L103)
 
 Returns `FediE2EE\PKD\Crypto\PublicKey`
 
@@ -966,7 +966,7 @@ If multiple are returned (e.g., via FEP-521a), this will cycle through them unti
 
 - `$actorId`: `string`
 
-**Throws:** `CryptoException`, `FetchException`
+**Throws:** `CryptoException`, `FetchException`, `InvalidArgumentException`, `SodiumException`
 
 #### [`assertAllArrayKeysExist`](../../../src/Tables/Records/ReplicaAuxDatum.php#L14-L19)
 
@@ -1101,23 +1101,23 @@ Returns `void`
 
 Returns `array`
 
-#### [`serializeForMerkle`](../../../src/Tables/Records/ReplicaLeaf.php#L62-L69)
+#### [`serializeForMerkle`](../../../src/Tables/Records/ReplicaLeaf.php#L63-L70)
 
-Returns `string`
+**API** · Returns `string`
 
 **Throws:** `SodiumException`
 
-#### [`hasPrimaryKey`](../../../src/Tables/Records/ReplicaLeaf.php#L31-L34)
+#### [`hasPrimaryKey`](../../../src/Tables/Records/ReplicaLeaf.php#L33-L36)
 
 Returns `bool`
 
-#### [`getPrimaryKey`](../../../src/Tables/Records/ReplicaLeaf.php#L40-L46)
+#### [`getPrimaryKey`](../../../src/Tables/Records/ReplicaLeaf.php#L42-L48)
 
 Returns `int`
 
 **Throws:** `TableException`
 
-#### [`attachSymmetricKey`](../../../src/Tables/Records/ReplicaLeaf.php#L52-L62)
+#### [`attachSymmetricKey`](../../../src/Tables/Records/ReplicaLeaf.php#L54-L64)
 
 Returns `self`
 
@@ -1128,7 +1128,7 @@ Returns `self`
 
 **Throws:** `TableException`
 
-#### [`getSymmetricKeyForProperty`](../../../src/Tables/Records/ReplicaLeaf.php#L68-L77)
+#### [`getSymmetricKeyForProperty`](../../../src/Tables/Records/ReplicaLeaf.php#L70-L79)
 
 Returns `FediE2EE\PKD\Crypto\SymmetricKey`
 
@@ -1138,11 +1138,11 @@ Returns `FediE2EE\PKD\Crypto\SymmetricKey`
 
 **Throws:** `TableException`
 
-#### [`getSymmetricKeys`](../../../src/Tables/Records/ReplicaLeaf.php#L79-L82)
+#### [`getSymmetricKeys`](../../../src/Tables/Records/ReplicaLeaf.php#L81-L84)
 
 Returns `array`
 
-#### [`getRfc9421PublicKeys`](../../../src/Tables/Records/ReplicaLeaf.php#L96-L99)
+#### [`getRfc9421PublicKeys`](../../../src/Tables/Records/ReplicaLeaf.php#L100-L103)
 
 Returns `FediE2EE\PKD\Crypto\PublicKey`
 
@@ -1154,7 +1154,7 @@ If multiple are returned (e.g., via FEP-521a), this will cycle through them unti
 
 - `$actorId`: `string`
 
-**Throws:** `CryptoException`, `FetchException`
+**Throws:** `CryptoException`, `FetchException`, `InvalidArgumentException`, `SodiumException`
 
 #### [`assertAllArrayKeysExist`](../../../src/Tables/Records/ReplicaLeaf.php#L14-L19)
 
@@ -1266,7 +1266,7 @@ Strip all newlines (CR, LF) characters from a string.
 
 ### Methods
 
-#### [`__construct`](../../../src/Tables/Records/ReplicaPublicKey.php#L17-L28)
+#### [`__construct`](../../../src/Tables/Records/ReplicaPublicKey.php#L19-L30)
 
 Returns `void`
 
@@ -1281,17 +1281,17 @@ Returns `void`
 - `$keyID`: `?string` = null
 - `$primaryKey`: `?int` = null
 
-#### [`hasPrimaryKey`](../../../src/Tables/Records/ReplicaPublicKey.php#L31-L34)
+#### [`hasPrimaryKey`](../../../src/Tables/Records/ReplicaPublicKey.php#L33-L36)
 
 Returns `bool`
 
-#### [`getPrimaryKey`](../../../src/Tables/Records/ReplicaPublicKey.php#L40-L46)
+#### [`getPrimaryKey`](../../../src/Tables/Records/ReplicaPublicKey.php#L42-L48)
 
 Returns `int`
 
 **Throws:** `TableException`
 
-#### [`attachSymmetricKey`](../../../src/Tables/Records/ReplicaPublicKey.php#L52-L62)
+#### [`attachSymmetricKey`](../../../src/Tables/Records/ReplicaPublicKey.php#L54-L64)
 
 Returns `self`
 
@@ -1302,7 +1302,7 @@ Returns `self`
 
 **Throws:** `TableException`
 
-#### [`getSymmetricKeyForProperty`](../../../src/Tables/Records/ReplicaPublicKey.php#L68-L77)
+#### [`getSymmetricKeyForProperty`](../../../src/Tables/Records/ReplicaPublicKey.php#L70-L79)
 
 Returns `FediE2EE\PKD\Crypto\SymmetricKey`
 
@@ -1312,11 +1312,11 @@ Returns `FediE2EE\PKD\Crypto\SymmetricKey`
 
 **Throws:** `TableException`
 
-#### [`getSymmetricKeys`](../../../src/Tables/Records/ReplicaPublicKey.php#L79-L82)
+#### [`getSymmetricKeys`](../../../src/Tables/Records/ReplicaPublicKey.php#L81-L84)
 
 Returns `array`
 
-#### [`getRfc9421PublicKeys`](../../../src/Tables/Records/ReplicaPublicKey.php#L96-L99)
+#### [`getRfc9421PublicKeys`](../../../src/Tables/Records/ReplicaPublicKey.php#L100-L103)
 
 Returns `FediE2EE\PKD\Crypto\PublicKey`
 
@@ -1328,7 +1328,7 @@ If multiple are returned (e.g., via FEP-521a), this will cycle through them unti
 
 - `$actorId`: `string`
 
-**Throws:** `CryptoException`, `FetchException`
+**Throws:** `CryptoException`, `FetchException`, `InvalidArgumentException`, `SodiumException`
 
 #### [`assertAllArrayKeysExist`](../../../src/Tables/Records/ReplicaPublicKey.php#L14-L19)
 
