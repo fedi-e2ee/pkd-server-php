@@ -81,6 +81,7 @@ CREATE TABLE IF NOT EXISTS pkd_actors_auxdata (
     actorauxdataid BIGSERIAL PRIMARY KEY,
     actorid BIGINT REFERENCES pkd_actors (actorid),
     auxdatatype TEXT,
+    auxdataid TEXT,
     auxdata TEXT, -- Encrypted, client-side
     wrap_auxdata TEXT NULL, -- Wrapped symmetric key for the auxdata field
     auxdata_idx TEXT,
