@@ -2,13 +2,12 @@
 declare(strict_types=1);
 namespace FediE2EE\PKDServer\Tables;
 
-use FediE2EE\PKD\Crypto\Exceptions\{
-    BundleException,
+use FediE2EE\PKD\Crypto\Exceptions\{BundleException,
     CryptoException,
+    InputException,
     JsonException,
     NetworkException,
-    NotImplementedException
-};
+    NotImplementedException};
 use FediE2EE\PKD\Crypto\Protocol\{
     Actions\AddKey,
     Actions\BurnDown,
@@ -26,12 +25,11 @@ use FediE2EE\PKD\Crypto\AttributeEncryption\AttributeKeyMap;
 use FediE2EE\PKD\Crypto\PublicKey;
 use FediE2EE\PKD\Crypto\Revocation;
 use FediE2EE\PKDServer\Dependency\WrappedEncryptedRow;
-use FediE2EE\PKDServer\Exceptions\{
-    CacheException,
+use FediE2EE\PKDServer\Exceptions\{CacheException,
+    ConcurrentException,
     DependencyException,
     ProtocolException,
-    TableException
-};
+    TableException};
 use FediE2EE\PKDServer\Protocol\Payload;
 use FediE2EE\PKDServer\Table;
 use FediE2EE\PKDServer\Tables\Records\{
@@ -39,6 +37,7 @@ use FediE2EE\PKDServer\Tables\Records\{
     MerkleLeaf
 };
 use GuzzleHttp\Exception\GuzzleException;
+use ParagonIE\Certainty\Exception\CertaintyException;
 use FediE2EE\PKDServer\Traits\{
     ProtocolMethodTrait,
     TOTPTrait
@@ -99,12 +98,13 @@ class PublicKeys extends Table
      * @param int $actorPrimaryKey
      * @param string $keyID
      * @return array
+     *
+     * @throws BaseJsonException
      * @throws CipherSweetException
      * @throws CryptoOperationException
+     * @throws DateMalformedStringException
      * @throws InvalidCiphertextException
      * @throws SodiumException
-     * @throws DateMalformedStringException
-     * @throws BaseJsonException
      */
     public function lookup(int $actorPrimaryKey, string $keyID): array
     {
@@ -158,8 +158,10 @@ class PublicKeys extends Table
     /**
      * @param int $primaryKey
      * @return ActorKey
+     *
      * @throws CacheException
      * @throws CipherSweetException
+     * @throws CryptoException
      * @throws CryptoOperationException
      * @throws DependencyException
      * @throws InvalidCiphertextException
@@ -196,9 +198,12 @@ class PublicKeys extends Table
     }
 
     /**
+     * @throws ArrayKeyException
      * @throws BaseJsonException
+     * @throws BlindIndexNotFoundException
      * @throws CacheException
      * @throws CipherSweetException
+     * @throws CryptoException
      * @throws CryptoOperationException
      * @throws DateMalformedStringException
      * @throws DependencyException
@@ -283,10 +288,12 @@ class PublicKeys extends Table
     }
 
     /**
+     * @throws ConcurrentException
      * @throws CryptoException
      * @throws DependencyException
      * @throws NotImplementedException
      * @throws ProtocolException
+     * @throws RandomException
      * @throws SodiumException
      * @throws TableException
      */
@@ -301,10 +308,12 @@ class PublicKeys extends Table
     }
 
     /**
+     * @throws ConcurrentException
      * @throws CryptoException
      * @throws DependencyException
      * @throws NotImplementedException
      * @throws ProtocolException
+     * @throws RandomException
      * @throws SodiumException
      * @throws TableException
      */
@@ -319,10 +328,12 @@ class PublicKeys extends Table
     }
 
     /**
+     * @throws ConcurrentException
      * @throws CryptoException
      * @throws DependencyException
      * @throws NotImplementedException
      * @throws ProtocolException
+     * @throws RandomException
      * @throws SodiumException
      * @throws TableException
      */
@@ -337,10 +348,12 @@ class PublicKeys extends Table
     }
 
     /**
+     * @throws ConcurrentException
      * @throws CryptoException
      * @throws DependencyException
      * @throws NotImplementedException
      * @throws ProtocolException
+     * @throws RandomException
      * @throws SodiumException
      * @throws TableException
      */
@@ -362,15 +375,17 @@ class PublicKeys extends Table
      * @throws BlindIndexNotFoundException
      * @throws BundleException
      * @throws CacheException
+     * @throws CertaintyException
      * @throws CipherSweetException
      * @throws CryptoException
      * @throws CryptoOperationException
      * @throws DateMalformedStringException
      * @throws DependencyException
      * @throws GuzzleException
+     * @throws InputException
      * @throws InvalidCiphertextException
-     * @throws NetworkException
      * @throws JsonException
+     * @throws NetworkException
      * @throws NotImplementedException
      * @throws ProtocolException
      * @throws RandomException
@@ -458,15 +473,19 @@ class PublicKeys extends Table
     /**
      * This is called by MerkleState::insertLeaf()
      *
+     * @throws ArrayKeyException
      * @throws BaseJsonException
+     * @throws BlindIndexNotFoundException
      * @throws BundleException
      * @throws CacheException
+     * @throws CertaintyException
      * @throws CipherSweetException
      * @throws CryptoException
      * @throws CryptoOperationException
      * @throws DateMalformedStringException
      * @throws DependencyException
      * @throws GuzzleException
+     * @throws InputException
      * @throws InvalidCiphertextException
      * @throws NetworkException
      * @throws NotImplementedException
@@ -586,12 +605,14 @@ class PublicKeys extends Table
      * @throws BlindIndexNotFoundException
      * @throws BundleException
      * @throws CacheException
+     * @throws CertaintyException
      * @throws CipherSweetException
      * @throws CryptoException
      * @throws CryptoOperationException
      * @throws DateMalformedStringException
      * @throws DependencyException
      * @throws GuzzleException
+     * @throws InputException
      * @throws InvalidCiphertextException
      * @throws NetworkException
      * @throws NotImplementedException
@@ -656,10 +677,12 @@ class PublicKeys extends Table
     }
 
     /**
+     * @throws ConcurrentException
      * @throws CryptoException
      * @throws DependencyException
      * @throws NotImplementedException
      * @throws ProtocolException
+     * @throws RandomException
      * @throws SodiumException
      * @throws TableException
      */
@@ -680,12 +703,14 @@ class PublicKeys extends Table
      * @throws BlindIndexNotFoundException
      * @throws BundleException
      * @throws CacheException
+     * @throws CertaintyException
      * @throws CipherSweetException
      * @throws CryptoException
      * @throws CryptoOperationException
      * @throws DateMalformedStringException
      * @throws DependencyException
      * @throws GuzzleException
+     * @throws InputException
      * @throws InvalidCiphertextException
      * @throws NetworkException
      * @throws NotImplementedException
@@ -761,10 +786,12 @@ class PublicKeys extends Table
     }
 
     /**
+     * @throws ConcurrentException
      * @throws CryptoException
      * @throws DependencyException
      * @throws NotImplementedException
      * @throws ProtocolException
+     * @throws RandomException
      * @throws SodiumException
      * @throws TableException
      */
@@ -784,19 +811,20 @@ class PublicKeys extends Table
      * @throws BlindIndexNotFoundException
      * @throws BundleException
      * @throws CacheException
+     * @throws CertaintyException
      * @throws CipherSweetException
      * @throws CryptoException
      * @throws CryptoOperationException
      * @throws DateMalformedStringException
      * @throws DependencyException
      * @throws GuzzleException
+     * @throws InputException
      * @throws InvalidCiphertextException
      * @throws NetworkException
      * @throws NotImplementedException
      * @throws ProtocolException
      * @throws SodiumException
      * @throws TableException
-     *
      */
     protected function fireproofCallback(MerkleLeaf $leaf, Payload $payload, string $outerActor): bool
     {
@@ -852,10 +880,12 @@ class PublicKeys extends Table
     }
 
     /**
+     * @throws ConcurrentException
      * @throws CryptoException
      * @throws DependencyException
      * @throws NotImplementedException
      * @throws ProtocolException
+     * @throws RandomException
      * @throws SodiumException
      * @throws TableException
      */
@@ -875,12 +905,14 @@ class PublicKeys extends Table
      * @throws BlindIndexNotFoundException
      * @throws BundleException
      * @throws CacheException
+     * @throws CertaintyException
      * @throws CipherSweetException
      * @throws CryptoException
      * @throws CryptoOperationException
      * @throws DateMalformedStringException
      * @throws DependencyException
      * @throws GuzzleException
+     * @throws InputException
      * @throws InvalidCiphertextException
      * @throws NetworkException
      * @throws NotImplementedException
@@ -942,10 +974,12 @@ class PublicKeys extends Table
     }
 
     /**
+     * @throws ConcurrentException
      * @throws CryptoException
      * @throws DependencyException
      * @throws NotImplementedException
      * @throws ProtocolException
+     * @throws RandomException
      * @throws SodiumException
      * @throws TableException
      */

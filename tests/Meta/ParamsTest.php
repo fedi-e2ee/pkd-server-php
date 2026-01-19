@@ -110,7 +110,7 @@ class ParamsTest extends TestCase
     {
         $this->expectException(DependencyException::class);
         $this->expectExceptionMessage('HTTP cache TTL cannot be less than 1 second');
-        new Params(hashAlgo: 'sha256', httpCacheTtl: 0);
+        new Params(httpCacheTtl: 0);
     }
 
     public function testParamsCacheTtlJustSmallEnough(): void
@@ -134,10 +134,16 @@ class ParamsTest extends TestCase
     {
         $params = new Params();
         $this->assertSame('sha256', $params->hashAlgo);
+        $this->assertSame('sha256', $params->getHashFunction());
         $this->assertSame(120, $params->otpMaxLife);
+        $this->assertSame(120, $params->getOtpMaxLife());
         $this->assertSame('pubkeydir', $params->actorUsername);
+        $this->assertSame('pubkeydir', $params->getActorUsername());
         $this->assertSame('localhost', $params->hostname);
+        $this->assertSame('localhost', $params->getHostname());
         $this->assertSame('', $params->cacheKey);
+        $this->assertSame('', $params->getCacheKey());
         $this->assertSame(60, $params->httpCacheTtl);
+        $this->assertSame(60, $params->getHttpCacheTtl());
     }
 }

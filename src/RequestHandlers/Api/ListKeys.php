@@ -3,9 +3,11 @@ declare(strict_types=1);
 namespace FediE2EE\PKDServer\RequestHandlers\Api;
 
 use FediE2EE\PKD\Crypto\Exceptions\{
+    CryptoException,
     JsonException,
     NotImplementedException
 };
+use DateMalformedStringException;
 use FediE2EE\PKD\Crypto\PublicKey;
 use FediE2EE\PKDServer\{
     Exceptions\CacheException,
@@ -19,6 +21,7 @@ use FediE2EE\PKDServer\Tables\{
     Actors,
     PublicKeys
 };
+use JsonException as BaseJsonException;
 use Override;
 use ParagonIE\CipherSweet\Exception\{
     ArrayKeyException,
@@ -68,6 +71,7 @@ class ListKeys implements RequestHandlerInterface
      *
      * @throws ArrayKeyException
      * @throws BlindIndexNotFoundException
+     * @throws CacheException
      * @throws CipherSweetException
      * @throws CryptoOperationException
      * @throws DependencyException
@@ -76,6 +80,9 @@ class ListKeys implements RequestHandlerInterface
      * @throws NotImplementedException
      * @throws SodiumException
      * @throws TableException
+     * @throws DateMalformedStringException
+     * @throws CryptoException
+     * @throws BaseJsonException
      */
     #[Route("api/actor/{actor_id}/keys")]
     #[Override]

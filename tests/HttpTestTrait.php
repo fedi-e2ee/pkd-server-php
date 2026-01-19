@@ -121,10 +121,11 @@ trait HttpTestTrait
     }
 
     /**
-     * @throws RandomException
+     * @throws CacheException
      * @throws CertaintyException
      * @throws DependencyException
      * @throws InvalidArgumentException
+     * @throws RandomException
      * @throws SodiumException
      */
     public function makeDummyActor(string $domain = 'example.com'): array

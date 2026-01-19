@@ -2,10 +2,8 @@
 declare(strict_types=1);
 namespace FediE2EE\PKDServer\RequestHandlers\Api;
 
-use FediE2EE\PKD\Crypto\Exceptions\{
-    JsonException,
-    NotImplementedException
-};
+use FediE2EE\PKD\Crypto\Exceptions\{CryptoException, JsonException, NotImplementedException};
+use DateMalformedStringException;
 use FediE2EE\PKDServer\{
     Exceptions\CacheException,
     Exceptions\DependencyException,
@@ -18,6 +16,7 @@ use FediE2EE\PKDServer\Tables\{
     Actors,
     AuxData
 };
+use JsonException as BaseJsonException;
 use Override;
 use ParagonIE\CipherSweet\Exception\{
     ArrayKeyException,
@@ -66,9 +65,12 @@ class GetAuxData implements RequestHandlerInterface
      * @api
      *
      * @throws ArrayKeyException
+     * @throws BaseJsonException
      * @throws BlindIndexNotFoundException
      * @throws CipherSweetException
+     * @throws CryptoException
      * @throws CryptoOperationException
+     * @throws DateMalformedStringException
      * @throws DependencyException
      * @throws InvalidCiphertextException
      * @throws JsonException

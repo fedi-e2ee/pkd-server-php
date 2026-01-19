@@ -2,9 +2,11 @@
 declare(strict_types=1);
 namespace FediE2EE\PKDServer\RequestHandlers\Api;
 
+use DateMalformedStringException;
 use DateTime;
 use FediE2EE\PKD\Crypto\Protocol\HPKEAdapter;
 use FediE2EE\PKD\Crypto\Exceptions\{
+    CryptoException,
     JsonException,
     NotImplementedException
 };
@@ -21,6 +23,7 @@ use FediE2EE\PKDServer\Tables\{
     Actors,
     TOTP as TOTPTable
 };
+use JsonException as BaseJsonException;
 use Override;
 use ParagonIE\CipherSweet\Exception\{
     ArrayKeyException,
@@ -64,10 +67,13 @@ class TotpRotate implements RequestHandlerInterface
 
     /**
      * @throws ArrayKeyException
+     * @throws BaseJsonException
      * @throws BlindIndexNotFoundException
      * @throws CacheException
      * @throws CipherSweetException
+     * @throws CryptoException
      * @throws CryptoOperationException
+     * @throws DateMalformedStringException
      * @throws DependencyException
      * @throws HPKEException
      * @throws InvalidCiphertextException

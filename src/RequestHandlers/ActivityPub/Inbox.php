@@ -24,6 +24,7 @@ use FediE2EE\PKDServer\Exceptions\{
 use Override;
 use ParagonIE\Certainty\Exception\CertaintyException;
 use Psr\Http\Server\RequestHandlerInterface;
+use Psr\SimpleCache\InvalidArgumentException;
 use Psr\Http\Message\{
     ServerRequestInterface,
     ResponseInterface
@@ -55,7 +56,7 @@ class Inbox implements RequestHandlerInterface
      * @throws CertaintyException
      * @throws CryptoException
      * @throws DependencyException
-     * @throws HttpSignatureException
+     * @throws InvalidArgumentException
      * @throws JsonException
      * @throws NotImplementedException
      * @throws SodiumException

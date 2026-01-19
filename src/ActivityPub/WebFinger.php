@@ -73,8 +73,11 @@ class WebFinger
     }
 
     /**
-     * @throws NetworkException
+     * @throws CacheException
      * @throws GuzzleException
+     * @throws InvalidArgumentException
+     * @throws NetworkException
+     * @throws SodiumException
      */
     public function canonicalize(string $actorUsernameOrUrl): string
     {
@@ -125,8 +128,6 @@ class WebFinger
     }
 
     /**
-     * @param string $identifier
-     * @return string
      * @throws GuzzleException
      * @throws NetworkException
      */
@@ -145,8 +146,6 @@ class WebFinger
     }
 
     /**
-     * @param string $url
-     * @return string
      * @throws GuzzleException
      * @throws NetworkException
      */

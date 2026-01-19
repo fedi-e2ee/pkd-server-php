@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace FediE2EE\PKDServer\Tests\RequestHandlers\Api;
 
-use Exception;
 use FediE2EE\PKD\Crypto\Protocol\Actions\{
     AddAuxData,
     AddKey
@@ -13,8 +12,14 @@ use FediE2EE\PKD\Crypto\{
     SecretKey,
     SymmetricKey
 };
-use FediE2EE\PKDServer\RequestHandlers\Api\ListAuxData;
-use FediE2EE\PKDServer\{ActivityPub\WebFinger,
+use FediE2EE\PKD\Crypto\Exceptions\{
+    CryptoException,
+    JsonException,
+    NotImplementedException,
+    ParserException
+};
+use FediE2EE\PKDServer\{
+    ActivityPub\WebFinger,
     AppCache,
     Dependency\WrappedEncryptedRow,
     Math,
@@ -22,9 +27,18 @@ use FediE2EE\PKDServer\{ActivityPub\WebFinger,
     Protocol\KeyWrapping,
     Protocol\Payload,
     Protocol\RewrapConfig,
+    Redirect,
     ServerConfig,
     Table,
-    TableCache};
+    TableCache
+};
+use FediE2EE\PKDServer\Exceptions\{
+    CacheException,
+    DependencyException,
+    ProtocolException,
+    TableException
+};
+use FediE2EE\PKDServer\RequestHandlers\Api\ListAuxData;
 use FediE2EE\PKDServer\Tables\{
     Actors,
     AuxData,
@@ -41,12 +55,25 @@ use FediE2EE\PKDServer\Tables\Records\{
 use FediE2EE\PKDServer\Tests\HttpTestTrait;
 use FediE2EE\PKDServer\Traits\ConfigTrait;
 use GuzzleHttp\Psr7\Response;
+use ParagonIE\CipherSweet\Exception\{
+    ArrayKeyException,
+    BlindIndexNotFoundException,
+    CipherSweetException,
+    CryptoOperationException,
+    InvalidCiphertextException
+};
 use PHPUnit\Framework\Attributes\{
     CoversClass,
     UsesClass
 };
+use ParagonIE\Certainty\Exception\CertaintyException;
+use ParagonIE\HPKE\HPKEException;
 use PHPUnit\Framework\TestCase;
+use Psr\SimpleCache\InvalidArgumentException;
+use Random\RandomException;
 use ReflectionClass;
+use ReflectionException;
+use SodiumException;
 
 #[CoversClass(ListAuxData::class)]
 #[UsesClass(AppCache::class)]
@@ -69,13 +96,32 @@ use ReflectionClass;
 #[UsesClass(Peer::class)]
 #[UsesClass(Math::class)]
 #[UsesClass(RewrapConfig::class)]
+#[UsesClass(Redirect::class)]
 class ListAuxDataTest extends TestCase
 {
     use ConfigTrait;
     use HttpTestTrait;
 
     /**
-     * @throws Exception
+     * @throws ArrayKeyException
+     * @throws BlindIndexNotFoundException
+     * @throws CacheException
+     * @throws CertaintyException
+     * @throws CipherSweetException
+     * @throws CryptoException
+     * @throws CryptoOperationException
+     * @throws DependencyException
+     * @throws HPKEException
+     * @throws InvalidArgumentException
+     * @throws InvalidCiphertextException
+     * @throws JsonException
+     * @throws NotImplementedException
+     * @throws ParserException
+     * @throws ProtocolException
+     * @throws RandomException
+     * @throws ReflectionException
+     * @throws SodiumException
+     * @throws TableException
      */
     public function testHandle(): void
     {
@@ -154,6 +200,140 @@ class ListAuxDataTest extends TestCase
         $this->assertSame($canonical, $body['actor-id']);
         $this->assertCount(1, $body['auxiliary']);
         $this->assertSame('test', $body['auxiliary'][0]['aux-type']);
+        $this->assertNotInTransaction();
+    }
+
+    /**
+     * @throws ArrayKeyException
+     * @throws BlindIndexNotFoundException
+     * @throws CipherSweetException
+     * @throws CryptoOperationException
+     * @throws DependencyException
+     * @throws InvalidCiphertextException
+     * @throws JsonException
+     * @throws NotImplementedException
+     * @throws ReflectionException
+     * @throws SodiumException
+     * @throws TableException
+     */
+    public function testEmptyActorIdRedirects(): void
+    {
+        $config = $this->getConfig();
+        $this->clearOldTransaction($config);
+
+        $reflector = new ReflectionClass(ListAuxData::class);
+        $handler = $reflector->newInstanceWithoutConstructor();
+        $handler->injectConfig($config);
+        $constructor = $reflector->getConstructor();
+        if ($constructor) {
+            $constructor->invoke($handler);
+        }
+
+        $request = $this->makeGetRequest('/api/actor//auxiliary')
+            ->withAttribute('actor_id', '');
+        $response = $handler->handle($request);
+
+        $this->assertGreaterThanOrEqual(300, $response->getStatusCode());
+        $this->assertLessThan(400, $response->getStatusCode());
+        $this->assertNotInTransaction();
+    }
+
+    /**
+     * @throws ArrayKeyException
+     * @throws BlindIndexNotFoundException
+     * @throws CertaintyException
+     * @throws CipherSweetException
+     * @throws CryptoOperationException
+     * @throws DependencyException
+     * @throws InvalidCiphertextException
+     * @throws JsonException
+     * @throws NotImplementedException
+     * @throws ReflectionException
+     * @throws SodiumException
+     * @throws TableException
+     */
+    public function testWebFingerErrorReturnsError(): void
+    {
+        $config = $this->getConfig();
+        $this->clearOldTransaction($config);
+
+        $webFinger = new WebFinger($config, $this->getMockClient([
+            new Response(500, [], 'Internal Server Error')
+        ]));
+
+        $reflector = new ReflectionClass(ListAuxData::class);
+        $handler = $reflector->newInstanceWithoutConstructor();
+        $handler->injectConfig($config);
+        $handler->setWebFinger($webFinger);
+        $constructor = $reflector->getConstructor();
+        if ($constructor) {
+            $constructor->invoke($handler);
+        }
+
+        $request = $this->makeGetRequest('/api/actor/test@example.com/auxiliary')
+            ->withAttribute('actor_id', 'test@example.com');
+        $response = $handler->handle($request);
+
+        $this->assertSame(400, $response->getStatusCode());
+        $body = json_decode($response->getBody()->getContents(), true);
+        $this->assertArrayHasKey('error', $body);
+        $this->assertStringContainsString('WebFinger', $body['error']);
+        $this->assertNotInTransaction();
+    }
+
+    /**
+     * @throws ArrayKeyException
+     * @throws BlindIndexNotFoundException
+     * @throws CertaintyException
+     * @throws CipherSweetException
+     * @throws CryptoOperationException
+     * @throws DependencyException
+     * @throws InvalidCiphertextException
+     * @throws JsonException
+     * @throws NotImplementedException
+     * @throws RandomException
+     * @throws ReflectionException
+     * @throws SodiumException
+     * @throws TableException
+     */
+    public function testActorNotFoundReturns404(): void
+    {
+        $config = $this->getConfig();
+        $this->clearOldTransaction($config);
+
+        $nonExistentActor = 'nonexistent' . bin2hex(random_bytes(8)) . '@example.com';
+        $canonical = 'https://example.com/users/nonexistent' . bin2hex(random_bytes(8));
+
+        $webFinger = new WebFinger($config, $this->getMockClient([
+            new Response(200, ['Content-Type' => 'application/json'], json_encode([
+                'subject' => 'acct:' . $nonExistentActor,
+                'links' => [
+                    [
+                        'rel' => 'self',
+                        'type' => 'application/activity+json',
+                        'href' => $canonical
+                    ]
+                ]
+            ])),
+        ]));
+
+        $reflector = new ReflectionClass(ListAuxData::class);
+        $handler = $reflector->newInstanceWithoutConstructor();
+        $handler->injectConfig($config);
+        $handler->setWebFinger($webFinger);
+        $constructor = $reflector->getConstructor();
+        if ($constructor) {
+            $constructor->invoke($handler);
+        }
+
+        $request = $this->makeGetRequest('/api/actor/' . urlencode($nonExistentActor) . '/auxiliary')
+            ->withAttribute('actor_id', $nonExistentActor);
+        $response = $handler->handle($request);
+
+        $this->assertSame(404, $response->getStatusCode());
+        $body = json_decode($response->getBody()->getContents(), true);
+        $this->assertArrayHasKey('error', $body);
+        $this->assertStringContainsString('not found', strtolower($body['error']));
         $this->assertNotInTransaction();
     }
 }

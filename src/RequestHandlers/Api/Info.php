@@ -2,7 +2,12 @@
 declare(strict_types=1);
 namespace FediE2EE\PKDServer\RequestHandlers\Api;
 
+use FediE2EE\PKD\Crypto\Exceptions\{
+    JsonException,
+    NotImplementedException
+};
 use FediE2EE\PKDServer\{
+    Exceptions\DependencyException,
     Meta\Route,
     Traits\ReqTrait
 };
@@ -12,11 +17,18 @@ use Psr\Http\Message\{
     ServerRequestInterface,
     ResponseInterface
 };
+use SodiumException;
 
 class Info implements RequestHandlerInterface
 {
     use ReqTrait;
 
+    /**
+     * @throws DependencyException
+     * @throws JsonException
+     * @throws NotImplementedException
+     * @throws SodiumException
+     */
     #[Route("/api/info")]
     #[Override]
     public function handle(ServerRequestInterface $request): ResponseInterface

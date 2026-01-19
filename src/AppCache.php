@@ -6,8 +6,10 @@ use DateInterval;
 use DateTime;
 use Override;
 use Predis\Client as RedisClient;
-use Psr\SimpleCache\CacheInterface;
-use Psr\SimpleCache\InvalidArgumentException;
+use Psr\SimpleCache\{
+    CacheInterface,
+    InvalidArgumentException
+};
 use SodiumException;
 
 class AppCache implements CacheInterface

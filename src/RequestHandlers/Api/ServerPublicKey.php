@@ -9,15 +9,9 @@ use FediE2EE\PKD\Crypto\Exceptions\{
 };
 use FediE2EE\PKDServer\Exceptions\DependencyException;
 use FediE2EE\PKDServer\Meta\Route;
-use Mdanter\Ecc\Exception\InsecureCurveException;
 use Override;
 use ParagonIE\ConstantTime\Base64UrlSafe;
-use ParagonIE\HPKE\AEAD\{
-    AES128GCM,
-    AES256GCM,
-    ChaCha20Poly1305
-};
-use ParagonIE\HPKE\{HPKE, HPKEException, KDF\HKDF, KEM\DHKEM\Curve, KEM\DHKEM\EncapsKey, KEM\DiffieHellmanKEM};
+use ParagonIE\HPKE\KEM\DHKEM\EncapsKey;
 use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Http\Message\{
     ServerRequestInterface,
@@ -32,8 +26,6 @@ class ServerPublicKey implements RequestHandlerInterface
 
     /**
      * @throws DependencyException
-     * @throws HPKEException
-     * @throws InsecureCurveException
      * @throws JsonException
      * @throws NotImplementedException
      * @throws SodiumException
@@ -43,7 +35,7 @@ class ServerPublicKey implements RequestHandlerInterface
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         $hpke = $this->config()->getHPKE();
-        $cs = $this->cipherSuiteString($hpke->cs);
+        $cs = $hpke->cs->getSuiteName();
         $encapsKey = $hpke->encapsKey;
         if (!($encapsKey instanceof EncapsKey)) {
             throw new TypeError('Only DHKEM encaps keys are expected');
@@ -54,28 +46,5 @@ class ServerPublicKey implements RequestHandlerInterface
             'hpke-ciphersuite' => $cs,
             'hpke-public-key' => Base64UrlSafe::encodeUnpadded($encapsKey->bytes),
         ]);
-    }
-
-    public function cipherSuiteString(HPKE $hpke): string
-    {
-        if (!$hpke->kem instanceof DiffieHellmanKEM) {
-            throw new TypeError('Too new for this library');
-        }
-        if (!$hpke->kdf instanceof HKDF) {
-            throw new TypeError('Unknown KDF algorithm');
-        }
-
-        $curve = match($hpke->kem->curve) {
-            Curve::X25519 => 'Curve25519',
-            default => throw new TypeError('Forbidden elliptic curve chosen for HPKE'),
-        };
-        $hash = $hpke->kdf->hash->value;
-        $aead = match($hpke->aead::class) {
-            AES128GCM::class => 'Aes128Gcm',
-            AES256GCM::class => 'Aes256Gcm',
-            ChaCha20Poly1305::class => 'ChaChaPoly',
-            default => throw new TypeError('Unknown AEAD mode configured for HPKE'),
-        };
-        return implode('_', [$curve, $hash, $aead]);
     }
 }

@@ -2,7 +2,9 @@
 declare(strict_types=1);
 namespace FediE2EE\PKDServer\RequestHandlers\Api;
 
+use DateMalformedStringException;
 use FediE2EE\PKD\Crypto\Exceptions\{
+    CryptoException,
     JsonException,
     NotImplementedException
 };
@@ -75,6 +77,8 @@ class ListAuxData implements RequestHandlerInterface
      * @throws NotImplementedException
      * @throws SodiumException
      * @throws TableException
+     * @throws DateMalformedStringException
+     * @throws CryptoException
      */
     #[Route("api/actor/{actor_id}/auxiliary")]
     #[Override]

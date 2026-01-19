@@ -4,6 +4,7 @@ namespace FediE2EE\PKDServer\Traits;
 
 use FediE2EE\PKD\Crypto\Exceptions\CryptoException;
 use FediE2EE\PKDServer\ServerConfig;
+use Psr\SimpleCache\InvalidArgumentException;
 use FediE2EE\PKD\Crypto\{
     PublicKey,
     SymmetricKey
@@ -13,6 +14,7 @@ use FediE2EE\PKDServer\Exceptions\{
     FetchException,
     TableException,
 };
+use SodiumException;
 
 /**
  * @property ServerConfig $config
@@ -92,6 +94,8 @@ trait TableRecordTrait
      *
      * @throws CryptoException
      * @throws FetchException
+     * @throws InvalidArgumentException
+     * @throws SodiumException
      */
     public function getRfc9421PublicKeys(string $actorId): PublicKey
     {

@@ -29,7 +29,6 @@ class Finger implements RequestHandlerInterface
     use ReqTrait;
 
     /**
-     * @return ResponseInterface
      * @throws CertaintyException
      * @throws DependencyException
      * @throws GuzzleException

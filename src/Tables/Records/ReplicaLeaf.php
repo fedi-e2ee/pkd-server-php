@@ -57,6 +57,7 @@ final class ReplicaLeaf
     }
 
     /**
+     * @api
      * @throws SodiumException
      */
     public function serializeForMerkle(): string

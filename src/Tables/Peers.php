@@ -8,18 +8,23 @@ use FediE2EE\PKD\Crypto\AttributeEncryption\AttributeKeyMap;
 use FediE2EE\PKD\Crypto\Exceptions\CryptoException;
 use FediE2EE\PKD\Crypto\Protocol\HPKEAdapter;
 use FediE2EE\PKD\Crypto\PublicKey;
-use FediE2EE\PKDServer\Protocol\RewrapConfig;
 use FediE2EE\PKD\Crypto\Merkle\{
     IncrementalTree,
     Tree
 };
 use FediE2EE\PKDServer\Dependency\WrappedEncryptedRow;
-use FediE2EE\PKDServer\Exceptions\TableException;
+use FediE2EE\PKDServer\Exceptions\{
+    DependencyException,
+    TableException
+};
+use FediE2EE\PKDServer\Protocol\RewrapConfig;
 use FediE2EE\PKDServer\Table;
 use FediE2EE\PKDServer\Tables\Records\Peer;
 use Override;
 use ParagonIE\ConstantTime\Base32;
 use ParagonIE\ConstantTime\Base64UrlSafe;
+use ParagonIE\HPKE\HPKEException;
+use Random\RandomException;
 use SodiumException;
 
 class Peers extends Table
@@ -47,6 +52,9 @@ class Peers extends Table
 
     /**
      * @api
+     *
+     * @throws TableException
+     * @throws RandomException
      */
     public function create(
         PublicKey $publicKey,
@@ -100,6 +108,12 @@ class Peers extends Table
         return $this->tableRowToPeer($peer);
     }
 
+    /**
+     * @throws CryptoException
+     * @throws DateMalformedStringException
+     * @throws SodiumException
+     * @throws TableException
+     */
     public function getPeer(string $hostname): Peer
     {
         $peer = $this->db->row("SELECT * FROM pkd_peers WHERE hostname = ?", $hostname);
@@ -160,6 +174,7 @@ class Peers extends Table
      * Lists which peers we replicate.
      *
      * @return Peer[]
+     *
      * @throws CryptoException
      * @throws DateMalformedStringException
      * @throws SodiumException
@@ -173,6 +188,9 @@ class Peers extends Table
         return $peerList;
     }
 
+    /**
+     * @throws TableException
+     */
     public function save(Peer $peer): bool
     {
         if ($peer->hasPrimaryKey()) {
@@ -184,6 +202,11 @@ class Peers extends Table
         return true;
     }
 
+    /**
+     * @throws CryptoException
+     * @throws DateMalformedStringException
+     * @throws SodiumException
+     */
     public function getRewrapCandidates(): array
     {
         $rows = $this->db->run(
@@ -202,6 +225,11 @@ class Peers extends Table
         return $peers;
     }
 
+    /**
+     * @throws DependencyException
+     * @throws HPKEException
+     * @throws TableException
+     */
     public function rewrapKeyMap(Peer $peer, AttributeKeyMap $keyMap, int $leafId): void
     {
         if (is_null($peer->wrapConfig)) {

@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace FediE2EE\PKDServer\Protocol;
 
+use DateMalformedStringException;
 use FediE2EE\PKD\Crypto\AttributeEncryption\AttributeKeyMap;
 use FediE2EE\PKD\Crypto\Exceptions\{
     BundleException,
@@ -52,9 +53,12 @@ class KeyWrapping
      * Initiate a rewrapping of the symmetric keys associated with a record.
      *
      * @throws CacheException
+     * @throws CryptoException
+     * @throws DateMalformedStringException
      * @throws DependencyException
      * @throws HPKEException
      * @throws JsonException
+     * @throws SodiumException
      * @throws TableException
      */
     public function rewrapSymmetricKeys(string $merkleRoot, ?AttributeKeyMap $keyMap = null): void
@@ -135,6 +139,9 @@ class KeyWrapping
         return json_encode($collected, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
     }
 
+    /**
+     * @throws JsonException
+     */
     public function deserializeKeyMap(
         #[SensitiveParameter]
         string $plaintextJsonString

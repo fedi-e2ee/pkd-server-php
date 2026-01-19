@@ -2,6 +2,7 @@
 namespace FediE2EE\PKDServer\Tables;
 
 use FediE2EE\PKD\Crypto\AttributeEncryption\AttributeKeyMap;
+use FediE2EE\PKD\Crypto\Exceptions\CryptoException;
 use FediE2EE\PKD\Crypto\PublicKey;
 use FediE2EE\PKDServer\Dependency\WrappedEncryptedRow;
 use FediE2EE\PKDServer\Exceptions\{
@@ -77,6 +78,7 @@ class Actors extends Table
      * @api
      *
      * @throws CipherSweetException
+     * @throws CryptoException
      * @throws CryptoOperationException
      * @throws InvalidCiphertextException
      * @throws SodiumException
@@ -145,6 +147,7 @@ class Actors extends Table
      * @throws ArrayKeyException
      * @throws BlindIndexNotFoundException
      * @throws CipherSweetException
+     * @throws CryptoException
      * @throws CryptoOperationException
      * @throws InvalidCiphertextException
      * @throws SodiumException

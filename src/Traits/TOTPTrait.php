@@ -2,10 +2,8 @@
 declare(strict_types=1);
 namespace FediE2EE\PKDServer\Traits;
 
-use FediE2EE\PKD\Crypto\Exceptions\{
-    JsonException,
-    NotImplementedException
-};
+use DateMalformedStringException;
+use FediE2EE\PKD\Crypto\Exceptions\NotImplementedException;
 use FediE2EE\PKD\Crypto\{
     PublicKey,
     UtilTrait
@@ -17,9 +15,8 @@ use FediE2EE\PKDServer\Exceptions\{
     TableException
 };
 use FediE2EE\PKDServer\Tables\PublicKeys;
+use JsonException;
 use ParagonIE\CipherSweet\Exception\{
-    ArrayKeyException,
-    BlindIndexNotFoundException,
     CipherSweetException,
     CryptoOperationException,
     InvalidCiphertextException
@@ -81,18 +78,17 @@ trait TOTPTrait
     }
 
     /**
-     * @throws ArrayKeyException
-     * @throws BlindIndexNotFoundException
+     * @throws CacheException
      * @throws CipherSweetException
      * @throws CryptoOperationException
-     * @throws CacheException
+     * @throws DateMalformedStringException
      * @throws DependencyException
-     * @throws TableException
      * @throws InvalidCiphertextException
      * @throws JsonException
+     * @throws NotImplementedException
      * @throws ProtocolException
      * @throws SodiumException
-     * @throws NotImplementedException
+     * @throws TableException
      */
     protected function verifySignature(array $body, string $actorId, string $keyId): void
     {

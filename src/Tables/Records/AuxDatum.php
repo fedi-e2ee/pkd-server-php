@@ -26,6 +26,9 @@ class AuxDatum
         $this->primaryKey = $primaryKey;
     }
 
+    /**
+     * @api
+     */
     public function getActor(): Actor
     {
         return $this->actor;

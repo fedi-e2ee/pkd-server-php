@@ -23,6 +23,9 @@ use FediE2EE\PKD\Crypto\Protocol\{
     Actions\UndoFireproof,
     Handler
 };
+use ParagonIE\Certainty\Exception\CertaintyException;
+use Psr\SimpleCache\InvalidArgumentException;
+use Random\RandomException;
 use FediE2EE\PKD\Crypto\{
     SecretKey,
     SymmetricKey
@@ -105,6 +108,9 @@ class ProtocolTest extends TestCase
 
     protected Protocol $protocol;
 
+    /**
+     * @throws DependencyException
+     */
     public function setUp(): void
     {
         $this->config = $this->getConfig();
@@ -112,19 +118,22 @@ class ProtocolTest extends TestCase
     }
 
     /**
-     * @throws ArrayKeyException
-     * @throws BlindIndexNotFoundException
+     * @throws BaseJsonException
      * @throws CacheException
+     * @throws CertaintyException
      * @throws CipherSweetException
      * @throws CryptoException
      * @throws CryptoOperationException
+     * @throws DateMalformedStringException
      * @throws DependencyException
      * @throws HPKEException
+     * @throws InvalidArgumentException
      * @throws InvalidCiphertextException
      * @throws JsonException
      * @throws NotImplementedException
      * @throws ParserException
      * @throws ProtocolException
+     * @throws RandomException
      * @throws SodiumException
      * @throws TableException
      */
@@ -220,21 +229,24 @@ class ProtocolTest extends TestCase
     }
 
     /**
+     * @throws BaseJsonException
      * @throws CacheException
+     * @throws CertaintyException
      * @throws CipherSweetException
      * @throws CryptoException
      * @throws CryptoOperationException
+     * @throws DateMalformedStringException
      * @throws DependencyException
      * @throws HPKEException
+     * @throws InvalidArgumentException
      * @throws InvalidCiphertextException
      * @throws JsonException
      * @throws NotImplementedException
      * @throws ParserException
      * @throws ProtocolException
+     * @throws RandomException
      * @throws SodiumException
      * @throws TableException
-     * @throws DateMalformedStringException
-     * @throws BaseJsonException
      */
     public function testMoveIdentity(): void
     {
@@ -314,19 +326,22 @@ class ProtocolTest extends TestCase
     }
 
     /**
-     * @throws ArrayKeyException
-     * @throws BlindIndexNotFoundException
+     * @throws BaseJsonException
      * @throws CacheException
+     * @throws CertaintyException
      * @throws CipherSweetException
      * @throws CryptoException
      * @throws CryptoOperationException
+     * @throws DateMalformedStringException
      * @throws DependencyException
      * @throws HPKEException
+     * @throws InvalidArgumentException
      * @throws InvalidCiphertextException
      * @throws JsonException
      * @throws NotImplementedException
      * @throws ParserException
      * @throws ProtocolException
+     * @throws RandomException
      * @throws SodiumException
      * @throws TableException
      */
@@ -405,13 +420,16 @@ class ProtocolTest extends TestCase
 
     /**
      * @throws CacheException
+     * @throws CertaintyException
      * @throws CryptoException
      * @throws DependencyException
      * @throws HPKEException
+     * @throws InvalidArgumentException
      * @throws JsonException
      * @throws NotImplementedException
      * @throws ParserException
      * @throws ProtocolException
+     * @throws RandomException
      * @throws SodiumException
      * @throws TableException
      */
@@ -507,13 +525,16 @@ class ProtocolTest extends TestCase
 
     /**
      * @throws CacheException
+     * @throws CertaintyException
      * @throws CryptoException
      * @throws DependencyException
      * @throws HPKEException
+     * @throws InvalidArgumentException
      * @throws JsonException
      * @throws NotImplementedException
      * @throws ParserException
      * @throws ProtocolException
+     * @throws RandomException
      * @throws SodiumException
      * @throws TableException
      */
@@ -625,13 +646,16 @@ class ProtocolTest extends TestCase
 
     /**
      * @throws CacheException
+     * @throws CertaintyException
      * @throws CryptoException
      * @throws DependencyException
      * @throws HPKEException
+     * @throws InvalidArgumentException
      * @throws JsonException
      * @throws NotImplementedException
      * @throws ParserException
      * @throws ProtocolException
+     * @throws RandomException
      * @throws SodiumException
      * @throws TableException
      */

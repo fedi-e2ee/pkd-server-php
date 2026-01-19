@@ -3,6 +3,9 @@ declare(strict_types=1);
 namespace FediE2EE\PKDServer\RequestHandlers\Api;
 
 use FediE2EE\PKD\Crypto\Exceptions\{
+    BundleException,
+    CryptoException,
+    InputException,
     JsonException,
     NotImplementedException
 };
@@ -12,11 +15,13 @@ use FediE2EE\PKDServer\Exceptions\{
     DependencyException,
     TableException
 };
-use FediE2EE\PKDServer\Tables\MerkleState;
 use FediE2EE\PKDServer\Interfaces\HttpCacheInterface;
 use FediE2EE\PKDServer\Meta\Route;
+use FediE2EE\PKDServer\Tables\MerkleState;
 use FediE2EE\PKDServer\Traits\HttpCacheTrait;
 use Override;
+use ParagonIE\HPKE\HPKEException;
+use Psr\SimpleCache\InvalidArgumentException;
 use Psr\Http\Message\{
     ResponseInterface,
     ServerRequestInterface
@@ -53,7 +58,12 @@ class HistorySince implements RequestHandlerInterface, HttpCacheInterface
     }
 
     /**
+     * @throws BundleException
+     * @throws CryptoException
      * @throws DependencyException
+     * @throws HPKEException
+     * @throws InputException
+     * @throws InvalidArgumentException
      * @throws JsonException
      * @throws NotImplementedException
      * @throws SodiumException

@@ -10,11 +10,12 @@ use FediE2EE\PKDServer\Tables\{
 };
 use FediE2EE\PKDServer\Tests\HttpTestTrait;
 use FediE2EE\PKDServer\Traits\ConfigTrait;
-use PHPUnit\Framework\Attributes\CoversNothing;
-use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\{
+    CoversNothing,
+    DataProvider
+};
 use PHPUnit\Framework\TestCase;
 use JsonException as BaseJsonException;
-use Throwable;
 
 #[CoversNothing]
 class ConfigTraitTest extends TestCase

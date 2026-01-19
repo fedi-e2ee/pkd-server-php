@@ -3,21 +3,30 @@ declare(strict_types=1);
 namespace FediE2EE\PKDServer\Traits;
 
 use Closure;
-use FediE2EE\PKD\Crypto\Exceptions\{CryptoException, NetworkException, NotImplementedException};
+use FediE2EE\PKD\Crypto\Exceptions\{
+    CryptoException,
+    NetworkException,
+    NotImplementedException
+};
 use FediE2EE\PKD\Crypto\Protocol\EncryptedProtocolMessageInterface;
 use FediE2EE\PKDServer\Exceptions\{
+    ConcurrentException,
     DependencyException,
     ProtocolException,
     TableException
 };
-use FediE2EE\PKDServer\Protocol\KeyWrapping;
-use FediE2EE\PKDServer\Protocol\Payload;
+use FediE2EE\PKDServer\Protocol\{
+    KeyWrapping,
+    Payload
+};
 use FediE2EE\PKDServer\ServerConfig;
 use GuzzleHttp\Exception\GuzzleException;
 use FediE2EE\PKDServer\Tables\{
     MerkleState,
     Records\MerkleLeaf
 };
+use ParagonIE\Certainty\Exception\CertaintyException;
+use Random\RandomException;
 use SodiumException;
 
 /**
@@ -30,12 +39,14 @@ trait ProtocolMethodTrait
     protected const int ENCRYPTION_OPTIONAL = 3;
 
     /**
-     * @throws ProtocolException
-     * @throws TableException
-     * @throws DependencyException
+     * @throws ConcurrentException
      * @throws CryptoException
+     * @throws DependencyException
      * @throws NotImplementedException
+     * @throws ProtocolException
+     * @throws RandomException
      * @throws SodiumException
+     * @throws TableException
      */
     protected function protocolMethod(
         Payload $payload,
@@ -88,9 +99,12 @@ trait ProtocolMethodTrait
 
 
     /**
+     * @throws CertaintyException
+     * @throws DependencyException
      * @throws GuzzleException
      * @throws NetworkException
      * @throws ProtocolException
+     * @throws SodiumException
      */
     protected function explicitOuterActorCheck(string $expected, string $given): void
     {

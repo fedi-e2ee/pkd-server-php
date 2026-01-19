@@ -8,7 +8,6 @@ use Monolog\Level;
 use Monolog\LogRecord;
 use Override;
 use ParagonIE\EasyDB\EasyDB;
-use PDO;
 use PDOStatement;
 use RuntimeException;
 
