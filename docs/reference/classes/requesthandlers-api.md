@@ -45,19 +45,19 @@ Namespace: `FediE2EE\PKDServer\RequestHandlers\Api`
 
 ### Methods
 
-#### [`__construct`](../../../src/RequestHandlers/Api/Actor.php#L48-L55)
+#### [`__construct`](../../../src/RequestHandlers/Api/Actor.php#L49-L56)
 
 Returns `void`
 
 **Throws:** `CacheException`, `DependencyException`, `TableException`
 
-#### [`getPrimaryCacheKey`](../../../src/RequestHandlers/Api/Actor.php#L58-L61)
+#### [`getPrimaryCacheKey`](../../../src/RequestHandlers/Api/Actor.php#L59-L62)
 
 Returns `string`
 
 **Attributes:** `#[Override]`
 
-#### [`handle`](../../../src/RequestHandlers/Api/Actor.php#L80-L118)
+#### [`handle`](../../../src/RequestHandlers/Api/Actor.php#L82-L120)
 
 **API** · Returns `Psr\Http\Message\ResponseInterface`
 
@@ -67,7 +67,7 @@ Returns `string`
 
 - `$request`: `Psr\Http\Message\ServerRequestInterface`
 
-**Throws:** `ArrayKeyException`, `BlindIndexNotFoundException`, `CipherSweetException`, `CryptoOperationException`, `DependencyException`, `InvalidArgumentException`, `InvalidCiphertextException`, `JsonException`, `NotImplementedException`, `SodiumException`, `TableException`
+**Throws:** `ArrayKeyException`, `BlindIndexNotFoundException`, `CipherSweetException`, `CryptoException`, `CryptoOperationException`, `DependencyException`, `InvalidArgumentException`, `InvalidCiphertextException`, `JsonException`, `NotImplementedException`, `SodiumException`, `TableException`
 
 #### [`clearCache`](../../../src/RequestHandlers/Api/Actor.php#L34-L37)
 
@@ -234,13 +234,13 @@ Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
 ### Methods
 
-#### [`__construct`](../../../src/RequestHandlers/Api/BurnDown.php#L44-L47)
+#### [`__construct`](../../../src/RequestHandlers/Api/BurnDown.php#L49-L52)
 
 Returns `void`
 
 **Throws:** `DependencyException`
 
-#### [`handle`](../../../src/RequestHandlers/Api/BurnDown.php#L63-L85)
+#### [`handle`](../../../src/RequestHandlers/Api/BurnDown.php#L69-L91)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -250,9 +250,9 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 - `$request`: `Psr\Http\Message\ServerRequestInterface`
 
-**Throws:** `CacheException`, `CertaintyException`, `CryptoException`, `DependencyException`, `HPKEException`, `JsonException`, `NotImplementedException`, `ParserException`, `SodiumException`, `TableException`
+**Throws:** `CacheException`, `CertaintyException`, `CryptoException`, `DependencyException`, `HPKEException`, `JsonException`, `NotImplementedException`, `ParserException`, `SodiumException`, `TableException`, `InvalidArgumentException`
 
-#### [`getVerifiedStream`](../../../src/RequestHandlers/Api/BurnDown.php#L35-L58)
+#### [`getVerifiedStream`](../../../src/RequestHandlers/Api/BurnDown.php#L37-L60)
 
 Returns `FediE2EE\PKDServer\ActivityPub\ActivityStream`
 
@@ -260,7 +260,7 @@ Returns `FediE2EE\PKDServer\ActivityPub\ActivityStream`
 
 - `$message`: `Psr\Http\Message\ServerRequestInterface`
 
-**Throws:** `ActivityPubException`, `DependencyException`, `FetchException`, `CryptoException`, `HttpSignatureException`, `NotImplementedException`, `CertaintyException`, `SodiumException`
+**Throws:** `ActivityPubException`, `CertaintyException`, `CryptoException`, `DependencyException`, `FetchException`, `HttpSignatureException`, `InvalidArgumentException`, `NotImplementedException`, `SodiumException`
 
 #### [`appCache`](../../../src/RequestHandlers/Api/BurnDown.php#L44-L47)
 
@@ -590,7 +590,7 @@ Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
 ### Methods
 
-#### [`handle`](../../../src/RequestHandlers/Api/Extensions.php#L31-L38)
+#### [`handle`](../../../src/RequestHandlers/Api/Extensions.php#L35-L42)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -761,13 +761,13 @@ Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
 ### Methods
 
-#### [`__construct`](../../../src/RequestHandlers/Api/GetAuxData.php#L50-L63)
+#### [`__construct`](../../../src/RequestHandlers/Api/GetAuxData.php#L49-L62)
 
 Returns `void`
 
 **Throws:** `CacheException`, `DependencyException`, `TableException`
 
-#### [`handle`](../../../src/RequestHandlers/Api/GetAuxData.php#L81-L116)
+#### [`handle`](../../../src/RequestHandlers/Api/GetAuxData.php#L83-L118)
 
 **API** · Returns `Psr\Http\Message\ResponseInterface`
 
@@ -777,7 +777,7 @@ Returns `void`
 
 - `$request`: `Psr\Http\Message\ServerRequestInterface`
 
-**Throws:** `ArrayKeyException`, `BlindIndexNotFoundException`, `CipherSweetException`, `CryptoOperationException`, `DependencyException`, `InvalidCiphertextException`, `JsonException`, `NotImplementedException`, `SodiumException`, `TableException`
+**Throws:** `ArrayKeyException`, `BaseJsonException`, `BlindIndexNotFoundException`, `CipherSweetException`, `CryptoException`, `CryptoOperationException`, `DateMalformedStringException`, `DependencyException`, `InvalidCiphertextException`, `JsonException`, `NotImplementedException`, `SodiumException`, `TableException`
 
 #### [`time`](../../../src/RequestHandlers/Api/GetAuxData.php#L34-L37)
 
@@ -938,13 +938,13 @@ Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
 ### Methods
 
-#### [`__construct`](../../../src/RequestHandlers/Api/GetKey.php#L52-L65)
+#### [`__construct`](../../../src/RequestHandlers/Api/GetKey.php#L49-L62)
 
 Returns `void`
 
 **Throws:** `CacheException`, `DependencyException`, `TableException`
 
-#### [`handle`](../../../src/RequestHandlers/Api/GetKey.php#L85-L121)
+#### [`handle`](../../../src/RequestHandlers/Api/GetKey.php#L83-L119)
 
 **API** · Returns `Psr\Http\Message\ResponseInterface`
 
@@ -954,7 +954,7 @@ Returns `void`
 
 - `$request`: `Psr\Http\Message\ServerRequestInterface`
 
-**Throws:** `ArrayKeyException`, `BaseJsonException`, `BlindIndexNotFoundException`, `CipherSweetException`, `CryptoOperationException`, `DateMalformedStringException`, `DependencyException`, `InvalidCiphertextException`, `JsonException`, `NotImplementedException`, `SodiumException`, `TableException`
+**Throws:** `ArrayKeyException`, `BaseJsonException`, `BlindIndexNotFoundException`, `CipherSweetException`, `CryptoException`, `CryptoOperationException`, `DateMalformedStringException`, `DependencyException`, `InvalidCiphertextException`, `JsonException`, `NotImplementedException`, `SodiumException`, `TableException`
 
 #### [`time`](../../../src/RequestHandlers/Api/GetKey.php#L34-L37)
 
@@ -1469,19 +1469,19 @@ Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
 ### Methods
 
-#### [`__construct`](../../../src/RequestHandlers/Api/HistorySince.php#L40-L47)
+#### [`__construct`](../../../src/RequestHandlers/Api/HistorySince.php#L45-L52)
 
 Returns `void`
 
 **Throws:** `DependencyException`, `TableException`, `CacheException`
 
-#### [`getPrimaryCacheKey`](../../../src/RequestHandlers/Api/HistorySince.php#L50-L53)
+#### [`getPrimaryCacheKey`](../../../src/RequestHandlers/Api/HistorySince.php#L55-L58)
 
 Returns `string`
 
 **Attributes:** `#[Override]`
 
-#### [`handle`](../../../src/RequestHandlers/Api/HistorySince.php#L63-L82)
+#### [`handle`](../../../src/RequestHandlers/Api/HistorySince.php#L73-L92)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -1491,7 +1491,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 - `$request`: `Psr\Http\Message\ServerRequestInterface`
 
-**Throws:** `DependencyException`, `JsonException`, `NotImplementedException`, `SodiumException`
+**Throws:** `BundleException`, `CryptoException`, `DependencyException`, `HPKEException`, `InputException`, `InvalidArgumentException`, `JsonException`, `NotImplementedException`, `SodiumException`
 
 #### [`clearCache`](../../../src/RequestHandlers/Api/HistorySince.php#L34-L37)
 
@@ -1847,7 +1847,7 @@ Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
 ### Methods
 
-#### [`handle`](../../../src/RequestHandlers/Api/Info.php#L22-L33)
+#### [`handle`](../../../src/RequestHandlers/Api/Info.php#L34-L45)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -1856,6 +1856,8 @@ Returns `Psr\Http\Message\ResponseInterface`
 **Parameters:**
 
 - `$request`: `Psr\Http\Message\ServerRequestInterface`
+
+**Throws:** `DependencyException`, `JsonException`, `NotImplementedException`, `SodiumException`
 
 #### [`time`](../../../src/RequestHandlers/Api/Info.php#L34-L37)
 
@@ -2016,13 +2018,13 @@ Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
 ### Methods
 
-#### [`__construct`](../../../src/RequestHandlers/Api/ListAuxData.php#L50-L63)
+#### [`__construct`](../../../src/RequestHandlers/Api/ListAuxData.php#L52-L65)
 
 Returns `void`
 
 **Throws:** `CacheException`, `DependencyException`, `TableException`
 
-#### [`handle`](../../../src/RequestHandlers/Api/ListAuxData.php#L81-L108)
+#### [`handle`](../../../src/RequestHandlers/Api/ListAuxData.php#L85-L112)
 
 **API** · Returns `Psr\Http\Message\ResponseInterface`
 
@@ -2032,7 +2034,7 @@ Returns `void`
 
 - `$request`: `Psr\Http\Message\ServerRequestInterface`
 
-**Throws:** `ArrayKeyException`, `BlindIndexNotFoundException`, `CipherSweetException`, `CryptoOperationException`, `DependencyException`, `InvalidCiphertextException`, `JsonException`, `NotImplementedException`, `SodiumException`, `TableException`
+**Throws:** `ArrayKeyException`, `BlindIndexNotFoundException`, `CipherSweetException`, `CryptoOperationException`, `DependencyException`, `InvalidCiphertextException`, `JsonException`, `NotImplementedException`, `SodiumException`, `TableException`, `DateMalformedStringException`, `CryptoException`
 
 #### [`time`](../../../src/RequestHandlers/Api/ListAuxData.php#L34-L37)
 
@@ -2193,13 +2195,13 @@ Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
 ### Methods
 
-#### [`__construct`](../../../src/RequestHandlers/Api/ListKeys.php#L51-L64)
+#### [`__construct`](../../../src/RequestHandlers/Api/ListKeys.php#L54-L67)
 
 Returns `void`
 
 **Throws:** `CacheException`, `DependencyException`, `TableException`
 
-#### [`handle`](../../../src/RequestHandlers/Api/ListKeys.php#L82-L119)
+#### [`handle`](../../../src/RequestHandlers/Api/ListKeys.php#L89-L126)
 
 **API** · Returns `Psr\Http\Message\ResponseInterface`
 
@@ -2209,7 +2211,7 @@ Returns `void`
 
 - `$request`: `Psr\Http\Message\ServerRequestInterface`
 
-**Throws:** `ArrayKeyException`, `BlindIndexNotFoundException`, `CipherSweetException`, `CryptoOperationException`, `DependencyException`, `InvalidCiphertextException`, `JsonException`, `NotImplementedException`, `SodiumException`, `TableException`
+**Throws:** `ArrayKeyException`, `BlindIndexNotFoundException`, `CacheException`, `CipherSweetException`, `CryptoOperationException`, `DependencyException`, `InvalidCiphertextException`, `JsonException`, `NotImplementedException`, `SodiumException`, `TableException`, `DateMalformedStringException`, `CryptoException`, `BaseJsonException`
 
 #### [`time`](../../../src/RequestHandlers/Api/ListKeys.php#L34-L37)
 
@@ -2406,7 +2408,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `ArrayKeyException`, `BaseJsonException`, `BlindIndexNotFoundException`, `CacheException`, `CipherSweetException`, `CryptoException`, `CryptoOperationException`, `DateMalformedStringException`, `DependencyException`, `InvalidCiphertextException`, `JsonException`, `NotImplementedException`, `SodiumException`, `TableException`
 
-#### [`actorKey`](../../../src/RequestHandlers/Api/ReplicaInfo.php#L211-L240)
+#### [`actorKey`](../../../src/RequestHandlers/Api/ReplicaInfo.php#L210-L239)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -2418,7 +2420,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `ArrayKeyException`, `BaseJsonException`, `BlindIndexNotFoundException`, `CacheException`, `CipherSweetException`, `CryptoException`, `CryptoOperationException`, `DateMalformedStringException`, `DependencyException`, `InvalidCiphertextException`, `JsonException`, `NotImplementedException`, `SodiumException`, `TableException`
 
-#### [`actorAuxiliary`](../../../src/RequestHandlers/Api/ReplicaInfo.php#L258-L282)
+#### [`actorAuxiliary`](../../../src/RequestHandlers/Api/ReplicaInfo.php#L257-L281)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -2430,7 +2432,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `ArrayKeyException`, `BlindIndexNotFoundException`, `CacheException`, `CipherSweetException`, `CryptoException`, `CryptoOperationException`, `DateMalformedStringException`, `DependencyException`, `InvalidCiphertextException`, `JsonException`, `NotImplementedException`, `SodiumException`, `TableException`
 
-#### [`actorAuxiliaryItem`](../../../src/RequestHandlers/Api/ReplicaInfo.php#L301-L330)
+#### [`actorAuxiliaryItem`](../../../src/RequestHandlers/Api/ReplicaInfo.php#L300-L329)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -2442,7 +2444,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `ArrayKeyException`, `BaseJsonException`, `BlindIndexNotFoundException`, `CacheException`, `CipherSweetException`, `CryptoException`, `CryptoOperationException`, `DateMalformedStringException`, `DependencyException`, `InvalidCiphertextException`, `JsonException`, `NotImplementedException`, `SodiumException`, `TableException`
 
-#### [`history`](../../../src/RequestHandlers/Api/ReplicaInfo.php#L344-L360)
+#### [`history`](../../../src/RequestHandlers/Api/ReplicaInfo.php#L343-L359)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -2454,7 +2456,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `BaseJsonException`, `CacheException`, `CryptoException`, `DateMalformedStringException`, `DependencyException`, `JsonException`, `NotImplementedException`, `SodiumException`, `TableException`
 
-#### [`historySince`](../../../src/RequestHandlers/Api/ReplicaInfo.php#L374-L391)
+#### [`historySince`](../../../src/RequestHandlers/Api/ReplicaInfo.php#L373-L390)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -2625,7 +2627,7 @@ Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
 ### Methods
 
-#### [`__construct`](../../../src/RequestHandlers/Api/Replicas.php#L21-L32)
+#### [`__construct`](../../../src/RequestHandlers/Api/Replicas.php#L40-L51)
 
 Returns `void`
 
@@ -2633,7 +2635,9 @@ Returns `void`
 
 - `$config`: `?FediE2EE\PKDServer\ServerConfig` = null
 
-#### [`handle`](../../../src/RequestHandlers/Api/Replicas.php#L36-L50)
+**Throws:** `CacheException`, `DependencyException`, `TableException`
+
+#### [`handle`](../../../src/RequestHandlers/Api/Replicas.php#L63-L77)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -2642,6 +2646,8 @@ Returns `Psr\Http\Message\ResponseInterface`
 **Parameters:**
 
 - `$request`: `Psr\Http\Message\ServerRequestInterface`
+
+**Throws:** `CryptoException`, `DateMalformedStringException`, `DependencyException`, `JsonException`, `NotImplementedException`, `SodiumException`
 
 #### [`time`](../../../src/RequestHandlers/Api/Replicas.php#L34-L37)
 
@@ -2802,13 +2808,13 @@ Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
 ### Methods
 
-#### [`__construct`](../../../src/RequestHandlers/Api/Revoke.php#L39-L42)
+#### [`__construct`](../../../src/RequestHandlers/Api/Revoke.php#L41-L44)
 
 Returns `void`
 
 **Throws:** `DependencyException`
 
-#### [`handle`](../../../src/RequestHandlers/Api/Revoke.php#L55-L67)
+#### [`handle`](../../../src/RequestHandlers/Api/Revoke.php#L59-L71)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -2818,7 +2824,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 - `$request`: `Psr\Http\Message\ServerRequestInterface`
 
-**Throws:** `DependencyException`, `NotImplementedException`, `TableException`, `CryptoException`, `ParserException`, `HPKEException`, `SodiumException`
+**Throws:** `BundleException`, `CacheException`, `CryptoException`, `DependencyException`, `HPKEException`, `JsonException`, `NotImplementedException`, `SodiumException`, `TableException`
 
 #### [`time`](../../../src/RequestHandlers/Api/Revoke.php#L34-L37)
 
@@ -2979,7 +2985,7 @@ Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
 ### Methods
 
-#### [`handle`](../../../src/RequestHandlers/Api/ServerPublicKey.php#L43-L57)
+#### [`handle`](../../../src/RequestHandlers/Api/ServerPublicKey.php#L35-L49)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -2989,15 +2995,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 - `$request`: `Psr\Http\Message\ServerRequestInterface`
 
-**Throws:** `DependencyException`, `HPKEException`, `InsecureCurveException`, `JsonException`, `NotImplementedException`, `SodiumException`
-
-#### [`cipherSuiteString`](../../../src/RequestHandlers/Api/ServerPublicKey.php#L59-L80)
-
-Returns `string`
-
-**Parameters:**
-
-- `$hpke`: `ParagonIE\HPKE\HPKE`
+**Throws:** `DependencyException`, `JsonException`, `NotImplementedException`, `SodiumException`
 
 #### [`time`](../../../src/RequestHandlers/Api/ServerPublicKey.php#L34-L37)
 
@@ -3158,13 +3156,13 @@ Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
 ### Methods
 
-#### [`__construct`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L52-L59)
+#### [`__construct`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L55-L62)
 
 Returns `void`
 
 **Throws:** `DependencyException`, `TableException`, `CacheException`
 
-#### [`handle`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L76-L139)
+#### [`handle`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L82-L145)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -3174,7 +3172,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 - `$request`: `Psr\Http\Message\ServerRequestInterface`
 
-**Throws:** `ArrayKeyException`, `BlindIndexNotFoundException`, `CacheException`, `CipherSweetException`, `CryptoOperationException`, `DependencyException`, `InvalidCiphertextException`, `JsonException`, `NotImplementedException`, `SodiumException`, `TableException`
+**Throws:** `ArrayKeyException`, `BaseJsonException`, `BlindIndexNotFoundException`, `CacheException`, `CipherSweetException`, `CryptoException`, `CryptoOperationException`, `DateMalformedStringException`, `DependencyException`, `InvalidCiphertextException`, `JsonException`, `NotImplementedException`, `SodiumException`, `TableException`
 
 #### [`time`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L34-L37)
 
@@ -3315,7 +3313,7 @@ Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
 **Throws:** `CertaintyException`, `DependencyException`, `SodiumException`
 
-#### [`verifyTOTP`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L42-L56)
+#### [`verifyTOTP`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L39-L53)
 
 static · Returns `bool`
 
@@ -3325,7 +3323,7 @@ static · Returns `bool`
 - `$otp`: `string`
 - `$windows`: `int` = 2
 
-#### [`generateTOTP`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L58-L73)
+#### [`generateTOTP`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L55-L70)
 
 static · Returns `string`
 
@@ -3334,7 +3332,7 @@ static · Returns `string`
 - `$secret`: `string`
 - `$time`: `?int` = null
 
-#### [`ord`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L78-L81)
+#### [`ord`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L75-L78)
 
 static · Returns `int`
 
@@ -3344,7 +3342,7 @@ Avoid cache-timing leaks in ord() by using unpack()
 
 - `$chr`: `string`
 
-#### [`throwIfTimeOutsideWindow`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L139-L148)
+#### [`throwIfTimeOutsideWindow`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L135-L144)
 
 Returns `void`
 
@@ -3458,13 +3456,13 @@ Strip all newlines (CR, LF) characters from a string.
 
 ### Methods
 
-#### [`__construct`](../../../src/RequestHandlers/Api/TotpEnroll.php#L56-L63)
+#### [`__construct`](../../../src/RequestHandlers/Api/TotpEnroll.php#L59-L66)
 
 Returns `void`
 
 **Throws:** `DependencyException`, `TableException`, `CacheException`
 
-#### [`handle`](../../../src/RequestHandlers/Api/TotpEnroll.php#L82-L156)
+#### [`handle`](../../../src/RequestHandlers/Api/TotpEnroll.php#L88-L162)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -3474,7 +3472,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 - `$request`: `Psr\Http\Message\ServerRequestInterface`
 
-**Throws:** `ArrayKeyException`, `BlindIndexNotFoundException`, `CacheException`, `CipherSweetException`, `CryptoOperationException`, `DependencyException`, `HPKEException`, `InvalidCiphertextException`, `JsonException`, `NotImplementedException`, `RandomException`, `SodiumException`, `TableException`
+**Throws:** `ArrayKeyException`, `BaseJsonException`, `BlindIndexNotFoundException`, `CacheException`, `CipherSweetException`, `CryptoException`, `CryptoOperationException`, `DateMalformedStringException`, `DependencyException`, `HPKEException`, `InvalidCiphertextException`, `JsonException`, `NotImplementedException`, `RandomException`, `SodiumException`, `TableException`
 
 #### [`time`](../../../src/RequestHandlers/Api/TotpEnroll.php#L34-L37)
 
@@ -3615,7 +3613,7 @@ Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
 **Throws:** `CertaintyException`, `DependencyException`, `SodiumException`
 
-#### [`verifyTOTP`](../../../src/RequestHandlers/Api/TotpEnroll.php#L42-L56)
+#### [`verifyTOTP`](../../../src/RequestHandlers/Api/TotpEnroll.php#L39-L53)
 
 static · Returns `bool`
 
@@ -3625,7 +3623,7 @@ static · Returns `bool`
 - `$otp`: `string`
 - `$windows`: `int` = 2
 
-#### [`generateTOTP`](../../../src/RequestHandlers/Api/TotpEnroll.php#L58-L73)
+#### [`generateTOTP`](../../../src/RequestHandlers/Api/TotpEnroll.php#L55-L70)
 
 static · Returns `string`
 
@@ -3634,7 +3632,7 @@ static · Returns `string`
 - `$secret`: `string`
 - `$time`: `?int` = null
 
-#### [`ord`](../../../src/RequestHandlers/Api/TotpEnroll.php#L78-L81)
+#### [`ord`](../../../src/RequestHandlers/Api/TotpEnroll.php#L75-L78)
 
 static · Returns `int`
 
@@ -3644,7 +3642,7 @@ Avoid cache-timing leaks in ord() by using unpack()
 
 - `$chr`: `string`
 
-#### [`throwIfTimeOutsideWindow`](../../../src/RequestHandlers/Api/TotpEnroll.php#L139-L148)
+#### [`throwIfTimeOutsideWindow`](../../../src/RequestHandlers/Api/TotpEnroll.php#L135-L144)
 
 Returns `void`
 
@@ -3758,13 +3756,13 @@ Strip all newlines (CR, LF) characters from a string.
 
 ### Methods
 
-#### [`__construct`](../../../src/RequestHandlers/Api/TotpRotate.php#L56-L63)
+#### [`__construct`](../../../src/RequestHandlers/Api/TotpRotate.php#L59-L66)
 
 Returns `void`
 
 **Throws:** `DependencyException`, `TableException`, `CacheException`
 
-#### [`handle`](../../../src/RequestHandlers/Api/TotpRotate.php#L82-L161)
+#### [`handle`](../../../src/RequestHandlers/Api/TotpRotate.php#L88-L167)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -3774,7 +3772,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 - `$request`: `Psr\Http\Message\ServerRequestInterface`
 
-**Throws:** `ArrayKeyException`, `BlindIndexNotFoundException`, `CacheException`, `CipherSweetException`, `CryptoOperationException`, `DependencyException`, `HPKEException`, `InvalidCiphertextException`, `JsonException`, `NotImplementedException`, `RandomException`, `SodiumException`, `TableException`
+**Throws:** `ArrayKeyException`, `BaseJsonException`, `BlindIndexNotFoundException`, `CacheException`, `CipherSweetException`, `CryptoException`, `CryptoOperationException`, `DateMalformedStringException`, `DependencyException`, `HPKEException`, `InvalidCiphertextException`, `JsonException`, `NotImplementedException`, `RandomException`, `SodiumException`, `TableException`
 
 #### [`time`](../../../src/RequestHandlers/Api/TotpRotate.php#L34-L37)
 
@@ -3915,7 +3913,7 @@ Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
 **Throws:** `CertaintyException`, `DependencyException`, `SodiumException`
 
-#### [`verifyTOTP`](../../../src/RequestHandlers/Api/TotpRotate.php#L42-L56)
+#### [`verifyTOTP`](../../../src/RequestHandlers/Api/TotpRotate.php#L39-L53)
 
 static · Returns `bool`
 
@@ -3925,7 +3923,7 @@ static · Returns `bool`
 - `$otp`: `string`
 - `$windows`: `int` = 2
 
-#### [`generateTOTP`](../../../src/RequestHandlers/Api/TotpRotate.php#L58-L73)
+#### [`generateTOTP`](../../../src/RequestHandlers/Api/TotpRotate.php#L55-L70)
 
 static · Returns `string`
 
@@ -3934,7 +3932,7 @@ static · Returns `string`
 - `$secret`: `string`
 - `$time`: `?int` = null
 
-#### [`ord`](../../../src/RequestHandlers/Api/TotpRotate.php#L78-L81)
+#### [`ord`](../../../src/RequestHandlers/Api/TotpRotate.php#L75-L78)
 
 static · Returns `int`
 
@@ -3944,7 +3942,7 @@ Avoid cache-timing leaks in ord() by using unpack()
 
 - `$chr`: `string`
 
-#### [`throwIfTimeOutsideWindow`](../../../src/RequestHandlers/Api/TotpRotate.php#L139-L148)
+#### [`throwIfTimeOutsideWindow`](../../../src/RequestHandlers/Api/TotpRotate.php#L135-L144)
 
 Returns `void`
 

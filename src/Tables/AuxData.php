@@ -8,6 +8,7 @@ use FediE2EE\PKD\Crypto\AttributeEncryption\AttributeKeyMap;
 use FediE2EE\PKD\Crypto\Exceptions\{
     BundleException,
     CryptoException,
+    InputException,
     NetworkException,
     NotImplementedException
 };
@@ -20,6 +21,7 @@ use FediE2EE\PKD\Extensions\ExtensionException;
 use FediE2EE\PKDServer\Dependency\WrappedEncryptedRow;
 use FediE2EE\PKDServer\Exceptions\{
     CacheException,
+    ConcurrentException,
     DependencyException,
     ProtocolException,
     TableException
@@ -27,10 +29,14 @@ use FediE2EE\PKDServer\Exceptions\{
 use FediE2EE\PKDServer\Protocol\Payload;
 use FediE2EE\PKDServer\Table;
 use FediE2EE\PKDServer\Tables\Records\MerkleLeaf;
-use FediE2EE\PKDServer\Traits\ProtocolMethodTrait;
+use FediE2EE\PKDServer\Traits\{
+    AuxDataIdTrait,
+    ProtocolMethodTrait
+};
 use GuzzleHttp\Exception\GuzzleException;
 use JsonException;
 use Override;
+use ParagonIE\Certainty\Exception\CertaintyException;
 use ParagonIE\CipherSweet\BlindIndex;
 use ParagonIE\CipherSweet\Exception\{
     ArrayKeyException,
@@ -39,10 +45,12 @@ use ParagonIE\CipherSweet\Exception\{
     CryptoOperationException,
     InvalidCiphertextException
 };
+use Random\RandomException;
 use SodiumException;
 
 class AuxData extends Table
 {
+    use AuxDataIdTrait;
     use ProtocolMethodTrait;
 
     #[Override]
@@ -80,6 +88,7 @@ class AuxData extends Table
                 ad.actorauxdataid,
                 ad.auxdatatype,
                 ad.auxdata,
+                ad.auxdataid,
                 ad.wrap_auxdata,
                 mli.created AS inserttime
             FROM pkd_actors_auxdata ad
@@ -91,7 +100,7 @@ class AuxData extends Table
         foreach ($query as $row) {
             $insertTime = new DateTimeImmutable((string) $row['inserttime'])->getTimestamp();
             $results[] = [
-                'aux-id' => $row['actorauxdataid'],
+                'aux-id' => $row['auxdataid'],
                 'aux-type' => $row['auxdatatype'],
                 'created' => (string) $insertTime,
             ];
@@ -114,6 +123,7 @@ class AuxData extends Table
             "SELECT
                 ad.actorauxdataid,
                 ad.auxdata,
+                ad.auxdataid,
                 ad.wrap_auxdata,
                 ad.auxdatatype,
                 ad.trusted,
@@ -126,7 +136,7 @@ class AuxData extends Table
             LEFT JOIN pkd_merkle_leaves mli ON mli.merkleleafid = ad.insertleaf
             LEFT JOIN pkd_merkle_leaves mlr ON mlr.merkleleafid = ad.revokeleaf
             WHERE
-                ad.actorid = ? AND ad.actorauxdataid = ? AND ad.trusted",
+                ad.actorid = ? AND ad.auxdataid = ? AND ad.trusted",
             $actorId,
             $auxId
         );
@@ -155,10 +165,12 @@ class AuxData extends Table
     }
 
     /**
+     * @throws ConcurrentException
      * @throws CryptoException
      * @throws DependencyException
      * @throws NotImplementedException
      * @throws ProtocolException
+     * @throws RandomException
      * @throws SodiumException
      * @throws TableException
      */
@@ -176,6 +188,7 @@ class AuxData extends Table
      * @throws BlindIndexNotFoundException
      * @throws BundleException
      * @throws CacheException
+     * @throws CertaintyException
      * @throws CipherSweetException
      * @throws CryptoException
      * @throws CryptoOperationException
@@ -183,6 +196,7 @@ class AuxData extends Table
      * @throws DependencyException
      * @throws ExtensionException
      * @throws GuzzleException
+     * @throws InputException
      * @throws InvalidCiphertextException
      * @throws JsonException
      * @throws NetworkException
@@ -253,12 +267,14 @@ class AuxData extends Table
         $encryptor = $this->getCipher();
         $maxId = (int) $this->db->cell("SELECT MAX(actorauxdataid) FROM pkd_actors_auxdata");
         $nextId = $maxId + 1;
+        $auxDataId = self::getAuxDataId($type, $data);
         $plaintextRow = $encryptor->wrapBeforeEncrypt(
             [
                 'actorauxdataid' => $nextId,
                 'actorid' => $actor->getPrimaryKey(),
                 'auxdatatype' => $type,
                 'auxdata' => $data,
+                'auxdataid' => $auxDataId,
                 'insertleaf' => $leaf->getPrimaryKey(),
                 'trusted' => 1
             ],
@@ -274,10 +290,12 @@ class AuxData extends Table
     }
 
     /**
+     * @throws ConcurrentException
      * @throws CryptoException
      * @throws DependencyException
      * @throws NotImplementedException
      * @throws ProtocolException
+     * @throws RandomException
      * @throws SodiumException
      * @throws TableException
      */
@@ -296,12 +314,14 @@ class AuxData extends Table
      * @throws BlindIndexNotFoundException
      * @throws BundleException
      * @throws CacheException
+     * @throws CertaintyException
      * @throws CipherSweetException
      * @throws CryptoException
      * @throws CryptoOperationException
      * @throws DateMalformedStringException
      * @throws DependencyException
      * @throws GuzzleException
+     * @throws InputException
      * @throws InvalidCiphertextException
      * @throws JsonException
      * @throws NetworkException

@@ -3,11 +3,13 @@ declare(strict_types=1);
 namespace FediE2EE\PKDServer\RequestHandlers\Api;
 
 use FediE2EE\PKD\Crypto\Exceptions\{
+    BundleException,
     CryptoException,
-    NotImplementedException,
-    ParserException
+    JsonException,
+    NotImplementedException
 };
 use FediE2EE\PKDServer\Exceptions\{
+    CacheException,
     DependencyException,
     ProtocolException,
     TableException
@@ -42,13 +44,15 @@ class Revoke implements RequestHandlerInterface
     }
 
     /**
-     * @throws DependencyException
-     * @throws NotImplementedException
-     * @throws TableException
+     * @throws BundleException
+     * @throws CacheException
      * @throws CryptoException
-     * @throws ParserException
+     * @throws DependencyException
      * @throws HPKEException
+     * @throws JsonException
+     * @throws NotImplementedException
      * @throws SodiumException
+     * @throws TableException
      */
     #[Route("/api/revoke")]
     #[Override]

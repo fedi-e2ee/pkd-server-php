@@ -2,14 +2,28 @@
 declare(strict_types=1);
 namespace FediE2EE\PKDServer\RequestHandlers\Api;
 
-use FediE2EE\PKD\Crypto\Exceptions\NotImplementedException;
-use FediE2EE\PKDServer\{Meta\Route, ServerConfig, Tables\Peers, Traits\ReqTrait};
+use DateMalformedStringException;
+use FediE2EE\PKD\Crypto\Exceptions\{
+    CryptoException,
+    JsonException,
+    NotImplementedException
+};
+use FediE2EE\PKDServer\{
+    Exceptions\CacheException,
+    Exceptions\DependencyException,
+    Exceptions\TableException,
+    Meta\Route,
+    ServerConfig,
+    Tables\Peers,
+    Traits\ReqTrait
+};
 use Override;
 use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Http\Message\{
     ServerRequestInterface,
     ResponseInterface
 };
+use SodiumException;
 use TypeError;
 
 class Replicas implements RequestHandlerInterface
@@ -18,6 +32,11 @@ class Replicas implements RequestHandlerInterface
 
     protected Peers $peersTable;
 
+    /**
+     * @throws CacheException
+     * @throws DependencyException
+     * @throws TableException
+     */
     public function __construct(?ServerConfig $config = null)
     {
         if (is_null($config)) {
@@ -31,6 +50,14 @@ class Replicas implements RequestHandlerInterface
         $this->peersTable = $peersTable;
     }
 
+    /**
+     * @throws CryptoException
+     * @throws DateMalformedStringException
+     * @throws DependencyException
+     * @throws JsonException
+     * @throws NotImplementedException
+     * @throws SodiumException
+     */
     #[Route("/api/replicas")]
     #[Override]
     public function handle(ServerRequestInterface $request): ResponseInterface

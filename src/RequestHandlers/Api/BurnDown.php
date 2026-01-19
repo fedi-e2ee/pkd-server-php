@@ -2,17 +2,21 @@
 declare(strict_types=1);
 namespace FediE2EE\PKDServer\RequestHandlers\Api;
 
-use FediE2EE\PKD\Crypto\Exceptions\{CryptoException,
+use FediE2EE\PKD\Crypto\Exceptions\{
+    CryptoException,
     HttpSignatureException,
     JsonException,
     NotImplementedException,
-    ParserException};
-use FediE2EE\PKDServer\Exceptions\{ActivityPubException,
+    ParserException
+};
+use FediE2EE\PKDServer\Exceptions\{
+    ActivityPubException,
     CacheException,
     DependencyException,
     FetchException,
     ProtocolException,
-    TableException};
+    TableException
+};
 use FediE2EE\PKDServer\{
     Meta\Route,
     Protocol
@@ -24,6 +28,7 @@ use FediE2EE\PKDServer\Traits\{
 use Override;
 use ParagonIE\Certainty\Exception\CertaintyException;
 use ParagonIE\HPKE\HPKEException;
+use Psr\SimpleCache\InvalidArgumentException;
 use Psr\Http\Message\{
     ResponseInterface,
     ServerRequestInterface
@@ -57,6 +62,7 @@ class BurnDown implements RequestHandlerInterface
      * @throws ParserException
      * @throws SodiumException
      * @throws TableException
+     * @throws InvalidArgumentException
      */
     #[Route("/api/revoke")]
     #[Override]

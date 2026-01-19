@@ -42,4 +42,34 @@ readonly class Params
             throw new DependencyException('Hostname is not valid');
         }
     }
+
+    public function getActorUsername(): string
+    {
+        return $this->actorUsername;
+    }
+
+    public function getCacheKey(): string
+    {
+        return $this->cacheKey;
+    }
+
+    public function getHashFunction(): string
+    {
+        return $this->hashAlgo;
+    }
+
+    public function getHostname(): string
+    {
+        return $this->hostname;
+    }
+
+    public function getHttpCacheTtl(): int
+    {
+        return $this->httpCacheTtl;
+    }
+
+    public function getOtpMaxLife(): int
+    {
+        return $this->otpMaxLife;
+    }
 }

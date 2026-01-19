@@ -5,6 +5,7 @@ namespace FediE2EE\PKDServer\Tables;
 use FediE2EE\PKD\Crypto\AttributeEncryption\AttributeKeyMap;
 use FediE2EE\PKD\Crypto\Merkle\InclusionProof;
 use FediE2EE\PKDServer\Dependency\WrappedEncryptedRow;
+use FediE2EE\PKDServer\Exceptions\TableException;
 use FediE2EE\PKDServer\Table;
 use JsonException;
 use FediE2EE\PKDServer\Tables\Records\{
@@ -45,6 +46,9 @@ class ReplicaHistory extends Table
         );
     }
 
+    /**
+     * @throws TableException
+     */
     public function save(Peer $peer, ReplicaLeaf $leaf): void
     {
         $params = $leaf->toArray();

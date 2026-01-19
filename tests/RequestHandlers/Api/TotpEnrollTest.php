@@ -12,6 +12,12 @@ use FediE2EE\PKD\Crypto\{
     SymmetricKey,
     UtilTrait
 };
+use FediE2EE\PKD\Crypto\Exceptions\{
+    CryptoException,
+    JsonException,
+    NotImplementedException,
+    ParserException
+};
 use FediE2EE\PKDServer\RequestHandlers\Api\{
     TotpEnroll
 };
@@ -31,6 +37,12 @@ use FediE2EE\PKDServer\{
     Table,
     TableCache
 };
+use FediE2EE\PKDServer\Exceptions\{
+    CacheException,
+    DependencyException,
+    ProtocolException,
+    TableException
+};
 use FediE2EE\PKDServer\Tables\{
     Actors,
     MerkleState,
@@ -47,17 +59,29 @@ use FediE2EE\PKDServer\Tables\Records\{
 };
 use FediE2EE\PKDServer\Tests\HttpTestTrait;
 use FediE2EE\PKDServer\Traits\ConfigTrait;
-use Laminas\Diactoros\ServerRequest;
-use Laminas\Diactoros\StreamFactory;
+use Laminas\Diactoros\{
+    ServerRequest,
+    StreamFactory
+};
+use ParagonIE\Certainty\Exception\CertaintyException;
+use ParagonIE\CipherSweet\Exception\{
+    CipherSweetException,
+    CryptoOperationException,
+    InvalidCiphertextException
+};
 use ParagonIE\ConstantTime\{
     Base32,
     Base64UrlSafe
 };
+use ParagonIE\HPKE\HPKEException;
 use PHPUnit\Framework\Attributes\{
     CoversClass,
     UsesClass
 };
 use PHPUnit\Framework\TestCase;
+use Psr\SimpleCache\InvalidArgumentException;
+use Random\RandomException;
+use SodiumException;
 
 #[CoversClass(TotpEnroll::class)]
 #[UsesClass(WebFinger::class)]
@@ -96,7 +120,22 @@ class TotpEnrollTest extends TestCase
     }
 
     /**
-     * @throws Exception
+     * @throws CacheException
+     * @throws CertaintyException
+     * @throws CipherSweetException
+     * @throws CryptoException
+     * @throws CryptoOperationException
+     * @throws DependencyException
+     * @throws HPKEException
+     * @throws InvalidArgumentException
+     * @throws InvalidCiphertextException
+     * @throws JsonException
+     * @throws NotImplementedException
+     * @throws ParserException
+     * @throws ProtocolException
+     * @throws RandomException
+     * @throws SodiumException
+     * @throws TableException
      */
     public function testHandle(): void
     {
@@ -214,7 +253,7 @@ class TotpEnrollTest extends TestCase
     /**
      * Test that missing actor-id returns error.
      *
-     * @throws Exception
+     * @throws DependencyException
      */
     public function testMissingActorId(): void
     {
@@ -245,7 +284,7 @@ class TotpEnrollTest extends TestCase
     /**
      * Test that missing key-id returns error.
      *
-     * @throws Exception
+     * @throws DependencyException
      */
     public function testMissingKeyId(): void
     {
@@ -274,7 +313,7 @@ class TotpEnrollTest extends TestCase
     /**
      * Test that missing otp-current returns error.
      *
-     * @throws Exception
+     * @throws DependencyException
      */
     public function testMissingOtpCurrent(): void
     {
@@ -303,7 +342,7 @@ class TotpEnrollTest extends TestCase
     /**
      * Test that missing otp-previous returns error.
      *
-     * @throws Exception
+     * @throws DependencyException
      */
     public function testMissingOtpPrevious(): void
     {
@@ -332,7 +371,7 @@ class TotpEnrollTest extends TestCase
     /**
      * Test that missing totp-secret returns error.
      *
-     * @throws Exception
+     * @throws DependencyException
      */
     public function testMissingTotpSecret(): void
     {
@@ -361,7 +400,7 @@ class TotpEnrollTest extends TestCase
     /**
      * Test that missing action returns error.
      *
-     * @throws Exception
+     * @throws DependencyException
      */
     public function testMissingAction(): void
     {
@@ -390,7 +429,7 @@ class TotpEnrollTest extends TestCase
     /**
      * Test that missing current-time returns error.
      *
-     * @throws Exception
+     * @throws DependencyException
      */
     public function testMissingCurrentTime(): void
     {
@@ -419,7 +458,7 @@ class TotpEnrollTest extends TestCase
     /**
      * Test that missing !pkd-context returns error.
      *
-     * @throws Exception
+     * @throws DependencyException
      */
     public function testMissingPkdContext(): void
     {
@@ -448,7 +487,7 @@ class TotpEnrollTest extends TestCase
     /**
      * Test that invalid JSON returns error.
      *
-     * @throws Exception
+     * @throws DependencyException
      */
     public function testInvalidJson(): void
     {
@@ -466,7 +505,7 @@ class TotpEnrollTest extends TestCase
     /**
      * Test that stale timestamp returns error.
      *
-     * @throws Exception
+     * @throws DependencyException
      */
     public function testStaleTimestamp(): void
     {
@@ -536,7 +575,7 @@ class TotpEnrollTest extends TestCase
     /**
      * Test that invalid signature returns error.
      *
-     * @throws Exception
+     * @throws DependencyException
      */
     public function testInvalidSignature(): void
     {
@@ -606,7 +645,7 @@ class TotpEnrollTest extends TestCase
     /**
      * Test that invalid TOTP codes return 406 error.
      *
-     * @throws Exception
+     * @throws DependencyException
      */
     public function testInvalidTotpCodes(): void
     {

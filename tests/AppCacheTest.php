@@ -31,6 +31,10 @@ class AppCacheTest extends TestCase
         return new AppCache($conf);
     }
 
+    /**
+     * @throws DependencyException
+     * @throws RandomException
+     */
     protected function getCaches(): array
     {
         $conf = $this->getConfig();
@@ -59,6 +63,10 @@ class AppCacheTest extends TestCase
         return [$this->getConfiguredCache(), new AppCache($clone)];
     }
 
+    /**
+     * @throws DependencyException
+     * @throws RandomException
+     */
     public function testDeriveKey(): void
     {
         [$good, $bad] = $this->getCaches();
@@ -104,6 +112,10 @@ class AppCacheTest extends TestCase
         $this->assertSame('test-value', $retrieved);
     }
 
+    /**
+     * @throws InvalidArgumentException
+     * @throws SodiumException
+     */
     public function testCache(): void
     {
         $cache = $this->getConfiguredCache();
@@ -150,6 +162,7 @@ class AppCacheTest extends TestCase
 
     /**
      * @throws InvalidArgumentException
+     * @throws SodiumException
      */
     public function testCacheMissReturnValue(): void
     {
@@ -161,7 +174,6 @@ class AppCacheTest extends TestCase
     }
 
     /**
-     * @return void
      * @throws RandomException
      */
     public function testConstructorInitializesInMemoryCache(): void
@@ -183,6 +195,9 @@ class AppCacheTest extends TestCase
         $this->assertEmpty($inMemoryCache[$namespace]);
     }
 
+    /**
+     * @throws DependencyException
+     */
     public function testParamsCacheTtlTooSmall(): void
     {
         $this->expectException(DependencyException::class);
@@ -190,16 +205,25 @@ class AppCacheTest extends TestCase
         new Params(hashAlgo: 'sha256', httpCacheTtl: 0);
     }
 
+    /**
+     * @throws DependencyException
+     */
     public function testParamsCacheTtlJustSmallEnough(): void
     {
         $this->assertInstanceOf(Params::class, new Params(httpCacheTtl: 2));
     }
 
+    /**
+     * @throws DependencyException
+     */
     public function testParamsCacheTtlJustLargeEnough(): void
     {
         $this->assertInstanceOf(Params::class, new Params(httpCacheTtl: 300));
     }
 
+    /**
+     * @throws DependencyException
+     */
     public function testParamsCacheTtlTooLarge(): void
     {
         $this->expectException(DependencyException::class);

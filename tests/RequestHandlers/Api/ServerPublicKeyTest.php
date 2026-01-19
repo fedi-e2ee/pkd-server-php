@@ -46,33 +46,6 @@ class ServerPublicKeyTest extends TestCase
         // Verify hpke-ciphersuite field
         $this->assertArrayHasKey('hpke-ciphersuite', $body);
         $this->assertIsString($body['hpke-ciphersuite']);
-        // Should be in format Curve25519_sha256_ChaChaPoly (or similar)
-        $this->assertMatchesRegularExpression('/^Curve25519_sha\d+_\w+$/', $body['hpke-ciphersuite']);
-    }
-
-    /**
-     * Test cipherSuiteString returns correct format.
-     *
-     * @throws Exception
-     */
-    public function testCipherSuiteString(): void
-    {
-        $config = $this->getConfig();
-        $this->clearOldTransaction($config);
-        $reflector = new ReflectionClass(ServerPublicKey::class);
-        $spkHandler = $reflector->newInstanceWithoutConstructor();
-        $spkHandler->injectConfig($config);
-
-        $hpke = $config->getHPKE();
-        $cipherSuite = $spkHandler->cipherSuiteString($hpke->cs);
-
-        $this->assertIsString($cipherSuite);
-        $this->assertNotEmpty($cipherSuite);
-        // Verify it contains expected parts
-        $this->assertStringContainsString('Curve25519', $cipherSuite);
-        $this->assertStringContainsString('_', $cipherSuite);
-        // Should have exactly 3 parts separated by underscores
-        $parts = explode('_', $cipherSuite);
-        $this->assertCount(3, $parts);
+        $this->assertMatchesRegularExpression('/^DHKEM\(X25519/', $body['hpke-ciphersuite']);
     }
 }

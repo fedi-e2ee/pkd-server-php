@@ -28,7 +28,7 @@ Namespace: `FediE2EE\PKDServer\RequestHandlers\ActivityPub`
 
 ### Methods
 
-#### [`handle`](../../../src/RequestHandlers/ActivityPub/Finger.php#L42-L88)
+#### [`handle`](../../../src/RequestHandlers/ActivityPub/Finger.php#L41-L87)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -40,7 +40,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `CertaintyException`, `DependencyException`, `GuzzleException`, `JsonException`, `NotImplementedException`, `SodiumException`
 
-#### [`getVerifiedStream`](../../../src/RequestHandlers/ActivityPub/Finger.php#L35-L58)
+#### [`getVerifiedStream`](../../../src/RequestHandlers/ActivityPub/Finger.php#L37-L60)
 
 Returns `FediE2EE\PKDServer\ActivityPub\ActivityStream`
 
@@ -48,7 +48,7 @@ Returns `FediE2EE\PKDServer\ActivityPub\ActivityStream`
 
 - `$message`: `Psr\Http\Message\ServerRequestInterface`
 
-**Throws:** `ActivityPubException`, `DependencyException`, `FetchException`, `CryptoException`, `HttpSignatureException`, `NotImplementedException`, `CertaintyException`, `SodiumException`
+**Throws:** `ActivityPubException`, `CertaintyException`, `CryptoException`, `DependencyException`, `FetchException`, `HttpSignatureException`, `InvalidArgumentException`, `NotImplementedException`, `SodiumException`
 
 #### [`appCache`](../../../src/RequestHandlers/ActivityPub/Finger.php#L44-L47)
 
@@ -209,13 +209,13 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 ### Methods
 
-#### [`__construct`](../../../src/RequestHandlers/ActivityPub/Inbox.php#L45-L52)
+#### [`__construct`](../../../src/RequestHandlers/ActivityPub/Inbox.php#L46-L53)
 
 Returns `void`
 
 **Throws:** `TableException`, `DependencyException`, `CacheException`
 
-#### [`handle`](../../../src/RequestHandlers/ActivityPub/Inbox.php#L65-L80)
+#### [`handle`](../../../src/RequestHandlers/ActivityPub/Inbox.php#L66-L81)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -225,9 +225,9 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 - `$request`: `Psr\Http\Message\ServerRequestInterface`
 
-**Throws:** `CertaintyException`, `CryptoException`, `DependencyException`, `HttpSignatureException`, `JsonException`, `NotImplementedException`, `SodiumException`
+**Throws:** `CertaintyException`, `CryptoException`, `DependencyException`, `InvalidArgumentException`, `JsonException`, `NotImplementedException`, `SodiumException`
 
-#### [`getVerifiedStream`](../../../src/RequestHandlers/ActivityPub/Inbox.php#L35-L58)
+#### [`getVerifiedStream`](../../../src/RequestHandlers/ActivityPub/Inbox.php#L37-L60)
 
 Returns `FediE2EE\PKDServer\ActivityPub\ActivityStream`
 
@@ -235,7 +235,7 @@ Returns `FediE2EE\PKDServer\ActivityPub\ActivityStream`
 
 - `$message`: `Psr\Http\Message\ServerRequestInterface`
 
-**Throws:** `ActivityPubException`, `DependencyException`, `FetchException`, `CryptoException`, `HttpSignatureException`, `NotImplementedException`, `CertaintyException`, `SodiumException`
+**Throws:** `ActivityPubException`, `CertaintyException`, `CryptoException`, `DependencyException`, `FetchException`, `HttpSignatureException`, `InvalidArgumentException`, `NotImplementedException`, `SodiumException`
 
 #### [`appCache`](../../../src/RequestHandlers/ActivityPub/Inbox.php#L44-L47)
 
@@ -406,7 +406,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 - `$request`: `Psr\Http\Message\ServerRequestInterface`
 
-#### [`getVerifiedStream`](../../../src/RequestHandlers/ActivityPub/UserPage.php#L35-L58)
+#### [`getVerifiedStream`](../../../src/RequestHandlers/ActivityPub/UserPage.php#L37-L60)
 
 Returns `FediE2EE\PKDServer\ActivityPub\ActivityStream`
 
@@ -414,7 +414,7 @@ Returns `FediE2EE\PKDServer\ActivityPub\ActivityStream`
 
 - `$message`: `Psr\Http\Message\ServerRequestInterface`
 
-**Throws:** `ActivityPubException`, `DependencyException`, `FetchException`, `CryptoException`, `HttpSignatureException`, `NotImplementedException`, `CertaintyException`, `SodiumException`
+**Throws:** `ActivityPubException`, `CertaintyException`, `CryptoException`, `DependencyException`, `FetchException`, `HttpSignatureException`, `InvalidArgumentException`, `NotImplementedException`, `SodiumException`
 
 #### [`appCache`](../../../src/RequestHandlers/ActivityPub/UserPage.php#L44-L47)
 

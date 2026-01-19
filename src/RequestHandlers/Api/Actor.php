@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace FediE2EE\PKDServer\RequestHandlers\Api;
 
 use FediE2EE\PKD\Crypto\Exceptions\{
+    CryptoException,
     JsonException,
     NotImplementedException
 };
@@ -66,6 +67,7 @@ class Actor implements RequestHandlerInterface, HttpCacheInterface
      * @throws ArrayKeyException
      * @throws BlindIndexNotFoundException
      * @throws CipherSweetException
+     * @throws CryptoException
      * @throws CryptoOperationException
      * @throws DependencyException
      * @throws InvalidArgumentException

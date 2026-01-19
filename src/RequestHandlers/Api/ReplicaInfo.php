@@ -191,7 +191,6 @@ class ReplicaInfo implements RequestHandlerInterface
     }
 
     /**
-     * @return ResponseInterface
      * @throws ArrayKeyException
      * @throws BaseJsonException
      * @throws BlindIndexNotFoundException

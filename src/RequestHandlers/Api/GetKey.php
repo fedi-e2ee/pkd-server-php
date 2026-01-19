@@ -3,10 +3,7 @@ declare(strict_types=1);
 namespace FediE2EE\PKDServer\RequestHandlers\Api;
 
 use DateMalformedStringException;
-use FediE2EE\PKD\Crypto\Exceptions\{
-    JsonException,
-    NotImplementedException
-};
+use FediE2EE\PKD\Crypto\Exceptions\{CryptoException, JsonException, NotImplementedException};
 use FediE2EE\PKDServer\{
     Exceptions\CacheException,
     Exceptions\DependencyException,
@@ -71,6 +68,7 @@ class GetKey implements RequestHandlerInterface
      * @throws BaseJsonException
      * @throws BlindIndexNotFoundException
      * @throws CipherSweetException
+     * @throws CryptoException
      * @throws CryptoOperationException
      * @throws DateMalformedStringException
      * @throws DependencyException

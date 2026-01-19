@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace FediE2EE\PKDServer\Tests\RequestHandlers\Api;
 
-use Exception;
 use FediE2EE\PKD\Crypto\Protocol\Actions\AddKey;
 use FediE2EE\PKD\Crypto\{
     AttributeEncryption\AttributeKeyMap,
@@ -50,7 +49,10 @@ use FediE2EE\PKDServer\Tables\{
     PublicKeys,
     TOTP
 };
-use FediE2EE\PKDServer\Traits\TOTPTrait;
+use FediE2EE\PKDServer\Traits\{
+    ConfigTrait,
+    TOTPTrait
+};
 use FediE2EE\PKDServer\Tables\Records\{
     Actor,
     ActorKey,
@@ -58,21 +60,27 @@ use FediE2EE\PKDServer\Tables\Records\{
     Peer
 };
 use FediE2EE\PKDServer\Tests\HttpTestTrait;
-use FediE2EE\PKDServer\Traits\ConfigTrait;
-use Laminas\Diactoros\ServerRequest;
-use Laminas\Diactoros\StreamFactory;
+use Laminas\Diactoros\{
+    ServerRequest,
+    StreamFactory
+};
 use ParagonIE\Certainty\Exception\CertaintyException;
 use ParagonIE\CipherSweet\Exception\{
     ArrayKeyException,
     CipherSweetException,
-    CryptoOperationException
+    CryptoOperationException,
+    InvalidCiphertextException
 };
 use ParagonIE\ConstantTime\{
     Base32,
     Base64UrlSafe
 };
 use ParagonIE\HPKE\HPKEException;
-use PHPUnit\Framework\Attributes\{CoversClass, DataProvider, UsesClass};
+use PHPUnit\Framework\Attributes\{
+    CoversClass,
+    DataProvider,
+    UsesClass
+};
 use PHPUnit\Framework\TestCase;
 use Psr\SimpleCache\InvalidArgumentException;
 use Random\RandomException;
@@ -118,7 +126,23 @@ class TotpRotateTest extends TestCase
     }
 
     /**
-     * @throws Exception
+     * @throws ArrayKeyException
+     * @throws CacheException
+     * @throws CertaintyException
+     * @throws CipherSweetException
+     * @throws CryptoException
+     * @throws CryptoOperationException
+     * @throws DependencyException
+     * @throws HPKEException
+     * @throws InvalidArgumentException
+     * @throws InvalidCiphertextException
+     * @throws JsonException
+     * @throws NotImplementedException
+     * @throws ParserException
+     * @throws ProtocolException
+     * @throws RandomException
+     * @throws SodiumException
+     * @throws TableException
      */
     #[DataProvider("timeOffsetProvider")]
     public function testHandle(int $timeOffset): void
@@ -251,7 +275,7 @@ class TotpRotateTest extends TestCase
     /**
      * Test that missing actor-id returns error.
      *
-     * @throws Exception
+     * @throws DependencyException
      */
     public function testMissingActorId(): void
     {
@@ -283,7 +307,7 @@ class TotpRotateTest extends TestCase
     /**
      * Test that missing key-id returns error.
      *
-     * @throws Exception
+     * @throws DependencyException
      */
     public function testMissingKeyId(): void
     {
@@ -313,7 +337,7 @@ class TotpRotateTest extends TestCase
     /**
      * Test that missing old-otp returns error.
      *
-     * @throws Exception
+     * @throws DependencyException
      */
     public function testMissingOldOtp(): void
     {
@@ -343,7 +367,7 @@ class TotpRotateTest extends TestCase
     /**
      * Test that missing new-otp-current returns error.
      *
-     * @throws Exception
+     * @throws DependencyException
      */
     public function testMissingNewOtpCurrent(): void
     {
@@ -373,7 +397,7 @@ class TotpRotateTest extends TestCase
     /**
      * Test that missing new-otp-previous returns error.
      *
-     * @throws Exception
+     * @throws DependencyException
      */
     public function testMissingNewOtpPrevious(): void
     {
@@ -403,7 +427,7 @@ class TotpRotateTest extends TestCase
     /**
      * Test that missing new-totp-secret returns error.
      *
-     * @throws Exception
+     * @throws DependencyException
      */
     public function testMissingNewTotpSecret(): void
     {
@@ -433,7 +457,7 @@ class TotpRotateTest extends TestCase
     /**
      * Test that missing action returns error.
      *
-     * @throws Exception
+     * @throws DependencyException
      */
     public function testMissingAction(): void
     {
@@ -463,7 +487,7 @@ class TotpRotateTest extends TestCase
     /**
      * Test that missing current-time returns error.
      *
-     * @throws Exception
+     * @throws DependencyException
      */
     public function testMissingCurrentTime(): void
     {
@@ -493,7 +517,7 @@ class TotpRotateTest extends TestCase
     /**
      * Test that missing !pkd-context returns error.
      *
-     * @throws Exception
+     * @throws DependencyException
      */
     public function testMissingPkdContext(): void
     {
@@ -523,7 +547,7 @@ class TotpRotateTest extends TestCase
     /**
      * Test that invalid JSON returns error.
      *
-     * @throws Exception
+     * @throws DependencyException
      */
     public function testInvalidJson(): void
     {

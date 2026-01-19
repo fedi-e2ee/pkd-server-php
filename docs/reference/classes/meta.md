@@ -48,6 +48,30 @@ These parameters MUST be public and MUST have a default value
 
 **Throws:** `DependencyException`
 
+#### [`getActorUsername`](../../../src/Meta/Params.php#L46-L49)
+
+Returns `string`
+
+#### [`getCacheKey`](../../../src/Meta/Params.php#L51-L54)
+
+Returns `string`
+
+#### [`getHashFunction`](../../../src/Meta/Params.php#L56-L59)
+
+Returns `string`
+
+#### [`getHostname`](../../../src/Meta/Params.php#L61-L64)
+
+Returns `string`
+
+#### [`getHttpCacheTtl`](../../../src/Meta/Params.php#L66-L69)
+
+Returns `int`
+
+#### [`getOtpMaxLife`](../../../src/Meta/Params.php#L71-L74)
+
+Returns `int`
+
 ---
 
 ## RecordForTable

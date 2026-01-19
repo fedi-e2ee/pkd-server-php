@@ -3,9 +3,11 @@ declare(strict_types=1);
 namespace FediE2EE\PKDServer\Tables\Records;
 
 use DateTimeImmutable;
-use FediE2EE\PKD\Crypto\Merkle\IncrementalTree;
-use FediE2EE\PKD\Crypto\PublicKey;
-use FediE2EE\PKD\Crypto\UtilTrait;
+use FediE2EE\PKD\Crypto\{
+    Merkle\IncrementalTree,
+    PublicKey,
+    UtilTrait
+};
 use FediE2EE\PKDServer\Meta\RecordForTable;
 use FediE2EE\PKDServer\Protocol\RewrapConfig;
 use FediE2EE\PKDServer\Tables\Peers;

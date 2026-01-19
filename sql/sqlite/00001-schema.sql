@@ -83,6 +83,7 @@ CREATE TABLE IF NOT EXISTS pkd_actors_auxdata (
     actorid INTEGER,
     auxdatatype TEXT,
     auxdata TEXT, -- Encrypted, client-side
+    auxdataid TEXT,
     wrap_auxdata TEXT NULL, -- Wrapped symmetric key for the auxdata field
     auxdata_idx TEXT, -- Blind index
     insertleaf INTEGER,

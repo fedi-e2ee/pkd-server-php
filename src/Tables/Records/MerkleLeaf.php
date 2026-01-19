@@ -3,9 +3,11 @@ declare(strict_types=1);
 namespace FediE2EE\PKDServer\Tables\Records;
 
 use FediE2EE\PKD\Crypto\Exceptions\NotImplementedException;
-use FediE2EE\PKD\Crypto\Merkle\InclusionProof;
-use FediE2EE\PKD\Crypto\SecretKey;
-use FediE2EE\PKD\Crypto\UtilTrait;
+use FediE2EE\PKD\Crypto\{
+    Merkle\InclusionProof,
+    SecretKey,
+    UtilTrait
+};
 use FediE2EE\PKDServer\Meta\RecordForTable;
 use FediE2EE\PKDServer\Protocol\Payload;
 use FediE2EE\PKDServer\Traits\TableRecordTrait;

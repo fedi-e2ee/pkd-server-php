@@ -3,7 +3,9 @@ declare(strict_types=1);
 namespace FediE2EE\PKDServer\Tables;
 
 use FediE2EE\PKD\Crypto\Exceptions\{
+    BundleException,
     CryptoException,
+    InputException,
     JsonException,
     NotImplementedException
 };
@@ -27,8 +29,10 @@ use FediE2EE\PKDServer\Table;
 use FediE2EE\PKDServer\Tables\Records\MerkleLeaf;
 use Override;
 use ParagonIE\ConstantTime\Base64UrlSafe;
+use ParagonIE\HPKE\HPKEException;
 use PDO;
 use PDOException;
+use Psr\SimpleCache\InvalidArgumentException;
 use Random\RandomException;
 use SodiumException;
 
@@ -175,6 +179,9 @@ class MerkleState extends Table
 
     /**
      * @api
+     *
+     * @throws DependencyException
+     * @throws SodiumException
      */
     public function getLatestRoot(): string
     {
@@ -327,7 +334,14 @@ class MerkleState extends Table
     /**
      * @api
      *
+     * @throws BundleException
+     * @throws CryptoException
      * @throws DependencyException
+     * @throws HPKEException
+     * @throws InputException
+     * @throws InvalidArgumentException
+     * @throws JsonException
+     * @throws SodiumException
      */
     public function getHashesSince(string $oldRoot, int $limit, int $offset = 0): array
     {

@@ -16,6 +16,7 @@ use FediE2EE\PKDServer\Exceptions\{
 };
 use ParagonIE\Certainty\Exception\CertaintyException;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\SimpleCache\InvalidArgumentException;
 use SodiumException;
 
 trait ActivityStreamsTrait
@@ -24,12 +25,13 @@ trait ActivityStreamsTrait
 
     /**
      * @throws ActivityPubException
+     * @throws CertaintyException
+     * @throws CryptoException
      * @throws DependencyException
      * @throws FetchException
-     * @throws CryptoException
      * @throws HttpSignatureException
+     * @throws InvalidArgumentException
      * @throws NotImplementedException
-     * @throws CertaintyException
      * @throws SodiumException
      */
     public function getVerifiedStream(ServerRequestInterface $message): ActivityStream

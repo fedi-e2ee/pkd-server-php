@@ -28,17 +28,17 @@ Namespace: `FediE2EE\PKDServer\Tables`
 
 ### Methods
 
-#### [`getCipher`](../../../src/Tables/ActivityStreamQueue.php#L16-L24)
+#### [`getCipher`](../../../src/Tables/ActivityStreamQueue.php#L15-L23)
 
 Returns `FediE2EE\PKDServer\Dependency\WrappedEncryptedRow`
 
 **Attributes:** `#[Override]`
 
-#### [`getNextPrimaryKey`](../../../src/Tables/ActivityStreamQueue.php#L32-L39)
+#### [`getNextPrimaryKey`](../../../src/Tables/ActivityStreamQueue.php#L31-L38)
 
 Returns `int`
 
-#### [`insert`](../../../src/Tables/ActivityStreamQueue.php#L44-L62)
+#### [`insert`](../../../src/Tables/ActivityStreamQueue.php#L43-L61)
 
 Returns `int`
 
@@ -60,17 +60,17 @@ Returns `int`
 
 ### Methods
 
-#### [`getCipher`](../../../src/Tables/Actors.php#L32-L45)
+#### [`getCipher`](../../../src/Tables/Actors.php#L33-L46)
 
 Returns `FediE2EE\PKDServer\Dependency\WrappedEncryptedRow`
 
 **Attributes:** `#[Override]`
 
-#### [`getNextPrimaryKey`](../../../src/Tables/Actors.php#L65-L72)
+#### [`getNextPrimaryKey`](../../../src/Tables/Actors.php#L66-L73)
 
 Returns `int`
 
-#### [`getActorByID`](../../../src/Tables/Actors.php#L85-L120)
+#### [`getActorByID`](../../../src/Tables/Actors.php#L87-L122)
 
 **API** · Returns `FediE2EE\PKDServer\Tables\Records\Actor`
 
@@ -80,9 +80,9 @@ When you already have a database ID, just fetch the object.
 
 - `$actorID`: `int`
 
-**Throws:** `CipherSweetException`, `CryptoOperationException`, `InvalidCiphertextException`, `SodiumException`, `TableException`
+**Throws:** `CipherSweetException`, `CryptoException`, `CryptoOperationException`, `InvalidCiphertextException`, `SodiumException`, `TableException`
 
-#### [`getCounts`](../../../src/Tables/Actors.php#L123-L137)
+#### [`getCounts`](../../../src/Tables/Actors.php#L125-L139)
 
 Returns `array`
 
@@ -90,7 +90,7 @@ Returns `array`
 
 - `$actorID`: `int`
 
-#### [`searchForActor`](../../../src/Tables/Actors.php#L152-L190)
+#### [`searchForActor`](../../../src/Tables/Actors.php#L155-L193)
 
 **API** · Returns `?FediE2EE\PKDServer\Tables\Records\Actor`
 
@@ -102,9 +102,9 @@ from the database based on that value. May return NULL, which indicates no recor
 
 - `$canonicalActorID`: `string`
 
-**Throws:** `ArrayKeyException`, `BlindIndexNotFoundException`, `CipherSweetException`, `CryptoOperationException`, `InvalidCiphertextException`, `SodiumException`
+**Throws:** `ArrayKeyException`, `BlindIndexNotFoundException`, `CipherSweetException`, `CryptoException`, `CryptoOperationException`, `InvalidCiphertextException`, `SodiumException`
 
-#### [`createActor`](../../../src/Tables/Actors.php#L199-L219)
+#### [`createActor`](../../../src/Tables/Actors.php#L202-L222)
 
 Returns `int`
 
@@ -116,7 +116,7 @@ Returns `int`
 
 **Throws:** `ArrayKeyException`, `CryptoOperationException`, `CipherSweetException`, `SodiumException`, `ProtocolException`
 
-#### [`clearCacheForActor`](../../../src/Tables/Actors.php#L224-L230)
+#### [`clearCacheForActor`](../../../src/Tables/Actors.php#L227-L233)
 
 Returns `void`
 
@@ -136,17 +136,17 @@ Returns `void`
 
 **Extends:** `FediE2EE\PKDServer\Table`
 
-**Uses:** `FediE2EE\PKDServer\Traits\ProtocolMethodTrait`
+**Uses:** `FediE2EE\PKDServer\Traits\AuxDataIdTrait`, `FediE2EE\PKDServer\Traits\ProtocolMethodTrait`
 
 ### Methods
 
-#### [`getCipher`](../../../src/Tables/AuxData.php#L49-L60)
+#### [`getCipher`](../../../src/Tables/AuxData.php#L57-L68)
 
 Returns `FediE2EE\PKDServer\Dependency\WrappedEncryptedRow`
 
 **Attributes:** `#[Override]`
 
-#### [`getAuxDataForActor`](../../../src/Tables/AuxData.php#L75-L100)
+#### [`getAuxDataForActor`](../../../src/Tables/AuxData.php#L83-L109)
 
 Returns `array`
 
@@ -156,7 +156,7 @@ Returns `array`
 
 **Throws:** `DateMalformedStringException`
 
-#### [`getAuxDataById`](../../../src/Tables/AuxData.php#L111-L155)
+#### [`getAuxDataById`](../../../src/Tables/AuxData.php#L120-L165)
 
 **API** · Returns `array`
 
@@ -167,7 +167,7 @@ Returns `array`
 
 **Throws:** `CipherSweetException`, `CryptoOperationException`, `DateMalformedStringException`, `InvalidCiphertextException`, `JsonException`, `SodiumException`
 
-#### [`addAuxData`](../../../src/Tables/AuxData.php#L165-L172)
+#### [`addAuxData`](../../../src/Tables/AuxData.php#L177-L184)
 
 Returns `bool`
 
@@ -176,9 +176,9 @@ Returns `bool`
 - `$payload`: `FediE2EE\PKDServer\Protocol\Payload`
 - `$outerActor`: `string`
 
-**Throws:** `CryptoException`, `DependencyException`, `NotImplementedException`, `ProtocolException`, `SodiumException`, `TableException`
+**Throws:** `ConcurrentException`, `CryptoException`, `DependencyException`, `NotImplementedException`, `ProtocolException`, `RandomException`, `SodiumException`, `TableException`
 
-#### [`revokeAuxData`](../../../src/Tables/AuxData.php#L284-L292)
+#### [`revokeAuxData`](../../../src/Tables/AuxData.php#L302-L310)
 
 Returns `bool`
 
@@ -187,7 +187,100 @@ Returns `bool`
 - `$payload`: `FediE2EE\PKDServer\Protocol\Payload`
 - `$outerActor`: `string`
 
-**Throws:** `CryptoException`, `DependencyException`, `NotImplementedException`, `ProtocolException`, `SodiumException`, `TableException`
+**Throws:** `ConcurrentException`, `CryptoException`, `DependencyException`, `NotImplementedException`, `ProtocolException`, `RandomException`, `SodiumException`, `TableException`
+
+#### [`getAuxDataId`](../../../src/Tables/AuxData.php#L12-L22)
+
+static · Returns `string`
+
+**Parameters:**
+
+- `$auxDataType`: `string`
+- `$data`: `string`
+
+#### [`assertAllArrayKeysExist`](../../../src/Tables/AuxData.php#L14-L19)
+
+static · Returns `void`
+
+**Parameters:**
+
+- `$target`: `array`
+- `...$arrayKeys`: `string`
+
+**Throws:** `InputException`
+
+#### [`allArrayKeysExist`](../../../src/Tables/AuxData.php#L21-L28)
+
+static · Returns `bool`
+
+**Parameters:**
+
+- `$target`: `array`
+- `...$arrayKeys`: `string`
+
+#### [`constantTimeSelect`](../../../src/Tables/AuxData.php#L35-L52)
+
+Returns `string`
+
+**Parameters:**
+
+- `$select`: `int`
+- `$left`: `string`
+- `$right`: `string`
+
+**Throws:** `CryptoException`
+
+#### [`dos2unix`](../../../src/Tables/AuxData.php#L60-L63)
+
+static · Returns `string`
+
+Normalize line-endings to UNIX-style (LF rather than CRLF).
+
+**Parameters:**
+
+- `$in`: `string`
+
+#### [`preAuthEncode`](../../../src/Tables/AuxData.php#L69-L78)
+
+static · Returns `string`
+
+**Parameters:**
+
+- `$pieces`: `array`
+
+#### [`sortByKey`](../../../src/Tables/AuxData.php#L80-L88)
+
+static · Returns `void`
+
+**Parameters:**
+
+- `$arr`: `array`
+
+#### [`LE64`](../../../src/Tables/AuxData.php#L90-L93)
+
+static · Returns `string`
+
+**Parameters:**
+
+- `$n`: `int`
+
+#### [`stringToByteArray`](../../../src/Tables/AuxData.php#L95-L99)
+
+Returns `array`
+
+**Parameters:**
+
+- `$str`: `string`
+
+#### [`stripNewlines`](../../../src/Tables/AuxData.php#L107-L141)
+
+static · Returns `string`
+
+Strip all newlines (CR, LF) characters from a string.
+
+**Parameters:**
+
+- `$input`: `string`
 
 ---
 
@@ -205,13 +298,13 @@ Insert new leaves
 
 ### Methods
 
-#### [`getCipher`](../../../src/Tables/MerkleState.php#L43-L51)
+#### [`getCipher`](../../../src/Tables/MerkleState.php#L47-L55)
 
 Returns `FediE2EE\PKDServer\Dependency\WrappedEncryptedRow`
 
 **Attributes:** `#[Override]`
 
-#### [`getWitnessByOrigin`](../../../src/Tables/MerkleState.php#L72-L83)
+#### [`getWitnessByOrigin`](../../../src/Tables/MerkleState.php#L76-L87)
 
 Returns `array`
 
@@ -223,7 +316,7 @@ Return the witness data (including public key) for a given origin
 
 **Throws:** `TableException`
 
-#### [`addWitnessCosignature`](../../../src/Tables/MerkleState.php#L100-L142)
+#### [`addWitnessCosignature`](../../../src/Tables/MerkleState.php#L104-L146)
 
 **API** · Returns `bool`
 
@@ -235,7 +328,7 @@ Return the witness data (including public key) for a given origin
 
 **Throws:** `CryptoException`, `JsonException`, `NotImplementedException`, `ProtocolException`, `SodiumException`, `TableException`
 
-#### [`getCosignatures`](../../../src/Tables/MerkleState.php#L144-L162)
+#### [`getCosignatures`](../../../src/Tables/MerkleState.php#L148-L166)
 
 Returns `array`
 
@@ -243,7 +336,7 @@ Returns `array`
 
 - `$leafId`: `int`
 
-#### [`countCosignatures`](../../../src/Tables/MerkleState.php#L164-L174)
+#### [`countCosignatures`](../../../src/Tables/MerkleState.php#L168-L178)
 
 Returns `int`
 
@@ -251,11 +344,13 @@ Returns `int`
 
 - `$leafId`: `int`
 
-#### [`getLatestRoot`](../../../src/Tables/MerkleState.php#L179-L188)
+#### [`getLatestRoot`](../../../src/Tables/MerkleState.php#L186-L195)
 
 **API** · Returns `string`
 
-#### [`insertLeaf`](../../../src/Tables/MerkleState.php#L207-L263)
+**Throws:** `DependencyException`, `SodiumException`
+
+#### [`insertLeaf`](../../../src/Tables/MerkleState.php#L214-L270)
 
 **API** · Returns `bool`
 
@@ -269,7 +364,7 @@ Insert leaf with retry logic for deadlocks
 
 **Throws:** `ConcurrentException`, `CryptoException`, `DependencyException`, `NotImplementedException`, `RandomException`, `SodiumException`
 
-#### [`getLeafByRoot`](../../../src/Tables/MerkleState.php#L268-L284)
+#### [`getLeafByRoot`](../../../src/Tables/MerkleState.php#L275-L291)
 
 **API** · Returns `?FediE2EE\PKDServer\Tables\Records\MerkleLeaf`
 
@@ -277,7 +372,7 @@ Insert leaf with retry logic for deadlocks
 
 - `$root`: `string`
 
-#### [`getLeafByID`](../../../src/Tables/MerkleState.php#L289-L305)
+#### [`getLeafByID`](../../../src/Tables/MerkleState.php#L296-L312)
 
 **API** · Returns `?FediE2EE\PKDServer\Tables\Records\MerkleLeaf`
 
@@ -285,7 +380,7 @@ Insert leaf with retry logic for deadlocks
 
 - `$primaryKey`: `int`
 
-#### [`getHashesSince`](../../../src/Tables/MerkleState.php#L332-L377)
+#### [`getHashesSince`](../../../src/Tables/MerkleState.php#L346-L391)
 
 **API** · Returns `array`
 
@@ -295,7 +390,7 @@ Insert leaf with retry logic for deadlocks
 - `$limit`: `int`
 - `$offset`: `int` = 0
 
-**Throws:** `DependencyException`
+**Throws:** `BundleException`, `CryptoException`, `DependencyException`, `HPKEException`, `InputException`, `InvalidArgumentException`, `JsonException`, `SodiumException`
 
 ---
 
@@ -309,17 +404,17 @@ Insert leaf with retry logic for deadlocks
 
 ### Methods
 
-#### [`getCipher`](../../../src/Tables/Peers.php#L28-L31)
+#### [`getCipher`](../../../src/Tables/Peers.php#L33-L36)
 
 Returns `FediE2EE\PKDServer\Dependency\WrappedEncryptedRow`
 
 **Attributes:** `#[Override]`
 
-#### [`getNextPeerId`](../../../src/Tables/Peers.php#L39-L46)
+#### [`getNextPeerId`](../../../src/Tables/Peers.php#L44-L51)
 
 Returns `int`
 
-#### [`create`](../../../src/Tables/Peers.php#L51-L84)
+#### [`create`](../../../src/Tables/Peers.php#L59-L92)
 
 **API** · Returns `FediE2EE\PKDServer\Tables\Records\Peer`
 
@@ -331,7 +426,9 @@ Returns `int`
 - `$replicate`: `bool` = false
 - `$rewrapConfig`: `?FediE2EE\PKDServer\Protocol\RewrapConfig` = null
 
-#### [`getPeerByUniqueId`](../../../src/Tables/Peers.php#L94-L101)
+**Throws:** `TableException`, `RandomException`
+
+#### [`getPeerByUniqueId`](../../../src/Tables/Peers.php#L102-L109)
 
 **API** · Returns `FediE2EE\PKDServer\Tables\Records\Peer`
 
@@ -341,7 +438,7 @@ Returns `int`
 
 **Throws:** `CryptoException`, `DateMalformedStringException`, `SodiumException`, `TableException`
 
-#### [`getPeer`](../../../src/Tables/Peers.php#L103-L111)
+#### [`getPeer`](../../../src/Tables/Peers.php#L117-L125)
 
 Returns `FediE2EE\PKDServer\Tables\Records\Peer`
 
@@ -349,13 +446,15 @@ Returns `FediE2EE\PKDServer\Tables\Records\Peer`
 
 - `$hostname`: `string`
 
-#### [`listAll`](../../../src/Tables/Peers.php#L150-L157)
+**Throws:** `CryptoException`, `DateMalformedStringException`, `SodiumException`, `TableException`
+
+#### [`listAll`](../../../src/Tables/Peers.php#L164-L171)
 
 **API** · Returns `array`
 
 **Throws:** `CryptoException`, `DateMalformedStringException`, `SodiumException`
 
-#### [`listReplicatingPeers`](../../../src/Tables/Peers.php#L167-L174)
+#### [`listReplicatingPeers`](../../../src/Tables/Peers.php#L182-L189)
 
 Returns `array`
 
@@ -363,7 +462,7 @@ Lists which peers we replicate.
 
 **Throws:** `CryptoException`, `DateMalformedStringException`, `SodiumException`
 
-#### [`save`](../../../src/Tables/Peers.php#L176-L185)
+#### [`save`](../../../src/Tables/Peers.php#L194-L203)
 
 Returns `bool`
 
@@ -371,11 +470,15 @@ Returns `bool`
 
 - `$peer`: `FediE2EE\PKDServer\Tables\Records\Peer`
 
-#### [`getRewrapCandidates`](../../../src/Tables/Peers.php#L187-L203)
+**Throws:** `TableException`
+
+#### [`getRewrapCandidates`](../../../src/Tables/Peers.php#L210-L226)
 
 Returns `array`
 
-#### [`rewrapKeyMap`](../../../src/Tables/Peers.php#L205-L248)
+**Throws:** `CryptoException`, `DateMalformedStringException`, `SodiumException`
+
+#### [`rewrapKeyMap`](../../../src/Tables/Peers.php#L233-L276)
 
 Returns `void`
 
@@ -384,6 +487,8 @@ Returns `void`
 - `$peer`: `FediE2EE\PKDServer\Tables\Records\Peer`
 - `$keyMap`: `FediE2EE\PKD\Crypto\AttributeEncryption\AttributeKeyMap`
 - `$leafId`: `int`
+
+**Throws:** `DependencyException`, `HPKEException`, `TableException`
 
 ---
 
@@ -399,13 +504,13 @@ Returns `void`
 
 ### Methods
 
-#### [`getCipher`](../../../src/Tables/PublicKeys.php#L68-L79)
+#### [`getCipher`](../../../src/Tables/PublicKeys.php#L67-L78)
 
 Returns `FediE2EE\PKDServer\Dependency\WrappedEncryptedRow`
 
 **Attributes:** `#[Override]`
 
-#### [`generateKeyID`](../../../src/Tables/PublicKeys.php#L84-L87)
+#### [`generateKeyID`](../../../src/Tables/PublicKeys.php#L83-L86)
 
 Returns `string`
 
@@ -420,9 +525,9 @@ Returns `array`
 - `$actorPrimaryKey`: `int`
 - `$keyID`: `string`
 
-**Throws:** `CipherSweetException`, `CryptoOperationException`, `InvalidCiphertextException`, `SodiumException`, `DateMalformedStringException`, `BaseJsonException`
+**Throws:** `BaseJsonException`, `CipherSweetException`, `CryptoOperationException`, `DateMalformedStringException`, `InvalidCiphertextException`, `SodiumException`
 
-#### [`getRecord`](../../../src/Tables/PublicKeys.php#L169-L196)
+#### [`getRecord`](../../../src/Tables/PublicKeys.php#L171-L198)
 
 Returns `FediE2EE\PKDServer\Tables\Records\ActorKey`
 
@@ -430,9 +535,9 @@ Returns `FediE2EE\PKDServer\Tables\Records\ActorKey`
 
 - `$primaryKey`: `int`
 
-**Throws:** `CacheException`, `CipherSweetException`, `CryptoOperationException`, `DependencyException`, `InvalidCiphertextException`, `SodiumException`, `TableException`
+**Throws:** `CacheException`, `CipherSweetException`, `CryptoException`, `CryptoOperationException`, `DependencyException`, `InvalidCiphertextException`, `SodiumException`, `TableException`
 
-#### [`getPublicKeysFor`](../../../src/Tables/PublicKeys.php#L209-L274)
+#### [`getPublicKeysFor`](../../../src/Tables/PublicKeys.php#L214-L279)
 
 Returns `array`
 
@@ -441,13 +546,13 @@ Returns `array`
 - `$actorName`: `string`
 - `$keyId`: `string` = ''
 
-**Throws:** `BaseJsonException`, `CacheException`, `CipherSweetException`, `CryptoOperationException`, `DateMalformedStringException`, `DependencyException`, `InvalidCiphertextException`, `SodiumException`, `TableException`
+**Throws:** `ArrayKeyException`, `BaseJsonException`, `BlindIndexNotFoundException`, `CacheException`, `CipherSweetException`, `CryptoException`, `CryptoOperationException`, `DateMalformedStringException`, `DependencyException`, `InvalidCiphertextException`, `SodiumException`, `TableException`
 
-#### [`getNextPrimaryKey`](../../../src/Tables/PublicKeys.php#L276-L283)
+#### [`getNextPrimaryKey`](../../../src/Tables/PublicKeys.php#L281-L288)
 
 Returns `int`
 
-#### [`addKey`](../../../src/Tables/PublicKeys.php#L293-L301)
+#### [`addKey`](../../../src/Tables/PublicKeys.php#L300-L308)
 
 Returns `FediE2EE\PKDServer\Tables\Records\ActorKey`
 
@@ -456,9 +561,9 @@ Returns `FediE2EE\PKDServer\Tables\Records\ActorKey`
 - `$payload`: `FediE2EE\PKDServer\Protocol\Payload`
 - `$outerActor`: `string`
 
-**Throws:** `CryptoException`, `DependencyException`, `NotImplementedException`, `ProtocolException`, `SodiumException`, `TableException`
+**Throws:** `ConcurrentException`, `CryptoException`, `DependencyException`, `NotImplementedException`, `ProtocolException`, `RandomException`, `SodiumException`, `TableException`
 
-#### [`revokeKey`](../../../src/Tables/PublicKeys.php#L311-L319)
+#### [`revokeKey`](../../../src/Tables/PublicKeys.php#L320-L328)
 
 Returns `FediE2EE\PKDServer\Tables\Records\ActorKey`
 
@@ -467,30 +572,19 @@ Returns `FediE2EE\PKDServer\Tables\Records\ActorKey`
 - `$payload`: `FediE2EE\PKDServer\Protocol\Payload`
 - `$outerActor`: `string`
 
-**Throws:** `CryptoException`, `DependencyException`, `NotImplementedException`, `ProtocolException`, `SodiumException`, `TableException`
+**Throws:** `ConcurrentException`, `CryptoException`, `DependencyException`, `NotImplementedException`, `ProtocolException`, `RandomException`, `SodiumException`, `TableException`
 
-#### [`revokeKeyThirdParty`](../../../src/Tables/PublicKeys.php#L329-L337)
-
-Returns `bool`
-
-**Parameters:**
-
-- `$payload`: `FediE2EE\PKDServer\Protocol\Payload`
-
-**Throws:** `CryptoException`, `DependencyException`, `NotImplementedException`, `ProtocolException`, `SodiumException`, `TableException`
-
-#### [`moveIdentity`](../../../src/Tables/PublicKeys.php#L347-L355)
+#### [`revokeKeyThirdParty`](../../../src/Tables/PublicKeys.php#L340-L348)
 
 Returns `bool`
 
 **Parameters:**
 
 - `$payload`: `FediE2EE\PKDServer\Protocol\Payload`
-- `$outerActor`: `string`
 
-**Throws:** `CryptoException`, `DependencyException`, `NotImplementedException`, `ProtocolException`, `SodiumException`, `TableException`
+**Throws:** `ConcurrentException`, `CryptoException`, `DependencyException`, `NotImplementedException`, `ProtocolException`, `RandomException`, `SodiumException`, `TableException`
 
-#### [`burnDown`](../../../src/Tables/PublicKeys.php#L666-L675)
+#### [`moveIdentity`](../../../src/Tables/PublicKeys.php#L360-L368)
 
 Returns `bool`
 
@@ -499,20 +593,9 @@ Returns `bool`
 - `$payload`: `FediE2EE\PKDServer\Protocol\Payload`
 - `$outerActor`: `string`
 
-**Throws:** `CryptoException`, `DependencyException`, `NotImplementedException`, `ProtocolException`, `SodiumException`, `TableException`
+**Throws:** `ConcurrentException`, `CryptoException`, `DependencyException`, `NotImplementedException`, `ProtocolException`, `RandomException`, `SodiumException`, `TableException`
 
-#### [`fireproof`](../../../src/Tables/PublicKeys.php#L771-L779)
-
-Returns `bool`
-
-**Parameters:**
-
-- `$payload`: `FediE2EE\PKDServer\Protocol\Payload`
-- `$outerActor`: `string`
-
-**Throws:** `CryptoException`, `DependencyException`, `NotImplementedException`, `ProtocolException`, `SodiumException`, `TableException`
-
-#### [`undoFireproof`](../../../src/Tables/PublicKeys.php#L862-L870)
+#### [`burnDown`](../../../src/Tables/PublicKeys.php#L689-L698)
 
 Returns `bool`
 
@@ -521,9 +604,31 @@ Returns `bool`
 - `$payload`: `FediE2EE\PKDServer\Protocol\Payload`
 - `$outerActor`: `string`
 
-**Throws:** `CryptoException`, `DependencyException`, `NotImplementedException`, `ProtocolException`, `SodiumException`, `TableException`
+**Throws:** `ConcurrentException`, `CryptoException`, `DependencyException`, `NotImplementedException`, `ProtocolException`, `RandomException`, `SodiumException`, `TableException`
 
-#### [`checkpoint`](../../../src/Tables/PublicKeys.php#L952-L960)
+#### [`fireproof`](../../../src/Tables/PublicKeys.php#L798-L806)
+
+Returns `bool`
+
+**Parameters:**
+
+- `$payload`: `FediE2EE\PKDServer\Protocol\Payload`
+- `$outerActor`: `string`
+
+**Throws:** `ConcurrentException`, `CryptoException`, `DependencyException`, `NotImplementedException`, `ProtocolException`, `RandomException`, `SodiumException`, `TableException`
+
+#### [`undoFireproof`](../../../src/Tables/PublicKeys.php#L892-L900)
+
+Returns `bool`
+
+**Parameters:**
+
+- `$payload`: `FediE2EE\PKDServer\Protocol\Payload`
+- `$outerActor`: `string`
+
+**Throws:** `ConcurrentException`, `CryptoException`, `DependencyException`, `NotImplementedException`, `ProtocolException`, `RandomException`, `SodiumException`, `TableException`
+
+#### [`checkpoint`](../../../src/Tables/PublicKeys.php#L986-L994)
 
 Returns `bool`
 
@@ -531,9 +636,9 @@ Returns `bool`
 
 - `$payload`: `FediE2EE\PKDServer\Protocol\Payload`
 
-**Throws:** `CryptoException`, `DependencyException`, `NotImplementedException`, `ProtocolException`, `SodiumException`, `TableException`
+**Throws:** `ConcurrentException`, `CryptoException`, `DependencyException`, `NotImplementedException`, `ProtocolException`, `RandomException`, `SodiumException`, `TableException`
 
-#### [`verifyTOTP`](../../../src/Tables/PublicKeys.php#L42-L56)
+#### [`verifyTOTP`](../../../src/Tables/PublicKeys.php#L39-L53)
 
 static · Returns `bool`
 
@@ -543,7 +648,7 @@ static · Returns `bool`
 - `$otp`: `string`
 - `$windows`: `int` = 2
 
-#### [`generateTOTP`](../../../src/Tables/PublicKeys.php#L58-L73)
+#### [`generateTOTP`](../../../src/Tables/PublicKeys.php#L55-L70)
 
 static · Returns `string`
 
@@ -552,7 +657,7 @@ static · Returns `string`
 - `$secret`: `string`
 - `$time`: `?int` = null
 
-#### [`ord`](../../../src/Tables/PublicKeys.php#L78-L81)
+#### [`ord`](../../../src/Tables/PublicKeys.php#L75-L78)
 
 static · Returns `int`
 
@@ -562,7 +667,7 @@ Avoid cache-timing leaks in ord() by using unpack()
 
 - `$chr`: `string`
 
-#### [`throwIfTimeOutsideWindow`](../../../src/Tables/PublicKeys.php#L139-L148)
+#### [`throwIfTimeOutsideWindow`](../../../src/Tables/PublicKeys.php#L135-L144)
 
 Returns `void`
 
@@ -780,13 +885,13 @@ Returns `array`
 
 ### Methods
 
-#### [`getCipher`](../../../src/Tables/ReplicaHistory.php#L19-L22)
+#### [`getCipher`](../../../src/Tables/ReplicaHistory.php#L20-L23)
 
 Returns `FediE2EE\PKDServer\Dependency\WrappedEncryptedRow`
 
 **Attributes:** `#[Override]`
 
-#### [`createLeaf`](../../../src/Tables/ReplicaHistory.php#L30-L46)
+#### [`createLeaf`](../../../src/Tables/ReplicaHistory.php#L31-L47)
 
 Returns `FediE2EE\PKDServer\Tables\Records\ReplicaLeaf`
 
@@ -796,7 +901,7 @@ Returns `FediE2EE\PKDServer\Tables\Records\ReplicaLeaf`
 - `$cosignature`: `string`
 - `$proof`: `FediE2EE\PKD\Crypto\Merkle\InclusionProof`
 
-#### [`save`](../../../src/Tables/ReplicaHistory.php#L48-L56)
+#### [`save`](../../../src/Tables/ReplicaHistory.php#L52-L60)
 
 Returns `void`
 
@@ -805,7 +910,9 @@ Returns `void`
 - `$peer`: `FediE2EE\PKDServer\Tables\Records\Peer`
 - `$leaf`: `FediE2EE\PKDServer\Tables\Records\ReplicaLeaf`
 
-#### [`getHistory`](../../../src/Tables/ReplicaHistory.php#L61-L72)
+**Throws:** `TableException`
+
+#### [`getHistory`](../../../src/Tables/ReplicaHistory.php#L65-L76)
 
 Returns `array`
 
@@ -817,7 +924,7 @@ Returns `array`
 
 **Throws:** `JsonException`
 
-#### [`getHistorySince`](../../../src/Tables/ReplicaHistory.php#L77-L97)
+#### [`getHistorySince`](../../../src/Tables/ReplicaHistory.php#L81-L101)
 
 Returns `array`
 

@@ -3,11 +3,15 @@ declare(strict_types=1);
 namespace FediE2EE\PKDServer;
 
 use FediE2EE\PKD\Crypto\{
-    Exceptions\CryptoException,
-    Exceptions\NotImplementedException,
-    Exceptions\ParserException,
     Protocol\HPKEAdapter,
     Protocol\Parser
+};
+use FediE2EE\PKD\Crypto\Exceptions\{
+    BundleException,
+    CryptoException,
+    JsonException,
+    NotImplementedException,
+    ParserException,
 };
 use FediE2EE\PKDServer\Exceptions\{
     DependencyException,
@@ -43,6 +47,9 @@ class Protocol
     protected Parser $parser;
     protected ?WebFinger $webFinger = null;
 
+    /**
+     * @throws DependencyException
+     */
     public function __construct(?ServerConfig $config)
     {
         if (is_null($config)) {
@@ -196,8 +203,11 @@ class Protocol
     /**
      * @param Payload $payload
      * @return void
-     * @throws DependencyException
+     *
      * @throws CacheException
+     * @throws DependencyException
+     * @throws HPKEException
+     * @throws JsonException
      * @throws TableException
      */
     protected function wrapLocalKeys(Payload $payload): void
@@ -241,12 +251,10 @@ class Protocol
     }
 
     /**
-     * @throws DependencyException
+     * @throws BundleException
      * @throws CryptoException
-     * @throws NotImplementedException
-     * @throws ParserException
+     * @throws DependencyException
      * @throws HPKEException
-     * @throws SodiumException
      */
     protected function hpkeUnwrap(string $arbitrary): Payload
     {
@@ -258,14 +266,16 @@ class Protocol
     }
 
     /**
+     * @throws BundleException
+     * @throws CacheException
      * @throws CryptoException
      * @throws DependencyException
-     * @throws ProtocolException
-     * @throws TableException
      * @throws HPKEException
+     * @throws JsonException
      * @throws NotImplementedException
-     * @throws ParserException
+     * @throws ProtocolException
      * @throws SodiumException
+     * @throws TableException
      */
     public function addKey(string $body, string $outerActor): ActorKey
     {
@@ -278,14 +288,16 @@ class Protocol
     }
 
     /**
+     * @throws BundleException
+     * @throws CacheException
      * @throws CryptoException
      * @throws DependencyException
-     * @throws ProtocolException
-     * @throws TableException
      * @throws HPKEException
+     * @throws JsonException
      * @throws NotImplementedException
-     * @throws ParserException
+     * @throws ProtocolException
      * @throws SodiumException
+     * @throws TableException
      */
     public function revokeKey(string $body, string $outerActor): ActorKey
     {
@@ -298,11 +310,13 @@ class Protocol
     }
 
     /**
+     * @throws BundleException
+     * @throws CacheException
      * @throws CryptoException
      * @throws DependencyException
      * @throws HPKEException
+     * @throws JsonException
      * @throws NotImplementedException
-     * @throws ParserException
      * @throws ProtocolException
      * @throws SodiumException
      * @throws TableException
@@ -324,11 +338,13 @@ class Protocol
     }
 
     /**
+     * @throws BundleException
+     * @throws CacheException
      * @throws CryptoException
      * @throws DependencyException
      * @throws HPKEException
+     * @throws JsonException
      * @throws NotImplementedException
-     * @throws ParserException
      * @throws ProtocolException
      * @throws SodiumException
      * @throws TableException
@@ -344,11 +360,13 @@ class Protocol
     }
 
     /**
+     * @throws BundleException
+     * @throws CacheException
      * @throws CryptoException
      * @throws DependencyException
      * @throws HPKEException
+     * @throws JsonException
      * @throws NotImplementedException
-     * @throws ParserException
      * @throws ProtocolException
      * @throws SodiumException
      * @throws TableException
@@ -368,11 +386,13 @@ class Protocol
     }
 
     /**
+     * @throws BundleException
+     * @throws CacheException
      * @throws CryptoException
      * @throws DependencyException
      * @throws HPKEException
+     * @throws JsonException
      * @throws NotImplementedException
-     * @throws ParserException
      * @throws ProtocolException
      * @throws SodiumException
      * @throws TableException
@@ -388,11 +408,13 @@ class Protocol
     }
 
     /**
+     * @throws BundleException
+     * @throws CacheException
      * @throws CryptoException
      * @throws DependencyException
      * @throws HPKEException
+     * @throws JsonException
      * @throws NotImplementedException
-     * @throws ParserException
      * @throws ProtocolException
      * @throws SodiumException
      * @throws TableException
@@ -408,11 +430,13 @@ class Protocol
     }
 
     /**
+     * @throws BundleException
+     * @throws CacheException
      * @throws CryptoException
      * @throws DependencyException
      * @throws HPKEException
+     * @throws JsonException
      * @throws NotImplementedException
-     * @throws ParserException
      * @throws ProtocolException
      * @throws SodiumException
      * @throws TableException
@@ -428,14 +452,17 @@ class Protocol
     }
 
     /**
+     * @throws BundleException
+     * @throws CacheException
      * @throws CryptoException
      * @throws DependencyException
      * @throws HPKEException
+     * @throws JsonException
      * @throws NotImplementedException
-     * @throws ParserException
      * @throws ProtocolException
      * @throws SodiumException
      * @throws TableException
+     *
      */
     public function revokeAuxData(string $body, string $outerActor): bool
     {
@@ -448,10 +475,13 @@ class Protocol
     }
 
     /**
+     * @throws BundleException
+     * @throws CacheException
      * @throws CryptoException
      * @throws DependencyException
+     * @throws HPKEException
+     * @throws JsonException
      * @throws NotImplementedException
-     * @throws ParserException
      * @throws ProtocolException
      * @throws SodiumException
      * @throws TableException
@@ -471,6 +501,9 @@ class Protocol
         return $return;
     }
 
+    /**
+     * @throws DependencyException
+     */
     protected function cleanUpAfterAction(): void
     {
         $this->config->getDb()->exec(
