@@ -44,6 +44,22 @@ jobs:
         run: |
           php-fuzzer fuzz --max-runs "$FUZZ_RUNS" fuzzing/FuzzJsonParsing.php
           shopt -s nullglob; for f in crash-*.txt; do mv "$f" "${f/crash-/fuzzed-FuzzJsonParsing-}"; done
+      - name: Run FuzzMath
+        run: |
+          php-fuzzer fuzz --max-runs "$FUZZ_RUNS" fuzzing/FuzzMath.php
+          shopt -s nullglob; for f in crash-*.txt; do mv "$f" "${f/crash-/fuzzed-FuzzMath-}"; done
+      - name: Run FuzzNetworkTrait
+        run: |
+          php-fuzzer fuzz --max-runs "$FUZZ_RUNS" fuzzing/FuzzNetworkTrait.php
+          shopt -s nullglob; for f in crash-*.txt; do mv "$f" "${f/crash-/fuzzed-FuzzNetworkTrait-}"; done
+      - name: Run FuzzParams
+        run: |
+          php-fuzzer fuzz --max-runs "$FUZZ_RUNS" fuzzing/FuzzParams.php
+          shopt -s nullglob; for f in crash-*.txt; do mv "$f" "${f/crash-/fuzzed-FuzzParams-}"; done
+      - name: Run FuzzRateLimit
+        run: |
+          php-fuzzer fuzz --max-runs "$FUZZ_RUNS" fuzzing/FuzzRateLimit.php
+          shopt -s nullglob; for f in crash-*.txt; do mv "$f" "${f/crash-/fuzzed-FuzzRateLimit-}"; done
       - name: Run FuzzBase64
         run: |
           php-fuzzer fuzz --max-runs "$FUZZ_RUNS" fuzzing/FuzzBase64.php
