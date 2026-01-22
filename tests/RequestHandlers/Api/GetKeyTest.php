@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace FediE2EE\PKDServer\Tests\RequestHandlers\Api;
 
+use DateMalformedStringException;
 use Exception;
 use FediE2EE\PKD\Crypto\Exceptions\{
     CryptoException,
@@ -47,6 +48,7 @@ use FediE2EE\PKDServer\Tables\Records\{
 use FediE2EE\PKDServer\Tests\HttpTestTrait;
 use FediE2EE\PKDServer\Traits\ConfigTrait;
 use GuzzleHttp\Psr7\Response;
+use JsonException as BaseJsonException;
 use PHPUnit\Framework\Attributes\{
     CoversClass,
     UsesClass
@@ -136,9 +138,12 @@ class GetKeyTest extends TestCase
 
     /**
      * @throws ArrayKeyException
+     * @throws BaseJsonException
      * @throws BlindIndexNotFoundException
      * @throws CipherSweetException
+     * @throws CryptoException
      * @throws CryptoOperationException
+     * @throws DateMalformedStringException
      * @throws DependencyException
      * @throws InvalidCiphertextException
      * @throws JsonException
@@ -177,6 +182,7 @@ class GetKeyTest extends TestCase
     }
 
     /**
+     * @throws CacheException
      * @throws CertaintyException
      * @throws DependencyException
      * @throws InvalidArgumentException
@@ -212,10 +218,13 @@ class GetKeyTest extends TestCase
 
     /**
      * @throws ArrayKeyException
+     * @throws BaseJsonException
      * @throws BlindIndexNotFoundException
      * @throws CertaintyException
      * @throws CipherSweetException
+     * @throws CryptoException
      * @throws CryptoOperationException
+     * @throws DateMalformedStringException
      * @throws DependencyException
      * @throws InvalidCiphertextException
      * @throws JsonException
@@ -250,16 +259,20 @@ class GetKeyTest extends TestCase
         $this->assertSame(400, $response->getStatusCode());
         $body = json_decode($response->getBody()->getContents(), true);
         $this->assertArrayHasKey('error', $body);
-        $this->assertStringContainsString('WebFinger', $body['error']);
+        $this->assertStringStartsWith('A WebFinger error occurred: ', $body['error']);
+        $this->assertStringContainsString('Internal Server Error', $body['error']);
         $this->assertNotInTransaction();
     }
 
     /**
      * @throws ArrayKeyException
+     * @throws BaseJsonException
      * @throws BlindIndexNotFoundException
      * @throws CertaintyException
      * @throws CipherSweetException
+     * @throws CryptoException
      * @throws CryptoOperationException
+     * @throws DateMalformedStringException
      * @throws DependencyException
      * @throws InvalidCiphertextException
      * @throws JsonException

@@ -3,8 +3,10 @@ declare(strict_types=1);
 namespace FediE2EE\PKDServer\Tests;
 
 use DateMalformedStringException;
+use DateTimeImmutable;
 use FediE2EE\PKD\Crypto\AttributeEncryption\AttributeKeyMap;
 use FediE2EE\PKD\Crypto\Exceptions\{
+    BundleException,
     CryptoException,
     JsonException,
     NetworkException,
@@ -20,6 +22,7 @@ use FediE2EE\PKD\Crypto\Protocol\{
     Actions\MoveIdentity,
     Actions\RevokeAuxData,
     Actions\RevokeKey,
+    Actions\RevokeKeyThirdParty,
     Actions\UndoFireproof,
     Handler
 };
@@ -27,6 +30,8 @@ use ParagonIE\Certainty\Exception\CertaintyException;
 use Psr\SimpleCache\InvalidArgumentException;
 use Random\RandomException;
 use FediE2EE\PKD\Crypto\{
+    Merkle\IncrementalTree,
+    Revocation,
     SecretKey,
     SymmetricKey
 };
@@ -66,17 +71,18 @@ use FediE2EE\PKDServer\Tables\{
 };
 use JsonException as BaseJsonException;
 use ParagonIE\CipherSweet\Exception\{
-    ArrayKeyException,
-    BlindIndexNotFoundException,
     CipherSweetException,
     CryptoOperationException,
     InvalidCiphertextException
 };
 use ParagonIE\HPKE\HPKEException;
+use ParagonIE\ConstantTime\Base64UrlSafe;
 use FediE2EE\PKDServer\ActivityPub\ActivityStream;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\UsesClass;
-use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\{
+    Attributes\CoversClass,
+    Attributes\UsesClass,
+    TestCase
+};
 use SodiumException;
 
 #[CoversClass(Protocol::class)]
@@ -118,6 +124,47 @@ class ProtocolTest extends TestCase
     }
 
     /**
+     * @throws DependencyException
+     * @throws NotImplementedException
+     * @throws SodiumException
+     */
+    protected function addTestPeer(): void
+    {
+        $peerKey = SecretKey::generate();
+        $serverHpke = $this->config->getHPKE();
+        $rewrapConfig = [
+            'cs' => $serverHpke->cs->getSuiteName(),
+            'ek' => Base64UrlSafe::encodeUnpadded($peerKey->getPublicKey()->getBytes())
+        ];
+        $tree = new IncrementalTree([], $this->config->getParams()->hashAlgo);
+        $this->config->getDb()->insert('pkd_peers', [
+            'uniqueid' => 'peer-test',
+            'hostname' => 'peer-test.example.com',
+            'publickey' => $peerKey->getPublicKey()->toString(),
+            'replicate' => 1,
+            'cosign' => 1,
+            'rewrap' => json_encode($rewrapConfig),
+            'incrementaltreestate' => Base64UrlSafe::encodeUnpadded($tree->toJson()),
+            'latestroot' => '',
+            'created' => (new DateTimeImmutable())->format(DateTimeImmutable::ATOM),
+            'modified' => (new DateTimeImmutable())->format(DateTimeImmutable::ATOM),
+        ]);
+    }
+
+    protected function assertKeyRewrapped(string $merkleRoot, string $message): void
+    {
+        $rewrapped = $this->config->getDb()->exists(
+            "SELECT count(rw.rewrappedkeyid) 
+                FROM pkd_merkle_leaf_rewrapped_keys rw
+                JOIN pkd_merkle_leaves ml
+                    ON rw.leaf = ml.merkleleafid 
+                WHERE ml.root = ?",
+            $merkleRoot
+        );
+        $this->assertTrue($rewrapped, $message);
+    }
+
+    /**
      * @throws BaseJsonException
      * @throws CacheException
      * @throws CertaintyException
@@ -140,6 +187,8 @@ class ProtocolTest extends TestCase
     public function testAddAndRevoke(): void
     {
         $this->clearOldTransaction($this->config);
+        $this->truncateTables();
+        $this->addTestPeer();
         [$actor, $canonical] = $this->makeDummyActor();
 
         // Generate two key pairs for alice
@@ -171,11 +220,12 @@ class ProtocolTest extends TestCase
         $result1 = $this->protocol->addKey($encryptedForServer1, $canonical);
         $this->assertTrue($result1->trusted);
         $keyId1 = $result1->keyID;
+        $this->ensureMerkleStateUnlocked();
 
         // Update latest merkle root
         $latestRoot2 = $merkleState->getLatestRoot();
         $this->assertNotSame($latestRoot1, $latestRoot2);
-        $this->assertMatchesRegularExpression('#^pkd-mr-v1:[A-Za-z0-9-_]+$#', $latestRoot2);
+        $this->assertKeyRewrapped($latestRoot2, 'Key should be rewrapped after first addKey');
 
         // 2. Second AddKey (signed by key 1)
         $addKey2 = new AddKey($canonical, $keypair2->getPublicKey());
@@ -196,16 +246,17 @@ class ProtocolTest extends TestCase
         $this->assertTrue($result2->trusted);
         $this->assertNotNull($result2->keyID);
         $keyId2 = $result2->keyID;
+        $this->ensureMerkleStateUnlocked();
 
         /** @var PublicKeys $pkTable */
         $pkTable = $this->table('PublicKeys');
         $this->assertCount(2, $pkTable->getPublicKeysFor($canonical));
+        $latestRoot3 = $merkleState->getLatestRoot();
+        $this->assertKeyRewrapped($latestRoot3, 'Key should be rewrapped after second addKey');
 
         // 3. RevokeKey (signed by key 1)
-        $latestRoot3 = $merkleState->getLatestRoot();
         $this->assertNotSame($latestRoot1, $latestRoot3);
         $this->assertNotSame($latestRoot2, $latestRoot3);
-        $this->assertMatchesRegularExpression('#^pkd-mr-v1:[A-Za-z0-9-_]+$#', $latestRoot3);
 
         $revokeKey = new RevokeKey($canonical, $keypair2->getPublicKey());
         $akm3 = new AttributeKeyMap()
@@ -225,7 +276,9 @@ class ProtocolTest extends TestCase
         $result3 = $this->protocol->revokeKey($encryptedForServer3, $canonical);
         $this->assertFalse($result3->trusted);
         $this->assertCount(1, $pkTable->getPublicKeysFor($canonical));
-        $this->assertNotInTransaction();
+        $this->ensureMerkleStateUnlocked();
+        $latestRoot4 = $merkleState->getLatestRoot();
+        $this->assertKeyRewrapped($latestRoot4, 'Key should be rewrapped after revokeKey');
     }
 
     /**
@@ -251,6 +304,8 @@ class ProtocolTest extends TestCase
     public function testMoveIdentity(): void
     {
         $this->clearOldTransaction($this->config);
+        $this->truncateTables();
+        $this->addTestPeer();
         [$oldActor, $canonical] = $this->makeDummyActor();
         [$newActor, $canonical2] = $this->makeDummyActor();
         $wf = new WebFinger($this->config);
@@ -287,6 +342,7 @@ class ProtocolTest extends TestCase
         $this->assertNotInTransaction();
         $result1 = $this->protocol->addKey($encryptedForServer1, $canonical);
         $keyId = $result1->keyID;
+        $this->ensureMerkleStateUnlocked();
 
         /** @var PublicKeys $pkTable */
         $pkTable = $this->table('PublicKeys');
@@ -309,6 +365,7 @@ class ProtocolTest extends TestCase
         $result2 = $this->protocol->addKey($encryptedForServer2, $canonical);
         $keyId2 = $result2->keyID;
         $this->assertCount(2, $pkTable->getPublicKeysFor($canonical));
+        $this->ensureMerkleStateUnlocked();
 
 
         // 3. MoveIdentity
@@ -330,7 +387,9 @@ class ProtocolTest extends TestCase
         $this->assertTrue($result);
         $this->assertCount(0, $pkTable->getPublicKeysFor($canonical));
         $this->assertCount(2, $pkTable->getPublicKeysFor($canonical2));
-        $this->assertNotInTransaction();
+        $latestRoot4 = $merkleState->getLatestRoot();
+        $this->assertKeyRewrapped($latestRoot4, 'Key should be rewrapped after moveIdentity');
+        $this->ensureMerkleStateUnlocked();
     }
 
     /**
@@ -356,6 +415,8 @@ class ProtocolTest extends TestCase
     public function testBurnDown(): void
     {
         $this->clearOldTransaction($this->config);
+        $this->truncateTables();
+        $this->addTestPeer();
         [, $canonActor] = $this->makeDummyActor();
         [, $canonOperator] = $this->makeDummyActor();
 
@@ -382,6 +443,7 @@ class ProtocolTest extends TestCase
         );
         $this->assertNotInTransaction();
         $this->protocol->addKey($encryptedForServer1, $canonActor);
+        $this->ensureMerkleStateUnlocked();
 
         // 2. AddKey for operator
         $latestRoot2 = $merkleState->getLatestRoot();
@@ -399,6 +461,7 @@ class ProtocolTest extends TestCase
         $this->assertNotInTransaction();
         $result2 = $this->protocol->addKey($encryptedForServer2, $canonOperator);
         $operatorKeyId = $result2->keyID;
+        $this->ensureMerkleStateUnlocked();
 
         /** @var PublicKeys $pkTable */
         $pkTable = $this->table('PublicKeys');
@@ -420,10 +483,14 @@ class ProtocolTest extends TestCase
         $this->assertNotInTransaction();
         $this->expectException(ProtocolException::class);
         $this->expectExceptionMessage('BurnDown MUST NOT be encrypted.');
-        $result = $this->protocol->burnDown($encryptedForServer3, $canonOperator);
-        $this->assertTrue($result);
+        try {
+            $this->assertTrue($this->protocol->burnDown($encryptedForServer3, $canonOperator));
+        } finally {
+            $this->ensureMerkleStateUnlocked();
+        }
         $this->assertCount(0, $pkTable->getPublicKeysFor($canonActor));
-        $this->assertNotInTransaction();
+        $latestRoot4 = $merkleState->getLatestRoot();
+        $this->assertKeyRewrapped($latestRoot4, 'Key should be rewrapped after burnDown');
     }
 
     /**
@@ -444,8 +511,10 @@ class ProtocolTest extends TestCase
     public function testFireproof(): void
     {
         $this->clearOldTransaction($this->config);
-        [$actor, $canonActor] = $this->makeDummyActor();
-        [$operator, $canonOperator] = $this->makeDummyActor();
+        $this->truncateTables();
+        $this->addTestPeer();
+        [, $canonActor] = $this->makeDummyActor();
+        [, $canonOperator] = $this->makeDummyActor();
 
         $actorKey = SecretKey::generate();
         $operatorKey = SecretKey::generate();
@@ -471,6 +540,7 @@ class ProtocolTest extends TestCase
         $this->assertNotInTransaction();
         $result1 = $this->protocol->addKey($encryptedForServer1, $canonActor);
         $actorKeyId = $result1->keyID;
+        $this->ensureMerkleStateUnlocked();
 
         // 2. AddKey for operator
         $latestRoot2 = $merkleState->getLatestRoot();
@@ -488,6 +558,7 @@ class ProtocolTest extends TestCase
         $this->assertNotInTransaction();
         $result2 = $this->protocol->addKey($encryptedForServer2, $canonOperator);
         $operatorKeyId = $result2->keyID;
+        $this->ensureMerkleStateUnlocked();
 
         // 3. Fireproof
         $latestRoot3 = $merkleState->getLatestRoot();
@@ -504,17 +575,20 @@ class ProtocolTest extends TestCase
         $this->assertNotInTransaction();
         $result = $this->protocol->fireproof($encryptedForServer3, $canonActor);
         $this->assertTrue($result);
+        $latestRoot4 = $merkleState->getLatestRoot();
+        $this->assertKeyRewrapped($latestRoot4, 'Key should be rewrapped after fireproof');
+        $this->ensureMerkleStateUnlocked();
 
         // 4. BurnDown (should fail)
         $this->expectException(ProtocolException::class);
         $this->expectExceptionMessage('BurnDown MUST NOT be encrypted.');
-        $latestRoot4 = $merkleState->getLatestRoot();
+        $latestRoot5 = $merkleState->getLatestRoot();
         $burnDown = new BurnDown($canonActor, $canonOperator);
         $akm4 = new AttributeKeyMap()
             ->addKey('actor', SymmetricKey::generate())
             ->addKey('operator', SymmetricKey::generate());
         $encryptedMsg4 = $burnDown->encrypt($akm4);
-        $bundle4 = $handler->handle($encryptedMsg4, $operatorKey, $akm4, $latestRoot4);
+        $bundle4 = $handler->handle($encryptedMsg4, $operatorKey, $akm4, $latestRoot5);
         $encryptedForServer4 = $handler->hpkeEncrypt(
             $bundle4,
             $serverHpke->encapsKey,
@@ -527,6 +601,7 @@ class ProtocolTest extends TestCase
         } catch (NetworkException $e) {
             throw new ProtocolException($e->getMessage(), $e->getCode(), $e);
         } finally {
+            $this->ensureMerkleStateUnlocked();
             $this->clearOldTransaction($this->config);
         }
     }
@@ -549,6 +624,8 @@ class ProtocolTest extends TestCase
     public function testUndoFireproof(): void
     {
         $this->clearOldTransaction($this->config);
+        $this->truncateTables();
+        $this->addTestPeer();
         [$actor, $canonicalActor] = $this->makeDummyActor();
         [$operator, $canonicalOperator] = $this->makeDummyActor();
 
@@ -577,6 +654,7 @@ class ProtocolTest extends TestCase
         $result1 = $this->protocol->addKey($encryptedForServer1, $canonicalActor);
         $this->clearOldTransaction($this->config);
         $actorKeyId = $result1->keyID;
+        $this->ensureMerkleStateUnlocked();
 
         // 2. AddKey for operator
         $latestRoot2 = $merkleState->getLatestRoot();
@@ -595,6 +673,7 @@ class ProtocolTest extends TestCase
         $result2 = $this->protocol->addKey($encryptedForServer2, $canonicalOperator);
         $this->clearOldTransaction($this->config);
         $operatorKeyId = $result2->keyID;
+        $this->ensureMerkleStateUnlocked();
 
         // 3. Fireproof
         $latestRoot3 = $merkleState->getLatestRoot();
@@ -612,14 +691,17 @@ class ProtocolTest extends TestCase
         $result = $this->protocol->fireproof($encryptedForServer3, $canonicalActor);
         $this->clearOldTransaction($this->config);
         $this->assertTrue($result);
+        $latestRoot4 = $merkleState->getLatestRoot();
+        $this->assertKeyRewrapped($latestRoot4, 'Key should be rewrapped after fireproof');
+        $this->ensureMerkleStateUnlocked();
 
         // 4. UndoFireproof
-        $latestRoot4 = $merkleState->getLatestRoot();
+        $latestRoot5 = $merkleState->getLatestRoot();
         $undoFireproof = new UndoFireproof($canonicalActor);
         $akm4 = new AttributeKeyMap()
             ->addKey('actor', SymmetricKey::generate());
         $encryptedMsg4 = $undoFireproof->encrypt($akm4);
-        $bundle4 = $handler->handle($encryptedMsg4, $actorKey, $akm4, $latestRoot4, $actorKeyId);
+        $bundle4 = $handler->handle($encryptedMsg4, $actorKey, $akm4, $latestRoot5, $actorKeyId);
         $encryptedForServer4 = $handler->hpkeEncrypt(
             $bundle4,
             $serverHpke->encapsKey,
@@ -629,15 +711,18 @@ class ProtocolTest extends TestCase
         $result = $this->protocol->undoFireproof($encryptedForServer4, $canonicalActor);
         $this->clearOldTransaction($this->config);
         $this->assertTrue($result);
+        $latestRoot6 = $merkleState->getLatestRoot();
+        $this->assertKeyRewrapped($latestRoot6, 'Key should be rewrapped after undoFireproof');
+        $this->ensureMerkleStateUnlocked();
 
         // 5. BurnDown (should succeed)
-        $latestRoot5 = $merkleState->getLatestRoot();
+        $latestRoot7 = $merkleState->getLatestRoot();
         $burnDown = new BurnDown($canonicalActor, $canonicalOperator);
         $akm5 = new AttributeKeyMap()
             ->addKey('actor', SymmetricKey::generate())
             ->addKey('operator', SymmetricKey::generate());
         $encryptedMsg5 = $burnDown->encrypt($akm5);
-        $bundle5 = $handler->handle($encryptedMsg5, $operatorKey, $akm5, $latestRoot5, $operatorKeyId);
+        $bundle5 = $handler->handle($encryptedMsg5, $operatorKey, $akm5, $latestRoot7, $operatorKeyId);
         $encryptedForServer5 = $handler->hpkeEncrypt(
             $bundle5,
             $serverHpke->encapsKey,
@@ -646,9 +731,14 @@ class ProtocolTest extends TestCase
         $this->assertNotInTransaction();
         $this->expectException(ProtocolException::class);
         $this->expectExceptionMessage('BurnDown MUST NOT be encrypted.');
-        $result = $this->protocol->burnDown($encryptedForServer5, $canonicalOperator);
-        $this->clearOldTransaction($this->config);
-        $this->assertTrue($result);
+        try {
+            $this->assertTrue(
+                $this->protocol->burnDown($encryptedForServer5, $canonicalOperator)
+            );
+        } finally {
+            $this->ensureMerkleStateUnlocked();
+            $this->clearOldTransaction($this->config);
+        }
         $this->assertNotInTransaction();
     }
 
@@ -670,6 +760,8 @@ class ProtocolTest extends TestCase
     public function testAddAuxData(): void
     {
         $this->clearOldTransaction($this->config);
+        $this->truncateTables();
+        $this->addTestPeer();
         [$actor, $canonEve] = $this->makeDummyActor();
         $actorKey = SecretKey::generate();
 
@@ -713,16 +805,19 @@ class ProtocolTest extends TestCase
         $this->assertNotInTransaction();
         $result = $this->protocol->addAuxData($encryptedForServer2, $canonEve);
         $this->assertTrue($result);
+        $latestRoot3 = $merkleState->getLatestRoot();
+        $this->assertKeyRewrapped($latestRoot3, 'Key should be rewrapped after addAuxData');
+        $this->ensureMerkleStateUnlocked();
 
         // 3. RevokeAuxData
-        $latestRoot3 = $merkleState->getLatestRoot();
+        $latestRoot4 = $merkleState->getLatestRoot();
         $revokeAuxData = new RevokeAuxData($canonEve, 'test', 'test');
         $akm3 = new AttributeKeyMap()
             ->addKey('actor', SymmetricKey::generate())
             ->addKey('aux-type', SymmetricKey::generate())
             ->addKey('aux-data', SymmetricKey::generate());
         $encryptedMsg3 = $revokeAuxData->encrypt($akm3);
-        $bundle3 = $handler->handle($encryptedMsg3, $actorKey, $akm3, $latestRoot3);
+        $bundle3 = $handler->handle($encryptedMsg3, $actorKey, $akm3, $latestRoot4);
         $encryptedForServer3 = $handler->hpkeEncrypt(
             $bundle3,
             $serverHpke->encapsKey,
@@ -731,16 +826,20 @@ class ProtocolTest extends TestCase
         $this->assertNotInTransaction();
         $result = $this->protocol->revokeAuxData($encryptedForServer3, $canonEve);
         $this->assertTrue($result);
+        $latestRoot5 = $merkleState->getLatestRoot();
+        $this->assertKeyRewrapped($latestRoot5, 'Key should be rewrapped after revokeAuxData');
+        $this->ensureMerkleStateUnlocked();
         $this->assertNotInTransaction();
     }
 
     /**
+     * @throws BundleException
      * @throws CacheException
      * @throws CryptoException
      * @throws DependencyException
+     * @throws HPKEException
      * @throws JsonException
      * @throws NotImplementedException
-     * @throws ParserException
      * @throws ProtocolException
      * @throws SodiumException
      * @throws TableException
@@ -748,6 +847,8 @@ class ProtocolTest extends TestCase
     public function testCheckpoint(): void
     {
         $this->clearOldTransaction($this->config);
+        $this->truncateTables();
+        $this->addTestPeer();
         $directory = 'example.net';
         $directoryKey = SecretKey::generate();
 
@@ -765,12 +866,82 @@ class ProtocolTest extends TestCase
             'https://' . 'example.com',
             $latestRoot1
         );
-        $empty = new AttributeKeyMap();
-        $bundle = $handler->handle($checkpoint, $directoryKey, $empty, $latestRoot1);
+
+        $hpke = $this->config->getHPKE();
+        $this->table('Peers')->create(
+            $this->config->getSigningKeys()->publicKey,
+            'localhost',
+            false,
+            true, // replicate
+            RewrapConfig::from($hpke->cs, $hpke->encapsKey)
+        );
+
+        $akm = new AttributeKeyMap();
+        $akm->addKey('test', SymmetricKey::generate());
+
+        $bundle = $handler->handle($checkpoint, $directoryKey, $akm, $latestRoot1);
         $this->assertNotInTransaction();
         $result = $this->protocol->checkpoint($bundle->toString());
         $this->assertTrue($result);
         $this->assertNotInTransaction();
+        $this->ensureMerkleStateUnlocked();
+
+        // Verify that the key was rewrapped in the database
+        $latestRoot2 = $merkleState->getLatestRoot();
+        $this->assertKeyRewrapped($latestRoot2, 'Key should be rewrapped after checkpoint');
+    }
+
+    /**
+     * @throws BaseJsonException
+     * @throws CacheException
+     * @throws CertaintyException
+     * @throws CipherSweetException
+     * @throws CryptoException
+     * @throws CryptoOperationException
+     * @throws DateMalformedStringException
+     * @throws DependencyException
+     * @throws HPKEException
+     * @throws InvalidArgumentException
+     * @throws InvalidCiphertextException
+     * @throws JsonException
+     * @throws NotImplementedException
+     * @throws ParserException
+     * @throws ProtocolException
+     * @throws RandomException
+     * @throws SodiumException
+     * @throws TableException
+     */
+    public function testRevokeKeyThirdParty(): void
+    {
+        $this->clearOldTransaction($this->config);
+        $this->truncateTables();
+        $this->addTestPeer();
+        [$actor, $canonical] = $this->makeDummyActor();
+        $keypair = SecretKey::generate();
+
+        $protocol = new Protocol($this->config);
+        $this->addKeyForActor($canonical, $keypair, $protocol, $this->config);
+        $this->ensureMerkleStateUnlocked();
+
+        /** @var PublicKeys $pkTable */
+        $pkTable = $this->table('PublicKeys');
+        $this->assertCount(1, $pkTable->getPublicKeysFor($canonical));
+
+        /** @var MerkleState $merkleState */
+        $merkleState = $this->table('MerkleState');
+        $latestRoot = $merkleState->getLatestRoot();
+
+        // Create revocation token
+        $revocation = new Revocation();
+        $token = $revocation->revokeThirdParty($keypair);
+
+        $revokeAction = new RevokeKeyThirdParty($token);
+        $handler = new Handler();
+        $bundle = $handler->handle($revokeAction, $keypair, new AttributeKeyMap(), $latestRoot);
+
+        $result = $this->protocol->revokeKeyThirdParty($bundle->toString());
+        $this->assertTrue($result);
+        $this->assertCount(0, $pkTable->getPublicKeysFor($canonical));
         $this->ensureMerkleStateUnlocked();
     }
 }

@@ -13,10 +13,10 @@ use FediE2EE\PKD\Crypto\{
     SymmetricKey
 };
 use FediE2EE\PKD\Crypto\Exceptions\{
+    BundleException,
     CryptoException,
     JsonException,
     NotImplementedException,
-    ParserException
 };
 use FediE2EE\PKDServer\{
     ActivityPub\WebFinger,
@@ -38,6 +38,7 @@ use FediE2EE\PKDServer\Exceptions\{
     ProtocolException,
     TableException
 };
+use DateMalformedStringException;
 use FediE2EE\PKDServer\RequestHandlers\Api\ListAuxData;
 use FediE2EE\PKDServer\Tables\{
     Actors,
@@ -105,18 +106,19 @@ class ListAuxDataTest extends TestCase
     /**
      * @throws ArrayKeyException
      * @throws BlindIndexNotFoundException
+     * @throws BundleException
      * @throws CacheException
      * @throws CertaintyException
      * @throws CipherSweetException
      * @throws CryptoException
      * @throws CryptoOperationException
+     * @throws DateMalformedStringException
      * @throws DependencyException
      * @throws HPKEException
      * @throws InvalidArgumentException
      * @throws InvalidCiphertextException
      * @throws JsonException
      * @throws NotImplementedException
-     * @throws ParserException
      * @throws ProtocolException
      * @throws RandomException
      * @throws ReflectionException
@@ -207,7 +209,9 @@ class ListAuxDataTest extends TestCase
      * @throws ArrayKeyException
      * @throws BlindIndexNotFoundException
      * @throws CipherSweetException
+     * @throws CryptoException
      * @throws CryptoOperationException
+     * @throws DateMalformedStringException
      * @throws DependencyException
      * @throws InvalidCiphertextException
      * @throws JsonException
@@ -243,7 +247,9 @@ class ListAuxDataTest extends TestCase
      * @throws BlindIndexNotFoundException
      * @throws CertaintyException
      * @throws CipherSweetException
+     * @throws CryptoException
      * @throws CryptoOperationException
+     * @throws DateMalformedStringException
      * @throws DependencyException
      * @throws InvalidCiphertextException
      * @throws JsonException
@@ -277,7 +283,8 @@ class ListAuxDataTest extends TestCase
         $this->assertSame(400, $response->getStatusCode());
         $body = json_decode($response->getBody()->getContents(), true);
         $this->assertArrayHasKey('error', $body);
-        $this->assertStringContainsString('WebFinger', $body['error']);
+        $this->assertStringStartsWith('A WebFinger error occurred: ', $body['error']);
+        $this->assertStringContainsString('Internal Server Error', $body['error']);
         $this->assertNotInTransaction();
     }
 
@@ -286,7 +293,9 @@ class ListAuxDataTest extends TestCase
      * @throws BlindIndexNotFoundException
      * @throws CertaintyException
      * @throws CipherSweetException
+     * @throws CryptoException
      * @throws CryptoOperationException
+     * @throws DateMalformedStringException
      * @throws DependencyException
      * @throws InvalidCiphertextException
      * @throws JsonException

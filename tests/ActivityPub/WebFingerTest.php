@@ -503,14 +503,44 @@ class WebFingerTest extends TestCase
         ];
     }
 
+    /**
+     * @throws CacheException
+     * @throws CertaintyException
+     * @throws DependencyException
+     * @throws GuzzleException
+     * @throws InvalidArgumentException
+     * @throws NetworkException
+     * @throws SodiumException
+     */
     #[DataProvider("inboxUrlProvider")]
     public function testGetInboxUrl(string $in, string $expect): void
     {
         $config = $this->getConfig();
-        $http = $config->getGuzzle();
-        $webFinger = new WebFinger($config, $http);
+        $container = [];
+        $history = Middleware::history($container);
+        $mock = new MockHandler([
+            new Response(200, ['Content-Type' => 'application/jrd+json'], json_encode([
+                'links' => [['rel' => 'self', 'type' => 'application/activity+json', 'href' => str_replace('.json', '', $expect)]]
+            ])),
+            new Response(200, ['Content-Type' => 'application/activity+json'], json_encode([
+                'inbox' => $expect
+            ]))
+        ]);
+        $handlerStack = HandlerStack::create($mock);
+        $handlerStack->push($history);
+        $mockHttp = new Client(['handler' => $handlerStack]);
+
+        $webFinger = new WebFinger($config, $mockHttp);
         $inboxUrl = $webFinger->getInboxUrl($in);
         $this->assertSame($expect, $inboxUrl);
+
+        // Verify requested URL
+        $this->assertCount(2, $container);
+        $this->assertSame(
+            str_replace('.json', '', $expect) . '.json',
+            (string) $container[1]['request']->getUri(),
+            'Second request should be to the canonical URL + .json'
+        );
     }
 
     /**

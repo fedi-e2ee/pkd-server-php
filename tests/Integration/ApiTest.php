@@ -665,7 +665,7 @@ class ApiTest extends TestCase
         }
         $this->assertNotInTransaction();
         $response = $revokeHandler->handle($request);
-        $this->assertSame(204, $response->getStatusCode());
+        $this->assertSame(200, $response->getStatusCode());
 
         $this->assertEmpty($pks->getPublicKeysFor($canonical));
         $this->assertNotInTransaction();

@@ -2,16 +2,20 @@
 declare(strict_types=1);
 namespace FediE2EE\PKDServer\Tests\RequestHandlers\ActivityPub;
 
+use GuzzleHttp\Psr7\Response;
 use FediE2EE\PKDServer\ActivityPub\WebFinger;
 use FediE2EE\PKDServer\AppCache;
 use FediE2EE\PKDServer\RequestHandlers\ActivityPub\Finger;
 use FediE2EE\PKDServer\ServerConfig;
 use FediE2EE\PKDServer\Tests\HttpTestTrait;
 use FediE2EE\PKDServer\Traits\ConfigTrait;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\UsesClass;
+use PHPUnit\Framework\Attributes\{
+    CoversClass,
+    DataProvider,
+    UsesClass
+};
 use PHPUnit\Framework\TestCase;
+use Throwable;
 
 #[CoversClass(Finger::class)]
 #[UsesClass(AppCache::class)]
@@ -31,6 +35,9 @@ class FingerTest extends TestCase
         ];
     }
 
+    /**
+     * @throws Throwable
+     */
     #[DataProvider("fingerProvider")]
     public function testKnownAnswers(string $actor, array $expected): void
     {
@@ -38,8 +45,29 @@ class FingerTest extends TestCase
             'resource' => 'acct:' . $actor,
         ]);
 
+        $config = $this->getConfig();
         $handler = new Finger();
-        $handler->injectConfig($GLOBALS['pkdConfig']);
+        $handler->injectConfig($config);
+
+        // If it's not the local actor, we need to mock WebFinger
+        $params = $config->getParams();
+        if ($actor !== "{$params->actorUsername}@{$params->hostname}") {
+            $mockWF = new WebFinger($config, $this->getMockClient([
+                new Response(200, ['Content-Type' => 'application/jrd+json'], json_encode([
+                    'subject' => 'acct:' . $actor,
+                    'aliases' => $expected['aliases'],
+                    'links' => [
+                        [
+                            'rel' => 'self',
+                            'type' => 'application/activity+json',
+                            'href' => $expected['aliases'][0]
+                        ]
+                    ]
+                ]))
+            ]));
+            $handler->setWebFinger($mockWF);
+        }
+
         $response = $handler->handle($request);
         $this->assertNotInTransaction();
         $this->assertSame(200, $response->getStatusCode());
@@ -51,6 +79,8 @@ class FingerTest extends TestCase
 
     /**
      * Test the full response structure for the local actor.
+     *
+     * @throws Throwable
      */
     public function testLocalActorFullResponse(): void
     {
@@ -89,6 +119,7 @@ class FingerTest extends TestCase
 
     /**
      * Test that missing resource parameter returns 400 error.
+     * @throws Throwable
      */
     public function testMissingResource(): void
     {
@@ -108,6 +139,7 @@ class FingerTest extends TestCase
 
     /**
      * Test that invalid resource format returns 400 error.
+     * @throws Throwable
      */
     public function testInvalidResourceFormat(): void
     {
@@ -128,6 +160,7 @@ class FingerTest extends TestCase
 
     /**
      * Test that unknown user returns 404 error.
+     * @throws Throwable
      */
     public function testUnknownUser(): void
     {

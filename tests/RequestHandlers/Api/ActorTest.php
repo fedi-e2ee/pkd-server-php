@@ -95,6 +95,9 @@ class ActorTest extends TestCase
     use ConfigTrait;
     use HttpTestTrait;
 
+    /**
+     * @throws DependencyException
+     */
     #[After]
     public function commitDanglingTransaction(): void
     {
@@ -315,7 +318,8 @@ class ActorTest extends TestCase
         $this->assertSame(400, $response->getStatusCode());
         $body = json_decode($response->getBody()->getContents(), true);
         $this->assertArrayHasKey('error', $body);
-        $this->assertStringContainsString('WebFinger', $body['error']);
+        $this->assertStringStartsWith('A WebFinger error occurred: ', $body['error']);
+        $this->assertStringContainsString('Internal Server Error', $body['error']);
         $this->assertNotInTransaction();
     }
 }

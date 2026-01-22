@@ -16,6 +16,7 @@ use PHPUnit\Framework\Attributes\{
 use PHPUnit\Framework\TestCase;
 use Psr\SimpleCache\InvalidArgumentException;
 use Random\RandomException;
+use ReflectionClass;
 use SodiumException;
 
 #[CoversClass(AppCache::class)]
@@ -160,6 +161,13 @@ class AppCacheTest extends TestCase
         $this->assertSame(3600, $cache->processTTL($interval));
     }
 
+    public function testProcessTTLWithCustomDefault(): void
+    {
+        $conf = $this->getConfig();
+        $cache = new AppCache($conf, defaultTTL: 123);
+        $this->assertSame(123, $cache->processTTL(null));
+    }
+
     /**
      * @throws InvalidArgumentException
      * @throws SodiumException
@@ -185,7 +193,7 @@ class AppCacheTest extends TestCase
         new AppCache($conf, $namespace);
 
         // Use reflection to check static inMemoryCache
-        $ref = new \ReflectionClass(AppCache::class);
+        $ref = new ReflectionClass(AppCache::class);
         $prop = $ref->getProperty('inMemoryCache');
         $prop->setAccessible(true);
         $inMemoryCache = $prop->getValue();
@@ -193,52 +201,5 @@ class AppCacheTest extends TestCase
         $this->assertArrayHasKey($namespace, $inMemoryCache);
         $this->assertIsArray($inMemoryCache[$namespace]);
         $this->assertEmpty($inMemoryCache[$namespace]);
-    }
-
-    /**
-     * @throws DependencyException
-     */
-    public function testParamsCacheTtlTooSmall(): void
-    {
-        $this->expectException(DependencyException::class);
-        $this->expectExceptionMessage('HTTP cache TTL cannot be less than 1 second');
-        new Params(hashAlgo: 'sha256', httpCacheTtl: 0);
-    }
-
-    /**
-     * @throws DependencyException
-     */
-    public function testParamsCacheTtlJustSmallEnough(): void
-    {
-        $this->assertInstanceOf(Params::class, new Params(httpCacheTtl: 2));
-    }
-
-    /**
-     * @throws DependencyException
-     */
-    public function testParamsCacheTtlJustLargeEnough(): void
-    {
-        $this->assertInstanceOf(Params::class, new Params(httpCacheTtl: 300));
-    }
-
-    /**
-     * @throws DependencyException
-     */
-    public function testParamsCacheTtlTooLarge(): void
-    {
-        $this->expectException(DependencyException::class);
-        $this->expectExceptionMessage('HTTP cache TTL cannot be greater than 300 seconds');
-        new Params(httpCacheTtl: 301);
-    }
-
-    public function testDefaultParams(): void
-    {
-        $params = new Params();
-        $this->assertSame('sha256', $params->hashAlgo);
-        $this->assertSame(120, $params->otpMaxLife);
-        $this->assertSame('pubkeydir', $params->actorUsername);
-        $this->assertSame('localhost', $params->hostname);
-        $this->assertSame('', $params->cacheKey);
-        $this->assertSame(60, $params->httpCacheTtl);
     }
 }

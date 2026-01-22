@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace FediE2EE\PKDServer\RateLimit;
 
+use DateMalformedStringException;
 use DateTimeImmutable;
 use FediE2EE\PKD\Crypto\Exceptions\InputException;
 use FediE2EE\PKD\Crypto\UtilTrait;
@@ -34,6 +35,7 @@ class RateLimitData implements \JsonSerializable
 
     /**
      * @throws BaseJsonException
+     * @throws DateMalformedStringException
      * @throws InputException
      */
     public static function fromJson(string $json): self
@@ -45,10 +47,26 @@ class RateLimitData implements \JsonSerializable
             'last-fail-time',
             'cooldown-start',
         );
+        $lastFail = null;
+        if (!empty($decoded['last-fail-time'])) {
+            if (is_array($decoded['last-fail-time'])) {
+                $lastFail = new DateTimeImmutable($decoded['last-fail-time']['date']);
+            } else {
+                $lastFail = new DateTimeImmutable($decoded['last-fail-time']);
+            }
+        }
+        $cooldownStart = null;
+        if (!empty($decoded['cooldown-start'])) {
+            if (is_array($decoded['cooldown-start'])) {
+                $cooldownStart = new DateTimeImmutable($decoded['cooldown-start']['date']);
+            } else {
+                $cooldownStart = new DateTimeImmutable($decoded['cooldown-start']);
+            }
+        }
         return new self(
             $decoded['failures'] ?? 0,
-            $decoded['last-fail-time'] ?? null,
-            $decoded['cooldown-start'] ?? null,
+            $lastFail,
+            $cooldownStart,
         );
     }
 

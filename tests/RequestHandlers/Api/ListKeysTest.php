@@ -210,6 +210,12 @@ class ListKeysTest extends TestCase
         $body = json_decode($response->getBody()->getContents(), true);
         $this->assertArrayHasKey('error', $body);
         $this->assertStringContainsString('A WebFinger error occurred', $body['error']);
+        $this->assertStringStartsWith('A WebFinger error occurred: ', $body['error']);
+        $this->assertNotSame(
+            'A WebFinger error occurred: ',
+            $body['error'],
+            'WebFinger error must actually have information!'
+        );
         $this->assertNotInTransaction();
     }
 
@@ -233,9 +239,7 @@ class ListKeysTest extends TestCase
         $config = $this->getConfig();
         $this->clearOldTransaction($config);
 
-        $nonExistentActor = 'nonexistent' . bin2hex(random_bytes(8)) . '@example.com';
-        $canonical = 'https://example.com/users/nonexistent' . bin2hex(random_bytes(8));
-
+        [$nonExistentActor, $canonical] = $this->makeDummyActor('nonexistent-example.com');
         $webFinger = new WebFinger($config, $this->getMockClient([
             new Response(200, ['Content-Type' => 'application/json'], json_encode([
                 'subject' => 'acct:' . $nonExistentActor,
@@ -248,24 +252,18 @@ class ListKeysTest extends TestCase
                 ]
             ])),
         ]));
-
-        $reflector = new ReflectionClass(ListKeys::class);
-        $handler = $reflector->newInstanceWithoutConstructor();
+        $handler = new ListKeys();
         $handler->injectConfig($config);
         $handler->setWebFinger($webFinger);
-        $constructor = $reflector->getConstructor();
-        if ($constructor) {
-            $constructor->invoke($handler);
-        }
-
         $request = $this->makeGetRequest('/api/actor/' . urlencode($nonExistentActor) . '/keys')
             ->withAttribute('actor_id', $nonExistentActor);
         $response = $handler->handle($request);
 
         $this->assertSame(404, $response->getStatusCode());
         $body = json_decode($response->getBody()->getContents(), true);
+        $this->assertIsArray($body);
         $this->assertArrayHasKey('error', $body);
-        $this->assertStringContainsString('not found', strtolower($body['error']));
+        $this->assertSame('Actor not found', $body['error']);
         $this->assertNotInTransaction();
     }
 }

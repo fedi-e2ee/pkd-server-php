@@ -142,4 +142,15 @@ class ReplicasTest extends TestCase
         }
         $this->assertTrue($found, 'peer not found in replicas list');
     }
+
+    /**
+     * @throws CacheException
+     * @throws DependencyException
+     * @throws TableException
+     */
+    public function testConstructorNullConfig(): void
+    {
+        $replicas = new Replicas(null);
+        $this->assertSame($GLOBALS['pkdConfig'], $replicas->config());
+    }
 }

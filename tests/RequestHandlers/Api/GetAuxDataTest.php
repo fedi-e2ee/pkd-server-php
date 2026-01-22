@@ -251,6 +251,9 @@ class GetAuxDataTest extends TestCase
 
         $this->assertGreaterThanOrEqual(300, $response->getStatusCode());
         $this->assertLessThan(400, $response->getStatusCode());
+        $location = $response->getHeader('Location');
+        $this->assertCount(1, $location);
+        $this->assertSame('/api', $location[0]);
         $this->assertNotInTransaction();
     }
 
@@ -279,6 +282,9 @@ class GetAuxDataTest extends TestCase
 
         $this->assertGreaterThanOrEqual(300, $response->getStatusCode());
         $this->assertLessThan(400, $response->getStatusCode());
+        $location = $response->getHeader('Location');
+        $this->assertCount(1, $location);
+        $this->assertSame('/api/actors/' . urlencode($canonical) . '/auxiliary', $location[0]);
         $this->assertNotInTransaction();
     }
 
@@ -322,7 +328,8 @@ class GetAuxDataTest extends TestCase
         $this->assertSame(400, $response->getStatusCode());
         $body = json_decode($response->getBody()->getContents(), true);
         $this->assertArrayHasKey('error', $body);
-        $this->assertStringContainsString('WebFinger', $body['error']);
+        $this->assertStringStartsWith('A WebFinger error occurred: ', $body['error']);
+        $this->assertStringContainsString('Internal Server Error', $body['error']);
         $this->assertNotInTransaction();
     }
 
