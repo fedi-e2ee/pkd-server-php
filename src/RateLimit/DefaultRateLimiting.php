@@ -71,6 +71,19 @@ class DefaultRateLimiting implements RateLimitInterface
         return $self;
     }
 
+    public function withMaxTimeout(string $key, ?DateInterval $interval = null): static
+    {
+        $self = clone $this;
+        if (!is_null($interval)) {
+            // We're adding it to the array:
+            $self->maxTimeouts[$key] = $interval;
+        } elseif (array_key_exists($key, $self->maxTimeouts)) {
+            // We're deleting it from the array:
+            unset($self->maxTimeouts[$key]);
+        }
+        return $self;
+    }
+
     #[Override]
     public function getRequestSubnet(ServerRequestInterface $request): string
     {
@@ -118,6 +131,9 @@ class DefaultRateLimiting implements RateLimitInterface
         /** @var string $target */
         foreach ($handler->getEnabledRateLimits() as $target) {
             $penalty = $this->storage->get($target, $lookups[$target]);
+            if (is_null($penalty)) {
+                continue;
+            }
             if ($penalty->failures < 1) {
                 // This should be treated the same as NULL.
                 $this->storage->delete($target, $lookups[$target]);
@@ -171,6 +187,27 @@ class DefaultRateLimiting implements RateLimitInterface
     }
 
     /**
+     * Collapse multiple types into a number of seconds.
+     *
+     * @param DateInterval|int|null $ttl
+     * @return int
+     */
+    public function processTTL(DateInterval|int|null $ttl): int
+    {
+        if (is_null($ttl)) {
+            return $this->baseDelay;
+        }
+        if (is_int($ttl)) {
+            return $ttl;
+        }
+
+        // Add interval from zero, cast to unix timestamp to get number of seconds.
+        $start = new \DateTime('@0');
+        $end = $start->add($ttl);
+        return (int) $end->format('U');
+    }
+
+    /**
      * @throws DateMalformedIntervalStringException
      */
     public function getPenaltyTime(?RateLimitData $data, string $target): ?DateTimeImmutable
@@ -186,7 +223,9 @@ class DefaultRateLimiting implements RateLimitInterface
         // Maximum penalty support:
         if (array_key_exists($target, $this->maxTimeouts)) {
             $max = $this->maxTimeouts[$target];
-            if ($penalty > $max) {
+            $penaltySeconds = $this->processTTL($penalty);
+            $maxSeconds = $this->processTTL($max);
+            if ($penaltySeconds > $maxSeconds) {
                 $penalty = $max;
             }
         }

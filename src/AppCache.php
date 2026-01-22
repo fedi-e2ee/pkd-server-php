@@ -197,9 +197,6 @@ class AppCache implements CacheInterface
         // Add interval from zero, cast to unix timestamp to get number of seconds.
         $start = new DateTime('@0');
         $end = $start->add($ttl);
-        $seconds = (int) $end->format('U');
-
-        // If invert is true, we negate:
-        return $ttl->invert ? -$seconds : $seconds;
+        return (int) $end->format('U');
     }
 }

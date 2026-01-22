@@ -179,8 +179,9 @@ class HistoryCosignTest extends TestCase
 
         $this->assertSame(400, $response->getStatusCode());
         $body = json_decode($response->getBody()->getContents(), true);
+        $this->assertIsArray($body);
         $this->assertArrayHasKey('error', $body);
-        $this->assertStringContainsString('body', strtolower($body['error']));
+        $this->assertSame('Empty body provided', $body['error']);
         $this->assertNotInTransaction();
     }
 

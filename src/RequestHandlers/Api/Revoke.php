@@ -2,12 +2,11 @@
 declare(strict_types=1);
 namespace FediE2EE\PKDServer\RequestHandlers\Api;
 
-use FediE2EE\PKD\Crypto\Exceptions\{
-    BundleException,
+use FediE2EE\PKD\Crypto\Exceptions\{BundleException,
     CryptoException,
+    InputException,
     JsonException,
-    NotImplementedException
-};
+    NotImplementedException};
 use FediE2EE\PKDServer\Exceptions\{
     CacheException,
     DependencyException,
@@ -20,6 +19,7 @@ use FediE2EE\PKDServer\{
     Protocol,
     Traits\ReqTrait
 };
+use JsonException as BaseJsonException;
 use Laminas\Diactoros\Response;
 use Override;
 use ParagonIE\HPKE\HPKEException;
@@ -45,6 +45,7 @@ class Revoke implements RequestHandlerInterface, LimitingHandlerInterface
     }
 
     /**
+     * @throws BaseJsonException
      * @throws BundleException
      * @throws CacheException
      * @throws CryptoException
@@ -59,16 +60,15 @@ class Revoke implements RequestHandlerInterface, LimitingHandlerInterface
     #[Override]
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $message = (string) $request->getBody();
-
-        try {
-            if (!$this->protocol->revokeKeyThirdParty($message)) {
-                return $this->signResponse(new Response('php://memory', 404));
-            }
-        } catch (ProtocolException) {
-            // Invalid token
+        $body = (string) $request->getBody();
+        if ($this->protocol->revokeKeyThirdParty($body)) {
+            return $this->json([
+                '!pkd-context' => 'fedi-e2ee:v1/api/revoke',
+                'time' => $this->time(),
+            ]);
         }
-        return $this->signResponse(new Response('php://memory', 204));
+        // We just return an empty response for now:
+        return new Response('php://memory', 204);
     }
 
     #[Override]

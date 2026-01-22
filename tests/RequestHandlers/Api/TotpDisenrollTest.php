@@ -550,4 +550,102 @@ class TotpDisenrollTest extends TestCase
         $this->assertArrayHasKey('error', $decoded);
         $this->assertSame('Missing required fields', $decoded['error']);
     }
+    /**
+     * Test that a timestamp outside the acceptable window returns error.
+     *
+     * @throws Exception
+     */
+    public function testTimestampOutsideWindow(): void
+    {
+        [, $canonical] = $this->makeDummyActor('timestamp-test-example.com');
+        $keypair = SecretKey::generate();
+
+        /** @var TOTP $table */
+        $table = $this->table('TOTP');
+        if (!($table instanceof TOTP)) {
+            $this->fail('type error: table() result not instance of TOTP table class');
+        }
+
+        /** @var MerkleState $merkleState */
+        $merkleState = $this->table('MerkleState');
+        if (!($merkleState instanceof MerkleState)) {
+            $this->fail('type error: table() result not instance of MerkleState table class');
+        }
+
+        // Add the key to the PKD first
+        $config = $this->getConfig();
+        $protocol = new Protocol($config);
+        $this->clearOldTransaction($config);
+        $latestRoot = $merkleState->getLatestRoot();
+        $serverHpke = $this->config->getHPKE();
+        $handler = new Handler();
+
+        $addKey = new AddKey($canonical, $keypair->getPublicKey());
+        $akm = new AttributeKeyMap()
+            ->addKey('actor', SymmetricKey::generate())
+            ->addKey('public-key', SymmetricKey::generate());
+        $encryptedMsg = $addKey->encrypt($akm);
+        $bundle = $handler->handle($encryptedMsg, $keypair, $akm, $latestRoot);
+        $encryptedForServer = $handler->hpkeEncrypt(
+            $bundle,
+            $serverHpke->encapsKey,
+            $serverHpke->cs,
+        );
+        $result = $protocol->addKey($encryptedForServer, $canonical);
+        $this->assertNotInTransaction();
+        $this->ensureMerkleStateUnlocked();
+        $this->assertObjectHasProperty('keyID', $result);
+
+        // Create TOTP Secret
+        $totpSecret = random_bytes(20);
+        $domain = 'timestamp-test-example.com';
+
+        // Save the secret
+        $table->saveSecret($domain, $totpSecret);
+
+        $oldTimestamp = time() - 86400;
+        $otpCurrent = self::generateTOTP($totpSecret);
+        $disenrollment = [
+            'actor-id' => $canonical,
+            'key-id' => $result->keyID,
+            'otp' => $otpCurrent,
+        ];
+        $messageToSign = $this->preAuthEncode([
+            '!pkd-context',
+            'fedi-e2ee:v1/api/totp/disenroll',
+            'action',
+            'TOTP-Disenroll',
+            'message',
+            json_encode($disenrollment, JSON_UNESCAPED_SLASHES),
+        ]);
+        $signature = $keypair->sign($messageToSign);
+
+        $body = [
+            '!pkd-context' => 'fedi-e2ee:v1/api/totp/disenroll',
+            'action' => 'TOTP-Disenroll',
+            'current-time' => (string) $oldTimestamp,
+            'disenrollment' => $disenrollment,
+            'signature' => Base64UrlSafe::encodeUnpadded($signature)
+        ];
+
+        // Dispatch the request
+        $request = new ServerRequest(
+            [],
+            [],
+            '/api/totp/disenroll',
+            'POST'
+        )
+            ->withHeader('Content-Type', 'application/json')
+            ->withBody(new StreamFactory()->createStream(json_encode($body)));
+        $response = $this->dispatchRequest($request);
+
+        // Should return 400 error for timestamp outside window
+        $this->assertSame(400, $response->getStatusCode());
+        $responseBody = json_decode((string) $response->getBody(), true);
+        $this->assertArrayHasKey('error', $responseBody);
+
+        // Verify the TOTP secret is still there (disenrollment should not have succeeded)
+        $storedSecret = $table->getSecretByDomain($domain);
+        $this->assertSame($totpSecret, $storedSecret);
+    }
 }
