@@ -159,7 +159,7 @@ Returns `bool`
 
 - `$key`: `string`
 
-#### [`processTTL`](../../../src/AppCache.php#L188-L204)
+#### [`processTTL`](../../../src/AppCache.php#L188-L201)
 
 Returns `int`
 

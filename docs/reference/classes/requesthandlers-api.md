@@ -2964,7 +2964,7 @@ Returns `void`
 
 **Throws:** `DependencyException`
 
-#### [`handle`](../../../src/RequestHandlers/Api/Revoke.php#L60-L72)
+#### [`handle`](../../../src/RequestHandlers/Api/Revoke.php#L61-L72)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -2974,7 +2974,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 - `$request`: `Psr\Http\Message\ServerRequestInterface`
 
-**Throws:** `BundleException`, `CacheException`, `CryptoException`, `DependencyException`, `HPKEException`, `JsonException`, `NotImplementedException`, `SodiumException`, `TableException`
+**Throws:** `BaseJsonException`, `BundleException`, `CacheException`, `CryptoException`, `DependencyException`, `HPKEException`, `JsonException`, `NotImplementedException`, `SodiumException`, `TableException`
 
 #### [`getEnabledRateLimits`](../../../src/RequestHandlers/Api/Revoke.php#L75-L78)
 
