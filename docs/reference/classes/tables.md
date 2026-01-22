@@ -298,13 +298,13 @@ Insert new leaves
 
 ### Methods
 
-#### [`getCipher`](../../../src/Tables/MerkleState.php#L47-L55)
+#### [`getCipher`](../../../src/Tables/MerkleState.php#L48-L56)
 
 Returns `FediE2EE\PKDServer\Dependency\WrappedEncryptedRow`
 
 **Attributes:** `#[Override]`
 
-#### [`getWitnessByOrigin`](../../../src/Tables/MerkleState.php#L76-L87)
+#### [`getWitnessByOrigin`](../../../src/Tables/MerkleState.php#L77-L88)
 
 Returns `array`
 
@@ -316,7 +316,7 @@ Return the witness data (including public key) for a given origin
 
 **Throws:** `TableException`
 
-#### [`addWitnessCosignature`](../../../src/Tables/MerkleState.php#L104-L146)
+#### [`addWitnessCosignature`](../../../src/Tables/MerkleState.php#L105-L147)
 
 **API** · Returns `bool`
 
@@ -328,7 +328,7 @@ Return the witness data (including public key) for a given origin
 
 **Throws:** `CryptoException`, `JsonException`, `NotImplementedException`, `ProtocolException`, `SodiumException`, `TableException`
 
-#### [`getCosignatures`](../../../src/Tables/MerkleState.php#L148-L166)
+#### [`getCosignatures`](../../../src/Tables/MerkleState.php#L149-L167)
 
 Returns `array`
 
@@ -336,7 +336,7 @@ Returns `array`
 
 - `$leafId`: `int`
 
-#### [`countCosignatures`](../../../src/Tables/MerkleState.php#L168-L178)
+#### [`countCosignatures`](../../../src/Tables/MerkleState.php#L169-L179)
 
 Returns `int`
 
@@ -344,13 +344,13 @@ Returns `int`
 
 - `$leafId`: `int`
 
-#### [`getLatestRoot`](../../../src/Tables/MerkleState.php#L186-L195)
+#### [`getLatestRoot`](../../../src/Tables/MerkleState.php#L187-L196)
 
 **API** · Returns `string`
 
 **Throws:** `DependencyException`, `SodiumException`
 
-#### [`insertLeaf`](../../../src/Tables/MerkleState.php#L214-L270)
+#### [`insertLeaf`](../../../src/Tables/MerkleState.php#L215-L271)
 
 **API** · Returns `bool`
 
@@ -364,7 +364,7 @@ Insert leaf with retry logic for deadlocks
 
 **Throws:** `ConcurrentException`, `CryptoException`, `DependencyException`, `NotImplementedException`, `RandomException`, `SodiumException`
 
-#### [`getLeafByRoot`](../../../src/Tables/MerkleState.php#L275-L291)
+#### [`getLeafByRoot`](../../../src/Tables/MerkleState.php#L276-L292)
 
 **API** · Returns `?FediE2EE\PKDServer\Tables\Records\MerkleLeaf`
 
@@ -372,7 +372,7 @@ Insert leaf with retry logic for deadlocks
 
 - `$root`: `string`
 
-#### [`getLeafByID`](../../../src/Tables/MerkleState.php#L296-L312)
+#### [`getLeafByID`](../../../src/Tables/MerkleState.php#L297-L313)
 
 **API** · Returns `?FediE2EE\PKDServer\Tables\Records\MerkleLeaf`
 
@@ -380,7 +380,7 @@ Insert leaf with retry logic for deadlocks
 
 - `$primaryKey`: `int`
 
-#### [`getHashesSince`](../../../src/Tables/MerkleState.php#L346-L391)
+#### [`getHashesSince`](../../../src/Tables/MerkleState.php#L347-L392)
 
 **API** · Returns `array`
 
@@ -638,7 +638,37 @@ Returns `bool`
 
 **Throws:** `ConcurrentException`, `CryptoException`, `DependencyException`, `NotImplementedException`, `ProtocolException`, `RandomException`, `SodiumException`, `TableException`
 
-#### [`verifyTOTP`](../../../src/Tables/PublicKeys.php#L39-L53)
+#### [`jsonDecode`](../../../src/Tables/PublicKeys.php#L12-L15)
+
+static · Returns `array`
+
+**Parameters:**
+
+- `$json`: `string`
+
+**Throws:** `BaseJsonException`
+
+#### [`jsonDecodeObject`](../../../src/Tables/PublicKeys.php#L20-L23)
+
+static · Returns `object`
+
+**Parameters:**
+
+- `$json`: `string`
+
+**Throws:** `BaseJsonException`
+
+#### [`jsonEncode`](../../../src/Tables/PublicKeys.php#L28-L34)
+
+static · Returns `string`
+
+**Parameters:**
+
+- `$data`: `mixed`
+
+**Throws:** `BaseJsonException`
+
+#### [`verifyTOTP`](../../../src/Tables/PublicKeys.php#L45-L59)
 
 static · Returns `bool`
 
@@ -648,7 +678,7 @@ static · Returns `bool`
 - `$otp`: `string`
 - `$windows`: `int` = 2
 
-#### [`generateTOTP`](../../../src/Tables/PublicKeys.php#L55-L70)
+#### [`generateTOTP`](../../../src/Tables/PublicKeys.php#L61-L76)
 
 static · Returns `string`
 
@@ -657,7 +687,7 @@ static · Returns `string`
 - `$secret`: `string`
 - `$time`: `?int` = null
 
-#### [`ord`](../../../src/Tables/PublicKeys.php#L75-L78)
+#### [`ord`](../../../src/Tables/PublicKeys.php#L81-L84)
 
 static · Returns `int`
 
@@ -667,7 +697,7 @@ Avoid cache-timing leaks in ord() by using unpack()
 
 - `$chr`: `string`
 
-#### [`throwIfTimeOutsideWindow`](../../../src/Tables/PublicKeys.php#L135-L144)
+#### [`throwIfTimeOutsideWindow`](../../../src/Tables/PublicKeys.php#L141-L150)
 
 Returns `void`
 

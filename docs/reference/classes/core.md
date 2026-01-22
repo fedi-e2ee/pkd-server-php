@@ -22,9 +22,11 @@ Namespace: `FediE2EE\PKDServer`
 
 **Implements:** `Psr\SimpleCache\CacheInterface`
 
+**Uses:** `FediE2EE\PKDServer\Traits\JsonTrait`
+
 ### Methods
 
-#### [`__construct`](../../../src/AppCache.php#L23-L32)
+#### [`__construct`](../../../src/AppCache.php#L26-L35)
 
 Returns `void`
 
@@ -34,7 +36,7 @@ Returns `void`
 - `$namespace`: `string` = ''
 - `$defaultTTL`: `int` = 60
 
-#### [`cacheJson`](../../../src/AppCache.php#L42-L52)
+#### [`cacheJson`](../../../src/AppCache.php#L46-L56)
 
 Returns `mixed`
 
@@ -48,9 +50,9 @@ Used for caching entire HTTP response data (arrays, etc.).)
 - `$fallback`: `callable`
 - `$ttl`: `DateInterval|int|null` = null
 
-**Throws:** `SodiumException`, `InvalidArgumentException`
+**Throws:** `InvalidArgumentException`, `SodiumException`, `JsonException`
 
-#### [`cache`](../../../src/AppCache.php#L62-L71)
+#### [`cache`](../../../src/AppCache.php#L66-L75)
 
 Returns `mixed`
 
@@ -66,7 +68,7 @@ Otherwise, it invokes the fallback to determine the value.
 
 **Throws:** `InvalidArgumentException`, `SodiumException`
 
-#### [`deriveKey`](../../../src/AppCache.php#L76-L79)
+#### [`deriveKey`](../../../src/AppCache.php#L80-L83)
 
 Returns `string`
 
@@ -76,7 +78,7 @@ Returns `string`
 
 **Throws:** `SodiumException`
 
-#### [`get`](../../../src/AppCache.php#L82-L90)
+#### [`get`](../../../src/AppCache.php#L86-L94)
 
 Returns `mixed`
 
@@ -87,7 +89,7 @@ Returns `mixed`
 - `$key`: `string`
 - `$default`: `mixed` = null
 
-#### [`set`](../../../src/AppCache.php#L93-L101)
+#### [`set`](../../../src/AppCache.php#L97-L105)
 
 Returns `bool`
 
@@ -99,7 +101,7 @@ Returns `bool`
 - `$value`: `mixed`
 - `$ttl`: `DateInterval|int|null` = null
 
-#### [`delete`](../../../src/AppCache.php#L104-L112)
+#### [`delete`](../../../src/AppCache.php#L108-L116)
 
 Returns `bool`
 
@@ -109,13 +111,13 @@ Returns `bool`
 
 - `$key`: `string`
 
-#### [`clear`](../../../src/AppCache.php#L115-L123)
+#### [`clear`](../../../src/AppCache.php#L119-L127)
 
 Returns `bool`
 
 **Attributes:** `#[Override]`
 
-#### [`getMultiple`](../../../src/AppCache.php#L126-L138)
+#### [`getMultiple`](../../../src/AppCache.php#L130-L142)
 
 Returns `array`
 
@@ -126,7 +128,7 @@ Returns `array`
 - `$keys`: `iterable`
 - `$default`: `mixed` = null
 
-#### [`setMultiple`](../../../src/AppCache.php#L141-L151)
+#### [`setMultiple`](../../../src/AppCache.php#L145-L155)
 
 Returns `bool`
 
@@ -137,7 +139,7 @@ Returns `bool`
 - `$values`: `iterable`
 - `$ttl`: `DateInterval|int|null` = null
 
-#### [`deleteMultiple`](../../../src/AppCache.php#L154-L167)
+#### [`deleteMultiple`](../../../src/AppCache.php#L158-L171)
 
 Returns `bool`
 
@@ -147,7 +149,7 @@ Returns `bool`
 
 - `$keys`: `iterable`
 
-#### [`has`](../../../src/AppCache.php#L170-L176)
+#### [`has`](../../../src/AppCache.php#L174-L180)
 
 Returns `bool`
 
@@ -157,7 +159,7 @@ Returns `bool`
 
 - `$key`: `string`
 
-#### [`processTTL`](../../../src/AppCache.php#L184-L200)
+#### [`processTTL`](../../../src/AppCache.php#L188-L204)
 
 Returns `int`
 
@@ -166,6 +168,36 @@ Collapse multiple types into a number of seconds for Redis.
 **Parameters:**
 
 - `$ttl`: `DateInterval|int|null`
+
+#### [`jsonDecode`](../../../src/AppCache.php#L12-L15)
+
+static · Returns `array`
+
+**Parameters:**
+
+- `$json`: `string`
+
+**Throws:** `BaseJsonException`
+
+#### [`jsonDecodeObject`](../../../src/AppCache.php#L20-L23)
+
+static · Returns `object`
+
+**Parameters:**
+
+- `$json`: `string`
+
+**Throws:** `BaseJsonException`
+
+#### [`jsonEncode`](../../../src/AppCache.php#L28-L34)
+
+static · Returns `string`
+
+**Parameters:**
+
+- `$data`: `mixed`
+
+**Throws:** `BaseJsonException`
 
 ---
 
@@ -254,7 +286,7 @@ This is intended for mocking in unit tests
 
 - `$wf`: `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
-#### [`addKey`](../../../src/Protocol.php#L280-L288)
+#### [`addKey`](../../../src/Protocol.php#L280-L289)
 
 Returns `FediE2EE\PKDServer\Tables\Records\ActorKey`
 
@@ -265,7 +297,7 @@ Returns `FediE2EE\PKDServer\Tables\Records\ActorKey`
 
 **Throws:** `BundleException`, `CacheException`, `CryptoException`, `DependencyException`, `HPKEException`, `JsonException`, `NotImplementedException`, `ProtocolException`, `SodiumException`, `TableException`
 
-#### [`revokeKey`](../../../src/Protocol.php#L302-L310)
+#### [`revokeKey`](../../../src/Protocol.php#L303-L312)
 
 Returns `FediE2EE\PKDServer\Tables\Records\ActorKey`
 
@@ -276,7 +308,7 @@ Returns `FediE2EE\PKDServer\Tables\Records\ActorKey`
 
 **Throws:** `BundleException`, `CacheException`, `CryptoException`, `DependencyException`, `HPKEException`, `JsonException`, `NotImplementedException`, `ProtocolException`, `SodiumException`, `TableException`
 
-#### [`revokeKeyThirdParty`](../../../src/Protocol.php#L324-L338)
+#### [`revokeKeyThirdParty`](../../../src/Protocol.php#L326-L341)
 
 Returns `bool`
 
@@ -286,18 +318,7 @@ Returns `bool`
 
 **Throws:** `BundleException`, `CacheException`, `CryptoException`, `DependencyException`, `HPKEException`, `JsonException`, `NotImplementedException`, `ProtocolException`, `SodiumException`, `TableException`
 
-#### [`moveIdentity`](../../../src/Protocol.php#L352-L360)
-
-Returns `bool`
-
-**Parameters:**
-
-- `$body`: `string`
-- `$outerActor`: `string`
-
-**Throws:** `BundleException`, `CacheException`, `CryptoException`, `DependencyException`, `HPKEException`, `JsonException`, `NotImplementedException`, `ProtocolException`, `SodiumException`, `TableException`
-
-#### [`burnDown`](../../../src/Protocol.php#L374-L386)
+#### [`moveIdentity`](../../../src/Protocol.php#L355-L364)
 
 Returns `bool`
 
@@ -308,7 +329,7 @@ Returns `bool`
 
 **Throws:** `BundleException`, `CacheException`, `CryptoException`, `DependencyException`, `HPKEException`, `JsonException`, `NotImplementedException`, `ProtocolException`, `SodiumException`, `TableException`
 
-#### [`fireproof`](../../../src/Protocol.php#L400-L408)
+#### [`burnDown`](../../../src/Protocol.php#L378-L391)
 
 Returns `bool`
 
@@ -319,7 +340,7 @@ Returns `bool`
 
 **Throws:** `BundleException`, `CacheException`, `CryptoException`, `DependencyException`, `HPKEException`, `JsonException`, `NotImplementedException`, `ProtocolException`, `SodiumException`, `TableException`
 
-#### [`undoFireproof`](../../../src/Protocol.php#L422-L430)
+#### [`fireproof`](../../../src/Protocol.php#L405-L414)
 
 Returns `bool`
 
@@ -330,7 +351,7 @@ Returns `bool`
 
 **Throws:** `BundleException`, `CacheException`, `CryptoException`, `DependencyException`, `HPKEException`, `JsonException`, `NotImplementedException`, `ProtocolException`, `SodiumException`, `TableException`
 
-#### [`addAuxData`](../../../src/Protocol.php#L444-L452)
+#### [`undoFireproof`](../../../src/Protocol.php#L428-L437)
 
 Returns `bool`
 
@@ -341,7 +362,7 @@ Returns `bool`
 
 **Throws:** `BundleException`, `CacheException`, `CryptoException`, `DependencyException`, `HPKEException`, `JsonException`, `NotImplementedException`, `ProtocolException`, `SodiumException`, `TableException`
 
-#### [`revokeAuxData`](../../../src/Protocol.php#L467-L475)
+#### [`addAuxData`](../../../src/Protocol.php#L451-L460)
 
 Returns `bool`
 
@@ -352,7 +373,18 @@ Returns `bool`
 
 **Throws:** `BundleException`, `CacheException`, `CryptoException`, `DependencyException`, `HPKEException`, `JsonException`, `NotImplementedException`, `ProtocolException`, `SodiumException`, `TableException`
 
-#### [`checkpoint`](../../../src/Protocol.php#L489-L502)
+#### [`revokeAuxData`](../../../src/Protocol.php#L475-L484)
+
+Returns `bool`
+
+**Parameters:**
+
+- `$body`: `string`
+- `$outerActor`: `string`
+
+**Throws:** `BundleException`, `CacheException`, `CryptoException`, `DependencyException`, `HPKEException`, `JsonException`, `NotImplementedException`, `ProtocolException`, `SodiumException`, `TableException`
+
+#### [`checkpoint`](../../../src/Protocol.php#L498-L512)
 
 Returns `bool`
 
@@ -391,31 +423,41 @@ Returns `void`
 
 - `$config`: `FediE2EE\PKDServer\ServerConfig`
 
-#### [`jsonDecode`](../../../src/Protocol.php#L87-L94)
-
-Returns `array`
-
-**Parameters:**
-
-- `$json`: `string`
-
-**Throws:** `BaseJsonException`
-
-#### [`jsonDecodeObject`](../../../src/Protocol.php#L99-L106)
-
-Returns `object`
-
-**Parameters:**
-
-- `$json`: `string`
-
-**Throws:** `BaseJsonException`
-
-#### [`config`](../../../src/Protocol.php#L111-L121)
+#### [`config`](../../../src/Protocol.php#L87-L97)
 
 Returns `FediE2EE\PKDServer\ServerConfig`
 
 **Throws:** `DependencyException`
+
+#### [`jsonDecode`](../../../src/Protocol.php#L12-L15)
+
+static · Returns `array`
+
+**Parameters:**
+
+- `$json`: `string`
+
+**Throws:** `BaseJsonException`
+
+#### [`jsonDecodeObject`](../../../src/Protocol.php#L20-L23)
+
+static · Returns `object`
+
+**Parameters:**
+
+- `$json`: `string`
+
+**Throws:** `BaseJsonException`
+
+#### [`jsonEncode`](../../../src/Protocol.php#L28-L34)
+
+static · Returns `string`
+
+**Parameters:**
+
+- `$data`: `mixed`
+
+**Throws:** `BaseJsonException`
 
 ---
 
@@ -453,7 +495,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 ### Methods
 
-#### [`__construct`](../../../src/ServerConfig.php#L36)
+#### [`__construct`](../../../src/ServerConfig.php#L38)
 
 Returns `void`
 
@@ -461,77 +503,83 @@ Returns `void`
 
 - `$params`: `FediE2EE\PKDServer\Meta\Params`
 
-#### [`getCaCertFetch`](../../../src/ServerConfig.php#L41-L47)
+#### [`getCaCertFetch`](../../../src/ServerConfig.php#L43-L49)
 
 Returns `ParagonIE\Certainty\Fetch`
 
 **Throws:** `DependencyException`
 
-#### [`getAuxDataTypeAllowList`](../../../src/ServerConfig.php#L52-L55)
+#### [`getAuxDataTypeAllowList`](../../../src/ServerConfig.php#L54-L57)
 
 **API** · Returns `array`
 
-#### [`getAuxDataRegistry`](../../../src/ServerConfig.php#L57-L63)
+#### [`getAuxDataRegistry`](../../../src/ServerConfig.php#L59-L65)
 
 Returns `FediE2EE\PKD\Extensions\Registry`
 
-#### [`getGuzzle`](../../../src/ServerConfig.php#L65-L70)
+#### [`getGuzzle`](../../../src/ServerConfig.php#L67-L72)
 
 Returns `GuzzleHttp\Client`
 
-#### [`getCipherSweet`](../../../src/ServerConfig.php#L75-L81)
+#### [`getCipherSweet`](../../../src/ServerConfig.php#L77-L83)
 
 Returns `ParagonIE\CipherSweet\CipherSweet`
 
 **Throws:** `DependencyException`
 
-#### [`getDb`](../../../src/ServerConfig.php#L87-L93)
+#### [`getDb`](../../../src/ServerConfig.php#L89-L95)
 
 **API** · Returns `ParagonIE\EasyDB\EasyDB`
 
 **Throws:** `DependencyException`
 
-#### [`getHPKE`](../../../src/ServerConfig.php#L99-L105)
+#### [`getHPKE`](../../../src/ServerConfig.php#L101-L107)
 
 **API** · Returns `FediE2EE\PKDServer\Dependency\HPKE`
 
 **Throws:** `DependencyException`
 
-#### [`getLogger`](../../../src/ServerConfig.php#L107-L113)
+#### [`getLogger`](../../../src/ServerConfig.php#L109-L115)
 
 Returns `Monolog\Logger`
 
-#### [`getParams`](../../../src/ServerConfig.php#L115-L118)
+#### [`getParams`](../../../src/ServerConfig.php#L117-L120)
 
 Returns `FediE2EE\PKDServer\Meta\Params`
 
-#### [`getSigningKeys`](../../../src/ServerConfig.php#L124-L130)
+#### [`getSigningKeys`](../../../src/ServerConfig.php#L126-L132)
 
 **API** · Returns `FediE2EE\PKDServer\Dependency\SigningKeys`
 
 **Throws:** `DependencyException`
 
-#### [`getRouter`](../../../src/ServerConfig.php#L136-L142)
+#### [`getRateLimit`](../../../src/ServerConfig.php#L138-L144)
+
+**API** · Returns `FediE2EE\PKDServer\Interfaces\RateLimitInterface`
+
+**Throws:** `DependencyException`
+
+#### [`getRouter`](../../../src/ServerConfig.php#L150-L156)
 
 **API** · Returns `League\Route\Router`
 
 **Throws:** `DependencyException`
 
-#### [`getTwig`](../../../src/ServerConfig.php#L148-L154)
+#### [`getTwig`](../../../src/ServerConfig.php#L162-L168)
 
 **API** · Returns `Twig\Environment`
 
 **Throws:** `DependencyException`
 
-#### [`getRedis`](../../../src/ServerConfig.php#L156-L159)
+#### [`getRedis`](../../../src/ServerConfig.php#L170-L173)
 
 Returns `?Predis\Client`
 
-#### [`hasRedis`](../../../src/ServerConfig.php#L161-L164)
+#### [`hasRedis`](../../../src/ServerConfig.php#L175-L178)
 
 Returns `bool`
 
-#### [`withAuxDataTypeAllowList`](../../../src/ServerConfig.php#L170-L174)
+#### [`withAuxDataTypeAllowList`](../../../src/ServerConfig.php#L184-L188)
 
 Returns `static`
 
@@ -539,7 +587,7 @@ Returns `static`
 
 - `$allowList`: `array` = []
 
-#### [`withAuxDataRegistry`](../../../src/ServerConfig.php#L176-L180)
+#### [`withAuxDataRegistry`](../../../src/ServerConfig.php#L190-L194)
 
 Returns `static`
 
@@ -547,7 +595,7 @@ Returns `static`
 
 - `$registry`: `FediE2EE\PKD\Extensions\Registry`
 
-#### [`withCACertFetch`](../../../src/ServerConfig.php#L182-L186)
+#### [`withCACertFetch`](../../../src/ServerConfig.php#L196-L200)
 
 Returns `static`
 
@@ -555,7 +603,7 @@ Returns `static`
 
 - `$fetch`: `ParagonIE\Certainty\Fetch`
 
-#### [`withCipherSweet`](../../../src/ServerConfig.php#L188-L192)
+#### [`withCipherSweet`](../../../src/ServerConfig.php#L202-L206)
 
 Returns `static`
 
@@ -563,7 +611,7 @@ Returns `static`
 
 - `$ciphersweet`: `ParagonIE\CipherSweet\CipherSweet`
 
-#### [`withDatabase`](../../../src/ServerConfig.php#L194-L198)
+#### [`withDatabase`](../../../src/ServerConfig.php#L208-L212)
 
 Returns `static`
 
@@ -571,7 +619,7 @@ Returns `static`
 
 - `$db`: `ParagonIE\EasyDB\EasyDB`
 
-#### [`withHPKE`](../../../src/ServerConfig.php#L200-L204)
+#### [`withHPKE`](../../../src/ServerConfig.php#L214-L218)
 
 Returns `static`
 
@@ -579,7 +627,7 @@ Returns `static`
 
 - `$hpke`: `FediE2EE\PKDServer\Dependency\HPKE`
 
-#### [`withLogger`](../../../src/ServerConfig.php#L206-L210)
+#### [`withLogger`](../../../src/ServerConfig.php#L220-L224)
 
 Returns `static`
 
@@ -587,7 +635,7 @@ Returns `static`
 
 - `$logger`: `Monolog\Logger`
 
-#### [`withOptionalRedisClient`](../../../src/ServerConfig.php#L212-L224)
+#### [`withOptionalRedisClient`](../../../src/ServerConfig.php#L226-L238)
 
 Returns `static`
 
@@ -595,7 +643,15 @@ Returns `static`
 
 - `$redis`: `?Predis\Client` = null
 
-#### [`withRouter`](../../../src/ServerConfig.php#L226-L230)
+#### [`withRateLimit`](../../../src/ServerConfig.php#L240-L244)
+
+Returns `static`
+
+**Parameters:**
+
+- `$rateLimit`: `FediE2EE\PKDServer\Interfaces\RateLimitInterface`
+
+#### [`withRouter`](../../../src/ServerConfig.php#L246-L250)
 
 Returns `static`
 
@@ -603,7 +659,7 @@ Returns `static`
 
 - `$router`: `League\Route\Router`
 
-#### [`withSigningKeys`](../../../src/ServerConfig.php#L232-L236)
+#### [`withSigningKeys`](../../../src/ServerConfig.php#L252-L256)
 
 Returns `static`
 
@@ -611,7 +667,7 @@ Returns `static`
 
 - `$signingKeys`: `FediE2EE\PKDServer\Dependency\SigningKeys`
 
-#### [`withTwig`](../../../src/ServerConfig.php#L238-L242)
+#### [`withTwig`](../../../src/ServerConfig.php#L258-L262)
 
 Returns `static`
 
@@ -713,33 +769,13 @@ Returns `void`
 
 - `$config`: `FediE2EE\PKDServer\ServerConfig`
 
-#### [`jsonDecode`](../../../src/Table.php#L87-L94)
-
-Returns `array`
-
-**Parameters:**
-
-- `$json`: `string`
-
-**Throws:** `BaseJsonException`
-
-#### [`jsonDecodeObject`](../../../src/Table.php#L99-L106)
-
-Returns `object`
-
-**Parameters:**
-
-- `$json`: `string`
-
-**Throws:** `BaseJsonException`
-
-#### [`config`](../../../src/Table.php#L111-L121)
+#### [`config`](../../../src/Table.php#L87-L97)
 
 Returns `FediE2EE\PKDServer\ServerConfig`
 
 **Throws:** `DependencyException`
 
-#### [`setWebFinger`](../../../src/Table.php#L126-L130)
+#### [`setWebFinger`](../../../src/Table.php#L102-L106)
 
 Returns `self`
 
@@ -749,7 +785,7 @@ This is intended for mocking in unit tests
 
 - `$wf`: `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
-#### [`webfinger`](../../../src/Table.php#L137-L144)
+#### [`webfinger`](../../../src/Table.php#L113-L120)
 
 Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
@@ -758,6 +794,36 @@ Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 - `$http`: `?GuzzleHttp\Client` = null
 
 **Throws:** `CertaintyException`, `DependencyException`, `SodiumException`
+
+#### [`jsonDecode`](../../../src/Table.php#L12-L15)
+
+static · Returns `array`
+
+**Parameters:**
+
+- `$json`: `string`
+
+**Throws:** `BaseJsonException`
+
+#### [`jsonDecodeObject`](../../../src/Table.php#L20-L23)
+
+static · Returns `object`
+
+**Parameters:**
+
+- `$json`: `string`
+
+**Throws:** `BaseJsonException`
+
+#### [`jsonEncode`](../../../src/Table.php#L28-L34)
+
+static · Returns `string`
+
+**Parameters:**
+
+- `$data`: `mixed`
+
+**Throws:** `BaseJsonException`
 
 ---
 

@@ -25,7 +25,7 @@ Namespace: `FediE2EE\PKDServer\Scheduled`
 
 ### Methods
 
-#### [`__construct`](../../../src/Scheduled/ASQueue.php#L39-L47)
+#### [`__construct`](../../../src/Scheduled/ASQueue.php#L44-L52)
 
 Returns `void`
 
@@ -35,13 +35,15 @@ Returns `void`
 
 **Throws:** `CertaintyException`, `DependencyException`, `SodiumException`
 
-#### [`run`](../../../src/Scheduled/ASQueue.php#L57-L92)
+#### [`run`](../../../src/Scheduled/ASQueue.php#L64-L99)
 
 Returns `void`
 
 ASQueue::run() is a very dumb method.
 
 All this method does is grab the unprocessed messages, order them, decode them, and then pass them onto Protocol::process(). The logic is entirely contained to Protocol and the Table classes.
+
+**Throws:** `DependencyException`
 
 #### [`appCache`](../../../src/Scheduled/ASQueue.php#L44-L47)
 
@@ -72,33 +74,13 @@ Returns `void`
 
 - `$config`: `FediE2EE\PKDServer\ServerConfig`
 
-#### [`jsonDecode`](../../../src/Scheduled/ASQueue.php#L87-L94)
-
-Returns `array`
-
-**Parameters:**
-
-- `$json`: `string`
-
-**Throws:** `BaseJsonException`
-
-#### [`jsonDecodeObject`](../../../src/Scheduled/ASQueue.php#L99-L106)
-
-Returns `object`
-
-**Parameters:**
-
-- `$json`: `string`
-
-**Throws:** `BaseJsonException`
-
-#### [`config`](../../../src/Scheduled/ASQueue.php#L111-L121)
+#### [`config`](../../../src/Scheduled/ASQueue.php#L87-L97)
 
 Returns `FediE2EE\PKDServer\ServerConfig`
 
 **Throws:** `DependencyException`
 
-#### [`setWebFinger`](../../../src/Scheduled/ASQueue.php#L126-L130)
+#### [`setWebFinger`](../../../src/Scheduled/ASQueue.php#L102-L106)
 
 Returns `self`
 
@@ -108,7 +90,7 @@ This is intended for mocking in unit tests
 
 - `$wf`: `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
-#### [`webfinger`](../../../src/Scheduled/ASQueue.php#L137-L144)
+#### [`webfinger`](../../../src/Scheduled/ASQueue.php#L113-L120)
 
 Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
@@ -117,6 +99,36 @@ Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 - `$http`: `?GuzzleHttp\Client` = null
 
 **Throws:** `CertaintyException`, `DependencyException`, `SodiumException`
+
+#### [`jsonDecode`](../../../src/Scheduled/ASQueue.php#L12-L15)
+
+static · Returns `array`
+
+**Parameters:**
+
+- `$json`: `string`
+
+**Throws:** `BaseJsonException`
+
+#### [`jsonDecodeObject`](../../../src/Scheduled/ASQueue.php#L20-L23)
+
+static · Returns `object`
+
+**Parameters:**
+
+- `$json`: `string`
+
+**Throws:** `BaseJsonException`
+
+#### [`jsonEncode`](../../../src/Scheduled/ASQueue.php#L28-L34)
+
+static · Returns `string`
+
+**Parameters:**
+
+- `$data`: `mixed`
+
+**Throws:** `BaseJsonException`
 
 ---
 
@@ -193,33 +205,13 @@ Returns `void`
 
 - `$config`: `FediE2EE\PKDServer\ServerConfig`
 
-#### [`jsonDecode`](../../../src/Scheduled/Witness.php#L87-L94)
-
-Returns `array`
-
-**Parameters:**
-
-- `$json`: `string`
-
-**Throws:** `BaseJsonException`
-
-#### [`jsonDecodeObject`](../../../src/Scheduled/Witness.php#L99-L106)
-
-Returns `object`
-
-**Parameters:**
-
-- `$json`: `string`
-
-**Throws:** `BaseJsonException`
-
-#### [`config`](../../../src/Scheduled/Witness.php#L111-L121)
+#### [`config`](../../../src/Scheduled/Witness.php#L87-L97)
 
 Returns `FediE2EE\PKDServer\ServerConfig`
 
 **Throws:** `DependencyException`
 
-#### [`setWebFinger`](../../../src/Scheduled/Witness.php#L126-L130)
+#### [`setWebFinger`](../../../src/Scheduled/Witness.php#L102-L106)
 
 Returns `self`
 
@@ -229,7 +221,7 @@ This is intended for mocking in unit tests
 
 - `$wf`: `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
-#### [`webfinger`](../../../src/Scheduled/Witness.php#L137-L144)
+#### [`webfinger`](../../../src/Scheduled/Witness.php#L113-L120)
 
 Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
@@ -238,6 +230,36 @@ Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 - `$http`: `?GuzzleHttp\Client` = null
 
 **Throws:** `CertaintyException`, `DependencyException`, `SodiumException`
+
+#### [`jsonDecode`](../../../src/Scheduled/Witness.php#L12-L15)
+
+static · Returns `array`
+
+**Parameters:**
+
+- `$json`: `string`
+
+**Throws:** `BaseJsonException`
+
+#### [`jsonDecodeObject`](../../../src/Scheduled/Witness.php#L20-L23)
+
+static · Returns `object`
+
+**Parameters:**
+
+- `$json`: `string`
+
+**Throws:** `BaseJsonException`
+
+#### [`jsonEncode`](../../../src/Scheduled/Witness.php#L28-L34)
+
+static · Returns `string`
+
+**Parameters:**
+
+- `$data`: `mixed`
+
+**Throws:** `BaseJsonException`
 
 ---
 

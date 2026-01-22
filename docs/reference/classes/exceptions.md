@@ -10,7 +10,9 @@ Namespace: `FediE2EE\PKDServer\Exceptions`
 - [ConcurrentException](#concurrentexception) - class
 - [DependencyException](#dependencyexception) - class
 - [FetchException](#fetchexception) - class
+- [NetTraitException](#nettraitexception) - class
 - [ProtocolException](#protocolexception) - class
+- [RateLimitException](#ratelimitexception) - class
 - [ScheduledTaskException](#scheduledtaskexception) - class
 - [TableException](#tableexception) - class
 
@@ -88,6 +90,18 @@ Namespace: `FediE2EE\PKDServer\Exceptions`
 
 ---
 
+## NetTraitException
+
+**class** `FediE2EE\PKDServer\Exceptions\NetTraitException`
+
+**File:** [`src/Exceptions/NetTraitException.php`](../../../src/Exceptions/NetTraitException.php)
+
+**Extends:** `FediE2EE\PKDServer\Exceptions\BaseException`
+
+**Implements:** `Stringable`, `Throwable`
+
+---
+
 ## ProtocolException
 
 **class** `FediE2EE\PKDServer\Exceptions\ProtocolException`
@@ -97,6 +111,24 @@ Namespace: `FediE2EE\PKDServer\Exceptions`
 **Extends:** `FediE2EE\PKDServer\Exceptions\BaseException`
 
 **Implements:** `Stringable`, `Throwable`
+
+---
+
+## RateLimitException
+
+**class** `FediE2EE\PKDServer\Exceptions\RateLimitException`
+
+**File:** [`src/Exceptions/RateLimitException.php`](../../../src/Exceptions/RateLimitException.php)
+
+**Extends:** `FediE2EE\PKDServer\Exceptions\BaseException`
+
+**Implements:** `Stringable`, `Throwable`
+
+### Properties
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `$rateLimitedUntil` | `?DateTimeImmutable` |  |
 
 ---
 
