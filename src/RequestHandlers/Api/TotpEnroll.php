@@ -15,6 +15,7 @@ use FediE2EE\PKDServer\{
     Exceptions\DependencyException,
     Exceptions\ProtocolException,
     Exceptions\TableException,
+    Interfaces\LimitingHandlerInterface,
     Meta\Route,
     Traits\ReqTrait,
     Traits\TOTPTrait
@@ -44,7 +45,7 @@ use SodiumException;
 use Throwable;
 use TypeError;
 
-class TotpEnroll implements RequestHandlerInterface
+class TotpEnroll implements RequestHandlerInterface, LimitingHandlerInterface
 {
     use ReqTrait;
     use TOTPTrait;
@@ -88,7 +89,7 @@ class TotpEnroll implements RequestHandlerInterface
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         try {
-            $body = $this->jsonDecode($request->getBody()->getContents());
+            $body =  self::jsonDecode($request->getBody()->getContents());
             $enrollment = $body['enrollment'] ?? [];
             $actorId = $enrollment['actor-id'] ?? '';
             $keyId = $enrollment['key-id'] ?? '';
@@ -159,5 +160,11 @@ class TotpEnroll implements RequestHandlerInterface
             'success' => true,
             'time' => (string) (new DateTime())->getTimestamp(),
         ]);
+    }
+
+    #[Override]
+    public function getEnabledRateLimits(): array
+    {
+        return ['ip', 'domain'];
     }
 }

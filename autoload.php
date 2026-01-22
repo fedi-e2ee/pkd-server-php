@@ -33,6 +33,9 @@ $GLOBALS['pkdConfig']
 $GLOBALS['pkdConfig']
     ->withOptionalRedisClient(require_once PKD_SERVER_ROOT . '/config/redis.php');
 
+// Set rate-limiting policy after Redis but before the router:
+$GLOBALS['pkdConfig']->withRateLimit(require_once PKD_SERVER_ROOT . '/config/rate-limiting.php');
+
 // Set the config injection strategy to the router
 $GLOBALS['pkdConfig']
     ->getRouter()

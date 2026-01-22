@@ -27,6 +27,7 @@ use FediE2EE\PKDServer\Exceptions\{
 use FediE2EE\PKDServer\ServerConfig;
 use FediE2EE\PKDServer\Tables\Peers;
 use FediE2EE\PKDServer\Traits\ConfigTrait;
+use JsonException as BaseJsonException;
 use ParagonIE\ConstantTime\Base64UrlSafe;
 use ParagonIE\EasyDB\EasyDB;
 use ParagonIE\HPKE\HPKEException;
@@ -125,6 +126,9 @@ class KeyWrapping
             ->open($this->hpke->decapsKey, $this->hpke->encapsKey, $ciphertext);
     }
 
+    /**
+     * @throws BaseJsonException
+     */
     public function serializeKeyMap(AttributeKeyMap $keyMap): string
     {
         if ($keyMap->isEmpty()) {
@@ -136,7 +140,7 @@ class KeyWrapping
                 $keyMap->getKey($name)->getBytes()
             );
         }
-        return json_encode($collected, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+        return self::jsonEncode($collected);
     }
 
     /**

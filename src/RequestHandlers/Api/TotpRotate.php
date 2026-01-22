@@ -15,6 +15,7 @@ use FediE2EE\PKDServer\{
     Exceptions\DependencyException,
     Exceptions\ProtocolException,
     Exceptions\TableException,
+    Interfaces\LimitingHandlerInterface,
     Meta\Route,
     Traits\ReqTrait,
     Traits\TOTPTrait
@@ -44,7 +45,7 @@ use SodiumException;
 use Throwable;
 use TypeError;
 
-class TotpRotate implements RequestHandlerInterface
+class TotpRotate implements RequestHandlerInterface, LimitingHandlerInterface
 {
     use ReqTrait;
     use TOTPTrait;
@@ -88,7 +89,7 @@ class TotpRotate implements RequestHandlerInterface
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         try {
-            $body = $this->jsonDecode($request->getBody()->getContents());
+            $body =  self::jsonDecode($request->getBody()->getContents());
             $rotation = $body['rotation'] ?? [];
             $actorId = $rotation['actor-id'] ?? '';
             $keyId = $rotation['key-id'] ?? '';
@@ -164,5 +165,11 @@ class TotpRotate implements RequestHandlerInterface
             'success' => true,
             'time' => (string) new DateTime()->getTimestamp(),
         ]);
+    }
+
+    #[Override]
+    public function getEnabledRateLimits(): array
+    {
+        return ['ip', 'domain'];
     }
 }

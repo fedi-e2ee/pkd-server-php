@@ -15,6 +15,7 @@ use FediE2EE\PKDServer\Exceptions\{
     TableException
 };
 use FediE2EE\PKDServer\{
+    Interfaces\LimitingHandlerInterface,
     Meta\Route,
     Protocol,
     Traits\ReqTrait
@@ -29,7 +30,7 @@ use Psr\Http\Message\{
 use Psr\Http\Server\RequestHandlerInterface;
 use SodiumException;
 
-class Revoke implements RequestHandlerInterface
+class Revoke implements RequestHandlerInterface, LimitingHandlerInterface
 {
     use ReqTrait;
 
@@ -68,5 +69,11 @@ class Revoke implements RequestHandlerInterface
             // Invalid token
         }
         return $this->signResponse(new Response('php://memory', 204));
+    }
+
+    #[Override]
+    public function getEnabledRateLimits(): array
+    {
+        return ['ip'];
     }
 }

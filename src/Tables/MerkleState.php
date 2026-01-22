@@ -27,6 +27,7 @@ use FediE2EE\PKD\Crypto\Merkle\{
 use FediE2EE\PKDServer\Dependency\WrappedEncryptedRow;
 use FediE2EE\PKDServer\Table;
 use FediE2EE\PKDServer\Tables\Records\MerkleLeaf;
+use JsonException as BaseJsonException;
 use Override;
 use ParagonIE\ConstantTime\Base64UrlSafe;
 use ParagonIE\HPKE\HPKEException;
@@ -393,12 +394,15 @@ class MerkleState extends Table
     /**
      * Internal processing for insertLeaf() above.
      *
+     * @throws BaseJsonException
      * @throws ConcurrentException
      * @throws CryptoException
+     * @throws DependencyException
+     * @throws InputException
+     * @throws JsonException
      * @throws NotImplementedException
      * @throws PDOException
      * @throws SodiumException
-     * @throws DependencyException
      */
     protected function insertLeafInternal(
         MerkleLeaf $leaf,
@@ -486,10 +490,7 @@ class MerkleState extends Table
                 'contenthash' => $leaf->contentHash,
                 'signature' => $leaf->getSignature(),
                 'contents' => $leaf->contents,
-                'inclusionproof' => json_encode(
-                    $inclusion,
-                    JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE
-                ),
+                'inclusionproof' => self::jsonEncode($inclusion),
                 'wrappedkeys' => $leaf->wrappedKeys,
                 'root' => $root,
             ],

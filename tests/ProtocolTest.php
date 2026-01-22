@@ -253,6 +253,14 @@ class ProtocolTest extends TestCase
         $this->clearOldTransaction($this->config);
         [$oldActor, $canonical] = $this->makeDummyActor();
         [$newActor, $canonical2] = $this->makeDummyActor();
+        $wf = new WebFinger($this->config);
+        $wf->setCanonicalForTesting($oldActor, $canonical);
+        $wf->setCanonicalForTesting($newActor, $canonical2);
+        $wf->setCanonicalForTesting($canonical, $canonical);
+        $wf->setCanonicalForTesting($canonical2, $canonical2);
+        $this->protocol->setWebFinger($wf);
+        $this->table('PublicKeys')->setWebFinger($wf);
+
         $keypair = SecretKey::generate();
         $keypair2 = SecretKey::generate();
 
@@ -318,7 +326,7 @@ class ProtocolTest extends TestCase
             $serverHpke->cs,
         );
         $this->assertNotInTransaction();
-        $result = $this->protocol->moveIdentity($encryptedForServer3, $canonical2);
+        $result = $this->protocol->moveIdentity($encryptedForServer3, $canonical);
         $this->assertTrue($result);
         $this->assertCount(0, $pkTable->getPublicKeysFor($canonical));
         $this->assertCount(2, $pkTable->getPublicKeysFor($canonical2));

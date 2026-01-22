@@ -7,6 +7,7 @@ use FediE2EE\PKD\Crypto\UtilTrait;
 use FediE2EE\PKDServer\Meta\RecordForTable;
 use FediE2EE\PKDServer\Tables\ReplicaHistory;
 use FediE2EE\PKDServer\Traits\TableRecordTrait;
+use JsonException;
 use SodiumException;
 
 #[RecordForTable(ReplicaHistory::class)]
@@ -30,6 +31,9 @@ final class ReplicaLeaf
         $this->primaryKey = $primaryKey;
     }
 
+    /**
+     * @throws JsonException
+     */
     public function toArray(): array
     {
         return [
@@ -48,7 +52,7 @@ final class ReplicaLeaf
             'inclusionproof' =>
                 is_null($this->inclusionProof)
                     ? null
-                    : json_encode($this->inclusionProof),
+                    : self::jsonEncode($this->inclusionProof),
             'created' =>
                 $this->created,
             'replicated' =>

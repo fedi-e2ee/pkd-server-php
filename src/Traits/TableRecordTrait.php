@@ -22,6 +22,8 @@ use SodiumException;
  */
 trait TableRecordTrait
 {
+    use JsonTrait;
+
     public ?int $primaryKey = null;
 
     /** @var SymmetricKey[] */

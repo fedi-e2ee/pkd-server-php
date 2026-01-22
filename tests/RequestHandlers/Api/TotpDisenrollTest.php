@@ -14,19 +14,23 @@ use FediE2EE\PKD\Crypto\{
 use FediE2EE\PKDServer\RequestHandlers\Api\{
     TotpDisenroll
 };
-use FediE2EE\PKDServer\{ActivityPub\WebFinger,
+use FediE2EE\PKDServer\{
+    ActivityPub\WebFinger,
     AppCache,
     Dependency\EasyDBHandler,
     Dependency\InjectConfigStrategy,
     Dependency\WrappedEncryptedRow,
     Math,
+    Middleware\RateLimitMiddleware,
     Protocol,
     Protocol\KeyWrapping,
     Protocol\Payload,
     Protocol\RewrapConfig,
+    RateLimit\DefaultRateLimiting,
     ServerConfig,
     Table,
-    TableCache};
+    TableCache
+};
 use FediE2EE\PKDServer\Tables\{
     Actors,
     MerkleState,
@@ -46,10 +50,7 @@ use FediE2EE\PKDServer\Traits\ConfigTrait;
 use Laminas\Diactoros\ServerRequest;
 use Laminas\Diactoros\StreamFactory;
 use ParagonIE\ConstantTime\Base64UrlSafe;
-use PHPUnit\Framework\Attributes\{
-    CoversClass,
-    UsesClass
-};
+use PHPUnit\Framework\Attributes\{CoversClass, DataProvider, UsesClass};
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(TotpDisenroll::class)]
@@ -75,6 +76,8 @@ use PHPUnit\Framework\TestCase;
 #[UsesClass(TOTP::class)]
 #[UsesClass(Math::class)]
 #[UsesClass(RewrapConfig::class)]
+#[UsesClass(RateLimitMiddleware::class)]
+#[UsesClass(DefaultRateLimiting::class)]
 class TotpDisenrollTest extends TestCase
 {
     use ConfigTrait;
@@ -155,7 +158,7 @@ class TotpDisenrollTest extends TestCase
             'action',
             'TOTP-Disenroll',
             'message',
-            json_encode($disenrollment),
+            json_encode($disenrollment, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_SLASHES),
         ]);
         $signature = $keypair->sign($messageToSign);
 
@@ -442,7 +445,7 @@ class TotpDisenrollTest extends TestCase
             'action',
             'TOTP-Disenroll',
             'message',
-            json_encode($disenrollment),
+            json_encode($disenrollment, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_SLASHES),
         ]);
         $signature = $keypair->sign($messageToSign);
         $signature ^= str_repeat("\xFF", 64);
@@ -471,5 +474,80 @@ class TotpDisenrollTest extends TestCase
         $this->assertSame(400, $response->getStatusCode());
         $this->assertArrayHasKey('error', $body);
         $this->assertSame('Invalid signature', $body['error']);
+    }
+
+
+    public static function deletedKeysProvider(): array
+    {
+        return [
+            [[
+                '!pkd-context' => '',
+                'current-time' => (string)(time()),
+                'action' => 'TOTP-Disenroll',
+                'disenrollment' => [
+                    'actor-id' => 'https://example.com/users/alice',
+                    'key-id' => 'test',
+                    'otp' => '12345678',
+                ]
+            ]], [[
+                '!pkd-context' => 'fedi-e2ee:v1/api/totp/disenroll',
+                'current-time' => '',
+                'action' => 'TOTP-Disenroll',
+                'disenrollment' => [
+                    'actor-id' => 'https://example.com/users/alice',
+                    'key-id' => 'test',
+                    'otp' => '12345678',
+                ]
+            ]], [[
+                '!pkd-context' => 'fedi-e2ee:v1/api/totp/disenroll',
+                'current-time' => (string)(time()),
+                'action' => '',
+                'disenrollment' => [
+                    'actor-id' => 'https://example.com/users/alice',
+                    'key-id' => 'test',
+                    'otp' => '12345678',
+                ]
+            ]], [[
+                '!pkd-context' => 'fedi-e2ee:v1/api/totp/disenroll',
+                'current-time' => (string)(time()),
+                'action' => 'TOTP-Disenroll',
+                'disenrollment' => [
+                    'actor-id' => '',
+                    'key-id' => 'test',
+                    'otp' => '12345678',
+                ]
+            ]], [[
+                '!pkd-context' => 'fedi-e2ee:v1/api/totp/disenroll',
+                'current-time' => (string)(time()),
+                'action' => 'TOTP-Disenroll',
+                'disenrollment' => [
+                    'actor-id' => 'https://example.com/users/alice',
+                    'key-id' => '',
+                    'otp' => '12345678',
+                ]
+            ]], [[
+                '!pkd-context' => 'fedi-e2ee:v1/api/totp/disenroll',
+                'current-time' => (string)(time()),
+                'action' => 'TOTP-Disenroll',
+                'disenrollment' => [
+                    'actor-id' => 'https://example.com/users/alice',
+                    'key-id' => 'test',
+                    'otp' => '',
+                ]
+            ]],
+        ];
+    }
+
+    #[DataProvider("deletedKeysProvider")]
+    public function testMissingFields(array $data): void
+    {
+        $request = $this->makePostRequest('/api/totp/disenroll', $data);
+        $response = $this->dispatchRequest($request);
+        $this->assertSame(400, $response->getStatusCode());
+        $body = $response->getBody()->getContents();
+        $decoded = json_decode($body, true);
+        $this->assertIsArray($decoded);
+        $this->assertArrayHasKey('error', $decoded);
+        $this->assertSame('Missing required fields', $decoded['error']);
     }
 }

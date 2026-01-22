@@ -28,10 +28,12 @@ use FediE2EE\PKDServer\{
     Dependency\InjectConfigStrategy,
     Dependency\WrappedEncryptedRow,
     Math,
+    Middleware\RateLimitMiddleware,
     Protocol,
     Protocol\KeyWrapping,
     Protocol\Payload,
     Protocol\RewrapConfig,
+    RateLimit\DefaultRateLimiting,
     ServerConfig,
     Table,
     TableCache
@@ -110,6 +112,8 @@ use SodiumException;
 #[UsesClass(WebFinger::class)]
 #[UsesClass(Math::class)]
 #[UsesClass(RewrapConfig::class)]
+#[UsesClass(RateLimitMiddleware::class)]
+#[UsesClass(DefaultRateLimiting::class)]
 class TotpRotateTest extends TestCase
 {
     use HttpTestTrait;
@@ -232,7 +236,7 @@ class TotpRotateTest extends TestCase
             'action',
             'TOTP-Rotate',
             'message',
-            json_encode($rotation)
+            json_encode($rotation, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE),
         ]);
         $signature = $sk->sign($toSign);
         $message['signature'] = Base64UrlSafe::encodeUnpadded($signature);
@@ -684,5 +688,249 @@ class TotpRotateTest extends TestCase
         $this->assertSame(400, $response->getStatusCode());
         $this->assertArrayHasKey('error', $body);
         $this->assertSame('Invalid signature', $body['error']);
+    }
+
+    /**
+     * @throws ArrayKeyException
+     * @throws CacheException
+     * @throws CertaintyException
+     * @throws CipherSweetException
+     * @throws CryptoException
+     * @throws CryptoOperationException
+     * @throws DependencyException
+     * @throws HPKEException
+     * @throws InvalidArgumentException
+     * @throws InvalidCiphertextException
+     * @throws JsonException
+     * @throws NotImplementedException
+     * @throws ParserException
+     * @throws ProtocolException
+     * @throws RandomException
+     * @throws SodiumException
+     * @throws TableException
+     */
+    public function testInvalidNewOtpCodes(): void
+    {
+        $sk = SecretKey::generate();
+        $pk = $sk->getPublicKey();
+        [, $canonical] = $this->makeDummyActor('invalid-new-otp-rotate.com');
+
+        /** @var TOTP $totpTable */
+        $totpTable = $this->table('TOTP');
+        /** @var MerkleState $merkleState */
+        $merkleState = $this->table('MerkleState');
+
+        $config = $this->getConfig();
+        $this->clearOldTransaction($config);
+        $protocol = new Protocol($config);
+
+        $addKeyResult = $this->addKeyForActor($canonical, $sk, $protocol, $config);
+        $keyId = $addKeyResult->keyID;
+
+        $domain = parse_url($canonical)['host'];
+        $oldSecret = random_bytes(20);
+        $totpTable->saveSecret($domain, $oldSecret);
+
+        $totpGenerator = new class() {
+            use TOTPTrait;
+        };
+
+        $oldOtp = $totpGenerator->generateTOTP($oldSecret, time());
+
+        $newSecret = random_bytes(20);
+        $newOtpCurrent = $totpGenerator->generateTOTP($newSecret, time());
+        $newOtpPrevious = $totpGenerator->generateTOTP($newSecret, time() - 30);
+
+        $hpke = $this->config()->getHPKE();
+        $encryptedSecret = new HPKEAdapter($hpke->cs, 'fedi-e2ee:v1/api/totp/rotate')->seal(
+            $hpke->getEncapsKey(),
+            $newSecret
+        );
+
+        // Case 1: new-otp-current is invalid (kills first part of LogicalOr)
+        $rotation = [
+            'actor-id' => $canonical,
+            'key-id' => $keyId,
+            'old-otp' => $oldOtp,
+            'new-otp-current' => '00000000', // INVALID
+            'new-otp-previous' => $newOtpPrevious,
+            'new-totp-secret' => Base32::encode($encryptedSecret),
+        ];
+        $this->executeRotateAndAssertError($sk, $rotation, 406, 'Invalid new TOTP codes');
+
+        // Case 2: new-otp-previous is invalid (kills second part of LogicalOr)
+        $rotation = [
+            'actor-id' => $canonical,
+            'key-id' => $keyId,
+            'old-otp' => $oldOtp,
+            'new-otp-current' => $newOtpCurrent,
+            'new-otp-previous' => '00000000', // INVALID
+            'new-totp-secret' => Base32::encode($encryptedSecret),
+        ];
+        $this->executeRotateAndAssertError($sk, $rotation, 406, 'Invalid new TOTP codes');
+    }
+
+    private function executeRotateAndAssertError(
+        SecretKey $sk,
+        array $rotation,
+        int $expectedStatus,
+        string $expectedError
+    ): void {
+        foreach ($rotation as $k => $v) {
+            if (empty($v)) {
+                fwrite(STDERR, "FIELD {$k} IS EMPTY\n");
+            }
+        }
+        $message = [
+            '!pkd-context' => 'fedi-e2ee:v1/api/totp/rotate',
+            'action' => 'TOTP-Rotate',
+            'current-time' => (string) time(),
+            'rotation' => $rotation,
+        ];
+        $toSign = $this->preAuthEncode([
+            '!pkd-context',
+            'fedi-e2ee:v1/api/totp/rotate',
+            'action',
+            'TOTP-Rotate',
+            'message',
+            json_encode($rotation, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE),
+        ]);
+        $message['signature'] = Base64UrlSafe::encodeUnpadded($sk->sign($toSign));
+        $request = $this->makePostRequest('/api/totp/rotate', $message);
+        $response = $this->dispatchRequest($request);
+        $body = json_decode((string)$response->getBody(), true);
+        if ($response->getStatusCode() !== $expectedStatus) {
+            fwrite(STDERR, "BODY: " . json_encode($body) . "\n");
+        }
+        $this->assertSame($expectedStatus, $response->getStatusCode());
+        $this->assertSame($expectedError, $body['error']);
+    }
+
+    public static function deletedKeysProvider(): array
+    {
+        return [
+            [[
+                '!pkd-context' => '',
+                'current-time' => (string) (time()),
+                'action' => 'TOTP-Rotate',
+                'rotation' => [
+                    'actor-id' => 'https://example.com/users/alice',
+                    'key-id' => 'test',
+                    'old-otp' => '12345678',
+                    'new-otp-current' => '12345678',
+                    'new-otp-previous' => '12345678',
+                    'new-totp-secret' => '12345678',
+                ]
+            ]], [[
+                '!pkd-context' => 'fedi-e2ee:v1/api/totp/rotate',
+                'current-time' => '',
+                'action' => 'TOTP-Rotate',
+                'rotation' => [
+                    'actor-id' => 'https://example.com/users/alice',
+                    'key-id' => 'test',
+                    'old-otp' => '12345678',
+                    'new-otp-current' => '12345678',
+                    'new-otp-previous' => '12345678',
+                    'new-totp-secret' => '12345678',
+                ]
+            ]], [[
+                '!pkd-context' => 'fedi-e2ee:v1/api/totp/rotate',
+                'current-time' => (string) (time()),
+                'action' => '',
+                'rotation' => [
+                    'actor-id' => 'https://example.com/users/alice',
+                    'key-id' => 'test',
+                    'old-otp' => '12345678',
+                    'new-otp-current' => '12345678',
+                    'new-otp-previous' => '12345678',
+                    'new-totp-secret' => '12345678',
+                ]
+            ]], [[
+                '!pkd-context' => 'fedi-e2ee:v1/api/totp/rotate',
+                'current-time' => (string) (time()),
+                'action' => 'TOTP-Rotate',
+                'rotation' => [
+                    'actor-id' => '',
+                    'key-id' => 'test',
+                    'old-otp' => '12345678',
+                    'new-otp-current' => '12345678',
+                    'new-otp-previous' => '12345678',
+                    'new-totp-secret' => '12345678',
+                ]
+            ]], [[
+                '!pkd-context' => 'fedi-e2ee:v1/api/totp/rotate',
+                'current-time' => (string) (time()),
+                'action' => 'TOTP-Rotate',
+                'rotation' => [
+                    'actor-id' => 'https://example.com/users/alice',
+                    'key-id' => '',
+                    'old-otp' => '12345678',
+                    'new-otp-current' => '12345678',
+                    'new-otp-previous' => '12345678',
+                    'new-totp-secret' => '12345678',
+                ]
+            ]], [[
+                '!pkd-context' => 'fedi-e2ee:v1/api/totp/rotate',
+                'current-time' => (string) (time()),
+                'action' => 'TOTP-Rotate',
+                'rotation' => [
+                    'actor-id' => 'https://example.com/users/alice',
+                    'key-id' => 'test',
+                    'old-otp' => '',
+                    'new-otp-current' => '12345678',
+                    'new-otp-previous' => '12345678',
+                    'new-totp-secret' => '12345678',
+                ]
+            ]], [[
+                '!pkd-context' => 'fedi-e2ee:v1/api/totp/rotate',
+                'current-time' => (string) (time()),
+                'action' => 'TOTP-Rotate',
+                'rotation' => [
+                    'actor-id' => 'https://example.com/users/alice',
+                    'key-id' => 'test',
+                    'old-otp' => '12345678',
+                    'new-otp-current' => '',
+                    'new-otp-previous' => '12345678',
+                    'new-totp-secret' => '12345678',
+                ]
+            ]], [[
+                '!pkd-context' => 'fedi-e2ee:v1/api/totp/rotate',
+                'current-time' => (string) (time()),
+                'action' => 'TOTP-Rotate',
+                'rotation' => [
+                    'actor-id' => 'https://example.com/users/alice',
+                    'key-id' => 'test',
+                    'old-otp' => '12345678',
+                    'new-otp-current' => '12345678',
+                    'new-otp-previous' => '',
+                    'new-totp-secret' => '12345678',
+                ]
+            ]], [[
+                '!pkd-context' => 'fedi-e2ee:v1/api/totp/rotate',
+                'current-time' => (string) (time()),
+                'action' => 'TOTP-Rotate',
+                'rotation' => [
+                    'actor-id' => 'https://example.com/users/alice',
+                    'key-id' => 'test',
+                    'old-otp' => '12345678',
+                    'new-otp-current' => '12345678',
+                    'new-otp-previous' => '12345678',
+                    'new-totp-secret' => '',
+                ]
+            ]]
+        ];
+    }
+
+    #[DataProvider("deletedKeysProvider")]
+    public function testMissingFields(array $data): void
+    {
+        $request = $this->makePostRequest('/api/totp/rotate', $data);
+        $response = $this->dispatchRequest($request);
+        $this->assertSame(400, $response->getStatusCode());
+        $body = $response->getBody()->getContents();
+        $decoded = json_decode($body, true);
+        $this->assertIsArray($decoded);
+        $this->assertArrayHasKey('error', $decoded);
+        $this->assertSame('Missing required fields', $decoded['error']);
     }
 }

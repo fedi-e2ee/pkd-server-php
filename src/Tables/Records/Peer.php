@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace FediE2EE\PKDServer\Tables\Records;
 
 use DateTimeImmutable;
+use JsonException;
 use FediE2EE\PKD\Crypto\{
     Merkle\IncrementalTree,
     PublicKey,
@@ -36,6 +37,9 @@ class Peer
         $this->primaryKey = $primaryKey;
     }
 
+    /**
+     * @throws JsonException
+     */
     public function toArray(): array
     {
         return [
@@ -52,7 +56,7 @@ class Peer
             'rewrap' =>
                 is_null($this->wrapConfig)
                     ? null
-                    : json_encode($this->wrapConfig),
+                    : self::jsonEncode($this->wrapConfig),
             'cosign' =>
                 $this->cosign,
             'replicate' =>

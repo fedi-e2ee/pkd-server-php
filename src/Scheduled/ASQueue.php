@@ -6,10 +6,13 @@ use FediE2EE\PKDServer\ActivityPub\{
     ActivityStream,
     WebFinger
 };
+use FediE2EE\PKD\Crypto\Exceptions\NetworkException;
 use FediE2EE\PKDServer\Exceptions\{
+    CacheException,
     DependencyException,
     ProtocolException
 };
+use JsonException;
 use FediE2EE\PKDServer\{
     Protocol,
     ServerConfig
@@ -17,10 +20,12 @@ use FediE2EE\PKDServer\{
 use FediE2EE\PKDServer\Traits\ConfigTrait;
 use GuzzleHttp\{
     Client,
+    Exception\GuzzleException,
     Psr7\Request
 };
 use ParagonIE\Certainty\Exception\CertaintyException;
 use ParagonIE\EasyDB\EasyDB;
+use Psr\SimpleCache\InvalidArgumentException;
 use SodiumException;
 use Throwable;
 
@@ -53,6 +58,8 @@ class ASQueue
      * Protocol::process().
      *
      * The logic is entirely contained to Protocol and the Table classes.
+     *
+     * @throws DependencyException
      */
     public function run(): void
     {
@@ -65,7 +72,7 @@ class ASQueue
         foreach ($workload as $queue) {
             $success = false;
             try {
-                $decoded = $this->jsonDecodeObject($queue['message']);
+                $decoded = self::jsonDecodeObject($queue['message']);
                 $enqueued = ActivityStream::fromDecoded($decoded);
                 try {
                     $results = $protocol->process($enqueued);
@@ -91,6 +98,14 @@ class ASQueue
         }
     }
 
+    /**
+     * @throws CacheException
+     * @throws GuzzleException
+     * @throws InvalidArgumentException
+     * @throws JsonException
+     * @throws NetworkException
+     * @throws SodiumException
+     */
     protected function replySuccess(ActivityStream $enqueued, array $results): void
     {
         // TODO: Let this be customized.
@@ -116,6 +131,14 @@ class ASQueue
         ]);
     }
 
+    /**
+     * @throws CacheException
+     * @throws GuzzleException
+     * @throws InvalidArgumentException
+     * @throws JsonException
+     * @throws NetworkException
+     * @throws SodiumException
+     */
     protected function replyFailure(ActivityStream $enqueued, Throwable $ex): void
     {
         $this->sendDM($enqueued->actor, $enqueued->id, [
@@ -125,6 +148,14 @@ class ASQueue
         ]);
     }
 
+    /**
+     * @throws CacheException
+     * @throws GuzzleException
+     * @throws InvalidArgumentException
+     * @throws JsonException
+     * @throws NetworkException
+     * @throws SodiumException
+     */
     protected function sendDM(string $actor, string $inReplyTo, array $object): void
     {
         $params = $this->config->getParams();
@@ -138,10 +169,7 @@ class ASQueue
             'object' => $object,
         ];
         $data['object']['type'] = 'Note';
-        $encoded = json_encode(
-            $data,
-            JSON_THROW_ON_ERROR | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE
-        );
+        $encoded = self::jsonEncode($data);
 
         // Get the actor's inbox URL:
         $actorInbox = $this->webFinger->getInboxUrl($actor);

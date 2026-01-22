@@ -3,7 +3,10 @@ declare(strict_types=1);
 namespace FediE2EE\PKDServer\Traits;
 
 use DateMalformedStringException;
-use FediE2EE\PKD\Crypto\Exceptions\NotImplementedException;
+use FediE2EE\PKD\Crypto\Exceptions\{
+    CryptoException,
+    NotImplementedException
+};
 use FediE2EE\PKD\Crypto\{
     PublicKey,
     UtilTrait
@@ -17,6 +20,8 @@ use FediE2EE\PKDServer\Exceptions\{
 use FediE2EE\PKDServer\Tables\PublicKeys;
 use JsonException;
 use ParagonIE\CipherSweet\Exception\{
+    ArrayKeyException,
+    BlindIndexNotFoundException,
     CipherSweetException,
     CryptoOperationException,
     InvalidCiphertextException
@@ -27,6 +32,7 @@ use SodiumException;
 
 trait TOTPTrait
 {
+    use JsonTrait;
     use UtilTrait;
     public const int TOTP_WINDOW_TIME = 30;
 
@@ -78,8 +84,11 @@ trait TOTPTrait
     }
 
     /**
+     * @throws ArrayKeyException
+     * @throws BlindIndexNotFoundException
      * @throws CacheException
      * @throws CipherSweetException
+     * @throws CryptoException
      * @throws CryptoOperationException
      * @throws DateMalformedStringException
      * @throws DependencyException
@@ -109,10 +118,7 @@ trait TOTPTrait
                 throw new ProtocolException('Signature is missing');
             }
 
-            $message = json_encode($body['enrollment'] ?? $body['disenrollment'] ?? $body['rotation']);
-            if (!is_string($message)) {
-                throw new ProtocolException('Could not JSON encode message');
-            }
+            $message = self::jsonEncode($body['enrollment'] ?? $body['disenrollment'] ?? $body['rotation']);
             $toSign = $this->preAuthEncode([
                 '!pkd-context',
                 ($body['!pkd-context'] ?? ''),

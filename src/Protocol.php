@@ -171,10 +171,10 @@ class Protocol
                 'UndoFireproof' => $publicKeyTable->undoFireproof($payload, $outerActor),
                 // BurnDown MUST NOT be encrypted:
                 'BurnDown' =>
-                    throw new ProtocolException('BurnDown MUST NOT be HPKE-encrypted'),
+                throw new ProtocolException('BurnDown MUST NOT be HPKE-encrypted'),
                 // Unknown:
                 default =>
-                    throw new ProtocolException('Unknown action: ' . $action),
+                throw new ProtocolException('Unknown action: ' . $action),
             };
         } else {
             $result = match ($action) {
@@ -183,9 +183,9 @@ class Protocol
                 'Checkpoint' => $publicKeyTable->checkpoint($payload),
                 // These actions MUST be encrypted:
                 'AddAuxData', 'AddKey', 'Fireproof', 'MoveIdentity', 'RevokeAuxData', 'RevokeKey', 'UndoFireproof' =>
-                    throw new ProtocolException('This action MUST be HPKE-encrypted: ' . $action),
+                throw new ProtocolException('This action MUST be HPKE-encrypted: ' . $action),
                 default =>
-                    throw new ProtocolException('Unknown action: ' . $action),
+                throw new ProtocolException('Unknown action: ' . $action),
             };
         }
         // You'll notice that Checkpoint is allowed, but not require, to be HPKE encrypted.
@@ -280,7 +280,8 @@ class Protocol
     public function addKey(string $body, string $outerActor): ActorKey
     {
         $payload = $this->hpkeUnwrap($body);
-        $table = new PublicKeys($this->config);
+        /** @var PublicKeys $table */
+        $table = $this->table('PublicKeys');
         $return = $table->addKey($payload, $outerActor);
         $this->wrapLocalKeys($payload);
         $this->cleanUpAfterAction();
@@ -302,7 +303,8 @@ class Protocol
     public function revokeKey(string $body, string $outerActor): ActorKey
     {
         $payload = $this->hpkeUnwrap($body);
-        $table = new PublicKeys($this->config);
+        /** @var PublicKeys $table */
+        $table = $this->table('PublicKeys');
         $return = $table->revokeKey($payload, $outerActor);
         $this->wrapLocalKeys($payload);
         $this->cleanUpAfterAction();
@@ -330,7 +332,8 @@ class Protocol
             throw new ProtocolException('Invalid bundle for RevokeKeyThirdParty', 0, $e);
         }
 
-        $table = new PublicKeys($this->config);
+        /** @var PublicKeys $table */
+        $table = $this->table('PublicKeys');
         $return = $table->revokeKeyThirdParty($payload);
         $this->wrapLocalKeys($payload);
         $this->cleanUpAfterAction();
@@ -352,7 +355,8 @@ class Protocol
     public function moveIdentity(string $body, string $outerActor): bool
     {
         $payload = $this->hpkeUnwrap($body);
-        $table = new PublicKeys($this->config);
+        /** @var PublicKeys $table */
+        $table = $this->table('PublicKeys');
         $return = $table->moveIdentity($payload, $outerActor);
         $this->wrapLocalKeys($payload);
         $this->cleanUpAfterAction();
@@ -378,7 +382,8 @@ class Protocol
             throw new ProtocolException('BurnDown MUST NOT be encrypted.');
         }
         $payload = $this->hpkeUnwrap($body);
-        $table = new PublicKeys($this->config);
+        /** @var PublicKeys $table */
+        $table = $this->table('PublicKeys');
         $return = $table->burnDown($payload, $outerActor);
         $this->wrapLocalKeys($payload);
         $this->cleanUpAfterAction();
@@ -400,7 +405,8 @@ class Protocol
     public function fireproof(string $body, string $outerActor): bool
     {
         $payload = $this->hpkeUnwrap($body);
-        $table = new PublicKeys($this->config);
+        /** @var PublicKeys $table */
+        $table = $this->table('PublicKeys');
         $return = $table->fireproof($payload, $outerActor);
         $this->wrapLocalKeys($payload);
         $this->cleanUpAfterAction();
@@ -422,7 +428,8 @@ class Protocol
     public function undoFireproof(string $body, string $outerActor): bool
     {
         $payload = $this->hpkeUnwrap($body);
-        $table = new PublicKeys($this->config);
+        /** @var PublicKeys $table */
+        $table = $this->table('PublicKeys');
         $return = $table->undoFireproof($payload, $outerActor);
         $this->wrapLocalKeys($payload);
         $this->cleanUpAfterAction();
@@ -444,7 +451,8 @@ class Protocol
     public function addAuxData(string $body, string $outerActor): bool
     {
         $payload = $this->hpkeUnwrap($body);
-        $table = new AuxData($this->config);
+        /** @var AuxData $table */
+        $table = $this->table('AuxData');
         $return = $table->addAuxData($payload, $outerActor);
         $this->wrapLocalKeys($payload);
         $this->cleanUpAfterAction();
@@ -467,7 +475,8 @@ class Protocol
     public function revokeAuxData(string $body, string $outerActor): bool
     {
         $payload = $this->hpkeUnwrap($body);
-        $table = new AuxData($this->config);
+        /** @var AuxData $table */
+        $table = $this->table('AuxData');
         $return = $table->revokeAuxData($payload, $outerActor);
         $this->wrapLocalKeys($payload);
         $this->cleanUpAfterAction();
@@ -494,7 +503,8 @@ class Protocol
         } catch (ParserException $e) {
             throw new ProtocolException('Invalid bundle for Checkpoint', 0, $e);
         }
-        $table = new PublicKeys($this->config);
+        /** @var PublicKeys $table */
+        $table = $this->table('PublicKeys');
         $return = $table->checkpoint($payload);
         $this->wrapLocalKeys($payload);
         $this->cleanUpAfterAction();

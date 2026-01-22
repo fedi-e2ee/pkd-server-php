@@ -10,6 +10,7 @@ use FediE2EE\PKD\Crypto\Exceptions\{
 };
 use FediE2EE\PKD\Crypto\HttpSignature;
 use FediE2EE\PKDServer\Exceptions\DependencyException;
+use JsonException as BaseJsonException;
 use Laminas\Diactoros\{
     Response,
     Stream
@@ -87,7 +88,7 @@ trait ReqTrait
      * Return a JSON response with HTTP Message Signature (from signResponse())
      *
      * @throws DependencyException
-     * @throws JsonException
+     * @throws BaseJsonException
      * @throws NotImplementedException
      * @throws SodiumException
      */
@@ -99,13 +100,7 @@ trait ReqTrait
         if (!array_key_exists('Content-Type', $headers)) {
             $headers['Content-Type'] = 'application/json';
         }
-        $json = json_encode(
-            $data,
-            JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE
-        );
-        if (!is_string($json)) {
-            throw new JsonException(json_last_error_msg(), json_last_error());
-        }
+        $json = self::jsoNEncode($data);
         $stream = new Stream('php://temp', 'wb');
         $stream->write($json);
         $stream->rewind();

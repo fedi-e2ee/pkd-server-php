@@ -9,6 +9,7 @@ use FediE2EE\PKDServer\Dependency\{
     HPKE,
     SigningKeys
 };
+use FediE2EE\PKDServer\Interfaces\RateLimitInterface;
 use FediE2EE\PKDServer\Exceptions\DependencyException;
 use League\Route\Router;
 use Monolog\Logger;
@@ -29,6 +30,7 @@ class ServerConfig
     private ?HPKE $hpke = null;
     private ?RedisClient $redis = null;
     private ?Logger $logger = null;
+    private ?RateLimitInterface $rateLimit = null;
     private ?Router $router = null;
     private ?SigningKeys $signingKeys = null;
     private ?Environment $twig = null;
@@ -133,6 +135,18 @@ class ServerConfig
      * @throws DependencyException
      * @api
      */
+    public function getRateLimit(): RateLimitInterface
+    {
+        if (is_null($this->rateLimit)) {
+            throw new DependencyException('rate-limiting logic not injected');
+        }
+        return $this->rateLimit;
+    }
+
+    /**
+     * @throws DependencyException
+     * @api
+     */
     public function getRouter(): Router
     {
         if (is_null($this->router)) {
@@ -220,6 +234,12 @@ class ServerConfig
             }
         }
         $this->redis = $redis;
+        return $this;
+    }
+
+    public function withRateLimit(RateLimitInterface $rateLimit): static
+    {
+        $this->rateLimit = $rateLimit;
         return $this;
     }
 

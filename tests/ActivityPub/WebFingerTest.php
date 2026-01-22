@@ -677,6 +677,10 @@ class WebFingerTest extends TestCase
                 json_encode([
                     'inbox' => 'https://example.com/users/alice/inbox',
                     'links' => [
+                        // missing rel (kills break mutation)
+                        ['type' => 'application/activity+json', 'href' => 'https://example.com/users/alice'],
+                        // missing type (kills break mutation)
+                        ['rel' => 'self', 'href' => 'https://example.com/users/alice'],
                         // invalid type
                         ['rel' => 'self', 'type' => 'application/json', 'href' => 'https://example.com/users/alice'],
                         // invalid rel
