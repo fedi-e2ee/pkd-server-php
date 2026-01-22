@@ -24,6 +24,7 @@ use FediE2EE\PKDServer\RequestHandlers\Api\{
     TotpDisenroll,
     TotpEnroll
 };
+use FediE2EE\PKDServer\Middleware\RateLimitMiddleware;
 use FediE2EE\PKDServer\RequestHandlers\ActivityPub\{
     Finger,
     Inbox,
@@ -63,11 +64,16 @@ $router->group('/api', function(RouteGroup $r) use ($router) {
 
     $r->map('POST', '/checkpoint', Checkpoint::class);
     $r->map('POST', '/history/cosign/{hash}', HistoryCosign::class);
-    $r->map('POST', '/burndown', BurnDown::class);
-    $r->map('POST', '/revoke', Revoke::class);
-    $r->map('POST', '/totp/enroll', TotpEnroll::class);
-    $r->map('POST', '/totp/disenroll', TotpDisenroll::class);
-    $r->map('POST', '/totp/rotate', TotpRotate::class);
+    $r->map('POST', '/burndown', BurnDown::class)
+        ->lazyMiddleware(RateLimitMiddleware::class);
+    $r->map('POST', '/revoke', Revoke::class)
+        ->lazyMiddleware(RateLimitMiddleware::class);
+    $r->map('POST', '/totp/enroll', TotpEnroll::class)
+        ->lazyMiddleware(RateLimitMiddleware::class);
+    $r->map('POST', '/totp/disenroll', TotpDisenroll::class)
+        ->lazyMiddleware(RateLimitMiddleware::class);
+    $r->map('POST', '/totp/rotate', TotpRotate::class)
+        ->lazyMiddleware(RateLimitMiddleware::class);
 });
 // ActivityPub integration
 $router->map('GET', '/.well-known/webfinger', Finger::class);

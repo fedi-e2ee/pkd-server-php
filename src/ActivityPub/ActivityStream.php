@@ -4,6 +4,7 @@ namespace FediE2EE\PKDServer\ActivityPub;
 
 use AllowDynamicProperties;
 use FediE2EE\PKDServer\Exceptions\ActivityPubException;
+use FediE2EE\PKDServer\Traits\JsonTrait;
 use JsonException;
 use JsonSerializable;
 use Override;
@@ -12,6 +13,7 @@ use stdClass;
 #[AllowDynamicProperties]
 class ActivityStream implements JsonSerializable
 {
+    use JsonTrait;
     protected const string PUBLIC_ADDRESS = 'https://www.w3.org/ns/activitystreams#Public';
     private string $internalContext = '';
     public string $id = '';
@@ -65,10 +67,7 @@ class ActivityStream implements JsonSerializable
      */
     public function __toString(): string
     {
-        return json_encode(
-            $this->jsonSerialize(),
-            JSON_THROW_ON_ERROR | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE
-        );
+        return self::jsonEncode($this->jsonSerialize());
     }
 
     /**

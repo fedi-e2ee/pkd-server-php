@@ -16,6 +16,7 @@ use FediE2EE\PKDServer\{
     Meta\Params,
     Protocol\KeyWrapping,
     Protocol,
+    Protocol\RewrapConfig,
     ServerConfig,
     Table,
     TableCache
@@ -41,8 +42,10 @@ use FediE2EE\PKDServer\Tables\{
 use FediE2EE\PKDServer\Tables\Records\{
     Actor,
     ActorKey,
-    MerkleLeaf
+    MerkleLeaf,
+    Peer
 };
+use ParagonIE\ConstantTime\Base64UrlSafe;
 use FediE2EE\PKDServer\Tests\HttpTestTrait;
 use FediE2EE\PKDServer\Traits\ConfigTrait;
 use ParagonIE\Certainty\Exception\CertaintyException;
@@ -76,6 +79,8 @@ use SodiumException;
 #[UsesClass(WrappedEncryptedRow::class)]
 #[UsesClass(Math::class)]
 #[UsesClass(WebFinger::class)]
+#[UsesClass(RewrapConfig::class)]
+#[UsesClass(Peer::class)]
 class KeyWrappingTest extends TestCase
 {
     use ConfigTrait;
@@ -110,6 +115,27 @@ class KeyWrappingTest extends TestCase
     {
         $keyWrapping = new KeyWrapping($this->config);
 
+        // Add a peer so rewrapSymmetricKeys has someone to rewrap for
+        $peerKey = SecretKey::generate();
+        $serverHpke = $this->config->getHPKE();
+        $rewrapConfig = [
+            'cs' => $serverHpke->cs->getSuiteName(),
+            'ek' => Base64UrlSafe::encodeUnpadded($peerKey->getPublicKey()->getBytes())
+        ];
+        $tree = new \FediE2EE\PKD\Crypto\Merkle\IncrementalTree([], $this->config->getParams()->hashAlgo);
+        $this->config->getDb()->insert('pkd_peers', [
+            'uniqueid' => 'peer1',
+            'hostname' => 'peer1.example.com',
+            'publickey' => $peerKey->getPublicKey()->toString(),
+            'replicate' => 1,
+            'cosign' => 1,
+            'rewrap' => json_encode($rewrapConfig),
+            'incrementaltreestate' => Base64UrlSafe::encodeUnpadded($tree->toJson()),
+            'latestroot' => '',
+            'created' => (new \DateTimeImmutable())->format(\DateTimeImmutable::ATOM),
+            'modified' => (new \DateTimeImmutable())->format(\DateTimeImmutable::ATOM),
+        ]);
+
         [, $canonical] = $this->makeDummyActor();
         $keypair = SecretKey::generate();
 
@@ -131,6 +157,8 @@ class KeyWrappingTest extends TestCase
         // First call - should populate cache
         [$message1, $rewrapped1] = $keyWrapping->decryptAndGetRewrapped($root, $wrappedKeys);
         $this->assertNotNull($message1);
+        $this->assertNotEmpty($rewrapped1, 'Rewrapped keys should not be empty');
+        $this->assertArrayHasKey('peer1', $rewrapped1);
 
         $cache = $this->appCache('key-wrapping-decrypt');
         $lookupKey = $root . ':' . $wrappedKeys;

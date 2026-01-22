@@ -19,6 +19,7 @@
                 "FediE2EE\\PKDServer\\Protocol::moveIdentity",
                 "FediE2EE\\PKDServer\\Protocol::undoFireproof",
                 "FediE2EE\\PKDServer\\Protocol::revokeAuxData",
+                "FediE2EE\\PKDServer\\Protocol::cleanUpAfterAction",
                 "FediE2EE\\PKDServer\\Traits\\ConfigTrait::table",
                 "FediE2EE\\PKDServer\\Traits\\ReqTrait::twig",
                 "FediE2EE\\PKDServer\\RequestHandlers\\Api\\BurnDown::handle"
@@ -26,6 +27,7 @@
         },
         "DecrementInteger": {
             "ignore": [
+                "FediE2EE\\PKDServer\\Meta\\Params::__construct",
                 "FediE2EE\\PKDServer\\AppCache::__construct",
                 "FediE2EE\\PKDServer\\Traits\\TOTPTrait::generateTOTP",
                 "FediE2EE\\PKDServer\\Traits\\TOTPTrait::verifyTOTP",
@@ -35,6 +37,7 @@
         },
         "IncrementInteger": {
             "ignore": [
+                "FediE2EE\\PKDServer\\Meta\\Params::__construct",
                 "FediE2EE\\PKDServer\\AppCache::__construct",
                 "FediE2EE\\PKDServer\\Traits\\TOTPTrait::generateTOTP",
                 "FediE2EE\\PKDServer\\Traits\\TOTPTrait::verifyTOTP",
@@ -129,6 +132,7 @@
         },
         "ReturnRemoval": {
             "ignore": [
+                "FediE2EE\\PKDServer\\AppCache::cache",
                 "FediE2EE\\PKDServer\\Dependency\\WrappedEncryptedRow::getFieldSymmetricKey",
                 "FediE2EE\\PKDServer\\RequestHandlers\\Api\\Revoke::handle"
             ]

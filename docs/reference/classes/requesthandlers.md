@@ -36,11 +36,11 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 - `$request`: `Psr\Http\Message\ServerRequestInterface`
 
-#### [`time`](../../../src/RequestHandlers/IndexPage.php#L34-L37)
+#### [`time`](../../../src/RequestHandlers/IndexPage.php#L35-L38)
 
 Returns `string`
 
-#### [`canonicalizeActor`](../../../src/RequestHandlers/IndexPage.php#L46-L50)
+#### [`canonicalizeActor`](../../../src/RequestHandlers/IndexPage.php#L47-L51)
 
 Returns `string`
 
@@ -50,7 +50,7 @@ Returns `string`
 
 **Throws:** `DependencyException`, `GuzzleException`, `NetworkException`, `SodiumException`, `CertaintyException`
 
-#### [`error`](../../../src/RequestHandlers/IndexPage.php#L58-L61)
+#### [`error`](../../../src/RequestHandlers/IndexPage.php#L59-L62)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -61,7 +61,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `DependencyException`, `JsonException`, `NotImplementedException`, `SodiumException`
 
-#### [`signResponse`](../../../src/RequestHandlers/IndexPage.php#L72-L84)
+#### [`signResponse`](../../../src/RequestHandlers/IndexPage.php#L73-L85)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -73,7 +73,7 @@ Implements an RFC 9421 HTTP Message Signature with Ed25519.
 
 **Throws:** `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`json`](../../../src/RequestHandlers/IndexPage.php#L94-L119)
+#### [`json`](../../../src/RequestHandlers/IndexPage.php#L95-L114)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -85,9 +85,9 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 - `$status`: `int` = 200
 - `$headers`: `array` = []
 
-**Throws:** `DependencyException`, `JsonException`, `NotImplementedException`, `SodiumException`
+**Throws:** `DependencyException`, `BaseJsonException`, `NotImplementedException`, `SodiumException`
 
-#### [`twig`](../../../src/RequestHandlers/IndexPage.php#L127-L144)
+#### [`twig`](../../../src/RequestHandlers/IndexPage.php#L122-L139)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -129,33 +129,13 @@ Returns `void`
 
 - `$config`: `FediE2EE\PKDServer\ServerConfig`
 
-#### [`jsonDecode`](../../../src/RequestHandlers/IndexPage.php#L87-L94)
-
-Returns `array`
-
-**Parameters:**
-
-- `$json`: `string`
-
-**Throws:** `BaseJsonException`
-
-#### [`jsonDecodeObject`](../../../src/RequestHandlers/IndexPage.php#L99-L106)
-
-Returns `object`
-
-**Parameters:**
-
-- `$json`: `string`
-
-**Throws:** `BaseJsonException`
-
-#### [`config`](../../../src/RequestHandlers/IndexPage.php#L111-L121)
+#### [`config`](../../../src/RequestHandlers/IndexPage.php#L87-L97)
 
 Returns `FediE2EE\PKDServer\ServerConfig`
 
 **Throws:** `DependencyException`
 
-#### [`setWebFinger`](../../../src/RequestHandlers/IndexPage.php#L126-L130)
+#### [`setWebFinger`](../../../src/RequestHandlers/IndexPage.php#L102-L106)
 
 Returns `self`
 
@@ -165,7 +145,7 @@ This is intended for mocking in unit tests
 
 - `$wf`: `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
-#### [`webfinger`](../../../src/RequestHandlers/IndexPage.php#L137-L144)
+#### [`webfinger`](../../../src/RequestHandlers/IndexPage.php#L113-L120)
 
 Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
@@ -174,6 +154,36 @@ Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 - `$http`: `?GuzzleHttp\Client` = null
 
 **Throws:** `CertaintyException`, `DependencyException`, `SodiumException`
+
+#### [`jsonDecode`](../../../src/RequestHandlers/IndexPage.php#L12-L15)
+
+static · Returns `array`
+
+**Parameters:**
+
+- `$json`: `string`
+
+**Throws:** `BaseJsonException`
+
+#### [`jsonDecodeObject`](../../../src/RequestHandlers/IndexPage.php#L20-L23)
+
+static · Returns `object`
+
+**Parameters:**
+
+- `$json`: `string`
+
+**Throws:** `BaseJsonException`
+
+#### [`jsonEncode`](../../../src/RequestHandlers/IndexPage.php#L28-L34)
+
+static · Returns `string`
+
+**Parameters:**
+
+- `$data`: `mixed`
+
+**Throws:** `BaseJsonException`
 
 ---
 

@@ -394,7 +394,7 @@ class PublicKeys extends Table
      */
     protected function addKeyCallback(MerkleLeaf $leaf, Payload $payload, string $outerActor): ActorKey
     {
-        $decoded = $payload->jsonDecode();
+        $decoded = $payload->decode();
 
         /** @var Actors $actorTable */
         $actorTable = $this->table('Actors');
@@ -637,7 +637,7 @@ class PublicKeys extends Table
         }
         $actionData = $decrypted->toArray();
         // Explicit check that the outer actor (from ActivityPub) matches the protocol message
-        $this->explicitOuterActorCheck($outerActor, $actionData['new-actor']);
+        $this->explicitOuterActorCheck($outerActor, $actionData['old-actor']);
         $sm = Bundle::fromJson($rawJson)->toSignedMessage();
 
         $oldActorId = $actorTable

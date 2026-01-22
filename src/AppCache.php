@@ -4,6 +4,8 @@ namespace FediE2EE\PKDServer;
 
 use DateInterval;
 use DateTime;
+use FediE2EE\PKDServer\Traits\JsonTrait;
+use JsonException;
 use Override;
 use Predis\Client as RedisClient;
 use Psr\SimpleCache\{
@@ -14,6 +16,7 @@ use SodiumException;
 
 class AppCache implements CacheInterface
 {
+    use JsonTrait;
     private static array $inMemoryCache = [];
     private ?RedisClient $redis;
     private string $namespace;
@@ -36,15 +39,16 @@ class AppCache implements CacheInterface
      *
      * Used for caching entire HTTP response data (arrays, etc.).)
      *
-     * @throws SodiumException
      * @throws InvalidArgumentException
+     * @throws SodiumException
+     * @throws JsonException
      */
     public function cacheJson(string $lookup, callable $fallback, DateInterval|int|null $ttl = null): mixed
     {
         $key = $this->deriveKey($lookup);
         if (!$this->has($key)) {
             $value = $fallback();
-            $encoded = json_encode($value, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_UNICODE);
+            $encoded = self::jsonEncode($value);
             $this->set($key, $encoded, $ttl);
             return $value;
         }

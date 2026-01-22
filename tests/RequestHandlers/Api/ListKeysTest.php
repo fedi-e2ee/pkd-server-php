@@ -209,7 +209,7 @@ class ListKeysTest extends TestCase
         $this->assertSame(400, $response->getStatusCode());
         $body = json_decode($response->getBody()->getContents(), true);
         $this->assertArrayHasKey('error', $body);
-        $this->assertStringContainsString('WebFinger', $body['error']);
+        $this->assertStringContainsString('A WebFinger error occurred', $body['error']);
         $this->assertNotInTransaction();
     }
 

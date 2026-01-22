@@ -23,10 +23,12 @@ use FediE2EE\PKDServer\{
     AppCache,
     Dependency\WrappedEncryptedRow,
     Math,
+    Middleware\RateLimitMiddleware,
     Protocol,
     Protocol\KeyWrapping,
     Protocol\Payload,
     Protocol\RewrapConfig,
+    RateLimit\DefaultRateLimiting,
     ServerConfig,
     Table,
     TableCache
@@ -73,6 +75,8 @@ use ReflectionClass;
 #[UsesClass(Peer::class)]
 #[UsesClass(Math::class)]
 #[UsesClass(RewrapConfig::class)]
+#[UsesClass(RateLimitMiddleware::class)]
+#[UsesClass(DefaultRateLimiting::class)]
 class RevokeTest extends TestCase
 {
     use ConfigTrait;

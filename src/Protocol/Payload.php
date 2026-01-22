@@ -3,14 +3,16 @@ declare(strict_types=1);
 namespace FediE2EE\PKDServer\Protocol;
 
 use FediE2EE\PKD\Crypto\AttributeEncryption\AttributeKeyMap;
-use FediE2EE\PKD\Crypto\Exceptions\JsonException;
+use JsonException;
 use FediE2EE\PKD\Crypto\Protocol\{
     EncryptedProtocolMessageInterface,
     ProtocolMessageInterface
 };
+use FediE2EE\PKDServer\Traits\JsonTrait;
 
 readonly class Payload
 {
+    use JsonTrait;
     public function __construct(
         public ProtocolMessageInterface $message,
         public AttributeKeyMap $keyMap,
@@ -28,13 +30,9 @@ readonly class Payload
     /**
      * @throws JsonException
      */
-    public function jsonDecode(): array
+    public function decode(): array
     {
-        $decoded = json_decode($this->rawJson, true);
-        if (!is_array($decoded)) {
-            throw new JsonException('Could not decode JSON');
-        }
-        return $decoded;
+        return self::jsonDecode($this->rawJson);
     }
 
     public function getMerkleTreePayload(): string
@@ -46,6 +44,6 @@ readonly class Payload
         if (array_key_exists('symmetric-keys', $decoded)) {
             unset($decoded['symmetric-keys']);
         }
-        return json_encode($decoded, JSON_UNESCAPED_SLASHES);
+        return self::jsonEncode($decoded);
     }
 }

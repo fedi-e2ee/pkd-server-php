@@ -150,7 +150,7 @@ class AuxData extends Table
             : null;
         $inclusionProof = null;
         if (is_string($decrypted['inclusionproof'])) {
-            $inclusionProof = $this->jsonDecode($decrypted['inclusionproof']);
+            $inclusionProof =  self::jsonDecode($decrypted['inclusionproof']);
         }
         return [
             'aux-data' => $decrypted['auxdata'],

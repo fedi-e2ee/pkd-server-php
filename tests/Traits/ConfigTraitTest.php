@@ -75,7 +75,7 @@ class ConfigTraitTest extends TestCase
         if (!$expectPass) {
             $this->expectException(BaseJsonException::class);
         }
-        $this->assertIsArray($mock->jsonDecode($input));
+        $this->assertIsArray($mock::jsonDecode($input));
     }
 
     #[DataProvider("jsonDecodeProvider")]
@@ -87,7 +87,7 @@ class ConfigTraitTest extends TestCase
         if (!$expectPass) {
             $this->expectException(BaseJsonException::class);
         }
-        $this->assertIsObject($mock->jsonDecodeObject($input));
+        $this->assertIsObject($mock::jsonDecodeObject($input));
     }
 
     public function testWebFinger(): void

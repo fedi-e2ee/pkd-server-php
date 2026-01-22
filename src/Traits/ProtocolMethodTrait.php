@@ -111,12 +111,16 @@ trait ProtocolMethodTrait
         if (hash_equals($expected, $given)) {
             return;
         }
-        $this->webfinger();
-        $canonicalExpected = $this->webFinger->canonicalize($expected);
-        $canonicalGiven = $this->webFinger->canonicalize($given);
+        $wf = $this->webfinger();
+        $canonicalExpected = $wf->canonicalize($expected);
+        $canonicalGiven = $wf->canonicalize($given);
         if (hash_equals($canonicalExpected, $canonicalGiven)) {
             return;
         }
+        fwrite(STDERR, "EXPECTED: {$expected}\n");
+        fwrite(STDERR, "GIVEN: {$given}\n");
+        fwrite(STDERR, "CANONICAL EXPECTED: {$canonicalExpected}\n");
+        fwrite(STDERR, "CANONICAL GIVEN: {$canonicalGiven}\n");
         throw new ProtocolException('Actor confusion attack detected and prevented');
     }
 }

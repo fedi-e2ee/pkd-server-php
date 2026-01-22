@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace FediE2EE\PKDServer\Tests\RequestHandlers\Api;
 
-use Exception;
 use FediE2EE\PKD\Crypto\Protocol\Actions\AddKey;
 use FediE2EE\PKD\Crypto\{
     AttributeEncryption\AttributeKeyMap,
@@ -29,10 +28,12 @@ use FediE2EE\PKDServer\{
     Dependency\InjectConfigStrategy,
     Dependency\WrappedEncryptedRow,
     Math,
+    Middleware\RateLimitMiddleware,
     Protocol,
     Protocol\KeyWrapping,
     Protocol\Payload,
     Protocol\RewrapConfig,
+    RateLimit\DefaultRateLimiting,
     ServerConfig,
     Table,
     TableCache
@@ -74,10 +75,7 @@ use ParagonIE\ConstantTime\{
     Base64UrlSafe
 };
 use ParagonIE\HPKE\HPKEException;
-use PHPUnit\Framework\Attributes\{
-    CoversClass,
-    UsesClass
-};
+use PHPUnit\Framework\Attributes\{CoversClass, DataProvider, UsesClass};
 use PHPUnit\Framework\TestCase;
 use Psr\SimpleCache\InvalidArgumentException;
 use Random\RandomException;
@@ -107,6 +105,8 @@ use SodiumException;
 #[UsesClass(TOTP::class)]
 #[UsesClass(Math::class)]
 #[UsesClass(RewrapConfig::class)]
+#[UsesClass(RateLimitMiddleware::class)]
+#[UsesClass(DefaultRateLimiting::class)]
 class TotpEnrollTest extends TestCase
 {
     use ConfigTrait;
@@ -206,7 +206,7 @@ class TotpEnrollTest extends TestCase
             'action',
             'TOTP-Enroll',
             'message',
-            json_encode($enrollment),
+            json_encode($enrollment, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_SLASHES),
         ]);
         $signature = $keypair->sign($messageToSign);
 
@@ -549,7 +549,7 @@ class TotpEnrollTest extends TestCase
             'action',
             'TOTP-Enroll',
             'message',
-            json_encode($enrollment),
+            json_encode($enrollment, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_SLASHES),
         ]);
         $signature = $keypair->sign($messageToSign);
 
@@ -687,7 +687,7 @@ class TotpEnrollTest extends TestCase
             'action',
             'TOTP-Enroll',
             'message',
-            json_encode($enrollment),
+            json_encode($enrollment, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_SLASHES),
         ]);
         $signature = $keypair->sign($messageToSign);
 
@@ -707,5 +707,214 @@ class TotpEnrollTest extends TestCase
         $this->assertSame(406, $response->getStatusCode());
         $responseBody = json_decode((string) $response->getBody(), true);
         $this->assertArrayHasKey('error', $responseBody);
+    }
+
+    /**
+     * @throws DependencyException
+     * @throws InvalidArgumentException
+     * @throws SodiumException
+     * @throws RandomException
+     * @throws CryptoException
+     * @throws HPKEException
+     * @throws JsonException
+     * @throws NotImplementedException
+     * @throws ParserException
+     * @throws ProtocolException
+     * @throws TableException
+     * @throws CertaintyException
+     */
+    public function testInvalidTotpCodesIndividually(): void
+    {
+        [, $canonical] = $this->makeDummyActor('invalid-totp-enroll-2.com');
+        $keypair = SecretKey::generate();
+
+        $config = $this->getConfig();
+        $this->clearOldTransaction($config);
+        $protocol = new Protocol($config);
+
+        $result = $this->addKeyForActor($canonical, $keypair, $protocol, $config);
+        $this->assertNotInTransaction();
+        $this->ensureMerkleStateUnlocked();
+        $keyId = $result->keyID;
+
+        $totpSecret = random_bytes(20);
+        $otpCurrent = self::generateTOTP($totpSecret);
+        $otpPrevious = self::generateTOTP($totpSecret, time() - 30);
+
+        $hpke = $this->config->getHPKE();
+        $encryptedSecret = new HPKEAdapter($hpke->cs, 'fedi-e2ee:v1/api/totp/enroll')->seal(
+            $hpke->getEncapsKey(),
+            $totpSecret
+        );
+        $encodedSecret = Base32::encode($encryptedSecret);
+
+        // Case 1: otp-current is invalid
+        $enrollment = [
+            'actor-id' => $canonical,
+            'key-id' => $keyId,
+            'current-time' => (string) time(),
+            'otp-current' => '00000000', // INVALID
+            'otp-previous' => $otpPrevious,
+            'totp-secret' => $encodedSecret,
+        ];
+        $this->executeEnrollAndAssertError($keypair, $enrollment, 406, 'Invalid TOTP codes');
+
+        // Case 2: otp-previous is invalid
+        $enrollment = [
+            'actor-id' => $canonical,
+            'key-id' => $keyId,
+            'current-time' => (string) time(),
+            'otp-current' => $otpCurrent,
+            'otp-previous' => '00000000', // INVALID
+            'totp-secret' => $encodedSecret,
+        ];
+        $this->executeEnrollAndAssertError($keypair, $enrollment, 406, 'Invalid TOTP codes');
+    }
+
+    /**
+     * @throws DependencyException
+     * @throws NotImplementedException
+     * @throws SodiumException
+     */
+    private function executeEnrollAndAssertError(
+        SecretKey $sk,
+        array $enrollment,
+        int $expectedStatus,
+        string $expectedError
+    ): void {
+        $messageToSign = $this->preAuthEncode([
+            '!pkd-context',
+            'fedi-e2ee:v1/api/totp/enroll',
+            'action',
+            'TOTP-Enroll',
+            'message',
+            json_encode($enrollment, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_SLASHES),
+        ]);
+        $signature = $sk->sign($messageToSign);
+
+        $body = [
+            '!pkd-context' => 'fedi-e2ee:v1/api/totp/enroll',
+            'action' => 'TOTP-Enroll',
+            'current-time' => $enrollment['current-time'],
+            'enrollment' => $enrollment,
+            'signature' => Base64UrlSafe::encodeUnpadded($signature)
+        ];
+
+        $request = new ServerRequest([], [], '/api/totp/enroll', 'POST')
+            ->withHeader('Content-Type', 'application/json')
+            ->withBody(new StreamFactory()->createStream(json_encode($body)));
+        $response = $this->dispatchRequest($request);
+
+        $this->assertSame($expectedStatus, $response->getStatusCode());
+        $responseBody = json_decode((string) $response->getBody(), true);
+        $this->assertSame($expectedError, $responseBody['error']);
+    }
+
+    public static function deletedKeysProvider(): array
+    {
+        return [
+            [[
+                '!pkd-context' => '',
+                'current-time' => (string)(time()),
+                'action' => 'TOTP-Enroll',
+                'enrollment' => [
+                    'actor-id' => 'https://example.com/users/alice',
+                    'key-id' => 'test',
+                    'otp-current' => '12345678',
+                    'otp-previous' => '00000000',
+                    'totp-secret' => '12345678',
+                ]
+            ]], [[
+                '!pkd-context' => 'fedi-e2ee:v1/api/totp/enroll',
+                'current-time' => '',
+                'action' => 'TOTP-Enroll',
+                'enrollment' => [
+                    'actor-id' => 'https://example.com/users/alice',
+                    'key-id' => 'test',
+                    'otp-current' => '12345678',
+                    'otp-previous' => '00000000',
+                    'totp-secret' => '12345678',
+                ]
+            ]], [[
+                '!pkd-context' => 'fedi-e2ee:v1/api/totp/enroll',
+                'current-time' => (string)(time()),
+                'action' => '',
+                'enrollment' => [
+                    'actor-id' => 'https://example.com/users/alice',
+                    'key-id' => 'test',
+                    'otp-current' => '12345678',
+                    'otp-previous' => '00000000',
+                    'totp-secret' => '12345678',
+                ]
+            ]], [[
+                '!pkd-context' => 'fedi-e2ee:v1/api/totp/enroll',
+                'current-time' => (string)(time()),
+                'action' => 'TOTP-Enroll',
+                'enrollment' => [
+                    'actor-id' => '',
+                    'key-id' => 'test',
+                    'otp-current' => '12345678',
+                    'otp-previous' => '00000000',
+                    'totp-secret' => '12345678',
+                ]
+            ]], [[
+                '!pkd-context' => 'fedi-e2ee:v1/api/totp/enroll',
+                'current-time' => (string)(time()),
+                'action' => 'TOTP-Enroll',
+                'enrollment' => [
+                    'actor-id' => 'https://example.com/users/alice',
+                    'key-id' => '',
+                    'otp-current' => '12345678',
+                    'otp-previous' => '00000000',
+                    'totp-secret' => '12345678',
+                ]
+            ]], [[
+                '!pkd-context' => 'fedi-e2ee:v1/api/totp/enroll',
+                'current-time' => (string)(time()),
+                'action' => 'TOTP-Enroll',
+                'enrollment' => [
+                    'actor-id' => 'https://example.com/users/alice',
+                    'key-id' => 'test',
+                    'otp-current' => '',
+                    'otp-previous' => '00000000',
+                    'totp-secret' => '12345678',
+                ]
+            ]], [[
+                '!pkd-context' => 'fedi-e2ee:v1/api/totp/enroll',
+                'current-time' => (string)(time()),
+                'action' => 'TOTP-Enroll',
+                'enrollment' => [
+                    'actor-id' => 'https://example.com/users/alice',
+                    'key-id' => 'test',
+                    'otp-current' => '12345678',
+                    'otp-previous' => '',
+                    'totp-secret' => '12345678',
+                ]
+            ]], [[
+                '!pkd-context' => 'fedi-e2ee:v1/api/totp/enroll',
+                'current-time' => (string)(time()),
+                'action' => 'TOTP-Enroll',
+                'enrollment' => [
+                    'actor-id' => 'https://example.com/users/alice',
+                    'key-id' => 'test',
+                    'otp-current' => '12345678',
+                    'otp-previous' => '00000000',
+                    'totp-secret' => '',
+                ]
+            ]],
+        ];
+    }
+
+    #[DataProvider("deletedKeysProvider")]
+    public function testMissingFields(array $data): void
+    {
+        $request = $this->makePostRequest('/api/totp/enroll', $data);
+        $response = $this->dispatchRequest($request);
+        $this->assertSame(400, $response->getStatusCode());
+        $body = $response->getBody()->getContents();
+        $decoded = json_decode($body, true);
+        $this->assertIsArray($decoded);
+        $this->assertArrayHasKey('error', $decoded);
+        $this->assertSame('Missing required fields', $decoded['error']);
     }
 }
