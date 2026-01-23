@@ -312,7 +312,7 @@ pm.max_requests = 500
 ; Security settings
 php_admin_value[disable_functions] = exec,passthru,shell_exec,system,proc_open,popen,parse_ini_file,show_source
 php_admin_value[expose_php] = Off
-php_admin_value[open_basedir] = /var/www/pkd-server-php:/tmp
+php_admin_value[open_basedir] = /var/www/pkd-server-php
 php_admin_value[session.cookie_httponly] = On
 php_admin_value[session.cookie_secure] = On
 php_admin_value[session.use_strict_mode] = On
