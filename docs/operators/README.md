@@ -17,7 +17,9 @@ The Sodium cryptography library and associated PHP extension (`ext-sodium`) are 
 when the Sodium extension is not available.
 
 Three database backends are currently supported: MySQL / MariaDB, PostgreSQL, and SQLite. For best performance, we
-recommend installing **Redis** in your deployment and configuring our software to use it.
+recommend installing **Redis** in your deployment and configuring our software to use it. If Redis is installed locally,
+make sure to follow [the Redis security best practices](https://redis.io/docs/latest/operate/oss_and_stack/management/security/),
+such as binding to `127.0.0.1`.
 
 Our software is largely webserver agnostic. Apache, nginx, or Caddy are all okay. Use whichever you're comfortable with.
 We recommend **nginx** since it's widely used and [now has native ACME support](https://blog.nginx.org/blog/native-support-for-acme-protocol).
@@ -118,7 +120,8 @@ sudo systemctl reload apache2
 ```
 
 > [!NOTE]
-> It's fine to run this with Apache mod-php, but we recommend using FPM for best results.
+> It's generally fine to run this with Apache mod-php, but we recommend using FPM for best results 
+> (performance, process isolation, generally better security).
 
 ### nginx
 
@@ -326,6 +329,15 @@ from `config` to `config/local` that you wish to alter.
 
 Refer to [the configuration section of the technical reference](../reference/configuration.md#configuration-files) for
 the meaning of each file.
+
+You run `chmod` on every file in the `config/local/` directory to lock it down as much as possible.
+
+```sh
+chmod 0750 /var/www/pkd-server-php/config/local
+chmod 0640 /var/www/pkd-server-php/config/local/*.php
+chmod 0600 /var/www/pkd-server-php/config/local/*.key
+chmod 0600 /var/www/pkd-server-php/config/local/*.json
+```
 
 ### Configuring the Database
 

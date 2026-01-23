@@ -43,6 +43,7 @@ if (file_exists(__DIR__ . '/signing.json')) {
         'public-key' =>
             $publicKey->toString(),
     ], JSON_PRETTY_PRINT));
+    chmod(__DIR__ . '/signing.json', 0600);
 }
 
 return new SigningKeys($secretKey, $publicKey);

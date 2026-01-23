@@ -18,6 +18,7 @@ $filePath = __DIR__ . '/ciphersweet-primary.key';
 if (!file_exists($filePath)) {
     $primary = random_bytes(32);
     file_put_contents($filePath, sodium_bin2hex($primary));
+    chmod($filePath, 0600);
     $keyProvider = new StringProvider($primary);
 } else {
     $keyProvider = new FileProvider($filePath);
