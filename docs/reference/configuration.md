@@ -14,7 +14,7 @@ This document describes configuration files in the `config/` directory.
 | [`config/hpke.php`](../../config/hpke.php) | HPKE encryption configuration |
 | [`config/logs.php`](../../config/logs.php) | Logging configuration |
 | [`config/params.php`](../../config/params.php) | Server parameters configuration |
-| [`config/rate-limiting.php`](../../config/rate-limiting.php) | Configuration file |
+| [`config/rate-limiting.php`](../../config/rate-limiting.php) | Rate Limiting configuration |
 | [`config/redis.php`](../../config/redis.php) | Redis cache configuration |
 | [`config/routes.php`](../../config/routes.php) | HTTP routing configuration |
 | [`config/signing-keys.php`](../../config/signing-keys.php) | Signing keys configuration |

@@ -470,6 +470,7 @@ final class DocGenerator
             'hpke' => 'HPKE encryption configuration',
             'logs' => 'Logging configuration',
             'params' => 'Server parameters configuration',
+            'rate-limiting' => 'Rate Limiting configuration',
             'redis' => 'Redis cache configuration',
             'routes' => 'HTTP routing configuration',
             'signing-keys' => 'Signing keys configuration',
