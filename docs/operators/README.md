@@ -160,6 +160,7 @@ server {
     ssl_trusted_certificate /etc/letsencrypt/live/demo.publickey.directory/chain.pem;
     resolver 1.1.1.1 1.0.0.1 valid=300s;
     resolver_timeout 5s;
+    # Note: 1.1.1.1 and 1.0.0.1 are CloudFlare. Substitute your preferred DNS provider.
 
     # Security Headers
     add_header Strict-Transport-Security "max-age=63072000; includeSubDomains; preload" always;
