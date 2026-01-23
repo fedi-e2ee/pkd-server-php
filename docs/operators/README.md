@@ -315,7 +315,7 @@ php_flag[log_errors] = on
 The first thing you should do is make a `config/local` subdirectory (if one doesn't already exist). Copy the PHP scripts
 from `config` to `config/local` that you wish to alter.
 
-Refer to [the configuration section of the technical reference](../reference/configuration.md#configuration-files)) for
+Refer to [the configuration section of the technical reference](../reference/configuration.md#configuration-files) for
 the meaning of each file.
 
 ### Configuring the Database
