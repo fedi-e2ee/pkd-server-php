@@ -254,6 +254,7 @@ class KeyWrappingTest extends TestCase
     {
         $keyWrapping = new KeyWrapping($this->config);
         $db = $this->config->getDb();
+        $sk = SecretKey::generate();
 
         // 1. Setup a leaf
         $db->insert('pkd_merkle_leaves', [
@@ -268,7 +269,7 @@ class KeyWrappingTest extends TestCase
         $db->insert('pkd_peers', [
             'uniqueid' => 'peer-multi',
             'hostname' => 'multi.example.com',
-            'publickey' => '...',
+            'publickey' => $sk->getPublicKey()->toString(),
             'replicate' => 1,
             'cosign' => 0,
             'latestroot' => '',
@@ -298,11 +299,12 @@ class KeyWrappingTest extends TestCase
         $this->assertSame('rewrapped1', $result['peer-multi']['attr1']);
         $this->assertSame('rewrapped2', $result['peer-multi']['attr2']);
 
+        $sk2 = SecretKey::generate();
         // 4. Setup ANOTHER peer
         $db->insert('pkd_peers', [
             'uniqueid' => 'peer-another',
             'hostname' => 'another.example.com',
-            'publickey' => '...',
+            'publickey' => $sk2->getPublicKey()->toString(),
             'replicate' => 1,
             'cosign' => 0,
             'latestroot' => '',
