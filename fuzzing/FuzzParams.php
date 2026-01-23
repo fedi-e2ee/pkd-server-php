@@ -38,6 +38,18 @@ $config->setTarget(function (string $input): void {
         }
     }
 
+    // Test hostname validation with fuzzed values
+    $hostnames = [
+        'localhost',
+        'example.com',
+        'sub.example.com',
+        '192.168.1.1',
+        '',
+        'invalid hostname',
+        '-invalid.com',
+        'invalid-.com',
+        str_repeat('a', 64) . '.com',
+    ];
     // Also try the raw input as hostname
     if (strlen($input) > 0 && strlen($input) <= 253) {
         $hostnames[] = $input;
