@@ -31,6 +31,14 @@ Deploying over HTTPS is **required**. Use LetsEncrypt with ACME. It works great.
 These configurations assume you cloned the pkd-server-php repository to `/var/www/pkd-server-php`.
 The file paths and directories provided commands provided assume you are running on Debian or Ubuntu Linux.
 
+> [!NOTE]
+> The example configurations below send [Strict-Transport-Security](https://scotthelme.co.uk/content-security-policy-an-introduction/)
+> headers with [the `includeSubdomains` and `preload` directives](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Strict-Transport-Security#preload).
+> This prioritizes transport-layer security but could revent users from accessing a subdomain that isn't HTTPS-ready 
+> (e.g., for an internal service).
+>
+> If you're deploying in such an environment, consider omitting `preload` until you're certain it's safe.
+
 ### Apache
 
 **File:** `/etc/apache2/sites-available/demo.publickey.directory.conf`
@@ -60,7 +68,7 @@ The file paths and directories provided commands provided assume you are running
     SSLHonorCipherOrder off
     SSLSessionTickets off
 
-    # Security Headers (applied to all responses)
+    # Security Headers (applied to all responses) 
     Header always set Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
     Header always set Content-Security-Policy "default-src 'none'; frame-ancestors 'none'; base-uri 'none'; form-action 'self'; style-src 'self'"
     Header always set X-Frame-Options "DENY"
