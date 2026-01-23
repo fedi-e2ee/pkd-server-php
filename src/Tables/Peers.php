@@ -105,6 +105,9 @@ class Peers extends Table
         if (empty($peer)) {
             throw new TableException('Peer not found: ' . $uniqueId);
         }
+        if (is_null($peer['publickey'])) {
+            throw new TableException('Peer has no public key');
+        }
         return $this->tableRowToPeer($peer);
     }
 
@@ -119,6 +122,9 @@ class Peers extends Table
         $peer = $this->db->row("SELECT * FROM pkd_peers WHERE hostname = ?", $hostname);
         if (empty($peer)) {
             throw new TableException('Peer not found: ' . $hostname);
+        }
+        if (is_null($peer['publickey'])) {
+            throw new TableException('Peer has no public key');
         }
 
         return $this->tableRowToPeer($peer);
@@ -165,7 +171,9 @@ class Peers extends Table
     {
         $peerList = [];
         foreach ($this->db->run("SELECT * FROM pkd_peers") as $peer) {
-            $peerList[] = $this->tableRowToPeer($peer);
+            if (!is_null($peer['publickey'])) {
+                $peerList[] = $this->tableRowToPeer($peer);
+            }
         }
         return $peerList;
     }
@@ -183,7 +191,9 @@ class Peers extends Table
     {
         $peerList = [];
         foreach ($this->db->run("SELECT * FROM pkd_peers WHERE replicate") as $peer) {
-            $peerList[] = $this->tableRowToPeer($peer);
+            if (!is_null($peer['publickey'])) {
+                $peerList[] = $this->tableRowToPeer($peer);
+            }
         }
         return $peerList;
     }
@@ -220,7 +230,9 @@ class Peers extends Table
         );
         $peers = [];
         foreach ($rows as $row) {
-            $peers[] = $this->tableRowToPeer($row);
+            if (!is_null($row['publickey'])) {
+                $peers[] = $this->tableRowToPeer($row);
+            }
         }
         return $peers;
     }

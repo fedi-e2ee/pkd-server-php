@@ -6,18 +6,16 @@ use FediE2EE\PKDServer\ActivityPub\{
     ActivityStream,
     WebFinger
 };
+use DateMalformedStringException;
 use FediE2EE\PKDServer\Dependency\{
     EasyDBHandler,
     WrappedEncryptedRow
 };
-use FediE2EE\PKD\Crypto\AttributeEncryption\AttributeKeyMap;
-use FediE2EE\PKD\Crypto\Exceptions\CryptoException;
-use FediE2EE\PKD\Crypto\Exceptions\NotImplementedException;
-use FediE2EE\PKD\Crypto\Protocol\Actions\AddKey;
-use FediE2EE\PKD\Crypto\Protocol\Handler;
-use FediE2EE\PKD\Crypto\SecretKey;
-use FediE2EE\PKD\Crypto\SymmetricKey;
-use GuzzleHttp\Psr7\Response;
+use FediE2EE\PKD\Crypto\Exceptions\{
+    CryptoException,
+    JsonException,
+    NotImplementedException
+};
 use FediE2EE\PKDServer\Protocol\{
     KeyWrapping,
     Payload,
@@ -56,9 +54,7 @@ use PHPUnit\Framework\Attributes\{
     CoversClass,
     UsesClass
 };
-use ParagonIE\Certainty\Exception\CertaintyException;
 use PHPUnit\Framework\TestCase;
-use Psr\SimpleCache\InvalidArgumentException;
 use Random\RandomException;
 use SodiumException;
 
@@ -92,7 +88,13 @@ class ReplicasTest extends TestCase
 
     /**
      * @throws CacheException
+     * @throws CryptoException
+     * @throws DateMalformedStringException
      * @throws DependencyException
+     * @throws JsonException
+     * @throws NotImplementedException
+     * @throws RandomException
+     * @throws SodiumException
      * @throws TableException
      */
     public function testHandle(): void
@@ -144,9 +146,7 @@ class ReplicasTest extends TestCase
     }
 
     /**
-     * @throws CacheException
      * @throws DependencyException
-     * @throws TableException
      */
     public function testConstructorNullConfig(): void
     {
