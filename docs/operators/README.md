@@ -55,7 +55,7 @@ The file paths and directories provided commands provided assume you are running
     SSLCertificateKeyFile /etc/letsencrypt/live/demo.publickey.directory/privkey.pem
 
     # Modern TLS settings
-    SSLProtocol all -SSLv3 -TLSv1 -TLSv1.1
+    SSLProtocol all -SSLv3 -TLSv1 -TLSv1.1 -TLSv1.2
     SSLCipherSuite ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384
     SSLHonorCipherOrder off
     SSLSessionTickets off
@@ -141,7 +141,7 @@ server {
     ssl_session_tickets off;
 
     # Modern TLS settings
-    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_protocols TLSv1.3;
     ssl_ciphers ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384;
     ssl_prefer_server_ciphers off;
     # ^- better mobile device battery life
@@ -222,7 +222,7 @@ demo.publickey.directory {
     # TLS is automatic with Caddy (ACME/Let's Encrypt)
     # Optionally configure minimum TLS version
     tls {
-        protocols tls1.2 tls1.3
+        protocols tls1.3
     }
 
     # Security Headers
