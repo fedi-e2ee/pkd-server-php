@@ -2,10 +2,14 @@ name: CI
 
 on: [push, pull_request]
 
+permissions: {}
+
 jobs:
   tests-without-redis:
     name: PHP ${{ matrix.php-versions }} on ${{ matrix.operating-system }} with ${{ matrix.db }}
     runs-on: ${{ matrix.operating-system }}
+    permissions:
+      contents: read
     strategy:
       fail-fast: false
       matrix:
@@ -35,10 +39,12 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8  # v6.0.1
+        with:
+          persist-credentials: false
 
       - name: Setup PHP
-        uses: shivammathur/setup-php@v2
+        uses: shivammathur/setup-php@db91e1a0e48e84637d325a7ee4d2677e146ceec4  # v2.36.0
         with:
           php-version: ${{ matrix.php-versions }}
           extensions: mbstring, intl, pcntl, pdo_mysql, pdo_pgsql, pdo_sqlite, sodium
@@ -46,7 +52,7 @@ jobs:
           coverage: none
 
       - name: Install Composer dependencies
-        uses: "ramsey/composer-install@v3"
+        uses: ramsey/composer-install@b38926e6aa883a48335a05214b1d7afe9d9913ca  # v3.1.1
 
       - name: Configure Redis
         run: |
@@ -106,6 +112,8 @@ jobs:
   tests-with-redis:
     name: PHP ${{ matrix.php-versions }} on ${{ matrix.operating-system }} with ${{ matrix.db }} with redis
     runs-on: ${{ matrix.operating-system }}
+    permissions:
+      contents: read
     strategy:
       fail-fast: false
       matrix:
@@ -133,17 +141,19 @@ jobs:
           - 3306:3306
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
       redis:
-        image: redis
+        image: redis:7
         ports:
           - 6379:6379
         options: --entrypoint redis-server --health-cmd "redis-cli ping" --health-interval 10s --health-timeout 5s --health-retries 3
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8  # v6.0.1
+        with:
+          persist-credentials: false
 
       - name: Setup PHP
-        uses: shivammathur/setup-php@v2
+        uses: shivammathur/setup-php@db91e1a0e48e84637d325a7ee4d2677e146ceec4  # v2.36.0
         with:
           php-version: ${{ matrix.php-versions }}
           extensions: mbstring, intl, pcntl, pdo_mysql, pdo_pgsql, pdo_sqlite, sodium, redis
@@ -151,7 +161,7 @@ jobs:
           coverage: none
 
       - name: Install Composer dependencies
-        uses: "ramsey/composer-install@v3"
+        uses: ramsey/composer-install@b38926e6aa883a48335a05214b1d7afe9d9913ca  # v3.1.1
 
       - name: Configure Redis
         run: |
