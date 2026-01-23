@@ -428,7 +428,7 @@ Returns `int`
 
 **Throws:** `TableException`, `RandomException`
 
-#### [`getPeerByUniqueId`](../../../src/Tables/Peers.php#L102-L109)
+#### [`getPeerByUniqueId`](../../../src/Tables/Peers.php#L102-L112)
 
 **API** · Returns `FediE2EE\PKDServer\Tables\Records\Peer`
 
@@ -438,7 +438,7 @@ Returns `int`
 
 **Throws:** `CryptoException`, `DateMalformedStringException`, `SodiumException`, `TableException`
 
-#### [`getPeer`](../../../src/Tables/Peers.php#L117-L125)
+#### [`getPeer`](../../../src/Tables/Peers.php#L120-L131)
 
 Returns `FediE2EE\PKDServer\Tables\Records\Peer`
 
@@ -448,13 +448,13 @@ Returns `FediE2EE\PKDServer\Tables\Records\Peer`
 
 **Throws:** `CryptoException`, `DateMalformedStringException`, `SodiumException`, `TableException`
 
-#### [`listAll`](../../../src/Tables/Peers.php#L164-L171)
+#### [`listAll`](../../../src/Tables/Peers.php#L170-L179)
 
 **API** · Returns `array`
 
 **Throws:** `CryptoException`, `DateMalformedStringException`, `SodiumException`
 
-#### [`listReplicatingPeers`](../../../src/Tables/Peers.php#L182-L189)
+#### [`listReplicatingPeers`](../../../src/Tables/Peers.php#L190-L199)
 
 Returns `array`
 
@@ -462,7 +462,7 @@ Lists which peers we replicate.
 
 **Throws:** `CryptoException`, `DateMalformedStringException`, `SodiumException`
 
-#### [`save`](../../../src/Tables/Peers.php#L194-L203)
+#### [`save`](../../../src/Tables/Peers.php#L204-L213)
 
 Returns `bool`
 
@@ -472,13 +472,13 @@ Returns `bool`
 
 **Throws:** `TableException`
 
-#### [`getRewrapCandidates`](../../../src/Tables/Peers.php#L210-L226)
+#### [`getRewrapCandidates`](../../../src/Tables/Peers.php#L220-L238)
 
 Returns `array`
 
 **Throws:** `CryptoException`, `DateMalformedStringException`, `SodiumException`
 
-#### [`rewrapKeyMap`](../../../src/Tables/Peers.php#L233-L276)
+#### [`rewrapKeyMap`](../../../src/Tables/Peers.php#L245-L288)
 
 Returns `void`
 
