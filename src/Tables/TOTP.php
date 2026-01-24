@@ -53,10 +53,25 @@ class TOTP extends Table
     /**
      * @throws CipherSweetException
      * @throws CryptoOperationException
-     * @throws SodiumException
      * @throws InvalidCiphertextException
+     * @throws SodiumException
      */
     public function getSecretByDomain(string $domain): ?string
+    {
+        $totp = $this->getTotpByDomain($domain);
+        if (is_null($totp)) {
+            return null;
+        }
+        return $totp['secret'];
+    }
+
+    /**
+     * @throws CipherSweetException
+     * @throws CryptoOperationException
+     * @throws InvalidCiphertextException
+     * @throws SodiumException
+     */
+    public function getTotpByDomain(string $domain): ?array
     {
         $row = $this->db->row(
             "SELECT * FROM pkd_totp_secrets WHERE domain = ?",
@@ -68,7 +83,10 @@ class TOTP extends Table
         $cipher = $this->getCipher();
         $cipher->decryptRow($row);
         $decrypted = $cipher->decryptRow($row);
-        return (string) $decrypted['secret'];
+        return [
+            'secret' => (string) $decrypted['secret'],
+            'last_time_step' => (int) ($row['last_time_step'] ?? 0),
+        ];
     }
 
     /**
@@ -79,13 +97,17 @@ class TOTP extends Table
      * @throws SodiumException
      * @throws TableException
      */
-    public function saveSecret(string $domain, #[SensitiveParameter] string $secret): void
-    {
+    public function saveSecret(
+        string $domain,
+        #[SensitiveParameter] string $secret,
+        int $lastTimeStep = 0
+    ): void {
         $cipher = $this->getCipher();
         $plaintext = [
             'totpid' => $this->getNextTotpId(),
             'domain' => $domain,
             'secret' => $secret,
+            'last_time_step' => $lastTimeStep,
         ];
         $row = $cipher->wrapBeforeEncrypt($plaintext, ['secret' => new SymmetricKey(random_bytes(32))]);
         $toStore = $cipher->encryptRow($row);
@@ -108,8 +130,11 @@ class TOTP extends Table
      * @throws TableException
      * @throws RandomException
      */
-    public function updateSecret(string $domain, #[SensitiveParameter] string $secret): void
-    {
+    public function updateSecret(
+        string $domain,
+        #[SensitiveParameter] string $secret,
+        int $lastTimeStep = 0
+    ): void {
         $rowID = $this->db->cell(
             "SELECT totpid FROM pkd_totp_secrets WHERE domain = ?",
             $domain
@@ -121,6 +146,7 @@ class TOTP extends Table
             'totpid' => $rowID,
             'domain' => $domain,
             'secret' => $secret,
+            'last_time_step' => $lastTimeStep,
         ];
         $row = $this->getCipher()->wrapBeforeEncrypt(
             $plaintext,
@@ -136,9 +162,19 @@ class TOTP extends Table
             'pkd_totp_secrets',
             [
                 'secret' => $encrypted['secret'],
-                'wrap_secret' => $encrypted['wrap_secret']
+                'wrap_secret' => $encrypted['wrap_secret'],
+                'last_time_step' => $lastTimeStep,
             ],
             ['totpid' => $rowID],
+        );
+    }
+
+    public function updateLastTimeStep(string $domain, int $lastTimeStep): void
+    {
+        $this->db->update(
+            'pkd_totp_secrets',
+            ['last_time_step' => $lastTimeStep],
+            ['domain' => $domain]
         );
     }
 }

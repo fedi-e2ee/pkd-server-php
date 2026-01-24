@@ -767,11 +767,16 @@ class PublicKeys extends Table
         /** @var TOTP $totpTable */
         $totpTable = $this->table('TOTP');
         $domain = parse_url($actor->actorID)['host'];
-        $secret = $totpTable->getSecretByDomain($domain);
-        if ($secret) {
-            if (!$this->verifyTOTP($secret, $decrypted->getOtp() ?? '')) {
+        $totp = $totpTable->getTotpByDomain($domain);
+        if ($totp) {
+            $ts = $this->verifyTOTP($totp['secret'], $decrypted->getOtp() ?? '');
+            if (is_null($ts)) {
                 throw new ProtocolException('Invalid TOTP code');
             }
+            if ($ts <= $totp['last_time_step']) {
+                throw new ProtocolException('TOTP code already used');
+            }
+            $totpTable->updateLastTimeStep($domain, $ts);
         }
 
         $affected = $this->db->update(

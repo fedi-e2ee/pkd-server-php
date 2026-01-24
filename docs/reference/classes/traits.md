@@ -820,7 +820,7 @@ static · Returns `string`
 
 #### [`verifyTOTP`](../../../src/Traits/TOTPTrait.php#L45-L59)
 
-static · Returns `bool`
+static · Returns `?int`
 
 **Parameters:**
 

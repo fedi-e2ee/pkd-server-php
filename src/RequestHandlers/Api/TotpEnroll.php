@@ -140,8 +140,13 @@ class TotpEnroll implements RequestHandlerInterface, LimitingHandlerInterface
             Base32::decode($totpSecret),
         );
 
-        if (!self::verifyTOTP($decryptedSecret, $otpCurrent) || !self::verifyTOTP($decryptedSecret, $otpPrevious)) {
+        $tsCurrent = self::verifyTOTP($decryptedSecret, $otpCurrent);
+        $tsPrevious = self::verifyTOTP($decryptedSecret, $otpPrevious);
+        if (is_null($tsCurrent) || is_null($tsPrevious)) {
             return $this->error('Invalid TOTP codes', 406);
+        }
+        if ($tsCurrent <= $tsPrevious) {
+            return $this->error('TOTP codes must be increasing', 406);
         }
 
         /** @var Actors $actorTable */
@@ -153,7 +158,7 @@ class TotpEnroll implements RequestHandlerInterface, LimitingHandlerInterface
             return $this->error('TOTP already enabled', 409);
         }
 
-        $this->totpTable->saveSecret($domain, $decryptedSecret);
+        $this->totpTable->saveSecret($domain, $decryptedSecret, $tsCurrent);
 
         return $this->json([
             '!pkd-context' => 'fedi-e2ee:v1/api/totp/enroll',

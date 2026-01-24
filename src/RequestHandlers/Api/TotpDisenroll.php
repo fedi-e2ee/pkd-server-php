@@ -127,13 +127,18 @@ class TotpDisenroll implements RequestHandlerInterface, LimitingHandlerInterface
         $actorTable = $this->table('Actors');
         $actor = $actorTable->searchForActor($actorId);
         $domain = parse_url($actor->actorID)['host'];
-        $secret = $this->totpTable->getSecretByDomain($domain);
-        if (!$secret) {
+        $totp = $this->totpTable->getTotpByDomain($domain);
+        if (!$totp) {
             return $this->error('TOTP not enabled', 409);
         }
-
-        if (!$this->verifyTOTP($secret, $otp)) {
+        $secret = $totp['secret'];
+        $lastTS = $totp['last_time_step'];
+        $ts = $this->verifyTOTP($secret, $otp);
+        if (is_null($ts)) {
             return $this->error('Invalid TOTP code', 403);
+        }
+        if ($ts <= $lastTS) {
+            return $this->error('TOTP code already used', 403);
         }
 
         $this->totpTable->deleteSecret($domain);

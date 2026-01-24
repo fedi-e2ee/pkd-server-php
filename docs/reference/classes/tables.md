@@ -606,7 +606,7 @@ Returns `bool`
 
 **Throws:** `ConcurrentException`, `CryptoException`, `DependencyException`, `NotImplementedException`, `ProtocolException`, `RandomException`, `SodiumException`, `TableException`
 
-#### [`fireproof`](../../../src/Tables/PublicKeys.php#L798-L806)
+#### [`fireproof`](../../../src/Tables/PublicKeys.php#L803-L811)
 
 Returns `bool`
 
@@ -617,7 +617,7 @@ Returns `bool`
 
 **Throws:** `ConcurrentException`, `CryptoException`, `DependencyException`, `NotImplementedException`, `ProtocolException`, `RandomException`, `SodiumException`, `TableException`
 
-#### [`undoFireproof`](../../../src/Tables/PublicKeys.php#L892-L900)
+#### [`undoFireproof`](../../../src/Tables/PublicKeys.php#L897-L905)
 
 Returns `bool`
 
@@ -628,7 +628,7 @@ Returns `bool`
 
 **Throws:** `ConcurrentException`, `CryptoException`, `DependencyException`, `NotImplementedException`, `ProtocolException`, `RandomException`, `SodiumException`, `TableException`
 
-#### [`checkpoint`](../../../src/Tables/PublicKeys.php#L986-L994)
+#### [`checkpoint`](../../../src/Tables/PublicKeys.php#L991-L999)
 
 Returns `bool`
 
@@ -670,7 +670,7 @@ static · Returns `string`
 
 #### [`verifyTOTP`](../../../src/Tables/PublicKeys.php#L45-L59)
 
-static · Returns `bool`
+static · Returns `?int`
 
 **Parameters:**
 
@@ -1027,7 +1027,7 @@ Returns `FediE2EE\PKDServer\Dependency\WrappedEncryptedRow`
 
 **Attributes:** `#[Override]`
 
-#### [`getSecretByDomain`](../../../src/Tables/TOTP.php#L59-L72)
+#### [`getSecretByDomain`](../../../src/Tables/TOTP.php#L59-L66)
 
 Returns `?string`
 
@@ -1035,9 +1035,19 @@ Returns `?string`
 
 - `$domain`: `string`
 
-**Throws:** `CipherSweetException`, `CryptoOperationException`, `SodiumException`, `InvalidCiphertextException`
+**Throws:** `CipherSweetException`, `CryptoOperationException`, `InvalidCiphertextException`, `SodiumException`
 
-#### [`saveSecret`](../../../src/Tables/TOTP.php#L82-L96)
+#### [`getTotpByDomain`](../../../src/Tables/TOTP.php#L74-L90)
+
+Returns `?array`
+
+**Parameters:**
+
+- `$domain`: `string`
+
+**Throws:** `CipherSweetException`, `CryptoOperationException`, `InvalidCiphertextException`, `SodiumException`
+
+#### [`saveSecret`](../../../src/Tables/TOTP.php#L100-L118)
 
 Returns `void`
 
@@ -1045,10 +1055,11 @@ Returns `void`
 
 - `$domain`: `string`
 - `$secret`: `string`
+- `$lastTimeStep`: `int` = 0
 
 **Throws:** `ArrayKeyException`, `CipherSweetException`, `CryptoOperationException`, `RandomException`, `SodiumException`, `TableException`
 
-#### [`deleteSecret`](../../../src/Tables/TOTP.php#L98-L101)
+#### [`deleteSecret`](../../../src/Tables/TOTP.php#L120-L123)
 
 Returns `void`
 
@@ -1056,7 +1067,7 @@ Returns `void`
 
 - `$domain`: `string`
 
-#### [`updateSecret`](../../../src/Tables/TOTP.php#L111-L143)
+#### [`updateSecret`](../../../src/Tables/TOTP.php#L133-L170)
 
 Returns `void`
 
@@ -1064,8 +1075,18 @@ Returns `void`
 
 - `$domain`: `string`
 - `$secret`: `string`
+- `$lastTimeStep`: `int` = 0
 
 **Throws:** `ArrayKeyException`, `CipherSweetException`, `CryptoOperationException`, `SodiumException`, `TableException`, `RandomException`
+
+#### [`updateLastTimeStep`](../../../src/Tables/TOTP.php#L172-L179)
+
+Returns `void`
+
+**Parameters:**
+
+- `$domain`: `string`
+- `$lastTimeStep`: `int`
 
 ---
 

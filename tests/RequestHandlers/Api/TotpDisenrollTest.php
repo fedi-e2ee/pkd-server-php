@@ -648,4 +648,90 @@ class TotpDisenrollTest extends TestCase
         $storedSecret = $table->getSecretByDomain($domain);
         $this->assertSame($totpSecret, $storedSecret);
     }
+
+    /**
+     * @throws Exception
+     */
+    public function testDisenrollReplay(): void
+    {
+        [, $canonical] = $this->makeDummyActor('replay-disenroll-example.com');
+        $keypair = SecretKey::generate();
+
+        /** @var TOTP $table */
+        $table = $this->table('TOTP');
+        /** @var MerkleState $merkleState */
+        $merkleState = $this->table('MerkleState');
+
+        // Add the key to the PKD first
+        $config = $this->getConfig();
+        $protocol = new Protocol($config);
+        $this->clearOldTransaction($config);
+        $latestRoot = $merkleState->getLatestRoot();
+        $serverHpke = $this->config->getHPKE();
+        $handler = new Handler();
+
+        $addKey = new AddKey($canonical, $keypair->getPublicKey());
+        $akm = new AttributeKeyMap()
+            ->addKey('actor', SymmetricKey::generate())
+            ->addKey('public-key', SymmetricKey::generate());
+        $encryptedMsg = $addKey->encrypt($akm);
+        $bundle = $handler->handle($encryptedMsg, $keypair, $akm, $latestRoot);
+        $encryptedForServer = $handler->hpkeEncrypt(
+            $bundle,
+            $serverHpke->encapsKey,
+            $serverHpke->cs,
+        );
+        $result = $protocol->addKey($encryptedForServer, $canonical);
+        $this->assertNotInTransaction();
+        $this->ensureMerkleStateUnlocked();
+
+        // Create TOTP Secret:
+        $totpSecret = random_bytes(20);
+        $domain = 'replay-disenroll-example.com';
+        $table->saveSecret($domain, $totpSecret);
+
+        // Prepare disenrollment request:
+        $otpCurrent = self::generateTOTP($totpSecret);
+        $disenrollment = [
+            'actor-id' => $canonical,
+            'key-id' => $result->keyID,
+            'otp' => $otpCurrent,
+        ];
+
+        $message = [
+            '!pkd-context' => 'fedi-e2ee:v1/api/totp/disenroll',
+            'action' => 'TOTP-Disenroll',
+            'current-time' => (string) time(),
+            'disenrollment' => $disenrollment,
+        ];
+        $messageToSign = $this->preAuthEncode([
+            '!pkd-context',
+            'fedi-e2ee:v1/api/totp/disenroll',
+            'action',
+            'TOTP-Disenroll',
+            'message',
+            json_encode($disenrollment, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_SLASHES),
+        ]);
+        $message['signature'] = Base64UrlSafe::encodeUnpadded($keypair->sign($messageToSign));
+
+        // Manually set last_time_step to the matching one to simulate replay
+        $ts = self::verifyTOTP($totpSecret, $otpCurrent);
+        $table->updateLastTimeStep($domain, $ts);
+
+        // Dispatch the request
+        $request = new ServerRequest(
+            [],
+            [],
+            '/api/totp/disenroll',
+            'POST'
+        )
+            ->withHeader('Content-Type', 'application/json')
+            ->withBody(new StreamFactory()->createStream(json_encode($message)));
+        $response = $this->dispatchRequest($request);
+
+        // Validate the HTTP response: should be 403 Forbidden because OTP already used
+        $this->assertSame(403, $response->getStatusCode());
+        $responseBody = json_decode((string) $response->getBody(), true);
+        $this->assertSame('TOTP code already used', $responseBody['error']);
+    }
 }
