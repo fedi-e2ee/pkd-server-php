@@ -917,4 +917,57 @@ class TotpEnrollTest extends TestCase
         $this->assertArrayHasKey('error', $decoded);
         $this->assertSame('Missing required fields', $decoded['error']);
     }
+    /**
+     * @throws CertaintyException
+     * @throws CipherSweetException
+     * @throws CryptoException
+     * @throws CryptoOperationException
+     * @throws DependencyException
+     * @throws HPKEException
+     * @throws InvalidArgumentException
+     * @throws JsonException
+     * @throws NotImplementedException
+     * @throws ParserException
+     * @throws ProtocolException
+     * @throws RandomException
+     * @throws SodiumException
+     * @throws TableException
+     */
+    public function testEnrollNonIncreasingCodes(): void
+    {
+        [, $canonical] = $this->makeDummyActor('non-increasing-enroll.com');
+        $keypair = SecretKey::generate();
+
+        $config = $this->getConfig();
+        $this->clearOldTransaction($config);
+        $protocol = new Protocol($config);
+
+        $result = $this->addKeyForActor($canonical, $keypair, $protocol, $config);
+        $this->assertNotInTransaction();
+        $this->ensureMerkleStateUnlocked();
+        $keyId = $result->keyID;
+
+        $totpSecret = random_bytes(20);
+        $otpCurrent = self::generateTOTP($totpSecret);
+        // Use SAME code for both
+        $otpPrevious = $otpCurrent;
+
+        $hpke = $this->config->getHPKE();
+        $encryptedSecret = (new HPKEAdapter($hpke->cs, 'fedi-e2ee:v1/api/totp/enroll'))->seal(
+            $hpke->getEncapsKey(),
+            $totpSecret
+        );
+        $encodedSecret = Base32::encode($encryptedSecret);
+
+        $enrollment = [
+            'actor-id' => $canonical,
+            'key-id' => $keyId,
+            'current-time' => (string) time(),
+            'otp-current' => $otpCurrent,
+            'otp-previous' => $otpPrevious,
+            'totp-secret' => $encodedSecret,
+        ];
+
+        $this->executeEnrollAndAssertError($keypair, $enrollment, 406, 'TOTP codes must be increasing');
+    }
 }

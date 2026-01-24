@@ -40,22 +40,22 @@ trait TOTPTrait
      * @param string $secret
      * @param string $otp
      * @param int $windows
-     * @return bool
+     * @return ?int
      */
     public static function verifyTOTP(
         #[SensitiveParameter] string $secret,
         #[SensitiveParameter] string $otp,
         int    $windows = 2
-    ): bool {
+    ): ?int {
         $time = time();
         for ($i = -$windows; $i <= $windows; $i++) {
             $trialTime = $time + ($i * self::TOTP_WINDOW_TIME);
             $expected = self::generateTOTP($secret, $trialTime);
             if (hash_equals($expected, $otp)) {
-                return true;
+                return (int) floor($trialTime / self::TOTP_WINDOW_TIME);
             }
         }
-        return false;
+        return null;
     }
 
     public static function generateTOTP(

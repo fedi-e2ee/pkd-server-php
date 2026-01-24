@@ -138,13 +138,18 @@ class TotpRotate implements RequestHandlerInterface, LimitingHandlerInterface
         $actorTable = $this->table('Actors');
         $actor = $actorTable->searchForActor($actorId);
         $domain = parse_url($actor->actorID)['host'];
-        $oldSecret = $this->totpTable->getSecretByDomain($domain);
-        if (!$oldSecret) {
+        $oldTotp = $this->totpTable->getTotpByDomain($domain);
+        if (!$oldTotp) {
             return $this->error('TOTP not enabled', 400);
         }
-
-        if (!$this->verifyTOTP($oldSecret, $oldOtp)) {
+        $oldSecret = $oldTotp['secret'];
+        $oldLastTS = $oldTotp['last_time_step'];
+        $tsOld = $this->verifyTOTP($oldSecret, $oldOtp);
+        if (is_null($tsOld)) {
             return $this->error('Invalid old TOTP code', 403);
+        }
+        if ($tsOld <= $oldLastTS) {
+            return $this->error('Old TOTP code already used', 403);
         }
 
         $hpke = $this->config()->getHPKE();
@@ -153,12 +158,16 @@ class TotpRotate implements RequestHandlerInterface, LimitingHandlerInterface
             $hpke->getEncapsKey(),
             Base32::decode($newTotpSecret)
         );
-
-        if (!$this->verifyTOTP($newSecret, $newOtpCurrent) || !$this->verifyTOTP($newSecret, $newOtpPrevious)) {
+        $tsNewCurrent = $this->verifyTOTP($newSecret, $newOtpCurrent);
+        $tsNewPrevious = $this->verifyTOTP($newSecret, $newOtpPrevious);
+        if (is_null($tsNewCurrent) || is_null($tsNewPrevious)) {
             return $this->error('Invalid new TOTP codes', 406);
         }
+        if ($tsNewCurrent <= $tsNewPrevious) {
+            return $this->error('New TOTP codes must be increasing', 406);
+        }
 
-        $this->totpTable->updateSecret($domain, $newSecret);
+        $this->totpTable->updateSecret($domain, $newSecret, $tsNewCurrent);
 
         return $this->json([
             '!pkd-context' => 'fedi-e2ee:v1/api/totp/rotate',

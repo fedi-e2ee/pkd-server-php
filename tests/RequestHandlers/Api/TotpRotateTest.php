@@ -806,6 +806,102 @@ class TotpRotateTest extends TestCase
         $this->assertSame($expectedError, $body['error']);
     }
 
+    /**
+     * @throws ArrayKeyException
+     * @throws CacheException
+     * @throws CertaintyException
+     * @throws CipherSweetException
+     * @throws CryptoException
+     * @throws CryptoOperationException
+     * @throws DependencyException
+     * @throws HPKEException
+     * @throws InvalidArgumentException
+     * @throws InvalidCiphertextException
+     * @throws JsonException
+     * @throws NotImplementedException
+     * @throws ParserException
+     * @throws ProtocolException
+     * @throws RandomException
+     * @throws SodiumException
+     * @throws TableException
+     */
+    public function testRotateReplay(): void
+    {
+        $sk = SecretKey::generate();
+        [, $canonical] = $this->makeDummyActor('replay-rotate-example.com');
+
+        /** @var TOTP $totpTable */
+        $totpTable = $this->table('TOTP');
+
+        $config = $this->getConfig();
+        $this->clearOldTransaction($config);
+        $protocol = new Protocol($config);
+
+        $addKeyResult = $this->addKeyForActor($canonical, $sk, $protocol, $config);
+        $keyId = $addKeyResult->keyID;
+
+        $domain = parse_url($canonical)['host'];
+        $oldSecret = random_bytes(20);
+        $totpTable->saveSecret($domain, $oldSecret);
+
+        $totpGenerator = new class() {
+            use TOTPTrait;
+        };
+
+        $oldOtp = $totpGenerator->generateTOTP($oldSecret, time());
+
+        $newSecret = random_bytes(20);
+        $newOtpCurrent = $totpGenerator->generateTOTP($newSecret, time());
+        $newOtpPrevious = $totpGenerator->generateTOTP($newSecret, time() - 30);
+
+        $hpke = $this->config()->getHPKE();
+        $encryptedSecret = (new HPKEAdapter($hpke->cs, 'fedi-e2ee:v1/api/totp/rotate'))->seal(
+            $hpke->getEncapsKey(),
+            $newSecret
+        );
+
+        $rotation = [
+            'actor-id' => $canonical,
+            'key-id' => $keyId,
+            'old-otp' => $oldOtp,
+            'new-otp-current' => $newOtpCurrent,
+            'new-otp-previous' => $newOtpPrevious,
+            'new-totp-secret' => Base32::encode($encryptedSecret),
+        ];
+
+        // First rotation should succeed
+        $message = [
+            '!pkd-context' => 'fedi-e2ee:v1/api/totp/rotate',
+            'action' => 'TOTP-Rotate',
+            'current-time' => (string) time(),
+            'rotation' => $rotation
+        ];
+        $toSign = $this->preAuthEncode([
+            '!pkd-context',
+            'fedi-e2ee:v1/api/totp/rotate',
+            'action',
+            'TOTP-Rotate',
+            'message',
+            json_encode($rotation, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE),
+        ]);
+        $message['signature'] = Base64UrlSafe::encodeUnpadded($sk->sign($toSign));
+        $request = $this->makePostRequest('/api/totp/rotate', $message);
+        $response = $this->dispatchRequest($request);
+        $this->assertSame(200, $response->getStatusCode(), $response->getBody()->getContents());
+
+        // Second rotation with the SAME old-otp should fail
+        $time =  (int) floor(time() / 30);
+        $totpTable->updateSecret($domain, $oldSecret, $time);
+
+        $request = $this->makePostRequest('/api/totp/rotate', $message);
+        $response = $this->dispatchRequest($request);
+
+        $this->assertSame(403, $response->getStatusCode());
+        $response->getBody()->rewind();
+        $body = json_decode($response->getBody()->getContents(), true);
+        $this->assertSame('Old TOTP code already used', $body['error']);
+    }
+
     public static function deletedKeysProvider(): array
     {
         return [

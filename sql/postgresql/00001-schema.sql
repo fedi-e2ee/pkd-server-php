@@ -100,6 +100,7 @@ CREATE TABLE IF NOT EXISTS pkd_totp_secrets (
     domain TEXT,
     secret TEXT,
     wrap_secret TEXT NULL,
+    last_time_step BIGINT DEFAULT 0,
     created TIMESTAMP DEFAULT NOW(),
     modified TIMESTAMP DEFAULT NOW()
 );
