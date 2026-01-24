@@ -3338,7 +3338,7 @@ Returns `void`
 
 **Throws:** `DependencyException`, `TableException`, `CacheException`
 
-#### [`handle`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L83-L146)
+#### [`handle`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L83-L151)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -3350,7 +3350,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `ArrayKeyException`, `BaseJsonException`, `BlindIndexNotFoundException`, `CacheException`, `CipherSweetException`, `CryptoException`, `CryptoOperationException`, `DateMalformedStringException`, `DependencyException`, `InvalidCiphertextException`, `JsonException`, `NotImplementedException`, `SodiumException`, `TableException`
 
-#### [`getEnabledRateLimits`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L149-L152)
+#### [`getEnabledRateLimits`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L154-L157)
 
 Returns `array`
 
@@ -3507,7 +3507,7 @@ static · Returns `string`
 
 #### [`verifyTOTP`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L45-L59)
 
-static · Returns `bool`
+static · Returns `?int`
 
 **Parameters:**
 
@@ -3654,7 +3654,7 @@ Returns `void`
 
 **Throws:** `DependencyException`, `TableException`, `CacheException`
 
-#### [`handle`](../../../src/RequestHandlers/Api/TotpEnroll.php#L89-L163)
+#### [`handle`](../../../src/RequestHandlers/Api/TotpEnroll.php#L89-L168)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -3666,7 +3666,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `ArrayKeyException`, `BaseJsonException`, `BlindIndexNotFoundException`, `CacheException`, `CipherSweetException`, `CryptoException`, `CryptoOperationException`, `DateMalformedStringException`, `DependencyException`, `HPKEException`, `InvalidCiphertextException`, `JsonException`, `NotImplementedException`, `RandomException`, `SodiumException`, `TableException`
 
-#### [`getEnabledRateLimits`](../../../src/RequestHandlers/Api/TotpEnroll.php#L166-L169)
+#### [`getEnabledRateLimits`](../../../src/RequestHandlers/Api/TotpEnroll.php#L171-L174)
 
 Returns `array`
 
@@ -3823,7 +3823,7 @@ static · Returns `string`
 
 #### [`verifyTOTP`](../../../src/RequestHandlers/Api/TotpEnroll.php#L45-L59)
 
-static · Returns `bool`
+static · Returns `?int`
 
 **Parameters:**
 
@@ -3970,7 +3970,7 @@ Returns `void`
 
 **Throws:** `DependencyException`, `TableException`, `CacheException`
 
-#### [`handle`](../../../src/RequestHandlers/Api/TotpRotate.php#L89-L168)
+#### [`handle`](../../../src/RequestHandlers/Api/TotpRotate.php#L89-L177)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -3982,7 +3982,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `ArrayKeyException`, `BaseJsonException`, `BlindIndexNotFoundException`, `CacheException`, `CipherSweetException`, `CryptoException`, `CryptoOperationException`, `DateMalformedStringException`, `DependencyException`, `HPKEException`, `InvalidCiphertextException`, `JsonException`, `NotImplementedException`, `RandomException`, `SodiumException`, `TableException`
 
-#### [`getEnabledRateLimits`](../../../src/RequestHandlers/Api/TotpRotate.php#L171-L174)
+#### [`getEnabledRateLimits`](../../../src/RequestHandlers/Api/TotpRotate.php#L180-L183)
 
 Returns `array`
 
@@ -4139,7 +4139,7 @@ static · Returns `string`
 
 #### [`verifyTOTP`](../../../src/RequestHandlers/Api/TotpRotate.php#L45-L59)
 
-static · Returns `bool`
+static · Returns `?int`
 
 **Parameters:**
 
