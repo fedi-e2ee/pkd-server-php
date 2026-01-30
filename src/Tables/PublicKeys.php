@@ -57,6 +57,7 @@ use ParagonIE\EasyDB\EasyStatement;
 use Random\RandomException;
 use SodiumException;
 use TypeError;
+use function hash_equals, is_array, is_null, is_string, json_decode, parse_url, random_bytes;
 
 class PublicKeys extends Table
 {

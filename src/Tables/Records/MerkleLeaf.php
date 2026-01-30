@@ -14,6 +14,7 @@ use FediE2EE\PKDServer\Traits\TableRecordTrait;
 use FediE2EE\PKDServer\Tables\MerkleState;
 use ParagonIE\ConstantTime\Base64UrlSafe;
 use SodiumException;
+use function hash, json_decode, sodium_bin2hex, sodium_hex2bin, time;
 
 /**
  * Abstraction for a row in the MerkleState table

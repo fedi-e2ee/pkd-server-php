@@ -12,6 +12,21 @@ use JsonException;
 use Override;
 use SensitiveParameter;
 use SodiumException;
+use function
+    array_key_exists,
+    file_exists,
+    file_get_contents,
+    file_put_contents,
+    implode,
+    is_dir,
+    is_null,
+    mkdir,
+    sodium_bin2hex,
+    sodium_crypto_generichash,
+    sodium_crypto_generichash_keygen,
+    substr,
+    time,
+    unlink;
 
 class Filesystem implements RateLimitStorageInterface
 {

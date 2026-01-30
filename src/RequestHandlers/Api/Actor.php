@@ -34,6 +34,7 @@ use Psr\Http\Server\RequestHandlerInterface;
 use SodiumException;
 use Throwable;
 use TypeError;
+use function is_null;
 
 class Actor implements RequestHandlerInterface, HttpCacheInterface
 {

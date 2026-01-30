@@ -17,6 +17,7 @@ use ParagonIE\CipherSweet\Exception\{
 use Random\RandomException;
 use SensitiveParameter;
 use SodiumException;
+use function array_key_exists, is_null, random_bytes;
 
 class TOTP extends Table
 {

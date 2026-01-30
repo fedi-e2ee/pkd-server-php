@@ -44,6 +44,7 @@ use Psr\Http\Server\RequestHandlerInterface;
 use SodiumException;
 use Throwable;
 use TypeError;
+use function hash_equals, is_null, parse_url;
 
 class TotpRotate implements RequestHandlerInterface, LimitingHandlerInterface
 {

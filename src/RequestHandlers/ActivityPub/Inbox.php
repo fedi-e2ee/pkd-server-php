@@ -21,6 +21,7 @@ use FediE2EE\PKDServer\Exceptions\{
     FetchException,
     TableException
 };
+use JsonException as BaseJsonException;
 use Override;
 use ParagonIE\Certainty\Exception\CertaintyException;
 use Psr\Http\Server\RequestHandlerInterface;
@@ -30,6 +31,7 @@ use Psr\Http\Message\{
     ResponseInterface
 };
 use SodiumException;
+use function defined;
 
 class Inbox implements RequestHandlerInterface
 {
@@ -53,6 +55,7 @@ class Inbox implements RequestHandlerInterface
     }
 
     /**
+     * @throws BaseJsonException
      * @throws CertaintyException
      * @throws CryptoException
      * @throws DependencyException

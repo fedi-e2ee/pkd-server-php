@@ -13,6 +13,7 @@ use FediE2EE\PKDServer\Tables\Records\{
     ReplicaLeaf
 };
 use Override;
+use function date, json_decode;
 
 class ReplicaHistory extends Table
 {

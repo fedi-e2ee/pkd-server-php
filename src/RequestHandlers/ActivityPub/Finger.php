@@ -14,6 +14,7 @@ use FediE2EE\PKDServer\{
     Traits\ActivityStreamsTrait,
     Traits\ReqTrait
 };
+use JsonException as BaseJsonException;
 use Override;
 use ParagonIE\Certainty\Exception\CertaintyException;
 use Psr\Http\Server\RequestHandlerInterface;
@@ -22,6 +23,7 @@ use Psr\Http\Message\{
     ResponseInterface
 };
 use SodiumException;
+use function array_key_exists, hash_equals, preg_match;
 
 class Finger implements RequestHandlerInterface
 {
@@ -29,6 +31,7 @@ class Finger implements RequestHandlerInterface
     use ReqTrait;
 
     /**
+     * @throws BaseJsonException
      * @throws CertaintyException
      * @throws DependencyException
      * @throws GuzzleException

@@ -29,6 +29,7 @@ use ParagonIE\CipherSweet\Exception\{
 use ParagonIE\ConstantTime\Base64UrlSafe;
 use SensitiveParameter;
 use SodiumException;
+use function floor, hash_equals, hash_hmac, is_null, pack, sprintf, substr, time, unpack;
 
 trait TOTPTrait
 {

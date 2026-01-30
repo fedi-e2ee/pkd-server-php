@@ -9,8 +9,10 @@ use FediE2EE\PKD\Crypto\UtilTrait;
 use FediE2EE\PKDServer\Traits\JsonTrait;
 use JsonException as BaseJsonException;
 use Override;
+use JsonSerializable;
+use function is_array, is_null;
 
-class RateLimitData implements \JsonSerializable
+class RateLimitData implements JsonSerializable
 {
     use JsonTrait;
     use UtilTrait;

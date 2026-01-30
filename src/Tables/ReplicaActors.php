@@ -24,6 +24,7 @@ use Override;
 use ParagonIE\CipherSweet\Backend\Key\SymmetricKey as CipherSweetKey;
 use ParagonIE\CipherSweet\BlindIndex;
 use SodiumException;
+use function hash_equals, is_null;
 
 class ReplicaActors extends Table
 {

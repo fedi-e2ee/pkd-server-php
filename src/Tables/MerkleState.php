@@ -36,6 +36,17 @@ use PDOException;
 use Psr\SimpleCache\InvalidArgumentException;
 use Random\RandomException;
 use SodiumException;
+use function
+    array_key_exists,
+    hash_equals,
+    in_array,
+    is_null,
+    parse_url,
+    random_bytes,
+    random_int,
+    sodium_bin2hex,
+    str_contains,
+    usleep;
 
 /**
  * Merkle State management

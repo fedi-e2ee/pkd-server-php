@@ -4,9 +4,27 @@ namespace FediE2EE\PKDServer\Traits;
 
 use FediE2EE\PKDServer\Exceptions\NetTraitException;
 use Psr\Http\Message\ServerRequestInterface;
+use function
+    array_values,
+    filter_var,
+    in_array,
+    inet_ntop,
+    inet_pton,
+    is_object,
+    is_string,
+    json_decode,
+    min,
+    pack,
+    parse_url,
+    property_exists,
+    trim,
+    unpack;
 
 trait NetworkTrait
 {
+    /**
+     * @throws NetTraitException
+     */
     public function getRequestIPSubnet(
         ServerRequestInterface $request,
         array $trustedProxies = [],
@@ -49,6 +67,9 @@ trait NetworkTrait
         return $remoteAddr;
     }
 
+    /**
+     * @throws NetTraitException
+     */
     public function ipv4Mask(string $ip, int $maskBits = 32): string
     {
         if ($maskBits < 0) {
@@ -125,12 +146,12 @@ trait NetworkTrait
         $request->getBody()->rewind();
 
         $decoded = json_decode($body);
-        if (!\is_object($decoded) || !property_exists($decoded, 'actor')) {
+        if (!is_object($decoded) || !property_exists($decoded, 'actor')) {
             return null;
         }
 
         $actorID = $decoded->actor;
-        if (!\is_string($actorID)) {
+        if (!is_string($actorID)) {
             return null;
         }
 

@@ -23,6 +23,7 @@ use ParagonIE\CipherSweet\Exception\{
     InvalidCiphertextException
 };
 use SodiumException;
+use function array_key_exists, hash_equals, is_null;
 
 class Actors extends Table
 {

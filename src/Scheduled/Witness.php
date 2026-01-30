@@ -51,6 +51,7 @@ use ParagonIE\EasyDB\EasyDB;
 use Random\RandomException;
 use SodiumException;
 use Throwable;
+use function count, is_array, is_string, json_decode, json_last_error_msg, random_bytes, substr, urlencode;
 
 /**
  * Perform witness co-signatures for third-porty Public Key Directory instances.

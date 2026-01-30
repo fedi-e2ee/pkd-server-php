@@ -28,6 +28,7 @@ use ParagonIE\EasyDB\EasyDB;
 use Psr\SimpleCache\InvalidArgumentException;
 use SodiumException;
 use Throwable;
+use function defined, is_null;
 
 class ASQueue
 {

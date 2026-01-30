@@ -15,6 +15,7 @@ use FediE2EE\PKDServer\Exceptions\{
     TableException,
 };
 use SodiumException;
+use function array_key_exists, is_null, property_exists;
 
 /**
  * @property ServerConfig $config

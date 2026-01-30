@@ -9,6 +9,7 @@ use League\Route\Route;
 use Override;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use function call_user_func_array, is_array, is_object, method_exists;
 
 class InjectConfigStrategy extends ApplicationStrategy
 {

@@ -34,6 +34,7 @@ use ParagonIE\HPKE\HPKEException;
 use Psr\SimpleCache\InvalidArgumentException;
 use SensitiveParameter;
 use SodiumException;
+use function array_key_exists, is_null, is_object, is_string, json_decode, json_encode, json_last_error_msg;
 
 class KeyWrapping
 {

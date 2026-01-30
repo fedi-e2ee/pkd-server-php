@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace FediE2EE\PKDServer\Traits;
 
 use JsonException as BaseJsonException;
+use function json_decode, json_encode;
 
 trait JsonTrait
 {
