@@ -13,7 +13,13 @@ use Psr\SimpleCache\{
     InvalidArgumentException
 };
 use SodiumException;
-use function array_key_exists, is_int, is_null, json_decode, sodium_bin2hex, sodium_crypto_generichash;
+
+use function array_key_exists;
+use function is_int;
+use function is_null;
+use function json_decode;
+use function sodium_bin2hex;
+use function sodium_crypto_generichash;
 
 class AppCache implements CacheInterface
 {

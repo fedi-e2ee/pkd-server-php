@@ -9,7 +9,9 @@ use FediE2EE\PKD\Crypto\Protocol\{
     ProtocolMessageInterface
 };
 use FediE2EE\PKDServer\Traits\JsonTrait;
-use function array_key_exists, json_decode;
+
+use function array_key_exists;
+use function json_decode;
 
 readonly class Payload
 {

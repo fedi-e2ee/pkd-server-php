@@ -4,21 +4,21 @@ namespace FediE2EE\PKDServer\Traits;
 
 use FediE2EE\PKDServer\Exceptions\NetTraitException;
 use Psr\Http\Message\ServerRequestInterface;
-use function
-    array_values,
-    filter_var,
-    in_array,
-    inet_ntop,
-    inet_pton,
-    is_object,
-    is_string,
-    json_decode,
-    min,
-    pack,
-    parse_url,
-    property_exists,
-    trim,
-    unpack;
+
+use function array_values;
+use function filter_var;
+use function in_array;
+use function inet_ntop;
+use function inet_pton;
+use function is_object;
+use function is_string;
+use function json_decode;
+use function min;
+use function pack;
+use function parse_url;
+use function property_exists;
+use function trim;
+use function unpack;
 
 trait NetworkTrait
 {

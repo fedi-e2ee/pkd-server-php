@@ -19,7 +19,11 @@ use FediE2EE\PKDServer\Traits\NetworkTrait;
 use Override;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use function array_key_exists, floor, is_int, is_null;
+
+use function array_key_exists;
+use function floor;
+use function is_int;
+use function is_null;
 
 class DefaultRateLimiting implements RateLimitInterface
 {

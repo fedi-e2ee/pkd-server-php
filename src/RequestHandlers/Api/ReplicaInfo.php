@@ -42,6 +42,7 @@ use Psr\Http\Message\{
 };
 use SodiumException;
 use TypeError;
+
 use function urlencode;
 
 class ReplicaInfo implements RequestHandlerInterface

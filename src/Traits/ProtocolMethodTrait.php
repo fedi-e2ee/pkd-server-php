@@ -30,6 +30,7 @@ use ParagonIE\Certainty\Exception\CertaintyException;
 use Psr\SimpleCache\InvalidArgumentException;
 use Random\RandomException;
 use SodiumException;
+
 use function hash_equals;
 
 /**

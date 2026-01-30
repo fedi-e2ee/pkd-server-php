@@ -17,7 +17,9 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use function in_array, is_null;
+
+use function in_array;
+use function is_null;
 
 class RateLimitMiddleware implements MiddlewareInterface
 {

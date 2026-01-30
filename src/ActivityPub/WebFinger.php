@@ -24,21 +24,21 @@ use ParagonIE\Certainty\{
 };
 use Psr\SimpleCache\InvalidArgumentException;
 use SodiumException;
-use function
-    array_key_exists,
-    explode,
-    is_array,
-    is_null,
-    is_object,
-    json_decode,
-    json_last_error_msg,
-    ltrim,
-    parse_url,
-    property_exists,
-    str_replace,
-    str_starts_with,
-    substr,
-    trim;
+
+use function array_key_exists;
+use function explode;
+use function is_array;
+use function is_null;
+use function is_object;
+use function json_decode;
+use function json_last_error_msg;
+use function ltrim;
+use function parse_url;
+use function property_exists;
+use function str_replace;
+use function str_starts_with;
+use function substr;
+use function trim;
 
 class WebFinger
 {

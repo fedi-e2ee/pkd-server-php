@@ -10,7 +10,9 @@ use FediE2EE\PKDServer\Traits\JsonTrait;
 use JsonException as BaseJsonException;
 use Override;
 use JsonSerializable;
-use function is_array, is_null;
+
+use function is_array;
+use function is_null;
 
 class RateLimitData implements JsonSerializable
 {

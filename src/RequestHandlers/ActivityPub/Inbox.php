@@ -31,6 +31,7 @@ use Psr\Http\Message\{
     ResponseInterface
 };
 use SodiumException;
+
 use function defined;
 
 class Inbox implements RequestHandlerInterface

@@ -11,7 +11,9 @@ use ParagonIE\CipherSweet\{
     Exception\CryptoOperationException
 };
 use Override;
-use function array_key_exists, is_null;
+
+use function array_key_exists;
+use function is_null;
 
 /**
  * Extends the CipherSweet EncryptedRow class to support key-wrapping

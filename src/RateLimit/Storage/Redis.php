@@ -13,7 +13,11 @@ use Override;
 use Predis\Client as PredisClient;
 use SensitiveParameter;
 use SodiumException;
-use function is_null, sodium_bin2hex, sodium_crypto_generichash, sodium_crypto_generichash_keygen;
+
+use function is_null;
+use function sodium_bin2hex;
+use function sodium_crypto_generichash;
+use function sodium_crypto_generichash_keygen;
 
 class Redis implements RateLimitStorageInterface
 {

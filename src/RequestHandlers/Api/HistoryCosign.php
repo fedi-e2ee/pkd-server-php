@@ -23,7 +23,11 @@ use Psr\Http\Server\RequestHandlerInterface;
 use SodiumException;
 use Throwable;
 use TypeError;
-use function in_array, is_object, json_decode, property_exists;
+
+use function in_array;
+use function is_object;
+use function json_decode;
+use function property_exists;
 
 class HistoryCosign implements RequestHandlerInterface
 {

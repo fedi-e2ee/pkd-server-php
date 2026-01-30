@@ -17,7 +17,10 @@ use ParagonIE\CipherSweet\Exception\{
 };
 use ParagonIE\EasyDB\EasyStatement;
 use SodiumException;
-use function is_array, is_string, json_decode;
+
+use function is_array;
+use function is_string;
+use function json_decode;
 
 class ReplicaPublicKeys extends Table
 {

@@ -18,7 +18,11 @@ use ParagonIE\Certainty\Exception\CertaintyException;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\SimpleCache\InvalidArgumentException;
 use SodiumException;
-use function is_object, json_decode, json_last_error_msg, property_exists;
+
+use function is_object;
+use function json_decode;
+use function json_last_error_msg;
+use function property_exists;
 
 trait ActivityStreamsTrait
 {

@@ -2,7 +2,8 @@
 declare(strict_types=1);
 namespace FediE2EE\PKDServer;
 
-use function ceil, log;
+use function ceil;
+use function log;
 
 abstract class Math
 {
