@@ -54,7 +54,7 @@ class Peer
             'incrementaltreestate' =>
                 Base64UrlSafe::encodeUnpadded($this->tree->toJson()),
             'latestroot' =>
-                $this->latestRoot,
+                $this->tree->getEncodedRoot(),
             'rewrap' =>
                 is_null($this->wrapConfig)
                     ? null
