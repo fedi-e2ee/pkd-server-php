@@ -329,7 +329,7 @@ Returns `bool`
 
 **Throws:** `BundleException`, `CacheException`, `CryptoException`, `DependencyException`, `HPKEException`, `JsonException`, `NotImplementedException`, `ProtocolException`, `SodiumException`, `TableException`
 
-#### [`burnDown`](../../../src/Protocol.php#L378-L391)
+#### [`burnDown`](../../../src/Protocol.php#L388-L402)
 
 Returns `bool`
 
@@ -340,7 +340,7 @@ Returns `bool`
 
 **Throws:** `BundleException`, `CacheException`, `CryptoException`, `DependencyException`, `HPKEException`, `JsonException`, `NotImplementedException`, `ProtocolException`, `SodiumException`, `TableException`
 
-#### [`fireproof`](../../../src/Protocol.php#L405-L414)
+#### [`fireproof`](../../../src/Protocol.php#L416-L425)
 
 Returns `bool`
 
@@ -351,7 +351,7 @@ Returns `bool`
 
 **Throws:** `BundleException`, `CacheException`, `CryptoException`, `DependencyException`, `HPKEException`, `JsonException`, `NotImplementedException`, `ProtocolException`, `SodiumException`, `TableException`
 
-#### [`undoFireproof`](../../../src/Protocol.php#L428-L437)
+#### [`undoFireproof`](../../../src/Protocol.php#L439-L448)
 
 Returns `bool`
 
@@ -362,7 +362,7 @@ Returns `bool`
 
 **Throws:** `BundleException`, `CacheException`, `CryptoException`, `DependencyException`, `HPKEException`, `JsonException`, `NotImplementedException`, `ProtocolException`, `SodiumException`, `TableException`
 
-#### [`addAuxData`](../../../src/Protocol.php#L451-L460)
+#### [`addAuxData`](../../../src/Protocol.php#L462-L471)
 
 Returns `bool`
 
@@ -373,7 +373,7 @@ Returns `bool`
 
 **Throws:** `BundleException`, `CacheException`, `CryptoException`, `DependencyException`, `HPKEException`, `JsonException`, `NotImplementedException`, `ProtocolException`, `SodiumException`, `TableException`
 
-#### [`revokeAuxData`](../../../src/Protocol.php#L475-L484)
+#### [`revokeAuxData`](../../../src/Protocol.php#L486-L495)
 
 Returns `bool`
 
@@ -384,7 +384,7 @@ Returns `bool`
 
 **Throws:** `BundleException`, `CacheException`, `CryptoException`, `DependencyException`, `HPKEException`, `JsonException`, `NotImplementedException`, `ProtocolException`, `SodiumException`, `TableException`
 
-#### [`checkpoint`](../../../src/Protocol.php#L498-L512)
+#### [`checkpoint`](../../../src/Protocol.php#L509-L523)
 
 Returns `bool`
 
