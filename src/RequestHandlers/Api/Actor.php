@@ -35,6 +35,8 @@ use SodiumException;
 use Throwable;
 use TypeError;
 
+use function is_null;
+
 class Actor implements RequestHandlerInterface, HttpCacheInterface
 {
     use HttpCacheTrait;

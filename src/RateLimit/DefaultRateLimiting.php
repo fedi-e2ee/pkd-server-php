@@ -5,6 +5,7 @@ namespace FediE2EE\PKDServer\RateLimit;
 use DateInterval;
 use DateMalformedIntervalStringException;
 use DateTimeImmutable;
+use DateTime;
 use FediE2EE\PKDServer\Exceptions\{
     DependencyException,
     RateLimitException
@@ -18,6 +19,11 @@ use FediE2EE\PKDServer\Traits\NetworkTrait;
 use Override;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+
+use function array_key_exists;
+use function floor;
+use function is_int;
+use function is_null;
 
 class DefaultRateLimiting implements RateLimitInterface
 {
@@ -202,7 +208,7 @@ class DefaultRateLimiting implements RateLimitInterface
         }
 
         // Add interval from zero, cast to unix timestamp to get number of seconds.
-        $start = new \DateTime('@0');
+        $start = new DateTime('@0');
         $end = $start->add($ttl);
         return (int) $end->format('U');
     }

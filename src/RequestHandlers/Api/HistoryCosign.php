@@ -24,6 +24,11 @@ use SodiumException;
 use Throwable;
 use TypeError;
 
+use function in_array;
+use function is_object;
+use function json_decode;
+use function property_exists;
+
 class HistoryCosign implements RequestHandlerInterface
 {
     use ReqTrait;

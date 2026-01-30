@@ -45,6 +45,10 @@ use SodiumException;
 use Throwable;
 use TypeError;
 
+use function hash_equals;
+use function is_null;
+use function parse_url;
+
 class TotpRotate implements RequestHandlerInterface, LimitingHandlerInterface
 {
     use ReqTrait;

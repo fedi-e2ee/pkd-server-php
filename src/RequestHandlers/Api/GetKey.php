@@ -3,7 +3,11 @@ declare(strict_types=1);
 namespace FediE2EE\PKDServer\RequestHandlers\Api;
 
 use DateMalformedStringException;
-use FediE2EE\PKD\Crypto\Exceptions\{CryptoException, JsonException, NotImplementedException};
+use FediE2EE\PKD\Crypto\Exceptions\{
+    CryptoException,
+    JsonException,
+    NotImplementedException
+};
 use FediE2EE\PKDServer\{
     Exceptions\CacheException,
     Exceptions\DependencyException,
@@ -33,6 +37,9 @@ use Psr\Http\Server\RequestHandlerInterface;
 use SodiumException;
 use Throwable;
 use TypeError;
+
+use function is_null;
+use function urlencode;
 
 class GetKey implements RequestHandlerInterface
 {

@@ -10,6 +10,9 @@ use FediE2EE\PKDServer\Traits\TableRecordTrait;
 use JsonException;
 use SodiumException;
 
+use function is_null;
+use function sodium_hex2bin;
+
 #[RecordForTable(ReplicaHistory::class)]
 final class ReplicaLeaf
 {

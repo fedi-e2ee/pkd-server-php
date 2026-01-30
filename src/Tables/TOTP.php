@@ -18,6 +18,10 @@ use Random\RandomException;
 use SensitiveParameter;
 use SodiumException;
 
+use function array_key_exists;
+use function is_null;
+use function random_bytes;
+
 class TOTP extends Table
 {
     #[Override]

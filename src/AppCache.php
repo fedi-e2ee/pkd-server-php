@@ -14,6 +14,13 @@ use Psr\SimpleCache\{
 };
 use SodiumException;
 
+use function array_key_exists;
+use function is_int;
+use function is_null;
+use function json_decode;
+use function sodium_bin2hex;
+use function sodium_crypto_generichash;
+
 class AppCache implements CacheInterface
 {
     use JsonTrait;

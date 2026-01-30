@@ -24,6 +24,10 @@ use ParagonIE\CipherSweet\Exception\{
 };
 use SodiumException;
 
+use function array_key_exists;
+use function hash_equals;
+use function is_null;
+
 class Actors extends Table
 {
     /** @var array<int, Actor>  */

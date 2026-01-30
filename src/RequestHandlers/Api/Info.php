@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace FediE2EE\PKDServer\RequestHandlers\Api;
 
 use FediE2EE\PKD\Crypto\Exceptions\{
-    JsonException,
     NotImplementedException
 };
 use FediE2EE\PKDServer\{
@@ -11,6 +10,7 @@ use FediE2EE\PKDServer\{
     Meta\Route,
     Traits\ReqTrait
 };
+use JsonException;
 use Override;
 use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Http\Message\{
@@ -38,7 +38,7 @@ class Info implements RequestHandlerInterface
         $actor = $params->actorUsername . '@' . $params->hostname;
         return $this->json([
             '!pkd-context' => 'fedi-e2ee:v1/api/info',
-            'current-time' => time(),
+            'current-time' => $this->time(),
             'actor' => $actor,
             'public-key' => $keys->publicKey->toString(),
         ]);

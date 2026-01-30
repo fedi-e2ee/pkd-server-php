@@ -10,6 +10,7 @@ use FediE2EE\PKD\Crypto\Exceptions\{
 };
 use FediE2EE\PKD\Crypto\Protocol\EncryptedProtocolMessageInterface;
 use FediE2EE\PKDServer\Exceptions\{
+    CacheException,
     ConcurrentException,
     DependencyException,
     ProtocolException,
@@ -26,8 +27,11 @@ use FediE2EE\PKDServer\Tables\{
     Records\MerkleLeaf
 };
 use ParagonIE\Certainty\Exception\CertaintyException;
+use Psr\SimpleCache\InvalidArgumentException;
 use Random\RandomException;
 use SodiumException;
+
+use function hash_equals;
 
 /**
  * @property ServerConfig $config
@@ -99,9 +103,11 @@ trait ProtocolMethodTrait
 
 
     /**
+     * @throws CacheException
      * @throws CertaintyException
      * @throws DependencyException
      * @throws GuzzleException
+     * @throws InvalidArgumentException
      * @throws NetworkException
      * @throws ProtocolException
      * @throws SodiumException
@@ -117,10 +123,6 @@ trait ProtocolMethodTrait
         if (hash_equals($canonicalExpected, $canonicalGiven)) {
             return;
         }
-        fwrite(STDERR, "EXPECTED: {$expected}\n");
-        fwrite(STDERR, "GIVEN: {$given}\n");
-        fwrite(STDERR, "CANONICAL EXPECTED: {$canonicalExpected}\n");
-        fwrite(STDERR, "CANONICAL GIVEN: {$canonicalGiven}\n");
         throw new ProtocolException('Actor confusion attack detected and prevented');
     }
 }

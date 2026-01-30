@@ -20,6 +20,8 @@ use Predis\Client as RedisClient;
 use Twig\Environment;
 use Throwable;
 
+use function is_null;
+
 class ServerConfig
 {
     private array $auxDataTypeAllowList = [];

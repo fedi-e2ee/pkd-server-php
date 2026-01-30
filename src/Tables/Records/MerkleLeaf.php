@@ -15,6 +15,12 @@ use FediE2EE\PKDServer\Tables\MerkleState;
 use ParagonIE\ConstantTime\Base64UrlSafe;
 use SodiumException;
 
+use function hash;
+use function json_decode;
+use function sodium_bin2hex;
+use function sodium_hex2bin;
+use function time;
+
 /**
  * Abstraction for a row in the MerkleState table
  */

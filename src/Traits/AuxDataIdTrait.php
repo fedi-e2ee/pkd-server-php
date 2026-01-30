@@ -5,6 +5,8 @@ namespace FediE2EE\PKDServer\Traits;
 use FediE2EE\PKD\Crypto\UtilTrait;
 use ParagonIE\ConstantTime\Base32;
 
+use function hash_hmac;
+
 trait AuxDataIdTrait
 {
     use UtilTrait;

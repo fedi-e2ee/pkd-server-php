@@ -63,13 +63,13 @@ Returns `void`
 
 ### Methods
 
-#### [`__construct`](../../../src/Dependency/InjectConfigStrategy.php#L20-L27)
+#### [`__construct`](../../../src/Dependency/InjectConfigStrategy.php#L25-L32)
 
 Returns `void`
 
 **Throws:** `DependencyException`
 
-#### [`invokeRouteCallable`](../../../src/Dependency/InjectConfigStrategy.php#L33-L56)
+#### [`invokeRouteCallable`](../../../src/Dependency/InjectConfigStrategy.php#L38-L61)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -122,11 +122,11 @@ Extends the CipherSweet EncryptedRow class to support key-wrapping
 
 ### Methods
 
-#### [`getWrappedColumnNames`](../../../src/Dependency/WrappedEncryptedRow.php#L31-L34)
+#### [`getWrappedColumnNames`](../../../src/Dependency/WrappedEncryptedRow.php#L34-L37)
 
 Returns `array`
 
-#### [`addField`](../../../src/Dependency/WrappedEncryptedRow.php#L47-L59)
+#### [`addField`](../../../src/Dependency/WrappedEncryptedRow.php#L50-L62)
 
 Returns `static`
 
@@ -142,7 +142,7 @@ Define a field that will be encrypted.
 - `$autoBindContext`: `bool` = false
 - `$wrappedKeyColumnName`: `?string` = null
 
-#### [`getExtensionKey`](../../../src/Dependency/WrappedEncryptedRow.php#L67-L70)
+#### [`getExtensionKey`](../../../src/Dependency/WrappedEncryptedRow.php#L70-L73)
 
 Returns `ParagonIE\CipherSweet\Backend\Key\SymmetricKey`
 
@@ -150,7 +150,7 @@ Get the key used to encrypt/decrypt the field symmetric key.
 
 **Throws:** `CipherSweetException`, `CryptoOperationException`
 
-#### [`wrapKey`](../../../src/Dependency/WrappedEncryptedRow.php#L76-L88)
+#### [`wrapKey`](../../../src/Dependency/WrappedEncryptedRow.php#L79-L91)
 
 Returns `string`
 
@@ -161,7 +161,7 @@ Returns `string`
 
 **Throws:** `CipherSweetException`, `CryptoOperationException`
 
-#### [`unwrapKey`](../../../src/Dependency/WrappedEncryptedRow.php#L94-L107)
+#### [`unwrapKey`](../../../src/Dependency/WrappedEncryptedRow.php#L97-L110)
 
 Returns `ParagonIE\CipherSweet\Backend\Key\SymmetricKey`
 
@@ -172,7 +172,7 @@ Returns `ParagonIE\CipherSweet\Backend\Key\SymmetricKey`
 
 **Throws:** `CipherSweetException`, `CryptoOperationException`
 
-#### [`wrapBeforeEncrypt`](../../../src/Dependency/WrappedEncryptedRow.php#L119-L141)
+#### [`wrapBeforeEncrypt`](../../../src/Dependency/WrappedEncryptedRow.php#L122-L144)
 
 **API** · Returns `array`
 
@@ -183,24 +183,11 @@ Returns `ParagonIE\CipherSweet\Backend\Key\SymmetricKey`
 
 **Throws:** `CipherSweetException`, `CryptoOperationException`
 
-#### [`purgeWrapKeyCache`](../../../src/Dependency/WrappedEncryptedRow.php#L147-L151)
+#### [`purgeWrapKeyCache`](../../../src/Dependency/WrappedEncryptedRow.php#L150-L154)
 
 **API** · Returns `static`
 
-#### [`addBooleanField`](../../../src/Dependency/WrappedEncryptedRow.php#L177-L190)
-
-**API** · Returns `static`
-
-**Attributes:** `#[Override]`
-
-**Parameters:**
-
-- `$fieldName`: `string`
-- `$aadSource`: `ParagonIE\CipherSweet\AAD|string` = ''
-- `$wrappedKeyColumnName`: `?string` = null
-- `$autoBindContext`: `bool` = false
-
-#### [`addFloatField`](../../../src/Dependency/WrappedEncryptedRow.php#L196-L209)
+#### [`addBooleanField`](../../../src/Dependency/WrappedEncryptedRow.php#L180-L193)
 
 **API** · Returns `static`
 
@@ -213,7 +200,7 @@ Returns `ParagonIE\CipherSweet\Backend\Key\SymmetricKey`
 - `$wrappedKeyColumnName`: `?string` = null
 - `$autoBindContext`: `bool` = false
 
-#### [`addIntegerField`](../../../src/Dependency/WrappedEncryptedRow.php#L215-L228)
+#### [`addFloatField`](../../../src/Dependency/WrappedEncryptedRow.php#L199-L212)
 
 **API** · Returns `static`
 
@@ -226,7 +213,7 @@ Returns `ParagonIE\CipherSweet\Backend\Key\SymmetricKey`
 - `$wrappedKeyColumnName`: `?string` = null
 - `$autoBindContext`: `bool` = false
 
-#### [`addOptionalBooleanField`](../../../src/Dependency/WrappedEncryptedRow.php#L234-L247)
+#### [`addIntegerField`](../../../src/Dependency/WrappedEncryptedRow.php#L218-L231)
 
 **API** · Returns `static`
 
@@ -239,7 +226,7 @@ Returns `ParagonIE\CipherSweet\Backend\Key\SymmetricKey`
 - `$wrappedKeyColumnName`: `?string` = null
 - `$autoBindContext`: `bool` = false
 
-#### [`addOptionalFloatField`](../../../src/Dependency/WrappedEncryptedRow.php#L253-L266)
+#### [`addOptionalBooleanField`](../../../src/Dependency/WrappedEncryptedRow.php#L237-L250)
 
 **API** · Returns `static`
 
@@ -252,7 +239,7 @@ Returns `ParagonIE\CipherSweet\Backend\Key\SymmetricKey`
 - `$wrappedKeyColumnName`: `?string` = null
 - `$autoBindContext`: `bool` = false
 
-#### [`addOptionalIntegerField`](../../../src/Dependency/WrappedEncryptedRow.php#L272-L285)
+#### [`addOptionalFloatField`](../../../src/Dependency/WrappedEncryptedRow.php#L256-L269)
 
 **API** · Returns `static`
 
@@ -265,7 +252,7 @@ Returns `ParagonIE\CipherSweet\Backend\Key\SymmetricKey`
 - `$wrappedKeyColumnName`: `?string` = null
 - `$autoBindContext`: `bool` = false
 
-#### [`addOptionalTextField`](../../../src/Dependency/WrappedEncryptedRow.php#L291-L304)
+#### [`addOptionalIntegerField`](../../../src/Dependency/WrappedEncryptedRow.php#L275-L288)
 
 **API** · Returns `static`
 
@@ -278,7 +265,20 @@ Returns `ParagonIE\CipherSweet\Backend\Key\SymmetricKey`
 - `$wrappedKeyColumnName`: `?string` = null
 - `$autoBindContext`: `bool` = false
 
-#### [`addTextField`](../../../src/Dependency/WrappedEncryptedRow.php#L310-L323)
+#### [`addOptionalTextField`](../../../src/Dependency/WrappedEncryptedRow.php#L294-L307)
+
+**API** · Returns `static`
+
+**Attributes:** `#[Override]`
+
+**Parameters:**
+
+- `$fieldName`: `string`
+- `$aadSource`: `ParagonIE\CipherSweet\AAD|string` = ''
+- `$wrappedKeyColumnName`: `?string` = null
+- `$autoBindContext`: `bool` = false
+
+#### [`addTextField`](../../../src/Dependency/WrappedEncryptedRow.php#L313-L326)
 
 **API** · Returns `static`
 

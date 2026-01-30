@@ -5,6 +5,8 @@ namespace FediE2EE\PKDServer\Meta;
 use FediE2EE\PKDServer\Exceptions\DependencyException;
 use FediE2EE\PKD\Crypto\Merkle\Tree;
 
+use function filter_var;
+
 /**
  * Server configuration parameters
  */

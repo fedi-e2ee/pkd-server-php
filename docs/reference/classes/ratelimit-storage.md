@@ -21,7 +21,7 @@ Namespace: `FediE2EE\PKDServer\RateLimit\Storage`
 
 ### Methods
 
-#### [`__construct`](../../../src/RateLimit/Storage/Filesystem.php#L26-L35)
+#### [`__construct`](../../../src/RateLimit/Storage/Filesystem.php#L41-L50)
 
 Returns `void`
 
@@ -33,7 +33,7 @@ Returns `void`
 
 **Throws:** `DependencyException`
 
-#### [`get`](../../../src/RateLimit/Storage/Filesystem.php#L43-L62)
+#### [`get`](../../../src/RateLimit/Storage/Filesystem.php#L58-L77)
 
 Returns `?FediE2EE\PKDServer\RateLimit\RateLimitData`
 
@@ -46,7 +46,7 @@ Returns `?FediE2EE\PKDServer\RateLimit\RateLimitData`
 
 **Throws:** `InputException`, `JsonException`, `SodiumException`
 
-#### [`set`](../../../src/RateLimit/Storage/Filesystem.php#L69-L77)
+#### [`set`](../../../src/RateLimit/Storage/Filesystem.php#L84-L92)
 
 Returns `bool`
 
@@ -60,7 +60,7 @@ Returns `bool`
 
 **Throws:** `SodiumException`, `JsonException`
 
-#### [`delete`](../../../src/RateLimit/Storage/Filesystem.php#L83-L90)
+#### [`delete`](../../../src/RateLimit/Storage/Filesystem.php#L98-L105)
 
 Returns `bool`
 
@@ -73,7 +73,7 @@ Returns `bool`
 
 **Throws:** `SodiumException`
 
-#### [`getFilesystemPath`](../../../src/RateLimit/Storage/Filesystem.php#L95-L116)
+#### [`getFilesystemPath`](../../../src/RateLimit/Storage/Filesystem.php#L110-L131)
 
 Returns `string`
 
@@ -84,7 +84,7 @@ Returns `string`
 
 **Throws:** `SodiumException`
 
-#### [`jsonDecode`](../../../src/RateLimit/Storage/Filesystem.php#L12-L15)
+#### [`jsonDecode`](../../../src/RateLimit/Storage/Filesystem.php#L15-L18)
 
 static · Returns `array`
 
@@ -94,7 +94,7 @@ static · Returns `array`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonDecodeObject`](../../../src/RateLimit/Storage/Filesystem.php#L20-L23)
+#### [`jsonDecodeObject`](../../../src/RateLimit/Storage/Filesystem.php#L23-L26)
 
 static · Returns `object`
 
@@ -104,7 +104,7 @@ static · Returns `object`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonEncode`](../../../src/RateLimit/Storage/Filesystem.php#L28-L34)
+#### [`jsonEncode`](../../../src/RateLimit/Storage/Filesystem.php#L31-L37)
 
 static · Returns `string`
 
@@ -212,7 +212,7 @@ Strip all newlines (CR, LF) characters from a string.
 
 ### Methods
 
-#### [`__construct`](../../../src/RateLimit/Storage/Redis.php#L27-L35)
+#### [`__construct`](../../../src/RateLimit/Storage/Redis.php#L32-L40)
 
 Returns `void`
 
@@ -223,7 +223,7 @@ Returns `void`
 
 **Throws:** `DependencyException`
 
-#### [`get`](../../../src/RateLimit/Storage/Redis.php#L43-L51)
+#### [`get`](../../../src/RateLimit/Storage/Redis.php#L48-L56)
 
 Returns `?FediE2EE\PKDServer\RateLimit\RateLimitData`
 
@@ -236,7 +236,7 @@ Returns `?FediE2EE\PKDServer\RateLimit\RateLimitData`
 
 **Throws:** `InputException`, `JsonException`, `SodiumException`
 
-#### [`set`](../../../src/RateLimit/Storage/Redis.php#L58-L63)
+#### [`set`](../../../src/RateLimit/Storage/Redis.php#L63-L68)
 
 Returns `bool`
 
@@ -250,7 +250,7 @@ Returns `bool`
 
 **Throws:** `JsonException`, `SodiumException`
 
-#### [`delete`](../../../src/RateLimit/Storage/Redis.php#L69-L74)
+#### [`delete`](../../../src/RateLimit/Storage/Redis.php#L74-L79)
 
 Returns `bool`
 
@@ -263,7 +263,7 @@ Returns `bool`
 
 **Throws:** `SodiumException`
 
-#### [`jsonDecode`](../../../src/RateLimit/Storage/Redis.php#L12-L15)
+#### [`jsonDecode`](../../../src/RateLimit/Storage/Redis.php#L15-L18)
 
 static · Returns `array`
 
@@ -273,7 +273,7 @@ static · Returns `array`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonDecodeObject`](../../../src/RateLimit/Storage/Redis.php#L20-L23)
+#### [`jsonDecodeObject`](../../../src/RateLimit/Storage/Redis.php#L23-L26)
 
 static · Returns `object`
 
@@ -283,7 +283,7 @@ static · Returns `object`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonEncode`](../../../src/RateLimit/Storage/Redis.php#L28-L34)
+#### [`jsonEncode`](../../../src/RateLimit/Storage/Redis.php#L31-L37)
 
 static · Returns `string`
 

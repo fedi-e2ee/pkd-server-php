@@ -4,6 +4,8 @@ namespace FediE2EE\PKDServer;
 
 use FediE2EE\PKDServer\Exceptions\CacheException;
 
+use function array_key_exists;
+
 class TableCache
 {
     private static TableCache $instance;

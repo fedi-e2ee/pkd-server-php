@@ -58,6 +58,14 @@ use Random\RandomException;
 use SodiumException;
 use TypeError;
 
+use function hash_equals;
+use function is_array;
+use function is_null;
+use function is_string;
+use function json_decode;
+use function parse_url;
+use function random_bytes;
+
 class PublicKeys extends Table
 {
     use ProtocolMethodTrait;

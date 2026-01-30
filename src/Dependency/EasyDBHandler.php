@@ -11,6 +11,8 @@ use ParagonIE\EasyDB\EasyDB;
 use PDOStatement;
 use RuntimeException;
 
+use function is_null;
+
 class EasyDBHandler extends AbstractProcessingHandler
 {
     private EasyDB $db;

@@ -37,6 +37,8 @@ use SodiumException;
 use Throwable;
 use TypeError;
 
+use function is_null;
+
 class ListAuxData implements RequestHandlerInterface
 {
     use ReqTrait;

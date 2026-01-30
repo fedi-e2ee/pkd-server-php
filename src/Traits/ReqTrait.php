@@ -25,6 +25,9 @@ use Twig\Error\{
 };
 use TypeError;
 
+use function array_key_exists;
+use function time;
+
 /**
  * Request Handler trait
  */

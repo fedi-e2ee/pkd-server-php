@@ -39,6 +39,8 @@ use SodiumException;
 use Throwable;
 use TypeError;
 
+use function is_null;
+
 class ListKeys implements RequestHandlerInterface
 {
     use ReqTrait;

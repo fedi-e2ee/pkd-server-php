@@ -41,6 +41,10 @@ use SodiumException;
 use Throwable;
 use TypeError;
 
+use function hash_equals;
+use function is_null;
+use function parse_url;
+
 class TotpDisenroll implements RequestHandlerInterface, LimitingHandlerInterface
 {
     use ReqTrait;

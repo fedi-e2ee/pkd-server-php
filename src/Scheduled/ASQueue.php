@@ -29,6 +29,9 @@ use Psr\SimpleCache\InvalidArgumentException;
 use SodiumException;
 use Throwable;
 
+use function defined;
+use function is_null;
+
 class ASQueue
 {
     use ConfigTrait;

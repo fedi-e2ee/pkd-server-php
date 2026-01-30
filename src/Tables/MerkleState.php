@@ -37,6 +37,17 @@ use Psr\SimpleCache\InvalidArgumentException;
 use Random\RandomException;
 use SodiumException;
 
+use function array_key_exists;
+use function hash_equals;
+use function in_array;
+use function is_null;
+use function parse_url;
+use function random_bytes;
+use function random_int;
+use function sodium_bin2hex;
+use function str_contains;
+use function usleep;
+
 /**
  * Merkle State management
  *

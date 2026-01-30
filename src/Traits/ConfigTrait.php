@@ -31,6 +31,8 @@ use GuzzleHttp\Client;
 use ParagonIE\Certainty\Exception\CertaintyException;
 use SodiumException;
 
+use function is_null;
+
 trait ConfigTrait
 {
     use JsonTrait;

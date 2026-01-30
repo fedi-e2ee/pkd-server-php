@@ -84,9 +84,9 @@ Namespace: `FediE2EE\PKDServer\Exceptions`
 
 **File:** [`src/Exceptions/FetchException.php`](../../../src/Exceptions/FetchException.php)
 
-**Extends:** `Exception`
+**Extends:** `FediE2EE\PKDServer\Exceptions\BaseException`
 
-**Implements:** `Throwable`, `Stringable`
+**Implements:** `Stringable`, `Throwable`
 
 ---
 
