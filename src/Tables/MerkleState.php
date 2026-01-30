@@ -520,7 +520,8 @@ class MerkleState extends Table
         $this->db->update(
             'pkd_merkle_state',
             [
-                'merkle_state' => Base64UrlSafe::encodeUnpadded($incremental->toJson())
+                'merkle_state' => Base64UrlSafe::encodeUnpadded($incremental->toJson()),
+                'lock_challenge' => ''
             ],
             ['merkle_state' => $state]
         );
