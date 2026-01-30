@@ -401,7 +401,7 @@ class PublicKeys extends Table
      * @throws TableException
      */
     //= https://raw.githubusercontent.com/fedi-e2ee/public-key-directory-specification/refs/heads/main/Specification.md#addkey
-    //# The first AddKey for any given Actor MUST be self-signed by the same public key being added.
+    //# The first `AddKey` for any given Actor **MUST** be self-signed by the same public key being added.
     protected function addKeyCallback(MerkleLeaf $leaf, Payload $payload, string $outerActor): ActorKey
     {
         $decoded = $payload->decode();
@@ -439,12 +439,12 @@ class PublicKeys extends Table
         $candidatePublicKeys = $this->getPublicKeysFor($actionData['actor']);
         if (empty($candidatePublicKeys)) {
             //= https://raw.githubusercontent.com/fedi-e2ee/public-key-directory-specification/refs/heads/main/Specification.md#addkey
-            //# The first AddKey for any given Actor MUST be self-signed by the same public key being added.
+            //# The first `AddKey` for any given Actor **MUST** be self-signed by the same public key being added.
             $newPublicKey = PublicKey::fromString($actionData['public-key']);
             $signatureIsValid = $sm->verify($newPublicKey);
         } else {
             //= https://raw.githubusercontent.com/fedi-e2ee/public-key-directory-specification/refs/heads/main/Specification.md#addkey
-            //# Subsequent AddKey messages MUST be signed by an existing, non-revoked public key.
+            //# Every subsequent `AddKey` must be signed by an existing, non-revoked public key.
             foreach ($candidatePublicKeys as $row) {
                 if ($sm->verify($row['public-key'])) {
                     $signatureIsValid = true;
@@ -482,7 +482,7 @@ class PublicKeys extends Table
     }
 
     //= https://raw.githubusercontent.com/fedi-e2ee/public-key-directory-specification/refs/heads/main/Specification.md#revokekey
-    //# Attempting to issue a RevokeKey MUST fail unless there is another public key associated with this Actor.
+    //# Attempting to issue a `RevokeKey` **MUST** fail unless there is another public key associated with this Actor.
     /**
      * This is called by MerkleState::insertLeaf()
      *
@@ -547,7 +547,7 @@ class PublicKeys extends Table
     }
 
     //= https://raw.githubusercontent.com/fedi-e2ee/public-key-directory-specification/refs/heads/main/Specification.md#revokekeythirdparty
-    //# RevokeKeyThirdParty: Emergency key revocation using a revocation token.
+    //# This is a special message type in two ways:
     /**
      * @throws ArrayKeyException
      * @throws BlindIndexNotFoundException
@@ -570,8 +570,8 @@ class PublicKeys extends Table
         $revocation = new Revocation();
         [$subject, $signed, $signature] = $revocation->decode($token);
 
-        //= https://raw.githubusercontent.com/fedi-e2ee/public-key-directory-specification/refs/heads/main/Specification.md#revokekeythirdparty
-        //# Verify the signature on the revocation token proves secret key possession.
+        //= https://raw.githubusercontent.com/fedi-e2ee/public-key-directory-specification/refs/heads/main/Specification.md#revokekeythirdparty-validation-steps
+        //# Validate signature for  `version || REVOCATION_CONSTANT || public_key`, using `public_key`.
         // First, let's make sure the signature is valid.
         if (!$subject->verify($signature, $signed)) {
             throw new ProtocolException('Invalid signature on revocation token');
@@ -638,7 +638,7 @@ class PublicKeys extends Table
      * @throws TableException
      */
     //= https://raw.githubusercontent.com/fedi-e2ee/public-key-directory-specification/refs/heads/main/Specification.md#moveidentity
-    //# MoveIdentity: Migrate actor identity from old-actor to new-actor.
+    //# This moves all the mappings from the old Actor ID to the new Actor ID.
     protected function moveIdentityCallback(MerkleLeaf $leaf, Payload $payload, string $outerActor): bool
     {
         $rawJson = $payload->rawJson;
@@ -667,7 +667,7 @@ class PublicKeys extends Table
         );
 
         //= https://raw.githubusercontent.com/fedi-e2ee/public-key-directory-specification/refs/heads/main/Specification.md#moveidentity
-        //# Requires protocol signature from valid public key of old-actor.
+        //# The message **MUST** be signed by a valid secret key for the `old-actor`
         $signatureIsValid = false;
         foreach ($candidatePublicKeys as $row) {
             if ($sm->verify($row['public-key'])) {
@@ -680,7 +680,7 @@ class PublicKeys extends Table
         }
 
         //= https://raw.githubusercontent.com/fedi-e2ee/public-key-directory-specification/refs/heads/main/Specification.md#moveidentity
-        //# Rejects if existing public keys for target new-actor.
+        //# This message **MUST** be rejected if there are existing public keys for the target `new-actor`.
         if (!empty($this->getPublicKeysFor($actionData['new-actor']))) {
             throw new ProtocolException('New actor already has public keys');
         }
@@ -742,7 +742,7 @@ class PublicKeys extends Table
      * @throws TableException
      */
     //= https://raw.githubusercontent.com/fedi-e2ee/public-key-directory-specification/refs/heads/main/Specification.md#burndown
-    //# BurnDown: Soft delete for all public keys and auxiliary data unless Actor is Fireproof.
+    //# A `BurnDown` message acts as a soft delete for all public keys and auxiliary data for a given Actor
     protected function burnDownCallback(MerkleLeaf $leaf, Payload $payload, string $outerActor): bool
     {
         $rawJson = $payload->rawJson;
@@ -763,15 +763,15 @@ class PublicKeys extends Table
         if (is_null($actor)) {
             throw new ProtocolException('Actor not found');
         }
-        //= https://raw.githubusercontent.com/fedi-e2ee/public-key-directory-specification/refs/heads/main/Specification.md#burndown
-        //# BurnDown MUST fail if the Actor is in Fireproof status.
+        //= https://raw.githubusercontent.com/fedi-e2ee/public-key-directory-specification/refs/heads/main/Specification.md#burndown-validation-steps
+        //# If this actor is [fireproof](#fireproof), abort.
         if ($actor->fireProof) {
             throw new ProtocolException('Actor is fireproof');
         }
 
         // Explicit check that the outer actor (from ActivityPub) matches the protocol message
         //= https://raw.githubusercontent.com/fedi-e2ee/public-key-directory-specification/refs/heads/main/Specification.md#burndown
-        //# BurnDown is issued by operator account on Actor's hosting instance.
+        //# a `BurnDown` is issued by an operator account on the Fediverse instance that hosts the
         $this->explicitOuterActorCheck($outerActor, $actionData['operator']);
         $operator = $actorTable->searchForActor($actionData['operator']);
         if (is_null($operator)) {
@@ -782,8 +782,8 @@ class PublicKeys extends Table
             keyId: $decoded['key-id'] ?? ''
         );
 
-        //= https://raw.githubusercontent.com/fedi-e2ee/public-key-directory-specification/refs/heads/main/Specification.md#burndown
-        //# BurnDown must be signed by the operator, not the actor being burned down.
+        //= https://raw.githubusercontent.com/fedi-e2ee/public-key-directory-specification/refs/heads/main/Specification.md#burndown-validation-steps
+        //# Validate the message signature for the given public key.
         $signatureIsValid = false;
         foreach ($candidatePublicKeys as $row) {
             if ($sm->verify($row['public-key'])) {
@@ -795,8 +795,8 @@ class PublicKeys extends Table
             throw new ProtocolException('Invalid signature');
         }
 
-        //= https://raw.githubusercontent.com/fedi-e2ee/public-key-directory-specification/refs/heads/main/Specification.md#burndown
-        //# Requires TOTP verification if enabled by instance.
+        //= https://raw.githubusercontent.com/fedi-e2ee/public-key-directory-specification/refs/heads/main/Specification.md#burndown-validation-steps
+        //# If the instance has previously enrolled a TOTP secret to this Fediverse server
         /** @var TOTP $totpTable */
         $totpTable = $this->table('TOTP');
         $domain = parse_url($actor->actorID)['host'];
@@ -865,7 +865,7 @@ class PublicKeys extends Table
      * @throws TableException
      */
     //= https://raw.githubusercontent.com/fedi-e2ee/public-key-directory-specification/refs/heads/main/Specification.md#fireproof
-    //# Fireproof: Opts out of BurnDown recovery mechanism.
+    //# `Fireproof` opts out of this recovery
     protected function fireproofCallback(MerkleLeaf $leaf, Payload $payload, string $outerActor): bool
     {
         $rawJson = $payload->rawJson;
@@ -888,7 +888,7 @@ class PublicKeys extends Table
         $actorTable = $this->table('Actors');
         $actor = $actorTable->searchForActor($actionData['actor']);
         //= https://raw.githubusercontent.com/fedi-e2ee/public-key-directory-specification/refs/heads/main/Specification.md#fireproof
-        //# Fireproof is NOT idempotent. If an Actor is already in Fireproof status, a subsequent Fireproof message MUST be rejected.
+        //# If an Actor is already in Fireproof status, a subsequent `Fireproof` message **MUST** be rejected.
         if ($actor->fireProof) {
             throw new ProtocolException('Actor is already fireproof');
         }
@@ -963,7 +963,7 @@ class PublicKeys extends Table
      * @throws TableException
      */
     //= https://raw.githubusercontent.com/fedi-e2ee/public-key-directory-specification/refs/heads/main/Specification.md#undofireproof
-    //# UndoFireproof: Reverts Fireproof status, re-enabling account recovery.
+    //# This reverts the Fireproof status for a given Actor, re-enabling account recovery by instance administrators.
     protected function undoFireproofCallback(MerkleLeaf $leaf, Payload $payload, string $outerActor): bool
     {
         $rawJson = $payload->rawJson;
@@ -986,7 +986,7 @@ class PublicKeys extends Table
         $actorTable = $this->table('Actors');
         $actor = $actorTable->searchForActor($actionData['actor']);
         //= https://raw.githubusercontent.com/fedi-e2ee/public-key-directory-specification/refs/heads/main/Specification.md#undofireproof
-        //# UndoFireproof rejects if user not currently in Fireproof status.
+        //# If the user is not in `Fireproof` status, this message is rejected.
         if (!$actor->fireProof) {
             throw new ProtocolException('Actor is not fireproof');
         }
