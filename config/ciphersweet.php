@@ -21,7 +21,7 @@ if (!file_exists($filePath)) {
     chmod($filePath, 0600);
     $keyProvider = new StringProvider($primary);
 } else {
-    $keyProvider = new FileProvider($filePath);
+    $keyProvider = new StringProvider(sodium_hex2bin(file_get_contents($filePath)));
 }
 
 return new CipherSweet(
