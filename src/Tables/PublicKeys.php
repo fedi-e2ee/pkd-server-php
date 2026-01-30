@@ -25,11 +25,13 @@ use FediE2EE\PKD\Crypto\AttributeEncryption\AttributeKeyMap;
 use FediE2EE\PKD\Crypto\PublicKey;
 use FediE2EE\PKD\Crypto\Revocation;
 use FediE2EE\PKDServer\Dependency\WrappedEncryptedRow;
-use FediE2EE\PKDServer\Exceptions\{CacheException,
+use FediE2EE\PKDServer\Exceptions\{
+    CacheException,
     ConcurrentException,
     DependencyException,
     ProtocolException,
-    TableException};
+    TableException
+};
 use FediE2EE\PKDServer\Protocol\Payload;
 use FediE2EE\PKDServer\Table;
 use FediE2EE\PKDServer\Tables\Records\{
@@ -436,17 +438,23 @@ class PublicKeys extends Table
 
         $sm = Bundle::fromJson($payload->rawJson)->toSignedMessage();
         $signatureIsValid = false;
+        $newPublicKey = PublicKey::fromString($actionData['public-key']);
         $candidatePublicKeys = $this->getPublicKeysFor($actionData['actor']);
         if (empty($candidatePublicKeys)) {
             //= https://raw.githubusercontent.com/fedi-e2ee/public-key-directory-specification/refs/heads/main/Specification.md#addkey
             //# The first `AddKey` for any given Actor **MUST** be self-signed by the same public key being added.
-            $newPublicKey = PublicKey::fromString($actionData['public-key']);
             $signatureIsValid = $sm->verify($newPublicKey);
         } else {
             //= https://raw.githubusercontent.com/fedi-e2ee/public-key-directory-specification/refs/heads/main/Specification.md#addkey
             //# Every subsequent `AddKey` must be signed by an existing, non-revoked public key.
             foreach ($candidatePublicKeys as $row) {
                 if ($sm->verify($row['public-key'])) {
+                    // Check if this is a self-signed AddKey (new key == signing key)
+                    if (hash_equals($newPublicKey->toString(), $row['public-key']->toString())) {
+                        throw new ProtocolException(
+                            'Self-signed AddKey not allowed when keys exist'
+                        );
+                    }
                     $signatureIsValid = true;
                     break;
                 }
@@ -777,6 +785,13 @@ class PublicKeys extends Table
         if (is_null($operator)) {
             throw new ProtocolException('Operator not found');
         }
+
+        $actorDomain = parse_url($actor->actorID, PHP_URL_HOST);
+        $operatorDomain = parse_url($operator->actorID, PHP_URL_HOST);
+        if (!hash_equals($actorDomain, $operatorDomain)) {
+            throw new ProtocolException('Operator must be on the same instance as the target actor');
+        }
+
         $candidatePublicKeys = $this->getPublicKeysFor(
             actorName: $operator->actorID,
             keyId: $decoded['key-id'] ?? ''
@@ -887,6 +902,9 @@ class PublicKeys extends Table
         /** @var Actors $actorTable */
         $actorTable = $this->table('Actors');
         $actor = $actorTable->searchForActor($actionData['actor']);
+        if (is_null($actor)) {
+            throw new ProtocolException('Actor has no enrolled keys');
+        }
         //= https://raw.githubusercontent.com/fedi-e2ee/public-key-directory-specification/refs/heads/main/Specification.md#fireproof
         //# If an Actor is already in Fireproof status, a subsequent `Fireproof` message **MUST** be rejected.
         if ($actor->fireProof) {

@@ -4,8 +4,11 @@ namespace FediE2EE\PKDServer\Tests\RequestHandlers\Api;
 
 use DateMalformedStringException;
 use FediE2EE\PKD\Crypto\Exceptions\{
+    BundleException,
     CryptoException,
+    InputException,
     JsonException as CryptoJsonException,
+    NetworkException,
     NotImplementedException,
     ParserException
 };
@@ -63,6 +66,7 @@ use FediE2EE\PKDServer\Tables\Records\{
     Peer
 };
 use FediE2EE\PKDServer\Tests\HttpTestTrait;
+use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Psr7\{
     Response,
     ServerRequest
@@ -70,6 +74,8 @@ use GuzzleHttp\Psr7\{
 use JsonException;
 use ParagonIE\Certainty\Exception\CertaintyException;
 use ParagonIE\CipherSweet\Exception\{
+    ArrayKeyException,
+    BlindIndexNotFoundException,
     CipherSweetException,
     CryptoOperationException,
     InvalidCiphertextException
@@ -116,6 +122,9 @@ class BurnDownTest extends TestCase
     use HttpTestTrait;
 
     /**
+     * @throws ArrayKeyException
+     * @throws BlindIndexNotFoundException
+     * @throws BundleException
      * @throws CacheException
      * @throws CertaintyException
      * @throws CipherSweetException
@@ -124,10 +133,13 @@ class BurnDownTest extends TestCase
      * @throws CryptoOperationException
      * @throws DateMalformedStringException
      * @throws DependencyException
+     * @throws GuzzleException
      * @throws HPKEException
+     * @throws InputException
      * @throws InvalidArgumentException
      * @throws InvalidCiphertextException
      * @throws JsonException
+     * @throws NetworkException
      * @throws NotImplementedException
      * @throws ParserException
      * @throws ProtocolException
@@ -138,9 +150,10 @@ class BurnDownTest extends TestCase
      */
     public function testHandle(): void
     {
-        // Create two actors: one to burn down, one as operator
-        [$actorHandle, $canonActor] = $this->makeDummyActor('victim.example.com');
-        [$operatorHandle, $canonOperator] = $this->makeDummyActor('operator.example.com');
+        // Create two actors on the SAME domain: one to burn down, one as operator
+        // Per spec, BurnDown must be from an operator on the same instance as the target
+        [$actorHandle, $canonActor] = $this->makeDummyActor();
+        [$operatorHandle, $canonOperator] = $this->makeDummyActor();
 
         $actorKey = SecretKey::generate();
         $operatorKey = SecretKey::generate();

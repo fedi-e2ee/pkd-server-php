@@ -118,6 +118,6 @@ if (!($GLOBALS['pkdConfig'] instanceof ServerConfig)) {
     $pkdConfig->getAuxDataRegistry()->addAuxDataType($testRegistry, 'test');
     // Add "test" extension to allow list
     $pkdConfig->withAuxDataTypeAllowList(
-        $pkdConfig->getAuxDataTypeAllowList() + ['test-v1']
+        $pkdConfig->getAuxDataTypeAllowList() + ['test-v1', 'age-v1']
     );
 })();

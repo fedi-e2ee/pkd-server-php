@@ -365,6 +365,16 @@ class Protocol
 
     /**
      * @throws BundleException
+     * @throws CryptoException
+     */
+    protected function parsePlaintext(string $body): Payload
+    {
+        $parsed = $this->parser->parseUnverified($body);
+        return new Payload($parsed->getMessage(), $parsed->getKeyMap(), $body);
+    }
+
+    /**
+     * @throws BundleException
      * @throws CacheException
      * @throws CryptoException
      * @throws DependencyException
@@ -381,7 +391,8 @@ class Protocol
         if (new HPKEAdapter($hpke->cs)->isHpkeCiphertext($body)) {
             throw new ProtocolException('BurnDown MUST NOT be encrypted.');
         }
-        $payload = $this->hpkeUnwrap($body);
+        // BurnDown messages are NOT HPKE-encrypted, parse directly
+        $payload = $this->parsePlaintext($body);
         /** @var PublicKeys $table */
         $table = $this->table('PublicKeys');
         $return = $table->burnDown($payload, $outerActor);
