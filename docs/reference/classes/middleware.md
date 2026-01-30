@@ -18,7 +18,7 @@ Namespace: `FediE2EE\PKDServer\Middleware`
 
 ### Methods
 
-#### [`__construct`](../../../src/Middleware/RateLimitMiddleware.php#L24-L29)
+#### [`__construct`](../../../src/Middleware/RateLimitMiddleware.php#L26-L31)
 
 Returns `void`
 
@@ -26,11 +26,11 @@ Returns `void`
 
 - `$config`: `?FediE2EE\PKDServer\ServerConfig` = null
 
-#### [`getConfig`](../../../src/Middleware/RateLimitMiddleware.php#L31-L37)
+#### [`getConfig`](../../../src/Middleware/RateLimitMiddleware.php#L33-L39)
 
 Returns `FediE2EE\PKDServer\ServerConfig`
 
-#### [`process`](../../../src/Middleware/RateLimitMiddleware.php#L55-L100)
+#### [`process`](../../../src/Middleware/RateLimitMiddleware.php#L57-L102)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
