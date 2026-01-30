@@ -26,7 +26,7 @@ Namespace: `FediE2EE\PKDServer`
 
 ### Methods
 
-#### [`__construct`](../../../src/AppCache.php#L26-L35)
+#### [`__construct`](../../../src/AppCache.php#L27-L36)
 
 Returns `void`
 
@@ -36,7 +36,7 @@ Returns `void`
 - `$namespace`: `string` = ''
 - `$defaultTTL`: `int` = 60
 
-#### [`cacheJson`](../../../src/AppCache.php#L46-L56)
+#### [`cacheJson`](../../../src/AppCache.php#L47-L57)
 
 Returns `mixed`
 
@@ -52,7 +52,7 @@ Used for caching entire HTTP response data (arrays, etc.).)
 
 **Throws:** `InvalidArgumentException`, `SodiumException`, `JsonException`
 
-#### [`cache`](../../../src/AppCache.php#L66-L75)
+#### [`cache`](../../../src/AppCache.php#L67-L76)
 
 Returns `mixed`
 
@@ -68,7 +68,7 @@ Otherwise, it invokes the fallback to determine the value.
 
 **Throws:** `InvalidArgumentException`, `SodiumException`
 
-#### [`deriveKey`](../../../src/AppCache.php#L80-L83)
+#### [`deriveKey`](../../../src/AppCache.php#L81-L84)
 
 Returns `string`
 
@@ -78,7 +78,7 @@ Returns `string`
 
 **Throws:** `SodiumException`
 
-#### [`get`](../../../src/AppCache.php#L86-L94)
+#### [`get`](../../../src/AppCache.php#L87-L95)
 
 Returns `mixed`
 
@@ -89,7 +89,7 @@ Returns `mixed`
 - `$key`: `string`
 - `$default`: `mixed` = null
 
-#### [`set`](../../../src/AppCache.php#L97-L105)
+#### [`set`](../../../src/AppCache.php#L98-L106)
 
 Returns `bool`
 
@@ -101,7 +101,7 @@ Returns `bool`
 - `$value`: `mixed`
 - `$ttl`: `DateInterval|int|null` = null
 
-#### [`delete`](../../../src/AppCache.php#L108-L116)
+#### [`delete`](../../../src/AppCache.php#L109-L117)
 
 Returns `bool`
 
@@ -111,13 +111,13 @@ Returns `bool`
 
 - `$key`: `string`
 
-#### [`clear`](../../../src/AppCache.php#L119-L127)
+#### [`clear`](../../../src/AppCache.php#L120-L128)
 
 Returns `bool`
 
 **Attributes:** `#[Override]`
 
-#### [`getMultiple`](../../../src/AppCache.php#L130-L142)
+#### [`getMultiple`](../../../src/AppCache.php#L131-L143)
 
 Returns `array`
 
@@ -128,7 +128,7 @@ Returns `array`
 - `$keys`: `iterable`
 - `$default`: `mixed` = null
 
-#### [`setMultiple`](../../../src/AppCache.php#L145-L155)
+#### [`setMultiple`](../../../src/AppCache.php#L146-L156)
 
 Returns `bool`
 
@@ -139,7 +139,7 @@ Returns `bool`
 - `$values`: `iterable`
 - `$ttl`: `DateInterval|int|null` = null
 
-#### [`deleteMultiple`](../../../src/AppCache.php#L158-L171)
+#### [`deleteMultiple`](../../../src/AppCache.php#L159-L172)
 
 Returns `bool`
 
@@ -149,7 +149,7 @@ Returns `bool`
 
 - `$keys`: `iterable`
 
-#### [`has`](../../../src/AppCache.php#L174-L180)
+#### [`has`](../../../src/AppCache.php#L175-L181)
 
 Returns `bool`
 
@@ -159,7 +159,7 @@ Returns `bool`
 
 - `$key`: `string`
 
-#### [`processTTL`](../../../src/AppCache.php#L188-L201)
+#### [`processTTL`](../../../src/AppCache.php#L189-L202)
 
 Returns `int`
 
@@ -169,7 +169,7 @@ Collapse multiple types into a number of seconds for Redis.
 
 - `$ttl`: `DateInterval|int|null`
 
-#### [`jsonDecode`](../../../src/AppCache.php#L12-L15)
+#### [`jsonDecode`](../../../src/AppCache.php#L13-L16)
 
 static · Returns `array`
 
@@ -179,7 +179,7 @@ static · Returns `array`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonDecodeObject`](../../../src/AppCache.php#L20-L23)
+#### [`jsonDecodeObject`](../../../src/AppCache.php#L21-L24)
 
 static · Returns `object`
 
@@ -189,7 +189,7 @@ static · Returns `object`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonEncode`](../../../src/AppCache.php#L28-L34)
+#### [`jsonEncode`](../../../src/AppCache.php#L29-L35)
 
 static · Returns `string`
 
@@ -209,7 +209,7 @@ static · Returns `string`
 
 ### Methods
 
-#### [`getHighVolumeCutoff`](../../../src/Math.php#L7-L10)
+#### [`getHighVolumeCutoff`](../../../src/Math.php#L9-L12)
 
 static · Returns `int`
 
@@ -217,7 +217,7 @@ static · Returns `int`
 
 - `$numLeaves`: `int`
 
-#### [`getLowVolumeCutoff`](../../../src/Math.php#L12-L19)
+#### [`getLowVolumeCutoff`](../../../src/Math.php#L14-L21)
 
 static · Returns `int`
 
@@ -394,7 +394,7 @@ Returns `bool`
 
 **Throws:** `BundleException`, `CacheException`, `CryptoException`, `DependencyException`, `HPKEException`, `JsonException`, `NotImplementedException`, `ProtocolException`, `SodiumException`, `TableException`
 
-#### [`appCache`](../../../src/Protocol.php#L44-L47)
+#### [`appCache`](../../../src/Protocol.php#L45-L48)
 
 Returns `FediE2EE\PKDServer\AppCache`
 
@@ -405,7 +405,7 @@ Returns `FediE2EE\PKDServer\AppCache`
 
 **Throws:** `DependencyException`
 
-#### [`table`](../../../src/Protocol.php#L54-L77)
+#### [`table`](../../../src/Protocol.php#L55-L78)
 
 Returns `FediE2EE\PKDServer\Table`
 
@@ -415,7 +415,7 @@ Returns `FediE2EE\PKDServer\Table`
 
 **Throws:** `CacheException`, `DependencyException`, `TableException`
 
-#### [`injectConfig`](../../../src/Protocol.php#L79-L82)
+#### [`injectConfig`](../../../src/Protocol.php#L80-L83)
 
 Returns `void`
 
@@ -423,13 +423,13 @@ Returns `void`
 
 - `$config`: `FediE2EE\PKDServer\ServerConfig`
 
-#### [`config`](../../../src/Protocol.php#L87-L97)
+#### [`config`](../../../src/Protocol.php#L88-L98)
 
 Returns `FediE2EE\PKDServer\ServerConfig`
 
 **Throws:** `DependencyException`
 
-#### [`jsonDecode`](../../../src/Protocol.php#L12-L15)
+#### [`jsonDecode`](../../../src/Protocol.php#L13-L16)
 
 static · Returns `array`
 
@@ -439,7 +439,7 @@ static · Returns `array`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonDecodeObject`](../../../src/Protocol.php#L20-L23)
+#### [`jsonDecodeObject`](../../../src/Protocol.php#L21-L24)
 
 static · Returns `object`
 
@@ -449,7 +449,7 @@ static · Returns `object`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonEncode`](../../../src/Protocol.php#L28-L34)
+#### [`jsonEncode`](../../../src/Protocol.php#L29-L35)
 
 static · Returns `string`
 
@@ -495,7 +495,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 ### Methods
 
-#### [`__construct`](../../../src/ServerConfig.php#L38)
+#### [`__construct`](../../../src/ServerConfig.php#L39)
 
 Returns `void`
 
@@ -503,83 +503,83 @@ Returns `void`
 
 - `$params`: `FediE2EE\PKDServer\Meta\Params`
 
-#### [`getCaCertFetch`](../../../src/ServerConfig.php#L43-L49)
+#### [`getCaCertFetch`](../../../src/ServerConfig.php#L44-L50)
 
 Returns `ParagonIE\Certainty\Fetch`
 
 **Throws:** `DependencyException`
 
-#### [`getAuxDataTypeAllowList`](../../../src/ServerConfig.php#L54-L57)
+#### [`getAuxDataTypeAllowList`](../../../src/ServerConfig.php#L55-L58)
 
 **API** · Returns `array`
 
-#### [`getAuxDataRegistry`](../../../src/ServerConfig.php#L59-L65)
+#### [`getAuxDataRegistry`](../../../src/ServerConfig.php#L60-L66)
 
 Returns `FediE2EE\PKD\Extensions\Registry`
 
-#### [`getGuzzle`](../../../src/ServerConfig.php#L67-L72)
+#### [`getGuzzle`](../../../src/ServerConfig.php#L68-L73)
 
 Returns `GuzzleHttp\Client`
 
-#### [`getCipherSweet`](../../../src/ServerConfig.php#L77-L83)
+#### [`getCipherSweet`](../../../src/ServerConfig.php#L78-L84)
 
 Returns `ParagonIE\CipherSweet\CipherSweet`
 
 **Throws:** `DependencyException`
 
-#### [`getDb`](../../../src/ServerConfig.php#L89-L95)
+#### [`getDb`](../../../src/ServerConfig.php#L90-L96)
 
 **API** · Returns `ParagonIE\EasyDB\EasyDB`
 
 **Throws:** `DependencyException`
 
-#### [`getHPKE`](../../../src/ServerConfig.php#L101-L107)
+#### [`getHPKE`](../../../src/ServerConfig.php#L102-L108)
 
 **API** · Returns `FediE2EE\PKDServer\Dependency\HPKE`
 
 **Throws:** `DependencyException`
 
-#### [`getLogger`](../../../src/ServerConfig.php#L109-L115)
+#### [`getLogger`](../../../src/ServerConfig.php#L110-L116)
 
 Returns `Monolog\Logger`
 
-#### [`getParams`](../../../src/ServerConfig.php#L117-L120)
+#### [`getParams`](../../../src/ServerConfig.php#L118-L121)
 
 Returns `FediE2EE\PKDServer\Meta\Params`
 
-#### [`getSigningKeys`](../../../src/ServerConfig.php#L126-L132)
+#### [`getSigningKeys`](../../../src/ServerConfig.php#L127-L133)
 
 **API** · Returns `FediE2EE\PKDServer\Dependency\SigningKeys`
 
 **Throws:** `DependencyException`
 
-#### [`getRateLimit`](../../../src/ServerConfig.php#L138-L144)
+#### [`getRateLimit`](../../../src/ServerConfig.php#L139-L145)
 
 **API** · Returns `FediE2EE\PKDServer\Interfaces\RateLimitInterface`
 
 **Throws:** `DependencyException`
 
-#### [`getRouter`](../../../src/ServerConfig.php#L150-L156)
+#### [`getRouter`](../../../src/ServerConfig.php#L151-L157)
 
 **API** · Returns `League\Route\Router`
 
 **Throws:** `DependencyException`
 
-#### [`getTwig`](../../../src/ServerConfig.php#L162-L168)
+#### [`getTwig`](../../../src/ServerConfig.php#L163-L169)
 
 **API** · Returns `Twig\Environment`
 
 **Throws:** `DependencyException`
 
-#### [`getRedis`](../../../src/ServerConfig.php#L170-L173)
+#### [`getRedis`](../../../src/ServerConfig.php#L171-L174)
 
 Returns `?Predis\Client`
 
-#### [`hasRedis`](../../../src/ServerConfig.php#L175-L178)
+#### [`hasRedis`](../../../src/ServerConfig.php#L176-L179)
 
 Returns `bool`
 
-#### [`withAuxDataTypeAllowList`](../../../src/ServerConfig.php#L184-L188)
+#### [`withAuxDataTypeAllowList`](../../../src/ServerConfig.php#L185-L189)
 
 Returns `static`
 
@@ -587,7 +587,7 @@ Returns `static`
 
 - `$allowList`: `array` = []
 
-#### [`withAuxDataRegistry`](../../../src/ServerConfig.php#L190-L194)
+#### [`withAuxDataRegistry`](../../../src/ServerConfig.php#L191-L195)
 
 Returns `static`
 
@@ -595,7 +595,7 @@ Returns `static`
 
 - `$registry`: `FediE2EE\PKD\Extensions\Registry`
 
-#### [`withCACertFetch`](../../../src/ServerConfig.php#L196-L200)
+#### [`withCACertFetch`](../../../src/ServerConfig.php#L197-L201)
 
 Returns `static`
 
@@ -603,7 +603,7 @@ Returns `static`
 
 - `$fetch`: `ParagonIE\Certainty\Fetch`
 
-#### [`withCipherSweet`](../../../src/ServerConfig.php#L202-L206)
+#### [`withCipherSweet`](../../../src/ServerConfig.php#L203-L207)
 
 Returns `static`
 
@@ -611,7 +611,7 @@ Returns `static`
 
 - `$ciphersweet`: `ParagonIE\CipherSweet\CipherSweet`
 
-#### [`withDatabase`](../../../src/ServerConfig.php#L208-L212)
+#### [`withDatabase`](../../../src/ServerConfig.php#L209-L213)
 
 Returns `static`
 
@@ -619,7 +619,7 @@ Returns `static`
 
 - `$db`: `ParagonIE\EasyDB\EasyDB`
 
-#### [`withHPKE`](../../../src/ServerConfig.php#L214-L218)
+#### [`withHPKE`](../../../src/ServerConfig.php#L215-L219)
 
 Returns `static`
 
@@ -627,7 +627,7 @@ Returns `static`
 
 - `$hpke`: `FediE2EE\PKDServer\Dependency\HPKE`
 
-#### [`withLogger`](../../../src/ServerConfig.php#L220-L224)
+#### [`withLogger`](../../../src/ServerConfig.php#L221-L225)
 
 Returns `static`
 
@@ -635,7 +635,7 @@ Returns `static`
 
 - `$logger`: `Monolog\Logger`
 
-#### [`withOptionalRedisClient`](../../../src/ServerConfig.php#L226-L238)
+#### [`withOptionalRedisClient`](../../../src/ServerConfig.php#L227-L239)
 
 Returns `static`
 
@@ -643,7 +643,7 @@ Returns `static`
 
 - `$redis`: `?Predis\Client` = null
 
-#### [`withRateLimit`](../../../src/ServerConfig.php#L240-L244)
+#### [`withRateLimit`](../../../src/ServerConfig.php#L241-L245)
 
 Returns `static`
 
@@ -651,7 +651,7 @@ Returns `static`
 
 - `$rateLimit`: `FediE2EE\PKDServer\Interfaces\RateLimitInterface`
 
-#### [`withRouter`](../../../src/ServerConfig.php#L246-L250)
+#### [`withRouter`](../../../src/ServerConfig.php#L247-L251)
 
 Returns `static`
 
@@ -659,7 +659,7 @@ Returns `static`
 
 - `$router`: `League\Route\Router`
 
-#### [`withSigningKeys`](../../../src/ServerConfig.php#L252-L256)
+#### [`withSigningKeys`](../../../src/ServerConfig.php#L253-L257)
 
 Returns `static`
 
@@ -667,7 +667,7 @@ Returns `static`
 
 - `$signingKeys`: `FediE2EE\PKDServer\Dependency\SigningKeys`
 
-#### [`withTwig`](../../../src/ServerConfig.php#L258-L262)
+#### [`withTwig`](../../../src/ServerConfig.php#L259-L263)
 
 Returns `static`
 
@@ -695,7 +695,7 @@ Returns `static`
 
 ### Methods
 
-#### [`__construct`](../../../src/Table.php#L29-L34)
+#### [`__construct`](../../../src/Table.php#L30-L35)
 
 Returns `void`
 
@@ -705,15 +705,15 @@ Returns `void`
 
 **Throws:** `DependencyException`
 
-#### [`getCipher`](../../../src/Table.php#L36)
+#### [`getCipher`](../../../src/Table.php#L37)
 
 abstract · Returns `FediE2EE\PKDServer\Dependency\WrappedEncryptedRow`
 
-#### [`clearCache`](../../../src/Table.php#L40-L43)
+#### [`clearCache`](../../../src/Table.php#L41-L44)
 
 Returns `void`
 
-#### [`convertKey`](../../../src/Table.php#L45-L48)
+#### [`convertKey`](../../../src/Table.php#L46-L49)
 
 Returns `ParagonIE\CipherSweet\Backend\Key\SymmetricKey`
 
@@ -721,7 +721,7 @@ Returns `ParagonIE\CipherSweet\Backend\Key\SymmetricKey`
 
 - `$inputKey`: `FediE2EE\PKD\Crypto\SymmetricKey`
 
-#### [`assertRecentMerkleRoot`](../../../src/Table.php#L53-L66)
+#### [`assertRecentMerkleRoot`](../../../src/Table.php#L54-L67)
 
 Returns `void`
 
@@ -731,7 +731,7 @@ Returns `void`
 
 **Throws:** `ProtocolException`
 
-#### [`isMerkleRootRecent`](../../../src/Table.php#L71-L127)
+#### [`isMerkleRootRecent`](../../../src/Table.php#L72-L128)
 
 **API** · Returns `bool`
 
@@ -740,7 +740,7 @@ Returns `void`
 - `$merkleRoot`: `string`
 - `$isHighVolume`: `bool` = false
 
-#### [`appCache`](../../../src/Table.php#L44-L47)
+#### [`appCache`](../../../src/Table.php#L45-L48)
 
 Returns `FediE2EE\PKDServer\AppCache`
 
@@ -751,7 +751,7 @@ Returns `FediE2EE\PKDServer\AppCache`
 
 **Throws:** `DependencyException`
 
-#### [`table`](../../../src/Table.php#L54-L77)
+#### [`table`](../../../src/Table.php#L55-L78)
 
 Returns `FediE2EE\PKDServer\Table`
 
@@ -761,7 +761,7 @@ Returns `FediE2EE\PKDServer\Table`
 
 **Throws:** `CacheException`, `DependencyException`, `TableException`
 
-#### [`injectConfig`](../../../src/Table.php#L79-L82)
+#### [`injectConfig`](../../../src/Table.php#L80-L83)
 
 Returns `void`
 
@@ -769,13 +769,13 @@ Returns `void`
 
 - `$config`: `FediE2EE\PKDServer\ServerConfig`
 
-#### [`config`](../../../src/Table.php#L87-L97)
+#### [`config`](../../../src/Table.php#L88-L98)
 
 Returns `FediE2EE\PKDServer\ServerConfig`
 
 **Throws:** `DependencyException`
 
-#### [`setWebFinger`](../../../src/Table.php#L102-L106)
+#### [`setWebFinger`](../../../src/Table.php#L103-L107)
 
 Returns `self`
 
@@ -785,7 +785,7 @@ This is intended for mocking in unit tests
 
 - `$wf`: `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
-#### [`webfinger`](../../../src/Table.php#L113-L120)
+#### [`webfinger`](../../../src/Table.php#L114-L121)
 
 Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
@@ -795,7 +795,7 @@ Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
 **Throws:** `CertaintyException`, `DependencyException`, `SodiumException`
 
-#### [`jsonDecode`](../../../src/Table.php#L12-L15)
+#### [`jsonDecode`](../../../src/Table.php#L13-L16)
 
 static · Returns `array`
 
@@ -805,7 +805,7 @@ static · Returns `array`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonDecodeObject`](../../../src/Table.php#L20-L23)
+#### [`jsonDecodeObject`](../../../src/Table.php#L21-L24)
 
 static · Returns `object`
 
@@ -815,7 +815,7 @@ static · Returns `object`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonEncode`](../../../src/Table.php#L28-L34)
+#### [`jsonEncode`](../../../src/Table.php#L29-L35)
 
 static · Returns `string`
 
@@ -835,15 +835,15 @@ static · Returns `string`
 
 ### Methods
 
-#### [`instance`](../../../src/TableCache.php#L15-L21)
+#### [`instance`](../../../src/TableCache.php#L16-L22)
 
 static · Returns `self`
 
-#### [`clearCache`](../../../src/TableCache.php#L23-L26)
+#### [`clearCache`](../../../src/TableCache.php#L24-L27)
 
 Returns `void`
 
-#### [`fetchTable`](../../../src/TableCache.php#L31-L37)
+#### [`fetchTable`](../../../src/TableCache.php#L32-L38)
 
 Returns `FediE2EE\PKDServer\Table`
 
@@ -853,7 +853,7 @@ Returns `FediE2EE\PKDServer\Table`
 
 **Throws:** `CacheException`
 
-#### [`hasTable`](../../../src/TableCache.php#L39-L42)
+#### [`hasTable`](../../../src/TableCache.php#L40-L43)
 
 Returns `bool`
 
@@ -861,7 +861,7 @@ Returns `bool`
 
 - `$tableName`: `string`
 
-#### [`storeTable`](../../../src/TableCache.php#L44-L48)
+#### [`storeTable`](../../../src/TableCache.php#L45-L49)
 
 Returns `static`
 

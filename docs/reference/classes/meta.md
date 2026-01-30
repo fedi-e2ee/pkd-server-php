@@ -31,7 +31,7 @@ Server configuration parameters
 
 ### Methods
 
-#### [`__construct`](../../../src/Meta/Params.php#L18-L44)
+#### [`__construct`](../../../src/Meta/Params.php#L19-L45)
 
 Returns `void`
 
@@ -48,27 +48,27 @@ These parameters MUST be public and MUST have a default value
 
 **Throws:** `DependencyException`
 
-#### [`getActorUsername`](../../../src/Meta/Params.php#L46-L49)
+#### [`getActorUsername`](../../../src/Meta/Params.php#L47-L50)
 
 Returns `string`
 
-#### [`getCacheKey`](../../../src/Meta/Params.php#L51-L54)
+#### [`getCacheKey`](../../../src/Meta/Params.php#L52-L55)
 
 Returns `string`
 
-#### [`getHashFunction`](../../../src/Meta/Params.php#L56-L59)
+#### [`getHashFunction`](../../../src/Meta/Params.php#L57-L60)
 
 Returns `string`
 
-#### [`getHostname`](../../../src/Meta/Params.php#L61-L64)
+#### [`getHostname`](../../../src/Meta/Params.php#L62-L65)
 
 Returns `string`
 
-#### [`getHttpCacheTtl`](../../../src/Meta/Params.php#L66-L69)
+#### [`getHttpCacheTtl`](../../../src/Meta/Params.php#L67-L70)
 
 Returns `int`
 
-#### [`getOtpMaxLife`](../../../src/Meta/Params.php#L71-L74)
+#### [`getOtpMaxLife`](../../../src/Meta/Params.php#L72-L75)
 
 Returns `int`
 

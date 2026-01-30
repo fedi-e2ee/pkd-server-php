@@ -30,7 +30,7 @@ Namespace: `FediE2EE\PKDServer\ActivityPub`
 
 ### Methods
 
-#### [`fromDecoded`](../../../src/ActivityPub/ActivityStream.php#L27-L42)
+#### [`fromDecoded`](../../../src/ActivityPub/ActivityStream.php#L28-L43)
 
 static · Returns `self`
 
@@ -40,7 +40,7 @@ static · Returns `self`
 
 **Throws:** `ActivityPubException`
 
-#### [`fromString`](../../../src/ActivityPub/ActivityStream.php#L47-L50)
+#### [`fromString`](../../../src/ActivityPub/ActivityStream.php#L48-L51)
 
 static · Returns `self`
 
@@ -50,23 +50,23 @@ static · Returns `self`
 
 **Throws:** `ActivityPubException`
 
-#### [`jsonSerialize`](../../../src/ActivityPub/ActivityStream.php#L53-L63)
+#### [`jsonSerialize`](../../../src/ActivityPub/ActivityStream.php#L54-L64)
 
 Returns `stdClass`
 
 **Attributes:** `#[Override]`
 
-#### [`__toString`](../../../src/ActivityPub/ActivityStream.php#L68-L71)
+#### [`__toString`](../../../src/ActivityPub/ActivityStream.php#L69-L72)
 
 Returns `string`
 
 **Throws:** `JsonException`
 
-#### [`isDirectMessage`](../../../src/ActivityPub/ActivityStream.php#L76-L110)
+#### [`isDirectMessage`](../../../src/ActivityPub/ActivityStream.php#L77-L111)
 
 Returns `bool`
 
-#### [`jsonDecode`](../../../src/ActivityPub/ActivityStream.php#L12-L15)
+#### [`jsonDecode`](../../../src/ActivityPub/ActivityStream.php#L13-L16)
 
 static · Returns `array`
 
@@ -76,7 +76,7 @@ static · Returns `array`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonDecodeObject`](../../../src/ActivityPub/ActivityStream.php#L20-L23)
+#### [`jsonDecodeObject`](../../../src/ActivityPub/ActivityStream.php#L21-L24)
 
 static · Returns `object`
 
@@ -86,7 +86,7 @@ static · Returns `object`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonEncode`](../../../src/ActivityPub/ActivityStream.php#L28-L34)
+#### [`jsonEncode`](../../../src/ActivityPub/ActivityStream.php#L29-L35)
 
 static · Returns `string`
 
@@ -106,7 +106,7 @@ static · Returns `string`
 
 ### Methods
 
-#### [`__construct`](../../../src/ActivityPub/WebFinger.php#L42-L61)
+#### [`__construct`](../../../src/ActivityPub/WebFinger.php#L57-L76)
 
 Returns `void`
 
@@ -118,11 +118,11 @@ Returns `void`
 
 **Throws:** `CertaintyException`, `DependencyException`, `SodiumException`
 
-#### [`clearCaches`](../../../src/ActivityPub/WebFinger.php#L66-L73)
+#### [`clearCaches`](../../../src/ActivityPub/WebFinger.php#L81-L88)
 
 **API** · Returns `void`
 
-#### [`canonicalize`](../../../src/ActivityPub/WebFinger.php#L82-L92)
+#### [`canonicalize`](../../../src/ActivityPub/WebFinger.php#L97-L107)
 
 Returns `string`
 
@@ -132,7 +132,7 @@ Returns `string`
 
 **Throws:** `CacheException`, `GuzzleException`, `InvalidArgumentException`, `NetworkException`, `SodiumException`
 
-#### [`fetch`](../../../src/ActivityPub/WebFinger.php#L115-L128)
+#### [`fetch`](../../../src/ActivityPub/WebFinger.php#L130-L143)
 
 Returns `array`
 
@@ -144,7 +144,7 @@ Fetch an entire remote WebFinger response.
 
 **Throws:** `GuzzleException`, `NetworkException`
 
-#### [`getInboxUrl`](../../../src/ActivityPub/WebFinger.php#L175-L193)
+#### [`getInboxUrl`](../../../src/ActivityPub/WebFinger.php#L190-L208)
 
 Returns `string`
 
@@ -154,7 +154,7 @@ Returns `string`
 
 **Throws:** `CacheException`, `GuzzleException`, `InvalidArgumentException`, `NetworkException`, `SodiumException`
 
-#### [`getPublicKey`](../../../src/ActivityPub/WebFinger.php#L201-L242)
+#### [`getPublicKey`](../../../src/ActivityPub/WebFinger.php#L216-L257)
 
 Returns `FediE2EE\PKD\Crypto\PublicKey`
 
@@ -164,7 +164,7 @@ Returns `FediE2EE\PKD\Crypto\PublicKey`
 
 **Throws:** `CryptoException`, `FetchException`, `InvalidArgumentException`, `SodiumException`
 
-#### [`trimUsername`](../../../src/ActivityPub/WebFinger.php#L244-L247)
+#### [`trimUsername`](../../../src/ActivityPub/WebFinger.php#L259-L262)
 
 Returns `string`
 
@@ -172,7 +172,7 @@ Returns `string`
 
 - `$username`: `string`
 
-#### [`setCanonicalForTesting`](../../../src/ActivityPub/WebFinger.php#L302-L309)
+#### [`setCanonicalForTesting`](../../../src/ActivityPub/WebFinger.php#L317-L324)
 
 Returns `void`
 
