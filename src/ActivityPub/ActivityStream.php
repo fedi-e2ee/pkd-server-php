@@ -58,14 +58,15 @@ class ActivityStream implements JsonSerializable
     #[Override]
     public function jsonSerialize(): stdClass
     {
-        $fields = ['@context' => $this->internalContext];
+        $obj = new stdClass();
+        $obj->{'@context'} = $this->internalContext;
         // @phpstan-ignore foreach.nonIterable
         foreach ($this as $key => $value) {
             if ($key !== 'internalContext') {
-                $fields[$key] = $value;
+                $obj->{$key} = $value;
             }
         }
-        return (object) $fields;
+        return $obj;
     }
 
     /**

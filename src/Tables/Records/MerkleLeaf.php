@@ -90,6 +90,9 @@ class MerkleLeaf
         return $this;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function getContents(): array
     {
         return json_decode($this->contents, true);

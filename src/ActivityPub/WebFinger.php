@@ -124,6 +124,7 @@ class WebFinger
     /**
      * Fetch an entire remote WebFinger response.
      *
+     * @return array<string, mixed>
      * @throws GuzzleException
      * @throws NetworkException
      */
@@ -196,9 +197,10 @@ class WebFinger
                 ['Accept' => 'application/activity+json']
             );
             $decoded = json_decode($raw->getBody()->getContents());
-            if (!is_object($decoded)) {
+            if (!is_object($decoded) || !property_exists($decoded, 'inbox')) {
                 throw new NetworkException('Could not decode ' . $canonicalUrl);
             }
+            /** @var string */
             return $decoded->inbox;
         });
         if (!$url) {
@@ -217,6 +219,9 @@ class WebFinger
     {
         $publicKey = $this->pkCache->cache($actorUrl, function () use ($actorUrl) {
             $parsed = parse_url($actorUrl);
+            if ($parsed === false || !isset($parsed['host']) || !isset($parsed['path'])) {
+                throw new FetchException("Invalid actor URL: {$actorUrl}");
+            }
             $host = $parsed['host'];
             $path = $parsed['path'];
             $username = $this->trimUsername($path);

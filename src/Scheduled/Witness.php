@@ -87,6 +87,9 @@ class Witness
      */
     public function __construct(?ServerConfig $config)
     {
+        if (is_null($config)) {
+            throw new DependencyException('ServerConfig is required');
+        }
         $this->config = $config;
         $this->db = $config->getDB();
         $peers = $this->table('Peers');
@@ -94,8 +97,8 @@ class Witness
             throw new TableException('Could not load table class for Peers');
         }
         $this->peers = $peers;
-        $this->http = $this->config->getGuzzle();
-        $this->logger = $this->config->getLogger();
+        $this->http = $config->getGuzzle();
+        $this->logger = $config->getLogger();
         $this->rfc9421 = new HttpSignature();
 
         // For replication support:
@@ -225,8 +228,8 @@ class Witness
             }
             // Let's calculate a cosignature:
             $cosigned = $cosignature->cosign(
-                $this->config->getSigningKeys()->secretKey,
-                $this->config->getParams()->hostname
+                $this->config()->getSigningKeys()->secretKey,
+                $this->config()->getParams()->hostname
             );
 
             // If we are sharing the cosignature upstream, let's toss it forward
@@ -252,6 +255,7 @@ class Witness
     }
 
     /**
+     * @throws DependencyException
      * @throws GuzzleException
      * @throws HttpSignatureException
      * @throws NotImplementedException
@@ -265,7 +269,7 @@ class Witness
             'https://' . $peer->hostname . '/api/history/cosign/' . urlencode($expectedMerkleRoot),
             [
                 'json' => [
-                    'witness' => $this->config->getParams()->hostname,
+                    'witness' => $this->config()->getParams()->hostname,
                     'cosigned' => $cosigned,
                 ]
             ]
@@ -274,6 +278,7 @@ class Witness
     }
 
     /**
+     * @param array<string, mixed> $record
      * @throws ArrayKeyException
      * @throws BlindIndexNotFoundException
      * @throws CipherSweetException
@@ -318,6 +323,7 @@ class Witness
     /**
      * Process the replicated action and update replica tables.
      *
+     * @param array<string, mixed> $message
      * @throws ArrayKeyException
      * @throws BlindIndexNotFoundException
      * @throws CipherSweetException
@@ -374,6 +380,7 @@ class Witness
     }
 
     /**
+     * @param array<string, mixed> $message
      * @throws ArrayKeyException
      * @throws BlindIndexNotFoundException
      * @throws CipherSweetException
@@ -417,11 +424,12 @@ class Witness
             'insertleaf' => $leafId,
             'trusted' => true,
         ]);
-        $encrypted['publickey_idx'] = (string) $indexes['publickey_idx'];
+        $encrypted['publickey_idx'] = self::blindIndexValue($indexes['publickey_idx']);
         $this->db->insert('pkd_replica_actors_publickeys', $encrypted);
     }
 
     /**
+     * @param array<string, mixed> $message
      * @throws ArrayKeyException
      * @throws BlindIndexNotFoundException
      * @throws CipherSweetException
@@ -457,12 +465,13 @@ class Witness
             [
                 'peer' => $peer->getPrimaryKey(),
                 'actor' => $replicaActor->primaryKey,
-                'publickey_idx' => $bi,
+                'publickey_idx' => self::blindIndexValue($bi),
             ]
         );
     }
 
     /**
+     * @param array<string, mixed> $message
      * @throws ArrayKeyException
      * @throws BlindIndexNotFoundException
      * @throws CryptoException
@@ -491,9 +500,10 @@ class Witness
             "SELECT actor FROM pkd_replica_actors_publickeys
              WHERE peer = ? AND publickey_idx = ? AND trusted",
             $peer->getPrimaryKey(),
-            $bi
+            self::blindIndexValue($bi)
         );
 
+        $biStr = self::blindIndexValue($bi);
         foreach ($rows as $row) {
             $this->db->update(
                 'pkd_replica_actors_publickeys',
@@ -504,13 +514,14 @@ class Witness
                 [
                     'peer' => $peer->getPrimaryKey(),
                     'actor' => $row['actor'],
-                    'publickey_idx' => $bi,
+                    'publickey_idx' => $biStr,
                 ]
             );
         }
     }
 
     /**
+     * @param array<string, mixed> $message
      * @throws ArrayKeyException
      * @throws BlindIndexNotFoundException
      * @throws CipherSweetException
@@ -547,6 +558,7 @@ class Witness
     }
 
     /**
+     * @param array<string, mixed> $message
      * @throws ArrayKeyException
      * @throws BlindIndexNotFoundException
      * @throws CipherSweetException
@@ -584,6 +596,7 @@ class Witness
     }
 
     /**
+     * @param array<string, mixed> $message
      * @throws ArrayKeyException
      * @throws BlindIndexNotFoundException
      * @throws CipherSweetException
@@ -613,6 +626,7 @@ class Witness
     }
 
     /**
+     * @param array<string, mixed> $message
      * @throws ArrayKeyException
      * @throws BlindIndexNotFoundException
      * @throws CipherSweetException
@@ -642,6 +656,7 @@ class Witness
     }
 
     /**
+     * @param array<string, mixed> $message
      * @throws ArrayKeyException
      * @throws BlindIndexNotFoundException
      * @throws CipherSweetException
@@ -684,6 +699,7 @@ class Witness
     }
 
     /**
+     * @param array<string, mixed> $message
      * @throws ArrayKeyException
      * @throws BlindIndexNotFoundException
      * @throws CipherSweetException
@@ -719,6 +735,7 @@ class Witness
     }
 
     /**
+     * @return array<string, mixed>
      * @throws CryptoException
      * @throws GuzzleException
      * @throws HttpSignatureException

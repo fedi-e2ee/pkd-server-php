@@ -8,8 +8,11 @@ use function array_key_exists;
 
 class TableCache
 {
-    private static TableCache $instance;
+    private static ?TableCache $instance = null;
 
+    /**
+     * @param array<string, Table> $tables
+     */
     protected function __construct(
         private array $tables = []
     ) {}

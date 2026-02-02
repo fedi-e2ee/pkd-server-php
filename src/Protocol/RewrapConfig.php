@@ -26,6 +26,9 @@ readonly class RewrapConfig implements JsonSerializable
         public string $encapsKey,
     ) {}
 
+    /**
+     * @throws DependencyException
+     */
     public static function from(
         Ciphersuite $cs,
         EncapsKeyInterface $encapsKey
@@ -54,6 +57,9 @@ readonly class RewrapConfig implements JsonSerializable
         return new self($pieces->cs, $pieces->ek);
     }
 
+    /**
+     * @return array{cs: string, ek: string}
+     */
     #[Override]
     public function jsonSerialize(): array
     {

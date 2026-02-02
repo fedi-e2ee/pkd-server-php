@@ -6,6 +6,7 @@ use DateMalformedStringException;
 use DateTimeImmutable;
 use FediE2EE\PKD\Crypto\AttributeEncryption\AttributeKeyMap;
 use FediE2EE\PKDServer\Dependency\WrappedEncryptedRow;
+use FediE2EE\PKDServer\Exceptions\TableException;
 use FediE2EE\PKDServer\Table;
 use JsonException;
 use ParagonIE\CipherSweet\BlindIndex;
@@ -18,6 +19,7 @@ use Override;
 use SodiumException;
 
 use function is_array;
+use function is_null;
 use function is_string;
 use function json_decode;
 
@@ -37,17 +39,23 @@ class ReplicaAuxData extends Table
         ;
     }
 
+    /**
+     * @throws TableException
+     */
     #[Override]
     protected function convertKeyMap(AttributeKeyMap $inputMap): array
     {
+        $key = $inputMap->getKey('aux-data');
+        if (is_null($key)) {
+            throw new TableException('Missing required key: aux-data');
+        }
         return [
-            'auxdata' => $this->convertKey(
-                $inputMap->getKey('aux-data')
-            ),
+            'auxdata' => $this->convertKey($key),
         ];
     }
 
     /**
+     * @return array<int, array<string, mixed>>
      * @throws DateMalformedStringException
      */
     public function getAuxDataForActor(int $peerID, int $actorID): array
@@ -79,6 +87,7 @@ class ReplicaAuxData extends Table
     }
 
     /**
+     * @return array<string, mixed>
      * @throws CipherSweetException
      * @throws CryptoOperationException
      * @throws DateMalformedStringException
@@ -112,15 +121,18 @@ class ReplicaAuxData extends Table
         if (!$row) {
             return [];
         }
-        $decrypted = $this->getCipher()->decryptRow($row);
+        $decrypted = $this->getCipher()->decryptRow(self::rowToStringArray($row));
+        $insertTimeVal = $decrypted['inserttime'] ?? 'now';
         $insertTime = (string) new DateTimeImmutable(
-            (string) ($decrypted['inserttime'] ?? 'now')
+            is_string($insertTimeVal) ? $insertTimeVal : 'now'
         )->getTimestamp();
-        $revokeTime = is_string($decrypted['revoketime'] ?? null)
-            ? (string) new DateTimeImmutable((string) $decrypted['revoketime'])->getTimestamp()
+        $revokeTimeVal = $decrypted['revoketime'] ?? null;
+        $revokeTime = is_string($revokeTimeVal) && !empty($revokeTimeVal)
+            ? (string) new DateTimeImmutable($revokeTimeVal)->getTimestamp()
             : null;
+        $inclusionVal = $decrypted['inclusionproof'] ?? '[]';
         $inclusionProof = json_decode(
-            (string) ($decrypted['inclusionproof'] ?? '[]'),
+            is_string($inclusionVal) ? $inclusionVal : '[]',
             true,
             512,
             JSON_THROW_ON_ERROR

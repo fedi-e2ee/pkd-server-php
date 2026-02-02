@@ -49,9 +49,10 @@ class ASQueue
         if (is_null($config)) {
             $config = $GLOBALS['pkdConfig'];
         }
+        $this->config = $config;
         $this->db = $config->getDB();
-        $this->http = $this->config->getGuzzle();
-        $this->webFinger = new WebFinger($config, $this->http, $this->config->getCaCertFetch());
+        $this->http = $config->getGuzzle();
+        $this->webFinger = new WebFinger($config, $this->http, $config->getCaCertFetch());
     }
 
     /**
@@ -85,7 +86,7 @@ class ASQueue
                     $this->replyFailure($enqueued, $ex);
                 }
             } catch (Throwable $ex) {
-                $this->config->getLogger()->error($ex->getMessage());
+                $this->config()->getLogger()->error($ex->getMessage());
                 echo $ex->getMessage(), PHP_EOL;
             }
 
@@ -102,6 +103,8 @@ class ASQueue
     }
 
     /**
+     * @param array<string, mixed> $results
+     *
      * @throws CacheException
      * @throws GuzzleException
      * @throws InvalidArgumentException
@@ -152,7 +155,12 @@ class ASQueue
     }
 
     /**
+     * @param string $actor
+     * @param string $inReplyTo
+     * @param array<string, mixed> $object
+     *
      * @throws CacheException
+     * @throws DependencyException
      * @throws GuzzleException
      * @throws InvalidArgumentException
      * @throws JsonException
@@ -161,7 +169,7 @@ class ASQueue
      */
     protected function sendDM(string $actor, string $inReplyTo, array $object): void
     {
-        $params = $this->config->getParams();
+        $params = $this->config()->getParams();
         // Format the object:
         $data = [
             '@context' => 'https://www.w3.org/ns/activitystreams',
@@ -175,6 +183,9 @@ class ASQueue
         $encoded = self::jsonEncode($data);
 
         // Get the actor's inbox URL:
+        if (is_null($this->webFinger)) {
+            throw new NetworkException('WebFinger not initialized');
+        }
         $actorInbox = $this->webFinger->getInboxUrl($actor);
 
         // Create and send a request:

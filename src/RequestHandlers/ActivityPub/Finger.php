@@ -38,7 +38,6 @@ class Finger implements RequestHandlerInterface
      * @throws CertaintyException
      * @throws DependencyException
      * @throws GuzzleException
-     * @throws JsonException
      * @throws NotImplementedException
      * @throws SodiumException
      */
@@ -58,13 +57,13 @@ class Finger implements RequestHandlerInterface
         $user = $matches[1];
         $domain = $matches[2];
 
-        $serverParams = $this->config->getParams();
+        $serverParams = $this->config()->getParams();
 
         // Handle third-party lookups
         if (!hash_equals($serverParams->hostname, $domain)) {
             try {
                 return $this->json(
-                    $this->webfinger($this->config->getGuzzle())
+                    $this->webfinger($this->config()->getGuzzle())
                         ->fetch($user . '@' . $domain)
                 );
             } catch (NetworkException $e) {

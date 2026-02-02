@@ -61,7 +61,11 @@ class Filesystem implements RateLimitStorageInterface
         if (!file_exists($file)) {
             return null;
         }
-        $unwrapped = self::jsonDecode(file_get_contents($file));
+        $contents = file_get_contents($file);
+        if ($contents === false) {
+            return null;
+        }
+        $unwrapped = self::jsonDecode($contents);
         if (!array_key_exists('expires', $unwrapped)) {
             return null;
         }

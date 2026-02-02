@@ -34,4 +34,4 @@ jobs:
         run: php cmd/init.php
 
       - name: Static Analysis
-        run: vendor/bin/phpstan analyse --level 5 --memory-limit 1024M
+        run: vendor/bin/phpstan analyse --memory-limit 1024M

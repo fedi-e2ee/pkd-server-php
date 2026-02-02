@@ -2,12 +2,13 @@
 declare(strict_types=1);
 namespace FediE2EE\PKDServer\Tables;
 
-use FediE2EE\PKD\Crypto\Exceptions\{BundleException,
+use FediE2EE\PKD\Crypto\Exceptions\{
+    BundleException,
     CryptoException,
     InputException,
-    JsonException,
     NetworkException,
-    NotImplementedException};
+    NotImplementedException
+};
 use FediE2EE\PKD\Crypto\Protocol\{
     Actions\AddKey,
     Actions\BurnDown,
@@ -56,6 +57,7 @@ use ParagonIE\CipherSweet\Exception\{
 };
 use ParagonIE\ConstantTime\Base64UrlSafe;
 use ParagonIE\EasyDB\EasyStatement;
+use Psr\SimpleCache\InvalidArgumentException;
 use Random\RandomException;
 use SodiumException;
 use TypeError;
@@ -65,7 +67,6 @@ use function is_array;
 use function is_null;
 use function is_string;
 use function json_decode;
-use function parse_url;
 use function random_bytes;
 
 class PublicKeys extends Table
@@ -95,19 +96,25 @@ class PublicKeys extends Table
         return Base64UrlSafe::encodeUnpadded(random_bytes(32));
     }
 
+    /**
+     * @throws TableException
+     */
     #[Override]
     protected function convertKeyMap(AttributeKeyMap $inputMap): array
     {
+        $key = $inputMap->getKey('public-key');
+        if (is_null($key)) {
+            throw new TableException('Missing required key: public-key');
+        }
         return [
-            'publickey' =>
-                $this->convertKey($inputMap->getKey('public-key')),
+            'publickey' => $this->convertKey($key),
         ];
     }
 
     /**
      * @param int $actorPrimaryKey
      * @param string $keyID
-     * @return array
+     * @return array<string, mixed>
      *
      * @throws BaseJsonException
      * @throws CipherSweetException
@@ -139,13 +146,14 @@ class PublicKeys extends Table
         if (empty($row)) {
             return [];
         }
-        $decrypted = $this->getCipher()->decryptRow($row);
-        $insertTime = (string) new DateTimeImmutable((string) $decrypted['inserttime'])->getTimestamp();
-        $revokeTime = is_string($decrypted['revoketime'])
-            ? (string) new DateTimeImmutable($decrypted['revoketime'])->getTimestamp()
+        $decrypted = $this->getCipher()->decryptRow(self::rowToStringArray($row));
+        $insertTime = (string) new DateTimeImmutable(self::decryptedString($decrypted, 'inserttime'))->getTimestamp();
+        $revokeTimeValue = $decrypted['revoketime'] ?? null;
+        $revokeTime = is_string($revokeTimeValue) && !empty($revokeTimeValue)
+            ? (string) new DateTimeImmutable($revokeTimeValue)->getTimestamp()
             : null;
         $inclusionProof = json_decode(
-            (string) $decrypted['inclusionproof'],
+            self::decryptedString($decrypted, 'inclusionproof'),
             true,
             512,
             JSON_THROW_ON_ERROR
@@ -187,23 +195,29 @@ class PublicKeys extends Table
         if (empty($row)) {
             throw new TableException('Actor not found: ' . $primaryKey);
         }
+        $rowArray = self::assertArray($row);
         /** @var Actors $actorTable */
         $actorTable = $this->table('Actors');
         /** @var MerkleState $merkleTable */
         $merkleTable = $this->table('MerkleState');
 
-        $actor = $actorTable->getActorByID($row['actorid']);
-        $insertLeaf = $merkleTable->getLeafByID($row['insertleaf']);
-        $revokeLeaf = is_null($row['revokeleaf']) ? null : $merkleTable->getLeafByID($row['revokeleaf']);
-        $decrypted = $this->getCipher()->decryptRow($row);
+        $actor = $actorTable->getActorByID(self::assertInt($rowArray['actorid'] ?? 0));
+        $insertLeaf = $merkleTable->getLeafByID(self::assertInt($rowArray['insertleaf'] ?? 0));
+        if (is_null($insertLeaf)) {
+            throw new TableException('Insert leaf not found for key: ' . $primaryKey);
+        }
+        $revokeLeaf = is_null($rowArray['revokeleaf'] ?? null)
+            ? null
+            : $merkleTable->getLeafByID(self::assertInt($rowArray['revokeleaf']));
+        $decrypted = $this->getCipher()->decryptRow(self::rowToStringArray($rowArray));
 
         return new ActorKey(
             actor: $actor,
-            publicKey: PublicKey::fromString((string) $decrypted['publickey']),
-            trusted: !empty($row['trusted']),
+            publicKey: PublicKey::fromString(self::decryptedString($decrypted, 'publickey')),
+            trusted: !empty($rowArray['trusted']),
             insertLeaf: $insertLeaf,
             revokeLeaf: $revokeLeaf,
-            keyID: $row['key_id'],
+            keyID: self::assertString($rowArray['key_id'] ?? ''),
         );
     }
 
@@ -215,6 +229,7 @@ class PublicKeys extends Table
      * @throws CipherSweetException
      * @throws CryptoException
      * @throws CryptoOperationException
+     * @return array<int, array<string, mixed>>
      * @throws DateMalformedStringException
      * @throws DependencyException
      * @throws InvalidCiphertextException
@@ -262,11 +277,12 @@ class PublicKeys extends Table
                 WHERE {$stmt}",
             ...$stmt->values()
         ) as $row) {
-            $decrypt = $this->getCipher()->decryptRow($row);
-            if (empty($keyId) || hash_equals((string) $row['key_id'], $keyId)) {
-                $insertTime = new DateTimeImmutable((string) $decrypt['inserttime'])->getTimestamp();
+            $rowArray = self::rowToStringArray($row);
+            $decrypt = $this->getCipher()->decryptRow($rowArray);
+            if (empty($keyId) || hash_equals($rowArray['key_id'] ?? '', $keyId)) {
+                $insertTime = new DateTimeImmutable(self::decryptedString($decrypt, 'inserttime'))->getTimestamp();
                 $inclusionProof = json_decode(
-                    (string) $decrypt['inclusionproof'],
+                    self::decryptedString($decrypt, 'inclusionproof'),
                     true,
                     512,
                     JSON_THROW_ON_ERROR
@@ -276,11 +292,11 @@ class PublicKeys extends Table
                 }
 
                 $results[] = [
-                    'public-key' => PublicKey::fromString((string) $decrypt['publickey']),
-                    'actorpublickeyid' => (int) $row['actorpublickeyid'],
-                    'key-id' => (string) $row['key_id'],
+                    'public-key' => PublicKey::fromString(self::decryptedString($decrypt, 'publickey')),
+                    'actorpublickeyid' => (int) ($rowArray['actorpublickeyid'] ?? 0),
+                    'key-id' => $rowArray['key_id'] ?? '',
                     'created' => (string) $insertTime,
-                    'merkle-root' => $decrypt['insertmerkleroot'],
+                    'merkle-root' => $decrypt['insertmerkleroot'] ?? null,
                     'inclusion-proof' => $inclusionProof,
                 ];
             }
@@ -393,8 +409,8 @@ class PublicKeys extends Table
      * @throws DependencyException
      * @throws GuzzleException
      * @throws InputException
+     * @throws InvalidArgumentException
      * @throws InvalidCiphertextException
-     * @throws JsonException
      * @throws NetworkException
      * @throws NotImplementedException
      * @throws ProtocolException
@@ -481,7 +497,7 @@ class PublicKeys extends Table
             $this->convertKeyMap($payload->keyMap)
         );
         [$rowToInsert, $blindIndexes] = $encryptor->prepareRowForStorage($plaintextRow);
-        $rowToInsert['publickey_idx'] = (string) $blindIndexes['publickey_idx'];
+        $rowToInsert['publickey_idx'] = self::blindIndexValue($blindIndexes['publickey_idx']);
         $this->db->insert(
             'pkd_actors_publickeys',
             $rowToInsert
@@ -507,6 +523,7 @@ class PublicKeys extends Table
      * @throws DependencyException
      * @throws GuzzleException
      * @throws InputException
+     * @throws InvalidArgumentException
      * @throws InvalidCiphertextException
      * @throws NetworkException
      * @throws NotImplementedException
@@ -609,7 +626,7 @@ class PublicKeys extends Table
         $revoked = false;
         foreach ($toRevoke as $row) {
             $decrypted = $this->getCipher()->decryptRow($row);
-            if (hash_equals($subject->toString(), (string) $decrypted['publickey'])) {
+            if (hash_equals($subject->toString(), self::decryptedString($decrypted, 'publickey'))) {
                 $this->db->update(
                     'pkd_actors_publickeys',
                     [
@@ -667,8 +684,11 @@ class PublicKeys extends Table
         $this->explicitOuterActorCheck($outerActor, $actionData['old-actor']);
         $sm = Bundle::fromJson($rawJson)->toSignedMessage();
 
-        $oldActorId = $actorTable
-            ->searchForActor($actionData['old-actor'])->getPrimaryKey();
+        $oldActor = $actorTable->searchForActor($actionData['old-actor']);
+        if (is_null($oldActor)) {
+            throw new ProtocolException('Old actor not found');
+        }
+        $oldActorId = $oldActor->getPrimaryKey();
         $candidatePublicKeys = $this->getPublicKeysFor(
             actorName: $actionData['old-actor'],
             keyId: $decoded['key-id'] ?? ''
@@ -786,9 +806,9 @@ class PublicKeys extends Table
             throw new ProtocolException('Operator not found');
         }
 
-        $actorDomain = parse_url($actor->actorID, PHP_URL_HOST);
-        $operatorDomain = parse_url($operator->actorID, PHP_URL_HOST);
-        if (!hash_equals($actorDomain, $operatorDomain)) {
+        $actorDomain = self::parseUrlHost($actor->actorID);
+        $operatorDomain = self::parseUrlHost($operator->actorID);
+        if (is_null($actorDomain) || is_null($operatorDomain) || !hash_equals($actorDomain, $operatorDomain)) {
             throw new ProtocolException('Operator must be on the same instance as the target actor');
         }
 
@@ -814,7 +834,10 @@ class PublicKeys extends Table
         //# If the instance has previously enrolled a TOTP secret to this Fediverse server
         /** @var TOTP $totpTable */
         $totpTable = $this->table('TOTP');
-        $domain = parse_url($actor->actorID)['host'];
+        $domain = self::parseUrlHost($actor->actorID);
+        if (is_null($domain)) {
+            throw new ProtocolException('Invalid actor URL');
+        }
         $totp = $totpTable->getTotpByDomain($domain);
         if ($totp) {
             $ts = $this->verifyTOTP($totp['secret'], $decrypted->getOtp() ?? '');
@@ -1003,6 +1026,9 @@ class PublicKeys extends Table
         /** @var Actors $actorTable */
         $actorTable = $this->table('Actors');
         $actor = $actorTable->searchForActor($actionData['actor']);
+        if (is_null($actor)) {
+            throw new ProtocolException('Actor not found');
+        }
         //= https://raw.githubusercontent.com/fedi-e2ee/public-key-directory-specification/refs/heads/main/Specification.md#undofireproof
         //# If the user is not in `Fireproof` status, this message is rejected.
         if (!$actor->fireProof) {

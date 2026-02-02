@@ -30,8 +30,17 @@ use FediE2EE\PKDServer\{
 use GuzzleHttp\Client;
 use ParagonIE\Certainty\Exception\CertaintyException;
 use SodiumException;
+use TypeError;
 
+use function array_key_exists;
+use function get_debug_type;
+use function is_array;
+use function is_int;
 use function is_null;
+use function is_numeric;
+use function is_string;
+use function parse_url;
+use function reset;
 
 trait ConfigTrait
 {
@@ -117,7 +126,120 @@ trait ConfigTrait
         if (!is_null($this->webFinger)) {
             return $this->webFinger;
         }
-        $this->webFinger = new WebFinger($this->config, $http, $this->config->getCaCertFetch());
+        $this->webFinger = new WebFinger($this->config(), $http, $this->config()->getCaCertFetch());
         return $this->webFinger;
+    }
+
+    /**
+     * @param string $url
+     * @return ?string Returns null if URL is invalid or has no host
+     */
+    public static function parseUrlHost(string $url): ?string
+    {
+        $parsed = parse_url($url);
+        if ($parsed === false) {
+            return null;
+        }
+        return $parsed['host'] ?? null;
+    }
+
+    /**
+     * @param array<array-key, mixed>|object $result
+     * @return array<array-key, mixed>
+     *
+     * @throws TypeError
+     */
+    public static function assertArray(array|object $result): array
+    {
+        if (!is_array($result)) {
+            throw new TypeError('Expected array, got object');
+        }
+        return $result;
+    }
+
+    /**
+     * @throws TypeError
+     */
+    public static function assertString(mixed $value): string
+    {
+        if (!is_string($value)) {
+            throw new TypeError('Expected string, got ' . get_debug_type($value));
+        }
+        return $value;
+    }
+
+    public static function assertStringOrNull(mixed $value): ?string
+    {
+        if (is_null($value)) {
+            return null;
+        }
+        if (!is_string($value)) {
+            throw new TypeError('Expected string or null, got ' . get_debug_type($value));
+        }
+        return $value;
+    }
+
+    /**
+     * @throws TypeError
+     */
+    public static function assertInt(mixed $value): int
+    {
+        if (is_int($value)) {
+            return $value;
+        }
+        if (is_numeric($value)) {
+            return (int) $value;
+        }
+        throw new TypeError('Expected int, got ' . get_debug_type($value));
+    }
+
+    /**
+     * @param array<array-key, mixed>|object $row
+     * @return array<string, string>
+     * @throws TypeError
+     */
+    public static function rowToStringArray(array|object $row): array
+    {
+        if (!is_array($row)) {
+            throw new TypeError('Expected array row');
+        }
+        $result = [];
+        foreach ($row as $key => $value) {
+            $result[(string) $key] = (string) $value;
+        }
+        return $result;
+    }
+
+    /**
+     * @param array<string, mixed> $row
+     * @throws TypeError
+     */
+    public static function decryptedString(array $row, string $key): string
+    {
+        if (!array_key_exists($key, $row)) {
+            throw new TypeError("Key '$key' not found in decrypted row");
+        }
+        $value = $row[$key];
+        if (is_array($value)) {
+            throw new TypeError("Expected scalar for key '$key', got array");
+        }
+        return (string) $value;
+    }
+
+    /**
+     * @param array<string, string>|string $blindIndex
+     * @param ?string $key
+     * @return string
+     */
+    public static function blindIndexValue(array|string $blindIndex, ?string $key = null): string
+    {
+        if (is_string($blindIndex)) {
+            return $blindIndex;
+        }
+        if (!is_null($key)) {
+            return $blindIndex[$key] ?? '';
+        }
+        // Return first value
+        return reset($blindIndex) ?: '';
     }
 }

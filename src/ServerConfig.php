@@ -13,10 +13,12 @@ use FediE2EE\PKDServer\Interfaces\RateLimitInterface;
 use FediE2EE\PKDServer\Exceptions\DependencyException;
 use League\Route\Router;
 use Monolog\Logger;
+use ParagonIE\Certainty\Exception\CertaintyException;
 use ParagonIE\Certainty\Fetch;
 use ParagonIE\CipherSweet\CipherSweet;
 use ParagonIE\EasyDB\EasyDB;
 use Predis\Client as RedisClient;
+use SodiumException;
 use Twig\Environment;
 use Throwable;
 
@@ -24,6 +26,7 @@ use function is_null;
 
 class ServerConfig
 {
+    /** @var array<int, string> */
     private array $auxDataTypeAllowList = [];
     private ?Registry $auxDataRegistry = null;
     private ?CipherSweet $ciphersweet = null;
@@ -51,6 +54,7 @@ class ServerConfig
     }
 
     /**
+     * @return array<int, string>
      * @api
      */
     public function getAuxDataTypeAllowList(): array
@@ -66,6 +70,11 @@ class ServerConfig
         return $this->auxDataRegistry;
     }
 
+    /**
+     * @throws CertaintyException
+     * @throws DependencyException
+     * @throws SodiumException
+     */
     public function getGuzzle(): Client
     {
         return new Client([
@@ -163,7 +172,7 @@ class ServerConfig
      */
     public function getTwig(): Environment
     {
-        if (is_null($this->router)) {
+        if (is_null($this->twig)) {
             throw new DependencyException('twig not injected');
         }
         return $this->twig;

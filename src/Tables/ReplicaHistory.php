@@ -31,6 +31,9 @@ class ReplicaHistory extends Table
         return [];
     }
 
+    /**
+     * @param array<string, mixed> $apiResponseRecord
+     */
     public function createLeaf(
         array $apiResponseRecord,
         string $cosignature,
@@ -50,6 +53,7 @@ class ReplicaHistory extends Table
     }
 
     /**
+     * @throws JsonException
      * @throws TableException
      */
     public function save(Peer $peer, ReplicaLeaf $leaf): void
@@ -63,6 +67,7 @@ class ReplicaHistory extends Table
     }
 
     /**
+     * @return array<int, array<string, mixed>>
      * @throws JsonException
      */
     public function getHistory(int $peerID, int $limit = 100, int $offset = 0): array
@@ -79,6 +84,7 @@ class ReplicaHistory extends Table
     }
 
     /**
+     * @return array<int, array<string, mixed>>
      * @throws JsonException
      */
     public function getHistorySince(int $peerID, string $hash, int $limit = 100, int $offset = 0): array
@@ -104,6 +110,8 @@ class ReplicaHistory extends Table
     }
 
     /**
+     * @param array<int, array<string, mixed>> $rows
+     * @return array<int, array<string, mixed>>
      * @throws JsonException
      */
     protected function formatHistory(array $rows): array

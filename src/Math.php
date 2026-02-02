@@ -18,6 +18,6 @@ abstract class Math
             return 1;
         }
         $log2 = (log($numLeaves) / log(2));
-        return (int) ($numLeaves - ceil(2 * $log2 * $log2));
+        return $numLeaves - (int) ceil(2.0 * $log2 * $log2);
     }
 }

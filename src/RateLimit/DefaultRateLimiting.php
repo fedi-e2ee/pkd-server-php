@@ -33,7 +33,7 @@ class DefaultRateLimiting implements RateLimitInterface
      * @param RateLimitStorageInterface $storage
      * @param bool $enabled
      * @param int $baseDelay
-     * @param array $trustedProxies
+     * @param array<int, string> $trustedProxies
      * @param int $ipv4MaskBits
      * @param int $ipv6MaskBits
      * @param bool $shouldEnforceDomain
@@ -134,15 +134,19 @@ class DefaultRateLimiting implements RateLimitInterface
         $now = (new DateTimeImmutable('NOW'));
 
         // Iterate over the actual configured targets:
-        /** @var string $target */
         foreach ($handler->getEnabledRateLimits() as $target) {
-            $penalty = $this->storage->get($target, $lookups[$target]);
+            $lookup = $lookups[$target] ?? null;
+            if (is_null($lookup)) {
+                // No identifier for this target type (e.g., no actor header)
+                continue;
+            }
+            $penalty = $this->storage->get($target, $lookup);
             if (is_null($penalty)) {
                 continue;
             }
             if ($penalty->failures < 1) {
                 // This should be treated the same as NULL.
-                $this->storage->delete($target, $lookups[$target]);
+                $this->storage->delete($target, $lookup);
                 continue;
             }
             // This request should be rate-limited. When is the next request allowed?
@@ -158,7 +162,7 @@ class DefaultRateLimiting implements RateLimitInterface
             if ($now >= $penalty->getCooldownStart()) {
                 $this->storage->set(
                     $target,
-                    $lookups[$target],
+                    $lookup,
                     $this->getCooledDown($penalty)
                 );
             }
@@ -252,9 +256,13 @@ class DefaultRateLimiting implements RateLimitInterface
             return new DateInterval('PT0S');
         }
         $milliseconds = $this->baseDelay << ($failures - 1);
-        $seconds = floor($milliseconds / 1000);
+        $seconds = (int) floor($milliseconds / 1000);
         $us = ($milliseconds % 1000) * 1000;
-        return DateInterval::createFromDateString($seconds. ' seconds + ' . $us . ' microseconds');
+        $interval = DateInterval::createFromDateString($seconds . ' seconds + ' . $us . ' microseconds');
+        if (!($interval instanceof DateInterval)) {
+            throw new DateMalformedIntervalStringException('Invalid interval string');
+        }
+        return $interval;
     }
 
     /**

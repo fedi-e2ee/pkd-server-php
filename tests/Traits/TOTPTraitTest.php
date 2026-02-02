@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace FediE2EE\PKDServer\Tests\Traits;
 
 use FediE2EE\PKDServer\Exceptions\ProtocolException;
-use FediE2EE\PKDServer\ServerConfig;
+use FediE2EE\PKDServer\Traits\ConfigTrait;
 use FediE2EE\PKDServer\Traits\TOTPTrait;
 use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\TestCase;
@@ -14,8 +14,9 @@ class TOTPTraitTest extends TestCase
     public function getDummyClass(): object
     {
         return new class() {
+            use ConfigTrait;
             use TOTPTrait;
-            private ServerConfig $config;
+
             public function __construct()
             {
                 $this->config = $GLOBALS['pkdConfig'];

@@ -14,6 +14,7 @@ use FediE2EE\PKDServer\Traits\ConfigTrait;
 use ParagonIE\CipherSweet\CipherSweet;
 use ParagonIE\CipherSweet\Backend\Key\SymmetricKey as CipherSweetKey;
 use ParagonIE\EasyDB\EasyDB;
+use SodiumException;
 
 use function hash_equals;
 
@@ -23,6 +24,7 @@ abstract class Table
 
     public readonly CipherSweet $engine;
     public readonly EasyDB $db;
+    /** @var array<int|string, mixed> */
     protected array $recordCache = [];
 
     /**
@@ -37,6 +39,9 @@ abstract class Table
 
     abstract public function getCipher(): WrappedEncryptedRow;
 
+    /**
+     * @return array<string, CipherSweetKey>
+     */
     abstract protected function convertKeyMap(AttributeKeyMap $inputMap): array;
 
     public function clearCache(): void
@@ -50,7 +55,9 @@ abstract class Table
     }
 
     /**
+     * @throws DependencyException
      * @throws ProtocolException
+     * @throws SodiumException
      */
     public function assertRecentMerkleRoot(string $recentMerkle): void
     {
@@ -69,14 +76,17 @@ abstract class Table
 
     /**
      * @api
+     *
+     * @throws DependencyException
+     * @throws SodiumException
      */
     public function isMerkleRootRecent(string $merkleRoot, bool $isHighVolume = false): bool
     {
-        $numLeaves = $this->db->cell("SELECT count(merkleleafid) FROM pkd_merkle_leaves");
-        if (!$numLeaves) {
+        $numLeaves = (int) $this->db->cell("SELECT count(merkleleafid) FROM pkd_merkle_leaves");
+        if ($numLeaves === 0) {
             // An empty Merkle tree is expected to have an empty root:
             return hash_equals(
-                (new Tree([], $this->config->getParams()->hashAlgo))->getEncodedRoot(),
+                (new Tree([], $this->config()->getParams()->hashAlgo))->getEncodedRoot(),
                 $merkleRoot
             );
         }

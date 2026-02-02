@@ -44,13 +44,18 @@ class TOTP extends Table
         return (int) ($cell) + 1;
     }
 
+    /**
+     * @throws TableException
+     */
     #[Override]
     protected function convertKeyMap(AttributeKeyMap $inputMap): array
     {
+        $key = $inputMap->getKey('totp-secret');
+        if (is_null($key)) {
+            throw new TableException('Missing required key: totp-secret');
+        }
         return [
-            'secret' => $this->convertKey(
-                $inputMap->getKey('totp-secret')
-            ),
+            'secret' => $this->convertKey($key),
         ];
     }
 
@@ -70,6 +75,7 @@ class TOTP extends Table
     }
 
     /**
+     * @return array<string, mixed>|null
      * @throws CipherSweetException
      * @throws CryptoOperationException
      * @throws InvalidCiphertextException
@@ -84,12 +90,12 @@ class TOTP extends Table
         if (!$row) {
             return null;
         }
+        $rowArray = self::rowToStringArray($row);
         $cipher = $this->getCipher();
-        $cipher->decryptRow($row);
-        $decrypted = $cipher->decryptRow($row);
+        $decrypted = $cipher->decryptRow($rowArray);
         return [
-            'secret' => (string) $decrypted['secret'],
-            'last_time_step' => (int) ($row['last_time_step'] ?? 0),
+            'secret' => self::decryptedString($decrypted, 'secret'),
+            'last_time_step' => (int) ($rowArray['last_time_step'] ?? 0),
         ];
     }
 

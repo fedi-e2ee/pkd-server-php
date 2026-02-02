@@ -21,6 +21,7 @@ class EasyDBHandler extends AbstractProcessingHandler
     public function __construct(EasyDB $db, int|string|Level $level = Level::Debug, bool $bubble = true)
     {
         $this->db = $db;
+        /** @psalm-suppress ArgumentTypeCoercion */
         parent::__construct($level, $bubble);
     }
 
@@ -38,6 +39,8 @@ class EasyDBHandler extends AbstractProcessingHandler
         if (is_null($this->statement)) {
             $this->initialize();
         }
+        // After initialize(), $this->statement is guaranteed to be non-null
+        /** @psalm-suppress PossiblyNullReference */
         $this->statement->execute([
             'channel' => $record->channel,
             'level' => $record->level->value,

@@ -20,6 +20,7 @@ use FediE2EE\PKDServer\Exceptions\{
 };
 use FediE2EE\PKDServer\Interfaces\HttpCacheInterface;
 use FediE2EE\PKDServer\Tables\MerkleState;
+use JsonException as BaseJsonException;
 use ParagonIE\HPKE\HPKEException;
 use Psr\SimpleCache\InvalidArgumentException;
 use SodiumException;
@@ -63,6 +64,7 @@ class HistoryView implements RequestHandlerInterface, HttpCacheInterface
     }
 
     /**
+     * @throws BaseJsonException
      * @throws BundleException
      * @throws CryptoException
      * @throws DependencyException
@@ -91,6 +93,7 @@ class HistoryView implements RequestHandlerInterface, HttpCacheInterface
                 }
                 [$message, $rewrappedKeys] = (new KeyWrapping($this->config()))
                     ->decryptAndGetRewrapped($hash, $leaf->wrappedKeys);
+                $leafPk = $leaf->primaryKey;
                 return [
                     '!pkd-context' => 'fedi-e2ee:v1/api/history/view',
                     'created' => $leaf->created,
@@ -99,7 +102,7 @@ class HistoryView implements RequestHandlerInterface, HttpCacheInterface
                     'message' => $message,
                     'merkle-root' => $hash,
                     'rewrapped-keys' => $rewrappedKeys,
-                    'witnesses' => $this->merkleState->getCosignatures($leaf->primaryKey),
+                    'witnesses' => is_null($leafPk) ? [] : $this->merkleState->getCosignatures($leafPk),
                 ];
             }
         );

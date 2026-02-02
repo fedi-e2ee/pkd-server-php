@@ -1,5 +1,8 @@
 parameters:
+    level: 7
     treatPhpDocTypesAsCertain: false
     paths:
         - src
         - public
+    stubFiles:
+        - stubs/phpstan/Laminas/Diactoros/Response.stub

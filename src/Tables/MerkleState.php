@@ -41,7 +41,6 @@ use function array_key_exists;
 use function hash_equals;
 use function in_array;
 use function is_null;
-use function parse_url;
 use function random_bytes;
 use function random_int;
 use function sodium_bin2hex;
@@ -68,9 +67,6 @@ class MerkleState extends Table
 
     /**
      * MerkleState has no encrypted fields.
-     *
-     * @param AttributeKeyMap $inputMap
-     * @return array
      */
     #[Override]
     protected function convertKeyMap(AttributeKeyMap $inputMap): array
@@ -107,6 +103,7 @@ class MerkleState extends Table
      * @return bool
      *
      * @throws CryptoException
+     * @throws DependencyException
      * @throws JsonException
      * @throws NotImplementedException
      * @throws ProtocolException
@@ -128,11 +125,11 @@ class MerkleState extends Table
         }
 
         // Validate hostname:
-        $hostname = $this->config->getParams()->hostname;
+        $hostname = $this->config()->getParams()->hostname;
         if ($tmp['hostname'] !== $hostname) {
             // If hostname is formatted as a URL, just grab the hostname:
-            $parsedUrl = parse_url($tmp['hostname']);
-            if ($parsedUrl['host'] !== $hostname) {
+            $parsedHost = self::parseUrlHost($tmp['hostname']);
+            if ($parsedHost !== $hostname) {
                 // Both mismatched? Bail out.
                 throw new ProtocolException('Hostname mismatch');
             }
@@ -140,6 +137,9 @@ class MerkleState extends Table
 
         // Grab the leaf that they're cosigning:
         $leaf = $this->getLeafByRoot($merkleRoot);
+        if (is_null($leaf)) {
+            throw new TableException('Merkle leaf not found for root: ' . $merkleRoot);
+        }
 
         // If we get here without throwing, we're good:
         if ($this->db->inTransaction()) {
@@ -157,6 +157,9 @@ class MerkleState extends Table
         return $this->db->commit();
     }
 
+    /**
+     * @return array<int, array<string, mixed>>
+     */
     public function getCosignatures(int $leafId): array
     {
         // TODO: cache
@@ -201,9 +204,9 @@ class MerkleState extends Table
             "SELECT root FROM pkd_merkle_leaves ORDER BY merkleleafid DESC LIMIT 1"
         );
         if (empty($result)) {
-            $result = new Tree([], $this->config()->getParams()->hashAlgo)->getEncodedRoot();
+            return new Tree([], $this->config()->getParams()->hashAlgo)->getEncodedRoot();
         }
-        return $result;
+        return (string) $result;
     }
 
     /**
@@ -290,7 +293,7 @@ class MerkleState extends Table
             return $this->recordCache[$root];
         }
         $data = $this->db->row(
-            "SELECT 
+            "SELECT
                     merkleleafid, root, contents, contenthash, signature, publickeyhash, inclusionproof, wrappedkeys, created
                 FROM pkd_merkle_leaves
                 WHERE root = ?",
@@ -299,7 +302,7 @@ class MerkleState extends Table
         if (empty($data)) {
             return null;
         }
-        return $this->cacheLeaf($data);
+        return $this->cacheLeaf(self::assertArray($data));
     }
 
     /**
@@ -311,7 +314,7 @@ class MerkleState extends Table
             return $this->recordCache[$primaryKey];
         }
         $data = $this->db->row(
-            "SELECT 
+            "SELECT
                     merkleleafid, root, contents, contenthash, signature, publickeyhash, inclusionproof, wrappedkeys, created
                 FROM pkd_merkle_leaves
                 WHERE merkleleafid = ?",
@@ -320,9 +323,14 @@ class MerkleState extends Table
         if (empty($data)) {
             return null;
         }
-        return $this->cacheLeaf($data);
+        return $this->cacheLeaf(self::assertArray($data));
     }
 
+    /**
+     * @param array<string, mixed> $data
+     *
+     * @throws JsonException
+     */
     protected function cacheLeaf(array $data): MerkleLeaf
     {
         $leaf = new MerkleLeaf(
@@ -345,6 +353,7 @@ class MerkleState extends Table
 
     /**
      * @api
+     * @return array<int, array<string, mixed>>
      *
      * @throws BundleException
      * @throws CryptoException
@@ -421,22 +430,22 @@ class MerkleState extends Table
             case 'pgsql':
             case 'mysql':
                 $this->db->beginTransaction();
-                $row = $this->db->row(
-                    "SELECT merkle_state, lock_challenge 
+                $row = self::assertArray($this->db->row(
+                    "SELECT merkle_state, lock_challenge
                             FROM pkd_merkle_state WHERE TRUE FOR UPDATE"
-                );
-                $state = $row['merkle_state'];
-                $storedChallenge = $row['lock_challenge'];
+                ));
+                $state = $row['merkle_state'] ?? null;
+                $storedChallenge = $row['lock_challenge'] ?? null;
                 break;
             case "sqlite":
                 $this->db->beginTransaction();
                 $this->db->exec("PRAGMA busy_timeout=5000");
-                $row = $this->db->row(
+                $row = self::assertArray($this->db->row(
                     "SELECT merkle_state, lock_challenge
                         FROM pkd_merkle_state WHERE 1"
-                );
-                $state = $row['merkle_state'];
-                $storedChallenge = $row['lock_challenge'];
+                ));
+                $state = $row['merkle_state'] ?? null;
+                $storedChallenge = $row['lock_challenge'] ?? null;
                 break;
             default:
                 throw new NotImplementedException('Database driver support not implemented');
@@ -480,6 +489,9 @@ class MerkleState extends Table
         $inclusion = $incremental->getInclusionProof($rawLeaf);
         $root = $incremental->getEncodedRoot();
         $rawNewRoot = $incremental->getRoot();
+        if (is_null($rawNewRoot)) {
+            throw new PDOException('invalid new root');
+        }
         if (!$incremental->verifyInclusionProof($rawNewRoot, $rawLeaf, $inclusion)) {
             throw new PDOException('invalid inclusion proof');
         }
@@ -517,8 +529,8 @@ class MerkleState extends Table
         $this->db->update(
             'pkd_merkle_state',
             [
-                'merkle_state' => Base64UrlSafe::encodeUnpadded($incremental->toJson()),
-                'lock_challenge' => ''
+                'merkle_state' => Base64UrlSafe::encodeUnpadded($incremental->toJson())
+                // We don't disable the lock challenge until after $inTransaction()
             ],
             ['merkle_state' => $state]
         );

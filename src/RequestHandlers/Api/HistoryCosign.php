@@ -2,10 +2,7 @@
 declare(strict_types=1);
 namespace FediE2EE\PKDServer\RequestHandlers\Api;
 
-use FediE2EE\PKD\Crypto\Exceptions\{
-    JsonException,
-    NotImplementedException
-};
+use FediE2EE\PKD\Crypto\Exceptions\NotImplementedException;
 use FediE2EE\PKDServer\Exceptions\{
     CacheException,
     DependencyException,
@@ -14,6 +11,7 @@ use FediE2EE\PKDServer\Exceptions\{
 use FediE2EE\PKDServer\Meta\Route;
 use FediE2EE\PKDServer\Tables\MerkleState;
 use FediE2EE\PKDServer\Traits\ReqTrait;
+use JsonException;
 use Override;
 use Psr\Http\Message\{
     ResponseInterface,
@@ -98,7 +96,7 @@ class HistoryCosign implements RequestHandlerInterface
                 'current-time' => $this->time(),
             ]);
         } catch (Throwable $ex) {
-            $this->config->getLogger()->error(
+            $this->config()->getLogger()->error(
                 $ex->getMessage(),
                 $ex->getTrace()
             );

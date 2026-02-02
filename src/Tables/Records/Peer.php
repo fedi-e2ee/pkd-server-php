@@ -3,12 +3,13 @@ declare(strict_types=1);
 namespace FediE2EE\PKDServer\Tables\Records;
 
 use DateTimeImmutable;
-use JsonException;
+use JsonException as BaseJsonException;
 use FediE2EE\PKD\Crypto\{
     Merkle\IncrementalTree,
     PublicKey,
     UtilTrait
 };
+use FediE2EE\PKD\Crypto\Exceptions\JsonException;
 use FediE2EE\PKDServer\Meta\RecordForTable;
 use FediE2EE\PKDServer\Protocol\RewrapConfig;
 use FediE2EE\PKDServer\Tables\Peers;
@@ -40,6 +41,9 @@ class Peer
     }
 
     /**
+     * @return array<string, mixed>
+     *
+     * @throws BaseJsonException
      * @throws JsonException
      */
     public function toArray(): array

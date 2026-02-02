@@ -45,6 +45,7 @@ use ParagonIE\CipherSweet\Exception\{
     CryptoOperationException,
     InvalidCiphertextException
 };
+use Psr\SimpleCache\InvalidArgumentException;
 use Random\RandomException;
 use SodiumException;
 
@@ -72,17 +73,23 @@ class AuxData extends Table
         ;
     }
 
+    /**
+     * @throws TableException
+     */
     #[Override]
     protected function convertKeyMap(AttributeKeyMap $inputMap): array
     {
+        $key = $inputMap->getKey('aux-data');
+        if (is_null($key)) {
+            throw new TableException('Missing required key: aux-data');
+        }
         return [
-            'auxdata' => $this->convertKey(
-                $inputMap->getKey('aux-data')
-            ),
+            'auxdata' => $this->convertKey($key),
         ];
     }
 
     /**
+     * @return array<int, array<string, mixed>>
      * @throws DateMalformedStringException
      */
     public function getAuxDataForActor(int $actorId): array
@@ -115,6 +122,8 @@ class AuxData extends Table
 
     /**
      * @api
+     * @return array<string, mixed>
+     *
      * @throws CipherSweetException
      * @throws CryptoOperationException
      * @throws DateMalformedStringException
@@ -148,8 +157,10 @@ class AuxData extends Table
         if (!$row) {
             return [];
         }
-        $decrypted = $this->getCipher()->decryptRow($row);
-        $insertTime = (string) new DateTimeImmutable((string) $decrypted['inserttime'])->getTimestamp();
+        $decrypted = $this->getCipher()->decryptRow(self::rowToStringArray($row));
+        $insertTime = (string) new DateTimeImmutable(
+            self::decryptedString($decrypted, 'inserttime')
+        )->getTimestamp();
         $revokeTime = is_string($decrypted['revoketime'])
             ? (string) new DateTimeImmutable($decrypted['revoketime'])->getTimestamp()
             : null;
@@ -202,6 +213,7 @@ class AuxData extends Table
      * @throws ExtensionException
      * @throws GuzzleException
      * @throws InputException
+     * @throws InvalidArgumentException
      * @throws InvalidCiphertextException
      * @throws JsonException
      * @throws NetworkException
@@ -257,8 +269,8 @@ class AuxData extends Table
         }
         $type = $actionData['aux-type'];
         $data = $actionData['aux-data'];
-        $allowed = $this->config->getAuxDataTypeAllowList();
-        $registry = $this->config->getAuxDataRegistry();
+        $allowed = $this->config()->getAuxDataTypeAllowList();
+        $registry = $this->config()->getAuxDataRegistry();
 
         // If the registry isn't allow-listed, this will throw:
         $ext = $registry->get($type, $allowed);
@@ -286,7 +298,7 @@ class AuxData extends Table
             $this->convertKeyMap($payload->keyMap)
         );
         [$rowToInsert, $blindIndexes] = $encryptor->prepareRowForStorage($plaintextRow);
-        $rowToInsert['auxdata_idx'] = (string) $blindIndexes['auxdata_idx'];
+        $rowToInsert['auxdata_idx'] = self::blindIndexValue($blindIndexes['auxdata_idx'] ?? '');
         $this->db->insert(
             'pkd_actors_auxdata',
             $rowToInsert
@@ -327,6 +339,7 @@ class AuxData extends Table
      * @throws DependencyException
      * @throws GuzzleException
      * @throws InputException
+     * @throws InvalidArgumentException
      * @throws InvalidCiphertextException
      * @throws JsonException
      * @throws NetworkException
@@ -392,7 +405,7 @@ class AuxData extends Table
                 WHERE actorid = ? AND auxdatatype = ? AND auxdata_idx = ? AND trusted",
             $actor->getPrimaryKey(),
             $actionData['aux-type'],
-            $bidx
+            self::blindIndexValue($bidx)
         );
 
         if (empty($toRevoke)) {
@@ -402,15 +415,16 @@ class AuxData extends Table
 
         $revoked = false;
         foreach ($toRevoke as $row) {
-            $decrypted = $this->getCipher()->decryptRow($row);
-            if (hash_equals($actionData['aux-data'], (string) $decrypted['auxdata'])) {
+            $rowArray = self::rowToStringArray($row);
+            $decrypted = $this->getCipher()->decryptRow($rowArray);
+            if (hash_equals($actionData['aux-data'], self::decryptedString($decrypted, 'auxdata'))) {
                 $this->db->update(
                     'pkd_actors_auxdata',
                     [
                         'trusted' => false,
                         'revokeleaf' => $leaf->getPrimaryKey(),
                     ],
-                    ['actorauxdataid' => $row['actorauxdataid']]
+                    ['actorauxdataid' => $rowArray['actorauxdataid']]
                 );
                 $revoked = true;
             }

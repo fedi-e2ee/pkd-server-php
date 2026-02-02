@@ -80,7 +80,8 @@ trait TOTPTrait
         $hash = hash_hmac('sha512', $binaryTime, $secret, true);
         $offset = self::ord(substr($hash, -1)) & 0x0F;
         $truncatedHash = substr($hash, $offset, 4);
-        $value = unpack('N', $truncatedHash)[1];
+        $unpacked = unpack('N', $truncatedHash);
+        $value = $unpacked === false ? 0 : $unpacked[1];
         $value &= 0x7FFFFFFF;
         return substr(sprintf('%08d', $value), -8);
     }
@@ -90,10 +91,13 @@ trait TOTPTrait
      */
     public static function ord(string $chr): int
     {
-        return unpack('C', $chr)[1];
+        $unpacked = unpack('C', $chr);
+        return $unpacked === false ? 0 : $unpacked[1];
     }
 
     /**
+     * @param array<string, mixed> $body
+     *
      * @throws ArrayKeyException
      * @throws BlindIndexNotFoundException
      * @throws CacheException
@@ -146,12 +150,14 @@ trait TOTPTrait
     }
 
     /**
+     * @param int $currentTime
+     * @throws DependencyException
      * @throws ProtocolException
      */
     public function throwIfTimeOutsideWindow(int $currentTime): void
     {
         $diff = time() - $currentTime;
-        if ($diff >= $this->config->getParams()->otpMaxLife) {
+        if ($diff >= $this->config()->getParams()->otpMaxLife) {
             throw new ProtocolException('OTP is too stale');
         }
         if ($diff < 0) {

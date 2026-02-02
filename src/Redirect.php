@@ -29,7 +29,7 @@ class Redirect
         return new Response(
             $stream,
             $this->status,
-            ['Location' => [(string) $this->url]]
+            ['Location' => (string) $this->url]
         );
     }
 }

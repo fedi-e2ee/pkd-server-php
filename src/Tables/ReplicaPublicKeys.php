@@ -6,6 +6,7 @@ use DateMalformedStringException;
 use DateTimeImmutable;
 use FediE2EE\PKD\Crypto\AttributeEncryption\AttributeKeyMap;
 use FediE2EE\PKDServer\Dependency\WrappedEncryptedRow;
+use FediE2EE\PKDServer\Exceptions\TableException;
 use FediE2EE\PKDServer\Table;
 use JsonException;
 use Override;
@@ -19,6 +20,7 @@ use ParagonIE\EasyDB\EasyStatement;
 use SodiumException;
 
 use function is_array;
+use function is_null;
 use function is_string;
 use function json_decode;
 
@@ -38,16 +40,23 @@ class ReplicaPublicKeys extends Table
         ;
     }
 
+    /**
+     * @throws TableException
+     */
     #[Override]
     protected function convertKeyMap(AttributeKeyMap $inputMap): array
     {
+        $key = $inputMap->getKey('public-key');
+        if (is_null($key)) {
+            throw new TableException('Missing required key: public-key');
+        }
         return [
-            'publickey' =>
-                $this->convertKey($inputMap->getKey('public-key')),
+            'publickey' => $this->convertKey($key),
         ];
     }
 
     /**
+     * @return array<string, mixed>
      * @throws CipherSweetException
      * @throws CryptoOperationException
      * @throws DateMalformedStringException
@@ -81,15 +90,18 @@ class ReplicaPublicKeys extends Table
         if (empty($row)) {
             return [];
         }
-        $decrypted = $this->getCipher()->decryptRow($row);
+        $decrypted = $this->getCipher()->decryptRow(self::rowToStringArray($row));
+        $insertTimeVal = $decrypted['inserttime'] ?? 'now';
         $insertTime = (string) (
-            new DateTimeImmutable((string) ($decrypted['inserttime'] ?? 'now'))->getTimestamp()
+            new DateTimeImmutable(is_string($insertTimeVal) ? $insertTimeVal : 'now')->getTimestamp()
         );
-        $revokeTime = is_string($decrypted['revoketime'] ?? null)
-            ? (string) new DateTimeImmutable((string) $decrypted['revoketime'])->getTimestamp()
+        $revokeTimeVal = $decrypted['revoketime'] ?? null;
+        $revokeTime = is_string($revokeTimeVal) && !empty($revokeTimeVal)
+            ? (string) new DateTimeImmutable($revokeTimeVal)->getTimestamp()
             : null;
+        $inclusionVal = $decrypted['inclusionproof'] ?? '[]';
         $inclusionProof = json_decode(
-            (string) ($decrypted['inclusionproof'] ?? '[]'),
+            is_string($inclusionVal) ? $inclusionVal : '[]',
             true,
             512,
             JSON_THROW_ON_ERROR
@@ -110,6 +122,7 @@ class ReplicaPublicKeys extends Table
     }
 
     /**
+     * @return array<int, array<string, mixed>>
      * @throws CipherSweetException
      * @throws CryptoOperationException
      * @throws DateMalformedStringException
@@ -142,10 +155,13 @@ class ReplicaPublicKeys extends Table
                 WHERE {$stmt}",
             ...$stmt->values()
         ) as $row) {
-            $decrypt = $this->getCipher()->decryptRow($row);
-            $insertTime = (string) new DateTimeImmutable((string) ($decrypt['inserttime'] ?? 'now'))->getTimestamp();
+            $rowArray = self::rowToStringArray($row);
+            $decrypt = $this->getCipher()->decryptRow($rowArray);
+            $insertTimeVal = $decrypt['inserttime'] ?? 'now';
+            $insertTime = (string) new DateTimeImmutable(is_string($insertTimeVal) ? $insertTimeVal : 'now')->getTimestamp();
+            $inclusionVal = $decrypt['inclusionproof'] ?? '[]';
             $inclusionProof = json_decode(
-                (string) ($decrypt['inclusionproof'] ?? '[]'),
+                is_string($inclusionVal) ? $inclusionVal : '[]',
                 true,
                 512,
                 JSON_THROW_ON_ERROR
@@ -155,12 +171,12 @@ class ReplicaPublicKeys extends Table
             }
 
             $results[] = [
-                'public-key' => (string) $decrypt['publickey'],
-                'key-id' => (string) $row['key_id'],
+                'public-key' => self::decryptedString($decrypt, 'publickey'),
+                'key-id' => $rowArray['key_id'] ?? '',
                 'created' => $insertTime,
                 'merkle-root' => $decrypt['insertmerkleroot'] ?? '',
                 'inclusion-proof' => $inclusionProof,
-                'trusted' => !empty($row['trusted'])
+                'trusted' => !empty($rowArray['trusted'])
             ];
         }
         return $results;

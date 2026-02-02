@@ -4,6 +4,14 @@ namespace FediE2EE\PKDServer\Tests\RequestHandlers\Api;
 
 use Exception;
 use FediE2EE\PKD\Crypto\Protocol\Actions\AddKey;
+use FediE2EE\PKD\Crypto\Protocol\{
+    Cosignature,
+    HistoricalRecord
+};
+use FediE2EE\PKD\Crypto\Merkle\{
+    IncrementalTree,
+    Tree
+};
 use FediE2EE\PKD\Crypto\{
     AttributeEncryption\AttributeKeyMap,
     Protocol\Handler,
@@ -11,6 +19,7 @@ use FediE2EE\PKD\Crypto\{
     SymmetricKey
 };
 use FediE2EE\PKDServer\RequestHandlers\Api\{
+    HistoryCosign,
     HistoryView
 };
 use FediE2EE\PKDServer\{
@@ -47,9 +56,11 @@ use PHPUnit\Framework\Attributes\{
 };
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
+use Throwable;
 
 #[CoversClass(HistoryView::class)]
 #[UsesClass(AppCache::class)]
+#[UsesClass(HistoryCosign::class)]
 #[UsesClass(WebFinger::class)]
 #[UsesClass(WrappedEncryptedRow::class)]
 #[UsesClass(Protocol::class)]
@@ -74,11 +85,11 @@ class HistoryViewTest extends TestCase
     use HttpTestTrait;
 
     /**
-     * @throws Exception
+     * @throws Throwable
      */
     public function testHandle(): void
     {
-        [$actorId, $canonical] = $this->makeDummyActor('example.com');
+        [, $canonical] = $this->makeDummyActor('example.com');
         $keypair = SecretKey::generate();
         $config = $this->getConfig();
         $this->clearOldTransaction($config);
@@ -196,6 +207,128 @@ class HistoryViewTest extends TestCase
         $this->assertSame(404, $response->getStatusCode());
         $body = json_decode($response->getBody()->getContents(), true);
         $this->assertArrayHasKey('error', $body);
+        $this->assertNotInTransaction();
+    }
+
+    /**
+     * Test that witnesses array contains cosignatures when they exist.
+     * This test ensures the ternary condition returns cosignatures, not empty array.
+     *
+     * @throws Throwable
+     */
+    public function testWitnessesContainsCosignatures(): void
+    {
+        [, $canonical] = $this->makeDummyActor('witnesses-test.com');
+        $keypair = SecretKey::generate();
+        $config = $this->getConfig();
+        $this->clearOldTransaction($config);
+        $protocol = new Protocol($config);
+        $webFinger = new WebFinger($config, $this->getMockClient([
+            new Response(200, ['Content-Type' => 'application/json'], '{"subject":"' . $canonical . '"}')
+        ]));
+        $protocol->setWebFinger($webFinger);
+
+        /** @var MerkleState $merkleState */
+        $merkleState = $this->table('MerkleState');
+        $latestRoot = $merkleState->getLatestRoot();
+
+        $serverHpke = $config->getHPKE();
+        $handler = new Handler();
+
+        // Add a key
+        $addKey = new AddKey($canonical, $keypair->getPublicKey());
+        $akm = new AttributeKeyMap()
+            ->addKey('actor', SymmetricKey::generate())
+            ->addKey('public-key', SymmetricKey::generate());
+        $encryptedMsg = $addKey->encrypt($akm);
+        $bundle = $handler->handle($encryptedMsg, $keypair, $akm, $latestRoot);
+        $encryptedForServer = $handler->hpkeEncrypt(
+            $bundle,
+            $serverHpke->encapsKey,
+            $serverHpke->cs
+        );
+        $protocol->addKey($encryptedForServer, $canonical);
+        $newRoot = $merkleState->getLatestRoot();
+
+        // Create a witness keypair and register it
+        $witnessSK = SecretKey::generate();
+        $witnessPK = $witnessSK->getPublicKey();
+        $witnessHostname = 'witness-' . bin2hex(random_bytes(8)) . '.example.com';
+
+        $config->getDb()->insert(
+            'pkd_merkle_witnesses',
+            [
+                'origin' => $witnessHostname,
+                'publickey' => $witnessPK->toString(),
+            ]
+        );
+
+        // Build the Merkle tree from scratch to create a valid cosignature
+        $zerothRoot = (new Tree())->getEncodedRoot();
+        $allHashes = $merkleState->getHashesSince($zerothRoot, 1000);
+
+        $tree = new IncrementalTree();
+        $targetRoot = null;
+        foreach ($allHashes as $record) {
+            $cosign = new Cosignature($tree);
+            $thisRoot = $record['merkle-root'];
+            $hist = new HistoricalRecord(
+                $record['encrypted-message'],
+                $record['publickeyhash'],
+                $record['signature'],
+            );
+            $cosign->append($hist, $thisRoot);
+
+            // When we reach our target root, create the cosignature
+            if ($thisRoot === $newRoot) {
+                $cosigned = $cosign->cosign($witnessSK, $config->getParams()->hostname);
+
+                // Setup cosign handler and submit
+                $reflector = new ReflectionClass(HistoryCosign::class);
+                $cosignHandler = $reflector->newInstanceWithoutConstructor();
+                $cosignHandler->injectConfig($config);
+                $constructor = $reflector->getConstructor();
+                if ($constructor) {
+                    $constructor->invoke($cosignHandler);
+                }
+
+                $cosignRequest = $this->makePostRequest(
+                    '/api/history/cosign/' . urlencode($thisRoot),
+                    ['witness' => $witnessHostname, 'cosigned' => $cosigned],
+                    ['Content-Type' => 'application/json']
+                )->withAttribute('hash', $thisRoot);
+                $cosignResponse = $cosignHandler->handle($cosignRequest);
+                $this->assertSame(200, $cosignResponse->getStatusCode());
+                $targetRoot = $thisRoot;
+            }
+            $tree = $cosign->getTree();
+        }
+
+        $this->assertNotNull($targetRoot, 'Should have found target root');
+
+        // Now verify HistoryView returns the witness
+        $reflector = new ReflectionClass(HistoryView::class);
+        $viewHandler = $reflector->newInstanceWithoutConstructor();
+        $viewHandler->injectConfig($config);
+        $constructor = $reflector->getConstructor();
+        if ($constructor) {
+            $constructor->invoke($viewHandler);
+        }
+
+        $request = $this->makeGetRequest('/api/history/view/' . urlencode($newRoot));
+        $request = $request->withAttribute('hash', $newRoot);
+        $response = $viewHandler->handle($request);
+
+        $this->assertSame(200, $response->getStatusCode());
+        $body = json_decode($response->getBody()->getContents(), true);
+
+        // The key assertion: witnesses must NOT be empty when cosignatures exist
+        $this->assertArrayHasKey('witnesses', $body);
+        $this->assertIsArray($body['witnesses']);
+        $this->assertNotEmpty($body['witnesses'], 'Witnesses array should contain cosignatures');
+        $this->assertCount(1, $body['witnesses']);
+        $this->assertSame($witnessHostname, $body['witnesses'][0]['witness']);
+
         $this->assertNotInTransaction();
     }
 }

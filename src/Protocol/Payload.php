@@ -31,6 +31,7 @@ readonly class Payload
     }
 
     /**
+     * @return array<string, mixed>
      * @throws JsonException
      */
     public function decode(): array
@@ -38,6 +39,9 @@ readonly class Payload
         return self::jsonDecode($this->rawJson);
     }
 
+    /**
+     * @throws JsonException
+     */
     public function getMerkleTreePayload(): string
     {
         $decoded = json_decode($this->rawJson, true);

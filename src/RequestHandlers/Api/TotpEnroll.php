@@ -47,7 +47,6 @@ use TypeError;
 
 use function hash_equals;
 use function is_null;
-use function parse_url;
 
 class TotpEnroll implements RequestHandlerInterface, LimitingHandlerInterface
 {
@@ -156,7 +155,13 @@ class TotpEnroll implements RequestHandlerInterface, LimitingHandlerInterface
         /** @var Actors $actorTable */
         $actorTable = $this->table('Actors');
         $actor = $actorTable->searchForActor($actorId);
-        $domain = parse_url($actor->actorID)['host'];
+        if (is_null($actor)) {
+            return $this->error('Actor not found', 404);
+        }
+        $domain = self::parseUrlHost($actor->actorID);
+        if (is_null($domain)) {
+            return $this->error('Invalid actor URL', 400);
+        }
 
         if ($this->totpTable->getSecretByDomain($domain)) {
             return $this->error('TOTP already enabled', 409);

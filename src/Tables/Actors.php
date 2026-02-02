@@ -53,6 +53,8 @@ class Actors extends Table
      * @param AttributeKeyMap $inputMap
      * @param string $action
      * @return array<string, CipherSweetKey>
+     *
+     * @throws TableException
      */
     #[Override]
     protected function convertKeyMap(AttributeKeyMap $inputMap, string $action = 'AddKey'): array
@@ -61,9 +63,12 @@ class Actors extends Table
         if ($action === 'MoveIdentity') {
             $actorField = 'new-actor';
         }
+        $key = $inputMap->getKey($actorField);
+        if (is_null($key)) {
+            throw new TableException("Missing required key: $actorField");
+        }
         return [
-            'activitypubid' =>
-                $this->convertKey($inputMap->getKey($actorField))
+            'activitypubid' => $this->convertKey($key)
         ];
     }
 
@@ -99,33 +104,35 @@ class Actors extends Table
         }
         $cipher = $this->getCipher();
         $encryptedRow = $this->db->row(
-            "SELECT 
+            "SELECT
                     actorid, activitypubid, wrap_activitypubid, fireproof, rfc9421pubkey
-                FROM 
+                FROM
                     pkd_actors
-                WHERE 
+                WHERE
                     actorid = ?",
             $actorID
         );
-        $row = $cipher->decryptRow($encryptedRow);
-        $canonicalActorID = (string) $row['activitypubid'];
-        $pk = empty($row['rfc9421pubkey'])
-            ? null
-            : PublicKey::fromString((string) $row['rfc9421pubkey']);
+        $row = $cipher->decryptRow(self::rowToStringArray($encryptedRow));
+        $canonicalActorID = self::decryptedString($row, 'activitypubid');
+        $rfc9421 = self::decryptedString($row, 'rfc9421pubkey');
+        $pk = empty($rfc9421) ? null : PublicKey::fromString($rfc9421);
+        $dbActorId = self::assertInt($row['actorid'] ?? 0);
         $actor = new Actor(
             actorID: $canonicalActorID,
             rfc9421pk: $pk,
             fireProof: !empty($row['fireproof']),
-            primaryKey: (int) $row['actorid'],
+            primaryKey: $dbActorId,
         );
         // Store in cache to save on future queries
         $this->recordCache[$canonicalActorID] = $actor;
-        $actorID = (int) $row['actorid'];
-        $this->idCache[$actorID] = $actor;
+        $this->idCache[$dbActorId] = $actor;
         return $actor;
     }
 
 
+    /**
+     * @return array{count-aux: int, count-keys: int}
+     */
     public function getCounts(int $actorID): array
     {
         $keyCount = $this->db->cell(
@@ -137,8 +144,8 @@ class Actors extends Table
             $actorID
         );
         return [
-            'count-aux' => $auxDataCount,
-            'count-keys' => $keyCount,
+            'count-aux' => (int) $auxDataCount,
+            'count-keys' => (int) $keyCount,
         ];
     }
 
@@ -164,32 +171,30 @@ class Actors extends Table
         $cipher = $this->getCipher();
         $bi = $cipher->getBlindIndex('activitypubid_idx', ['activitypubid' => $canonicalActorID]);
         $results = $this->db->run(
-            "SELECT 
+            "SELECT
                     actorid, activitypubid, wrap_activitypubid, fireproof, rfc9421pubkey
-                FROM 
+                FROM
                     pkd_actors
-                WHERE 
+                WHERE
                     activitypubid_idx = ?",
-            $bi
+            self::blindIndexValue($bi)
         );
-        /** @var array<string, string> $encryptedRow */
         foreach ($results as $encryptedRow) {
-            /** @var array<string, scalar> $row */
-            $row = $cipher->decryptRow($encryptedRow);
-            if (hash_equals((string) $row['activitypubid'], $canonicalActorID)) {
-                $pk = empty($row['rfc9421pubkey'])
-                    ? null
-                    : PublicKey::fromString($row['rfc9421pubkey']);
+            $row = $cipher->decryptRow(self::rowToStringArray($encryptedRow));
+            $actorId = self::decryptedString($row, 'activitypubid');
+            if (hash_equals($actorId, $canonicalActorID)) {
+                $rfc9421 = self::decryptedString($row, 'rfc9421pubkey');
+                $pk = empty($rfc9421) ? null : PublicKey::fromString($rfc9421);
+                $dbActorId = self::assertInt($row['actorid'] ?? 0);
                 $actor = new Actor(
-                    actorID: (string) $row['activitypubid'],
+                    actorID: $actorId,
                     rfc9421pk: $pk,
                     fireProof: !empty($row['fireproof']),
-                    primaryKey: (int) $row['actorid'],
+                    primaryKey: $dbActorId,
                 );
                 // Store in cache to save on future queries
                 $this->recordCache[$canonicalActorID] = $actor;
-                $actorID = (int) $row['actorid'];
-                $this->idCache[$actorID] = $actor;
+                $this->idCache[$dbActorId] = $actor;
                 return $actor;
             }
         }
@@ -198,10 +203,11 @@ class Actors extends Table
 
     /**
      * @throws ArrayKeyException
-     * @throws CryptoOperationException
      * @throws CipherSweetException
-     * @throws SodiumException
+     * @throws CryptoOperationException
      * @throws ProtocolException
+     * @throws SodiumException
+     * @throws TableException
      */
     public function createActor(string $activityPubID, Payload $payload, ?PublicKey $key = null): int
     {

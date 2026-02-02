@@ -24,6 +24,9 @@ final class ReplicaActor
         $this->primaryKey = $primaryKey;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function toArray(): array
     {
         return [

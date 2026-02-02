@@ -29,8 +29,12 @@ class WrappedEncryptedRow extends EncryptedRow
      */
     protected array $wrappedColumnName = [];
 
+    /** @var array<string, SymmetricKey> */
     protected array $wrapKeys = [];
 
+    /**
+     * @return array<string, string>
+     */
     public function getWrappedColumnNames(): array
     {
         return $this->wrappedColumnName;
@@ -78,10 +82,6 @@ class WrappedEncryptedRow extends EncryptedRow
      */
     public function wrapKey(SymmetricKey $key, string $fieldName): string
     {
-        // Check the cache first:
-        if (array_key_exists($fieldName, $this->wrapKeys)) {
-            return $this->wrapKeys[$fieldName];
-        }
         // Wrap it:
         return $this->engine->getBackend()->encrypt(
             $key->getRawKey(),
@@ -156,6 +156,7 @@ class WrappedEncryptedRow extends EncryptedRow
     /**
      * Get the wrapped symmetric key for a given field.
      *
+     * @param array<array-key, mixed> $row
      * @throws CipherSweetException
      * @throws CryptoOperationException
      */

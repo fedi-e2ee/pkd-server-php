@@ -84,6 +84,9 @@ trait TableRecordTrait
         return $this->symmetricKeys[$property];
     }
 
+    /**
+     * @return array<string, SymmetricKey>
+     */
     public function getSymmetricKeys(): array
     {
         return $this->symmetricKeys;

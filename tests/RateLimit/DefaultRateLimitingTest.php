@@ -416,9 +416,54 @@ class DefaultRateLimitingTest extends TestCase
     }
 
     /**
+     * @throws DateMalformedIntervalStringException
      * @throws DependencyException
      * @throws RandomException
      */
+    public function testRecordPenaltyPersistence(): void
+    {
+        $storage = $this->getStorage();
+        $drl = new DefaultRateLimiting($storage);
+
+        // Ensure key doesn't exist
+        $storage->delete('ip', 'test-persistence/32');
+        $this->assertNull($storage->get('ip', 'test-persistence/32'));
+
+        // Record penalty - this MUST persist to storage
+        $drl->recordPenalty('ip', 'test-persistence/32');
+
+        // Verify the penalty was persisted
+        $result = $storage->get('ip', 'test-persistence/32');
+        $this->assertNotNull($result, 'recordPenalty must persist data to storage');
+        $this->assertSame(1, $result->failures);
+    }
+
+    /**
+     * @throws DateMalformedIntervalStringException
+     */
+    public function testIncreaseFailuresPrecision(): void
+    {
+        $drl = $this->getDefaultRateLimit();
+
+        // Test null -> 1 (catches RateLimitData(0) mutations and +1 mutations)
+        $data1 = $drl->increaseFailures(null);
+        $this->assertSame(1, $data1->failures, 'First failure from null must be exactly 1');
+
+        // Test 1 -> 2
+        $data2 = $drl->increaseFailures($data1);
+        $this->assertSame(2, $data2->failures, 'Second failure must be exactly 2');
+
+        // Test starting from 0 explicitly
+        $fromZero = new RateLimitData(0);
+        $incremented = $drl->increaseFailures($fromZero);
+        $this->assertSame(1, $incremented->failures, 'Incrementing from 0 must result in 1');
+
+        // Test starting from 5
+        $fromFive = new RateLimitData(5);
+        $incrementedFive = $drl->increaseFailures($fromFive);
+        $this->assertSame(6, $incrementedFive->failures, 'Incrementing from 5 must result in 6');
+    }
+
     public function testProcessTTL(): void
     {
         $drl = $this->getDefaultRateLimit();

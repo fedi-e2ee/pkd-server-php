@@ -35,6 +35,7 @@ final class ReplicaLeaf
     }
 
     /**
+     * @return array<string, mixed>
      * @throws JsonException
      */
     public function toArray(): array

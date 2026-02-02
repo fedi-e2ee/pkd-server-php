@@ -2,15 +2,16 @@
 declare(strict_types=1);
 namespace FediE2EE\PKDServer\Traits;
 
+use FediE2EE\PKDServer\Exceptions\CacheException;
 use GuzzleHttp\Exception\GuzzleException;
 use FediE2EE\PKD\Crypto\Exceptions\{
-    JsonException,
     NetworkException,
     NotImplementedException
 };
 use FediE2EE\PKD\Crypto\HttpSignature;
 use FediE2EE\PKDServer\Exceptions\DependencyException;
 use JsonException as BaseJsonException;
+use Psr\SimpleCache\InvalidArgumentException;
 use Laminas\Diactoros\{
     Response,
     Stream
@@ -41,21 +42,27 @@ trait ReqTrait
     }
 
     /**
+     * @throws CacheException
+     * @throws CertaintyException
      * @throws DependencyException
      * @throws GuzzleException
+     * @throws InvalidArgumentException
      * @throws NetworkException
      * @throws SodiumException
-     * @throws CertaintyException
      */
     public function canonicalizeActor(string $actor): string
     {
-        // TODO: Cache in Redis
-        return $this->webfinger()->canonicalize($actor);
+        return $this->appCache('activitypub:actor')->cache(
+            sodium_bin2hex($actor),
+            function () use ($actor) {
+                return $this->webfinger()->canonicalize($actor);
+            }
+        );
     }
 
     /**
+     * @throws BaseJsonException
      * @throws DependencyException
-     * @throws JsonException
      * @throws NotImplementedException
      * @throws SodiumException
      */
@@ -90,6 +97,8 @@ trait ReqTrait
     /**
      * Return a JSON response with HTTP Message Signature (from signResponse())
      *
+     * @param array<string, mixed>|object $data
+     * @param array<string, string> $headers
      * @throws DependencyException
      * @throws BaseJsonException
      * @throws NotImplementedException
@@ -117,6 +126,8 @@ trait ReqTrait
     }
 
     /**
+     * @param array<string, mixed> $vars
+     * @param array<string, string> $headers
      * @throws DependencyException
      * @throws LoaderError
      * @throws RuntimeError

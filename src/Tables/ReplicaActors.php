@@ -50,6 +50,8 @@ class ReplicaActors extends Table
      * @param AttributeKeyMap $inputMap
      * @param string $action
      * @return array<string, CipherSweetKey>
+     *
+     * @throws TableException
      */
     #[Override]
     protected function convertKeyMap(AttributeKeyMap $inputMap, string $action = 'AddKey'): array
@@ -58,9 +60,12 @@ class ReplicaActors extends Table
         if ($action === 'MoveIdentity') {
             $actorField = 'new-actor';
         }
+        $key = $inputMap->getKey($actorField);
+        if (is_null($key)) {
+            throw new TableException("Missing required key: $actorField");
+        }
         return [
-            'activitypubid' =>
-                $this->convertKey($inputMap->getKey($actorField))
+            'activitypubid' => $this->convertKey($key)
         ];
     }
 
@@ -89,29 +94,33 @@ class ReplicaActors extends Table
         $row = $this->db->row(
             "SELECT * FROM pkd_replica_actors WHERE peer = ? AND activitypubid_idx = ?",
             $peerID,
-            $bi
+            self::blindIndexValue($bi)
         );
         if (empty($row)) {
             return null;
         }
-        $decrypted = $cipher->decryptRow($row);
+        $rowArray = self::rowToStringArray($row);
+        $decrypted = $cipher->decryptRow($rowArray);
         // Verify it matches because of potential blind index collisions
-        if (!hash_equals((string) $decrypted['activitypubid'], $activityPubID)) {
+        $actorId = self::decryptedString($decrypted, 'activitypubid');
+        if (!hash_equals($actorId, $activityPubID)) {
             return null;
         }
 
-        $pk = empty($decrypted['rfc9421pubkey'])
-            ? null
-            : PublicKey::fromString((string) $decrypted['rfc9421pubkey']);
+        $rfc9421 = self::decryptedString($decrypted, 'rfc9421pubkey');
+        $pk = empty($rfc9421) ? null : PublicKey::fromString($rfc9421);
 
         return new ReplicaActor(
-            actorID: (string) $decrypted['activitypubid'],
+            actorID: $actorId,
             rfc9421pk: $pk,
-            fireProof: !empty($row['fireproof']),
-            primaryKey: (int) $row['replicaactorid']
+            fireProof: !empty($rowArray['fireproof']),
+            primaryKey: self::assertInt($rowArray['replicaactorid'] ?? 0)
         );
     }
 
+    /**
+     * @return array{count-aux: int, count-keys: int}
+     */
     public function getCounts(int $peerID, int $actorID): array
     {
         $keyCount = $this->db->cell(
@@ -129,8 +138,8 @@ class ReplicaActors extends Table
             $actorID
         );
         return [
-            'count-aux' => $auxDataCount,
-            'count-keys' => $keyCount,
+            'count-aux' => (int) ($auxDataCount ?? 0),
+            'count-keys' => (int) ($keyCount ?? 0),
         ];
     }
 
@@ -159,7 +168,7 @@ class ReplicaActors extends Table
             $this->convertKeyMap($payload->keyMap, $payload->message->getAction())
         );
         [$fields, $blindIndexes] = $encryptor->prepareRowForStorage($plaintext);
-        $fields['activitypubid_idx'] = (string) $blindIndexes['activitypubid_idx'];
+        $fields['activitypubid_idx'] = self::blindIndexValue($blindIndexes['activitypubid_idx']);
         $fields['peer'] = $peer->getPrimaryKey();
 
         $this->db->insert('pkd_replica_actors', $fields);
@@ -192,7 +201,7 @@ class ReplicaActors extends Table
             'rfc9421pubkey' => is_null($key) ? null : $key->toString(),
         ];
         [$fields, $blindIndexes] = $cipher->prepareRowForStorage($plaintext);
-        $fields['activitypubid_idx'] = (string) $blindIndexes['activitypubid_idx'];
+        $fields['activitypubid_idx'] = self::blindIndexValue($blindIndexes['activitypubid_idx']);
         $fields['peer'] = $peer->getPrimaryKey();
 
         $this->db->insert('pkd_replica_actors', $fields);

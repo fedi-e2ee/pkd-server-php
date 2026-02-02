@@ -45,11 +45,14 @@ final class Actor
         );
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function toArray(): array
     {
         return [
             'activitypubid' => $this->actorID,
-            'rfc9421pubkey' => $this->rfc9421pk->toString(),
+            'rfc9421pubkey' => $this->rfc9421pk?->toString() ?? '',
             'fireproof' => $this->fireProof,
         ];
     }

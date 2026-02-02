@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <psalm
     autoloader="vendor/autoload.php"
-    errorLevel="6"
+    errorLevel="3"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns="https://getpsalm.org/schema/config"
     xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
@@ -12,6 +12,9 @@
             <directory name="vendor" />
         </ignoreFiles>
     </projectFiles>
+    <stubs>
+        <file name="stubs/psalm/Laminas.php" />
+    </stubs>
     <issueHandlers>
         <MissingDependency errorLevel="info" />
         <PossiblyUnusedReturnValue errorLevel="info" />
@@ -22,6 +25,6 @@
         <UnusedClass errorLevel="info" />
         <UnusedParam errorLevel="info" />
         <UnusedProperty errorLevel="info" />
-        <UnusedVariable errorLeel="info" /><!-- False positive -->
+        <UnusedVariable errorLevel="info" />
     </issueHandlers>
 </psalm>

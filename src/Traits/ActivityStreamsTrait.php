@@ -18,8 +18,8 @@ use ParagonIE\Certainty\Exception\CertaintyException;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\SimpleCache\InvalidArgumentException;
 use SodiumException;
+use stdClass;
 
-use function is_object;
 use function json_decode;
 use function json_last_error_msg;
 use function property_exists;
@@ -48,7 +48,7 @@ trait ActivityStreamsTrait
 
         // Decode JSON
         $decoded = json_decode($body);
-        if (!is_object($decoded)) {
+        if (!($decoded instanceof stdClass)) {
             throw new ActivityPubException('Invalid JSON: ' . json_last_error_msg());
         }
         if (!property_exists($decoded, 'actor')) {

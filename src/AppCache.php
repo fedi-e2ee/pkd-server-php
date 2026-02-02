@@ -15,8 +15,10 @@ use Psr\SimpleCache\{
 use SodiumException;
 
 use function array_key_exists;
+use function is_array;
 use function is_int;
 use function is_null;
+use function iterator_to_array;
 use function json_decode;
 use function sodium_bin2hex;
 use function sodium_crypto_generichash;
@@ -24,6 +26,7 @@ use function sodium_crypto_generichash;
 class AppCache implements CacheInterface
 {
     use JsonTrait;
+    /** @var array<string, array<string, mixed>> */
     private static array $inMemoryCache = [];
     private ?RedisClient $redis;
     private string $namespace;
@@ -133,12 +136,19 @@ class AppCache implements CacheInterface
         return true;
     }
 
+    /**
+     * @param iterable<string> $keys
+     * @return array<string, mixed>
+     *
+     * @throws InvalidArgumentException
+     */
     #[Override]
     public function getMultiple(iterable $keys, mixed $default = null): array
     {
         if (!is_null($this->redis)) {
+            $keysArray = is_array($keys) ? $keys : iterator_to_array($keys);
             /** @var array<string, mixed> $results */
-            $results = $this->redis->mget($keys);
+            $results = $this->redis->mget($keysArray);
             return $results;
         }
         $collected = [];
@@ -148,6 +158,11 @@ class AppCache implements CacheInterface
         return $collected;
     }
 
+    /**
+     * @param iterable<mixed, mixed> $values
+     *
+     * @throws InvalidArgumentException
+     */
     #[Override]
     public function setMultiple(iterable $values, DateInterval|int|null $ttl = null): bool
     {

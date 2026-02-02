@@ -59,8 +59,8 @@ trait ProtocolMethodTrait
         int $encryption = self::ENCRYPTION_REQUIRED
     ): mixed {
         // Before we do any insets, we should make sure we're not in a dangling transaction:
-        if ($this->config->getDb()->inTransaction()) {
-            $this->config->getDb()->commit();
+        if ($this->config()->getDb()->inTransaction()) {
+            $this->config()->getDb()->commit();
         }
         $message = $payload->message;
         if ($message->getAction() !== $expectedAction) {
@@ -88,15 +88,15 @@ trait ProtocolMethodTrait
         $cb = function () use (&$result, $leaf, $payload, $callback) {
             $result = $callback($leaf, $payload);
         };
-        if (new MerkleState($this->config)->insertLeaf($leaf, $cb)) {
-            if ($this->config->getDb()->inTransaction()) {
-                $this->config->getDb()->commit();
+        if (new MerkleState($this->config())->insertLeaf($leaf, $cb)) {
+            if ($this->config()->getDb()->inTransaction()) {
+                $this->config()->getDb()->commit();
             }
             return $result;
         }
         // Before we do any insets, we should make sure we're not in a dangling transaction:
-        if ($this->config->getDb()->inTransaction()) {
-            $this->config->getDb()->rollBack();
+        if ($this->config()->getDb()->inTransaction()) {
+            $this->config()->getDb()->rollBack();
         }
         throw new TableException('Could not insert new leaf');
     }

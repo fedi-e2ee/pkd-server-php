@@ -36,8 +36,8 @@ use SensitiveParameter;
 use SodiumException;
 
 use function array_key_exists;
+use function is_int;
 use function is_null;
-use function is_object;
 use function is_string;
 use function json_decode;
 use function json_encode;
@@ -51,11 +51,15 @@ class KeyWrapping
     private EasyDB $db;
     private HPKE $hpke;
 
+    /**
+     * @throws DependencyException
+     */
     public function __construct(?ServerConfig $config = null)
     {
-        $this->config = $config ?? $GLOBALS['pkdConfig'];
-        $this->db = $this->config->getDb();
-        $this->hpke = $this->config->getHPKE();
+        $config = $config ?? $GLOBALS['pkdConfig'];
+        $this->config = $config;
+        $this->db = $config->getDb();
+        $this->hpke = $config->getHPKE();
     }
 
     /**
@@ -81,6 +85,9 @@ class KeyWrapping
             "SELECT merkleleafid FROM pkd_merkle_leaves WHERE root = ?",
             $merkleRoot
         );
+        if (!is_int($merkleLeafId)) {
+            throw new TableException('Merkle leaf not found for root');
+        }
 
         // Do we need to fetch it from the pkd_merkle_leaves table?
         if (is_null($keyMap)) {
@@ -144,9 +151,11 @@ class KeyWrapping
         }
         $collected = [];
         foreach ($keyMap->getAttributes() as $name) {
-            $collected[$name] = Base64UrlSafe::encodeUnpadded(
-                $keyMap->getKey($name)->getBytes()
-            );
+            $key = $keyMap->getKey($name);
+            if (is_null($key)) {
+                continue; // Should not happen since we're iterating over known attributes
+            }
+            $collected[$name] = Base64UrlSafe::encodeUnpadded($key->getBytes());
         }
         return self::jsonEncode($collected);
     }
@@ -158,8 +167,8 @@ class KeyWrapping
         #[SensitiveParameter]
         string $plaintextJsonString
     ): AttributeKeyMap {
-        $jsonObject = json_decode($plaintextJsonString);
-        if (!is_object($jsonObject)) {
+        $jsonObject = json_decode($plaintextJsonString, true);
+        if (!is_array($jsonObject)) {
             throw new JsonException('Invalid json:' . json_last_error_msg());
         }
         $keyMap = new AttributeKeyMap();
@@ -202,6 +211,9 @@ class KeyWrapping
                 "SELECT contents FROM pkd_merkle_leaves WHERE root = ?",
                 $merkleRoot
             );
+            if (!is_string($encryptedMessage)) {
+                return null;
+            }
             $message = $this->unwrapLocalMessage($encryptedMessage, $wrappedKeys);
             $rewrappedKeys = $this->getRewrappedFor($merkleRoot);
             return json_encode([$message, $rewrappedKeys]);
@@ -214,6 +226,7 @@ class KeyWrapping
     }
 
     /**
+     * @return array<string, mixed>
      * @throws BundleException
      * @throws CryptoException
      * @throws HPKEException
@@ -230,6 +243,7 @@ class KeyWrapping
     }
 
     /**
+     * @return array<string, array<string, string>>
      * @throws InputException
      */
     public function getRewrappedFor(string $merkleRoot): array

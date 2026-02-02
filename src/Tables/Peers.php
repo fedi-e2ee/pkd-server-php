@@ -20,9 +20,12 @@ use FediE2EE\PKDServer\Exceptions\{
 use FediE2EE\PKDServer\Protocol\RewrapConfig;
 use FediE2EE\PKDServer\Table;
 use FediE2EE\PKDServer\Tables\Records\Peer;
+use JsonException;
 use Override;
-use ParagonIE\ConstantTime\Base32;
-use ParagonIE\ConstantTime\Base64UrlSafe;
+use ParagonIE\ConstantTime\{
+    Base32,
+    Base64UrlSafe
+};
 use ParagonIE\HPKE\HPKEException;
 use Random\RandomException;
 use SodiumException;
@@ -108,10 +111,11 @@ class Peers extends Table
         if (empty($peer)) {
             throw new TableException('Peer not found: ' . $uniqueId);
         }
-        if (is_null($peer['publickey'])) {
+        $peerArray = self::assertArray($peer);
+        if (is_null($peerArray['publickey'] ?? null)) {
             throw new TableException('Peer has no public key');
         }
-        return $this->tableRowToPeer($peer);
+        return $this->tableRowToPeer($peerArray);
     }
 
     /**
@@ -126,14 +130,16 @@ class Peers extends Table
         if (empty($peer)) {
             throw new TableException('Peer not found: ' . $hostname);
         }
-        if (is_null($peer['publickey'])) {
+        $peerArray = self::assertArray($peer);
+        if (is_null($peerArray['publickey'] ?? null)) {
             throw new TableException('Peer has no public key');
         }
 
-        return $this->tableRowToPeer($peer);
+        return $this->tableRowToPeer($peerArray);
     }
 
     /**
+     * @param array<string, mixed> $peer
      * @throws DateMalformedStringException
      * @throws CryptoException
      * @throws SodiumException
@@ -166,6 +172,8 @@ class Peers extends Table
 
     /**
      * @api
+     * @return array<int, Peer>
+     *
      * @throws CryptoException
      * @throws DateMalformedStringException
      * @throws SodiumException
@@ -202,6 +210,7 @@ class Peers extends Table
     }
 
     /**
+     * @throws JsonException
      * @throws TableException
      */
     public function save(Peer $peer): bool
@@ -216,6 +225,8 @@ class Peers extends Table
     }
 
     /**
+     * @return array<int, Peer>
+     *
      * @throws CryptoException
      * @throws DateMalformedStringException
      * @throws SodiumException
@@ -263,7 +274,11 @@ class Peers extends Table
                 $leafId,
                 $attr
             );
-            $ciphertext = $adapter->seal($encapsKey, $keyMap->getKey($attr)->getBytes());
+            $key = $keyMap->getKey($attr);
+            if (is_null($key)) {
+                continue; // Should not happen since we're iterating over known attributes
+            }
+            $ciphertext = $adapter->seal($encapsKey, $key->getBytes());
             if ($exists) {
                 $this->db->update(
                     'pkd_merkle_leaf_rewrapped_keys',

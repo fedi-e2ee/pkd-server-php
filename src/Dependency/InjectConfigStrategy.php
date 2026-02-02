@@ -51,6 +51,10 @@ class InjectConfigStrategy extends ApplicationStrategy
 
         // Manually invoke the callable with the request as the first arg
         // (League does this via call_user_func_array internally)
+        // @phpstan-ignore function.alreadyNarrowedType (defensive check for library compatibility)
+        if (!is_callable($callable)) {
+            throw new DependencyException('Route callable is not callable');
+        }
         $response = call_user_func_array($callable, [$request]);
 
         // Ensure it's a ResponseInterface (League's default behavior)

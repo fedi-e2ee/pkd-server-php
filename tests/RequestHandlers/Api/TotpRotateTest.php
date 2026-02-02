@@ -12,11 +12,15 @@ use FediE2EE\PKD\Crypto\{
     UtilTrait
 };
 use FediE2EE\PKD\Crypto\Exceptions\{
+    BundleException,
     CryptoException,
+    InputException,
     JsonException,
+    NetworkException,
     NotImplementedException,
     ParserException
 };
+use GuzzleHttp\Exception\GuzzleException;
 use FediE2EE\PKDServer\RequestHandlers\Api\{
     TotpRotate
 };
@@ -88,6 +92,15 @@ use Psr\SimpleCache\InvalidArgumentException;
 use Random\RandomException;
 use SodiumException;
 
+use function floor;
+use function hash;
+use function json_decode;
+use function json_encode;
+use function parse_url;
+use function random_bytes;
+use function substr;
+use function time;
+
 #[CoversClass(TotpRotate::class)]
 #[UsesClass(AppCache::class)]
 #[UsesClass(EasyDBHandler::class)]
@@ -131,18 +144,21 @@ class TotpRotateTest extends TestCase
 
     /**
      * @throws ArrayKeyException
+     * @throws BundleException
      * @throws CacheException
      * @throws CertaintyException
      * @throws CipherSweetException
      * @throws CryptoException
      * @throws CryptoOperationException
      * @throws DependencyException
+     * @throws GuzzleException
      * @throws HPKEException
+     * @throws InputException
      * @throws InvalidArgumentException
      * @throws InvalidCiphertextException
      * @throws JsonException
+     * @throws NetworkException
      * @throws NotImplementedException
-     * @throws ParserException
      * @throws ProtocolException
      * @throws RandomException
      * @throws SodiumException
@@ -709,6 +725,73 @@ class TotpRotateTest extends TestCase
      * @throws SodiumException
      * @throws TableException
      */
+    public function testEqualTimestepsRejected(): void
+    {
+        $sk = SecretKey::generate();
+        [, $canonical] = $this->makeDummyActor('equal-ts-rotate.com');
+
+        /** @var TOTP $totpTable */
+        $totpTable = $this->table('TOTP');
+
+        $config = $this->getConfig();
+        $this->clearOldTransaction($config);
+        $protocol = new Protocol($config);
+
+        $addKeyResult = $this->addKeyForActor($canonical, $sk, $protocol, $config);
+        $keyId = $addKeyResult->keyID;
+
+        $domain = parse_url($canonical)['host'];
+        $oldSecret = random_bytes(20);
+        $totpTable->saveSecret($domain, $oldSecret);
+
+        $totpGenerator = new class() {
+            use TOTPTrait;
+        };
+
+        $oldOtp = $totpGenerator->generateTOTP($oldSecret, time());
+
+        $newSecret = random_bytes(20);
+        // Generate BOTH codes at the SAME time to get equal time steps
+        $sameTime = time();
+        $newOtpCurrent = $totpGenerator->generateTOTP($newSecret, $sameTime);
+        $newOtpPrevious = $totpGenerator->generateTOTP($newSecret, $sameTime);
+
+        $hpke = $this->config()->getHPKE();
+        $encryptedSecret = new HPKEAdapter($hpke->cs, 'fedi-e2ee:v1/api/totp/rotate')->seal(
+            $hpke->getEncapsKey(),
+            $newSecret
+        );
+
+        $rotation = [
+            'actor-id' => $canonical,
+            'key-id' => $keyId,
+            'old-otp' => $oldOtp,
+            'new-otp-current' => $newOtpCurrent,
+            'new-otp-previous' => $newOtpPrevious,
+            'new-totp-secret' => Base32::encode($encryptedSecret),
+        ];
+        $this->executeRotateAndAssertError($sk, $rotation, 406, 'New TOTP codes must be increasing');
+    }
+
+    /**
+     * @throws ArrayKeyException
+     * @throws CacheException
+     * @throws CertaintyException
+     * @throws CipherSweetException
+     * @throws CryptoException
+     * @throws CryptoOperationException
+     * @throws DependencyException
+     * @throws HPKEException
+     * @throws InvalidArgumentException
+     * @throws InvalidCiphertextException
+     * @throws JsonException
+     * @throws NotImplementedException
+     * @throws ParserException
+     * @throws ProtocolException
+     * @throws RandomException
+     * @throws SodiumException
+     * @throws TableException
+     */
     public function testInvalidNewOtpCodes(): void
     {
         $sk = SecretKey::generate();
@@ -1017,6 +1100,9 @@ class TotpRotateTest extends TestCase
         ];
     }
 
+    /**
+     * @throws DependencyException
+     */
     #[DataProvider("deletedKeysProvider")]
     public function testMissingFields(array $data): void
     {

@@ -6,7 +6,7 @@
         ]
     },
     "threads": "max",
-    "minCoveredMsi": 80,
+    "minCoveredMsi": 95,
     "phpUnit": {
         "configDir": "."
     },
@@ -20,18 +20,39 @@
                 "FediE2EE\\PKDServer\\Protocol::undoFireproof",
                 "FediE2EE\\PKDServer\\Protocol::revokeAuxData",
                 "FediE2EE\\PKDServer\\Protocol::cleanUpAfterAction",
-                "FediE2EE\\PKDServer\\Traits\\ConfigTrait::table",
-                "FediE2EE\\PKDServer\\Traits\\ReqTrait::twig",
-                "FediE2EE\\PKDServer\\RequestHandlers\\Api\\BurnDown::handle"
+                "FediE2EE\\PKDServer\\Protocol::addKey",
+                "FediE2EE\\PKDServer\\Protocol::revokeKey",
+                "FediE2EE\\PKDServer\\Protocol::revokeKeyThirdParty",
+                "FediE2EE\\PKDServer\\Protocol::burnDown",
+                "FediE2EE\\PKDServer\\Protocol::fireproof",
+                "FediE2EE\\PKDServer\\Protocol::addAuxData",
+                "FediE2EE\\PKDServer\\Protocol\\KeyWrapping::decryptAndGetRewrapped",
+                "FediE2EE\\PKDServer\\RateLimit\\DefaultRateLimiting::recordPenalty"
             ],
 			"ignoreSourceCodeByRegex": [
-				".*getLogger.*"
+				".*getLogger.*",
+				".*wrapLocalKeys.*",
+				".*cleanUpAfterAction.*",
+				".*assertAllArrayKeysExist.*",
+				".*ConfigTrait::table.*",
+				".*ReqTrait::twig.*"
+            ]
+        },
+        "CloneRemoval": {
+            "ignore": [
+                "FediE2EE\\PKDServer\\RateLimit\\DefaultRateLimiting::withBaseDelay",
+                "FediE2EE\\PKDServer\\RateLimit\\DefaultRateLimiting::withMaxTimeout"
             ]
         },
         "DecrementInteger": {
             "ignore": [
                 "FediE2EE\\PKDServer\\Meta\\Params::__construct",
                 "FediE2EE\\PKDServer\\AppCache::__construct",
+                "FediE2EE\\PKDServer\\RateLimit\\DefaultRateLimiting::__construct",
+                "FediE2EE\\PKDServer\\RateLimit\\DefaultRateLimiting::getCooledDown",
+                "FediE2EE\\PKDServer\\RateLimit\\DefaultRateLimiting::getIntervalFromFailureCount",
+                "FediE2EE\\PKDServer\\RateLimit\\DefaultRateLimiting::increaseFailures",
+                "FediE2EE\\PKDServer\\Protocol\\KeyWrapping::decryptAndGetRewrapped",
                 "FediE2EE\\PKDServer\\Traits\\TOTPTrait::generateTOTP",
                 "FediE2EE\\PKDServer\\Traits\\TOTPTrait::verifyTOTP",
                 "FediE2EE\\PKDServer\\RequestHandlers\\Api\\HistorySince::handle",
@@ -42,11 +63,59 @@
             "ignore": [
                 "FediE2EE\\PKDServer\\Meta\\Params::__construct",
                 "FediE2EE\\PKDServer\\AppCache::__construct",
+                "FediE2EE\\PKDServer\\RateLimit\\DefaultRateLimiting::__construct",
+                "FediE2EE\\PKDServer\\RateLimit\\DefaultRateLimiting::getCooledDown",
+                "FediE2EE\\PKDServer\\RateLimit\\DefaultRateLimiting::getIntervalFromFailureCount",
+                "FediE2EE\\PKDServer\\RateLimit\\DefaultRateLimiting::increaseFailures",
+                "FediE2EE\\PKDServer\\Protocol\\KeyWrapping::decryptAndGetRewrapped",
                 "FediE2EE\\PKDServer\\Traits\\TOTPTrait::generateTOTP",
                 "FediE2EE\\PKDServer\\Traits\\TOTPTrait::verifyTOTP",
                 "FediE2EE\\PKDServer\\Traits\\ReqTrait::error",
                 "FediE2EE\\PKDServer\\RequestHandlers\\Api\\HistorySince::handle",
                 "FediE2EE\\PKDServer\\RequestHandlers\\Api\\Revoke::handle"
+            ]
+        },
+        "Identical": {
+            "ignore": [
+                "FediE2EE\\PKDServer\\RateLimit\\DefaultRateLimiting::getIntervalFromFailureCount"
+            ]
+        },
+        "Minus": {
+            "ignore": [
+                "FediE2EE\\PKDServer\\RateLimit\\DefaultRateLimiting::getIntervalFromFailureCount"
+            ]
+        },
+        "ShiftLeft": {
+            "ignore": [
+                "FediE2EE\\PKDServer\\RateLimit\\DefaultRateLimiting::getIntervalFromFailureCount"
+            ]
+        },
+        "RoundingFamily": {
+            "ignore": [
+                "FediE2EE\\PKDServer\\RateLimit\\DefaultRateLimiting::getIntervalFromFailureCount"
+            ]
+        },
+        "CastInt": {
+            "ignore": [
+                "FediE2EE\\PKDServer\\RateLimit\\DefaultRateLimiting::getIntervalFromFailureCount"
+            ]
+        },
+        "CastString": {
+            "ignore": [
+                "FediE2EE\\PKDServer\\RequestHandlers\\Api\\ReplicaInfo::getInfo",
+                "FediE2EE\\PKDServer\\RequestHandlers\\Api\\ReplicaInfo::getAuxInfo",
+                "FediE2EE\\PKDServer\\RequestHandlers\\Api\\ReplicaInfo::actorKeys"
+            ]
+        },
+        "Modulus": {
+            "ignore": [
+                "FediE2EE\\PKDServer\\RateLimit\\DefaultRateLimiting::getIntervalFromFailureCount"
+            ]
+        },
+        "TrueValue": {
+            "ignore": [
+                "FediE2EE\\PKDServer\\RateLimit\\DefaultRateLimiting::__construct",
+                "FediE2EE\\PKDServer\\RateLimit\\DefaultRateLimiting::shouldEnforce"
             ]
         },
         "FalseValue": {
@@ -65,7 +134,51 @@
         "MatchArmRemoval": {
             "ignore": [
                 "FediE2EE\\PKDServer\\Traits\\ConfigTrait::table",
-                "FediE2EE\\PKDServer\\RequestHandlers\\Api\\ServerPublicKey::cipherSuiteString"
+                "FediE2EE\\PKDServer\\RequestHandlers\\Api\\ServerPublicKey::cipherSuiteString",
+                "FediE2EE\\PKDServer\\RateLimit\\DefaultRateLimiting::shouldEnforce"
+            ]
+        },
+        "LessThan": {
+            "ignore": [
+                "FediE2EE\\PKDServer\\Meta\\Params::__construct",
+                "FediE2EE\\PKDServer\\RateLimit\\DefaultRateLimiting::enforceRateLimit",
+                "FediE2EE\\PKDServer\\RateLimit\\DefaultRateLimiting::getCooledDown",
+                "FediE2EE\\PKDServer\\RateLimit\\DefaultRateLimiting::getIntervalFromFailureCount"
+            ]
+        },
+        "LessThanNegotiation": {
+            "ignore": [
+                "FediE2EE\\PKDServer\\Meta\\Params::__construct",
+                "FediE2EE\\PKDServer\\RateLimit\\DefaultRateLimiting::enforceRateLimit",
+                "FediE2EE\\PKDServer\\RateLimit\\DefaultRateLimiting::getCooledDown",
+                "FediE2EE\\PKDServer\\RateLimit\\DefaultRateLimiting::getIntervalFromFailureCount"
+            ]
+        },
+        "GreaterThanOrEqualTo": {
+            "ignore": [
+                "FediE2EE\\PKDServer\\RateLimit\\DefaultRateLimiting::getPenaltyTime"
+            ]
+        },
+        "GreaterThanOrEqualToNegotiation": {
+            "ignore": [
+                "FediE2EE\\PKDServer\\RateLimit\\DefaultRateLimiting::getPenaltyTime"
+            ]
+        },
+        "GreaterThan": {
+            "ignore": [
+                "FediE2EE\\PKDServer\\Meta\\Params::__construct",
+                "FediE2EE\\PKDServer\\RateLimit\\DefaultRateLimiting::getPenaltyTime"
+            ]
+        },
+        "GreaterThanNegotiation": {
+            "ignore": [
+                "FediE2EE\\PKDServer\\Meta\\Params::__construct",
+                "FediE2EE\\PKDServer\\RateLimit\\DefaultRateLimiting::getPenaltyTime"
+            ]
+        },
+        "Decrement": {
+            "ignore": [
+                "FediE2EE\\PKDServer\\RateLimit\\DefaultRateLimiting::getCooledDown"
             ]
         },
         "BitwiseOr": {
@@ -79,7 +192,8 @@
         "Concat": {
 			"ignoreSourceCodeByRegex": [
 				".*DateInterval::createFromDateString.*",
-				".*throw\\s+?new*"
+				".*throw\\s+?new*",
+				".*DependencyException.*"
             ]
         },
         "ConcatOperandRemoval": {
@@ -88,7 +202,8 @@
             ],
 			"ignoreSourceCodeByRegex": [
 				".*DateInterval::createFromDateString.*",
-				".*throw\\s+?new*"
+				".*throw\\s+?new*",
+				".*DependencyException.*"
             ]
         },
         "UnwrapSubstr": {
@@ -98,17 +213,25 @@
         },
         "Division": {
             "ignore": [
-                "FediE2EE\\PKDServer\\Traits\\TOTPTrait::generateTOTP"
+                "FediE2EE\\PKDServer\\Traits\\TOTPTrait::generateTOTP",
+                "FediE2EE\\PKDServer\\RateLimit\\DefaultRateLimiting::getIntervalFromFailureCount"
+            ]
+        },
+        "Multiplication": {
+            "ignore": [
+                "FediE2EE\\PKDServer\\RateLimit\\DefaultRateLimiting::getIntervalFromFailureCount"
             ]
         },
         "Plus": {
             "ignore": [
-                "FediE2EE\\PKDServer\\Traits\\TOTPTrait::verifyTOTP"
+                "FediE2EE\\PKDServer\\Traits\\TOTPTrait::verifyTOTP",
+                "FediE2EE\\PKDServer\\RateLimit\\DefaultRateLimiting::increaseFailures"
             ]
         },
         "IfNegation": {
             "ignore": [
-                "FediE2EE\\PKDServer\\ActivityPub\\WebFinger::__construct"
+                "FediE2EE\\PKDServer\\ActivityPub\\WebFinger::__construct",
+                "FediE2EE\\PKDServer\\RateLimit\\DefaultRateLimiting::processTTL"
             ],
 			"ignoreSourceCodeByRegex": [
 				".*array_key_exists.*",
@@ -118,13 +241,15 @@
         "ArrayItemRemoval": {
             "ignore": [
                 "FediE2EE\\PKDServer\\ActivityPub\\WebFinger::__construct",
-                "FediE2EE\\PKDServer\\RequestHandlers\\Api\\HistoryCosign::handle"
+                "FediE2EE\\PKDServer\\RequestHandlers\\Api\\HistoryCosign::handle",
+                "FediE2EE\\PKDServer\\RateLimit\\DefaultRateLimiting::enforceRateLimit"
             ]
         },
         "ArrayItem": {
             "ignore": [
                 "FediE2EE\\PKDServer\\ActivityPub\\WebFinger::__construct",
-                "FediE2EE\\PKDServer\\RequestHandlers\\Api\\HistoryCosign::handle"
+                "FediE2EE\\PKDServer\\RequestHandlers\\Api\\HistoryCosign::handle",
+                "FediE2EE\\PKDServer\\RateLimit\\DefaultRateLimiting::enforceRateLimit"
             ]
         },
         "UnwrapStrReplace": {
@@ -139,7 +264,15 @@
         },
         "Throw_": {
             "ignore": [
-                "FediE2EE\\PKDServer\\ActivityPub\\WebFinger::getPublicKeyForActor"
+                "FediE2EE\\PKDServer\\ActivityPub\\WebFinger::getPublicKeyForActor",
+                "FediE2EE\\PKDServer\\Meta\\Params::__construct",
+                "FediE2EE\\PKDServer\\RateLimit\\DefaultRateLimiting::enforceRateLimit"
+            ]
+        },
+        "LogicalOr": {
+            "ignore": [
+                "FediE2EE\\PKDServer\\ActivityPub\\WebFinger::getInboxUrl",
+                "FediE2EE\\PKDServer\\ActivityPub\\WebFinger::getPublicKey"
             ]
         },
         "PregMatchRemoveDollar": {
@@ -151,7 +284,10 @@
             "ignore": [
                 "FediE2EE\\PKDServer\\AppCache::cache",
                 "FediE2EE\\PKDServer\\Dependency\\WrappedEncryptedRow::getFieldSymmetricKey",
-                "FediE2EE\\PKDServer\\RequestHandlers\\Api\\Revoke::handle"
+                "FediE2EE\\PKDServer\\RequestHandlers\\Api\\Revoke::handle",
+                "FediE2EE\\PKDServer\\RateLimit\\DefaultRateLimiting::processTTL",
+                "FediE2EE\\PKDServer\\RateLimit\\DefaultRateLimiting::getPenaltyTime",
+                "FediE2EE\\PKDServer\\RateLimit\\DefaultRateLimiting::getIntervalFromFailureCount"
             ]
         },
         "Catch_": {
@@ -169,7 +305,31 @@
         },
         "LogicalNot": {
             "ignore": [
-                "FediE2EE\\PKDServer\\Traits\\ReqTrait::twig"
+                "FediE2EE\\PKDServer\\Traits\\ReqTrait::twig",
+                "FediE2EE\\PKDServer\\Meta\\Params::__construct",
+                "FediE2EE\\PKDServer\\RateLimit\\DefaultRateLimiting::getCooledDown",
+                "FediE2EE\\PKDServer\\RateLimit\\DefaultRateLimiting::enforceRateLimit",
+                "FediE2EE\\PKDServer\\RateLimit\\DefaultRateLimiting::withMaxTimeout"
+            ]
+        },
+        "Foreach_": {
+            "ignore": [
+                "FediE2EE\\PKDServer\\RateLimit\\DefaultRateLimiting::enforceRateLimit"
+            ]
+        },
+        "Continue_": {
+            "ignore": [
+                "FediE2EE\\PKDServer\\RateLimit\\DefaultRateLimiting::enforceRateLimit"
+            ]
+        },
+        "Break_": {
+            "ignore": [
+                "FediE2EE\\PKDServer\\RateLimit\\DefaultRateLimiting::getCooledDown"
+            ]
+        },
+        "DoWhile": {
+            "ignore": [
+                "FediE2EE\\PKDServer\\RateLimit\\DefaultRateLimiting::getCooledDown"
             ]
         }
     },

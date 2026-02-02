@@ -23,6 +23,7 @@ use function unpack;
 trait NetworkTrait
 {
     /**
+     * @param array<int, string> $trustedProxies
      * @throws NetTraitException
      */
     public function getRequestIPSubnet(
@@ -41,6 +42,9 @@ trait NetworkTrait
         return $ip;
     }
 
+    /**
+     * @param array<int, string> $trustedProxies
+     */
     public function extractIPFromRequest(
         ServerRequestInterface $request,
         array $trustedProxies = []
@@ -98,6 +102,9 @@ trait NetworkTrait
         return $normalized  . '/' . $maskBits;
     }
 
+    /**
+     * @throws NetTraitException
+     */
     public function ipv6Mask(string $ip, int $maskBits = 128): string
     {
         if ($maskBits < 0) {
@@ -126,12 +133,21 @@ trait NetworkTrait
         return $normalized  . '/' . $maskBits;
     }
 
+    /**
+     * @return array<int, int>
+     */
     public function stringToByteArray(string $str): array
     {
         $values = unpack('C*', $str);
+        if ($values === false) {
+            return [];
+        }
         return array_values($values);
     }
 
+    /**
+     * @param array<int, int> $array
+     */
     public function byteArrayToString(array $array): string
     {
         return pack('C*', ...$array);

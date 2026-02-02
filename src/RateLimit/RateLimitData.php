@@ -84,6 +84,9 @@ class RateLimitData implements JsonSerializable
         return $this->cooldownStart;
     }
 
+    /**
+     * @return array{failures: int, last-fail-time: DateTimeImmutable, cooldown-start: DateTimeImmutable}
+     */
     #[Override]
     public function jsonSerialize(): array
     {

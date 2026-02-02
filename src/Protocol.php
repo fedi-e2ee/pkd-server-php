@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace FediE2EE\PKDServer;
 
+use DateMalformedStringException;
 use FediE2EE\PKD\Crypto\{
     Protocol\HPKEAdapter,
     Protocol\Parser
@@ -14,6 +15,8 @@ use FediE2EE\PKD\Crypto\Exceptions\{
     ParserException,
 };
 use FediE2EE\PKDServer\Exceptions\{
+    CacheException,
+    ConcurrentException,
     DependencyException,
     ProtocolException,
     TableException
@@ -25,7 +28,6 @@ use FediE2EE\PKDServer\{
     Protocol\Payload,
     Traits\ConfigTrait
 };
-use FediE2EE\PKDServer\Exceptions\CacheException;
 use FediE2EE\PKDServer\Tables\{
     AuxData,
     MerkleState,
@@ -35,7 +37,10 @@ use FediE2EE\PKDServer\Tables\{
 use GuzzleHttp\Client;
 use ParagonIE\Certainty\Exception\CertaintyException;
 use ParagonIE\HPKE\HPKEException;
+use Random\RandomException;
 use SodiumException;
+
+use function property_exists;
 
 /**
  * This class defines the process for which records are updated in the Public Key Directory.
@@ -60,13 +65,20 @@ class Protocol
     }
 
     /**
+     * @return array{action: string, result: bool|ActorKey, latest-root: string}
+     *
+     * @throws BundleException
+     * @throws CacheException
+     * @throws ConcurrentException
      * @throws CryptoException
+     * @throws DateMalformedStringException
      * @throws DependencyException
-     * @throws Exceptions\CacheException
      * @throws HPKEException
+     * @throws JsonException
      * @throws NotImplementedException
      * @throws ParserException
      * @throws ProtocolException
+     * @throws RandomException
      * @throws SodiumException
      * @throws TableException
      */
@@ -87,7 +99,12 @@ class Protocol
         // If it was enqueued, we can assume the signature was valid.
 
         // First, parse the outer JSON envelope (per v0.3.0+ of the specification)
-        $outerJson = json_decode($enqueued->object->content, true);
+        if (!property_exists($enqueued->object, 'content')) {
+            throw new ProtocolException('Missing content in ActivityStream object');
+        }
+        /** @var string $activityContent */
+        $activityContent = $enqueued->object->content;
+        $outerJson = json_decode($activityContent, true);
         if (!is_array($outerJson)) {
             throw new ProtocolException('Only JSON objects are allowed.');
         }
@@ -123,9 +140,14 @@ class Protocol
         }
 
         // Is this encrypted?
-        $hpke = $this->config->getHPKE();
+        $hpke = $this->config()->getHPKE();
         $adapter = new HPKEAdapter($hpke->cs);
-        $wasEncrypted = $adapter->isHpkeCiphertext($outerJson[$fieldToUse]);
+        // We've validated that this key exists above, but verify again for type safety
+        if (!array_key_exists($fieldToUse, $outerJson) || !is_string($outerJson[$fieldToUse])) {
+            throw new ProtocolException('Message payload must be a string');
+        }
+        $messagePayload = $outerJson[$fieldToUse];
+        $wasEncrypted = $adapter->isHpkeCiphertext($messagePayload);
 
         // Let's bail out if anything strange is happening:
         if ($wasEncrypted !== $contextImpliesEncryption) {
@@ -134,9 +156,9 @@ class Protocol
 
         // If it was encrypted, we should decrypt it:
         if ($wasEncrypted) {
-            $raw = $adapter->open($hpke->decapsKey, $hpke->encapsKey, $outerJson[$fieldToUse]);
+            $raw = $adapter->open($hpke->decapsKey, $hpke->encapsKey, $messagePayload);
         } else {
-            $raw = $outerJson[$fieldToUse];
+            $raw = $messagePayload;
         }
 
         // Parse the plaintext, grab the action parameter;
@@ -205,9 +227,12 @@ class Protocol
      * @return void
      *
      * @throws CacheException
+     * @throws CryptoException
+     * @throws DateMalformedStringException
      * @throws DependencyException
      * @throws HPKEException
      * @throws JsonException
+     * @throws SodiumException
      * @throws TableException
      */
     protected function wrapLocalKeys(Payload $payload): void
@@ -220,8 +245,8 @@ class Protocol
 
         // $keyWrapping->localKeyWrap($merkleRoot, $payload->keyMap);
         $keyWrapping->rewrapSymmetricKeys($merkleRoot, $payload->keyMap);
-        if ($this->config->getDb()->inTransaction()) {
-            $this->config->getDb()->commit();
+        if ($this->config()->getDb()->inTransaction()) {
+            $this->config()->getDb()->commit();
         }
     }
 
@@ -235,7 +260,7 @@ class Protocol
         if (!is_null($this->webFinger)) {
             return $this->webFinger;
         }
-        return new WebFinger($this->config, $http, $this->config->getCaCertFetch());
+        return new WebFinger($this->config(), $http, $this->config()->getCaCertFetch());
     }
 
     /**
@@ -258,7 +283,7 @@ class Protocol
      */
     protected function hpkeUnwrap(string $arbitrary): Payload
     {
-        $hpke = $this->config->getHPKE();
+        $hpke = $this->config()->getHPKE();
         $raw = new HPKEAdapter($hpke->cs)
             ->open($hpke->decapsKey, $hpke->encapsKey, $arbitrary);
         $parsed = $this->parser->parseUnverified($raw);
@@ -268,12 +293,15 @@ class Protocol
     /**
      * @throws BundleException
      * @throws CacheException
+     * @throws ConcurrentException
      * @throws CryptoException
+     * @throws DateMalformedStringException
      * @throws DependencyException
      * @throws HPKEException
      * @throws JsonException
      * @throws NotImplementedException
      * @throws ProtocolException
+     * @throws RandomException
      * @throws SodiumException
      * @throws TableException
      */
@@ -291,12 +319,15 @@ class Protocol
     /**
      * @throws BundleException
      * @throws CacheException
+     * @throws ConcurrentException
      * @throws CryptoException
+     * @throws DateMalformedStringException
      * @throws DependencyException
      * @throws HPKEException
      * @throws JsonException
      * @throws NotImplementedException
      * @throws ProtocolException
+     * @throws RandomException
      * @throws SodiumException
      * @throws TableException
      */
@@ -314,12 +345,15 @@ class Protocol
     /**
      * @throws BundleException
      * @throws CacheException
+     * @throws ConcurrentException
      * @throws CryptoException
+     * @throws DateMalformedStringException
      * @throws DependencyException
      * @throws HPKEException
      * @throws JsonException
      * @throws NotImplementedException
      * @throws ProtocolException
+     * @throws RandomException
      * @throws SodiumException
      * @throws TableException
      */
@@ -343,12 +377,15 @@ class Protocol
     /**
      * @throws BundleException
      * @throws CacheException
+     * @throws ConcurrentException
      * @throws CryptoException
+     * @throws DateMalformedStringException
      * @throws DependencyException
      * @throws HPKEException
      * @throws JsonException
      * @throws NotImplementedException
      * @throws ProtocolException
+     * @throws RandomException
      * @throws SodiumException
      * @throws TableException
      */
@@ -376,18 +413,21 @@ class Protocol
     /**
      * @throws BundleException
      * @throws CacheException
+     * @throws ConcurrentException
      * @throws CryptoException
+     * @throws DateMalformedStringException
      * @throws DependencyException
      * @throws HPKEException
      * @throws JsonException
      * @throws NotImplementedException
      * @throws ProtocolException
+     * @throws RandomException
      * @throws SodiumException
      * @throws TableException
      */
     public function burnDown(string $body, string $outerActor): bool
     {
-        $hpke = $this->config->getHPKE();
+        $hpke = $this->config()->getHPKE();
         if (new HPKEAdapter($hpke->cs)->isHpkeCiphertext($body)) {
             throw new ProtocolException('BurnDown MUST NOT be encrypted.');
         }
@@ -404,12 +444,15 @@ class Protocol
     /**
      * @throws BundleException
      * @throws CacheException
+     * @throws ConcurrentException
      * @throws CryptoException
+     * @throws DateMalformedStringException
      * @throws DependencyException
      * @throws HPKEException
      * @throws JsonException
      * @throws NotImplementedException
      * @throws ProtocolException
+     * @throws RandomException
      * @throws SodiumException
      * @throws TableException
      */
@@ -427,12 +470,15 @@ class Protocol
     /**
      * @throws BundleException
      * @throws CacheException
+     * @throws ConcurrentException
      * @throws CryptoException
+     * @throws DateMalformedStringException
      * @throws DependencyException
      * @throws HPKEException
      * @throws JsonException
      * @throws NotImplementedException
      * @throws ProtocolException
+     * @throws RandomException
      * @throws SodiumException
      * @throws TableException
      */
@@ -450,12 +496,15 @@ class Protocol
     /**
      * @throws BundleException
      * @throws CacheException
+     * @throws ConcurrentException
      * @throws CryptoException
+     * @throws DateMalformedStringException
      * @throws DependencyException
      * @throws HPKEException
      * @throws JsonException
      * @throws NotImplementedException
      * @throws ProtocolException
+     * @throws RandomException
      * @throws SodiumException
      * @throws TableException
      */
@@ -473,15 +522,17 @@ class Protocol
     /**
      * @throws BundleException
      * @throws CacheException
+     * @throws ConcurrentException
      * @throws CryptoException
+     * @throws DateMalformedStringException
      * @throws DependencyException
      * @throws HPKEException
      * @throws JsonException
      * @throws NotImplementedException
      * @throws ProtocolException
+     * @throws RandomException
      * @throws SodiumException
      * @throws TableException
-     *
      */
     public function revokeAuxData(string $body, string $outerActor): bool
     {
@@ -497,12 +548,15 @@ class Protocol
     /**
      * @throws BundleException
      * @throws CacheException
+     * @throws ConcurrentException
      * @throws CryptoException
+     * @throws DateMalformedStringException
      * @throws DependencyException
      * @throws HPKEException
      * @throws JsonException
      * @throws NotImplementedException
      * @throws ProtocolException
+     * @throws RandomException
      * @throws SodiumException
      * @throws TableException
      */
@@ -527,7 +581,7 @@ class Protocol
      */
     protected function cleanUpAfterAction(): void
     {
-        $this->config->getDb()->exec(
+        $this->config()->getDb()->exec(
             "UPDATE pkd_merkle_state SET lock_challenge = ''"
         );
     }
