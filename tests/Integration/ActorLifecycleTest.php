@@ -25,16 +25,19 @@ use FediE2EE\PKDServer\RequestHandlers\Api\{
     Actor,
     ListKeys,
 };
-use FediE2EE\PKDServer\{ActivityPub\WebFinger,
+use FediE2EE\PKDServer\{
+    ActivityPub\WebFinger,
     AppCache,
     Dependency\WrappedEncryptedRow,
     Math,
+    Meta\Params,
     Protocol,
     Protocol\KeyWrapping,
     Protocol\RewrapConfig,
     ServerConfig,
     Table,
-    TableCache};
+    TableCache
+};
 use FediE2EE\PKDServer\Exceptions\{
     CacheException,
     DependencyException,
@@ -87,6 +90,7 @@ use SodiumException;
 #[UsesClass(AuxData::class)]
 #[UsesClass(AppCache::class)]
 #[UsesClass(MerkleLeaf::class)]
+#[UsesClass(Params::class)]
 #[UsesClass(MerkleState::class)]
 #[UsesClass(PublicKeys::class)]
 #[UsesClass(TableCache::class)]
