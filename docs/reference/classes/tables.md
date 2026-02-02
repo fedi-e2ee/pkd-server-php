@@ -380,7 +380,7 @@ Insert leaf with retry logic for deadlocks
 
 - `$primaryKey`: `int`
 
-#### [`getHashesSince`](../../../src/Tables/MerkleState.php#L358-L403)
+#### [`getHashesSince`](../../../src/Tables/MerkleState.php#L358-L400)
 
 **API** · Returns `array`
 

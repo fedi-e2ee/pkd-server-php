@@ -72,6 +72,10 @@ Returns `int`
 
 Returns `int`
 
+#### [`getEmptyTreeRoot`](../../../src/Meta/Params.php#L78-L81)
+
+Returns `string`
+
 ---
 
 ## RecordForTable
