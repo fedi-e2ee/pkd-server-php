@@ -27,6 +27,7 @@ use FediE2EE\PKDServer\{
     AppCache,
     Dependency\WrappedEncryptedRow,
     Math,
+    Meta\Params,
     Protocol,
     Protocol\KeyWrapping,
     Protocol\Payload,
@@ -71,6 +72,7 @@ use Throwable;
 #[UsesClass(Table::class)]
 #[UsesClass(TableCache::class)]
 #[UsesClass(Actors::class)]
+#[UsesClass(Params::class)]
 #[UsesClass(MerkleState::class)]
 #[UsesClass(PublicKeys::class)]
 #[UsesClass(Actor::class)]
