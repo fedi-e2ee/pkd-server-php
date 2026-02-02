@@ -39,6 +39,7 @@ use FediE2EE\PKDServer\{
     AppCache,
     Dependency\WrappedEncryptedRow,
     Math,
+    Meta\Params,
     Protocol,
     Protocol\KeyWrapping,
     Protocol\Payload,
@@ -106,6 +107,7 @@ use SodiumException;
 #[UsesClass(KeyWrapping::class)]
 #[UsesClass(MerkleLeaf::class)]
 #[UsesClass(MerkleState::class)]
+#[UsesClass(Params::class)]
 #[UsesClass(Payload::class)]
 #[UsesClass(Peers::class)]
 #[UsesClass(PublicKeys::class)]

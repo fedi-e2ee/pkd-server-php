@@ -17,6 +17,7 @@ use FediE2EE\PKDServer\{ActivityPub\WebFinger,
     AppCache,
     Dependency\WrappedEncryptedRow,
     Math,
+    Meta\Params,
     Protocol,
     Protocol\KeyWrapping,
     Protocol\Payload,
@@ -65,6 +66,7 @@ use ReflectionClass;
 #[UsesClass(MerkleLeaf::class)]
 #[UsesClass(Peer::class)]
 #[UsesClass(Math::class)]
+#[UsesClass(Params::class)]
 #[UsesClass(RewrapConfig::class)]
 class HistorySinceTest extends TestCase
 {

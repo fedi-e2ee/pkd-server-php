@@ -359,10 +359,7 @@ class MerkleState extends Table
     {
         $oldRootID = 0;
         // Special case: The first entry has a previous hash of all zeroes
-        //
-        // No, Semgrep, this is NOT a Telegram key:
-        // nosemgrep: generic.secrets.security.detected-telegram-bot-api-key.detected-telegram-bot-api-key
-        if ($oldRoot !== 'pkd-mr-v1:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA') {
+        if ($oldRoot !== $this->config()->getParams()->getEmptyTreeRoot()) {
             $oldRootID = $this->db->cell(
                 "SELECT 
                     merkleleafid

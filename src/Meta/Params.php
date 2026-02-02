@@ -74,4 +74,9 @@ readonly class Params
     {
         return $this->otpMaxLife;
     }
+
+    public function getEmptyTreeRoot(): string
+    {
+        return (new Tree([], $this->hashAlgo))->getEncodedRoot();
+    }
 }
