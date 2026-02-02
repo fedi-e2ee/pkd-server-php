@@ -218,9 +218,10 @@ class HistoryViewTest extends TestCase
      */
     public function testWitnessesContainsCosignatures(): void
     {
+        $config = $this->getConfig();
+        $this->truncateTables();
         [, $canonical] = $this->makeDummyActor('witnesses-test.com');
         $keypair = SecretKey::generate();
-        $config = $this->getConfig();
         $this->clearOldTransaction($config);
         $protocol = new Protocol($config);
         $webFinger = new WebFinger($config, $this->getMockClient([
