@@ -33,7 +33,7 @@ abstract · Returns `string`
 
 ### Methods
 
-#### [`getEnabledRateLimits`](../../../src/Interfaces/LimitingHandlerInterface.php#L9)
+#### [`getEnabledRateLimits`](../../../src/Interfaces/LimitingHandlerInterface.php#L10)
 
 abstract · Returns `array`
 

@@ -69,7 +69,7 @@ Returns `void`
 
 **Throws:** `DependencyException`
 
-#### [`invokeRouteCallable`](../../../src/Dependency/InjectConfigStrategy.php#L38-L61)
+#### [`invokeRouteCallable`](../../../src/Dependency/InjectConfigStrategy.php#L38-L65)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -122,11 +122,11 @@ Extends the CipherSweet EncryptedRow class to support key-wrapping
 
 ### Methods
 
-#### [`getWrappedColumnNames`](../../../src/Dependency/WrappedEncryptedRow.php#L34-L37)
+#### [`getWrappedColumnNames`](../../../src/Dependency/WrappedEncryptedRow.php#L38-L41)
 
 Returns `array`
 
-#### [`addField`](../../../src/Dependency/WrappedEncryptedRow.php#L50-L62)
+#### [`addField`](../../../src/Dependency/WrappedEncryptedRow.php#L54-L66)
 
 Returns `static`
 
@@ -142,7 +142,7 @@ Define a field that will be encrypted.
 - `$autoBindContext`: `bool` = false
 - `$wrappedKeyColumnName`: `?string` = null
 
-#### [`getExtensionKey`](../../../src/Dependency/WrappedEncryptedRow.php#L70-L73)
+#### [`getExtensionKey`](../../../src/Dependency/WrappedEncryptedRow.php#L74-L77)
 
 Returns `ParagonIE\CipherSweet\Backend\Key\SymmetricKey`
 
@@ -150,7 +150,7 @@ Get the key used to encrypt/decrypt the field symmetric key.
 
 **Throws:** `CipherSweetException`, `CryptoOperationException`
 
-#### [`wrapKey`](../../../src/Dependency/WrappedEncryptedRow.php#L79-L91)
+#### [`wrapKey`](../../../src/Dependency/WrappedEncryptedRow.php#L83-L91)
 
 Returns `string`
 
@@ -187,7 +187,7 @@ Returns `ParagonIE\CipherSweet\Backend\Key\SymmetricKey`
 
 **API** · Returns `static`
 
-#### [`addBooleanField`](../../../src/Dependency/WrappedEncryptedRow.php#L180-L193)
+#### [`addBooleanField`](../../../src/Dependency/WrappedEncryptedRow.php#L181-L194)
 
 **API** · Returns `static`
 
@@ -200,7 +200,7 @@ Returns `ParagonIE\CipherSweet\Backend\Key\SymmetricKey`
 - `$wrappedKeyColumnName`: `?string` = null
 - `$autoBindContext`: `bool` = false
 
-#### [`addFloatField`](../../../src/Dependency/WrappedEncryptedRow.php#L199-L212)
+#### [`addFloatField`](../../../src/Dependency/WrappedEncryptedRow.php#L200-L213)
 
 **API** · Returns `static`
 
@@ -213,7 +213,7 @@ Returns `ParagonIE\CipherSweet\Backend\Key\SymmetricKey`
 - `$wrappedKeyColumnName`: `?string` = null
 - `$autoBindContext`: `bool` = false
 
-#### [`addIntegerField`](../../../src/Dependency/WrappedEncryptedRow.php#L218-L231)
+#### [`addIntegerField`](../../../src/Dependency/WrappedEncryptedRow.php#L219-L232)
 
 **API** · Returns `static`
 
@@ -226,7 +226,7 @@ Returns `ParagonIE\CipherSweet\Backend\Key\SymmetricKey`
 - `$wrappedKeyColumnName`: `?string` = null
 - `$autoBindContext`: `bool` = false
 
-#### [`addOptionalBooleanField`](../../../src/Dependency/WrappedEncryptedRow.php#L237-L250)
+#### [`addOptionalBooleanField`](../../../src/Dependency/WrappedEncryptedRow.php#L238-L251)
 
 **API** · Returns `static`
 
@@ -239,7 +239,7 @@ Returns `ParagonIE\CipherSweet\Backend\Key\SymmetricKey`
 - `$wrappedKeyColumnName`: `?string` = null
 - `$autoBindContext`: `bool` = false
 
-#### [`addOptionalFloatField`](../../../src/Dependency/WrappedEncryptedRow.php#L256-L269)
+#### [`addOptionalFloatField`](../../../src/Dependency/WrappedEncryptedRow.php#L257-L270)
 
 **API** · Returns `static`
 
@@ -252,7 +252,7 @@ Returns `ParagonIE\CipherSweet\Backend\Key\SymmetricKey`
 - `$wrappedKeyColumnName`: `?string` = null
 - `$autoBindContext`: `bool` = false
 
-#### [`addOptionalIntegerField`](../../../src/Dependency/WrappedEncryptedRow.php#L275-L288)
+#### [`addOptionalIntegerField`](../../../src/Dependency/WrappedEncryptedRow.php#L276-L289)
 
 **API** · Returns `static`
 
@@ -265,7 +265,7 @@ Returns `ParagonIE\CipherSweet\Backend\Key\SymmetricKey`
 - `$wrappedKeyColumnName`: `?string` = null
 - `$autoBindContext`: `bool` = false
 
-#### [`addOptionalTextField`](../../../src/Dependency/WrappedEncryptedRow.php#L294-L307)
+#### [`addOptionalTextField`](../../../src/Dependency/WrappedEncryptedRow.php#L295-L308)
 
 **API** · Returns `static`
 
@@ -278,7 +278,7 @@ Returns `ParagonIE\CipherSweet\Backend\Key\SymmetricKey`
 - `$wrappedKeyColumnName`: `?string` = null
 - `$autoBindContext`: `bool` = false
 
-#### [`addTextField`](../../../src/Dependency/WrappedEncryptedRow.php#L313-L326)
+#### [`addTextField`](../../../src/Dependency/WrappedEncryptedRow.php#L314-L327)
 
 **API** · Returns `static`
 

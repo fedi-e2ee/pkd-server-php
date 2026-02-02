@@ -43,7 +43,7 @@ Returns `FediE2EE\PKDServer\ActivityPub\ActivityStream`
 
 **Throws:** `ActivityPubException`, `CertaintyException`, `CryptoException`, `DependencyException`, `FetchException`, `HttpSignatureException`, `InvalidArgumentException`, `NotImplementedException`, `SodiumException`
 
-#### [`appCache`](../../../src/Traits/ActivityStreamsTrait.php#L46-L49)
+#### [`appCache`](../../../src/Traits/ActivityStreamsTrait.php#L55-L58)
 
 Returns `FediE2EE\PKDServer\AppCache`
 
@@ -54,7 +54,7 @@ Returns `FediE2EE\PKDServer\AppCache`
 
 **Throws:** `DependencyException`
 
-#### [`table`](../../../src/Traits/ActivityStreamsTrait.php#L56-L79)
+#### [`table`](../../../src/Traits/ActivityStreamsTrait.php#L65-L88)
 
 Returns `FediE2EE\PKDServer\Table`
 
@@ -64,7 +64,7 @@ Returns `FediE2EE\PKDServer\Table`
 
 **Throws:** `CacheException`, `DependencyException`, `TableException`
 
-#### [`injectConfig`](../../../src/Traits/ActivityStreamsTrait.php#L81-L84)
+#### [`injectConfig`](../../../src/Traits/ActivityStreamsTrait.php#L90-L93)
 
 Returns `void`
 
@@ -72,13 +72,13 @@ Returns `void`
 
 - `$config`: `FediE2EE\PKDServer\ServerConfig`
 
-#### [`config`](../../../src/Traits/ActivityStreamsTrait.php#L89-L99)
+#### [`config`](../../../src/Traits/ActivityStreamsTrait.php#L98-L108)
 
 Returns `FediE2EE\PKDServer\ServerConfig`
 
 **Throws:** `DependencyException`
 
-#### [`setWebFinger`](../../../src/Traits/ActivityStreamsTrait.php#L104-L108)
+#### [`setWebFinger`](../../../src/Traits/ActivityStreamsTrait.php#L113-L117)
 
 Returns `self`
 
@@ -88,7 +88,7 @@ This is intended for mocking in unit tests
 
 - `$wf`: `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
-#### [`webfinger`](../../../src/Traits/ActivityStreamsTrait.php#L115-L122)
+#### [`webfinger`](../../../src/Traits/ActivityStreamsTrait.php#L124-L131)
 
 Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
@@ -98,7 +98,83 @@ Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
 **Throws:** `CertaintyException`, `DependencyException`, `SodiumException`
 
-#### [`jsonDecode`](../../../src/Traits/ActivityStreamsTrait.php#L15-L18)
+#### [`parseUrlHost`](../../../src/Traits/ActivityStreamsTrait.php#L137-L144)
+
+static · Returns `?string`
+
+**Parameters:**
+
+- `$url`: `string`
+
+#### [`assertArray`](../../../src/Traits/ActivityStreamsTrait.php#L152-L158)
+
+static · Returns `array`
+
+**Parameters:**
+
+- `$result`: `object|array`
+
+**Throws:** `TypeError`
+
+#### [`assertString`](../../../src/Traits/ActivityStreamsTrait.php#L163-L169)
+
+static · Returns `string`
+
+**Parameters:**
+
+- `$value`: `mixed`
+
+**Throws:** `TypeError`
+
+#### [`assertStringOrNull`](../../../src/Traits/ActivityStreamsTrait.php#L171-L180)
+
+static · Returns `?string`
+
+**Parameters:**
+
+- `$value`: `mixed`
+
+#### [`assertInt`](../../../src/Traits/ActivityStreamsTrait.php#L185-L194)
+
+static · Returns `int`
+
+**Parameters:**
+
+- `$value`: `mixed`
+
+**Throws:** `TypeError`
+
+#### [`rowToStringArray`](../../../src/Traits/ActivityStreamsTrait.php#L201-L211)
+
+static · Returns `array`
+
+**Parameters:**
+
+- `$row`: `object|array`
+
+**Throws:** `TypeError`
+
+#### [`decryptedString`](../../../src/Traits/ActivityStreamsTrait.php#L217-L227)
+
+static · Returns `string`
+
+**Parameters:**
+
+- `$row`: `array`
+- `$key`: `string`
+
+**Throws:** `TypeError`
+
+#### [`blindIndexValue`](../../../src/Traits/ActivityStreamsTrait.php#L234-L244)
+
+static · Returns `string`
+
+**Parameters:**
+
+- `$blindIndex`: `array|string`
+- `$key`: `?string` = null
+
+#### [`jsonDecode`](../../../src/Traits/ActivityStreamsTrait.php#L17-L20)
 
 static · Returns `array`
 
@@ -108,9 +184,9 @@ static · Returns `array`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonDecodeObject`](../../../src/Traits/ActivityStreamsTrait.php#L23-L26)
+#### [`jsonDecodeObject`](../../../src/Traits/ActivityStreamsTrait.php#L25-L28)
 
-static · Returns `object`
+static · Returns `stdClass`
 
 **Parameters:**
 
@@ -118,7 +194,7 @@ static · Returns `object`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonEncode`](../../../src/Traits/ActivityStreamsTrait.php#L31-L37)
+#### [`jsonEncode`](../../../src/Traits/ActivityStreamsTrait.php#L34-L40)
 
 static · Returns `string`
 
@@ -251,7 +327,7 @@ Strip all newlines (CR, LF) characters from a string.
 
 ### Methods
 
-#### [`appCache`](../../../src/Traits/ConfigTrait.php#L46-L49)
+#### [`appCache`](../../../src/Traits/ConfigTrait.php#L55-L58)
 
 Returns `FediE2EE\PKDServer\AppCache`
 
@@ -262,7 +338,7 @@ Returns `FediE2EE\PKDServer\AppCache`
 
 **Throws:** `DependencyException`
 
-#### [`table`](../../../src/Traits/ConfigTrait.php#L56-L79)
+#### [`table`](../../../src/Traits/ConfigTrait.php#L65-L88)
 
 Returns `FediE2EE\PKDServer\Table`
 
@@ -272,7 +348,7 @@ Returns `FediE2EE\PKDServer\Table`
 
 **Throws:** `CacheException`, `DependencyException`, `TableException`
 
-#### [`injectConfig`](../../../src/Traits/ConfigTrait.php#L81-L84)
+#### [`injectConfig`](../../../src/Traits/ConfigTrait.php#L90-L93)
 
 Returns `void`
 
@@ -280,13 +356,13 @@ Returns `void`
 
 - `$config`: `FediE2EE\PKDServer\ServerConfig`
 
-#### [`config`](../../../src/Traits/ConfigTrait.php#L89-L99)
+#### [`config`](../../../src/Traits/ConfigTrait.php#L98-L108)
 
 Returns `FediE2EE\PKDServer\ServerConfig`
 
 **Throws:** `DependencyException`
 
-#### [`setWebFinger`](../../../src/Traits/ConfigTrait.php#L104-L108)
+#### [`setWebFinger`](../../../src/Traits/ConfigTrait.php#L113-L117)
 
 Returns `self`
 
@@ -296,7 +372,7 @@ This is intended for mocking in unit tests
 
 - `$wf`: `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
-#### [`webfinger`](../../../src/Traits/ConfigTrait.php#L115-L122)
+#### [`webfinger`](../../../src/Traits/ConfigTrait.php#L124-L131)
 
 Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
@@ -306,7 +382,83 @@ Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
 **Throws:** `CertaintyException`, `DependencyException`, `SodiumException`
 
-#### [`jsonDecode`](../../../src/Traits/ConfigTrait.php#L15-L18)
+#### [`parseUrlHost`](../../../src/Traits/ConfigTrait.php#L137-L144)
+
+static · Returns `?string`
+
+**Parameters:**
+
+- `$url`: `string`
+
+#### [`assertArray`](../../../src/Traits/ConfigTrait.php#L152-L158)
+
+static · Returns `array`
+
+**Parameters:**
+
+- `$result`: `object|array`
+
+**Throws:** `TypeError`
+
+#### [`assertString`](../../../src/Traits/ConfigTrait.php#L163-L169)
+
+static · Returns `string`
+
+**Parameters:**
+
+- `$value`: `mixed`
+
+**Throws:** `TypeError`
+
+#### [`assertStringOrNull`](../../../src/Traits/ConfigTrait.php#L171-L180)
+
+static · Returns `?string`
+
+**Parameters:**
+
+- `$value`: `mixed`
+
+#### [`assertInt`](../../../src/Traits/ConfigTrait.php#L185-L194)
+
+static · Returns `int`
+
+**Parameters:**
+
+- `$value`: `mixed`
+
+**Throws:** `TypeError`
+
+#### [`rowToStringArray`](../../../src/Traits/ConfigTrait.php#L201-L211)
+
+static · Returns `array`
+
+**Parameters:**
+
+- `$row`: `object|array`
+
+**Throws:** `TypeError`
+
+#### [`decryptedString`](../../../src/Traits/ConfigTrait.php#L217-L227)
+
+static · Returns `string`
+
+**Parameters:**
+
+- `$row`: `array`
+- `$key`: `string`
+
+**Throws:** `TypeError`
+
+#### [`blindIndexValue`](../../../src/Traits/ConfigTrait.php#L234-L244)
+
+static · Returns `string`
+
+**Parameters:**
+
+- `$blindIndex`: `array|string`
+- `$key`: `?string` = null
+
+#### [`jsonDecode`](../../../src/Traits/ConfigTrait.php#L17-L20)
 
 static · Returns `array`
 
@@ -316,9 +468,9 @@ static · Returns `array`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonDecodeObject`](../../../src/Traits/ConfigTrait.php#L23-L26)
+#### [`jsonDecodeObject`](../../../src/Traits/ConfigTrait.php#L25-L28)
 
-static · Returns `object`
+static · Returns `stdClass`
 
 **Parameters:**
 
@@ -326,7 +478,7 @@ static · Returns `object`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonEncode`](../../../src/Traits/ConfigTrait.php#L31-L37)
+#### [`jsonEncode`](../../../src/Traits/ConfigTrait.php#L34-L40)
 
 static · Returns `string`
 
@@ -360,11 +512,11 @@ Returns `bool`
 
 **Throws:** `DependencyException`
 
-#### [`time`](../../../src/Traits/HttpCacheTrait.php#L38-L41)
+#### [`time`](../../../src/Traits/HttpCacheTrait.php#L39-L42)
 
 Returns `string`
 
-#### [`canonicalizeActor`](../../../src/Traits/HttpCacheTrait.php#L50-L54)
+#### [`canonicalizeActor`](../../../src/Traits/HttpCacheTrait.php#L53-L61)
 
 Returns `string`
 
@@ -372,9 +524,9 @@ Returns `string`
 
 - `$actor`: `string`
 
-**Throws:** `DependencyException`, `GuzzleException`, `NetworkException`, `SodiumException`, `CertaintyException`
+**Throws:** `CacheException`, `CertaintyException`, `DependencyException`, `GuzzleException`, `InvalidArgumentException`, `NetworkException`, `SodiumException`
 
-#### [`error`](../../../src/Traits/HttpCacheTrait.php#L62-L65)
+#### [`error`](../../../src/Traits/HttpCacheTrait.php#L69-L72)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -383,9 +535,9 @@ Returns `Psr\Http\Message\ResponseInterface`
 - `$message`: `string`
 - `$code`: `int` = 400
 
-**Throws:** `DependencyException`, `JsonException`, `NotImplementedException`, `SodiumException`
+**Throws:** `BaseJsonException`, `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`signResponse`](../../../src/Traits/HttpCacheTrait.php#L76-L88)
+#### [`signResponse`](../../../src/Traits/HttpCacheTrait.php#L83-L95)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -397,7 +549,7 @@ Implements an RFC 9421 HTTP Message Signature with Ed25519.
 
 **Throws:** `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`json`](../../../src/Traits/HttpCacheTrait.php#L98-L117)
+#### [`json`](../../../src/Traits/HttpCacheTrait.php#L107-L126)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -411,7 +563,7 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 
 **Throws:** `DependencyException`, `BaseJsonException`, `NotImplementedException`, `SodiumException`
 
-#### [`twig`](../../../src/Traits/HttpCacheTrait.php#L125-L142)
+#### [`twig`](../../../src/Traits/HttpCacheTrait.php#L136-L153)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -424,7 +576,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `DependencyException`, `LoaderError`, `RuntimeError`, `SyntaxError`
 
-#### [`appCache`](../../../src/Traits/HttpCacheTrait.php#L46-L49)
+#### [`appCache`](../../../src/Traits/HttpCacheTrait.php#L55-L58)
 
 Returns `FediE2EE\PKDServer\AppCache`
 
@@ -435,7 +587,7 @@ Returns `FediE2EE\PKDServer\AppCache`
 
 **Throws:** `DependencyException`
 
-#### [`table`](../../../src/Traits/HttpCacheTrait.php#L56-L79)
+#### [`table`](../../../src/Traits/HttpCacheTrait.php#L65-L88)
 
 Returns `FediE2EE\PKDServer\Table`
 
@@ -445,7 +597,7 @@ Returns `FediE2EE\PKDServer\Table`
 
 **Throws:** `CacheException`, `DependencyException`, `TableException`
 
-#### [`injectConfig`](../../../src/Traits/HttpCacheTrait.php#L81-L84)
+#### [`injectConfig`](../../../src/Traits/HttpCacheTrait.php#L90-L93)
 
 Returns `void`
 
@@ -453,13 +605,13 @@ Returns `void`
 
 - `$config`: `FediE2EE\PKDServer\ServerConfig`
 
-#### [`config`](../../../src/Traits/HttpCacheTrait.php#L89-L99)
+#### [`config`](../../../src/Traits/HttpCacheTrait.php#L98-L108)
 
 Returns `FediE2EE\PKDServer\ServerConfig`
 
 **Throws:** `DependencyException`
 
-#### [`setWebFinger`](../../../src/Traits/HttpCacheTrait.php#L104-L108)
+#### [`setWebFinger`](../../../src/Traits/HttpCacheTrait.php#L113-L117)
 
 Returns `self`
 
@@ -469,7 +621,7 @@ This is intended for mocking in unit tests
 
 - `$wf`: `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
-#### [`webfinger`](../../../src/Traits/HttpCacheTrait.php#L115-L122)
+#### [`webfinger`](../../../src/Traits/HttpCacheTrait.php#L124-L131)
 
 Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
@@ -479,7 +631,83 @@ Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
 **Throws:** `CertaintyException`, `DependencyException`, `SodiumException`
 
-#### [`jsonDecode`](../../../src/Traits/HttpCacheTrait.php#L15-L18)
+#### [`parseUrlHost`](../../../src/Traits/HttpCacheTrait.php#L137-L144)
+
+static · Returns `?string`
+
+**Parameters:**
+
+- `$url`: `string`
+
+#### [`assertArray`](../../../src/Traits/HttpCacheTrait.php#L152-L158)
+
+static · Returns `array`
+
+**Parameters:**
+
+- `$result`: `object|array`
+
+**Throws:** `TypeError`
+
+#### [`assertString`](../../../src/Traits/HttpCacheTrait.php#L163-L169)
+
+static · Returns `string`
+
+**Parameters:**
+
+- `$value`: `mixed`
+
+**Throws:** `TypeError`
+
+#### [`assertStringOrNull`](../../../src/Traits/HttpCacheTrait.php#L171-L180)
+
+static · Returns `?string`
+
+**Parameters:**
+
+- `$value`: `mixed`
+
+#### [`assertInt`](../../../src/Traits/HttpCacheTrait.php#L185-L194)
+
+static · Returns `int`
+
+**Parameters:**
+
+- `$value`: `mixed`
+
+**Throws:** `TypeError`
+
+#### [`rowToStringArray`](../../../src/Traits/HttpCacheTrait.php#L201-L211)
+
+static · Returns `array`
+
+**Parameters:**
+
+- `$row`: `object|array`
+
+**Throws:** `TypeError`
+
+#### [`decryptedString`](../../../src/Traits/HttpCacheTrait.php#L217-L227)
+
+static · Returns `string`
+
+**Parameters:**
+
+- `$row`: `array`
+- `$key`: `string`
+
+**Throws:** `TypeError`
+
+#### [`blindIndexValue`](../../../src/Traits/HttpCacheTrait.php#L234-L244)
+
+static · Returns `string`
+
+**Parameters:**
+
+- `$blindIndex`: `array|string`
+- `$key`: `?string` = null
+
+#### [`jsonDecode`](../../../src/Traits/HttpCacheTrait.php#L17-L20)
 
 static · Returns `array`
 
@@ -489,9 +717,9 @@ static · Returns `array`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonDecodeObject`](../../../src/Traits/HttpCacheTrait.php#L23-L26)
+#### [`jsonDecodeObject`](../../../src/Traits/HttpCacheTrait.php#L25-L28)
 
-static · Returns `object`
+static · Returns `stdClass`
 
 **Parameters:**
 
@@ -499,7 +727,7 @@ static · Returns `object`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonEncode`](../../../src/Traits/HttpCacheTrait.php#L31-L37)
+#### [`jsonEncode`](../../../src/Traits/HttpCacheTrait.php#L34-L40)
 
 static · Returns `string`
 
@@ -519,7 +747,7 @@ static · Returns `string`
 
 ### Methods
 
-#### [`jsonDecode`](../../../src/Traits/JsonTrait.php#L15-L18)
+#### [`jsonDecode`](../../../src/Traits/JsonTrait.php#L17-L20)
 
 static · Returns `array`
 
@@ -529,9 +757,9 @@ static · Returns `array`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonDecodeObject`](../../../src/Traits/JsonTrait.php#L23-L26)
+#### [`jsonDecodeObject`](../../../src/Traits/JsonTrait.php#L25-L28)
 
-static · Returns `object`
+static · Returns `stdClass`
 
 **Parameters:**
 
@@ -539,7 +767,7 @@ static · Returns `object`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonEncode`](../../../src/Traits/JsonTrait.php#L31-L37)
+#### [`jsonEncode`](../../../src/Traits/JsonTrait.php#L34-L40)
 
 static · Returns `string`
 
@@ -559,7 +787,7 @@ static · Returns `string`
 
 ### Methods
 
-#### [`getRequestIPSubnet`](../../../src/Traits/NetworkTrait.php#L28-L42)
+#### [`getRequestIPSubnet`](../../../src/Traits/NetworkTrait.php#L29-L43)
 
 Returns `string`
 
@@ -572,7 +800,7 @@ Returns `string`
 
 **Throws:** `NetTraitException`
 
-#### [`extractIPFromRequest`](../../../src/Traits/NetworkTrait.php#L44-L68)
+#### [`extractIPFromRequest`](../../../src/Traits/NetworkTrait.php#L48-L72)
 
 Returns `string`
 
@@ -581,7 +809,7 @@ Returns `string`
 - `$request`: `Psr\Http\Message\ServerRequestInterface`
 - `$trustedProxies`: `array` = []
 
-#### [`ipv4Mask`](../../../src/Traits/NetworkTrait.php#L73-L99)
+#### [`ipv4Mask`](../../../src/Traits/NetworkTrait.php#L77-L103)
 
 Returns `string`
 
@@ -592,7 +820,7 @@ Returns `string`
 
 **Throws:** `NetTraitException`
 
-#### [`ipv6Mask`](../../../src/Traits/NetworkTrait.php#L101-L127)
+#### [`ipv6Mask`](../../../src/Traits/NetworkTrait.php#L108-L134)
 
 Returns `string`
 
@@ -601,7 +829,9 @@ Returns `string`
 - `$ip`: `string`
 - `$maskBits`: `int` = 128
 
-#### [`stringToByteArray`](../../../src/Traits/NetworkTrait.php#L129-L133)
+**Throws:** `NetTraitException`
+
+#### [`stringToByteArray`](../../../src/Traits/NetworkTrait.php#L139-L146)
 
 Returns `array`
 
@@ -609,7 +839,7 @@ Returns `array`
 
 - `$str`: `string`
 
-#### [`byteArrayToString`](../../../src/Traits/NetworkTrait.php#L135-L138)
+#### [`byteArrayToString`](../../../src/Traits/NetworkTrait.php#L151-L154)
 
 Returns `string`
 
@@ -617,7 +847,7 @@ Returns `string`
 
 - `$array`: `array`
 
-#### [`getRequestActor`](../../../src/Traits/NetworkTrait.php#L140-L160)
+#### [`getRequestActor`](../../../src/Traits/NetworkTrait.php#L156-L176)
 
 Returns `?string`
 
@@ -625,7 +855,7 @@ Returns `?string`
 
 - `$request`: `Psr\Http\Message\ServerRequestInterface`
 
-#### [`getRequestDomain`](../../../src/Traits/NetworkTrait.php#L162-L170)
+#### [`getRequestDomain`](../../../src/Traits/NetworkTrait.php#L178-L186)
 
 Returns `?string`
 
@@ -661,11 +891,11 @@ Request Handler trait
 
 ### Methods
 
-#### [`time`](../../../src/Traits/ReqTrait.php#L38-L41)
+#### [`time`](../../../src/Traits/ReqTrait.php#L39-L42)
 
 Returns `string`
 
-#### [`canonicalizeActor`](../../../src/Traits/ReqTrait.php#L50-L54)
+#### [`canonicalizeActor`](../../../src/Traits/ReqTrait.php#L53-L61)
 
 Returns `string`
 
@@ -673,9 +903,9 @@ Returns `string`
 
 - `$actor`: `string`
 
-**Throws:** `DependencyException`, `GuzzleException`, `NetworkException`, `SodiumException`, `CertaintyException`
+**Throws:** `CacheException`, `CertaintyException`, `DependencyException`, `GuzzleException`, `InvalidArgumentException`, `NetworkException`, `SodiumException`
 
-#### [`error`](../../../src/Traits/ReqTrait.php#L62-L65)
+#### [`error`](../../../src/Traits/ReqTrait.php#L69-L72)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -684,9 +914,9 @@ Returns `Psr\Http\Message\ResponseInterface`
 - `$message`: `string`
 - `$code`: `int` = 400
 
-**Throws:** `DependencyException`, `JsonException`, `NotImplementedException`, `SodiumException`
+**Throws:** `BaseJsonException`, `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`signResponse`](../../../src/Traits/ReqTrait.php#L76-L88)
+#### [`signResponse`](../../../src/Traits/ReqTrait.php#L83-L95)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -698,7 +928,7 @@ Implements an RFC 9421 HTTP Message Signature with Ed25519.
 
 **Throws:** `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`json`](../../../src/Traits/ReqTrait.php#L98-L117)
+#### [`json`](../../../src/Traits/ReqTrait.php#L107-L126)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -712,7 +942,7 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 
 **Throws:** `DependencyException`, `BaseJsonException`, `NotImplementedException`, `SodiumException`
 
-#### [`twig`](../../../src/Traits/ReqTrait.php#L125-L142)
+#### [`twig`](../../../src/Traits/ReqTrait.php#L136-L153)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -725,7 +955,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `DependencyException`, `LoaderError`, `RuntimeError`, `SyntaxError`
 
-#### [`appCache`](../../../src/Traits/ReqTrait.php#L46-L49)
+#### [`appCache`](../../../src/Traits/ReqTrait.php#L55-L58)
 
 Returns `FediE2EE\PKDServer\AppCache`
 
@@ -736,7 +966,7 @@ Returns `FediE2EE\PKDServer\AppCache`
 
 **Throws:** `DependencyException`
 
-#### [`table`](../../../src/Traits/ReqTrait.php#L56-L79)
+#### [`table`](../../../src/Traits/ReqTrait.php#L65-L88)
 
 Returns `FediE2EE\PKDServer\Table`
 
@@ -746,7 +976,7 @@ Returns `FediE2EE\PKDServer\Table`
 
 **Throws:** `CacheException`, `DependencyException`, `TableException`
 
-#### [`injectConfig`](../../../src/Traits/ReqTrait.php#L81-L84)
+#### [`injectConfig`](../../../src/Traits/ReqTrait.php#L90-L93)
 
 Returns `void`
 
@@ -754,13 +984,13 @@ Returns `void`
 
 - `$config`: `FediE2EE\PKDServer\ServerConfig`
 
-#### [`config`](../../../src/Traits/ReqTrait.php#L89-L99)
+#### [`config`](../../../src/Traits/ReqTrait.php#L98-L108)
 
 Returns `FediE2EE\PKDServer\ServerConfig`
 
 **Throws:** `DependencyException`
 
-#### [`setWebFinger`](../../../src/Traits/ReqTrait.php#L104-L108)
+#### [`setWebFinger`](../../../src/Traits/ReqTrait.php#L113-L117)
 
 Returns `self`
 
@@ -770,7 +1000,7 @@ This is intended for mocking in unit tests
 
 - `$wf`: `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
-#### [`webfinger`](../../../src/Traits/ReqTrait.php#L115-L122)
+#### [`webfinger`](../../../src/Traits/ReqTrait.php#L124-L131)
 
 Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
@@ -780,7 +1010,83 @@ Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
 **Throws:** `CertaintyException`, `DependencyException`, `SodiumException`
 
-#### [`jsonDecode`](../../../src/Traits/ReqTrait.php#L15-L18)
+#### [`parseUrlHost`](../../../src/Traits/ReqTrait.php#L137-L144)
+
+static · Returns `?string`
+
+**Parameters:**
+
+- `$url`: `string`
+
+#### [`assertArray`](../../../src/Traits/ReqTrait.php#L152-L158)
+
+static · Returns `array`
+
+**Parameters:**
+
+- `$result`: `object|array`
+
+**Throws:** `TypeError`
+
+#### [`assertString`](../../../src/Traits/ReqTrait.php#L163-L169)
+
+static · Returns `string`
+
+**Parameters:**
+
+- `$value`: `mixed`
+
+**Throws:** `TypeError`
+
+#### [`assertStringOrNull`](../../../src/Traits/ReqTrait.php#L171-L180)
+
+static · Returns `?string`
+
+**Parameters:**
+
+- `$value`: `mixed`
+
+#### [`assertInt`](../../../src/Traits/ReqTrait.php#L185-L194)
+
+static · Returns `int`
+
+**Parameters:**
+
+- `$value`: `mixed`
+
+**Throws:** `TypeError`
+
+#### [`rowToStringArray`](../../../src/Traits/ReqTrait.php#L201-L211)
+
+static · Returns `array`
+
+**Parameters:**
+
+- `$row`: `object|array`
+
+**Throws:** `TypeError`
+
+#### [`decryptedString`](../../../src/Traits/ReqTrait.php#L217-L227)
+
+static · Returns `string`
+
+**Parameters:**
+
+- `$row`: `array`
+- `$key`: `string`
+
+**Throws:** `TypeError`
+
+#### [`blindIndexValue`](../../../src/Traits/ReqTrait.php#L234-L244)
+
+static · Returns `string`
+
+**Parameters:**
+
+- `$blindIndex`: `array|string`
+- `$key`: `?string` = null
+
+#### [`jsonDecode`](../../../src/Traits/ReqTrait.php#L17-L20)
 
 static · Returns `array`
 
@@ -790,9 +1096,9 @@ static · Returns `array`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonDecodeObject`](../../../src/Traits/ReqTrait.php#L23-L26)
+#### [`jsonDecodeObject`](../../../src/Traits/ReqTrait.php#L25-L28)
 
-static · Returns `object`
+static · Returns `stdClass`
 
 **Parameters:**
 
@@ -800,7 +1106,7 @@ static · Returns `object`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonEncode`](../../../src/Traits/ReqTrait.php#L31-L37)
+#### [`jsonEncode`](../../../src/Traits/ReqTrait.php#L34-L40)
 
 static · Returns `string`
 
@@ -832,7 +1138,7 @@ static · Returns `?int`
 - `$otp`: `string`
 - `$windows`: `int` = 2
 
-#### [`generateTOTP`](../../../src/Traits/TOTPTrait.php#L71-L86)
+#### [`generateTOTP`](../../../src/Traits/TOTPTrait.php#L71-L87)
 
 static · Returns `string`
 
@@ -841,7 +1147,7 @@ static · Returns `string`
 - `$secret`: `string`
 - `$time`: `?int` = null
 
-#### [`ord`](../../../src/Traits/TOTPTrait.php#L91-L94)
+#### [`ord`](../../../src/Traits/TOTPTrait.php#L92-L96)
 
 static · Returns `int`
 
@@ -851,7 +1157,7 @@ Avoid cache-timing leaks in ord() by using unpack()
 
 - `$chr`: `string`
 
-#### [`throwIfTimeOutsideWindow`](../../../src/Traits/TOTPTrait.php#L151-L160)
+#### [`throwIfTimeOutsideWindow`](../../../src/Traits/TOTPTrait.php#L157-L166)
 
 Returns `void`
 
@@ -859,9 +1165,9 @@ Returns `void`
 
 - `$currentTime`: `int`
 
-**Throws:** `ProtocolException`
+**Throws:** `DependencyException`, `ProtocolException`
 
-#### [`jsonDecode`](../../../src/Traits/TOTPTrait.php#L15-L18)
+#### [`jsonDecode`](../../../src/Traits/TOTPTrait.php#L17-L20)
 
 static · Returns `array`
 
@@ -871,9 +1177,9 @@ static · Returns `array`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonDecodeObject`](../../../src/Traits/TOTPTrait.php#L23-L26)
+#### [`jsonDecodeObject`](../../../src/Traits/TOTPTrait.php#L25-L28)
 
-static · Returns `object`
+static · Returns `stdClass`
 
 **Parameters:**
 
@@ -881,7 +1187,7 @@ static · Returns `object`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonEncode`](../../../src/Traits/TOTPTrait.php#L31-L37)
+#### [`jsonEncode`](../../../src/Traits/TOTPTrait.php#L34-L40)
 
 static · Returns `string`
 
@@ -1025,11 +1331,11 @@ Returns `FediE2EE\PKD\Crypto\SymmetricKey`
 
 **Throws:** `TableException`
 
-#### [`getSymmetricKeys`](../../../src/Traits/TableRecordTrait.php#L87-L90)
+#### [`getSymmetricKeys`](../../../src/Traits/TableRecordTrait.php#L90-L93)
 
 Returns `array`
 
-#### [`getRfc9421PublicKeys`](../../../src/Traits/TableRecordTrait.php#L106-L109)
+#### [`getRfc9421PublicKeys`](../../../src/Traits/TableRecordTrait.php#L109-L112)
 
 Returns `FediE2EE\PKD\Crypto\PublicKey`
 
@@ -1043,7 +1349,7 @@ If multiple are returned (e.g., via FEP-521a), this will cycle through them unti
 
 **Throws:** `CryptoException`, `FetchException`, `InvalidArgumentException`, `SodiumException`
 
-#### [`jsonDecode`](../../../src/Traits/TableRecordTrait.php#L15-L18)
+#### [`jsonDecode`](../../../src/Traits/TableRecordTrait.php#L17-L20)
 
 static · Returns `array`
 
@@ -1053,9 +1359,9 @@ static · Returns `array`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonDecodeObject`](../../../src/Traits/TableRecordTrait.php#L23-L26)
+#### [`jsonDecodeObject`](../../../src/Traits/TableRecordTrait.php#L25-L28)
 
-static · Returns `object`
+static · Returns `stdClass`
 
 **Parameters:**
 
@@ -1063,7 +1369,7 @@ static · Returns `object`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonEncode`](../../../src/Traits/TableRecordTrait.php#L31-L37)
+#### [`jsonEncode`](../../../src/Traits/TableRecordTrait.php#L34-L40)
 
 static · Returns `string`
 

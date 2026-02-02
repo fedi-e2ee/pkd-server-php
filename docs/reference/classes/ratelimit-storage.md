@@ -33,7 +33,7 @@ Returns `void`
 
 **Throws:** `DependencyException`
 
-#### [`get`](../../../src/RateLimit/Storage/Filesystem.php#L58-L77)
+#### [`get`](../../../src/RateLimit/Storage/Filesystem.php#L58-L81)
 
 Returns `?FediE2EE\PKDServer\RateLimit\RateLimitData`
 
@@ -46,7 +46,7 @@ Returns `?FediE2EE\PKDServer\RateLimit\RateLimitData`
 
 **Throws:** `InputException`, `JsonException`, `SodiumException`
 
-#### [`set`](../../../src/RateLimit/Storage/Filesystem.php#L84-L92)
+#### [`set`](../../../src/RateLimit/Storage/Filesystem.php#L88-L96)
 
 Returns `bool`
 
@@ -60,7 +60,7 @@ Returns `bool`
 
 **Throws:** `SodiumException`, `JsonException`
 
-#### [`delete`](../../../src/RateLimit/Storage/Filesystem.php#L98-L105)
+#### [`delete`](../../../src/RateLimit/Storage/Filesystem.php#L102-L109)
 
 Returns `bool`
 
@@ -73,7 +73,7 @@ Returns `bool`
 
 **Throws:** `SodiumException`
 
-#### [`getFilesystemPath`](../../../src/RateLimit/Storage/Filesystem.php#L110-L131)
+#### [`getFilesystemPath`](../../../src/RateLimit/Storage/Filesystem.php#L114-L135)
 
 Returns `string`
 
@@ -84,7 +84,7 @@ Returns `string`
 
 **Throws:** `SodiumException`
 
-#### [`jsonDecode`](../../../src/RateLimit/Storage/Filesystem.php#L15-L18)
+#### [`jsonDecode`](../../../src/RateLimit/Storage/Filesystem.php#L17-L20)
 
 static · Returns `array`
 
@@ -94,9 +94,9 @@ static · Returns `array`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonDecodeObject`](../../../src/RateLimit/Storage/Filesystem.php#L23-L26)
+#### [`jsonDecodeObject`](../../../src/RateLimit/Storage/Filesystem.php#L25-L28)
 
-static · Returns `object`
+static · Returns `stdClass`
 
 **Parameters:**
 
@@ -104,7 +104,7 @@ static · Returns `object`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonEncode`](../../../src/RateLimit/Storage/Filesystem.php#L31-L37)
+#### [`jsonEncode`](../../../src/RateLimit/Storage/Filesystem.php#L34-L40)
 
 static · Returns `string`
 
@@ -263,7 +263,7 @@ Returns `bool`
 
 **Throws:** `SodiumException`
 
-#### [`jsonDecode`](../../../src/RateLimit/Storage/Redis.php#L15-L18)
+#### [`jsonDecode`](../../../src/RateLimit/Storage/Redis.php#L17-L20)
 
 static · Returns `array`
 
@@ -273,9 +273,9 @@ static · Returns `array`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonDecodeObject`](../../../src/RateLimit/Storage/Redis.php#L23-L26)
+#### [`jsonDecodeObject`](../../../src/RateLimit/Storage/Redis.php#L25-L28)
 
-static · Returns `object`
+static · Returns `stdClass`
 
 **Parameters:**
 
@@ -283,7 +283,7 @@ static · Returns `object`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonEncode`](../../../src/RateLimit/Storage/Redis.php#L31-L37)
+#### [`jsonEncode`](../../../src/RateLimit/Storage/Redis.php#L34-L40)
 
 static · Returns `string`
 

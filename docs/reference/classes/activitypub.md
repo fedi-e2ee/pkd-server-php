@@ -50,23 +50,23 @@ static · Returns `self`
 
 **Throws:** `ActivityPubException`
 
-#### [`jsonSerialize`](../../../src/ActivityPub/ActivityStream.php#L59-L69)
+#### [`jsonSerialize`](../../../src/ActivityPub/ActivityStream.php#L59-L70)
 
 Returns `stdClass`
 
 **Attributes:** `#[Override]`
 
-#### [`__toString`](../../../src/ActivityPub/ActivityStream.php#L74-L77)
+#### [`__toString`](../../../src/ActivityPub/ActivityStream.php#L75-L78)
 
 Returns `string`
 
 **Throws:** `JsonException`
 
-#### [`isDirectMessage`](../../../src/ActivityPub/ActivityStream.php#L82-L116)
+#### [`isDirectMessage`](../../../src/ActivityPub/ActivityStream.php#L83-L117)
 
 Returns `bool`
 
-#### [`jsonDecode`](../../../src/ActivityPub/ActivityStream.php#L15-L18)
+#### [`jsonDecode`](../../../src/ActivityPub/ActivityStream.php#L17-L20)
 
 static · Returns `array`
 
@@ -76,9 +76,9 @@ static · Returns `array`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonDecodeObject`](../../../src/ActivityPub/ActivityStream.php#L23-L26)
+#### [`jsonDecodeObject`](../../../src/ActivityPub/ActivityStream.php#L25-L28)
 
-static · Returns `object`
+static · Returns `stdClass`
 
 **Parameters:**
 
@@ -86,7 +86,7 @@ static · Returns `object`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonEncode`](../../../src/ActivityPub/ActivityStream.php#L31-L37)
+#### [`jsonEncode`](../../../src/ActivityPub/ActivityStream.php#L34-L40)
 
 static · Returns `string`
 
@@ -132,7 +132,7 @@ Returns `string`
 
 **Throws:** `CacheException`, `GuzzleException`, `InvalidArgumentException`, `NetworkException`, `SodiumException`
 
-#### [`fetch`](../../../src/ActivityPub/WebFinger.php#L130-L143)
+#### [`fetch`](../../../src/ActivityPub/WebFinger.php#L131-L144)
 
 Returns `array`
 
@@ -144,7 +144,7 @@ Fetch an entire remote WebFinger response.
 
 **Throws:** `GuzzleException`, `NetworkException`
 
-#### [`getInboxUrl`](../../../src/ActivityPub/WebFinger.php#L190-L208)
+#### [`getInboxUrl`](../../../src/ActivityPub/WebFinger.php#L191-L210)
 
 Returns `string`
 
@@ -154,7 +154,7 @@ Returns `string`
 
 **Throws:** `CacheException`, `GuzzleException`, `InvalidArgumentException`, `NetworkException`, `SodiumException`
 
-#### [`getPublicKey`](../../../src/ActivityPub/WebFinger.php#L216-L257)
+#### [`getPublicKey`](../../../src/ActivityPub/WebFinger.php#L218-L262)
 
 Returns `FediE2EE\PKD\Crypto\PublicKey`
 
@@ -164,7 +164,7 @@ Returns `FediE2EE\PKD\Crypto\PublicKey`
 
 **Throws:** `CryptoException`, `FetchException`, `InvalidArgumentException`, `SodiumException`
 
-#### [`trimUsername`](../../../src/ActivityPub/WebFinger.php#L259-L262)
+#### [`trimUsername`](../../../src/ActivityPub/WebFinger.php#L264-L267)
 
 Returns `string`
 
@@ -172,7 +172,7 @@ Returns `string`
 
 - `$username`: `string`
 
-#### [`setCanonicalForTesting`](../../../src/ActivityPub/WebFinger.php#L317-L324)
+#### [`setCanonicalForTesting`](../../../src/ActivityPub/WebFinger.php#L322-L329)
 
 Returns `void`
 

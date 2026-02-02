@@ -75,11 +75,11 @@ Returns `bool`
 
 **Throws:** `DependencyException`
 
-#### [`time`](../../../src/RequestHandlers/Api/Actor.php#L38-L41)
+#### [`time`](../../../src/RequestHandlers/Api/Actor.php#L39-L42)
 
 Returns `string`
 
-#### [`canonicalizeActor`](../../../src/RequestHandlers/Api/Actor.php#L50-L54)
+#### [`canonicalizeActor`](../../../src/RequestHandlers/Api/Actor.php#L53-L61)
 
 Returns `string`
 
@@ -87,9 +87,9 @@ Returns `string`
 
 - `$actor`: `string`
 
-**Throws:** `DependencyException`, `GuzzleException`, `NetworkException`, `SodiumException`, `CertaintyException`
+**Throws:** `CacheException`, `CertaintyException`, `DependencyException`, `GuzzleException`, `InvalidArgumentException`, `NetworkException`, `SodiumException`
 
-#### [`error`](../../../src/RequestHandlers/Api/Actor.php#L62-L65)
+#### [`error`](../../../src/RequestHandlers/Api/Actor.php#L69-L72)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -98,9 +98,9 @@ Returns `Psr\Http\Message\ResponseInterface`
 - `$message`: `string`
 - `$code`: `int` = 400
 
-**Throws:** `DependencyException`, `JsonException`, `NotImplementedException`, `SodiumException`
+**Throws:** `BaseJsonException`, `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`signResponse`](../../../src/RequestHandlers/Api/Actor.php#L76-L88)
+#### [`signResponse`](../../../src/RequestHandlers/Api/Actor.php#L83-L95)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -112,7 +112,7 @@ Implements an RFC 9421 HTTP Message Signature with Ed25519.
 
 **Throws:** `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`json`](../../../src/RequestHandlers/Api/Actor.php#L98-L117)
+#### [`json`](../../../src/RequestHandlers/Api/Actor.php#L107-L126)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -126,7 +126,7 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 
 **Throws:** `DependencyException`, `BaseJsonException`, `NotImplementedException`, `SodiumException`
 
-#### [`twig`](../../../src/RequestHandlers/Api/Actor.php#L125-L142)
+#### [`twig`](../../../src/RequestHandlers/Api/Actor.php#L136-L153)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -139,7 +139,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `DependencyException`, `LoaderError`, `RuntimeError`, `SyntaxError`
 
-#### [`appCache`](../../../src/RequestHandlers/Api/Actor.php#L46-L49)
+#### [`appCache`](../../../src/RequestHandlers/Api/Actor.php#L55-L58)
 
 Returns `FediE2EE\PKDServer\AppCache`
 
@@ -150,7 +150,7 @@ Returns `FediE2EE\PKDServer\AppCache`
 
 **Throws:** `DependencyException`
 
-#### [`table`](../../../src/RequestHandlers/Api/Actor.php#L56-L79)
+#### [`table`](../../../src/RequestHandlers/Api/Actor.php#L65-L88)
 
 Returns `FediE2EE\PKDServer\Table`
 
@@ -160,7 +160,7 @@ Returns `FediE2EE\PKDServer\Table`
 
 **Throws:** `CacheException`, `DependencyException`, `TableException`
 
-#### [`injectConfig`](../../../src/RequestHandlers/Api/Actor.php#L81-L84)
+#### [`injectConfig`](../../../src/RequestHandlers/Api/Actor.php#L90-L93)
 
 Returns `void`
 
@@ -168,13 +168,13 @@ Returns `void`
 
 - `$config`: `FediE2EE\PKDServer\ServerConfig`
 
-#### [`config`](../../../src/RequestHandlers/Api/Actor.php#L89-L99)
+#### [`config`](../../../src/RequestHandlers/Api/Actor.php#L98-L108)
 
 Returns `FediE2EE\PKDServer\ServerConfig`
 
 **Throws:** `DependencyException`
 
-#### [`setWebFinger`](../../../src/RequestHandlers/Api/Actor.php#L104-L108)
+#### [`setWebFinger`](../../../src/RequestHandlers/Api/Actor.php#L113-L117)
 
 Returns `self`
 
@@ -184,7 +184,7 @@ This is intended for mocking in unit tests
 
 - `$wf`: `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
-#### [`webfinger`](../../../src/RequestHandlers/Api/Actor.php#L115-L122)
+#### [`webfinger`](../../../src/RequestHandlers/Api/Actor.php#L124-L131)
 
 Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
@@ -194,7 +194,83 @@ Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
 **Throws:** `CertaintyException`, `DependencyException`, `SodiumException`
 
-#### [`jsonDecode`](../../../src/RequestHandlers/Api/Actor.php#L15-L18)
+#### [`parseUrlHost`](../../../src/RequestHandlers/Api/Actor.php#L137-L144)
+
+static · Returns `?string`
+
+**Parameters:**
+
+- `$url`: `string`
+
+#### [`assertArray`](../../../src/RequestHandlers/Api/Actor.php#L152-L158)
+
+static · Returns `array`
+
+**Parameters:**
+
+- `$result`: `object|array`
+
+**Throws:** `TypeError`
+
+#### [`assertString`](../../../src/RequestHandlers/Api/Actor.php#L163-L169)
+
+static · Returns `string`
+
+**Parameters:**
+
+- `$value`: `mixed`
+
+**Throws:** `TypeError`
+
+#### [`assertStringOrNull`](../../../src/RequestHandlers/Api/Actor.php#L171-L180)
+
+static · Returns `?string`
+
+**Parameters:**
+
+- `$value`: `mixed`
+
+#### [`assertInt`](../../../src/RequestHandlers/Api/Actor.php#L185-L194)
+
+static · Returns `int`
+
+**Parameters:**
+
+- `$value`: `mixed`
+
+**Throws:** `TypeError`
+
+#### [`rowToStringArray`](../../../src/RequestHandlers/Api/Actor.php#L201-L211)
+
+static · Returns `array`
+
+**Parameters:**
+
+- `$row`: `object|array`
+
+**Throws:** `TypeError`
+
+#### [`decryptedString`](../../../src/RequestHandlers/Api/Actor.php#L217-L227)
+
+static · Returns `string`
+
+**Parameters:**
+
+- `$row`: `array`
+- `$key`: `string`
+
+**Throws:** `TypeError`
+
+#### [`blindIndexValue`](../../../src/RequestHandlers/Api/Actor.php#L234-L244)
+
+static · Returns `string`
+
+**Parameters:**
+
+- `$blindIndex`: `array|string`
+- `$key`: `?string` = null
+
+#### [`jsonDecode`](../../../src/RequestHandlers/Api/Actor.php#L17-L20)
 
 static · Returns `array`
 
@@ -204,9 +280,9 @@ static · Returns `array`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonDecodeObject`](../../../src/RequestHandlers/Api/Actor.php#L23-L26)
+#### [`jsonDecodeObject`](../../../src/RequestHandlers/Api/Actor.php#L25-L28)
 
-static · Returns `object`
+static · Returns `stdClass`
 
 **Parameters:**
 
@@ -214,7 +290,7 @@ static · Returns `object`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonEncode`](../../../src/RequestHandlers/Api/Actor.php#L31-L37)
+#### [`jsonEncode`](../../../src/RequestHandlers/Api/Actor.php#L34-L40)
 
 static · Returns `string`
 
@@ -272,7 +348,7 @@ Returns `FediE2EE\PKDServer\ActivityPub\ActivityStream`
 
 **Throws:** `ActivityPubException`, `CertaintyException`, `CryptoException`, `DependencyException`, `FetchException`, `HttpSignatureException`, `InvalidArgumentException`, `NotImplementedException`, `SodiumException`
 
-#### [`appCache`](../../../src/RequestHandlers/Api/BurnDown.php#L46-L49)
+#### [`appCache`](../../../src/RequestHandlers/Api/BurnDown.php#L55-L58)
 
 Returns `FediE2EE\PKDServer\AppCache`
 
@@ -283,7 +359,7 @@ Returns `FediE2EE\PKDServer\AppCache`
 
 **Throws:** `DependencyException`
 
-#### [`table`](../../../src/RequestHandlers/Api/BurnDown.php#L56-L79)
+#### [`table`](../../../src/RequestHandlers/Api/BurnDown.php#L65-L88)
 
 Returns `FediE2EE\PKDServer\Table`
 
@@ -293,7 +369,7 @@ Returns `FediE2EE\PKDServer\Table`
 
 **Throws:** `CacheException`, `DependencyException`, `TableException`
 
-#### [`injectConfig`](../../../src/RequestHandlers/Api/BurnDown.php#L81-L84)
+#### [`injectConfig`](../../../src/RequestHandlers/Api/BurnDown.php#L90-L93)
 
 Returns `void`
 
@@ -301,13 +377,13 @@ Returns `void`
 
 - `$config`: `FediE2EE\PKDServer\ServerConfig`
 
-#### [`config`](../../../src/RequestHandlers/Api/BurnDown.php#L89-L99)
+#### [`config`](../../../src/RequestHandlers/Api/BurnDown.php#L98-L108)
 
 Returns `FediE2EE\PKDServer\ServerConfig`
 
 **Throws:** `DependencyException`
 
-#### [`setWebFinger`](../../../src/RequestHandlers/Api/BurnDown.php#L104-L108)
+#### [`setWebFinger`](../../../src/RequestHandlers/Api/BurnDown.php#L113-L117)
 
 Returns `self`
 
@@ -317,7 +393,7 @@ This is intended for mocking in unit tests
 
 - `$wf`: `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
-#### [`webfinger`](../../../src/RequestHandlers/Api/BurnDown.php#L115-L122)
+#### [`webfinger`](../../../src/RequestHandlers/Api/BurnDown.php#L124-L131)
 
 Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
@@ -327,7 +403,83 @@ Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
 **Throws:** `CertaintyException`, `DependencyException`, `SodiumException`
 
-#### [`jsonDecode`](../../../src/RequestHandlers/Api/BurnDown.php#L15-L18)
+#### [`parseUrlHost`](../../../src/RequestHandlers/Api/BurnDown.php#L137-L144)
+
+static · Returns `?string`
+
+**Parameters:**
+
+- `$url`: `string`
+
+#### [`assertArray`](../../../src/RequestHandlers/Api/BurnDown.php#L152-L158)
+
+static · Returns `array`
+
+**Parameters:**
+
+- `$result`: `object|array`
+
+**Throws:** `TypeError`
+
+#### [`assertString`](../../../src/RequestHandlers/Api/BurnDown.php#L163-L169)
+
+static · Returns `string`
+
+**Parameters:**
+
+- `$value`: `mixed`
+
+**Throws:** `TypeError`
+
+#### [`assertStringOrNull`](../../../src/RequestHandlers/Api/BurnDown.php#L171-L180)
+
+static · Returns `?string`
+
+**Parameters:**
+
+- `$value`: `mixed`
+
+#### [`assertInt`](../../../src/RequestHandlers/Api/BurnDown.php#L185-L194)
+
+static · Returns `int`
+
+**Parameters:**
+
+- `$value`: `mixed`
+
+**Throws:** `TypeError`
+
+#### [`rowToStringArray`](../../../src/RequestHandlers/Api/BurnDown.php#L201-L211)
+
+static · Returns `array`
+
+**Parameters:**
+
+- `$row`: `object|array`
+
+**Throws:** `TypeError`
+
+#### [`decryptedString`](../../../src/RequestHandlers/Api/BurnDown.php#L217-L227)
+
+static · Returns `string`
+
+**Parameters:**
+
+- `$row`: `array`
+- `$key`: `string`
+
+**Throws:** `TypeError`
+
+#### [`blindIndexValue`](../../../src/RequestHandlers/Api/BurnDown.php#L234-L244)
+
+static · Returns `string`
+
+**Parameters:**
+
+- `$blindIndex`: `array|string`
+- `$key`: `?string` = null
+
+#### [`jsonDecode`](../../../src/RequestHandlers/Api/BurnDown.php#L17-L20)
 
 static · Returns `array`
 
@@ -337,9 +489,9 @@ static · Returns `array`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonDecodeObject`](../../../src/RequestHandlers/Api/BurnDown.php#L23-L26)
+#### [`jsonDecodeObject`](../../../src/RequestHandlers/Api/BurnDown.php#L25-L28)
 
-static · Returns `object`
+static · Returns `stdClass`
 
 **Parameters:**
 
@@ -347,7 +499,7 @@ static · Returns `object`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonEncode`](../../../src/RequestHandlers/Api/BurnDown.php#L31-L37)
+#### [`jsonEncode`](../../../src/RequestHandlers/Api/BurnDown.php#L34-L40)
 
 static · Returns `string`
 
@@ -357,11 +509,11 @@ static · Returns `string`
 
 **Throws:** `BaseJsonException`
 
-#### [`time`](../../../src/RequestHandlers/Api/BurnDown.php#L38-L41)
+#### [`time`](../../../src/RequestHandlers/Api/BurnDown.php#L39-L42)
 
 Returns `string`
 
-#### [`canonicalizeActor`](../../../src/RequestHandlers/Api/BurnDown.php#L50-L54)
+#### [`canonicalizeActor`](../../../src/RequestHandlers/Api/BurnDown.php#L53-L61)
 
 Returns `string`
 
@@ -369,9 +521,9 @@ Returns `string`
 
 - `$actor`: `string`
 
-**Throws:** `DependencyException`, `GuzzleException`, `NetworkException`, `SodiumException`, `CertaintyException`
+**Throws:** `CacheException`, `CertaintyException`, `DependencyException`, `GuzzleException`, `InvalidArgumentException`, `NetworkException`, `SodiumException`
 
-#### [`error`](../../../src/RequestHandlers/Api/BurnDown.php#L62-L65)
+#### [`error`](../../../src/RequestHandlers/Api/BurnDown.php#L69-L72)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -380,9 +532,9 @@ Returns `Psr\Http\Message\ResponseInterface`
 - `$message`: `string`
 - `$code`: `int` = 400
 
-**Throws:** `DependencyException`, `JsonException`, `NotImplementedException`, `SodiumException`
+**Throws:** `BaseJsonException`, `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`signResponse`](../../../src/RequestHandlers/Api/BurnDown.php#L76-L88)
+#### [`signResponse`](../../../src/RequestHandlers/Api/BurnDown.php#L83-L95)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -394,7 +546,7 @@ Implements an RFC 9421 HTTP Message Signature with Ed25519.
 
 **Throws:** `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`json`](../../../src/RequestHandlers/Api/BurnDown.php#L98-L117)
+#### [`json`](../../../src/RequestHandlers/Api/BurnDown.php#L107-L126)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -408,7 +560,7 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 
 **Throws:** `DependencyException`, `BaseJsonException`, `NotImplementedException`, `SodiumException`
 
-#### [`twig`](../../../src/RequestHandlers/Api/BurnDown.php#L125-L142)
+#### [`twig`](../../../src/RequestHandlers/Api/BurnDown.php#L136-L153)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -451,11 +603,11 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 - `$request`: `Psr\Http\Message\ServerRequestInterface`
 
-#### [`time`](../../../src/RequestHandlers/Api/Checkpoint.php#L38-L41)
+#### [`time`](../../../src/RequestHandlers/Api/Checkpoint.php#L39-L42)
 
 Returns `string`
 
-#### [`canonicalizeActor`](../../../src/RequestHandlers/Api/Checkpoint.php#L50-L54)
+#### [`canonicalizeActor`](../../../src/RequestHandlers/Api/Checkpoint.php#L53-L61)
 
 Returns `string`
 
@@ -463,9 +615,9 @@ Returns `string`
 
 - `$actor`: `string`
 
-**Throws:** `DependencyException`, `GuzzleException`, `NetworkException`, `SodiumException`, `CertaintyException`
+**Throws:** `CacheException`, `CertaintyException`, `DependencyException`, `GuzzleException`, `InvalidArgumentException`, `NetworkException`, `SodiumException`
 
-#### [`error`](../../../src/RequestHandlers/Api/Checkpoint.php#L62-L65)
+#### [`error`](../../../src/RequestHandlers/Api/Checkpoint.php#L69-L72)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -474,9 +626,9 @@ Returns `Psr\Http\Message\ResponseInterface`
 - `$message`: `string`
 - `$code`: `int` = 400
 
-**Throws:** `DependencyException`, `JsonException`, `NotImplementedException`, `SodiumException`
+**Throws:** `BaseJsonException`, `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`signResponse`](../../../src/RequestHandlers/Api/Checkpoint.php#L76-L88)
+#### [`signResponse`](../../../src/RequestHandlers/Api/Checkpoint.php#L83-L95)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -488,7 +640,7 @@ Implements an RFC 9421 HTTP Message Signature with Ed25519.
 
 **Throws:** `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`json`](../../../src/RequestHandlers/Api/Checkpoint.php#L98-L117)
+#### [`json`](../../../src/RequestHandlers/Api/Checkpoint.php#L107-L126)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -502,7 +654,7 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 
 **Throws:** `DependencyException`, `BaseJsonException`, `NotImplementedException`, `SodiumException`
 
-#### [`twig`](../../../src/RequestHandlers/Api/Checkpoint.php#L125-L142)
+#### [`twig`](../../../src/RequestHandlers/Api/Checkpoint.php#L136-L153)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -515,7 +667,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `DependencyException`, `LoaderError`, `RuntimeError`, `SyntaxError`
 
-#### [`appCache`](../../../src/RequestHandlers/Api/Checkpoint.php#L46-L49)
+#### [`appCache`](../../../src/RequestHandlers/Api/Checkpoint.php#L55-L58)
 
 Returns `FediE2EE\PKDServer\AppCache`
 
@@ -526,7 +678,7 @@ Returns `FediE2EE\PKDServer\AppCache`
 
 **Throws:** `DependencyException`
 
-#### [`table`](../../../src/RequestHandlers/Api/Checkpoint.php#L56-L79)
+#### [`table`](../../../src/RequestHandlers/Api/Checkpoint.php#L65-L88)
 
 Returns `FediE2EE\PKDServer\Table`
 
@@ -536,7 +688,7 @@ Returns `FediE2EE\PKDServer\Table`
 
 **Throws:** `CacheException`, `DependencyException`, `TableException`
 
-#### [`injectConfig`](../../../src/RequestHandlers/Api/Checkpoint.php#L81-L84)
+#### [`injectConfig`](../../../src/RequestHandlers/Api/Checkpoint.php#L90-L93)
 
 Returns `void`
 
@@ -544,13 +696,13 @@ Returns `void`
 
 - `$config`: `FediE2EE\PKDServer\ServerConfig`
 
-#### [`config`](../../../src/RequestHandlers/Api/Checkpoint.php#L89-L99)
+#### [`config`](../../../src/RequestHandlers/Api/Checkpoint.php#L98-L108)
 
 Returns `FediE2EE\PKDServer\ServerConfig`
 
 **Throws:** `DependencyException`
 
-#### [`setWebFinger`](../../../src/RequestHandlers/Api/Checkpoint.php#L104-L108)
+#### [`setWebFinger`](../../../src/RequestHandlers/Api/Checkpoint.php#L113-L117)
 
 Returns `self`
 
@@ -560,7 +712,7 @@ This is intended for mocking in unit tests
 
 - `$wf`: `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
-#### [`webfinger`](../../../src/RequestHandlers/Api/Checkpoint.php#L115-L122)
+#### [`webfinger`](../../../src/RequestHandlers/Api/Checkpoint.php#L124-L131)
 
 Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
@@ -570,7 +722,83 @@ Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
 **Throws:** `CertaintyException`, `DependencyException`, `SodiumException`
 
-#### [`jsonDecode`](../../../src/RequestHandlers/Api/Checkpoint.php#L15-L18)
+#### [`parseUrlHost`](../../../src/RequestHandlers/Api/Checkpoint.php#L137-L144)
+
+static · Returns `?string`
+
+**Parameters:**
+
+- `$url`: `string`
+
+#### [`assertArray`](../../../src/RequestHandlers/Api/Checkpoint.php#L152-L158)
+
+static · Returns `array`
+
+**Parameters:**
+
+- `$result`: `object|array`
+
+**Throws:** `TypeError`
+
+#### [`assertString`](../../../src/RequestHandlers/Api/Checkpoint.php#L163-L169)
+
+static · Returns `string`
+
+**Parameters:**
+
+- `$value`: `mixed`
+
+**Throws:** `TypeError`
+
+#### [`assertStringOrNull`](../../../src/RequestHandlers/Api/Checkpoint.php#L171-L180)
+
+static · Returns `?string`
+
+**Parameters:**
+
+- `$value`: `mixed`
+
+#### [`assertInt`](../../../src/RequestHandlers/Api/Checkpoint.php#L185-L194)
+
+static · Returns `int`
+
+**Parameters:**
+
+- `$value`: `mixed`
+
+**Throws:** `TypeError`
+
+#### [`rowToStringArray`](../../../src/RequestHandlers/Api/Checkpoint.php#L201-L211)
+
+static · Returns `array`
+
+**Parameters:**
+
+- `$row`: `object|array`
+
+**Throws:** `TypeError`
+
+#### [`decryptedString`](../../../src/RequestHandlers/Api/Checkpoint.php#L217-L227)
+
+static · Returns `string`
+
+**Parameters:**
+
+- `$row`: `array`
+- `$key`: `string`
+
+**Throws:** `TypeError`
+
+#### [`blindIndexValue`](../../../src/RequestHandlers/Api/Checkpoint.php#L234-L244)
+
+static · Returns `string`
+
+**Parameters:**
+
+- `$blindIndex`: `array|string`
+- `$key`: `?string` = null
+
+#### [`jsonDecode`](../../../src/RequestHandlers/Api/Checkpoint.php#L17-L20)
 
 static · Returns `array`
 
@@ -580,9 +808,9 @@ static · Returns `array`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonDecodeObject`](../../../src/RequestHandlers/Api/Checkpoint.php#L23-L26)
+#### [`jsonDecodeObject`](../../../src/RequestHandlers/Api/Checkpoint.php#L25-L28)
 
-static · Returns `object`
+static · Returns `stdClass`
 
 **Parameters:**
 
@@ -590,7 +818,7 @@ static · Returns `object`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonEncode`](../../../src/RequestHandlers/Api/Checkpoint.php#L31-L37)
+#### [`jsonEncode`](../../../src/RequestHandlers/Api/Checkpoint.php#L34-L40)
 
 static · Returns `string`
 
@@ -632,11 +860,11 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `DependencyException`, `JsonException`, `NotImplementedException`, `SodiumException`
 
-#### [`time`](../../../src/RequestHandlers/Api/Extensions.php#L38-L41)
+#### [`time`](../../../src/RequestHandlers/Api/Extensions.php#L39-L42)
 
 Returns `string`
 
-#### [`canonicalizeActor`](../../../src/RequestHandlers/Api/Extensions.php#L50-L54)
+#### [`canonicalizeActor`](../../../src/RequestHandlers/Api/Extensions.php#L53-L61)
 
 Returns `string`
 
@@ -644,9 +872,9 @@ Returns `string`
 
 - `$actor`: `string`
 
-**Throws:** `DependencyException`, `GuzzleException`, `NetworkException`, `SodiumException`, `CertaintyException`
+**Throws:** `CacheException`, `CertaintyException`, `DependencyException`, `GuzzleException`, `InvalidArgumentException`, `NetworkException`, `SodiumException`
 
-#### [`error`](../../../src/RequestHandlers/Api/Extensions.php#L62-L65)
+#### [`error`](../../../src/RequestHandlers/Api/Extensions.php#L69-L72)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -655,9 +883,9 @@ Returns `Psr\Http\Message\ResponseInterface`
 - `$message`: `string`
 - `$code`: `int` = 400
 
-**Throws:** `DependencyException`, `JsonException`, `NotImplementedException`, `SodiumException`
+**Throws:** `BaseJsonException`, `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`signResponse`](../../../src/RequestHandlers/Api/Extensions.php#L76-L88)
+#### [`signResponse`](../../../src/RequestHandlers/Api/Extensions.php#L83-L95)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -669,7 +897,7 @@ Implements an RFC 9421 HTTP Message Signature with Ed25519.
 
 **Throws:** `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`json`](../../../src/RequestHandlers/Api/Extensions.php#L98-L117)
+#### [`json`](../../../src/RequestHandlers/Api/Extensions.php#L107-L126)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -683,7 +911,7 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 
 **Throws:** `DependencyException`, `BaseJsonException`, `NotImplementedException`, `SodiumException`
 
-#### [`twig`](../../../src/RequestHandlers/Api/Extensions.php#L125-L142)
+#### [`twig`](../../../src/RequestHandlers/Api/Extensions.php#L136-L153)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -696,7 +924,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `DependencyException`, `LoaderError`, `RuntimeError`, `SyntaxError`
 
-#### [`appCache`](../../../src/RequestHandlers/Api/Extensions.php#L46-L49)
+#### [`appCache`](../../../src/RequestHandlers/Api/Extensions.php#L55-L58)
 
 Returns `FediE2EE\PKDServer\AppCache`
 
@@ -707,7 +935,7 @@ Returns `FediE2EE\PKDServer\AppCache`
 
 **Throws:** `DependencyException`
 
-#### [`table`](../../../src/RequestHandlers/Api/Extensions.php#L56-L79)
+#### [`table`](../../../src/RequestHandlers/Api/Extensions.php#L65-L88)
 
 Returns `FediE2EE\PKDServer\Table`
 
@@ -717,7 +945,7 @@ Returns `FediE2EE\PKDServer\Table`
 
 **Throws:** `CacheException`, `DependencyException`, `TableException`
 
-#### [`injectConfig`](../../../src/RequestHandlers/Api/Extensions.php#L81-L84)
+#### [`injectConfig`](../../../src/RequestHandlers/Api/Extensions.php#L90-L93)
 
 Returns `void`
 
@@ -725,13 +953,13 @@ Returns `void`
 
 - `$config`: `FediE2EE\PKDServer\ServerConfig`
 
-#### [`config`](../../../src/RequestHandlers/Api/Extensions.php#L89-L99)
+#### [`config`](../../../src/RequestHandlers/Api/Extensions.php#L98-L108)
 
 Returns `FediE2EE\PKDServer\ServerConfig`
 
 **Throws:** `DependencyException`
 
-#### [`setWebFinger`](../../../src/RequestHandlers/Api/Extensions.php#L104-L108)
+#### [`setWebFinger`](../../../src/RequestHandlers/Api/Extensions.php#L113-L117)
 
 Returns `self`
 
@@ -741,7 +969,7 @@ This is intended for mocking in unit tests
 
 - `$wf`: `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
-#### [`webfinger`](../../../src/RequestHandlers/Api/Extensions.php#L115-L122)
+#### [`webfinger`](../../../src/RequestHandlers/Api/Extensions.php#L124-L131)
 
 Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
@@ -751,7 +979,83 @@ Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
 **Throws:** `CertaintyException`, `DependencyException`, `SodiumException`
 
-#### [`jsonDecode`](../../../src/RequestHandlers/Api/Extensions.php#L15-L18)
+#### [`parseUrlHost`](../../../src/RequestHandlers/Api/Extensions.php#L137-L144)
+
+static · Returns `?string`
+
+**Parameters:**
+
+- `$url`: `string`
+
+#### [`assertArray`](../../../src/RequestHandlers/Api/Extensions.php#L152-L158)
+
+static · Returns `array`
+
+**Parameters:**
+
+- `$result`: `object|array`
+
+**Throws:** `TypeError`
+
+#### [`assertString`](../../../src/RequestHandlers/Api/Extensions.php#L163-L169)
+
+static · Returns `string`
+
+**Parameters:**
+
+- `$value`: `mixed`
+
+**Throws:** `TypeError`
+
+#### [`assertStringOrNull`](../../../src/RequestHandlers/Api/Extensions.php#L171-L180)
+
+static · Returns `?string`
+
+**Parameters:**
+
+- `$value`: `mixed`
+
+#### [`assertInt`](../../../src/RequestHandlers/Api/Extensions.php#L185-L194)
+
+static · Returns `int`
+
+**Parameters:**
+
+- `$value`: `mixed`
+
+**Throws:** `TypeError`
+
+#### [`rowToStringArray`](../../../src/RequestHandlers/Api/Extensions.php#L201-L211)
+
+static · Returns `array`
+
+**Parameters:**
+
+- `$row`: `object|array`
+
+**Throws:** `TypeError`
+
+#### [`decryptedString`](../../../src/RequestHandlers/Api/Extensions.php#L217-L227)
+
+static · Returns `string`
+
+**Parameters:**
+
+- `$row`: `array`
+- `$key`: `string`
+
+**Throws:** `TypeError`
+
+#### [`blindIndexValue`](../../../src/RequestHandlers/Api/Extensions.php#L234-L244)
+
+static · Returns `string`
+
+**Parameters:**
+
+- `$blindIndex`: `array|string`
+- `$key`: `?string` = null
+
+#### [`jsonDecode`](../../../src/RequestHandlers/Api/Extensions.php#L17-L20)
 
 static · Returns `array`
 
@@ -761,9 +1065,9 @@ static · Returns `array`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonDecodeObject`](../../../src/RequestHandlers/Api/Extensions.php#L23-L26)
+#### [`jsonDecodeObject`](../../../src/RequestHandlers/Api/Extensions.php#L25-L28)
 
-static · Returns `object`
+static · Returns `stdClass`
 
 **Parameters:**
 
@@ -771,7 +1075,7 @@ static · Returns `object`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonEncode`](../../../src/RequestHandlers/Api/Extensions.php#L31-L37)
+#### [`jsonEncode`](../../../src/RequestHandlers/Api/Extensions.php#L34-L40)
 
 static · Returns `string`
 
@@ -819,11 +1123,11 @@ Returns `void`
 
 **Throws:** `ArrayKeyException`, `BaseJsonException`, `BlindIndexNotFoundException`, `CipherSweetException`, `CryptoException`, `CryptoOperationException`, `DateMalformedStringException`, `DependencyException`, `InvalidCiphertextException`, `JsonException`, `NotImplementedException`, `SodiumException`, `TableException`
 
-#### [`time`](../../../src/RequestHandlers/Api/GetAuxData.php#L38-L41)
+#### [`time`](../../../src/RequestHandlers/Api/GetAuxData.php#L39-L42)
 
 Returns `string`
 
-#### [`canonicalizeActor`](../../../src/RequestHandlers/Api/GetAuxData.php#L50-L54)
+#### [`canonicalizeActor`](../../../src/RequestHandlers/Api/GetAuxData.php#L53-L61)
 
 Returns `string`
 
@@ -831,9 +1135,9 @@ Returns `string`
 
 - `$actor`: `string`
 
-**Throws:** `DependencyException`, `GuzzleException`, `NetworkException`, `SodiumException`, `CertaintyException`
+**Throws:** `CacheException`, `CertaintyException`, `DependencyException`, `GuzzleException`, `InvalidArgumentException`, `NetworkException`, `SodiumException`
 
-#### [`error`](../../../src/RequestHandlers/Api/GetAuxData.php#L62-L65)
+#### [`error`](../../../src/RequestHandlers/Api/GetAuxData.php#L69-L72)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -842,9 +1146,9 @@ Returns `Psr\Http\Message\ResponseInterface`
 - `$message`: `string`
 - `$code`: `int` = 400
 
-**Throws:** `DependencyException`, `JsonException`, `NotImplementedException`, `SodiumException`
+**Throws:** `BaseJsonException`, `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`signResponse`](../../../src/RequestHandlers/Api/GetAuxData.php#L76-L88)
+#### [`signResponse`](../../../src/RequestHandlers/Api/GetAuxData.php#L83-L95)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -856,7 +1160,7 @@ Implements an RFC 9421 HTTP Message Signature with Ed25519.
 
 **Throws:** `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`json`](../../../src/RequestHandlers/Api/GetAuxData.php#L98-L117)
+#### [`json`](../../../src/RequestHandlers/Api/GetAuxData.php#L107-L126)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -870,7 +1174,7 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 
 **Throws:** `DependencyException`, `BaseJsonException`, `NotImplementedException`, `SodiumException`
 
-#### [`twig`](../../../src/RequestHandlers/Api/GetAuxData.php#L125-L142)
+#### [`twig`](../../../src/RequestHandlers/Api/GetAuxData.php#L136-L153)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -883,7 +1187,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `DependencyException`, `LoaderError`, `RuntimeError`, `SyntaxError`
 
-#### [`appCache`](../../../src/RequestHandlers/Api/GetAuxData.php#L46-L49)
+#### [`appCache`](../../../src/RequestHandlers/Api/GetAuxData.php#L55-L58)
 
 Returns `FediE2EE\PKDServer\AppCache`
 
@@ -894,7 +1198,7 @@ Returns `FediE2EE\PKDServer\AppCache`
 
 **Throws:** `DependencyException`
 
-#### [`table`](../../../src/RequestHandlers/Api/GetAuxData.php#L56-L79)
+#### [`table`](../../../src/RequestHandlers/Api/GetAuxData.php#L65-L88)
 
 Returns `FediE2EE\PKDServer\Table`
 
@@ -904,7 +1208,7 @@ Returns `FediE2EE\PKDServer\Table`
 
 **Throws:** `CacheException`, `DependencyException`, `TableException`
 
-#### [`injectConfig`](../../../src/RequestHandlers/Api/GetAuxData.php#L81-L84)
+#### [`injectConfig`](../../../src/RequestHandlers/Api/GetAuxData.php#L90-L93)
 
 Returns `void`
 
@@ -912,13 +1216,13 @@ Returns `void`
 
 - `$config`: `FediE2EE\PKDServer\ServerConfig`
 
-#### [`config`](../../../src/RequestHandlers/Api/GetAuxData.php#L89-L99)
+#### [`config`](../../../src/RequestHandlers/Api/GetAuxData.php#L98-L108)
 
 Returns `FediE2EE\PKDServer\ServerConfig`
 
 **Throws:** `DependencyException`
 
-#### [`setWebFinger`](../../../src/RequestHandlers/Api/GetAuxData.php#L104-L108)
+#### [`setWebFinger`](../../../src/RequestHandlers/Api/GetAuxData.php#L113-L117)
 
 Returns `self`
 
@@ -928,7 +1232,7 @@ This is intended for mocking in unit tests
 
 - `$wf`: `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
-#### [`webfinger`](../../../src/RequestHandlers/Api/GetAuxData.php#L115-L122)
+#### [`webfinger`](../../../src/RequestHandlers/Api/GetAuxData.php#L124-L131)
 
 Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
@@ -938,7 +1242,83 @@ Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
 **Throws:** `CertaintyException`, `DependencyException`, `SodiumException`
 
-#### [`jsonDecode`](../../../src/RequestHandlers/Api/GetAuxData.php#L15-L18)
+#### [`parseUrlHost`](../../../src/RequestHandlers/Api/GetAuxData.php#L137-L144)
+
+static · Returns `?string`
+
+**Parameters:**
+
+- `$url`: `string`
+
+#### [`assertArray`](../../../src/RequestHandlers/Api/GetAuxData.php#L152-L158)
+
+static · Returns `array`
+
+**Parameters:**
+
+- `$result`: `object|array`
+
+**Throws:** `TypeError`
+
+#### [`assertString`](../../../src/RequestHandlers/Api/GetAuxData.php#L163-L169)
+
+static · Returns `string`
+
+**Parameters:**
+
+- `$value`: `mixed`
+
+**Throws:** `TypeError`
+
+#### [`assertStringOrNull`](../../../src/RequestHandlers/Api/GetAuxData.php#L171-L180)
+
+static · Returns `?string`
+
+**Parameters:**
+
+- `$value`: `mixed`
+
+#### [`assertInt`](../../../src/RequestHandlers/Api/GetAuxData.php#L185-L194)
+
+static · Returns `int`
+
+**Parameters:**
+
+- `$value`: `mixed`
+
+**Throws:** `TypeError`
+
+#### [`rowToStringArray`](../../../src/RequestHandlers/Api/GetAuxData.php#L201-L211)
+
+static · Returns `array`
+
+**Parameters:**
+
+- `$row`: `object|array`
+
+**Throws:** `TypeError`
+
+#### [`decryptedString`](../../../src/RequestHandlers/Api/GetAuxData.php#L217-L227)
+
+static · Returns `string`
+
+**Parameters:**
+
+- `$row`: `array`
+- `$key`: `string`
+
+**Throws:** `TypeError`
+
+#### [`blindIndexValue`](../../../src/RequestHandlers/Api/GetAuxData.php#L234-L244)
+
+static · Returns `string`
+
+**Parameters:**
+
+- `$blindIndex`: `array|string`
+- `$key`: `?string` = null
+
+#### [`jsonDecode`](../../../src/RequestHandlers/Api/GetAuxData.php#L17-L20)
 
 static · Returns `array`
 
@@ -948,9 +1328,9 @@ static · Returns `array`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonDecodeObject`](../../../src/RequestHandlers/Api/GetAuxData.php#L23-L26)
+#### [`jsonDecodeObject`](../../../src/RequestHandlers/Api/GetAuxData.php#L25-L28)
 
-static · Returns `object`
+static · Returns `stdClass`
 
 **Parameters:**
 
@@ -958,7 +1338,7 @@ static · Returns `object`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonEncode`](../../../src/RequestHandlers/Api/GetAuxData.php#L31-L37)
+#### [`jsonEncode`](../../../src/RequestHandlers/Api/GetAuxData.php#L34-L40)
 
 static · Returns `string`
 
@@ -1006,11 +1386,11 @@ Returns `void`
 
 **Throws:** `ArrayKeyException`, `BaseJsonException`, `BlindIndexNotFoundException`, `CipherSweetException`, `CryptoException`, `CryptoOperationException`, `DateMalformedStringException`, `DependencyException`, `InvalidCiphertextException`, `JsonException`, `NotImplementedException`, `SodiumException`, `TableException`
 
-#### [`time`](../../../src/RequestHandlers/Api/GetKey.php#L38-L41)
+#### [`time`](../../../src/RequestHandlers/Api/GetKey.php#L39-L42)
 
 Returns `string`
 
-#### [`canonicalizeActor`](../../../src/RequestHandlers/Api/GetKey.php#L50-L54)
+#### [`canonicalizeActor`](../../../src/RequestHandlers/Api/GetKey.php#L53-L61)
 
 Returns `string`
 
@@ -1018,9 +1398,9 @@ Returns `string`
 
 - `$actor`: `string`
 
-**Throws:** `DependencyException`, `GuzzleException`, `NetworkException`, `SodiumException`, `CertaintyException`
+**Throws:** `CacheException`, `CertaintyException`, `DependencyException`, `GuzzleException`, `InvalidArgumentException`, `NetworkException`, `SodiumException`
 
-#### [`error`](../../../src/RequestHandlers/Api/GetKey.php#L62-L65)
+#### [`error`](../../../src/RequestHandlers/Api/GetKey.php#L69-L72)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -1029,9 +1409,9 @@ Returns `Psr\Http\Message\ResponseInterface`
 - `$message`: `string`
 - `$code`: `int` = 400
 
-**Throws:** `DependencyException`, `JsonException`, `NotImplementedException`, `SodiumException`
+**Throws:** `BaseJsonException`, `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`signResponse`](../../../src/RequestHandlers/Api/GetKey.php#L76-L88)
+#### [`signResponse`](../../../src/RequestHandlers/Api/GetKey.php#L83-L95)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -1043,7 +1423,7 @@ Implements an RFC 9421 HTTP Message Signature with Ed25519.
 
 **Throws:** `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`json`](../../../src/RequestHandlers/Api/GetKey.php#L98-L117)
+#### [`json`](../../../src/RequestHandlers/Api/GetKey.php#L107-L126)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -1057,7 +1437,7 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 
 **Throws:** `DependencyException`, `BaseJsonException`, `NotImplementedException`, `SodiumException`
 
-#### [`twig`](../../../src/RequestHandlers/Api/GetKey.php#L125-L142)
+#### [`twig`](../../../src/RequestHandlers/Api/GetKey.php#L136-L153)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -1070,7 +1450,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `DependencyException`, `LoaderError`, `RuntimeError`, `SyntaxError`
 
-#### [`appCache`](../../../src/RequestHandlers/Api/GetKey.php#L46-L49)
+#### [`appCache`](../../../src/RequestHandlers/Api/GetKey.php#L55-L58)
 
 Returns `FediE2EE\PKDServer\AppCache`
 
@@ -1081,7 +1461,7 @@ Returns `FediE2EE\PKDServer\AppCache`
 
 **Throws:** `DependencyException`
 
-#### [`table`](../../../src/RequestHandlers/Api/GetKey.php#L56-L79)
+#### [`table`](../../../src/RequestHandlers/Api/GetKey.php#L65-L88)
 
 Returns `FediE2EE\PKDServer\Table`
 
@@ -1091,7 +1471,7 @@ Returns `FediE2EE\PKDServer\Table`
 
 **Throws:** `CacheException`, `DependencyException`, `TableException`
 
-#### [`injectConfig`](../../../src/RequestHandlers/Api/GetKey.php#L81-L84)
+#### [`injectConfig`](../../../src/RequestHandlers/Api/GetKey.php#L90-L93)
 
 Returns `void`
 
@@ -1099,13 +1479,13 @@ Returns `void`
 
 - `$config`: `FediE2EE\PKDServer\ServerConfig`
 
-#### [`config`](../../../src/RequestHandlers/Api/GetKey.php#L89-L99)
+#### [`config`](../../../src/RequestHandlers/Api/GetKey.php#L98-L108)
 
 Returns `FediE2EE\PKDServer\ServerConfig`
 
 **Throws:** `DependencyException`
 
-#### [`setWebFinger`](../../../src/RequestHandlers/Api/GetKey.php#L104-L108)
+#### [`setWebFinger`](../../../src/RequestHandlers/Api/GetKey.php#L113-L117)
 
 Returns `self`
 
@@ -1115,7 +1495,7 @@ This is intended for mocking in unit tests
 
 - `$wf`: `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
-#### [`webfinger`](../../../src/RequestHandlers/Api/GetKey.php#L115-L122)
+#### [`webfinger`](../../../src/RequestHandlers/Api/GetKey.php#L124-L131)
 
 Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
@@ -1125,7 +1505,83 @@ Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
 **Throws:** `CertaintyException`, `DependencyException`, `SodiumException`
 
-#### [`jsonDecode`](../../../src/RequestHandlers/Api/GetKey.php#L15-L18)
+#### [`parseUrlHost`](../../../src/RequestHandlers/Api/GetKey.php#L137-L144)
+
+static · Returns `?string`
+
+**Parameters:**
+
+- `$url`: `string`
+
+#### [`assertArray`](../../../src/RequestHandlers/Api/GetKey.php#L152-L158)
+
+static · Returns `array`
+
+**Parameters:**
+
+- `$result`: `object|array`
+
+**Throws:** `TypeError`
+
+#### [`assertString`](../../../src/RequestHandlers/Api/GetKey.php#L163-L169)
+
+static · Returns `string`
+
+**Parameters:**
+
+- `$value`: `mixed`
+
+**Throws:** `TypeError`
+
+#### [`assertStringOrNull`](../../../src/RequestHandlers/Api/GetKey.php#L171-L180)
+
+static · Returns `?string`
+
+**Parameters:**
+
+- `$value`: `mixed`
+
+#### [`assertInt`](../../../src/RequestHandlers/Api/GetKey.php#L185-L194)
+
+static · Returns `int`
+
+**Parameters:**
+
+- `$value`: `mixed`
+
+**Throws:** `TypeError`
+
+#### [`rowToStringArray`](../../../src/RequestHandlers/Api/GetKey.php#L201-L211)
+
+static · Returns `array`
+
+**Parameters:**
+
+- `$row`: `object|array`
+
+**Throws:** `TypeError`
+
+#### [`decryptedString`](../../../src/RequestHandlers/Api/GetKey.php#L217-L227)
+
+static · Returns `string`
+
+**Parameters:**
+
+- `$row`: `array`
+- `$key`: `string`
+
+**Throws:** `TypeError`
+
+#### [`blindIndexValue`](../../../src/RequestHandlers/Api/GetKey.php#L234-L244)
+
+static · Returns `string`
+
+**Parameters:**
+
+- `$blindIndex`: `array|string`
+- `$key`: `?string` = null
+
+#### [`jsonDecode`](../../../src/RequestHandlers/Api/GetKey.php#L17-L20)
 
 static · Returns `array`
 
@@ -1135,9 +1591,9 @@ static · Returns `array`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonDecodeObject`](../../../src/RequestHandlers/Api/GetKey.php#L23-L26)
+#### [`jsonDecodeObject`](../../../src/RequestHandlers/Api/GetKey.php#L25-L28)
 
-static · Returns `object`
+static · Returns `stdClass`
 
 **Parameters:**
 
@@ -1145,7 +1601,7 @@ static · Returns `object`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonEncode`](../../../src/RequestHandlers/Api/GetKey.php#L31-L37)
+#### [`jsonEncode`](../../../src/RequestHandlers/Api/GetKey.php#L34-L40)
 
 static · Returns `string`
 
@@ -1193,11 +1649,11 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `DependencyException`, `JsonException`, `NotImplementedException`, `SodiumException`
 
-#### [`time`](../../../src/RequestHandlers/Api/History.php#L38-L41)
+#### [`time`](../../../src/RequestHandlers/Api/History.php#L39-L42)
 
 Returns `string`
 
-#### [`canonicalizeActor`](../../../src/RequestHandlers/Api/History.php#L50-L54)
+#### [`canonicalizeActor`](../../../src/RequestHandlers/Api/History.php#L53-L61)
 
 Returns `string`
 
@@ -1205,9 +1661,9 @@ Returns `string`
 
 - `$actor`: `string`
 
-**Throws:** `DependencyException`, `GuzzleException`, `NetworkException`, `SodiumException`, `CertaintyException`
+**Throws:** `CacheException`, `CertaintyException`, `DependencyException`, `GuzzleException`, `InvalidArgumentException`, `NetworkException`, `SodiumException`
 
-#### [`error`](../../../src/RequestHandlers/Api/History.php#L62-L65)
+#### [`error`](../../../src/RequestHandlers/Api/History.php#L69-L72)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -1216,9 +1672,9 @@ Returns `Psr\Http\Message\ResponseInterface`
 - `$message`: `string`
 - `$code`: `int` = 400
 
-**Throws:** `DependencyException`, `JsonException`, `NotImplementedException`, `SodiumException`
+**Throws:** `BaseJsonException`, `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`signResponse`](../../../src/RequestHandlers/Api/History.php#L76-L88)
+#### [`signResponse`](../../../src/RequestHandlers/Api/History.php#L83-L95)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -1230,7 +1686,7 @@ Implements an RFC 9421 HTTP Message Signature with Ed25519.
 
 **Throws:** `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`json`](../../../src/RequestHandlers/Api/History.php#L98-L117)
+#### [`json`](../../../src/RequestHandlers/Api/History.php#L107-L126)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -1244,7 +1700,7 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 
 **Throws:** `DependencyException`, `BaseJsonException`, `NotImplementedException`, `SodiumException`
 
-#### [`twig`](../../../src/RequestHandlers/Api/History.php#L125-L142)
+#### [`twig`](../../../src/RequestHandlers/Api/History.php#L136-L153)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -1257,7 +1713,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `DependencyException`, `LoaderError`, `RuntimeError`, `SyntaxError`
 
-#### [`appCache`](../../../src/RequestHandlers/Api/History.php#L46-L49)
+#### [`appCache`](../../../src/RequestHandlers/Api/History.php#L55-L58)
 
 Returns `FediE2EE\PKDServer\AppCache`
 
@@ -1268,7 +1724,7 @@ Returns `FediE2EE\PKDServer\AppCache`
 
 **Throws:** `DependencyException`
 
-#### [`table`](../../../src/RequestHandlers/Api/History.php#L56-L79)
+#### [`table`](../../../src/RequestHandlers/Api/History.php#L65-L88)
 
 Returns `FediE2EE\PKDServer\Table`
 
@@ -1278,7 +1734,7 @@ Returns `FediE2EE\PKDServer\Table`
 
 **Throws:** `CacheException`, `DependencyException`, `TableException`
 
-#### [`injectConfig`](../../../src/RequestHandlers/Api/History.php#L81-L84)
+#### [`injectConfig`](../../../src/RequestHandlers/Api/History.php#L90-L93)
 
 Returns `void`
 
@@ -1286,13 +1742,13 @@ Returns `void`
 
 - `$config`: `FediE2EE\PKDServer\ServerConfig`
 
-#### [`config`](../../../src/RequestHandlers/Api/History.php#L89-L99)
+#### [`config`](../../../src/RequestHandlers/Api/History.php#L98-L108)
 
 Returns `FediE2EE\PKDServer\ServerConfig`
 
 **Throws:** `DependencyException`
 
-#### [`setWebFinger`](../../../src/RequestHandlers/Api/History.php#L104-L108)
+#### [`setWebFinger`](../../../src/RequestHandlers/Api/History.php#L113-L117)
 
 Returns `self`
 
@@ -1302,7 +1758,7 @@ This is intended for mocking in unit tests
 
 - `$wf`: `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
-#### [`webfinger`](../../../src/RequestHandlers/Api/History.php#L115-L122)
+#### [`webfinger`](../../../src/RequestHandlers/Api/History.php#L124-L131)
 
 Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
@@ -1312,7 +1768,83 @@ Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
 **Throws:** `CertaintyException`, `DependencyException`, `SodiumException`
 
-#### [`jsonDecode`](../../../src/RequestHandlers/Api/History.php#L15-L18)
+#### [`parseUrlHost`](../../../src/RequestHandlers/Api/History.php#L137-L144)
+
+static · Returns `?string`
+
+**Parameters:**
+
+- `$url`: `string`
+
+#### [`assertArray`](../../../src/RequestHandlers/Api/History.php#L152-L158)
+
+static · Returns `array`
+
+**Parameters:**
+
+- `$result`: `object|array`
+
+**Throws:** `TypeError`
+
+#### [`assertString`](../../../src/RequestHandlers/Api/History.php#L163-L169)
+
+static · Returns `string`
+
+**Parameters:**
+
+- `$value`: `mixed`
+
+**Throws:** `TypeError`
+
+#### [`assertStringOrNull`](../../../src/RequestHandlers/Api/History.php#L171-L180)
+
+static · Returns `?string`
+
+**Parameters:**
+
+- `$value`: `mixed`
+
+#### [`assertInt`](../../../src/RequestHandlers/Api/History.php#L185-L194)
+
+static · Returns `int`
+
+**Parameters:**
+
+- `$value`: `mixed`
+
+**Throws:** `TypeError`
+
+#### [`rowToStringArray`](../../../src/RequestHandlers/Api/History.php#L201-L211)
+
+static · Returns `array`
+
+**Parameters:**
+
+- `$row`: `object|array`
+
+**Throws:** `TypeError`
+
+#### [`decryptedString`](../../../src/RequestHandlers/Api/History.php#L217-L227)
+
+static · Returns `string`
+
+**Parameters:**
+
+- `$row`: `array`
+- `$key`: `string`
+
+**Throws:** `TypeError`
+
+#### [`blindIndexValue`](../../../src/RequestHandlers/Api/History.php#L234-L244)
+
+static · Returns `string`
+
+**Parameters:**
+
+- `$blindIndex`: `array|string`
+- `$key`: `?string` = null
+
+#### [`jsonDecode`](../../../src/RequestHandlers/Api/History.php#L17-L20)
 
 static · Returns `array`
 
@@ -1322,9 +1854,9 @@ static · Returns `array`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonDecodeObject`](../../../src/RequestHandlers/Api/History.php#L23-L26)
+#### [`jsonDecodeObject`](../../../src/RequestHandlers/Api/History.php#L25-L28)
 
-static · Returns `object`
+static · Returns `stdClass`
 
 **Parameters:**
 
@@ -1332,7 +1864,7 @@ static · Returns `object`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonEncode`](../../../src/RequestHandlers/Api/History.php#L31-L37)
+#### [`jsonEncode`](../../../src/RequestHandlers/Api/History.php#L34-L40)
 
 static · Returns `string`
 
@@ -1362,13 +1894,13 @@ static · Returns `string`
 
 ### Methods
 
-#### [`__construct`](../../../src/RequestHandlers/Api/HistoryCosign.php#L43-L50)
+#### [`__construct`](../../../src/RequestHandlers/Api/HistoryCosign.php#L41-L48)
 
 Returns `void`
 
 **Throws:** `DependencyException`, `TableException`, `CacheException`
 
-#### [`handle`](../../../src/RequestHandlers/Api/HistoryCosign.php#L60-L107)
+#### [`handle`](../../../src/RequestHandlers/Api/HistoryCosign.php#L58-L105)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -1380,11 +1912,11 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `DependencyException`, `JsonException`, `NotImplementedException`, `SodiumException`
 
-#### [`time`](../../../src/RequestHandlers/Api/HistoryCosign.php#L38-L41)
+#### [`time`](../../../src/RequestHandlers/Api/HistoryCosign.php#L39-L42)
 
 Returns `string`
 
-#### [`canonicalizeActor`](../../../src/RequestHandlers/Api/HistoryCosign.php#L50-L54)
+#### [`canonicalizeActor`](../../../src/RequestHandlers/Api/HistoryCosign.php#L53-L61)
 
 Returns `string`
 
@@ -1392,9 +1924,9 @@ Returns `string`
 
 - `$actor`: `string`
 
-**Throws:** `DependencyException`, `GuzzleException`, `NetworkException`, `SodiumException`, `CertaintyException`
+**Throws:** `CacheException`, `CertaintyException`, `DependencyException`, `GuzzleException`, `InvalidArgumentException`, `NetworkException`, `SodiumException`
 
-#### [`error`](../../../src/RequestHandlers/Api/HistoryCosign.php#L62-L65)
+#### [`error`](../../../src/RequestHandlers/Api/HistoryCosign.php#L69-L72)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -1403,9 +1935,9 @@ Returns `Psr\Http\Message\ResponseInterface`
 - `$message`: `string`
 - `$code`: `int` = 400
 
-**Throws:** `DependencyException`, `JsonException`, `NotImplementedException`, `SodiumException`
+**Throws:** `BaseJsonException`, `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`signResponse`](../../../src/RequestHandlers/Api/HistoryCosign.php#L76-L88)
+#### [`signResponse`](../../../src/RequestHandlers/Api/HistoryCosign.php#L83-L95)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -1417,7 +1949,7 @@ Implements an RFC 9421 HTTP Message Signature with Ed25519.
 
 **Throws:** `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`json`](../../../src/RequestHandlers/Api/HistoryCosign.php#L98-L117)
+#### [`json`](../../../src/RequestHandlers/Api/HistoryCosign.php#L107-L126)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -1431,7 +1963,7 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 
 **Throws:** `DependencyException`, `BaseJsonException`, `NotImplementedException`, `SodiumException`
 
-#### [`twig`](../../../src/RequestHandlers/Api/HistoryCosign.php#L125-L142)
+#### [`twig`](../../../src/RequestHandlers/Api/HistoryCosign.php#L136-L153)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -1444,7 +1976,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `DependencyException`, `LoaderError`, `RuntimeError`, `SyntaxError`
 
-#### [`appCache`](../../../src/RequestHandlers/Api/HistoryCosign.php#L46-L49)
+#### [`appCache`](../../../src/RequestHandlers/Api/HistoryCosign.php#L55-L58)
 
 Returns `FediE2EE\PKDServer\AppCache`
 
@@ -1455,7 +1987,7 @@ Returns `FediE2EE\PKDServer\AppCache`
 
 **Throws:** `DependencyException`
 
-#### [`table`](../../../src/RequestHandlers/Api/HistoryCosign.php#L56-L79)
+#### [`table`](../../../src/RequestHandlers/Api/HistoryCosign.php#L65-L88)
 
 Returns `FediE2EE\PKDServer\Table`
 
@@ -1465,7 +1997,7 @@ Returns `FediE2EE\PKDServer\Table`
 
 **Throws:** `CacheException`, `DependencyException`, `TableException`
 
-#### [`injectConfig`](../../../src/RequestHandlers/Api/HistoryCosign.php#L81-L84)
+#### [`injectConfig`](../../../src/RequestHandlers/Api/HistoryCosign.php#L90-L93)
 
 Returns `void`
 
@@ -1473,13 +2005,13 @@ Returns `void`
 
 - `$config`: `FediE2EE\PKDServer\ServerConfig`
 
-#### [`config`](../../../src/RequestHandlers/Api/HistoryCosign.php#L89-L99)
+#### [`config`](../../../src/RequestHandlers/Api/HistoryCosign.php#L98-L108)
 
 Returns `FediE2EE\PKDServer\ServerConfig`
 
 **Throws:** `DependencyException`
 
-#### [`setWebFinger`](../../../src/RequestHandlers/Api/HistoryCosign.php#L104-L108)
+#### [`setWebFinger`](../../../src/RequestHandlers/Api/HistoryCosign.php#L113-L117)
 
 Returns `self`
 
@@ -1489,7 +2021,7 @@ This is intended for mocking in unit tests
 
 - `$wf`: `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
-#### [`webfinger`](../../../src/RequestHandlers/Api/HistoryCosign.php#L115-L122)
+#### [`webfinger`](../../../src/RequestHandlers/Api/HistoryCosign.php#L124-L131)
 
 Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
@@ -1499,7 +2031,83 @@ Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
 **Throws:** `CertaintyException`, `DependencyException`, `SodiumException`
 
-#### [`jsonDecode`](../../../src/RequestHandlers/Api/HistoryCosign.php#L15-L18)
+#### [`parseUrlHost`](../../../src/RequestHandlers/Api/HistoryCosign.php#L137-L144)
+
+static · Returns `?string`
+
+**Parameters:**
+
+- `$url`: `string`
+
+#### [`assertArray`](../../../src/RequestHandlers/Api/HistoryCosign.php#L152-L158)
+
+static · Returns `array`
+
+**Parameters:**
+
+- `$result`: `object|array`
+
+**Throws:** `TypeError`
+
+#### [`assertString`](../../../src/RequestHandlers/Api/HistoryCosign.php#L163-L169)
+
+static · Returns `string`
+
+**Parameters:**
+
+- `$value`: `mixed`
+
+**Throws:** `TypeError`
+
+#### [`assertStringOrNull`](../../../src/RequestHandlers/Api/HistoryCosign.php#L171-L180)
+
+static · Returns `?string`
+
+**Parameters:**
+
+- `$value`: `mixed`
+
+#### [`assertInt`](../../../src/RequestHandlers/Api/HistoryCosign.php#L185-L194)
+
+static · Returns `int`
+
+**Parameters:**
+
+- `$value`: `mixed`
+
+**Throws:** `TypeError`
+
+#### [`rowToStringArray`](../../../src/RequestHandlers/Api/HistoryCosign.php#L201-L211)
+
+static · Returns `array`
+
+**Parameters:**
+
+- `$row`: `object|array`
+
+**Throws:** `TypeError`
+
+#### [`decryptedString`](../../../src/RequestHandlers/Api/HistoryCosign.php#L217-L227)
+
+static · Returns `string`
+
+**Parameters:**
+
+- `$row`: `array`
+- `$key`: `string`
+
+**Throws:** `TypeError`
+
+#### [`blindIndexValue`](../../../src/RequestHandlers/Api/HistoryCosign.php#L234-L244)
+
+static · Returns `string`
+
+**Parameters:**
+
+- `$blindIndex`: `array|string`
+- `$key`: `?string` = null
+
+#### [`jsonDecode`](../../../src/RequestHandlers/Api/HistoryCosign.php#L17-L20)
 
 static · Returns `array`
 
@@ -1509,9 +2117,9 @@ static · Returns `array`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonDecodeObject`](../../../src/RequestHandlers/Api/HistoryCosign.php#L23-L26)
+#### [`jsonDecodeObject`](../../../src/RequestHandlers/Api/HistoryCosign.php#L25-L28)
 
-static · Returns `object`
+static · Returns `stdClass`
 
 **Parameters:**
 
@@ -1519,7 +2127,7 @@ static · Returns `object`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonEncode`](../../../src/RequestHandlers/Api/HistoryCosign.php#L31-L37)
+#### [`jsonEncode`](../../../src/RequestHandlers/Api/HistoryCosign.php#L34-L40)
 
 static · Returns `string`
 
@@ -1579,11 +2187,11 @@ Returns `bool`
 
 **Throws:** `DependencyException`
 
-#### [`time`](../../../src/RequestHandlers/Api/HistorySince.php#L38-L41)
+#### [`time`](../../../src/RequestHandlers/Api/HistorySince.php#L39-L42)
 
 Returns `string`
 
-#### [`canonicalizeActor`](../../../src/RequestHandlers/Api/HistorySince.php#L50-L54)
+#### [`canonicalizeActor`](../../../src/RequestHandlers/Api/HistorySince.php#L53-L61)
 
 Returns `string`
 
@@ -1591,9 +2199,9 @@ Returns `string`
 
 - `$actor`: `string`
 
-**Throws:** `DependencyException`, `GuzzleException`, `NetworkException`, `SodiumException`, `CertaintyException`
+**Throws:** `CacheException`, `CertaintyException`, `DependencyException`, `GuzzleException`, `InvalidArgumentException`, `NetworkException`, `SodiumException`
 
-#### [`error`](../../../src/RequestHandlers/Api/HistorySince.php#L62-L65)
+#### [`error`](../../../src/RequestHandlers/Api/HistorySince.php#L69-L72)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -1602,9 +2210,9 @@ Returns `Psr\Http\Message\ResponseInterface`
 - `$message`: `string`
 - `$code`: `int` = 400
 
-**Throws:** `DependencyException`, `JsonException`, `NotImplementedException`, `SodiumException`
+**Throws:** `BaseJsonException`, `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`signResponse`](../../../src/RequestHandlers/Api/HistorySince.php#L76-L88)
+#### [`signResponse`](../../../src/RequestHandlers/Api/HistorySince.php#L83-L95)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -1616,7 +2224,7 @@ Implements an RFC 9421 HTTP Message Signature with Ed25519.
 
 **Throws:** `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`json`](../../../src/RequestHandlers/Api/HistorySince.php#L98-L117)
+#### [`json`](../../../src/RequestHandlers/Api/HistorySince.php#L107-L126)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -1630,7 +2238,7 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 
 **Throws:** `DependencyException`, `BaseJsonException`, `NotImplementedException`, `SodiumException`
 
-#### [`twig`](../../../src/RequestHandlers/Api/HistorySince.php#L125-L142)
+#### [`twig`](../../../src/RequestHandlers/Api/HistorySince.php#L136-L153)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -1643,7 +2251,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `DependencyException`, `LoaderError`, `RuntimeError`, `SyntaxError`
 
-#### [`appCache`](../../../src/RequestHandlers/Api/HistorySince.php#L46-L49)
+#### [`appCache`](../../../src/RequestHandlers/Api/HistorySince.php#L55-L58)
 
 Returns `FediE2EE\PKDServer\AppCache`
 
@@ -1654,7 +2262,7 @@ Returns `FediE2EE\PKDServer\AppCache`
 
 **Throws:** `DependencyException`
 
-#### [`table`](../../../src/RequestHandlers/Api/HistorySince.php#L56-L79)
+#### [`table`](../../../src/RequestHandlers/Api/HistorySince.php#L65-L88)
 
 Returns `FediE2EE\PKDServer\Table`
 
@@ -1664,7 +2272,7 @@ Returns `FediE2EE\PKDServer\Table`
 
 **Throws:** `CacheException`, `DependencyException`, `TableException`
 
-#### [`injectConfig`](../../../src/RequestHandlers/Api/HistorySince.php#L81-L84)
+#### [`injectConfig`](../../../src/RequestHandlers/Api/HistorySince.php#L90-L93)
 
 Returns `void`
 
@@ -1672,13 +2280,13 @@ Returns `void`
 
 - `$config`: `FediE2EE\PKDServer\ServerConfig`
 
-#### [`config`](../../../src/RequestHandlers/Api/HistorySince.php#L89-L99)
+#### [`config`](../../../src/RequestHandlers/Api/HistorySince.php#L98-L108)
 
 Returns `FediE2EE\PKDServer\ServerConfig`
 
 **Throws:** `DependencyException`
 
-#### [`setWebFinger`](../../../src/RequestHandlers/Api/HistorySince.php#L104-L108)
+#### [`setWebFinger`](../../../src/RequestHandlers/Api/HistorySince.php#L113-L117)
 
 Returns `self`
 
@@ -1688,7 +2296,7 @@ This is intended for mocking in unit tests
 
 - `$wf`: `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
-#### [`webfinger`](../../../src/RequestHandlers/Api/HistorySince.php#L115-L122)
+#### [`webfinger`](../../../src/RequestHandlers/Api/HistorySince.php#L124-L131)
 
 Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
@@ -1698,7 +2306,83 @@ Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
 **Throws:** `CertaintyException`, `DependencyException`, `SodiumException`
 
-#### [`jsonDecode`](../../../src/RequestHandlers/Api/HistorySince.php#L15-L18)
+#### [`parseUrlHost`](../../../src/RequestHandlers/Api/HistorySince.php#L137-L144)
+
+static · Returns `?string`
+
+**Parameters:**
+
+- `$url`: `string`
+
+#### [`assertArray`](../../../src/RequestHandlers/Api/HistorySince.php#L152-L158)
+
+static · Returns `array`
+
+**Parameters:**
+
+- `$result`: `object|array`
+
+**Throws:** `TypeError`
+
+#### [`assertString`](../../../src/RequestHandlers/Api/HistorySince.php#L163-L169)
+
+static · Returns `string`
+
+**Parameters:**
+
+- `$value`: `mixed`
+
+**Throws:** `TypeError`
+
+#### [`assertStringOrNull`](../../../src/RequestHandlers/Api/HistorySince.php#L171-L180)
+
+static · Returns `?string`
+
+**Parameters:**
+
+- `$value`: `mixed`
+
+#### [`assertInt`](../../../src/RequestHandlers/Api/HistorySince.php#L185-L194)
+
+static · Returns `int`
+
+**Parameters:**
+
+- `$value`: `mixed`
+
+**Throws:** `TypeError`
+
+#### [`rowToStringArray`](../../../src/RequestHandlers/Api/HistorySince.php#L201-L211)
+
+static · Returns `array`
+
+**Parameters:**
+
+- `$row`: `object|array`
+
+**Throws:** `TypeError`
+
+#### [`decryptedString`](../../../src/RequestHandlers/Api/HistorySince.php#L217-L227)
+
+static · Returns `string`
+
+**Parameters:**
+
+- `$row`: `array`
+- `$key`: `string`
+
+**Throws:** `TypeError`
+
+#### [`blindIndexValue`](../../../src/RequestHandlers/Api/HistorySince.php#L234-L244)
+
+static · Returns `string`
+
+**Parameters:**
+
+- `$blindIndex`: `array|string`
+- `$key`: `?string` = null
+
+#### [`jsonDecode`](../../../src/RequestHandlers/Api/HistorySince.php#L17-L20)
 
 static · Returns `array`
 
@@ -1708,9 +2392,9 @@ static · Returns `array`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonDecodeObject`](../../../src/RequestHandlers/Api/HistorySince.php#L23-L26)
+#### [`jsonDecodeObject`](../../../src/RequestHandlers/Api/HistorySince.php#L25-L28)
 
-static · Returns `object`
+static · Returns `stdClass`
 
 **Parameters:**
 
@@ -1718,7 +2402,7 @@ static · Returns `object`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonEncode`](../../../src/RequestHandlers/Api/HistorySince.php#L31-L37)
+#### [`jsonEncode`](../../../src/RequestHandlers/Api/HistorySince.php#L34-L40)
 
 static · Returns `string`
 
@@ -1748,19 +2432,19 @@ static · Returns `string`
 
 ### Methods
 
-#### [`__construct`](../../../src/RequestHandlers/Api/HistoryView.php#L50-L57)
+#### [`__construct`](../../../src/RequestHandlers/Api/HistoryView.php#L51-L58)
 
 Returns `void`
 
 **Throws:** `DependencyException`, `TableException`, `CacheException`
 
-#### [`getPrimaryCacheKey`](../../../src/RequestHandlers/Api/HistoryView.php#L60-L63)
+#### [`getPrimaryCacheKey`](../../../src/RequestHandlers/Api/HistoryView.php#L61-L64)
 
 Returns `string`
 
 **Attributes:** `#[Override]`
 
-#### [`handle`](../../../src/RequestHandlers/Api/HistoryView.php#L78-L110)
+#### [`handle`](../../../src/RequestHandlers/Api/HistoryView.php#L80-L113)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -1770,7 +2454,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 - `$request`: `Psr\Http\Message\ServerRequestInterface`
 
-**Throws:** `BundleException`, `CryptoException`, `DependencyException`, `HPKEException`, `InputException`, `InvalidArgumentException`, `JsonException`, `NotImplementedException`, `SodiumException`
+**Throws:** `BaseJsonException`, `BundleException`, `CryptoException`, `DependencyException`, `HPKEException`, `InputException`, `InvalidArgumentException`, `JsonException`, `NotImplementedException`, `SodiumException`
 
 #### [`clearCache`](../../../src/RequestHandlers/Api/HistoryView.php#L34-L37)
 
@@ -1778,11 +2462,11 @@ Returns `bool`
 
 **Throws:** `DependencyException`
 
-#### [`time`](../../../src/RequestHandlers/Api/HistoryView.php#L38-L41)
+#### [`time`](../../../src/RequestHandlers/Api/HistoryView.php#L39-L42)
 
 Returns `string`
 
-#### [`canonicalizeActor`](../../../src/RequestHandlers/Api/HistoryView.php#L50-L54)
+#### [`canonicalizeActor`](../../../src/RequestHandlers/Api/HistoryView.php#L53-L61)
 
 Returns `string`
 
@@ -1790,9 +2474,9 @@ Returns `string`
 
 - `$actor`: `string`
 
-**Throws:** `DependencyException`, `GuzzleException`, `NetworkException`, `SodiumException`, `CertaintyException`
+**Throws:** `CacheException`, `CertaintyException`, `DependencyException`, `GuzzleException`, `InvalidArgumentException`, `NetworkException`, `SodiumException`
 
-#### [`error`](../../../src/RequestHandlers/Api/HistoryView.php#L62-L65)
+#### [`error`](../../../src/RequestHandlers/Api/HistoryView.php#L69-L72)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -1801,9 +2485,9 @@ Returns `Psr\Http\Message\ResponseInterface`
 - `$message`: `string`
 - `$code`: `int` = 400
 
-**Throws:** `DependencyException`, `JsonException`, `NotImplementedException`, `SodiumException`
+**Throws:** `BaseJsonException`, `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`signResponse`](../../../src/RequestHandlers/Api/HistoryView.php#L76-L88)
+#### [`signResponse`](../../../src/RequestHandlers/Api/HistoryView.php#L83-L95)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -1815,7 +2499,7 @@ Implements an RFC 9421 HTTP Message Signature with Ed25519.
 
 **Throws:** `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`json`](../../../src/RequestHandlers/Api/HistoryView.php#L98-L117)
+#### [`json`](../../../src/RequestHandlers/Api/HistoryView.php#L107-L126)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -1829,7 +2513,7 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 
 **Throws:** `DependencyException`, `BaseJsonException`, `NotImplementedException`, `SodiumException`
 
-#### [`twig`](../../../src/RequestHandlers/Api/HistoryView.php#L125-L142)
+#### [`twig`](../../../src/RequestHandlers/Api/HistoryView.php#L136-L153)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -1842,7 +2526,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `DependencyException`, `LoaderError`, `RuntimeError`, `SyntaxError`
 
-#### [`appCache`](../../../src/RequestHandlers/Api/HistoryView.php#L46-L49)
+#### [`appCache`](../../../src/RequestHandlers/Api/HistoryView.php#L55-L58)
 
 Returns `FediE2EE\PKDServer\AppCache`
 
@@ -1853,7 +2537,7 @@ Returns `FediE2EE\PKDServer\AppCache`
 
 **Throws:** `DependencyException`
 
-#### [`table`](../../../src/RequestHandlers/Api/HistoryView.php#L56-L79)
+#### [`table`](../../../src/RequestHandlers/Api/HistoryView.php#L65-L88)
 
 Returns `FediE2EE\PKDServer\Table`
 
@@ -1863,7 +2547,7 @@ Returns `FediE2EE\PKDServer\Table`
 
 **Throws:** `CacheException`, `DependencyException`, `TableException`
 
-#### [`injectConfig`](../../../src/RequestHandlers/Api/HistoryView.php#L81-L84)
+#### [`injectConfig`](../../../src/RequestHandlers/Api/HistoryView.php#L90-L93)
 
 Returns `void`
 
@@ -1871,13 +2555,13 @@ Returns `void`
 
 - `$config`: `FediE2EE\PKDServer\ServerConfig`
 
-#### [`config`](../../../src/RequestHandlers/Api/HistoryView.php#L89-L99)
+#### [`config`](../../../src/RequestHandlers/Api/HistoryView.php#L98-L108)
 
 Returns `FediE2EE\PKDServer\ServerConfig`
 
 **Throws:** `DependencyException`
 
-#### [`setWebFinger`](../../../src/RequestHandlers/Api/HistoryView.php#L104-L108)
+#### [`setWebFinger`](../../../src/RequestHandlers/Api/HistoryView.php#L113-L117)
 
 Returns `self`
 
@@ -1887,7 +2571,7 @@ This is intended for mocking in unit tests
 
 - `$wf`: `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
-#### [`webfinger`](../../../src/RequestHandlers/Api/HistoryView.php#L115-L122)
+#### [`webfinger`](../../../src/RequestHandlers/Api/HistoryView.php#L124-L131)
 
 Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
@@ -1897,7 +2581,83 @@ Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
 **Throws:** `CertaintyException`, `DependencyException`, `SodiumException`
 
-#### [`jsonDecode`](../../../src/RequestHandlers/Api/HistoryView.php#L15-L18)
+#### [`parseUrlHost`](../../../src/RequestHandlers/Api/HistoryView.php#L137-L144)
+
+static · Returns `?string`
+
+**Parameters:**
+
+- `$url`: `string`
+
+#### [`assertArray`](../../../src/RequestHandlers/Api/HistoryView.php#L152-L158)
+
+static · Returns `array`
+
+**Parameters:**
+
+- `$result`: `object|array`
+
+**Throws:** `TypeError`
+
+#### [`assertString`](../../../src/RequestHandlers/Api/HistoryView.php#L163-L169)
+
+static · Returns `string`
+
+**Parameters:**
+
+- `$value`: `mixed`
+
+**Throws:** `TypeError`
+
+#### [`assertStringOrNull`](../../../src/RequestHandlers/Api/HistoryView.php#L171-L180)
+
+static · Returns `?string`
+
+**Parameters:**
+
+- `$value`: `mixed`
+
+#### [`assertInt`](../../../src/RequestHandlers/Api/HistoryView.php#L185-L194)
+
+static · Returns `int`
+
+**Parameters:**
+
+- `$value`: `mixed`
+
+**Throws:** `TypeError`
+
+#### [`rowToStringArray`](../../../src/RequestHandlers/Api/HistoryView.php#L201-L211)
+
+static · Returns `array`
+
+**Parameters:**
+
+- `$row`: `object|array`
+
+**Throws:** `TypeError`
+
+#### [`decryptedString`](../../../src/RequestHandlers/Api/HistoryView.php#L217-L227)
+
+static · Returns `string`
+
+**Parameters:**
+
+- `$row`: `array`
+- `$key`: `string`
+
+**Throws:** `TypeError`
+
+#### [`blindIndexValue`](../../../src/RequestHandlers/Api/HistoryView.php#L234-L244)
+
+static · Returns `string`
+
+**Parameters:**
+
+- `$blindIndex`: `array|string`
+- `$key`: `?string` = null
+
+#### [`jsonDecode`](../../../src/RequestHandlers/Api/HistoryView.php#L17-L20)
 
 static · Returns `array`
 
@@ -1907,9 +2667,9 @@ static · Returns `array`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonDecodeObject`](../../../src/RequestHandlers/Api/HistoryView.php#L23-L26)
+#### [`jsonDecodeObject`](../../../src/RequestHandlers/Api/HistoryView.php#L25-L28)
 
-static · Returns `object`
+static · Returns `stdClass`
 
 **Parameters:**
 
@@ -1917,7 +2677,7 @@ static · Returns `object`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonEncode`](../../../src/RequestHandlers/Api/HistoryView.php#L31-L37)
+#### [`jsonEncode`](../../../src/RequestHandlers/Api/HistoryView.php#L34-L40)
 
 static · Returns `string`
 
@@ -1959,11 +2719,11 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `DependencyException`, `JsonException`, `NotImplementedException`, `SodiumException`
 
-#### [`time`](../../../src/RequestHandlers/Api/Info.php#L38-L41)
+#### [`time`](../../../src/RequestHandlers/Api/Info.php#L39-L42)
 
 Returns `string`
 
-#### [`canonicalizeActor`](../../../src/RequestHandlers/Api/Info.php#L50-L54)
+#### [`canonicalizeActor`](../../../src/RequestHandlers/Api/Info.php#L53-L61)
 
 Returns `string`
 
@@ -1971,9 +2731,9 @@ Returns `string`
 
 - `$actor`: `string`
 
-**Throws:** `DependencyException`, `GuzzleException`, `NetworkException`, `SodiumException`, `CertaintyException`
+**Throws:** `CacheException`, `CertaintyException`, `DependencyException`, `GuzzleException`, `InvalidArgumentException`, `NetworkException`, `SodiumException`
 
-#### [`error`](../../../src/RequestHandlers/Api/Info.php#L62-L65)
+#### [`error`](../../../src/RequestHandlers/Api/Info.php#L69-L72)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -1982,9 +2742,9 @@ Returns `Psr\Http\Message\ResponseInterface`
 - `$message`: `string`
 - `$code`: `int` = 400
 
-**Throws:** `DependencyException`, `JsonException`, `NotImplementedException`, `SodiumException`
+**Throws:** `BaseJsonException`, `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`signResponse`](../../../src/RequestHandlers/Api/Info.php#L76-L88)
+#### [`signResponse`](../../../src/RequestHandlers/Api/Info.php#L83-L95)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -1996,7 +2756,7 @@ Implements an RFC 9421 HTTP Message Signature with Ed25519.
 
 **Throws:** `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`json`](../../../src/RequestHandlers/Api/Info.php#L98-L117)
+#### [`json`](../../../src/RequestHandlers/Api/Info.php#L107-L126)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -2010,7 +2770,7 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 
 **Throws:** `DependencyException`, `BaseJsonException`, `NotImplementedException`, `SodiumException`
 
-#### [`twig`](../../../src/RequestHandlers/Api/Info.php#L125-L142)
+#### [`twig`](../../../src/RequestHandlers/Api/Info.php#L136-L153)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -2023,7 +2783,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `DependencyException`, `LoaderError`, `RuntimeError`, `SyntaxError`
 
-#### [`appCache`](../../../src/RequestHandlers/Api/Info.php#L46-L49)
+#### [`appCache`](../../../src/RequestHandlers/Api/Info.php#L55-L58)
 
 Returns `FediE2EE\PKDServer\AppCache`
 
@@ -2034,7 +2794,7 @@ Returns `FediE2EE\PKDServer\AppCache`
 
 **Throws:** `DependencyException`
 
-#### [`table`](../../../src/RequestHandlers/Api/Info.php#L56-L79)
+#### [`table`](../../../src/RequestHandlers/Api/Info.php#L65-L88)
 
 Returns `FediE2EE\PKDServer\Table`
 
@@ -2044,7 +2804,7 @@ Returns `FediE2EE\PKDServer\Table`
 
 **Throws:** `CacheException`, `DependencyException`, `TableException`
 
-#### [`injectConfig`](../../../src/RequestHandlers/Api/Info.php#L81-L84)
+#### [`injectConfig`](../../../src/RequestHandlers/Api/Info.php#L90-L93)
 
 Returns `void`
 
@@ -2052,13 +2812,13 @@ Returns `void`
 
 - `$config`: `FediE2EE\PKDServer\ServerConfig`
 
-#### [`config`](../../../src/RequestHandlers/Api/Info.php#L89-L99)
+#### [`config`](../../../src/RequestHandlers/Api/Info.php#L98-L108)
 
 Returns `FediE2EE\PKDServer\ServerConfig`
 
 **Throws:** `DependencyException`
 
-#### [`setWebFinger`](../../../src/RequestHandlers/Api/Info.php#L104-L108)
+#### [`setWebFinger`](../../../src/RequestHandlers/Api/Info.php#L113-L117)
 
 Returns `self`
 
@@ -2068,7 +2828,7 @@ This is intended for mocking in unit tests
 
 - `$wf`: `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
-#### [`webfinger`](../../../src/RequestHandlers/Api/Info.php#L115-L122)
+#### [`webfinger`](../../../src/RequestHandlers/Api/Info.php#L124-L131)
 
 Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
@@ -2078,7 +2838,83 @@ Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
 **Throws:** `CertaintyException`, `DependencyException`, `SodiumException`
 
-#### [`jsonDecode`](../../../src/RequestHandlers/Api/Info.php#L15-L18)
+#### [`parseUrlHost`](../../../src/RequestHandlers/Api/Info.php#L137-L144)
+
+static · Returns `?string`
+
+**Parameters:**
+
+- `$url`: `string`
+
+#### [`assertArray`](../../../src/RequestHandlers/Api/Info.php#L152-L158)
+
+static · Returns `array`
+
+**Parameters:**
+
+- `$result`: `object|array`
+
+**Throws:** `TypeError`
+
+#### [`assertString`](../../../src/RequestHandlers/Api/Info.php#L163-L169)
+
+static · Returns `string`
+
+**Parameters:**
+
+- `$value`: `mixed`
+
+**Throws:** `TypeError`
+
+#### [`assertStringOrNull`](../../../src/RequestHandlers/Api/Info.php#L171-L180)
+
+static · Returns `?string`
+
+**Parameters:**
+
+- `$value`: `mixed`
+
+#### [`assertInt`](../../../src/RequestHandlers/Api/Info.php#L185-L194)
+
+static · Returns `int`
+
+**Parameters:**
+
+- `$value`: `mixed`
+
+**Throws:** `TypeError`
+
+#### [`rowToStringArray`](../../../src/RequestHandlers/Api/Info.php#L201-L211)
+
+static · Returns `array`
+
+**Parameters:**
+
+- `$row`: `object|array`
+
+**Throws:** `TypeError`
+
+#### [`decryptedString`](../../../src/RequestHandlers/Api/Info.php#L217-L227)
+
+static · Returns `string`
+
+**Parameters:**
+
+- `$row`: `array`
+- `$key`: `string`
+
+**Throws:** `TypeError`
+
+#### [`blindIndexValue`](../../../src/RequestHandlers/Api/Info.php#L234-L244)
+
+static · Returns `string`
+
+**Parameters:**
+
+- `$blindIndex`: `array|string`
+- `$key`: `?string` = null
+
+#### [`jsonDecode`](../../../src/RequestHandlers/Api/Info.php#L17-L20)
 
 static · Returns `array`
 
@@ -2088,9 +2924,9 @@ static · Returns `array`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonDecodeObject`](../../../src/RequestHandlers/Api/Info.php#L23-L26)
+#### [`jsonDecodeObject`](../../../src/RequestHandlers/Api/Info.php#L25-L28)
 
-static · Returns `object`
+static · Returns `stdClass`
 
 **Parameters:**
 
@@ -2098,7 +2934,7 @@ static · Returns `object`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonEncode`](../../../src/RequestHandlers/Api/Info.php#L31-L37)
+#### [`jsonEncode`](../../../src/RequestHandlers/Api/Info.php#L34-L40)
 
 static · Returns `string`
 
@@ -2146,11 +2982,11 @@ Returns `void`
 
 **Throws:** `ArrayKeyException`, `BlindIndexNotFoundException`, `CipherSweetException`, `CryptoOperationException`, `DependencyException`, `InvalidCiphertextException`, `JsonException`, `NotImplementedException`, `SodiumException`, `TableException`, `DateMalformedStringException`, `CryptoException`
 
-#### [`time`](../../../src/RequestHandlers/Api/ListAuxData.php#L38-L41)
+#### [`time`](../../../src/RequestHandlers/Api/ListAuxData.php#L39-L42)
 
 Returns `string`
 
-#### [`canonicalizeActor`](../../../src/RequestHandlers/Api/ListAuxData.php#L50-L54)
+#### [`canonicalizeActor`](../../../src/RequestHandlers/Api/ListAuxData.php#L53-L61)
 
 Returns `string`
 
@@ -2158,9 +2994,9 @@ Returns `string`
 
 - `$actor`: `string`
 
-**Throws:** `DependencyException`, `GuzzleException`, `NetworkException`, `SodiumException`, `CertaintyException`
+**Throws:** `CacheException`, `CertaintyException`, `DependencyException`, `GuzzleException`, `InvalidArgumentException`, `NetworkException`, `SodiumException`
 
-#### [`error`](../../../src/RequestHandlers/Api/ListAuxData.php#L62-L65)
+#### [`error`](../../../src/RequestHandlers/Api/ListAuxData.php#L69-L72)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -2169,9 +3005,9 @@ Returns `Psr\Http\Message\ResponseInterface`
 - `$message`: `string`
 - `$code`: `int` = 400
 
-**Throws:** `DependencyException`, `JsonException`, `NotImplementedException`, `SodiumException`
+**Throws:** `BaseJsonException`, `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`signResponse`](../../../src/RequestHandlers/Api/ListAuxData.php#L76-L88)
+#### [`signResponse`](../../../src/RequestHandlers/Api/ListAuxData.php#L83-L95)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -2183,7 +3019,7 @@ Implements an RFC 9421 HTTP Message Signature with Ed25519.
 
 **Throws:** `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`json`](../../../src/RequestHandlers/Api/ListAuxData.php#L98-L117)
+#### [`json`](../../../src/RequestHandlers/Api/ListAuxData.php#L107-L126)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -2197,7 +3033,7 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 
 **Throws:** `DependencyException`, `BaseJsonException`, `NotImplementedException`, `SodiumException`
 
-#### [`twig`](../../../src/RequestHandlers/Api/ListAuxData.php#L125-L142)
+#### [`twig`](../../../src/RequestHandlers/Api/ListAuxData.php#L136-L153)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -2210,7 +3046,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `DependencyException`, `LoaderError`, `RuntimeError`, `SyntaxError`
 
-#### [`appCache`](../../../src/RequestHandlers/Api/ListAuxData.php#L46-L49)
+#### [`appCache`](../../../src/RequestHandlers/Api/ListAuxData.php#L55-L58)
 
 Returns `FediE2EE\PKDServer\AppCache`
 
@@ -2221,7 +3057,7 @@ Returns `FediE2EE\PKDServer\AppCache`
 
 **Throws:** `DependencyException`
 
-#### [`table`](../../../src/RequestHandlers/Api/ListAuxData.php#L56-L79)
+#### [`table`](../../../src/RequestHandlers/Api/ListAuxData.php#L65-L88)
 
 Returns `FediE2EE\PKDServer\Table`
 
@@ -2231,7 +3067,7 @@ Returns `FediE2EE\PKDServer\Table`
 
 **Throws:** `CacheException`, `DependencyException`, `TableException`
 
-#### [`injectConfig`](../../../src/RequestHandlers/Api/ListAuxData.php#L81-L84)
+#### [`injectConfig`](../../../src/RequestHandlers/Api/ListAuxData.php#L90-L93)
 
 Returns `void`
 
@@ -2239,13 +3075,13 @@ Returns `void`
 
 - `$config`: `FediE2EE\PKDServer\ServerConfig`
 
-#### [`config`](../../../src/RequestHandlers/Api/ListAuxData.php#L89-L99)
+#### [`config`](../../../src/RequestHandlers/Api/ListAuxData.php#L98-L108)
 
 Returns `FediE2EE\PKDServer\ServerConfig`
 
 **Throws:** `DependencyException`
 
-#### [`setWebFinger`](../../../src/RequestHandlers/Api/ListAuxData.php#L104-L108)
+#### [`setWebFinger`](../../../src/RequestHandlers/Api/ListAuxData.php#L113-L117)
 
 Returns `self`
 
@@ -2255,7 +3091,7 @@ This is intended for mocking in unit tests
 
 - `$wf`: `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
-#### [`webfinger`](../../../src/RequestHandlers/Api/ListAuxData.php#L115-L122)
+#### [`webfinger`](../../../src/RequestHandlers/Api/ListAuxData.php#L124-L131)
 
 Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
@@ -2265,7 +3101,83 @@ Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
 **Throws:** `CertaintyException`, `DependencyException`, `SodiumException`
 
-#### [`jsonDecode`](../../../src/RequestHandlers/Api/ListAuxData.php#L15-L18)
+#### [`parseUrlHost`](../../../src/RequestHandlers/Api/ListAuxData.php#L137-L144)
+
+static · Returns `?string`
+
+**Parameters:**
+
+- `$url`: `string`
+
+#### [`assertArray`](../../../src/RequestHandlers/Api/ListAuxData.php#L152-L158)
+
+static · Returns `array`
+
+**Parameters:**
+
+- `$result`: `object|array`
+
+**Throws:** `TypeError`
+
+#### [`assertString`](../../../src/RequestHandlers/Api/ListAuxData.php#L163-L169)
+
+static · Returns `string`
+
+**Parameters:**
+
+- `$value`: `mixed`
+
+**Throws:** `TypeError`
+
+#### [`assertStringOrNull`](../../../src/RequestHandlers/Api/ListAuxData.php#L171-L180)
+
+static · Returns `?string`
+
+**Parameters:**
+
+- `$value`: `mixed`
+
+#### [`assertInt`](../../../src/RequestHandlers/Api/ListAuxData.php#L185-L194)
+
+static · Returns `int`
+
+**Parameters:**
+
+- `$value`: `mixed`
+
+**Throws:** `TypeError`
+
+#### [`rowToStringArray`](../../../src/RequestHandlers/Api/ListAuxData.php#L201-L211)
+
+static · Returns `array`
+
+**Parameters:**
+
+- `$row`: `object|array`
+
+**Throws:** `TypeError`
+
+#### [`decryptedString`](../../../src/RequestHandlers/Api/ListAuxData.php#L217-L227)
+
+static · Returns `string`
+
+**Parameters:**
+
+- `$row`: `array`
+- `$key`: `string`
+
+**Throws:** `TypeError`
+
+#### [`blindIndexValue`](../../../src/RequestHandlers/Api/ListAuxData.php#L234-L244)
+
+static · Returns `string`
+
+**Parameters:**
+
+- `$blindIndex`: `array|string`
+- `$key`: `?string` = null
+
+#### [`jsonDecode`](../../../src/RequestHandlers/Api/ListAuxData.php#L17-L20)
 
 static · Returns `array`
 
@@ -2275,9 +3187,9 @@ static · Returns `array`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonDecodeObject`](../../../src/RequestHandlers/Api/ListAuxData.php#L23-L26)
+#### [`jsonDecodeObject`](../../../src/RequestHandlers/Api/ListAuxData.php#L25-L28)
 
-static · Returns `object`
+static · Returns `stdClass`
 
 **Parameters:**
 
@@ -2285,7 +3197,7 @@ static · Returns `object`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonEncode`](../../../src/RequestHandlers/Api/ListAuxData.php#L31-L37)
+#### [`jsonEncode`](../../../src/RequestHandlers/Api/ListAuxData.php#L34-L40)
 
 static · Returns `string`
 
@@ -2333,11 +3245,11 @@ Returns `void`
 
 **Throws:** `ArrayKeyException`, `BlindIndexNotFoundException`, `CacheException`, `CipherSweetException`, `CryptoOperationException`, `DependencyException`, `InvalidCiphertextException`, `JsonException`, `NotImplementedException`, `SodiumException`, `TableException`, `DateMalformedStringException`, `CryptoException`, `BaseJsonException`
 
-#### [`time`](../../../src/RequestHandlers/Api/ListKeys.php#L38-L41)
+#### [`time`](../../../src/RequestHandlers/Api/ListKeys.php#L39-L42)
 
 Returns `string`
 
-#### [`canonicalizeActor`](../../../src/RequestHandlers/Api/ListKeys.php#L50-L54)
+#### [`canonicalizeActor`](../../../src/RequestHandlers/Api/ListKeys.php#L53-L61)
 
 Returns `string`
 
@@ -2345,9 +3257,9 @@ Returns `string`
 
 - `$actor`: `string`
 
-**Throws:** `DependencyException`, `GuzzleException`, `NetworkException`, `SodiumException`, `CertaintyException`
+**Throws:** `CacheException`, `CertaintyException`, `DependencyException`, `GuzzleException`, `InvalidArgumentException`, `NetworkException`, `SodiumException`
 
-#### [`error`](../../../src/RequestHandlers/Api/ListKeys.php#L62-L65)
+#### [`error`](../../../src/RequestHandlers/Api/ListKeys.php#L69-L72)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -2356,9 +3268,9 @@ Returns `Psr\Http\Message\ResponseInterface`
 - `$message`: `string`
 - `$code`: `int` = 400
 
-**Throws:** `DependencyException`, `JsonException`, `NotImplementedException`, `SodiumException`
+**Throws:** `BaseJsonException`, `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`signResponse`](../../../src/RequestHandlers/Api/ListKeys.php#L76-L88)
+#### [`signResponse`](../../../src/RequestHandlers/Api/ListKeys.php#L83-L95)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -2370,7 +3282,7 @@ Implements an RFC 9421 HTTP Message Signature with Ed25519.
 
 **Throws:** `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`json`](../../../src/RequestHandlers/Api/ListKeys.php#L98-L117)
+#### [`json`](../../../src/RequestHandlers/Api/ListKeys.php#L107-L126)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -2384,7 +3296,7 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 
 **Throws:** `DependencyException`, `BaseJsonException`, `NotImplementedException`, `SodiumException`
 
-#### [`twig`](../../../src/RequestHandlers/Api/ListKeys.php#L125-L142)
+#### [`twig`](../../../src/RequestHandlers/Api/ListKeys.php#L136-L153)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -2397,7 +3309,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `DependencyException`, `LoaderError`, `RuntimeError`, `SyntaxError`
 
-#### [`appCache`](../../../src/RequestHandlers/Api/ListKeys.php#L46-L49)
+#### [`appCache`](../../../src/RequestHandlers/Api/ListKeys.php#L55-L58)
 
 Returns `FediE2EE\PKDServer\AppCache`
 
@@ -2408,7 +3320,7 @@ Returns `FediE2EE\PKDServer\AppCache`
 
 **Throws:** `DependencyException`
 
-#### [`table`](../../../src/RequestHandlers/Api/ListKeys.php#L56-L79)
+#### [`table`](../../../src/RequestHandlers/Api/ListKeys.php#L65-L88)
 
 Returns `FediE2EE\PKDServer\Table`
 
@@ -2418,7 +3330,7 @@ Returns `FediE2EE\PKDServer\Table`
 
 **Throws:** `CacheException`, `DependencyException`, `TableException`
 
-#### [`injectConfig`](../../../src/RequestHandlers/Api/ListKeys.php#L81-L84)
+#### [`injectConfig`](../../../src/RequestHandlers/Api/ListKeys.php#L90-L93)
 
 Returns `void`
 
@@ -2426,13 +3338,13 @@ Returns `void`
 
 - `$config`: `FediE2EE\PKDServer\ServerConfig`
 
-#### [`config`](../../../src/RequestHandlers/Api/ListKeys.php#L89-L99)
+#### [`config`](../../../src/RequestHandlers/Api/ListKeys.php#L98-L108)
 
 Returns `FediE2EE\PKDServer\ServerConfig`
 
 **Throws:** `DependencyException`
 
-#### [`setWebFinger`](../../../src/RequestHandlers/Api/ListKeys.php#L104-L108)
+#### [`setWebFinger`](../../../src/RequestHandlers/Api/ListKeys.php#L113-L117)
 
 Returns `self`
 
@@ -2442,7 +3354,7 @@ This is intended for mocking in unit tests
 
 - `$wf`: `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
-#### [`webfinger`](../../../src/RequestHandlers/Api/ListKeys.php#L115-L122)
+#### [`webfinger`](../../../src/RequestHandlers/Api/ListKeys.php#L124-L131)
 
 Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
@@ -2452,7 +3364,83 @@ Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
 **Throws:** `CertaintyException`, `DependencyException`, `SodiumException`
 
-#### [`jsonDecode`](../../../src/RequestHandlers/Api/ListKeys.php#L15-L18)
+#### [`parseUrlHost`](../../../src/RequestHandlers/Api/ListKeys.php#L137-L144)
+
+static · Returns `?string`
+
+**Parameters:**
+
+- `$url`: `string`
+
+#### [`assertArray`](../../../src/RequestHandlers/Api/ListKeys.php#L152-L158)
+
+static · Returns `array`
+
+**Parameters:**
+
+- `$result`: `object|array`
+
+**Throws:** `TypeError`
+
+#### [`assertString`](../../../src/RequestHandlers/Api/ListKeys.php#L163-L169)
+
+static · Returns `string`
+
+**Parameters:**
+
+- `$value`: `mixed`
+
+**Throws:** `TypeError`
+
+#### [`assertStringOrNull`](../../../src/RequestHandlers/Api/ListKeys.php#L171-L180)
+
+static · Returns `?string`
+
+**Parameters:**
+
+- `$value`: `mixed`
+
+#### [`assertInt`](../../../src/RequestHandlers/Api/ListKeys.php#L185-L194)
+
+static · Returns `int`
+
+**Parameters:**
+
+- `$value`: `mixed`
+
+**Throws:** `TypeError`
+
+#### [`rowToStringArray`](../../../src/RequestHandlers/Api/ListKeys.php#L201-L211)
+
+static · Returns `array`
+
+**Parameters:**
+
+- `$row`: `object|array`
+
+**Throws:** `TypeError`
+
+#### [`decryptedString`](../../../src/RequestHandlers/Api/ListKeys.php#L217-L227)
+
+static · Returns `string`
+
+**Parameters:**
+
+- `$row`: `array`
+- `$key`: `string`
+
+**Throws:** `TypeError`
+
+#### [`blindIndexValue`](../../../src/RequestHandlers/Api/ListKeys.php#L234-L244)
+
+static · Returns `string`
+
+**Parameters:**
+
+- `$blindIndex`: `array|string`
+- `$key`: `?string` = null
+
+#### [`jsonDecode`](../../../src/RequestHandlers/Api/ListKeys.php#L17-L20)
 
 static · Returns `array`
 
@@ -2462,9 +3450,9 @@ static · Returns `array`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonDecodeObject`](../../../src/RequestHandlers/Api/ListKeys.php#L23-L26)
+#### [`jsonDecodeObject`](../../../src/RequestHandlers/Api/ListKeys.php#L25-L28)
 
-static · Returns `object`
+static · Returns `stdClass`
 
 **Parameters:**
 
@@ -2472,7 +3460,7 @@ static · Returns `object`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonEncode`](../../../src/RequestHandlers/Api/ListKeys.php#L31-L37)
+#### [`jsonEncode`](../../../src/RequestHandlers/Api/ListKeys.php#L34-L40)
 
 static · Returns `string`
 
@@ -2598,11 +3586,11 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `BaseJsonException`, `CacheException`, `CryptoException`, `DateMalformedStringException`, `DependencyException`, `JsonException`, `NotImplementedException`, `SodiumException`, `TableException`
 
-#### [`time`](../../../src/RequestHandlers/Api/ReplicaInfo.php#L38-L41)
+#### [`time`](../../../src/RequestHandlers/Api/ReplicaInfo.php#L39-L42)
 
 Returns `string`
 
-#### [`canonicalizeActor`](../../../src/RequestHandlers/Api/ReplicaInfo.php#L50-L54)
+#### [`canonicalizeActor`](../../../src/RequestHandlers/Api/ReplicaInfo.php#L53-L61)
 
 Returns `string`
 
@@ -2610,9 +3598,9 @@ Returns `string`
 
 - `$actor`: `string`
 
-**Throws:** `DependencyException`, `GuzzleException`, `NetworkException`, `SodiumException`, `CertaintyException`
+**Throws:** `CacheException`, `CertaintyException`, `DependencyException`, `GuzzleException`, `InvalidArgumentException`, `NetworkException`, `SodiumException`
 
-#### [`error`](../../../src/RequestHandlers/Api/ReplicaInfo.php#L62-L65)
+#### [`error`](../../../src/RequestHandlers/Api/ReplicaInfo.php#L69-L72)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -2621,9 +3609,9 @@ Returns `Psr\Http\Message\ResponseInterface`
 - `$message`: `string`
 - `$code`: `int` = 400
 
-**Throws:** `DependencyException`, `JsonException`, `NotImplementedException`, `SodiumException`
+**Throws:** `BaseJsonException`, `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`signResponse`](../../../src/RequestHandlers/Api/ReplicaInfo.php#L76-L88)
+#### [`signResponse`](../../../src/RequestHandlers/Api/ReplicaInfo.php#L83-L95)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -2635,7 +3623,7 @@ Implements an RFC 9421 HTTP Message Signature with Ed25519.
 
 **Throws:** `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`json`](../../../src/RequestHandlers/Api/ReplicaInfo.php#L98-L117)
+#### [`json`](../../../src/RequestHandlers/Api/ReplicaInfo.php#L107-L126)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -2649,7 +3637,7 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 
 **Throws:** `DependencyException`, `BaseJsonException`, `NotImplementedException`, `SodiumException`
 
-#### [`twig`](../../../src/RequestHandlers/Api/ReplicaInfo.php#L125-L142)
+#### [`twig`](../../../src/RequestHandlers/Api/ReplicaInfo.php#L136-L153)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -2662,7 +3650,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `DependencyException`, `LoaderError`, `RuntimeError`, `SyntaxError`
 
-#### [`appCache`](../../../src/RequestHandlers/Api/ReplicaInfo.php#L46-L49)
+#### [`appCache`](../../../src/RequestHandlers/Api/ReplicaInfo.php#L55-L58)
 
 Returns `FediE2EE\PKDServer\AppCache`
 
@@ -2673,7 +3661,7 @@ Returns `FediE2EE\PKDServer\AppCache`
 
 **Throws:** `DependencyException`
 
-#### [`table`](../../../src/RequestHandlers/Api/ReplicaInfo.php#L56-L79)
+#### [`table`](../../../src/RequestHandlers/Api/ReplicaInfo.php#L65-L88)
 
 Returns `FediE2EE\PKDServer\Table`
 
@@ -2683,7 +3671,7 @@ Returns `FediE2EE\PKDServer\Table`
 
 **Throws:** `CacheException`, `DependencyException`, `TableException`
 
-#### [`injectConfig`](../../../src/RequestHandlers/Api/ReplicaInfo.php#L81-L84)
+#### [`injectConfig`](../../../src/RequestHandlers/Api/ReplicaInfo.php#L90-L93)
 
 Returns `void`
 
@@ -2691,13 +3679,13 @@ Returns `void`
 
 - `$config`: `FediE2EE\PKDServer\ServerConfig`
 
-#### [`config`](../../../src/RequestHandlers/Api/ReplicaInfo.php#L89-L99)
+#### [`config`](../../../src/RequestHandlers/Api/ReplicaInfo.php#L98-L108)
 
 Returns `FediE2EE\PKDServer\ServerConfig`
 
 **Throws:** `DependencyException`
 
-#### [`setWebFinger`](../../../src/RequestHandlers/Api/ReplicaInfo.php#L104-L108)
+#### [`setWebFinger`](../../../src/RequestHandlers/Api/ReplicaInfo.php#L113-L117)
 
 Returns `self`
 
@@ -2707,7 +3695,7 @@ This is intended for mocking in unit tests
 
 - `$wf`: `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
-#### [`webfinger`](../../../src/RequestHandlers/Api/ReplicaInfo.php#L115-L122)
+#### [`webfinger`](../../../src/RequestHandlers/Api/ReplicaInfo.php#L124-L131)
 
 Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
@@ -2717,7 +3705,83 @@ Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
 **Throws:** `CertaintyException`, `DependencyException`, `SodiumException`
 
-#### [`jsonDecode`](../../../src/RequestHandlers/Api/ReplicaInfo.php#L15-L18)
+#### [`parseUrlHost`](../../../src/RequestHandlers/Api/ReplicaInfo.php#L137-L144)
+
+static · Returns `?string`
+
+**Parameters:**
+
+- `$url`: `string`
+
+#### [`assertArray`](../../../src/RequestHandlers/Api/ReplicaInfo.php#L152-L158)
+
+static · Returns `array`
+
+**Parameters:**
+
+- `$result`: `object|array`
+
+**Throws:** `TypeError`
+
+#### [`assertString`](../../../src/RequestHandlers/Api/ReplicaInfo.php#L163-L169)
+
+static · Returns `string`
+
+**Parameters:**
+
+- `$value`: `mixed`
+
+**Throws:** `TypeError`
+
+#### [`assertStringOrNull`](../../../src/RequestHandlers/Api/ReplicaInfo.php#L171-L180)
+
+static · Returns `?string`
+
+**Parameters:**
+
+- `$value`: `mixed`
+
+#### [`assertInt`](../../../src/RequestHandlers/Api/ReplicaInfo.php#L185-L194)
+
+static · Returns `int`
+
+**Parameters:**
+
+- `$value`: `mixed`
+
+**Throws:** `TypeError`
+
+#### [`rowToStringArray`](../../../src/RequestHandlers/Api/ReplicaInfo.php#L201-L211)
+
+static · Returns `array`
+
+**Parameters:**
+
+- `$row`: `object|array`
+
+**Throws:** `TypeError`
+
+#### [`decryptedString`](../../../src/RequestHandlers/Api/ReplicaInfo.php#L217-L227)
+
+static · Returns `string`
+
+**Parameters:**
+
+- `$row`: `array`
+- `$key`: `string`
+
+**Throws:** `TypeError`
+
+#### [`blindIndexValue`](../../../src/RequestHandlers/Api/ReplicaInfo.php#L234-L244)
+
+static · Returns `string`
+
+**Parameters:**
+
+- `$blindIndex`: `array|string`
+- `$key`: `?string` = null
+
+#### [`jsonDecode`](../../../src/RequestHandlers/Api/ReplicaInfo.php#L17-L20)
 
 static · Returns `array`
 
@@ -2727,9 +3791,9 @@ static · Returns `array`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonDecodeObject`](../../../src/RequestHandlers/Api/ReplicaInfo.php#L23-L26)
+#### [`jsonDecodeObject`](../../../src/RequestHandlers/Api/ReplicaInfo.php#L25-L28)
 
-static · Returns `object`
+static · Returns `stdClass`
 
 **Parameters:**
 
@@ -2737,7 +3801,7 @@ static · Returns `object`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonEncode`](../../../src/RequestHandlers/Api/ReplicaInfo.php#L31-L37)
+#### [`jsonEncode`](../../../src/RequestHandlers/Api/ReplicaInfo.php#L34-L40)
 
 static · Returns `string`
 
@@ -2789,11 +3853,11 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `CryptoException`, `DateMalformedStringException`, `DependencyException`, `JsonException`, `NotImplementedException`, `SodiumException`
 
-#### [`time`](../../../src/RequestHandlers/Api/Replicas.php#L38-L41)
+#### [`time`](../../../src/RequestHandlers/Api/Replicas.php#L39-L42)
 
 Returns `string`
 
-#### [`canonicalizeActor`](../../../src/RequestHandlers/Api/Replicas.php#L50-L54)
+#### [`canonicalizeActor`](../../../src/RequestHandlers/Api/Replicas.php#L53-L61)
 
 Returns `string`
 
@@ -2801,9 +3865,9 @@ Returns `string`
 
 - `$actor`: `string`
 
-**Throws:** `DependencyException`, `GuzzleException`, `NetworkException`, `SodiumException`, `CertaintyException`
+**Throws:** `CacheException`, `CertaintyException`, `DependencyException`, `GuzzleException`, `InvalidArgumentException`, `NetworkException`, `SodiumException`
 
-#### [`error`](../../../src/RequestHandlers/Api/Replicas.php#L62-L65)
+#### [`error`](../../../src/RequestHandlers/Api/Replicas.php#L69-L72)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -2812,9 +3876,9 @@ Returns `Psr\Http\Message\ResponseInterface`
 - `$message`: `string`
 - `$code`: `int` = 400
 
-**Throws:** `DependencyException`, `JsonException`, `NotImplementedException`, `SodiumException`
+**Throws:** `BaseJsonException`, `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`signResponse`](../../../src/RequestHandlers/Api/Replicas.php#L76-L88)
+#### [`signResponse`](../../../src/RequestHandlers/Api/Replicas.php#L83-L95)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -2826,7 +3890,7 @@ Implements an RFC 9421 HTTP Message Signature with Ed25519.
 
 **Throws:** `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`json`](../../../src/RequestHandlers/Api/Replicas.php#L98-L117)
+#### [`json`](../../../src/RequestHandlers/Api/Replicas.php#L107-L126)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -2840,7 +3904,7 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 
 **Throws:** `DependencyException`, `BaseJsonException`, `NotImplementedException`, `SodiumException`
 
-#### [`twig`](../../../src/RequestHandlers/Api/Replicas.php#L125-L142)
+#### [`twig`](../../../src/RequestHandlers/Api/Replicas.php#L136-L153)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -2853,7 +3917,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `DependencyException`, `LoaderError`, `RuntimeError`, `SyntaxError`
 
-#### [`appCache`](../../../src/RequestHandlers/Api/Replicas.php#L46-L49)
+#### [`appCache`](../../../src/RequestHandlers/Api/Replicas.php#L55-L58)
 
 Returns `FediE2EE\PKDServer\AppCache`
 
@@ -2864,7 +3928,7 @@ Returns `FediE2EE\PKDServer\AppCache`
 
 **Throws:** `DependencyException`
 
-#### [`table`](../../../src/RequestHandlers/Api/Replicas.php#L56-L79)
+#### [`table`](../../../src/RequestHandlers/Api/Replicas.php#L65-L88)
 
 Returns `FediE2EE\PKDServer\Table`
 
@@ -2874,7 +3938,7 @@ Returns `FediE2EE\PKDServer\Table`
 
 **Throws:** `CacheException`, `DependencyException`, `TableException`
 
-#### [`injectConfig`](../../../src/RequestHandlers/Api/Replicas.php#L81-L84)
+#### [`injectConfig`](../../../src/RequestHandlers/Api/Replicas.php#L90-L93)
 
 Returns `void`
 
@@ -2882,13 +3946,13 @@ Returns `void`
 
 - `$config`: `FediE2EE\PKDServer\ServerConfig`
 
-#### [`config`](../../../src/RequestHandlers/Api/Replicas.php#L89-L99)
+#### [`config`](../../../src/RequestHandlers/Api/Replicas.php#L98-L108)
 
 Returns `FediE2EE\PKDServer\ServerConfig`
 
 **Throws:** `DependencyException`
 
-#### [`setWebFinger`](../../../src/RequestHandlers/Api/Replicas.php#L104-L108)
+#### [`setWebFinger`](../../../src/RequestHandlers/Api/Replicas.php#L113-L117)
 
 Returns `self`
 
@@ -2898,7 +3962,7 @@ This is intended for mocking in unit tests
 
 - `$wf`: `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
-#### [`webfinger`](../../../src/RequestHandlers/Api/Replicas.php#L115-L122)
+#### [`webfinger`](../../../src/RequestHandlers/Api/Replicas.php#L124-L131)
 
 Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
@@ -2908,7 +3972,83 @@ Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
 **Throws:** `CertaintyException`, `DependencyException`, `SodiumException`
 
-#### [`jsonDecode`](../../../src/RequestHandlers/Api/Replicas.php#L15-L18)
+#### [`parseUrlHost`](../../../src/RequestHandlers/Api/Replicas.php#L137-L144)
+
+static · Returns `?string`
+
+**Parameters:**
+
+- `$url`: `string`
+
+#### [`assertArray`](../../../src/RequestHandlers/Api/Replicas.php#L152-L158)
+
+static · Returns `array`
+
+**Parameters:**
+
+- `$result`: `object|array`
+
+**Throws:** `TypeError`
+
+#### [`assertString`](../../../src/RequestHandlers/Api/Replicas.php#L163-L169)
+
+static · Returns `string`
+
+**Parameters:**
+
+- `$value`: `mixed`
+
+**Throws:** `TypeError`
+
+#### [`assertStringOrNull`](../../../src/RequestHandlers/Api/Replicas.php#L171-L180)
+
+static · Returns `?string`
+
+**Parameters:**
+
+- `$value`: `mixed`
+
+#### [`assertInt`](../../../src/RequestHandlers/Api/Replicas.php#L185-L194)
+
+static · Returns `int`
+
+**Parameters:**
+
+- `$value`: `mixed`
+
+**Throws:** `TypeError`
+
+#### [`rowToStringArray`](../../../src/RequestHandlers/Api/Replicas.php#L201-L211)
+
+static · Returns `array`
+
+**Parameters:**
+
+- `$row`: `object|array`
+
+**Throws:** `TypeError`
+
+#### [`decryptedString`](../../../src/RequestHandlers/Api/Replicas.php#L217-L227)
+
+static · Returns `string`
+
+**Parameters:**
+
+- `$row`: `array`
+- `$key`: `string`
+
+**Throws:** `TypeError`
+
+#### [`blindIndexValue`](../../../src/RequestHandlers/Api/Replicas.php#L234-L244)
+
+static · Returns `string`
+
+**Parameters:**
+
+- `$blindIndex`: `array|string`
+- `$key`: `?string` = null
+
+#### [`jsonDecode`](../../../src/RequestHandlers/Api/Replicas.php#L17-L20)
 
 static · Returns `array`
 
@@ -2918,9 +4058,9 @@ static · Returns `array`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonDecodeObject`](../../../src/RequestHandlers/Api/Replicas.php#L23-L26)
+#### [`jsonDecodeObject`](../../../src/RequestHandlers/Api/Replicas.php#L25-L28)
 
-static · Returns `object`
+static · Returns `stdClass`
 
 **Parameters:**
 
@@ -2928,7 +4068,7 @@ static · Returns `object`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonEncode`](../../../src/RequestHandlers/Api/Replicas.php#L31-L37)
+#### [`jsonEncode`](../../../src/RequestHandlers/Api/Replicas.php#L34-L40)
 
 static · Returns `string`
 
@@ -2982,11 +4122,11 @@ Returns `array`
 
 **Attributes:** `#[Override]`
 
-#### [`time`](../../../src/RequestHandlers/Api/Revoke.php#L38-L41)
+#### [`time`](../../../src/RequestHandlers/Api/Revoke.php#L39-L42)
 
 Returns `string`
 
-#### [`canonicalizeActor`](../../../src/RequestHandlers/Api/Revoke.php#L50-L54)
+#### [`canonicalizeActor`](../../../src/RequestHandlers/Api/Revoke.php#L53-L61)
 
 Returns `string`
 
@@ -2994,9 +4134,9 @@ Returns `string`
 
 - `$actor`: `string`
 
-**Throws:** `DependencyException`, `GuzzleException`, `NetworkException`, `SodiumException`, `CertaintyException`
+**Throws:** `CacheException`, `CertaintyException`, `DependencyException`, `GuzzleException`, `InvalidArgumentException`, `NetworkException`, `SodiumException`
 
-#### [`error`](../../../src/RequestHandlers/Api/Revoke.php#L62-L65)
+#### [`error`](../../../src/RequestHandlers/Api/Revoke.php#L69-L72)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -3005,9 +4145,9 @@ Returns `Psr\Http\Message\ResponseInterface`
 - `$message`: `string`
 - `$code`: `int` = 400
 
-**Throws:** `DependencyException`, `JsonException`, `NotImplementedException`, `SodiumException`
+**Throws:** `BaseJsonException`, `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`signResponse`](../../../src/RequestHandlers/Api/Revoke.php#L76-L88)
+#### [`signResponse`](../../../src/RequestHandlers/Api/Revoke.php#L83-L95)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -3019,7 +4159,7 @@ Implements an RFC 9421 HTTP Message Signature with Ed25519.
 
 **Throws:** `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`json`](../../../src/RequestHandlers/Api/Revoke.php#L98-L117)
+#### [`json`](../../../src/RequestHandlers/Api/Revoke.php#L107-L126)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -3033,7 +4173,7 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 
 **Throws:** `DependencyException`, `BaseJsonException`, `NotImplementedException`, `SodiumException`
 
-#### [`twig`](../../../src/RequestHandlers/Api/Revoke.php#L125-L142)
+#### [`twig`](../../../src/RequestHandlers/Api/Revoke.php#L136-L153)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -3046,7 +4186,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `DependencyException`, `LoaderError`, `RuntimeError`, `SyntaxError`
 
-#### [`appCache`](../../../src/RequestHandlers/Api/Revoke.php#L46-L49)
+#### [`appCache`](../../../src/RequestHandlers/Api/Revoke.php#L55-L58)
 
 Returns `FediE2EE\PKDServer\AppCache`
 
@@ -3057,7 +4197,7 @@ Returns `FediE2EE\PKDServer\AppCache`
 
 **Throws:** `DependencyException`
 
-#### [`table`](../../../src/RequestHandlers/Api/Revoke.php#L56-L79)
+#### [`table`](../../../src/RequestHandlers/Api/Revoke.php#L65-L88)
 
 Returns `FediE2EE\PKDServer\Table`
 
@@ -3067,7 +4207,7 @@ Returns `FediE2EE\PKDServer\Table`
 
 **Throws:** `CacheException`, `DependencyException`, `TableException`
 
-#### [`injectConfig`](../../../src/RequestHandlers/Api/Revoke.php#L81-L84)
+#### [`injectConfig`](../../../src/RequestHandlers/Api/Revoke.php#L90-L93)
 
 Returns `void`
 
@@ -3075,13 +4215,13 @@ Returns `void`
 
 - `$config`: `FediE2EE\PKDServer\ServerConfig`
 
-#### [`config`](../../../src/RequestHandlers/Api/Revoke.php#L89-L99)
+#### [`config`](../../../src/RequestHandlers/Api/Revoke.php#L98-L108)
 
 Returns `FediE2EE\PKDServer\ServerConfig`
 
 **Throws:** `DependencyException`
 
-#### [`setWebFinger`](../../../src/RequestHandlers/Api/Revoke.php#L104-L108)
+#### [`setWebFinger`](../../../src/RequestHandlers/Api/Revoke.php#L113-L117)
 
 Returns `self`
 
@@ -3091,7 +4231,7 @@ This is intended for mocking in unit tests
 
 - `$wf`: `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
-#### [`webfinger`](../../../src/RequestHandlers/Api/Revoke.php#L115-L122)
+#### [`webfinger`](../../../src/RequestHandlers/Api/Revoke.php#L124-L131)
 
 Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
@@ -3101,7 +4241,83 @@ Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
 **Throws:** `CertaintyException`, `DependencyException`, `SodiumException`
 
-#### [`jsonDecode`](../../../src/RequestHandlers/Api/Revoke.php#L15-L18)
+#### [`parseUrlHost`](../../../src/RequestHandlers/Api/Revoke.php#L137-L144)
+
+static · Returns `?string`
+
+**Parameters:**
+
+- `$url`: `string`
+
+#### [`assertArray`](../../../src/RequestHandlers/Api/Revoke.php#L152-L158)
+
+static · Returns `array`
+
+**Parameters:**
+
+- `$result`: `object|array`
+
+**Throws:** `TypeError`
+
+#### [`assertString`](../../../src/RequestHandlers/Api/Revoke.php#L163-L169)
+
+static · Returns `string`
+
+**Parameters:**
+
+- `$value`: `mixed`
+
+**Throws:** `TypeError`
+
+#### [`assertStringOrNull`](../../../src/RequestHandlers/Api/Revoke.php#L171-L180)
+
+static · Returns `?string`
+
+**Parameters:**
+
+- `$value`: `mixed`
+
+#### [`assertInt`](../../../src/RequestHandlers/Api/Revoke.php#L185-L194)
+
+static · Returns `int`
+
+**Parameters:**
+
+- `$value`: `mixed`
+
+**Throws:** `TypeError`
+
+#### [`rowToStringArray`](../../../src/RequestHandlers/Api/Revoke.php#L201-L211)
+
+static · Returns `array`
+
+**Parameters:**
+
+- `$row`: `object|array`
+
+**Throws:** `TypeError`
+
+#### [`decryptedString`](../../../src/RequestHandlers/Api/Revoke.php#L217-L227)
+
+static · Returns `string`
+
+**Parameters:**
+
+- `$row`: `array`
+- `$key`: `string`
+
+**Throws:** `TypeError`
+
+#### [`blindIndexValue`](../../../src/RequestHandlers/Api/Revoke.php#L234-L244)
+
+static · Returns `string`
+
+**Parameters:**
+
+- `$blindIndex`: `array|string`
+- `$key`: `?string` = null
+
+#### [`jsonDecode`](../../../src/RequestHandlers/Api/Revoke.php#L17-L20)
 
 static · Returns `array`
 
@@ -3111,9 +4327,9 @@ static · Returns `array`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonDecodeObject`](../../../src/RequestHandlers/Api/Revoke.php#L23-L26)
+#### [`jsonDecodeObject`](../../../src/RequestHandlers/Api/Revoke.php#L25-L28)
 
-static · Returns `object`
+static · Returns `stdClass`
 
 **Parameters:**
 
@@ -3121,7 +4337,7 @@ static · Returns `object`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonEncode`](../../../src/RequestHandlers/Api/Revoke.php#L31-L37)
+#### [`jsonEncode`](../../../src/RequestHandlers/Api/Revoke.php#L34-L40)
 
 static · Returns `string`
 
@@ -3163,11 +4379,11 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `DependencyException`, `JsonException`, `NotImplementedException`, `SodiumException`
 
-#### [`time`](../../../src/RequestHandlers/Api/ServerPublicKey.php#L38-L41)
+#### [`time`](../../../src/RequestHandlers/Api/ServerPublicKey.php#L39-L42)
 
 Returns `string`
 
-#### [`canonicalizeActor`](../../../src/RequestHandlers/Api/ServerPublicKey.php#L50-L54)
+#### [`canonicalizeActor`](../../../src/RequestHandlers/Api/ServerPublicKey.php#L53-L61)
 
 Returns `string`
 
@@ -3175,9 +4391,9 @@ Returns `string`
 
 - `$actor`: `string`
 
-**Throws:** `DependencyException`, `GuzzleException`, `NetworkException`, `SodiumException`, `CertaintyException`
+**Throws:** `CacheException`, `CertaintyException`, `DependencyException`, `GuzzleException`, `InvalidArgumentException`, `NetworkException`, `SodiumException`
 
-#### [`error`](../../../src/RequestHandlers/Api/ServerPublicKey.php#L62-L65)
+#### [`error`](../../../src/RequestHandlers/Api/ServerPublicKey.php#L69-L72)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -3186,9 +4402,9 @@ Returns `Psr\Http\Message\ResponseInterface`
 - `$message`: `string`
 - `$code`: `int` = 400
 
-**Throws:** `DependencyException`, `JsonException`, `NotImplementedException`, `SodiumException`
+**Throws:** `BaseJsonException`, `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`signResponse`](../../../src/RequestHandlers/Api/ServerPublicKey.php#L76-L88)
+#### [`signResponse`](../../../src/RequestHandlers/Api/ServerPublicKey.php#L83-L95)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -3200,7 +4416,7 @@ Implements an RFC 9421 HTTP Message Signature with Ed25519.
 
 **Throws:** `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`json`](../../../src/RequestHandlers/Api/ServerPublicKey.php#L98-L117)
+#### [`json`](../../../src/RequestHandlers/Api/ServerPublicKey.php#L107-L126)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -3214,7 +4430,7 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 
 **Throws:** `DependencyException`, `BaseJsonException`, `NotImplementedException`, `SodiumException`
 
-#### [`twig`](../../../src/RequestHandlers/Api/ServerPublicKey.php#L125-L142)
+#### [`twig`](../../../src/RequestHandlers/Api/ServerPublicKey.php#L136-L153)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -3227,7 +4443,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `DependencyException`, `LoaderError`, `RuntimeError`, `SyntaxError`
 
-#### [`appCache`](../../../src/RequestHandlers/Api/ServerPublicKey.php#L46-L49)
+#### [`appCache`](../../../src/RequestHandlers/Api/ServerPublicKey.php#L55-L58)
 
 Returns `FediE2EE\PKDServer\AppCache`
 
@@ -3238,7 +4454,7 @@ Returns `FediE2EE\PKDServer\AppCache`
 
 **Throws:** `DependencyException`
 
-#### [`table`](../../../src/RequestHandlers/Api/ServerPublicKey.php#L56-L79)
+#### [`table`](../../../src/RequestHandlers/Api/ServerPublicKey.php#L65-L88)
 
 Returns `FediE2EE\PKDServer\Table`
 
@@ -3248,7 +4464,7 @@ Returns `FediE2EE\PKDServer\Table`
 
 **Throws:** `CacheException`, `DependencyException`, `TableException`
 
-#### [`injectConfig`](../../../src/RequestHandlers/Api/ServerPublicKey.php#L81-L84)
+#### [`injectConfig`](../../../src/RequestHandlers/Api/ServerPublicKey.php#L90-L93)
 
 Returns `void`
 
@@ -3256,13 +4472,13 @@ Returns `void`
 
 - `$config`: `FediE2EE\PKDServer\ServerConfig`
 
-#### [`config`](../../../src/RequestHandlers/Api/ServerPublicKey.php#L89-L99)
+#### [`config`](../../../src/RequestHandlers/Api/ServerPublicKey.php#L98-L108)
 
 Returns `FediE2EE\PKDServer\ServerConfig`
 
 **Throws:** `DependencyException`
 
-#### [`setWebFinger`](../../../src/RequestHandlers/Api/ServerPublicKey.php#L104-L108)
+#### [`setWebFinger`](../../../src/RequestHandlers/Api/ServerPublicKey.php#L113-L117)
 
 Returns `self`
 
@@ -3272,7 +4488,7 @@ This is intended for mocking in unit tests
 
 - `$wf`: `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
-#### [`webfinger`](../../../src/RequestHandlers/Api/ServerPublicKey.php#L115-L122)
+#### [`webfinger`](../../../src/RequestHandlers/Api/ServerPublicKey.php#L124-L131)
 
 Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
@@ -3282,7 +4498,83 @@ Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
 **Throws:** `CertaintyException`, `DependencyException`, `SodiumException`
 
-#### [`jsonDecode`](../../../src/RequestHandlers/Api/ServerPublicKey.php#L15-L18)
+#### [`parseUrlHost`](../../../src/RequestHandlers/Api/ServerPublicKey.php#L137-L144)
+
+static · Returns `?string`
+
+**Parameters:**
+
+- `$url`: `string`
+
+#### [`assertArray`](../../../src/RequestHandlers/Api/ServerPublicKey.php#L152-L158)
+
+static · Returns `array`
+
+**Parameters:**
+
+- `$result`: `object|array`
+
+**Throws:** `TypeError`
+
+#### [`assertString`](../../../src/RequestHandlers/Api/ServerPublicKey.php#L163-L169)
+
+static · Returns `string`
+
+**Parameters:**
+
+- `$value`: `mixed`
+
+**Throws:** `TypeError`
+
+#### [`assertStringOrNull`](../../../src/RequestHandlers/Api/ServerPublicKey.php#L171-L180)
+
+static · Returns `?string`
+
+**Parameters:**
+
+- `$value`: `mixed`
+
+#### [`assertInt`](../../../src/RequestHandlers/Api/ServerPublicKey.php#L185-L194)
+
+static · Returns `int`
+
+**Parameters:**
+
+- `$value`: `mixed`
+
+**Throws:** `TypeError`
+
+#### [`rowToStringArray`](../../../src/RequestHandlers/Api/ServerPublicKey.php#L201-L211)
+
+static · Returns `array`
+
+**Parameters:**
+
+- `$row`: `object|array`
+
+**Throws:** `TypeError`
+
+#### [`decryptedString`](../../../src/RequestHandlers/Api/ServerPublicKey.php#L217-L227)
+
+static · Returns `string`
+
+**Parameters:**
+
+- `$row`: `array`
+- `$key`: `string`
+
+**Throws:** `TypeError`
+
+#### [`blindIndexValue`](../../../src/RequestHandlers/Api/ServerPublicKey.php#L234-L244)
+
+static · Returns `string`
+
+**Parameters:**
+
+- `$blindIndex`: `array|string`
+- `$key`: `?string` = null
+
+#### [`jsonDecode`](../../../src/RequestHandlers/Api/ServerPublicKey.php#L17-L20)
 
 static · Returns `array`
 
@@ -3292,9 +4584,9 @@ static · Returns `array`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonDecodeObject`](../../../src/RequestHandlers/Api/ServerPublicKey.php#L23-L26)
+#### [`jsonDecodeObject`](../../../src/RequestHandlers/Api/ServerPublicKey.php#L25-L28)
 
-static · Returns `object`
+static · Returns `stdClass`
 
 **Parameters:**
 
@@ -3302,7 +4594,7 @@ static · Returns `object`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonEncode`](../../../src/RequestHandlers/Api/ServerPublicKey.php#L31-L37)
+#### [`jsonEncode`](../../../src/RequestHandlers/Api/ServerPublicKey.php#L34-L40)
 
 static · Returns `string`
 
@@ -3332,13 +4624,13 @@ static · Returns `string`
 
 ### Methods
 
-#### [`__construct`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L60-L67)
+#### [`__construct`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L59-L66)
 
 Returns `void`
 
 **Throws:** `DependencyException`, `TableException`, `CacheException`
 
-#### [`handle`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L87-L155)
+#### [`handle`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L86-L160)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -3350,17 +4642,17 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `ArrayKeyException`, `BaseJsonException`, `BlindIndexNotFoundException`, `CacheException`, `CipherSweetException`, `CryptoException`, `CryptoOperationException`, `DateMalformedStringException`, `DependencyException`, `InvalidCiphertextException`, `JsonException`, `NotImplementedException`, `SodiumException`, `TableException`
 
-#### [`getEnabledRateLimits`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L158-L161)
+#### [`getEnabledRateLimits`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L163-L166)
 
 Returns `array`
 
 **Attributes:** `#[Override]`
 
-#### [`time`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L38-L41)
+#### [`time`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L39-L42)
 
 Returns `string`
 
-#### [`canonicalizeActor`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L50-L54)
+#### [`canonicalizeActor`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L53-L61)
 
 Returns `string`
 
@@ -3368,9 +4660,9 @@ Returns `string`
 
 - `$actor`: `string`
 
-**Throws:** `DependencyException`, `GuzzleException`, `NetworkException`, `SodiumException`, `CertaintyException`
+**Throws:** `CacheException`, `CertaintyException`, `DependencyException`, `GuzzleException`, `InvalidArgumentException`, `NetworkException`, `SodiumException`
 
-#### [`error`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L62-L65)
+#### [`error`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L69-L72)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -3379,9 +4671,9 @@ Returns `Psr\Http\Message\ResponseInterface`
 - `$message`: `string`
 - `$code`: `int` = 400
 
-**Throws:** `DependencyException`, `JsonException`, `NotImplementedException`, `SodiumException`
+**Throws:** `BaseJsonException`, `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`signResponse`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L76-L88)
+#### [`signResponse`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L83-L95)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -3393,7 +4685,7 @@ Implements an RFC 9421 HTTP Message Signature with Ed25519.
 
 **Throws:** `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`json`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L98-L117)
+#### [`json`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L107-L126)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -3407,7 +4699,7 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 
 **Throws:** `DependencyException`, `BaseJsonException`, `NotImplementedException`, `SodiumException`
 
-#### [`twig`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L125-L142)
+#### [`twig`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L136-L153)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -3420,7 +4712,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `DependencyException`, `LoaderError`, `RuntimeError`, `SyntaxError`
 
-#### [`appCache`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L46-L49)
+#### [`appCache`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L55-L58)
 
 Returns `FediE2EE\PKDServer\AppCache`
 
@@ -3431,7 +4723,7 @@ Returns `FediE2EE\PKDServer\AppCache`
 
 **Throws:** `DependencyException`
 
-#### [`table`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L56-L79)
+#### [`table`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L65-L88)
 
 Returns `FediE2EE\PKDServer\Table`
 
@@ -3441,7 +4733,7 @@ Returns `FediE2EE\PKDServer\Table`
 
 **Throws:** `CacheException`, `DependencyException`, `TableException`
 
-#### [`injectConfig`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L81-L84)
+#### [`injectConfig`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L90-L93)
 
 Returns `void`
 
@@ -3449,13 +4741,13 @@ Returns `void`
 
 - `$config`: `FediE2EE\PKDServer\ServerConfig`
 
-#### [`config`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L89-L99)
+#### [`config`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L98-L108)
 
 Returns `FediE2EE\PKDServer\ServerConfig`
 
 **Throws:** `DependencyException`
 
-#### [`setWebFinger`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L104-L108)
+#### [`setWebFinger`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L113-L117)
 
 Returns `self`
 
@@ -3465,7 +4757,7 @@ This is intended for mocking in unit tests
 
 - `$wf`: `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
-#### [`webfinger`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L115-L122)
+#### [`webfinger`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L124-L131)
 
 Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
@@ -3475,7 +4767,83 @@ Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
 **Throws:** `CertaintyException`, `DependencyException`, `SodiumException`
 
-#### [`jsonDecode`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L15-L18)
+#### [`parseUrlHost`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L137-L144)
+
+static · Returns `?string`
+
+**Parameters:**
+
+- `$url`: `string`
+
+#### [`assertArray`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L152-L158)
+
+static · Returns `array`
+
+**Parameters:**
+
+- `$result`: `object|array`
+
+**Throws:** `TypeError`
+
+#### [`assertString`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L163-L169)
+
+static · Returns `string`
+
+**Parameters:**
+
+- `$value`: `mixed`
+
+**Throws:** `TypeError`
+
+#### [`assertStringOrNull`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L171-L180)
+
+static · Returns `?string`
+
+**Parameters:**
+
+- `$value`: `mixed`
+
+#### [`assertInt`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L185-L194)
+
+static · Returns `int`
+
+**Parameters:**
+
+- `$value`: `mixed`
+
+**Throws:** `TypeError`
+
+#### [`rowToStringArray`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L201-L211)
+
+static · Returns `array`
+
+**Parameters:**
+
+- `$row`: `object|array`
+
+**Throws:** `TypeError`
+
+#### [`decryptedString`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L217-L227)
+
+static · Returns `string`
+
+**Parameters:**
+
+- `$row`: `array`
+- `$key`: `string`
+
+**Throws:** `TypeError`
+
+#### [`blindIndexValue`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L234-L244)
+
+static · Returns `string`
+
+**Parameters:**
+
+- `$blindIndex`: `array|string`
+- `$key`: `?string` = null
+
+#### [`jsonDecode`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L17-L20)
 
 static · Returns `array`
 
@@ -3485,9 +4853,9 @@ static · Returns `array`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonDecodeObject`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L23-L26)
+#### [`jsonDecodeObject`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L25-L28)
 
-static · Returns `object`
+static · Returns `stdClass`
 
 **Parameters:**
 
@@ -3495,7 +4863,7 @@ static · Returns `object`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonEncode`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L31-L37)
+#### [`jsonEncode`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L34-L40)
 
 static · Returns `string`
 
@@ -3515,7 +4883,7 @@ static · Returns `?int`
 - `$otp`: `string`
 - `$windows`: `int` = 2
 
-#### [`generateTOTP`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L71-L86)
+#### [`generateTOTP`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L71-L87)
 
 static · Returns `string`
 
@@ -3524,7 +4892,7 @@ static · Returns `string`
 - `$secret`: `string`
 - `$time`: `?int` = null
 
-#### [`ord`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L91-L94)
+#### [`ord`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L92-L96)
 
 static · Returns `int`
 
@@ -3534,7 +4902,7 @@ Avoid cache-timing leaks in ord() by using unpack()
 
 - `$chr`: `string`
 
-#### [`throwIfTimeOutsideWindow`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L151-L160)
+#### [`throwIfTimeOutsideWindow`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L157-L166)
 
 Returns `void`
 
@@ -3542,7 +4910,7 @@ Returns `void`
 
 - `$currentTime`: `int`
 
-**Throws:** `ProtocolException`
+**Throws:** `DependencyException`, `ProtocolException`
 
 #### [`assertAllArrayKeysExist`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L27-L32)
 
@@ -3648,13 +5016,13 @@ Strip all newlines (CR, LF) characters from a string.
 
 ### Methods
 
-#### [`__construct`](../../../src/RequestHandlers/Api/TotpEnroll.php#L64-L71)
+#### [`__construct`](../../../src/RequestHandlers/Api/TotpEnroll.php#L63-L70)
 
 Returns `void`
 
 **Throws:** `DependencyException`, `TableException`, `CacheException`
 
-#### [`handle`](../../../src/RequestHandlers/Api/TotpEnroll.php#L93-L172)
+#### [`handle`](../../../src/RequestHandlers/Api/TotpEnroll.php#L92-L177)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -3666,17 +5034,17 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `ArrayKeyException`, `BaseJsonException`, `BlindIndexNotFoundException`, `CacheException`, `CipherSweetException`, `CryptoException`, `CryptoOperationException`, `DateMalformedStringException`, `DependencyException`, `HPKEException`, `InvalidCiphertextException`, `JsonException`, `NotImplementedException`, `RandomException`, `SodiumException`, `TableException`
 
-#### [`getEnabledRateLimits`](../../../src/RequestHandlers/Api/TotpEnroll.php#L175-L178)
+#### [`getEnabledRateLimits`](../../../src/RequestHandlers/Api/TotpEnroll.php#L180-L183)
 
 Returns `array`
 
 **Attributes:** `#[Override]`
 
-#### [`time`](../../../src/RequestHandlers/Api/TotpEnroll.php#L38-L41)
+#### [`time`](../../../src/RequestHandlers/Api/TotpEnroll.php#L39-L42)
 
 Returns `string`
 
-#### [`canonicalizeActor`](../../../src/RequestHandlers/Api/TotpEnroll.php#L50-L54)
+#### [`canonicalizeActor`](../../../src/RequestHandlers/Api/TotpEnroll.php#L53-L61)
 
 Returns `string`
 
@@ -3684,9 +5052,9 @@ Returns `string`
 
 - `$actor`: `string`
 
-**Throws:** `DependencyException`, `GuzzleException`, `NetworkException`, `SodiumException`, `CertaintyException`
+**Throws:** `CacheException`, `CertaintyException`, `DependencyException`, `GuzzleException`, `InvalidArgumentException`, `NetworkException`, `SodiumException`
 
-#### [`error`](../../../src/RequestHandlers/Api/TotpEnroll.php#L62-L65)
+#### [`error`](../../../src/RequestHandlers/Api/TotpEnroll.php#L69-L72)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -3695,9 +5063,9 @@ Returns `Psr\Http\Message\ResponseInterface`
 - `$message`: `string`
 - `$code`: `int` = 400
 
-**Throws:** `DependencyException`, `JsonException`, `NotImplementedException`, `SodiumException`
+**Throws:** `BaseJsonException`, `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`signResponse`](../../../src/RequestHandlers/Api/TotpEnroll.php#L76-L88)
+#### [`signResponse`](../../../src/RequestHandlers/Api/TotpEnroll.php#L83-L95)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -3709,7 +5077,7 @@ Implements an RFC 9421 HTTP Message Signature with Ed25519.
 
 **Throws:** `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`json`](../../../src/RequestHandlers/Api/TotpEnroll.php#L98-L117)
+#### [`json`](../../../src/RequestHandlers/Api/TotpEnroll.php#L107-L126)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -3723,7 +5091,7 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 
 **Throws:** `DependencyException`, `BaseJsonException`, `NotImplementedException`, `SodiumException`
 
-#### [`twig`](../../../src/RequestHandlers/Api/TotpEnroll.php#L125-L142)
+#### [`twig`](../../../src/RequestHandlers/Api/TotpEnroll.php#L136-L153)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -3736,7 +5104,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `DependencyException`, `LoaderError`, `RuntimeError`, `SyntaxError`
 
-#### [`appCache`](../../../src/RequestHandlers/Api/TotpEnroll.php#L46-L49)
+#### [`appCache`](../../../src/RequestHandlers/Api/TotpEnroll.php#L55-L58)
 
 Returns `FediE2EE\PKDServer\AppCache`
 
@@ -3747,7 +5115,7 @@ Returns `FediE2EE\PKDServer\AppCache`
 
 **Throws:** `DependencyException`
 
-#### [`table`](../../../src/RequestHandlers/Api/TotpEnroll.php#L56-L79)
+#### [`table`](../../../src/RequestHandlers/Api/TotpEnroll.php#L65-L88)
 
 Returns `FediE2EE\PKDServer\Table`
 
@@ -3757,7 +5125,7 @@ Returns `FediE2EE\PKDServer\Table`
 
 **Throws:** `CacheException`, `DependencyException`, `TableException`
 
-#### [`injectConfig`](../../../src/RequestHandlers/Api/TotpEnroll.php#L81-L84)
+#### [`injectConfig`](../../../src/RequestHandlers/Api/TotpEnroll.php#L90-L93)
 
 Returns `void`
 
@@ -3765,13 +5133,13 @@ Returns `void`
 
 - `$config`: `FediE2EE\PKDServer\ServerConfig`
 
-#### [`config`](../../../src/RequestHandlers/Api/TotpEnroll.php#L89-L99)
+#### [`config`](../../../src/RequestHandlers/Api/TotpEnroll.php#L98-L108)
 
 Returns `FediE2EE\PKDServer\ServerConfig`
 
 **Throws:** `DependencyException`
 
-#### [`setWebFinger`](../../../src/RequestHandlers/Api/TotpEnroll.php#L104-L108)
+#### [`setWebFinger`](../../../src/RequestHandlers/Api/TotpEnroll.php#L113-L117)
 
 Returns `self`
 
@@ -3781,7 +5149,7 @@ This is intended for mocking in unit tests
 
 - `$wf`: `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
-#### [`webfinger`](../../../src/RequestHandlers/Api/TotpEnroll.php#L115-L122)
+#### [`webfinger`](../../../src/RequestHandlers/Api/TotpEnroll.php#L124-L131)
 
 Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
@@ -3791,7 +5159,83 @@ Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
 **Throws:** `CertaintyException`, `DependencyException`, `SodiumException`
 
-#### [`jsonDecode`](../../../src/RequestHandlers/Api/TotpEnroll.php#L15-L18)
+#### [`parseUrlHost`](../../../src/RequestHandlers/Api/TotpEnroll.php#L137-L144)
+
+static · Returns `?string`
+
+**Parameters:**
+
+- `$url`: `string`
+
+#### [`assertArray`](../../../src/RequestHandlers/Api/TotpEnroll.php#L152-L158)
+
+static · Returns `array`
+
+**Parameters:**
+
+- `$result`: `object|array`
+
+**Throws:** `TypeError`
+
+#### [`assertString`](../../../src/RequestHandlers/Api/TotpEnroll.php#L163-L169)
+
+static · Returns `string`
+
+**Parameters:**
+
+- `$value`: `mixed`
+
+**Throws:** `TypeError`
+
+#### [`assertStringOrNull`](../../../src/RequestHandlers/Api/TotpEnroll.php#L171-L180)
+
+static · Returns `?string`
+
+**Parameters:**
+
+- `$value`: `mixed`
+
+#### [`assertInt`](../../../src/RequestHandlers/Api/TotpEnroll.php#L185-L194)
+
+static · Returns `int`
+
+**Parameters:**
+
+- `$value`: `mixed`
+
+**Throws:** `TypeError`
+
+#### [`rowToStringArray`](../../../src/RequestHandlers/Api/TotpEnroll.php#L201-L211)
+
+static · Returns `array`
+
+**Parameters:**
+
+- `$row`: `object|array`
+
+**Throws:** `TypeError`
+
+#### [`decryptedString`](../../../src/RequestHandlers/Api/TotpEnroll.php#L217-L227)
+
+static · Returns `string`
+
+**Parameters:**
+
+- `$row`: `array`
+- `$key`: `string`
+
+**Throws:** `TypeError`
+
+#### [`blindIndexValue`](../../../src/RequestHandlers/Api/TotpEnroll.php#L234-L244)
+
+static · Returns `string`
+
+**Parameters:**
+
+- `$blindIndex`: `array|string`
+- `$key`: `?string` = null
+
+#### [`jsonDecode`](../../../src/RequestHandlers/Api/TotpEnroll.php#L17-L20)
 
 static · Returns `array`
 
@@ -3801,9 +5245,9 @@ static · Returns `array`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonDecodeObject`](../../../src/RequestHandlers/Api/TotpEnroll.php#L23-L26)
+#### [`jsonDecodeObject`](../../../src/RequestHandlers/Api/TotpEnroll.php#L25-L28)
 
-static · Returns `object`
+static · Returns `stdClass`
 
 **Parameters:**
 
@@ -3811,7 +5255,7 @@ static · Returns `object`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonEncode`](../../../src/RequestHandlers/Api/TotpEnroll.php#L31-L37)
+#### [`jsonEncode`](../../../src/RequestHandlers/Api/TotpEnroll.php#L34-L40)
 
 static · Returns `string`
 
@@ -3831,7 +5275,7 @@ static · Returns `?int`
 - `$otp`: `string`
 - `$windows`: `int` = 2
 
-#### [`generateTOTP`](../../../src/RequestHandlers/Api/TotpEnroll.php#L71-L86)
+#### [`generateTOTP`](../../../src/RequestHandlers/Api/TotpEnroll.php#L71-L87)
 
 static · Returns `string`
 
@@ -3840,7 +5284,7 @@ static · Returns `string`
 - `$secret`: `string`
 - `$time`: `?int` = null
 
-#### [`ord`](../../../src/RequestHandlers/Api/TotpEnroll.php#L91-L94)
+#### [`ord`](../../../src/RequestHandlers/Api/TotpEnroll.php#L92-L96)
 
 static · Returns `int`
 
@@ -3850,7 +5294,7 @@ Avoid cache-timing leaks in ord() by using unpack()
 
 - `$chr`: `string`
 
-#### [`throwIfTimeOutsideWindow`](../../../src/RequestHandlers/Api/TotpEnroll.php#L151-L160)
+#### [`throwIfTimeOutsideWindow`](../../../src/RequestHandlers/Api/TotpEnroll.php#L157-L166)
 
 Returns `void`
 
@@ -3858,7 +5302,7 @@ Returns `void`
 
 - `$currentTime`: `int`
 
-**Throws:** `ProtocolException`
+**Throws:** `DependencyException`, `ProtocolException`
 
 #### [`assertAllArrayKeysExist`](../../../src/RequestHandlers/Api/TotpEnroll.php#L27-L32)
 
@@ -3964,13 +5408,13 @@ Strip all newlines (CR, LF) characters from a string.
 
 ### Methods
 
-#### [`__construct`](../../../src/RequestHandlers/Api/TotpRotate.php#L64-L71)
+#### [`__construct`](../../../src/RequestHandlers/Api/TotpRotate.php#L63-L70)
 
 Returns `void`
 
 **Throws:** `DependencyException`, `TableException`, `CacheException`
 
-#### [`handle`](../../../src/RequestHandlers/Api/TotpRotate.php#L93-L181)
+#### [`handle`](../../../src/RequestHandlers/Api/TotpRotate.php#L92-L186)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -3982,17 +5426,17 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `ArrayKeyException`, `BaseJsonException`, `BlindIndexNotFoundException`, `CacheException`, `CipherSweetException`, `CryptoException`, `CryptoOperationException`, `DateMalformedStringException`, `DependencyException`, `HPKEException`, `InvalidCiphertextException`, `JsonException`, `NotImplementedException`, `RandomException`, `SodiumException`, `TableException`
 
-#### [`getEnabledRateLimits`](../../../src/RequestHandlers/Api/TotpRotate.php#L184-L187)
+#### [`getEnabledRateLimits`](../../../src/RequestHandlers/Api/TotpRotate.php#L189-L192)
 
 Returns `array`
 
 **Attributes:** `#[Override]`
 
-#### [`time`](../../../src/RequestHandlers/Api/TotpRotate.php#L38-L41)
+#### [`time`](../../../src/RequestHandlers/Api/TotpRotate.php#L39-L42)
 
 Returns `string`
 
-#### [`canonicalizeActor`](../../../src/RequestHandlers/Api/TotpRotate.php#L50-L54)
+#### [`canonicalizeActor`](../../../src/RequestHandlers/Api/TotpRotate.php#L53-L61)
 
 Returns `string`
 
@@ -4000,9 +5444,9 @@ Returns `string`
 
 - `$actor`: `string`
 
-**Throws:** `DependencyException`, `GuzzleException`, `NetworkException`, `SodiumException`, `CertaintyException`
+**Throws:** `CacheException`, `CertaintyException`, `DependencyException`, `GuzzleException`, `InvalidArgumentException`, `NetworkException`, `SodiumException`
 
-#### [`error`](../../../src/RequestHandlers/Api/TotpRotate.php#L62-L65)
+#### [`error`](../../../src/RequestHandlers/Api/TotpRotate.php#L69-L72)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -4011,9 +5455,9 @@ Returns `Psr\Http\Message\ResponseInterface`
 - `$message`: `string`
 - `$code`: `int` = 400
 
-**Throws:** `DependencyException`, `JsonException`, `NotImplementedException`, `SodiumException`
+**Throws:** `BaseJsonException`, `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`signResponse`](../../../src/RequestHandlers/Api/TotpRotate.php#L76-L88)
+#### [`signResponse`](../../../src/RequestHandlers/Api/TotpRotate.php#L83-L95)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -4025,7 +5469,7 @@ Implements an RFC 9421 HTTP Message Signature with Ed25519.
 
 **Throws:** `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`json`](../../../src/RequestHandlers/Api/TotpRotate.php#L98-L117)
+#### [`json`](../../../src/RequestHandlers/Api/TotpRotate.php#L107-L126)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -4039,7 +5483,7 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 
 **Throws:** `DependencyException`, `BaseJsonException`, `NotImplementedException`, `SodiumException`
 
-#### [`twig`](../../../src/RequestHandlers/Api/TotpRotate.php#L125-L142)
+#### [`twig`](../../../src/RequestHandlers/Api/TotpRotate.php#L136-L153)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -4052,7 +5496,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `DependencyException`, `LoaderError`, `RuntimeError`, `SyntaxError`
 
-#### [`appCache`](../../../src/RequestHandlers/Api/TotpRotate.php#L46-L49)
+#### [`appCache`](../../../src/RequestHandlers/Api/TotpRotate.php#L55-L58)
 
 Returns `FediE2EE\PKDServer\AppCache`
 
@@ -4063,7 +5507,7 @@ Returns `FediE2EE\PKDServer\AppCache`
 
 **Throws:** `DependencyException`
 
-#### [`table`](../../../src/RequestHandlers/Api/TotpRotate.php#L56-L79)
+#### [`table`](../../../src/RequestHandlers/Api/TotpRotate.php#L65-L88)
 
 Returns `FediE2EE\PKDServer\Table`
 
@@ -4073,7 +5517,7 @@ Returns `FediE2EE\PKDServer\Table`
 
 **Throws:** `CacheException`, `DependencyException`, `TableException`
 
-#### [`injectConfig`](../../../src/RequestHandlers/Api/TotpRotate.php#L81-L84)
+#### [`injectConfig`](../../../src/RequestHandlers/Api/TotpRotate.php#L90-L93)
 
 Returns `void`
 
@@ -4081,13 +5525,13 @@ Returns `void`
 
 - `$config`: `FediE2EE\PKDServer\ServerConfig`
 
-#### [`config`](../../../src/RequestHandlers/Api/TotpRotate.php#L89-L99)
+#### [`config`](../../../src/RequestHandlers/Api/TotpRotate.php#L98-L108)
 
 Returns `FediE2EE\PKDServer\ServerConfig`
 
 **Throws:** `DependencyException`
 
-#### [`setWebFinger`](../../../src/RequestHandlers/Api/TotpRotate.php#L104-L108)
+#### [`setWebFinger`](../../../src/RequestHandlers/Api/TotpRotate.php#L113-L117)
 
 Returns `self`
 
@@ -4097,7 +5541,7 @@ This is intended for mocking in unit tests
 
 - `$wf`: `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
-#### [`webfinger`](../../../src/RequestHandlers/Api/TotpRotate.php#L115-L122)
+#### [`webfinger`](../../../src/RequestHandlers/Api/TotpRotate.php#L124-L131)
 
 Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
@@ -4107,7 +5551,83 @@ Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
 **Throws:** `CertaintyException`, `DependencyException`, `SodiumException`
 
-#### [`jsonDecode`](../../../src/RequestHandlers/Api/TotpRotate.php#L15-L18)
+#### [`parseUrlHost`](../../../src/RequestHandlers/Api/TotpRotate.php#L137-L144)
+
+static · Returns `?string`
+
+**Parameters:**
+
+- `$url`: `string`
+
+#### [`assertArray`](../../../src/RequestHandlers/Api/TotpRotate.php#L152-L158)
+
+static · Returns `array`
+
+**Parameters:**
+
+- `$result`: `object|array`
+
+**Throws:** `TypeError`
+
+#### [`assertString`](../../../src/RequestHandlers/Api/TotpRotate.php#L163-L169)
+
+static · Returns `string`
+
+**Parameters:**
+
+- `$value`: `mixed`
+
+**Throws:** `TypeError`
+
+#### [`assertStringOrNull`](../../../src/RequestHandlers/Api/TotpRotate.php#L171-L180)
+
+static · Returns `?string`
+
+**Parameters:**
+
+- `$value`: `mixed`
+
+#### [`assertInt`](../../../src/RequestHandlers/Api/TotpRotate.php#L185-L194)
+
+static · Returns `int`
+
+**Parameters:**
+
+- `$value`: `mixed`
+
+**Throws:** `TypeError`
+
+#### [`rowToStringArray`](../../../src/RequestHandlers/Api/TotpRotate.php#L201-L211)
+
+static · Returns `array`
+
+**Parameters:**
+
+- `$row`: `object|array`
+
+**Throws:** `TypeError`
+
+#### [`decryptedString`](../../../src/RequestHandlers/Api/TotpRotate.php#L217-L227)
+
+static · Returns `string`
+
+**Parameters:**
+
+- `$row`: `array`
+- `$key`: `string`
+
+**Throws:** `TypeError`
+
+#### [`blindIndexValue`](../../../src/RequestHandlers/Api/TotpRotate.php#L234-L244)
+
+static · Returns `string`
+
+**Parameters:**
+
+- `$blindIndex`: `array|string`
+- `$key`: `?string` = null
+
+#### [`jsonDecode`](../../../src/RequestHandlers/Api/TotpRotate.php#L17-L20)
 
 static · Returns `array`
 
@@ -4117,9 +5637,9 @@ static · Returns `array`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonDecodeObject`](../../../src/RequestHandlers/Api/TotpRotate.php#L23-L26)
+#### [`jsonDecodeObject`](../../../src/RequestHandlers/Api/TotpRotate.php#L25-L28)
 
-static · Returns `object`
+static · Returns `stdClass`
 
 **Parameters:**
 
@@ -4127,7 +5647,7 @@ static · Returns `object`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonEncode`](../../../src/RequestHandlers/Api/TotpRotate.php#L31-L37)
+#### [`jsonEncode`](../../../src/RequestHandlers/Api/TotpRotate.php#L34-L40)
 
 static · Returns `string`
 
@@ -4147,7 +5667,7 @@ static · Returns `?int`
 - `$otp`: `string`
 - `$windows`: `int` = 2
 
-#### [`generateTOTP`](../../../src/RequestHandlers/Api/TotpRotate.php#L71-L86)
+#### [`generateTOTP`](../../../src/RequestHandlers/Api/TotpRotate.php#L71-L87)
 
 static · Returns `string`
 
@@ -4156,7 +5676,7 @@ static · Returns `string`
 - `$secret`: `string`
 - `$time`: `?int` = null
 
-#### [`ord`](../../../src/RequestHandlers/Api/TotpRotate.php#L91-L94)
+#### [`ord`](../../../src/RequestHandlers/Api/TotpRotate.php#L92-L96)
 
 static · Returns `int`
 
@@ -4166,7 +5686,7 @@ Avoid cache-timing leaks in ord() by using unpack()
 
 - `$chr`: `string`
 
-#### [`throwIfTimeOutsideWindow`](../../../src/RequestHandlers/Api/TotpRotate.php#L151-L160)
+#### [`throwIfTimeOutsideWindow`](../../../src/RequestHandlers/Api/TotpRotate.php#L157-L166)
 
 Returns `void`
 
@@ -4174,7 +5694,7 @@ Returns `void`
 
 - `$currentTime`: `int`
 
-**Throws:** `ProtocolException`
+**Throws:** `DependencyException`, `ProtocolException`
 
 #### [`assertAllArrayKeysExist`](../../../src/RequestHandlers/Api/TotpRotate.php#L27-L32)
 

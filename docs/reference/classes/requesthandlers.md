@@ -36,11 +36,11 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 - `$request`: `Psr\Http\Message\ServerRequestInterface`
 
-#### [`time`](../../../src/RequestHandlers/IndexPage.php#L38-L41)
+#### [`time`](../../../src/RequestHandlers/IndexPage.php#L39-L42)
 
 Returns `string`
 
-#### [`canonicalizeActor`](../../../src/RequestHandlers/IndexPage.php#L50-L54)
+#### [`canonicalizeActor`](../../../src/RequestHandlers/IndexPage.php#L53-L61)
 
 Returns `string`
 
@@ -48,9 +48,9 @@ Returns `string`
 
 - `$actor`: `string`
 
-**Throws:** `DependencyException`, `GuzzleException`, `NetworkException`, `SodiumException`, `CertaintyException`
+**Throws:** `CacheException`, `CertaintyException`, `DependencyException`, `GuzzleException`, `InvalidArgumentException`, `NetworkException`, `SodiumException`
 
-#### [`error`](../../../src/RequestHandlers/IndexPage.php#L62-L65)
+#### [`error`](../../../src/RequestHandlers/IndexPage.php#L69-L72)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -59,9 +59,9 @@ Returns `Psr\Http\Message\ResponseInterface`
 - `$message`: `string`
 - `$code`: `int` = 400
 
-**Throws:** `DependencyException`, `JsonException`, `NotImplementedException`, `SodiumException`
+**Throws:** `BaseJsonException`, `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`signResponse`](../../../src/RequestHandlers/IndexPage.php#L76-L88)
+#### [`signResponse`](../../../src/RequestHandlers/IndexPage.php#L83-L95)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -73,7 +73,7 @@ Implements an RFC 9421 HTTP Message Signature with Ed25519.
 
 **Throws:** `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`json`](../../../src/RequestHandlers/IndexPage.php#L98-L117)
+#### [`json`](../../../src/RequestHandlers/IndexPage.php#L107-L126)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -87,7 +87,7 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 
 **Throws:** `DependencyException`, `BaseJsonException`, `NotImplementedException`, `SodiumException`
 
-#### [`twig`](../../../src/RequestHandlers/IndexPage.php#L125-L142)
+#### [`twig`](../../../src/RequestHandlers/IndexPage.php#L136-L153)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -100,7 +100,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `DependencyException`, `LoaderError`, `RuntimeError`, `SyntaxError`
 
-#### [`appCache`](../../../src/RequestHandlers/IndexPage.php#L46-L49)
+#### [`appCache`](../../../src/RequestHandlers/IndexPage.php#L55-L58)
 
 Returns `FediE2EE\PKDServer\AppCache`
 
@@ -111,7 +111,7 @@ Returns `FediE2EE\PKDServer\AppCache`
 
 **Throws:** `DependencyException`
 
-#### [`table`](../../../src/RequestHandlers/IndexPage.php#L56-L79)
+#### [`table`](../../../src/RequestHandlers/IndexPage.php#L65-L88)
 
 Returns `FediE2EE\PKDServer\Table`
 
@@ -121,7 +121,7 @@ Returns `FediE2EE\PKDServer\Table`
 
 **Throws:** `CacheException`, `DependencyException`, `TableException`
 
-#### [`injectConfig`](../../../src/RequestHandlers/IndexPage.php#L81-L84)
+#### [`injectConfig`](../../../src/RequestHandlers/IndexPage.php#L90-L93)
 
 Returns `void`
 
@@ -129,13 +129,13 @@ Returns `void`
 
 - `$config`: `FediE2EE\PKDServer\ServerConfig`
 
-#### [`config`](../../../src/RequestHandlers/IndexPage.php#L89-L99)
+#### [`config`](../../../src/RequestHandlers/IndexPage.php#L98-L108)
 
 Returns `FediE2EE\PKDServer\ServerConfig`
 
 **Throws:** `DependencyException`
 
-#### [`setWebFinger`](../../../src/RequestHandlers/IndexPage.php#L104-L108)
+#### [`setWebFinger`](../../../src/RequestHandlers/IndexPage.php#L113-L117)
 
 Returns `self`
 
@@ -145,7 +145,7 @@ This is intended for mocking in unit tests
 
 - `$wf`: `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
-#### [`webfinger`](../../../src/RequestHandlers/IndexPage.php#L115-L122)
+#### [`webfinger`](../../../src/RequestHandlers/IndexPage.php#L124-L131)
 
 Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
@@ -155,7 +155,83 @@ Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
 **Throws:** `CertaintyException`, `DependencyException`, `SodiumException`
 
-#### [`jsonDecode`](../../../src/RequestHandlers/IndexPage.php#L15-L18)
+#### [`parseUrlHost`](../../../src/RequestHandlers/IndexPage.php#L137-L144)
+
+static · Returns `?string`
+
+**Parameters:**
+
+- `$url`: `string`
+
+#### [`assertArray`](../../../src/RequestHandlers/IndexPage.php#L152-L158)
+
+static · Returns `array`
+
+**Parameters:**
+
+- `$result`: `object|array`
+
+**Throws:** `TypeError`
+
+#### [`assertString`](../../../src/RequestHandlers/IndexPage.php#L163-L169)
+
+static · Returns `string`
+
+**Parameters:**
+
+- `$value`: `mixed`
+
+**Throws:** `TypeError`
+
+#### [`assertStringOrNull`](../../../src/RequestHandlers/IndexPage.php#L171-L180)
+
+static · Returns `?string`
+
+**Parameters:**
+
+- `$value`: `mixed`
+
+#### [`assertInt`](../../../src/RequestHandlers/IndexPage.php#L185-L194)
+
+static · Returns `int`
+
+**Parameters:**
+
+- `$value`: `mixed`
+
+**Throws:** `TypeError`
+
+#### [`rowToStringArray`](../../../src/RequestHandlers/IndexPage.php#L201-L211)
+
+static · Returns `array`
+
+**Parameters:**
+
+- `$row`: `object|array`
+
+**Throws:** `TypeError`
+
+#### [`decryptedString`](../../../src/RequestHandlers/IndexPage.php#L217-L227)
+
+static · Returns `string`
+
+**Parameters:**
+
+- `$row`: `array`
+- `$key`: `string`
+
+**Throws:** `TypeError`
+
+#### [`blindIndexValue`](../../../src/RequestHandlers/IndexPage.php#L234-L244)
+
+static · Returns `string`
+
+**Parameters:**
+
+- `$blindIndex`: `array|string`
+- `$key`: `?string` = null
+
+#### [`jsonDecode`](../../../src/RequestHandlers/IndexPage.php#L17-L20)
 
 static · Returns `array`
 
@@ -165,9 +241,9 @@ static · Returns `array`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonDecodeObject`](../../../src/RequestHandlers/IndexPage.php#L23-L26)
+#### [`jsonDecodeObject`](../../../src/RequestHandlers/IndexPage.php#L25-L28)
 
-static · Returns `object`
+static · Returns `stdClass`
 
 **Parameters:**
 
@@ -175,7 +251,7 @@ static · Returns `object`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonEncode`](../../../src/RequestHandlers/IndexPage.php#L31-L37)
+#### [`jsonEncode`](../../../src/RequestHandlers/IndexPage.php#L34-L40)
 
 static · Returns `string`
 
