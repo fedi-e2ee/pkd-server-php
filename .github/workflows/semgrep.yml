@@ -21,7 +21,7 @@ jobs:
         with:
           persist-credentials: false
       - run: |
-         semgrep scan \
+         semgrep scan --error \
             --config auto \
             --config p/phpcs-security-audit \
             --config p/security-audit \
