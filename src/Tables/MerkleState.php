@@ -529,6 +529,7 @@ class MerkleState extends Table
         $this->db->update(
             'pkd_merkle_state',
             [
+                'lock_challenge' => '',
                 'merkle_state' => Base64UrlSafe::encodeUnpadded($incremental->toJson())
                 // We don't disable the lock challenge until after $inTransaction()
             ],
