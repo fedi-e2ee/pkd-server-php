@@ -21,7 +21,7 @@ Namespace: `FediE2EE\PKDServer\RateLimit\Storage`
 
 ### Methods
 
-#### [`__construct`](../../../src/RateLimit/Storage/Filesystem.php#L41-L50)
+#### [`__construct`](../../../src/RateLimit/Storage/Filesystem.php#L42-L51)
 
 Returns `void`
 
@@ -33,7 +33,7 @@ Returns `void`
 
 **Throws:** `DependencyException`
 
-#### [`get`](../../../src/RateLimit/Storage/Filesystem.php#L58-L81)
+#### [`get`](../../../src/RateLimit/Storage/Filesystem.php#L60-L83)
 
 Returns `?FediE2EE\PKDServer\RateLimit\RateLimitData`
 
@@ -44,9 +44,9 @@ Returns `?FediE2EE\PKDServer\RateLimit\RateLimitData`
 - `$type`: `string`
 - `$identifier`: `string`
 
-**Throws:** `InputException`, `JsonException`, `SodiumException`
+**Throws:** `DateMalformedStringException`, `InputException`, `JsonException`, `SodiumException`
 
-#### [`set`](../../../src/RateLimit/Storage/Filesystem.php#L88-L96)
+#### [`set`](../../../src/RateLimit/Storage/Filesystem.php#L90-L98)
 
 Returns `bool`
 
@@ -60,7 +60,7 @@ Returns `bool`
 
 **Throws:** `SodiumException`, `JsonException`
 
-#### [`delete`](../../../src/RateLimit/Storage/Filesystem.php#L102-L109)
+#### [`delete`](../../../src/RateLimit/Storage/Filesystem.php#L104-L113)
 
 Returns `bool`
 
@@ -73,7 +73,7 @@ Returns `bool`
 
 **Throws:** `SodiumException`
 
-#### [`getFilesystemPath`](../../../src/RateLimit/Storage/Filesystem.php#L114-L135)
+#### [`getFilesystemPath`](../../../src/RateLimit/Storage/Filesystem.php#L118-L139)
 
 Returns `string`
 

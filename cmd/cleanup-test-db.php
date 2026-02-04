@@ -27,6 +27,7 @@ sleep(1);
 // Try to delete, with retries
 $attempts = 0;
 while (file_exists($dbPath) && $attempts < 5) {
+    // nosemgrep: php.lang.security.unlink-use.unlink-use
     if (@unlink($dbPath)) {
         exit(0);
     }

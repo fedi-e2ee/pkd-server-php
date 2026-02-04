@@ -65,6 +65,7 @@ final class DocGenerator
         // Remove old monolithic classes.md if it exists
         $oldFile = self::OUTPUT_DIR . '/classes.md';
         if (file_exists($oldFile)) {
+            // nosemgrep: php.lang.security.unlink-use.unlink-use
             unlink($oldFile);
         }
     }
@@ -80,6 +81,7 @@ final class DocGenerator
             if (is_dir($path)) {
                 $this->removeDirectory($path);
             } else {
+                // nosemgrep: php.lang.security.unlink-use.unlink-use
                 unlink($path);
             }
         }

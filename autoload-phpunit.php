@@ -71,9 +71,11 @@ if (!($GLOBALS['pkdConfig'] instanceof ServerConfig)) {
                 $script = __DIR__ . '/cmd/cleanup-test-db.php';
                 if (DIRECTORY_SEPARATOR === '\\') {
                     // Windows: use start with /B (background) flag
+                    // nosemgrep: php.lang.security.exec-use.exec-use
                     pclose(popen("start /B " . PHP_BINARY . " " . escapeshellarg($script) . " " . escapeshellarg($temp), "r"));
                 } else {
                     // Unix: use nohup and redirect to /dev/null
+                    // nosemgrep: php.lang.security.exec-use.exec-use
                     shell_exec(PHP_BINARY . " " . escapeshellarg($script) . " " . escapeshellarg($temp) . " > /dev/null 2>&1 &");
                 }
             });

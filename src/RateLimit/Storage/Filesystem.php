@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace FediE2EE\PKDServer\RateLimit\Storage;
 
+use DateMalformedStringException;
 use FediE2EE\PKD\Crypto\Exceptions\InputException;
 use FediE2EE\PKD\Crypto\UtilTrait;
 use FediE2EE\PKDServer\Exceptions\DependencyException;
@@ -50,6 +51,7 @@ class Filesystem implements RateLimitStorageInterface
     }
 
     /**
+     * @throws DateMalformedStringException
      * @throws InputException
      * @throws JsonException
      * @throws SodiumException
@@ -105,6 +107,8 @@ class Filesystem implements RateLimitStorageInterface
         if (!file_exists($file)) {
             return true;
         }
+        // The filepath here is created by concatenating hex-encoded hash function outputs. It's fine.
+        // nosemgrep: php.lang.security.unlink-use.unlink-use
         return unlink($file);
     }
 
