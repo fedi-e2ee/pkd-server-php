@@ -24,7 +24,7 @@ jobs:
           POSTGRES_DB: pkd_test
           POSTGRES_USER: pkd_test
         ports:
-          - 5432:5432
+          - 127.0.0.1:5432:5432
         options: --health-cmd="pg_isready" --health-interval=10s --health-timeout=5s --health-retries=3
       mysql:
         image: mysql:8
@@ -34,7 +34,7 @@ jobs:
           MYSQL_USER: pkd_test
           MYSQL_PASSWORD: pkd_test
         ports:
-          - 3306:3306
+          - 127.0.0.1:3306:3306
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
     steps:
@@ -128,7 +128,7 @@ jobs:
           POSTGRES_DB: pkd_test
           POSTGRES_USER: pkd_test
         ports:
-          - 5432:5432
+          - 127.0.0.1:5432:5432
         options: --health-cmd="pg_isready" --health-interval=10s --health-timeout=5s --health-retries=3
       mysql:
         image: mysql:8
@@ -138,12 +138,12 @@ jobs:
           MYSQL_USER: pkd_test
           MYSQL_PASSWORD: pkd_test
         ports:
-          - 3306:3306
+          - 127.0.0.1:3306:3306
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
       redis:
         image: redis:7
         ports:
-          - 6379:6379
+          - 127.0.0.1:6379:6379
         options: --entrypoint redis-server --health-cmd "redis-cli ping" --health-interval 10s --health-timeout 5s --health-retries 3
 
     steps:
