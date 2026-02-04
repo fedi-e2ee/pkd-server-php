@@ -550,13 +550,8 @@ class MerkleState extends Table
                 $this->db->beginTransaction();
             }
             // Unlock challenge
-            $this->db->update(
-                'pkd_merkle_state',
-                [
-                    'lock_challenge' => '',
-                ],
-                ['merkle_state' => $state]
-            );
+
+            $this->db->exec("UPDATE pkd_merkle_state SET lock_challenge = ''");
             // @phpstan-ignore-next-line
             if ($wrap) {
                 $this->db->commit();

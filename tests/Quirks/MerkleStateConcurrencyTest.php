@@ -10,6 +10,7 @@ use ParagonIE\EasyDB\EasyDB;
 use PDOException;
 use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\TestCase;
+use Throwable;
 
 #[CoversNothing]
 class MerkleStateConcurrencyTest extends TestCase
@@ -17,6 +18,9 @@ class MerkleStateConcurrencyTest extends TestCase
     use ConfigTrait;
     use HttpTestTrait;
 
+    /**
+     * @throws Throwable
+     */
     public function testConcurrency(): void
     {
         if (!extension_loaded('pcntl')) {
