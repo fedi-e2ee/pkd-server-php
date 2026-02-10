@@ -37,6 +37,7 @@ use Psr\Http\Server\RequestHandlerInterface;
 use SodiumException;
 use Throwable;
 use TypeError;
+
 use function is_null;
 
 class TotpDisenroll implements RequestHandlerInterface, LimitingHandlerInterface
@@ -94,8 +95,11 @@ class TotpDisenroll implements RequestHandlerInterface, LimitingHandlerInterface
 
         try {
             $domain = $this->validateTotpRequest(
-                $body, $sub['actor-id'], $sub['key-id'],
-                'fedi-e2ee:v1/api/totp/disenroll', 'TOTP-Disenroll',
+                $body,
+                $sub['actor-id'],
+                $sub['key-id'],
+                'fedi-e2ee:v1/api/totp/disenroll',
+                'TOTP-Disenroll',
             );
         } catch (ProtocolException $ex) {
             return $this->error($ex->getMessage(), 400);

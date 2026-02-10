@@ -80,6 +80,10 @@ jobs:
         run: |
           php-fuzzer fuzz --max-runs "$FUZZ_RUNS" fuzzing/FuzzTOTP.php
           shopt -s nullglob; for f in crash-*.txt; do mv "$f" "${f/crash-/fuzzed-FuzzTOTP-}"; done
+      - name: Run DifferentialFuzzProtocolWitness
+        run: |
+          php-fuzzer fuzz --max-runs "$FUZZ_RUNS" fuzzing/DifferentialFuzzProtocolWitness.php
+          shopt -s nullglob; for f in crash-*.txt; do mv "$f" "${f/crash-/fuzzed-DifferentialFuzzProtocolWitness-}"; done
       - name: Check for crashes
         if: always()
         run: |

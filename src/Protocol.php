@@ -128,6 +128,8 @@ class Protocol
 
     /**
      * Determine which field contains the message payload based on !pkd-context.
+     *
+     * @param array<string, mixed> $outerJson
      * @return array{field: string, encrypted: bool}
      *
      * @throws ProtocolException

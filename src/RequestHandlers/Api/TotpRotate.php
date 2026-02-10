@@ -41,6 +41,7 @@ use Psr\Http\Server\RequestHandlerInterface;
 use SodiumException;
 use Throwable;
 use TypeError;
+
 use function is_null;
 
 class TotpRotate implements RequestHandlerInterface, LimitingHandlerInterface
@@ -100,8 +101,11 @@ class TotpRotate implements RequestHandlerInterface, LimitingHandlerInterface
 
         try {
             $domain = $this->validateTotpRequest(
-                $body, $sub['actor-id'], $sub['key-id'],
-                'fedi-e2ee:v1/api/totp/rotate', 'TOTP-Rotate',
+                $body,
+                $sub['actor-id'],
+                $sub['key-id'],
+                'fedi-e2ee:v1/api/totp/rotate',
+                'TOTP-Rotate',
             );
         } catch (ProtocolException $ex) {
             return $this->error($ex->getMessage(), 400);

@@ -63,7 +63,14 @@ use Psr\SimpleCache\InvalidArgumentException;
 use Random\RandomException;
 use SodiumException;
 use TypeError;
-use function array_any, hash_equals, is_array, is_null, is_string, json_decode, random_bytes;
+
+use function array_any;
+use function hash_equals;
+use function is_array;
+use function is_null;
+use function is_string;
+use function json_decode;
+use function random_bytes;
 
 class PublicKeys extends Table
 {
@@ -80,7 +87,8 @@ class PublicKeys extends Table
             'actorpublickeyid'
         )
             ->addTextField('publickey')
-            ->addBlindIndex('publickey',
+            ->addBlindIndex(
+                'publickey',
                 new BlindIndex('publickey_idx', [], 16, true)
             )
         ;
@@ -336,7 +344,7 @@ class PublicKeys extends Table
         $sm = Bundle::fromJson($rawJson)->toSignedMessage();
         $anySignatureIsValid = array_any(
             $this->getPublicKeysFor($actorName, $keyId),
-            fn(array $row) => $sm->verify($row['public-key'])
+            fn (array $row) => $sm->verify($row['public-key'])
         );
         if (!$anySignatureIsValid) {
             throw new ProtocolException('Invalid signature');
