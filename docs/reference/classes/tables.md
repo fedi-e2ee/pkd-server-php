@@ -350,7 +350,7 @@ Returns `int`
 
 **Throws:** `DependencyException`, `SodiumException`
 
-#### [`insertLeaf`](../../../src/Tables/MerkleState.php#L229-L285)
+#### [`insertLeaf`](../../../src/Tables/MerkleState.php#L229-L293)
 
 **API** · Returns `bool`
 
@@ -364,7 +364,7 @@ Insert leaf with retry logic for deadlocks
 
 **Throws:** `ConcurrentException`, `CryptoException`, `DependencyException`, `NotImplementedException`, `RandomException`, `SodiumException`
 
-#### [`getLeafByRoot`](../../../src/Tables/MerkleState.php#L290-L306)
+#### [`getLeafByRoot`](../../../src/Tables/MerkleState.php#L312-L328)
 
 **API** · Returns `?FediE2EE\PKDServer\Tables\Records\MerkleLeaf`
 
@@ -372,7 +372,7 @@ Insert leaf with retry logic for deadlocks
 
 - `$root`: `string`
 
-#### [`getLeafByID`](../../../src/Tables/MerkleState.php#L311-L327)
+#### [`getLeafByID`](../../../src/Tables/MerkleState.php#L333-L349)
 
 **API** · Returns `?FediE2EE\PKDServer\Tables\Records\MerkleLeaf`
 
@@ -380,7 +380,7 @@ Insert leaf with retry logic for deadlocks
 
 - `$primaryKey`: `int`
 
-#### [`getHashesSince`](../../../src/Tables/MerkleState.php#L367-L409)
+#### [`getHashesSince`](../../../src/Tables/MerkleState.php#L389-L431)
 
 **API** · Returns `array`
 
@@ -595,7 +595,7 @@ Returns `bool`
 
 **Throws:** `ConcurrentException`, `CryptoException`, `DependencyException`, `NotImplementedException`, `ProtocolException`, `RandomException`, `SodiumException`, `TableException`
 
-#### [`burnDown`](../../../src/Tables/PublicKeys.php#L817-L826)
+#### [`burnDown`](../../../src/Tables/PublicKeys.php#L853-L862)
 
 Returns `bool`
 
@@ -606,7 +606,7 @@ Returns `bool`
 
 **Throws:** `ConcurrentException`, `CryptoException`, `DependencyException`, `NotImplementedException`, `ProtocolException`, `RandomException`, `SodiumException`, `TableException`
 
-#### [`fireproof`](../../../src/Tables/PublicKeys.php#L916-L924)
+#### [`fireproof`](../../../src/Tables/PublicKeys.php#L952-L960)
 
 Returns `bool`
 
@@ -617,7 +617,7 @@ Returns `bool`
 
 **Throws:** `ConcurrentException`, `CryptoException`, `DependencyException`, `NotImplementedException`, `ProtocolException`, `RandomException`, `SodiumException`, `TableException`
 
-#### [`undoFireproof`](../../../src/Tables/PublicKeys.php#L999-L1007)
+#### [`undoFireproof`](../../../src/Tables/PublicKeys.php#L1035-L1043)
 
 Returns `bool`
 
@@ -628,7 +628,7 @@ Returns `bool`
 
 **Throws:** `ConcurrentException`, `CryptoException`, `DependencyException`, `NotImplementedException`, `ProtocolException`, `RandomException`, `SodiumException`, `TableException`
 
-#### [`checkpoint`](../../../src/Tables/PublicKeys.php#L1082-L1090)
+#### [`checkpoint`](../../../src/Tables/PublicKeys.php#L1118-L1126)
 
 Returns `bool`
 
