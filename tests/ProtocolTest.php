@@ -8,6 +8,7 @@ use FediE2EE\PKD\Crypto\AttributeEncryption\AttributeKeyMap;
 use FediE2EE\PKD\Crypto\Exceptions\{
     BundleException,
     CryptoException,
+    InputException,
     JsonException,
     NetworkException,
     NotImplementedException,
@@ -26,6 +27,7 @@ use FediE2EE\PKD\Crypto\Protocol\{
     Actions\UndoFireproof,
     Handler
 };
+use GuzzleHttp\Exception\GuzzleException;
 use ParagonIE\Certainty\Exception\CertaintyException;
 use Psr\SimpleCache\InvalidArgumentException;
 use Random\RandomException;
@@ -38,6 +40,7 @@ use FediE2EE\PKD\Crypto\{
 use FediE2EE\PKDServer\Traits\ConfigTrait;
 use FediE2EE\PKDServer\Exceptions\{
     CacheException,
+    ConcurrentException,
     DependencyException,
     ProtocolException,
     TableException
@@ -71,6 +74,8 @@ use FediE2EE\PKDServer\Tables\{
 };
 use JsonException as BaseJsonException;
 use ParagonIE\CipherSweet\Exception\{
+    ArrayKeyException,
+    BlindIndexNotFoundException,
     CipherSweetException,
     CryptoOperationException,
     InvalidCiphertextException
@@ -943,5 +948,778 @@ class ProtocolTest extends TestCase
         $this->assertTrue($result);
         $this->assertCount(0, $pkTable->getPublicKeysFor($canonical));
         $this->ensureMerkleStateUnlocked();
+    }
+
+    /**
+     * Spec: RevokeKey MUST fail unless there is another public key.
+     *
+     * @throws ArrayKeyException
+     * @throws BaseJsonException
+     * @throws BlindIndexNotFoundException
+     * @throws BundleException
+     * @throws CacheException
+     * @throws CertaintyException
+     * @throws CipherSweetException
+     * @throws ConcurrentException
+     * @throws CryptoException
+     * @throws CryptoOperationException
+     * @throws DateMalformedStringException
+     * @throws DependencyException
+     * @throws GuzzleException
+     * @throws HPKEException
+     * @throws InputException
+     * @throws InvalidArgumentException
+     * @throws InvalidCiphertextException
+     * @throws JsonException
+     * @throws NetworkException
+     * @throws NotImplementedException
+     * @throws ParserException
+     * @throws ProtocolException
+     * @throws RandomException
+     * @throws SodiumException
+     * @throws TableException
+     */
+    public function testRevokeKeyLastKeyInvariant(): void
+    {
+        $this->clearOldTransaction($this->config);
+        $this->truncateTables();
+        $this->addTestPeer();
+        [, $canonical] = $this->makeDummyActor();
+
+        $keypair1 = SecretKey::generate();
+        $protocol = new Protocol($this->config);
+        $this->addKeyForActor($canonical, $keypair1, $protocol, $this->config);
+        $this->ensureMerkleStateUnlocked();
+
+        /** @var PublicKeys $pkTable */
+        $pkTable = $this->table('PublicKeys');
+        $this->assertCount(1, $pkTable->getPublicKeysFor($canonical));
+
+        /** @var MerkleState $merkleState */
+        $merkleState = $this->table('MerkleState');
+        $latestRoot = $merkleState->getLatestRoot();
+
+        // Try to revoke the only key
+        $serverHpke = $this->config->getHPKE();
+        $handler = new Handler();
+        $revokeKey = new RevokeKey($canonical, $keypair1->getPublicKey());
+        $akm = new AttributeKeyMap()
+            ->addKey('actor', SymmetricKey::generate())
+            ->addKey('public-key', SymmetricKey::generate());
+        $bundle = $handler->handle(
+            $revokeKey->encrypt($akm),
+            $keypair1,
+            $akm,
+            $latestRoot
+        );
+        $encrypted = $handler->hpkeEncrypt(
+            $bundle,
+            $serverHpke->encapsKey,
+            $serverHpke->cs
+        );
+
+        $this->expectException(ProtocolException::class);
+        $this->expectExceptionMessage('Cannot revoke the last remaining key');
+        try {
+            $protocol->revokeKey($encrypted, $canonical);
+        } finally {
+            $this->ensureMerkleStateUnlocked();
+            $this->clearOldTransaction($this->config);
+        }
+    }
+
+    /**
+     * Spec: RevokeKey must be signed by a DIFFERENT non-revoked key.
+     *
+     * @throws ArrayKeyException
+     * @throws BaseJsonException
+     * @throws BlindIndexNotFoundException
+     * @throws BundleException
+     * @throws CacheException
+     * @throws CertaintyException
+     * @throws CipherSweetException
+     * @throws ConcurrentException
+     * @throws CryptoException
+     * @throws CryptoOperationException
+     * @throws DateMalformedStringException
+     * @throws DependencyException
+     * @throws GuzzleException
+     * @throws HPKEException
+     * @throws InputException
+     * @throws InvalidArgumentException
+     * @throws InvalidCiphertextException
+     * @throws JsonException
+     * @throws NetworkException
+     * @throws NotImplementedException
+     * @throws ParserException
+     * @throws ProtocolException
+     * @throws RandomException
+     * @throws SodiumException
+     * @throws TableException
+     */
+    public function testRevokeKeySelfRevocation(): void
+    {
+        $this->clearOldTransaction($this->config);
+        $this->truncateTables();
+        $this->addTestPeer();
+        [, $canonical] = $this->makeDummyActor();
+
+        $keypair1 = SecretKey::generate();
+        $keypair2 = SecretKey::generate();
+
+        /** @var MerkleState $merkleState */
+        $merkleState = $this->table('MerkleState');
+        $serverHpke = $this->config->getHPKE();
+        $handler = new Handler();
+        $protocol = new Protocol($this->config);
+
+        // Add key1 (self-signed)
+        $this->addKeyForActor($canonical, $keypair1, $protocol, $this->config);
+        $this->ensureMerkleStateUnlocked();
+
+        // Add key2 (signed by key1)
+        $latestRoot = $merkleState->getLatestRoot();
+        $addKey2 = new AddKey($canonical, $keypair2->getPublicKey());
+        $akm2 = new AttributeKeyMap()
+            ->addKey('actor', SymmetricKey::generate())
+            ->addKey('public-key', SymmetricKey::generate());
+        $bundle2 = $handler->handle(
+            $addKey2->encrypt($akm2),
+            $keypair1,
+            $akm2,
+            $latestRoot
+        );
+        $encrypted2 = $handler->hpkeEncrypt(
+            $bundle2,
+            $serverHpke->encapsKey,
+            $serverHpke->cs
+        );
+        $protocol->addKey($encrypted2, $canonical);
+        $this->ensureMerkleStateUnlocked();
+
+        /** @var PublicKeys $pkTable */
+        $pkTable = $this->table('PublicKeys');
+        $this->assertCount(2, $pkTable->getPublicKeysFor($canonical));
+
+        // Try to revoke key1, signed by key1 (self-revocation)
+        $latestRoot = $merkleState->getLatestRoot();
+        $revokeKey = new RevokeKey($canonical, $keypair1->getPublicKey());
+        $akm3 = new AttributeKeyMap()
+            ->addKey('actor', SymmetricKey::generate())
+            ->addKey('public-key', SymmetricKey::generate());
+        $bundle3 = $handler->handle(
+            $revokeKey->encrypt($akm3),
+            $keypair1,
+            $akm3,
+            $latestRoot
+        );
+        $encrypted3 = $handler->hpkeEncrypt(
+            $bundle3,
+            $serverHpke->encapsKey,
+            $serverHpke->cs
+        );
+
+        $this->expectException(ProtocolException::class);
+        $this->expectExceptionMessage(
+            'RevokeKey must be signed by a different valid key'
+        );
+        try {
+            $protocol->revokeKey($encrypted3, $canonical);
+        } finally {
+            $this->ensureMerkleStateUnlocked();
+            $this->clearOldTransaction($this->config);
+        }
+    }
+
+    /**
+     * Verify the target key (not the signing key) is revoked.
+     *
+     * @throws ArrayKeyException
+     * @throws BaseJsonException
+     * @throws BlindIndexNotFoundException
+     * @throws BundleException
+     * @throws CacheException
+     * @throws CertaintyException
+     * @throws CipherSweetException
+     * @throws ConcurrentException
+     * @throws CryptoException
+     * @throws CryptoOperationException
+     * @throws DateMalformedStringException
+     * @throws DependencyException
+     * @throws GuzzleException
+     * @throws HPKEException
+     * @throws InputException
+     * @throws InvalidArgumentException
+     * @throws InvalidCiphertextException
+     * @throws JsonException
+     * @throws NetworkException
+     * @throws NotImplementedException
+     * @throws ParserException
+     * @throws ProtocolException
+     * @throws RandomException
+     * @throws SodiumException
+     * @throws TableException
+     */
+    public function testRevokeKeyCorrectTarget(): void
+    {
+        $this->clearOldTransaction($this->config);
+        $this->truncateTables();
+        $this->addTestPeer();
+        [, $canonical] = $this->makeDummyActor();
+
+        $keypair1 = SecretKey::generate();
+        $keypair2 = SecretKey::generate();
+
+        /** @var MerkleState $merkleState */
+        $merkleState = $this->table('MerkleState');
+        $serverHpke = $this->config->getHPKE();
+        $handler = new Handler();
+        $protocol = new Protocol($this->config);
+
+        // Add key1 (self-signed)
+        $this->addKeyForActor($canonical, $keypair1, $protocol, $this->config);
+        $this->ensureMerkleStateUnlocked();
+
+        // Add key2 (signed by key1)
+        $latestRoot = $merkleState->getLatestRoot();
+        $addKey2 = new AddKey($canonical, $keypair2->getPublicKey());
+        $akm2 = new AttributeKeyMap()
+            ->addKey('actor', SymmetricKey::generate())
+            ->addKey('public-key', SymmetricKey::generate());
+        $bundle2 = $handler->handle(
+            $addKey2->encrypt($akm2),
+            $keypair1,
+            $akm2,
+            $latestRoot
+        );
+        $encrypted2 = $handler->hpkeEncrypt(
+            $bundle2,
+            $serverHpke->encapsKey,
+            $serverHpke->cs
+        );
+        $protocol->addKey($encrypted2, $canonical);
+        $this->ensureMerkleStateUnlocked();
+
+        /** @var PublicKeys $pkTable */
+        $pkTable = $this->table('PublicKeys');
+        $this->assertCount(2, $pkTable->getPublicKeysFor($canonical));
+
+        // Revoke key2, signed by key1
+        $latestRoot = $merkleState->getLatestRoot();
+        $revokeKey = new RevokeKey($canonical, $keypair2->getPublicKey());
+        $akm3 = new AttributeKeyMap()
+            ->addKey('actor', SymmetricKey::generate())
+            ->addKey('public-key', SymmetricKey::generate());
+        $bundle3 = $handler->handle(
+            $revokeKey->encrypt($akm3),
+            $keypair1,
+            $akm3,
+            $latestRoot
+        );
+        $encrypted3 = $handler->hpkeEncrypt(
+            $bundle3,
+            $serverHpke->encapsKey,
+            $serverHpke->cs
+        );
+
+        $this->assertNotInTransaction();
+        $result = $protocol->revokeKey($encrypted3, $canonical);
+        $this->assertFalse($result->trusted);
+        $this->ensureMerkleStateUnlocked();
+
+        // Verify key1 remains and key2 is gone
+        $remainingKeys = $pkTable->getPublicKeysFor($canonical);
+        $this->assertCount(1, $remainingKeys);
+        $this->assertTrue(hash_equals(
+            $keypair1->getPublicKey()->toString(),
+            $remainingKeys[0]['public-key']->toString()
+        ));
+    }
+
+    /**
+     * Replaying an identical message must be rejected.
+     *
+     * @throws BundleException
+     * @throws CacheException
+     * @throws CertaintyException
+     * @throws ConcurrentException
+     * @throws CryptoException
+     * @throws DateMalformedStringException
+     * @throws DependencyException
+     * @throws GuzzleException
+     * @throws HPKEException
+     * @throws InputException
+     * @throws InvalidArgumentException
+     * @throws JsonException
+     * @throws NetworkException
+     * @throws NotImplementedException
+     * @throws ParserException
+     * @throws ProtocolException
+     * @throws RandomException
+     * @throws SodiumException
+     * @throws TableException
+     */
+    public function testMessageReplayRejected(): void
+    {
+        $this->clearOldTransaction($this->config);
+        $this->truncateTables();
+        $this->addTestPeer();
+        [, $canonical] = $this->makeDummyActor();
+
+        $keypair1 = SecretKey::generate();
+        $keypair2 = SecretKey::generate();
+
+        /** @var MerkleState $merkleState */
+        $merkleState = $this->table('MerkleState');
+        $serverHpke = $this->config->getHPKE();
+        $handler = new Handler();
+        $protocol = new Protocol($this->config);
+
+        // Add key1 first
+        $this->addKeyForActor($canonical, $keypair1, $protocol, $this->config);
+        $this->ensureMerkleStateUnlocked();
+
+        // Create a second AddKey bundle (key2 signed by key1)
+        $latestRoot = $merkleState->getLatestRoot();
+        $addKey2 = new AddKey($canonical, $keypair2->getPublicKey());
+        $akm = new AttributeKeyMap()
+            ->addKey('actor', SymmetricKey::generate())
+            ->addKey('public-key', SymmetricKey::generate());
+        $bundle = $handler->handle(
+            $addKey2->encrypt($akm),
+            $keypair1,
+            $akm,
+            $latestRoot
+        );
+
+        // First submission succeeds
+        $encrypted1 = $handler->hpkeEncrypt(
+            $bundle,
+            $serverHpke->encapsKey,
+            $serverHpke->cs
+        );
+        $protocol->addKey($encrypted1, $canonical);
+        $this->ensureMerkleStateUnlocked();
+
+        // Replay: same bundle, different HPKE ciphertext
+        $encrypted2 = $handler->hpkeEncrypt(
+            $bundle,
+            $serverHpke->encapsKey,
+            $serverHpke->cs
+        );
+
+        $this->expectException(ProtocolException::class);
+        $this->expectExceptionMessage('Message has already been processed');
+        try {
+            $protocol->addKey($encrypted2, $canonical);
+        } finally {
+            $this->ensureMerkleStateUnlocked();
+            $this->clearOldTransaction($this->config);
+        }
+    }
+
+    /**
+     * Fireproof must actually prevent a plaintext BurnDown.
+     *
+     * @throws BundleException
+     * @throws CacheException
+     * @throws CertaintyException
+     * @throws ConcurrentException
+     * @throws CryptoException
+     * @throws DateMalformedStringException
+     * @throws DependencyException
+     * @throws GuzzleException
+     * @throws HPKEException
+     * @throws InputException
+     * @throws InvalidArgumentException
+     * @throws JsonException
+     * @throws NetworkException
+     * @throws NotImplementedException
+     * @throws ParserException
+     * @throws ProtocolException
+     * @throws RandomException
+     * @throws SodiumException
+     * @throws TableException
+     */
+    public function testFireproofPreventsPlaintextBurnDown(): void
+    {
+        $this->clearOldTransaction($this->config);
+        $this->truncateTables();
+        $this->addTestPeer();
+        [, $canonActor] = $this->makeDummyActor();
+        [, $canonOperator] = $this->makeDummyActor();
+
+        $actorKey = SecretKey::generate();
+        $operatorKey = SecretKey::generate();
+
+        /** @var MerkleState $merkleState */
+        $merkleState = $this->table('MerkleState');
+        $serverHpke = $this->config->getHPKE();
+        $handler = new Handler();
+        $protocol = new Protocol($this->config);
+
+        // Enroll actor key
+        $this->addKeyForActor(
+            $canonActor,
+            $actorKey,
+            $protocol,
+            $this->config
+        );
+        $this->ensureMerkleStateUnlocked();
+
+        // Enroll operator key
+        $this->addKeyForActor(
+            $canonOperator,
+            $operatorKey,
+            $protocol,
+            $this->config
+        );
+        $this->ensureMerkleStateUnlocked();
+
+        // Fireproof the actor
+        $latestRoot = $merkleState->getLatestRoot();
+        $fireproof = new Fireproof($canonActor);
+        $akm = new AttributeKeyMap()
+            ->addKey('actor', SymmetricKey::generate());
+        $bundle = $handler->handle(
+            $fireproof->encrypt($akm),
+            $actorKey,
+            $akm,
+            $latestRoot
+        );
+        $encrypted = $handler->hpkeEncrypt(
+            $bundle,
+            $serverHpke->encapsKey,
+            $serverHpke->cs
+        );
+        $this->assertNotInTransaction();
+        $result = $protocol->fireproof($encrypted, $canonActor);
+        $this->assertTrue($result);
+        $this->ensureMerkleStateUnlocked();
+
+        // Create plaintext BurnDown (NOT HPKE encrypted)
+        $latestRoot = $merkleState->getLatestRoot();
+        $burnDown = new BurnDown($canonActor, $canonOperator, null, '');
+        $bundleBD = $handler->handle(
+            $burnDown,
+            $operatorKey,
+            new AttributeKeyMap(),
+            $latestRoot
+        );
+        $plaintextJson = $bundleBD->toJson();
+
+        $this->expectException(ProtocolException::class);
+        $this->expectExceptionMessage('Actor is fireproof');
+        try {
+            $protocol->burnDown($plaintextJson, $canonOperator);
+        } finally {
+            $this->ensureMerkleStateUnlocked();
+            $this->clearOldTransaction($this->config);
+        }
+    }
+
+    /**
+     * Fireproof on an already-fireproof actor must be rejected.
+     *
+     * @throws BundleException
+     * @throws CacheException
+     * @throws CertaintyException
+     * @throws ConcurrentException
+     * @throws CryptoException
+     * @throws DateMalformedStringException
+     * @throws DependencyException
+     * @throws GuzzleException
+     * @throws HPKEException
+     * @throws InputException
+     * @throws InvalidArgumentException
+     * @throws JsonException
+     * @throws NetworkException
+     * @throws NotImplementedException
+     * @throws ParserException
+     * @throws ProtocolException
+     * @throws RandomException
+     * @throws SodiumException
+     * @throws TableException
+     */
+    public function testFireproofIdempotency(): void
+    {
+        $this->clearOldTransaction($this->config);
+        $this->truncateTables();
+        $this->addTestPeer();
+        [, $canonical] = $this->makeDummyActor();
+
+        $keypair = SecretKey::generate();
+
+        /** @var MerkleState $merkleState */
+        $merkleState = $this->table('MerkleState');
+        $serverHpke = $this->config->getHPKE();
+        $handler = new Handler();
+        $protocol = new Protocol($this->config);
+
+        $this->addKeyForActor($canonical, $keypair, $protocol, $this->config);
+        $this->ensureMerkleStateUnlocked();
+
+        // First Fireproof succeeds
+        $latestRoot = $merkleState->getLatestRoot();
+        $fireproof = new Fireproof($canonical);
+        $akm = new AttributeKeyMap()
+            ->addKey('actor', SymmetricKey::generate());
+        $bundle = $handler->handle(
+            $fireproof->encrypt($akm),
+            $keypair,
+            $akm,
+            $latestRoot
+        );
+        $encrypted = $handler->hpkeEncrypt(
+            $bundle,
+            $serverHpke->encapsKey,
+            $serverHpke->cs
+        );
+        $result = $protocol->fireproof($encrypted, $canonical);
+        $this->assertTrue($result);
+        $this->ensureMerkleStateUnlocked();
+
+        // Second Fireproof must fail
+        $latestRoot = $merkleState->getLatestRoot();
+        $fireproof2 = new Fireproof($canonical);
+        $akm2 = new AttributeKeyMap()
+            ->addKey('actor', SymmetricKey::generate());
+        $bundle2 = $handler->handle(
+            $fireproof2->encrypt($akm2),
+            $keypair,
+            $akm2,
+            $latestRoot
+        );
+        $encrypted2 = $handler->hpkeEncrypt(
+            $bundle2,
+            $serverHpke->encapsKey,
+            $serverHpke->cs
+        );
+
+        $this->expectException(ProtocolException::class);
+        $this->expectExceptionMessage('Actor is already fireproof');
+        try {
+            $protocol->fireproof($encrypted2, $canonical);
+        } finally {
+            $this->ensureMerkleStateUnlocked();
+            $this->clearOldTransaction($this->config);
+        }
+    }
+
+    /**
+     * UndoFireproof on a non-fireproof actor must be rejected.
+     *
+     * @throws BundleException
+     * @throws CacheException
+     * @throws CertaintyException
+     * @throws ConcurrentException
+     * @throws CryptoException
+     * @throws DateMalformedStringException
+     * @throws DependencyException
+     * @throws GuzzleException
+     * @throws HPKEException
+     * @throws InputException
+     * @throws InvalidArgumentException
+     * @throws JsonException
+     * @throws NetworkException
+     * @throws NotImplementedException
+     * @throws ParserException
+     * @throws ProtocolException
+     * @throws RandomException
+     * @throws SodiumException
+     * @throws TableException
+     */
+    public function testUndoFireproofWithoutFireproof(): void
+    {
+        $this->clearOldTransaction($this->config);
+        $this->truncateTables();
+        $this->addTestPeer();
+        [, $canonical] = $this->makeDummyActor();
+
+        $keypair = SecretKey::generate();
+
+        /** @var MerkleState $merkleState */
+        $merkleState = $this->table('MerkleState');
+        $serverHpke = $this->config->getHPKE();
+        $handler = new Handler();
+        $protocol = new Protocol($this->config);
+
+        $this->addKeyForActor($canonical, $keypair, $protocol, $this->config);
+        $this->ensureMerkleStateUnlocked();
+
+        // Try UndoFireproof without being fireproof
+        $latestRoot = $merkleState->getLatestRoot();
+        $undoFireproof = new UndoFireproof($canonical);
+        $akm = new AttributeKeyMap()
+            ->addKey('actor', SymmetricKey::generate());
+        $bundle = $handler->handle(
+            $undoFireproof->encrypt($akm),
+            $keypair,
+            $akm,
+            $latestRoot
+        );
+        $encrypted = $handler->hpkeEncrypt(
+            $bundle,
+            $serverHpke->encapsKey,
+            $serverHpke->cs
+        );
+
+        $this->expectException(ProtocolException::class);
+        $this->expectExceptionMessage('Actor is not fireproof');
+        try {
+            $protocol->undoFireproof($encrypted, $canonical);
+        } finally {
+            $this->ensureMerkleStateUnlocked();
+            $this->clearOldTransaction($this->config);
+        }
+    }
+
+    /**
+     * A stale or invalid Merkle root must be rejected.
+     *
+     * @throws BundleException
+     * @throws CacheException
+     * @throws CertaintyException
+     * @throws ConcurrentException
+     * @throws CryptoException
+     * @throws DateMalformedStringException
+     * @throws DependencyException
+     * @throws GuzzleException
+     * @throws HPKEException
+     * @throws InputException
+     * @throws InvalidArgumentException
+     * @throws JsonException
+     * @throws NetworkException
+     * @throws NotImplementedException
+     * @throws ParserException
+     * @throws ProtocolException
+     * @throws RandomException
+     * @throws SodiumException
+     * @throws TableException
+     */
+    public function testStaleMerkleRootRejection(): void
+    {
+        $this->clearOldTransaction($this->config);
+        $this->truncateTables();
+        $this->addTestPeer();
+        [, $canonical] = $this->makeDummyActor();
+
+        $serverHpke = $this->config->getHPKE();
+        $handler = new Handler();
+        $protocol = new Protocol($this->config);
+
+        // Use a completely bogus Merkle root
+        $bogusRoot = 'pkd-mr-v1:' . Base64UrlSafe::encodeUnpadded(
+            random_bytes(32)
+        );
+
+        // Enroll one key first so the tree is non-empty
+        $keypair1 = SecretKey::generate();
+        $this->addKeyForActor($canonical, $keypair1, $protocol, $this->config);
+        $this->ensureMerkleStateUnlocked();
+
+        // Build many messages to advance the tree past the leniency window
+        for ($i = 0; $i < 100; $i++) {
+            $kp = SecretKey::generate();
+            [, $c] = $this->makeDummyActor();
+            $this->addKeyForActor($c, $kp, $protocol, $this->config);
+            $this->ensureMerkleStateUnlocked();
+        }
+
+        // Now try to add a key referencing the bogus root
+        $keypair2 = SecretKey::generate();
+        $addKey = new AddKey($canonical, $keypair2->getPublicKey());
+        $akm = new AttributeKeyMap()
+            ->addKey('actor', SymmetricKey::generate())
+            ->addKey('public-key', SymmetricKey::generate());
+        $bundle = $handler->handle(
+            $addKey->encrypt($akm),
+            $keypair1,
+            $akm,
+            $bogusRoot
+        );
+        $encrypted = $handler->hpkeEncrypt(
+            $bundle,
+            $serverHpke->encapsKey,
+            $serverHpke->cs
+        );
+
+        $this->expectException(ProtocolException::class);
+        $this->expectExceptionMessage('Stale or invalid Merkle Root');
+        try {
+            $protocol->addKey($encrypted, $canonical);
+        } finally {
+            $this->ensureMerkleStateUnlocked();
+            $this->clearOldTransaction($this->config);
+        }
+    }
+
+    /**
+     * Outer actor must match the protocol message actor.
+     *
+     * @throws BundleException
+     * @throws CacheException
+     * @throws CertaintyException
+     * @throws ConcurrentException
+     * @throws CryptoException
+     * @throws DateMalformedStringException
+     * @throws DependencyException
+     * @throws GuzzleException
+     * @throws HPKEException
+     * @throws InputException
+     * @throws InvalidArgumentException
+     * @throws JsonException
+     * @throws NetworkException
+     * @throws NotImplementedException
+     * @throws RandomException
+     * @throws SodiumException
+     * @throws TableException
+     */
+    public function testOuterActorMismatch(): void
+    {
+        $this->clearOldTransaction($this->config);
+        $this->truncateTables();
+        $this->addTestPeer();
+        [, $canonicalA] = $this->makeDummyActor();
+        [, $canonicalB] = $this->makeDummyActor();
+
+        $keypairA = SecretKey::generate();
+
+        /** @var MerkleState $merkleState */
+        $merkleState = $this->table('MerkleState');
+        $serverHpke = $this->config->getHPKE();
+        $handler = new Handler();
+        $protocol = new Protocol($this->config);
+
+        // Create AddKey for actor A
+        $latestRoot = $merkleState->getLatestRoot();
+        $addKey = new AddKey($canonicalA, $keypairA->getPublicKey());
+        $akm = new AttributeKeyMap()
+            ->addKey('actor', SymmetricKey::generate())
+            ->addKey('public-key', SymmetricKey::generate());
+        $bundle = $handler->handle(
+            $addKey->encrypt($akm),
+            $keypairA,
+            $akm,
+            $latestRoot
+        );
+        $encrypted = $handler->hpkeEncrypt(
+            $bundle,
+            $serverHpke->encapsKey,
+            $serverHpke->cs
+        );
+
+        // Submit with outer actor = B (mismatch with message actor A).
+        // May throw ProtocolException or GuzzleException depending on whether WebFinger canonicalization is attempted.
+        $threw = false;
+        try {
+            $protocol->addKey($encrypted, $canonicalB);
+        } catch (ProtocolException|GuzzleException) {
+            $threw = true;
+        } finally {
+            $this->ensureMerkleStateUnlocked();
+            $this->clearOldTransaction($this->config);
+        }
+        $this->assertTrue($threw, 'Outer actor mismatch must be rejected');
     }
 }

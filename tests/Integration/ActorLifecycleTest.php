@@ -12,8 +12,10 @@ use FediE2EE\PKD\Crypto\{
 };
 use FediE2EE\PKD\Crypto\Protocol\Actions\{
     AddKey,
-    RevokeKey
+    RevokeKey,
+    RevokeKeyThirdParty
 };
+use FediE2EE\PKD\Crypto\Revocation;
 use FediE2EE\PKD\Crypto\Exceptions\{
     BundleException,
     CryptoException,
@@ -373,31 +375,45 @@ class ActorLifecycleTest extends TestCase
         ]);
         $peerId = (int) $db->lastInsertId();
 
-        // 2. Setup actor and add key
+        // 2. Setup actor and add two keys
         [, $canonical] = $this->makeDummyActor('example.net');
-        $keypair = SecretKey::generate();
+        $keypair1 = SecretKey::generate();
+        $keypair2 = SecretKey::generate();
 
         $this->clearOldTransaction($config);
         $protocol = new Protocol($config);
-        $protocol->setWebFinger($this->createWebFingerMock($config, $canonical, 2));
+        $protocol->setWebFinger($this->createWebFingerMock($config, $canonical, 4));
 
-        $this->addKeyForActor($canonical, $keypair, $protocol, $config);
+        // Add key1 (self-signed)
+        $this->addKeyForActor($canonical, $keypair1, $protocol, $config);
+        $this->assertNotInTransaction();
+
+        // Add key2 (signed by key1)
+        /** @var MerkleState $merkleState */
+        $merkleState = $this->table('MerkleState');
+        $serverHpke = $config->getHPKE();
+        $handler = new Handler();
+
+        $latestRoot = $merkleState->getLatestRoot();
+        $addKey2 = new AddKey($canonical, $keypair2->getPublicKey());
+        $akm2 = new AttributeKeyMap()
+            ->addKey('actor', SymmetricKey::generate())
+            ->addKey('public-key', SymmetricKey::generate());
+        $bundle2 = $handler->handle($addKey2->encrypt($akm2), $keypair1, $akm2, $latestRoot);
+        $encrypted2 = $handler->hpkeEncrypt($bundle2, $serverHpke->encapsKey, $serverHpke->cs);
+        $protocol->addKey($encrypted2, $canonical);
         $this->assertNotInTransaction();
 
         // Clear rewrapped keys from addKey to check revokeKey's work
         $db->safeQuery("DELETE FROM pkd_merkle_leaf_rewrapped_keys");
 
-        // 3. Revoke key
-        /** @var MerkleState $merkleState */
-        $merkleState = $this->table('MerkleState');
+        // 3. Revoke key2 (signed by key1)
         $latestRoot = $merkleState->getLatestRoot();
-        $serverHpke = $config->getHPKE();
-        $handler = new Handler();
-        $revokeKey = new \FediE2EE\PKD\Crypto\Protocol\Actions\RevokeKey($canonical, $keypair->getPublicKey());
+        $revokeKey = new RevokeKey($canonical, $keypair2->getPublicKey());
         $akm = new AttributeKeyMap();
         $akm->addKey('actor', SymmetricKey::generate());
         $akm->addKey('public-key', SymmetricKey::generate());
-        $bundle = $handler->handle($revokeKey->encrypt($akm), $keypair, $akm, $latestRoot);
+        $bundle = $handler->handle($revokeKey->encrypt($akm), $keypair1, $akm, $latestRoot);
         $encrypted = $handler->hpkeEncrypt($bundle, $serverHpke->encapsKey, $serverHpke->cs);
         $protocol->revokeKey($encrypted, $canonical);
 
@@ -663,21 +679,19 @@ class ActorLifecycleTest extends TestCase
         $this->assertCount(1, $body['public-keys']);
         $this->assertSame($keypair1->getPublicKey()->toString(), $body['public-keys'][0]['public-key']);
 
-        // 2. RevokeKey (signed by key 1)
+        // 2. RevokeKeyThirdParty (uses revocation token to revoke last key)
         $latestRoot2 = $merkleState->getLatestRoot();
-        $revokeKey = new RevokeKey($canonical, $keypair1->getPublicKey());
-        $akm2 = new AttributeKeyMap()
-            ->addKey('actor', SymmetricKey::generate())
-            ->addKey('public-key', SymmetricKey::generate());
-        $encryptedMsg2 = $revokeKey->encrypt($akm2);
-        $bundle2 = $handler->handle($encryptedMsg2, $keypair1, $akm2, $latestRoot2);
-        $encryptedForServer2 = $handler->hpkeEncrypt(
-            $bundle2,
-            $serverHpke->encapsKey,
-            $serverHpke->cs,
+        $revocation = new Revocation();
+        $token = $revocation->revokeThirdParty($keypair1);
+        $revokeAction = new RevokeKeyThirdParty($token);
+        $bundle2 = $handler->handle(
+            $revokeAction,
+            $keypair1,
+            new AttributeKeyMap(),
+            $latestRoot2
         );
         $this->assertNotInTransaction();
-        $protocol->revokeKey($encryptedForServer2, $canonical);
+        $protocol->revokeKeyThirdParty($bundle2->toString());
         $this->assertNotInTransaction();
 
         // Verify with HTTP request
