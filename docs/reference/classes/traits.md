@@ -1128,7 +1128,7 @@ static · Returns `string`
 
 ### Methods
 
-#### [`verifyTOTP`](../../../src/Traits/TOTPTrait.php#L55-L69)
+#### [`verifyTOTP`](../../../src/Traits/TOTPTrait.php#L58-L72)
 
 static · Returns `?int`
 
@@ -1138,7 +1138,7 @@ static · Returns `?int`
 - `$otp`: `string`
 - `$windows`: `int` = 2
 
-#### [`generateTOTP`](../../../src/Traits/TOTPTrait.php#L71-L87)
+#### [`generateTOTP`](../../../src/Traits/TOTPTrait.php#L74-L90)
 
 static · Returns `string`
 
@@ -1147,7 +1147,7 @@ static · Returns `string`
 - `$secret`: `string`
 - `$time`: `?int` = null
 
-#### [`ord`](../../../src/Traits/TOTPTrait.php#L92-L96)
+#### [`ord`](../../../src/Traits/TOTPTrait.php#L95-L99)
 
 static · Returns `int`
 
@@ -1157,7 +1157,7 @@ Avoid cache-timing leaks in ord() by using unpack()
 
 - `$chr`: `string`
 
-#### [`throwIfTimeOutsideWindow`](../../../src/Traits/TOTPTrait.php#L157-L166)
+#### [`throwIfTimeOutsideWindow`](../../../src/Traits/TOTPTrait.php#L160-L169)
 
 Returns `void`
 

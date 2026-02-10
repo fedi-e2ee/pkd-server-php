@@ -4624,13 +4624,13 @@ static · Returns `string`
 
 ### Methods
 
-#### [`__construct`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L59-L66)
+#### [`__construct`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L55-L62)
 
 Returns `void`
 
 **Throws:** `DependencyException`, `TableException`, `CacheException`
 
-#### [`handle`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L86-L160)
+#### [`handle`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L82-L127)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -4642,7 +4642,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `ArrayKeyException`, `BaseJsonException`, `BlindIndexNotFoundException`, `CacheException`, `CipherSweetException`, `CryptoException`, `CryptoOperationException`, `DateMalformedStringException`, `DependencyException`, `InvalidCiphertextException`, `JsonException`, `NotImplementedException`, `SodiumException`, `TableException`
 
-#### [`getEnabledRateLimits`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L163-L166)
+#### [`getEnabledRateLimits`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L130-L133)
 
 Returns `array`
 
@@ -4873,7 +4873,7 @@ static · Returns `string`
 
 **Throws:** `BaseJsonException`
 
-#### [`verifyTOTP`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L55-L69)
+#### [`verifyTOTP`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L58-L72)
 
 static · Returns `?int`
 
@@ -4883,7 +4883,7 @@ static · Returns `?int`
 - `$otp`: `string`
 - `$windows`: `int` = 2
 
-#### [`generateTOTP`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L71-L87)
+#### [`generateTOTP`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L74-L90)
 
 static · Returns `string`
 
@@ -4892,7 +4892,7 @@ static · Returns `string`
 - `$secret`: `string`
 - `$time`: `?int` = null
 
-#### [`ord`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L92-L96)
+#### [`ord`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L95-L99)
 
 static · Returns `int`
 
@@ -4902,7 +4902,7 @@ Avoid cache-timing leaks in ord() by using unpack()
 
 - `$chr`: `string`
 
-#### [`throwIfTimeOutsideWindow`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L157-L166)
+#### [`throwIfTimeOutsideWindow`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L160-L169)
 
 Returns `void`
 
@@ -5016,13 +5016,13 @@ Strip all newlines (CR, LF) characters from a string.
 
 ### Methods
 
-#### [`__construct`](../../../src/RequestHandlers/Api/TotpEnroll.php#L63-L70)
+#### [`__construct`](../../../src/RequestHandlers/Api/TotpEnroll.php#L59-L66)
 
 Returns `void`
 
 **Throws:** `DependencyException`, `TableException`, `CacheException`
 
-#### [`handle`](../../../src/RequestHandlers/Api/TotpEnroll.php#L92-L177)
+#### [`handle`](../../../src/RequestHandlers/Api/TotpEnroll.php#L88-L141)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -5034,7 +5034,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `ArrayKeyException`, `BaseJsonException`, `BlindIndexNotFoundException`, `CacheException`, `CipherSweetException`, `CryptoException`, `CryptoOperationException`, `DateMalformedStringException`, `DependencyException`, `HPKEException`, `InvalidCiphertextException`, `JsonException`, `NotImplementedException`, `RandomException`, `SodiumException`, `TableException`
 
-#### [`getEnabledRateLimits`](../../../src/RequestHandlers/Api/TotpEnroll.php#L180-L183)
+#### [`getEnabledRateLimits`](../../../src/RequestHandlers/Api/TotpEnroll.php#L144-L147)
 
 Returns `array`
 
@@ -5265,7 +5265,7 @@ static · Returns `string`
 
 **Throws:** `BaseJsonException`
 
-#### [`verifyTOTP`](../../../src/RequestHandlers/Api/TotpEnroll.php#L55-L69)
+#### [`verifyTOTP`](../../../src/RequestHandlers/Api/TotpEnroll.php#L58-L72)
 
 static · Returns `?int`
 
@@ -5275,7 +5275,7 @@ static · Returns `?int`
 - `$otp`: `string`
 - `$windows`: `int` = 2
 
-#### [`generateTOTP`](../../../src/RequestHandlers/Api/TotpEnroll.php#L71-L87)
+#### [`generateTOTP`](../../../src/RequestHandlers/Api/TotpEnroll.php#L74-L90)
 
 static · Returns `string`
 
@@ -5284,7 +5284,7 @@ static · Returns `string`
 - `$secret`: `string`
 - `$time`: `?int` = null
 
-#### [`ord`](../../../src/RequestHandlers/Api/TotpEnroll.php#L92-L96)
+#### [`ord`](../../../src/RequestHandlers/Api/TotpEnroll.php#L95-L99)
 
 static · Returns `int`
 
@@ -5294,7 +5294,7 @@ Avoid cache-timing leaks in ord() by using unpack()
 
 - `$chr`: `string`
 
-#### [`throwIfTimeOutsideWindow`](../../../src/RequestHandlers/Api/TotpEnroll.php#L157-L166)
+#### [`throwIfTimeOutsideWindow`](../../../src/RequestHandlers/Api/TotpEnroll.php#L160-L169)
 
 Returns `void`
 
@@ -5408,13 +5408,13 @@ Strip all newlines (CR, LF) characters from a string.
 
 ### Methods
 
-#### [`__construct`](../../../src/RequestHandlers/Api/TotpRotate.php#L63-L70)
+#### [`__construct`](../../../src/RequestHandlers/Api/TotpRotate.php#L59-L66)
 
 Returns `void`
 
 **Throws:** `DependencyException`, `TableException`, `CacheException`
 
-#### [`handle`](../../../src/RequestHandlers/Api/TotpRotate.php#L92-L186)
+#### [`handle`](../../../src/RequestHandlers/Api/TotpRotate.php#L88-L148)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -5426,7 +5426,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `ArrayKeyException`, `BaseJsonException`, `BlindIndexNotFoundException`, `CacheException`, `CipherSweetException`, `CryptoException`, `CryptoOperationException`, `DateMalformedStringException`, `DependencyException`, `HPKEException`, `InvalidCiphertextException`, `JsonException`, `NotImplementedException`, `RandomException`, `SodiumException`, `TableException`
 
-#### [`getEnabledRateLimits`](../../../src/RequestHandlers/Api/TotpRotate.php#L189-L192)
+#### [`getEnabledRateLimits`](../../../src/RequestHandlers/Api/TotpRotate.php#L151-L154)
 
 Returns `array`
 
@@ -5657,7 +5657,7 @@ static · Returns `string`
 
 **Throws:** `BaseJsonException`
 
-#### [`verifyTOTP`](../../../src/RequestHandlers/Api/TotpRotate.php#L55-L69)
+#### [`verifyTOTP`](../../../src/RequestHandlers/Api/TotpRotate.php#L58-L72)
 
 static · Returns `?int`
 
@@ -5667,7 +5667,7 @@ static · Returns `?int`
 - `$otp`: `string`
 - `$windows`: `int` = 2
 
-#### [`generateTOTP`](../../../src/RequestHandlers/Api/TotpRotate.php#L71-L87)
+#### [`generateTOTP`](../../../src/RequestHandlers/Api/TotpRotate.php#L74-L90)
 
 static · Returns `string`
 
@@ -5676,7 +5676,7 @@ static · Returns `string`
 - `$secret`: `string`
 - `$time`: `?int` = null
 
-#### [`ord`](../../../src/RequestHandlers/Api/TotpRotate.php#L92-L96)
+#### [`ord`](../../../src/RequestHandlers/Api/TotpRotate.php#L95-L99)
 
 static · Returns `int`
 
@@ -5686,7 +5686,7 @@ Avoid cache-timing leaks in ord() by using unpack()
 
 - `$chr`: `string`
 
-#### [`throwIfTimeOutsideWindow`](../../../src/RequestHandlers/Api/TotpRotate.php#L157-L166)
+#### [`throwIfTimeOutsideWindow`](../../../src/RequestHandlers/Api/TotpRotate.php#L160-L169)
 
 Returns `void`
 

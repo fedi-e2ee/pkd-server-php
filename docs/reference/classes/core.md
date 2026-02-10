@@ -259,7 +259,7 @@ Returns `void`
 
 **Throws:** `DependencyException`
 
-#### [`process`](../../../src/Protocol.php#L85-L223)
+#### [`process`](../../../src/Protocol.php#L85-L127)
 
 Returns `array`
 
@@ -270,7 +270,7 @@ Returns `array`
 
 **Throws:** `BundleException`, `CacheException`, `ConcurrentException`, `CryptoException`, `DateMalformedStringException`, `DependencyException`, `HPKEException`, `JsonException`, `NotImplementedException`, `ParserException`, `ProtocolException`, `RandomException`, `SodiumException`, `TableException`
 
-#### [`webfinger`](../../../src/Protocol.php#L258-L264)
+#### [`webfinger`](../../../src/Protocol.php#L308-L314)
 
 Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
@@ -280,7 +280,7 @@ Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
 **Throws:** `DependencyException`, `SodiumException`, `CertaintyException`
 
-#### [`setWebFinger`](../../../src/Protocol.php#L272-L276)
+#### [`setWebFinger`](../../../src/Protocol.php#L322-L326)
 
 Returns `self`
 
@@ -290,7 +290,7 @@ This is intended for mocking in unit tests
 
 - `$wf`: `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
-#### [`addKey`](../../../src/Protocol.php#L308-L317)
+#### [`addKey`](../../../src/Protocol.php#L358-L367)
 
 Returns `FediE2EE\PKDServer\Tables\Records\ActorKey`
 
@@ -301,7 +301,7 @@ Returns `FediE2EE\PKDServer\Tables\Records\ActorKey`
 
 **Throws:** `BundleException`, `CacheException`, `ConcurrentException`, `CryptoException`, `DateMalformedStringException`, `DependencyException`, `HPKEException`, `JsonException`, `NotImplementedException`, `ProtocolException`, `RandomException`, `SodiumException`, `TableException`
 
-#### [`revokeKey`](../../../src/Protocol.php#L334-L343)
+#### [`revokeKey`](../../../src/Protocol.php#L384-L393)
 
 Returns `FediE2EE\PKDServer\Tables\Records\ActorKey`
 
@@ -312,7 +312,7 @@ Returns `FediE2EE\PKDServer\Tables\Records\ActorKey`
 
 **Throws:** `BundleException`, `CacheException`, `ConcurrentException`, `CryptoException`, `DateMalformedStringException`, `DependencyException`, `HPKEException`, `JsonException`, `NotImplementedException`, `ProtocolException`, `RandomException`, `SodiumException`, `TableException`
 
-#### [`revokeKeyThirdParty`](../../../src/Protocol.php#L360-L375)
+#### [`revokeKeyThirdParty`](../../../src/Protocol.php#L410-L425)
 
 Returns `bool`
 
@@ -322,18 +322,7 @@ Returns `bool`
 
 **Throws:** `BundleException`, `CacheException`, `ConcurrentException`, `CryptoException`, `DateMalformedStringException`, `DependencyException`, `HPKEException`, `JsonException`, `NotImplementedException`, `ProtocolException`, `RandomException`, `SodiumException`, `TableException`
 
-#### [`moveIdentity`](../../../src/Protocol.php#L392-L401)
-
-Returns `bool`
-
-**Parameters:**
-
-- `$body`: `string`
-- `$outerActor`: `string`
-
-**Throws:** `BundleException`, `CacheException`, `ConcurrentException`, `CryptoException`, `DateMalformedStringException`, `DependencyException`, `HPKEException`, `JsonException`, `NotImplementedException`, `ProtocolException`, `RandomException`, `SodiumException`, `TableException`
-
-#### [`burnDown`](../../../src/Protocol.php#L428-L442)
+#### [`moveIdentity`](../../../src/Protocol.php#L442-L451)
 
 Returns `bool`
 
@@ -344,7 +333,7 @@ Returns `bool`
 
 **Throws:** `BundleException`, `CacheException`, `ConcurrentException`, `CryptoException`, `DateMalformedStringException`, `DependencyException`, `HPKEException`, `JsonException`, `NotImplementedException`, `ProtocolException`, `RandomException`, `SodiumException`, `TableException`
 
-#### [`fireproof`](../../../src/Protocol.php#L459-L468)
+#### [`burnDown`](../../../src/Protocol.php#L478-L492)
 
 Returns `bool`
 
@@ -355,7 +344,7 @@ Returns `bool`
 
 **Throws:** `BundleException`, `CacheException`, `ConcurrentException`, `CryptoException`, `DateMalformedStringException`, `DependencyException`, `HPKEException`, `JsonException`, `NotImplementedException`, `ProtocolException`, `RandomException`, `SodiumException`, `TableException`
 
-#### [`undoFireproof`](../../../src/Protocol.php#L485-L494)
+#### [`fireproof`](../../../src/Protocol.php#L509-L518)
 
 Returns `bool`
 
@@ -366,7 +355,7 @@ Returns `bool`
 
 **Throws:** `BundleException`, `CacheException`, `ConcurrentException`, `CryptoException`, `DateMalformedStringException`, `DependencyException`, `HPKEException`, `JsonException`, `NotImplementedException`, `ProtocolException`, `RandomException`, `SodiumException`, `TableException`
 
-#### [`addAuxData`](../../../src/Protocol.php#L511-L520)
+#### [`undoFireproof`](../../../src/Protocol.php#L535-L544)
 
 Returns `bool`
 
@@ -377,7 +366,7 @@ Returns `bool`
 
 **Throws:** `BundleException`, `CacheException`, `ConcurrentException`, `CryptoException`, `DateMalformedStringException`, `DependencyException`, `HPKEException`, `JsonException`, `NotImplementedException`, `ProtocolException`, `RandomException`, `SodiumException`, `TableException`
 
-#### [`revokeAuxData`](../../../src/Protocol.php#L537-L546)
+#### [`addAuxData`](../../../src/Protocol.php#L561-L570)
 
 Returns `bool`
 
@@ -388,7 +377,18 @@ Returns `bool`
 
 **Throws:** `BundleException`, `CacheException`, `ConcurrentException`, `CryptoException`, `DateMalformedStringException`, `DependencyException`, `HPKEException`, `JsonException`, `NotImplementedException`, `ProtocolException`, `RandomException`, `SodiumException`, `TableException`
 
-#### [`checkpoint`](../../../src/Protocol.php#L563-L577)
+#### [`revokeAuxData`](../../../src/Protocol.php#L587-L596)
+
+Returns `bool`
+
+**Parameters:**
+
+- `$body`: `string`
+- `$outerActor`: `string`
+
+**Throws:** `BundleException`, `CacheException`, `ConcurrentException`, `CryptoException`, `DateMalformedStringException`, `DependencyException`, `HPKEException`, `JsonException`, `NotImplementedException`, `ProtocolException`, `RandomException`, `SodiumException`, `TableException`
+
+#### [`checkpoint`](../../../src/Protocol.php#L613-L627)
 
 Returns `bool`
 

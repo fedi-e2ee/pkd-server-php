@@ -504,19 +504,19 @@ Returns `void`
 
 ### Methods
 
-#### [`getCipher`](../../../src/Tables/PublicKeys.php#L78-L89)
+#### [`getCipher`](../../../src/Tables/PublicKeys.php#L81-L95)
 
 Returns `FediE2EE\PKDServer\Dependency\WrappedEncryptedRow`
 
 **Attributes:** `#[Override]`
 
-#### [`generateKeyID`](../../../src/Tables/PublicKeys.php#L94-L97)
+#### [`generateKeyID`](../../../src/Tables/PublicKeys.php#L100-L103)
 
 Returns `string`
 
 **Throws:** `RandomException`
 
-#### [`lookup`](../../../src/Tables/PublicKeys.php#L126-L174)
+#### [`lookup`](../../../src/Tables/PublicKeys.php#L132-L180)
 
 Returns `array`
 
@@ -527,7 +527,7 @@ Returns `array`
 
 **Throws:** `BaseJsonException`, `CipherSweetException`, `CryptoOperationException`, `DateMalformedStringException`, `InvalidCiphertextException`, `SodiumException`
 
-#### [`getRecord`](../../../src/Tables/PublicKeys.php#L189-L222)
+#### [`getRecord`](../../../src/Tables/PublicKeys.php#L195-L228)
 
 Returns `FediE2EE\PKDServer\Tables\Records\ActorKey`
 
@@ -537,7 +537,7 @@ Returns `FediE2EE\PKDServer\Tables\Records\ActorKey`
 
 **Throws:** `CacheException`, `CipherSweetException`, `CryptoException`, `CryptoOperationException`, `DependencyException`, `InvalidCiphertextException`, `SodiumException`, `TableException`
 
-#### [`getPublicKeysFor`](../../../src/Tables/PublicKeys.php#L239-L305)
+#### [`getPublicKeysFor`](../../../src/Tables/PublicKeys.php#L245-L311)
 
 Returns `array`
 
@@ -548,11 +548,11 @@ Returns `array`
 
 **Throws:** `ArrayKeyException`, `BaseJsonException`, `BlindIndexNotFoundException`, `CacheException`, `CipherSweetException`, `CryptoException`, `CryptoOperationException`, `DateMalformedStringException`, `DependencyException`, `InvalidCiphertextException`, `SodiumException`, `TableException`
 
-#### [`getNextPrimaryKey`](../../../src/Tables/PublicKeys.php#L307-L314)
+#### [`getNextPrimaryKey`](../../../src/Tables/PublicKeys.php#L313-L320)
 
 Returns `int`
 
-#### [`addKey`](../../../src/Tables/PublicKeys.php#L326-L334)
+#### [`addKey`](../../../src/Tables/PublicKeys.php#L418-L426)
 
 Returns `FediE2EE\PKDServer\Tables\Records\ActorKey`
 
@@ -563,7 +563,7 @@ Returns `FediE2EE\PKDServer\Tables\Records\ActorKey`
 
 **Throws:** `ConcurrentException`, `CryptoException`, `DependencyException`, `NotImplementedException`, `ProtocolException`, `RandomException`, `SodiumException`, `TableException`
 
-#### [`revokeKey`](../../../src/Tables/PublicKeys.php#L346-L354)
+#### [`revokeKey`](../../../src/Tables/PublicKeys.php#L438-L446)
 
 Returns `FediE2EE\PKDServer\Tables\Records\ActorKey`
 
@@ -574,7 +574,7 @@ Returns `FediE2EE\PKDServer\Tables\Records\ActorKey`
 
 **Throws:** `ConcurrentException`, `CryptoException`, `DependencyException`, `NotImplementedException`, `ProtocolException`, `RandomException`, `SodiumException`, `TableException`
 
-#### [`revokeKeyThirdParty`](../../../src/Tables/PublicKeys.php#L366-L374)
+#### [`revokeKeyThirdParty`](../../../src/Tables/PublicKeys.php#L458-L466)
 
 Returns `bool`
 
@@ -584,18 +584,7 @@ Returns `bool`
 
 **Throws:** `ConcurrentException`, `CryptoException`, `DependencyException`, `NotImplementedException`, `ProtocolException`, `RandomException`, `SodiumException`, `TableException`
 
-#### [`moveIdentity`](../../../src/Tables/PublicKeys.php#L386-L394)
-
-Returns `bool`
-
-**Parameters:**
-
-- `$payload`: `FediE2EE\PKDServer\Protocol\Payload`
-- `$outerActor`: `string`
-
-**Throws:** `ConcurrentException`, `CryptoException`, `DependencyException`, `NotImplementedException`, `ProtocolException`, `RandomException`, `SodiumException`, `TableException`
-
-#### [`burnDown`](../../../src/Tables/PublicKeys.php#L740-L749)
+#### [`moveIdentity`](../../../src/Tables/PublicKeys.php#L478-L486)
 
 Returns `bool`
 
@@ -606,7 +595,7 @@ Returns `bool`
 
 **Throws:** `ConcurrentException`, `CryptoException`, `DependencyException`, `NotImplementedException`, `ProtocolException`, `RandomException`, `SodiumException`, `TableException`
 
-#### [`fireproof`](../../../src/Tables/PublicKeys.php#L874-L882)
+#### [`burnDown`](../../../src/Tables/PublicKeys.php#L817-L826)
 
 Returns `bool`
 
@@ -617,7 +606,7 @@ Returns `bool`
 
 **Throws:** `ConcurrentException`, `CryptoException`, `DependencyException`, `NotImplementedException`, `ProtocolException`, `RandomException`, `SodiumException`, `TableException`
 
-#### [`undoFireproof`](../../../src/Tables/PublicKeys.php#L975-L983)
+#### [`fireproof`](../../../src/Tables/PublicKeys.php#L916-L924)
 
 Returns `bool`
 
@@ -628,7 +617,18 @@ Returns `bool`
 
 **Throws:** `ConcurrentException`, `CryptoException`, `DependencyException`, `NotImplementedException`, `ProtocolException`, `RandomException`, `SodiumException`, `TableException`
 
-#### [`checkpoint`](../../../src/Tables/PublicKeys.php#L1076-L1084)
+#### [`undoFireproof`](../../../src/Tables/PublicKeys.php#L999-L1007)
+
+Returns `bool`
+
+**Parameters:**
+
+- `$payload`: `FediE2EE\PKDServer\Protocol\Payload`
+- `$outerActor`: `string`
+
+**Throws:** `ConcurrentException`, `CryptoException`, `DependencyException`, `NotImplementedException`, `ProtocolException`, `RandomException`, `SodiumException`, `TableException`
+
+#### [`checkpoint`](../../../src/Tables/PublicKeys.php#L1082-L1090)
 
 Returns `bool`
 
@@ -668,7 +668,7 @@ static · Returns `string`
 
 **Throws:** `BaseJsonException`
 
-#### [`verifyTOTP`](../../../src/Tables/PublicKeys.php#L55-L69)
+#### [`verifyTOTP`](../../../src/Tables/PublicKeys.php#L58-L72)
 
 static · Returns `?int`
 
@@ -678,7 +678,7 @@ static · Returns `?int`
 - `$otp`: `string`
 - `$windows`: `int` = 2
 
-#### [`generateTOTP`](../../../src/Tables/PublicKeys.php#L71-L87)
+#### [`generateTOTP`](../../../src/Tables/PublicKeys.php#L74-L90)
 
 static · Returns `string`
 
@@ -687,7 +687,7 @@ static · Returns `string`
 - `$secret`: `string`
 - `$time`: `?int` = null
 
-#### [`ord`](../../../src/Tables/PublicKeys.php#L92-L96)
+#### [`ord`](../../../src/Tables/PublicKeys.php#L95-L99)
 
 static · Returns `int`
 
@@ -697,7 +697,7 @@ Avoid cache-timing leaks in ord() by using unpack()
 
 - `$chr`: `string`
 
-#### [`throwIfTimeOutsideWindow`](../../../src/Tables/PublicKeys.php#L157-L166)
+#### [`throwIfTimeOutsideWindow`](../../../src/Tables/PublicKeys.php#L160-L169)
 
 Returns `void`
 
