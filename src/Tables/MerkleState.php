@@ -249,6 +249,14 @@ class MerkleState extends Table
                 if ($this->db->inTransaction()) {
                     $this->db->rollBack();
                 }
+
+                // Unique constraint violation = duplicate message replay
+                if ($this->isUniqueConstraintViolation($e)) {
+                    throw new ProtocolException(
+                        'Message has already been processed'
+                    );
+                }
+
                 $shouldRetry = false;
 
                 // Check for deadlock/lock timeout errors by driver
@@ -282,6 +290,20 @@ class MerkleState extends Table
         }
         // If we end up here, it was not successful.
         return false;
+    }
+
+    private function isUniqueConstraintViolation(PDOException $e): bool
+    {
+        return match ($this->db->getDriver()) {
+            'pgsql' => $e->getCode() === '23505',
+            'mysql' => $e->getCode() === '23000'
+                && str_contains($e->getMessage(), 'Duplicate entry'),
+            'sqlite' => str_contains(
+                $e->getMessage(),
+                'UNIQUE constraint failed'
+            ),
+            default => false,
+        };
     }
 
     /**
