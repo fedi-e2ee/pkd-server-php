@@ -84,21 +84,92 @@ class Protocol
      */
     public function process(ActivityStream $enqueued, bool $isActivityPub = true): array
     {
-        // Initialize some Table classes for handling SQL:
-        /** @var PublicKeys $publicKeyTable */
-        $publicKeyTable = $this->table('PublicKeys');
-        /** @var AuxData $auxDataTable */
-        $auxDataTable = $this->table('AuxData');
+        $envelope = $this->parseOuterEnvelope($enqueued);
+
+        $hpke = $this->config()->getHPKE();
+        $adapter = new HPKEAdapter($hpke->cs);
+        $wasEncrypted = $adapter->isHpkeCiphertext($envelope['payload']);
+        if ($wasEncrypted !== $envelope['encrypted']) {
+            throw new ProtocolException(
+                'Client confusion: an HPKE encrypted payload was sent as plaintext.'
+            );
+        }
+
+        $raw = $wasEncrypted
+            ? $adapter->open($hpke->decapsKey, $hpke->encapsKey, $envelope['payload'])
+            : $envelope['payload'];
+
+        $parsed = $isActivityPub
+            ? $this->parser->parseUnverifiedForActivityPub($raw)
+            : $this->parser->parseUnverified($raw);
+
+        $payload = new Payload($parsed->getMessage(), $parsed->getKeyMap(), $raw);
+        $action = $parsed->getMessage()->getAction();
+
+        // Explicitly reject BurnDown if received over ActivityPub.
+        if ($isActivityPub && ($action === 'BurnDown')) {
+            throw new ProtocolException('BurnDown is not allowed over ActivityPub.');
+        }
+
+        // Route the request based on whether it was encrypted or not:
+        $result = $wasEncrypted
+            ? $this->routeEncryptedAction($action, $payload, $envelope['actor'])
+            : $this->routePlaintextAction($action, $payload, $envelope['actor']);
+
+        // Notice that Checkpoint is allowed, but not required, to be HPKE encrypted.
         /** @var MerkleState $merkleState */
         $merkleState = $this->table('MerkleState');
+        $merkleRoot = $merkleState->getLatestRoot();
+        if (!empty($result)) {
+            $this->wrapLocalKeys($payload);
+        }
+        return ['action' => $action, 'result' => $result, 'latest-root' => $merkleRoot];
+    }
 
+    /**
+     * Determine which field contains the message payload based on !pkd-context.
+     * @return array{field: string, encrypted: bool}
+     *
+     * @throws ProtocolException
+     */
+    protected function resolveEncryptionField(array $outerJson): array
+    {
+        $contextImpliesEncryption = match($outerJson['!pkd-context']) {
+            'fedi-e2ee:v1-encrypted-message' => true,
+            'fedi-e2ee:v1-plaintext-message' => false,
+            default => throw new ProtocolException('Invalid !pkd-context value'),
+        };
+        if ($contextImpliesEncryption) {
+            if (!array_key_exists('encrypted-message', $outerJson)) {
+                throw new ProtocolException('No "encrypted-message" was set.');
+            }
+            if (array_key_exists('plaintext-message', $outerJson)) {
+                throw new ProtocolException('Unexpected "plaintext-message".');
+            }
+            return ['field' => 'encrypted-message', 'encrypted' => true];
+        }
+        if (!array_key_exists('plaintext-message', $outerJson)) {
+            throw new ProtocolException('No "plaintext-message" was set.');
+        }
+        if (array_key_exists('encrypted-message', $outerJson)) {
+            throw new ProtocolException('Unexpected "encrypted-message".');
+        }
+        return ['field' => 'plaintext-message', 'encrypted' => false];
+    }
+
+    /**
+     * Parse and validate the outer ActivityStream envelope.
+     *
+     * @return array{actor: string, payload: string, encrypted: bool}
+     * @throws ProtocolException
+     */
+    protected function parseOuterEnvelope(ActivityStream $enqueued): array
+    {
         if (!$enqueued->isDirectMessage()) {
             throw new ProtocolException('Only direct messages are allowed.');
         }
-        // We already verified te HTTP Message Signature in the Inbox ResponseHandler.
+        // We already verified the HTTP Message Signature in the Inbox ResponseHandler.
         // If it was enqueued, we can assume the signature was valid.
-
-        // First, parse the outer JSON envelope (per v0.3.0+ of the specification)
         if (!property_exists($enqueued->object, 'content')) {
             throw new ProtocolException('Missing content in ActivityStream object');
         }
@@ -114,112 +185,89 @@ class Protocol
         if (!array_key_exists('actor', $outerJson)) {
             throw new ProtocolException('No actor was set.');
         }
-
-        // Let's figure out, from the context, whether encryption was expected:
-        $contextImpliesEncryption = match($outerJson['!pkd-context']) {
-            'fedi-e2ee:v1-encrypted-message' => true,
-            'fedi-e2ee:v1-plaintext-message' => false,
-            default => throw new ProtocolException('Invalid !pkd-context value'),
-        };
-        if ($contextImpliesEncryption) {
-            if (!array_key_exists('encrypted-message', $outerJson)) {
-                throw new ProtocolException('No "encrypted-message" was set.');
-            }
-            if (array_key_exists('plaintext-message', $outerJson)) {
-                throw new ProtocolException('Unexpected "plaintext-message".');
-            }
-            $fieldToUse = 'encrypted-message';
-        } else {
-            if (!array_key_exists('plaintext-message', $outerJson)) {
-                throw new ProtocolException('No "plaintext-message" was set.');
-            }
-            if (array_key_exists('encrypted-message', $outerJson)) {
-                throw new ProtocolException('Unexpected "encrypted-message".');
-            }
-            $fieldToUse = 'plaintext-message';
-        }
-
-        // Is this encrypted?
-        $hpke = $this->config()->getHPKE();
-        $adapter = new HPKEAdapter($hpke->cs);
-        // We've validated that this key exists above, but verify again for type safety
-        if (!array_key_exists($fieldToUse, $outerJson) || !is_string($outerJson[$fieldToUse])) {
-            throw new ProtocolException('Message payload must be a string');
-        }
-        $messagePayload = $outerJson[$fieldToUse];
-        $wasEncrypted = $adapter->isHpkeCiphertext($messagePayload);
-
-        // Let's bail out if anything strange is happening:
-        if ($wasEncrypted !== $contextImpliesEncryption) {
-            throw new ProtocolException('Client confusion: an HPKE encrypted payload was sent as plaintext.');
-        }
-
-        // If it was encrypted, we should decrypt it:
-        if ($wasEncrypted) {
-            $raw = $adapter->open($hpke->decapsKey, $hpke->encapsKey, $messagePayload);
-        } else {
-            $raw = $messagePayload;
-        }
-
-        // Parse the plaintext, grab the action parameter;
-        if ($isActivityPub) {
-            $parsed = $this->parser->parseUnverifiedForActivityPub($raw);
-        } else {
-            $parsed = $this->parser->parseUnverified($raw);
-        }
-        $payload = new Payload($parsed->getMessage(), $parsed->getKeyMap(), $raw);
-        $action = $parsed->getMessage()->getAction();
         $outerActor = $outerJson['actor'];
         if (!is_string($outerActor)) {
             throw new ProtocolException('Only strings are allowed for actor IDs.');
         }
 
-        // Explicitly reject BurnDown if received over ActivityPub.
-        if ($isActivityPub && ($action === 'BurnDown')) {
-            throw new ProtocolException('BurnDown is not allowed over ActivityPub.');
+        $encryption = $this->resolveEncryptionField($outerJson);
+        $fieldToUse = $encryption['field'];
+        if (!array_key_exists($fieldToUse, $outerJson) || !is_string($outerJson[$fieldToUse])) {
+            throw new ProtocolException('Message payload must be a string');
         }
+        return [
+            'actor' => $outerActor,
+            'payload' => $outerJson[$fieldToUse],
+            'encrypted' => $encryption['encrypted'],
+        ];
+    }
 
-        // Route the request based on whether it was encrypted or not:
-        if ($wasEncrypted) {
-            $result = match ($action) {
-                // These actions are allowed to be encrypted:
-                'AddAuxData' => $auxDataTable->addAuxData($payload, $outerActor),
-                'AddKey' => $publicKeyTable->addKey($payload, $outerActor),
-                'Checkpoint' => $publicKeyTable->checkpoint($payload),
-                'Fireproof' => $publicKeyTable->fireproof($payload, $outerActor),
-                'MoveIdentity' => $publicKeyTable->moveIdentity($payload, $outerActor),
-                'RevokeAuxData' => $auxDataTable->revokeAuxData($payload, $outerActor),
-                'RevokeKey' => $publicKeyTable->revokeKey($payload, $outerActor),
-                'UndoFireproof' => $publicKeyTable->undoFireproof($payload, $outerActor),
-                // BurnDown MUST NOT be encrypted:
-                'BurnDown' =>
+    /**
+     * Route an encrypted protocol action to the appropriate table handler.
+     *
+     * @throws CacheException
+     * @throws ConcurrentException
+     * @throws CryptoException
+     * @throws DependencyException
+     * @throws NotImplementedException
+     * @throws ProtocolException
+     * @throws RandomException
+     * @throws SodiumException
+     * @throws TableException
+     */
+    protected function routeEncryptedAction(
+        string $action,
+        Payload $payload,
+        string $outerActor,
+    ): ActorKey|bool {
+        /** @var PublicKeys $publicKeyTable */
+        $publicKeyTable = $this->table('PublicKeys');
+        /** @var AuxData $auxDataTable */
+        $auxDataTable = $this->table('AuxData');
+        return match ($action) {
+            'AddAuxData' => $auxDataTable->addAuxData($payload, $outerActor),
+            'AddKey' => $publicKeyTable->addKey($payload, $outerActor),
+            'Checkpoint' => $publicKeyTable->checkpoint($payload),
+            'Fireproof' => $publicKeyTable->fireproof($payload, $outerActor),
+            'MoveIdentity' => $publicKeyTable->moveIdentity($payload, $outerActor),
+            'RevokeAuxData' => $auxDataTable->revokeAuxData($payload, $outerActor),
+            'RevokeKey' => $publicKeyTable->revokeKey($payload, $outerActor),
+            'UndoFireproof' => $publicKeyTable->undoFireproof($payload, $outerActor),
+            'BurnDown' =>
                 throw new ProtocolException('BurnDown MUST NOT be HPKE-encrypted'),
-                // Unknown:
-                default =>
+            default =>
                 throw new ProtocolException('Unknown action: ' . $action),
-            };
-        } else {
-            $result = match ($action) {
-                // These actions are allowed to be plaintext:
-                'BurnDown' => $publicKeyTable->burndown($payload, $outerActor),
-                'Checkpoint' => $publicKeyTable->checkpoint($payload),
-                // These actions MUST be encrypted:
-                'AddAuxData', 'AddKey', 'Fireproof', 'MoveIdentity', 'RevokeAuxData', 'RevokeKey', 'UndoFireproof' =>
+        };
+    }
+
+    /**
+     * Route a plaintext protocol action to the appropriate table handler.
+     *
+     * @throws CacheException
+     * @throws ConcurrentException
+     * @throws CryptoException
+     * @throws DependencyException
+     * @throws NotImplementedException
+     * @throws ProtocolException
+     * @throws RandomException
+     * @throws SodiumException
+     * @throws TableException
+     */
+    protected function routePlaintextAction(
+        string $action,
+        Payload $payload,
+        string $outerActor,
+    ): bool {
+        /** @var PublicKeys $publicKeyTable */
+        $publicKeyTable = $this->table('PublicKeys');
+        return match ($action) {
+            'BurnDown' => $publicKeyTable->burndown($payload, $outerActor),
+            'Checkpoint' => $publicKeyTable->checkpoint($payload),
+            'AddAuxData', 'AddKey', 'Fireproof', 'MoveIdentity', 'RevokeAuxData', 'RevokeKey', 'UndoFireproof' =>
                 throw new ProtocolException('This action MUST be HPKE-encrypted: ' . $action),
-                default =>
+            default =>
                 throw new ProtocolException('Unknown action: ' . $action),
-            };
-        }
-        // You'll notice that Checkpoint is allowed, but not require, to be HPKE encrypted.
-        $merkleRoot = $merkleState->getLatestRoot();
-
-        // Trigger a rewrap on the new record immediately:
-        if (!empty($result)) {
-            $this->wrapLocalKeys($payload);
-        }
-
-        // Return the results as an array so other processes can shape a response:
-        return ['action' => $action, 'result' => $result, 'latest-root' => $merkleRoot];
+        };
     }
 
     /**

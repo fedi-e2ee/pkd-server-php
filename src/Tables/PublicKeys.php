@@ -23,8 +23,10 @@ use FediE2EE\PKD\Crypto\Protocol\{
 use DateMalformedStringException;
 use DateTimeImmutable;
 use FediE2EE\PKD\Crypto\AttributeEncryption\AttributeKeyMap;
-use FediE2EE\PKD\Crypto\PublicKey;
-use FediE2EE\PKD\Crypto\Revocation;
+use FediE2EE\PKD\Crypto\{
+    PublicKey,
+    Revocation
+};
 use FediE2EE\PKDServer\Dependency\WrappedEncryptedRow;
 use FediE2EE\PKDServer\Exceptions\{
     CacheException,
@@ -61,13 +63,7 @@ use Psr\SimpleCache\InvalidArgumentException;
 use Random\RandomException;
 use SodiumException;
 use TypeError;
-
-use function hash_equals;
-use function is_array;
-use function is_null;
-use function is_string;
-use function json_decode;
-use function random_bytes;
+use function array_any, hash_equals, is_array, is_null, is_string, json_decode, random_bytes;
 
 class PublicKeys extends Table
 {
@@ -84,7 +80,9 @@ class PublicKeys extends Table
             'actorpublickeyid'
         )
             ->addTextField('publickey')
-            ->addBlindIndex('publickey', new BlindIndex('publickey_idx', [], 16, true))
+            ->addBlindIndex('publickey',
+                new BlindIndex('publickey_idx', [], 16, true)
+            )
         ;
     }
 
@@ -311,6 +309,92 @@ class PublicKeys extends Table
             return 1;
         }
         return (int) ($maxActorPKId) + 1;
+    }
+
+    /**
+     * Verify a protocol message signature against an actor's enrolled keys.
+     *
+     * @throws ArrayKeyException
+     * @throws BaseJsonException
+     * @throws BlindIndexNotFoundException
+     * @throws CacheException
+     * @throws CipherSweetException
+     * @throws CryptoException
+     * @throws CryptoOperationException
+     * @throws DateMalformedStringException
+     * @throws DependencyException
+     * @throws InvalidCiphertextException
+     * @throws ProtocolException
+     * @throws SodiumException
+     * @throws TableException
+     */
+    protected function verifyProtocolSignature(
+        string $rawJson,
+        string $actorName,
+        string $keyId = '',
+    ): void {
+        $sm = Bundle::fromJson($rawJson)->toSignedMessage();
+        $anySignatureIsValid = array_any(
+            $this->getPublicKeysFor($actorName, $keyId),
+            fn(array $row) => $sm->verify($row['public-key'])
+        );
+        if (!$anySignatureIsValid) {
+            throw new ProtocolException('Invalid signature');
+        }
+    }
+
+    /**
+     * @throws ProtocolException
+     */
+    protected function verifyOperatorDomain(
+        string $actorId,
+        string $operatorId,
+    ): void {
+        $actorDomain = self::parseUrlHost($actorId);
+        $operatorDomain = self::parseUrlHost($operatorId);
+        if (
+            is_null($actorDomain)
+            || is_null($operatorDomain)
+            || !hash_equals($actorDomain, $operatorDomain)
+        ) {
+            throw new ProtocolException(
+                'Operator must be on the same instance as the target actor'
+            );
+        }
+    }
+
+    /**
+     * @throws CacheException
+     * @throws CipherSweetException
+     * @throws CryptoOperationException
+     * @throws DependencyException
+     * @throws InvalidCiphertextException
+     * @throws ProtocolException
+     * @throws SodiumException
+     * @throws TableException
+     */
+    protected function verifyBurnDownTotp(
+        string $actorId,
+        BurnDown $decrypted,
+    ): void {
+        /** @var TOTP $totpTable */
+        $totpTable = $this->table('TOTP');
+        $domain = self::parseUrlHost($actorId);
+        if (is_null($domain)) {
+            throw new ProtocolException('Invalid actor URL');
+        }
+        $totp = $totpTable->getTotpByDomain($domain);
+        if (!$totp) {
+            return;
+        }
+        $ts = $this->verifyTOTP($totp['secret'], $decrypted->getOtp() ?? '');
+        if (is_null($ts)) {
+            throw new ProtocolException('Invalid TOTP code');
+        }
+        if ($ts <= $totp['last_time_step']) {
+            throw new ProtocolException('TOTP code already used');
+        }
+        $totpTable->updateLastTimeStep($domain, $ts);
     }
 
     /**
@@ -682,30 +766,15 @@ class PublicKeys extends Table
         $actionData = $decrypted->toArray();
         // Explicit check that the outer actor (from ActivityPub) matches the protocol message
         $this->explicitOuterActorCheck($outerActor, $actionData['old-actor']);
-        $sm = Bundle::fromJson($rawJson)->toSignedMessage();
-
         $oldActor = $actorTable->searchForActor($actionData['old-actor']);
         if (is_null($oldActor)) {
             throw new ProtocolException('Old actor not found');
         }
         $oldActorId = $oldActor->getPrimaryKey();
-        $candidatePublicKeys = $this->getPublicKeysFor(
-            actorName: $actionData['old-actor'],
-            keyId: $decoded['key-id'] ?? ''
-        );
 
         //= https://raw.githubusercontent.com/fedi-e2ee/public-key-directory-specification/refs/heads/main/Specification.md#moveidentity
         //# The message **MUST** be signed by a valid secret key for the `old-actor`
-        $signatureIsValid = false;
-        foreach ($candidatePublicKeys as $row) {
-            if ($sm->verify($row['public-key'])) {
-                $signatureIsValid = true;
-                break;
-            }
-        }
-        if (!$signatureIsValid) {
-            throw new ProtocolException('Invalid signature');
-        }
+        $this->verifyProtocolSignature($rawJson, $actionData['old-actor'], $decoded['key-id'] ?? '');
 
         //= https://raw.githubusercontent.com/fedi-e2ee/public-key-directory-specification/refs/heads/main/Specification.md#moveidentity
         //# This message **MUST** be rejected if there are existing public keys for the target `new-actor`.
@@ -783,7 +852,6 @@ class PublicKeys extends Table
             throw new ProtocolException('Invalid message type');
         }
         $actionData = $decrypted->toArray();
-        $sm = Bundle::fromJson($rawJson)->toSignedMessage();
 
         /** @var Actors $actorTable */
         $actorTable = $this->table('Actors');
@@ -806,49 +874,15 @@ class PublicKeys extends Table
             throw new ProtocolException('Operator not found');
         }
 
-        $actorDomain = self::parseUrlHost($actor->actorID);
-        $operatorDomain = self::parseUrlHost($operator->actorID);
-        if (is_null($actorDomain) || is_null($operatorDomain) || !hash_equals($actorDomain, $operatorDomain)) {
-            throw new ProtocolException('Operator must be on the same instance as the target actor');
-        }
-
-        $candidatePublicKeys = $this->getPublicKeysFor(
-            actorName: $operator->actorID,
-            keyId: $decoded['key-id'] ?? ''
-        );
+        $this->verifyOperatorDomain($actor->actorID, $operator->actorID);
 
         //= https://raw.githubusercontent.com/fedi-e2ee/public-key-directory-specification/refs/heads/main/Specification.md#burndown-validation-steps
         //# Validate the message signature for the given public key.
-        $signatureIsValid = false;
-        foreach ($candidatePublicKeys as $row) {
-            if ($sm->verify($row['public-key'])) {
-                $signatureIsValid = true;
-                break;
-            }
-        }
-        if (!$signatureIsValid) {
-            throw new ProtocolException('Invalid signature');
-        }
+        $this->verifyProtocolSignature($rawJson, $operator->actorID, $decoded['key-id'] ?? '');
 
         //= https://raw.githubusercontent.com/fedi-e2ee/public-key-directory-specification/refs/heads/main/Specification.md#burndown-validation-steps
         //# If the instance has previously enrolled a TOTP secret to this Fediverse server
-        /** @var TOTP $totpTable */
-        $totpTable = $this->table('TOTP');
-        $domain = self::parseUrlHost($actor->actorID);
-        if (is_null($domain)) {
-            throw new ProtocolException('Invalid actor URL');
-        }
-        $totp = $totpTable->getTotpByDomain($domain);
-        if ($totp) {
-            $ts = $this->verifyTOTP($totp['secret'], $decrypted->getOtp() ?? '');
-            if (is_null($ts)) {
-                throw new ProtocolException('Invalid TOTP code');
-            }
-            if ($ts <= $totp['last_time_step']) {
-                throw new ProtocolException('TOTP code already used');
-            }
-            $totpTable->updateLastTimeStep($domain, $ts);
-        }
+        $this->verifyBurnDownTotp($actor->actorID, $decrypted);
 
         $affected = $this->db->update(
             'pkd_actors_publickeys',
@@ -885,7 +919,6 @@ class PublicKeys extends Table
      * @throws ArrayKeyException
      * @throws BaseJsonException
      * @throws BlindIndexNotFoundException
-     * @throws BundleException
      * @throws CacheException
      * @throws CertaintyException
      * @throws CipherSweetException
@@ -894,10 +927,9 @@ class PublicKeys extends Table
      * @throws DateMalformedStringException
      * @throws DependencyException
      * @throws GuzzleException
-     * @throws InputException
+     * @throws InvalidArgumentException
      * @throws InvalidCiphertextException
      * @throws NetworkException
-     * @throws NotImplementedException
      * @throws ProtocolException
      * @throws SodiumException
      * @throws TableException
@@ -920,8 +952,6 @@ class PublicKeys extends Table
         // Explicit check that the outer actor (from ActivityPub) matches the protocol message
         $this->explicitOuterActorCheck($outerActor, $actionData['actor']);
 
-        $sm = Bundle::fromJson($rawJson)->toSignedMessage();
-
         /** @var Actors $actorTable */
         $actorTable = $this->table('Actors');
         $actor = $actorTable->searchForActor($actionData['actor']);
@@ -934,21 +964,7 @@ class PublicKeys extends Table
             throw new ProtocolException('Actor is already fireproof');
         }
 
-        $candidatePublicKeys = $this->getPublicKeysFor(
-            actorName: $actor->actorID,
-            keyId: $decoded['key-id'] ?? ''
-        );
-
-        $signatureIsValid = false;
-        foreach ($candidatePublicKeys as $row) {
-            if ($sm->verify($row['public-key'])) {
-                $signatureIsValid = true;
-                break;
-            }
-        }
-        if (!$signatureIsValid) {
-            throw new ProtocolException('Invalid signature');
-        }
+        $this->verifyProtocolSignature($rawJson, $actor->actorID, $decoded['key-id'] ?? '');
 
         $this->db->update(
             'pkd_actors',
@@ -986,7 +1002,6 @@ class PublicKeys extends Table
      * @throws ArrayKeyException
      * @throws BaseJsonException
      * @throws BlindIndexNotFoundException
-     * @throws BundleException
      * @throws CacheException
      * @throws CertaintyException
      * @throws CipherSweetException
@@ -995,10 +1010,9 @@ class PublicKeys extends Table
      * @throws DateMalformedStringException
      * @throws DependencyException
      * @throws GuzzleException
-     * @throws InputException
+     * @throws InvalidArgumentException
      * @throws InvalidCiphertextException
      * @throws NetworkException
-     * @throws NotImplementedException
      * @throws ProtocolException
      * @throws SodiumException
      * @throws TableException
@@ -1021,8 +1035,6 @@ class PublicKeys extends Table
         // Explicit check that the outer actor (from ActivityPub) matches the protocol message
         $this->explicitOuterActorCheck($outerActor, $actionData['actor']);
 
-        $sm = Bundle::fromJson($rawJson)->toSignedMessage();
-
         /** @var Actors $actorTable */
         $actorTable = $this->table('Actors');
         $actor = $actorTable->searchForActor($actionData['actor']);
@@ -1035,21 +1047,7 @@ class PublicKeys extends Table
             throw new ProtocolException('Actor is not fireproof');
         }
 
-        $candidatePublicKeys = $this->getPublicKeysFor(
-            actorName: $actor->actorID,
-            keyId: $decoded['key-id'] ?? ''
-        );
-
-        $signatureIsValid = false;
-        foreach ($candidatePublicKeys as $row) {
-            if ($sm->verify($row['public-key'])) {
-                $signatureIsValid = true;
-                break;
-            }
-        }
-        if (!$signatureIsValid) {
-            throw new ProtocolException('Invalid signature');
-        }
+        $this->verifyProtocolSignature($rawJson, $actor->actorID, $decoded['key-id'] ?? '');
 
         $this->db->update(
             'pkd_actors',
@@ -1084,7 +1082,9 @@ class PublicKeys extends Table
     }
 
     /**
+     * @throws DependencyException
      * @throws ProtocolException
+     * @throws SodiumException
      */
     protected function checkpointCallback(MerkleLeaf $leaf, Payload $payload): bool
     {

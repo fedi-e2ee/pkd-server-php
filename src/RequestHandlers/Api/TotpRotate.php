@@ -20,10 +20,7 @@ use FediE2EE\PKDServer\{
     Traits\ReqTrait,
     Traits\TOTPTrait
 };
-use FediE2EE\PKDServer\Tables\{
-    Actors,
-    TOTP as TOTPTable
-};
+use FediE2EE\PKDServer\Tables\TOTP as TOTPTable;
 use JsonException as BaseJsonException;
 use Override;
 use ParagonIE\CipherSweet\Exception\{
@@ -44,8 +41,6 @@ use Psr\Http\Server\RequestHandlerInterface;
 use SodiumException;
 use Throwable;
 use TypeError;
-
-use function hash_equals;
 use function is_null;
 
 class TotpRotate implements RequestHandlerInterface, LimitingHandlerInterface
@@ -92,83 +87,46 @@ class TotpRotate implements RequestHandlerInterface, LimitingHandlerInterface
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         try {
-            $body =  self::jsonDecode($request->getBody()->getContents());
-            $rotation = $body['rotation'] ?? [];
-            $actorId = $rotation['actor-id'] ?? '';
-            $keyId = $rotation['key-id'] ?? '';
-            $oldOtp = $rotation['old-otp'] ?? '';
-            $newOtpCurrent = $rotation['new-otp-current'] ?? '';
-            $newOtpPrevious = $rotation['new-otp-previous'] ?? '';
-            $newTotpSecret = $rotation['new-totp-secret'] ?? '';
-
-            if (
-                empty($actorId)
-                || empty($keyId)
-                || empty($oldOtp)
-                || empty($newOtpCurrent)
-                || empty($newOtpPrevious)
-                || empty($newTotpSecret)
-                || empty($body['action'])
-                || empty($body['current-time'])
-                || empty($body['!pkd-context'])
-            ) {
-                return $this->error('Missing required fields', 400);
-            }
-        } catch (Throwable $ex) {
-            return $this->error('Invalid JSON', 400);
+            $parsed = $this->parseTotpBody(
+                $request->getBody()->getContents(),
+                'rotation',
+                ['actor-id', 'key-id', 'old-otp', 'new-otp-current', 'new-otp-previous', 'new-totp-secret'],
+            );
+        } catch (Throwable) {
+            return $this->error('Missing required fields', 400);
         }
+        $body = $parsed['body'];
+        $sub = $parsed['sub'];
 
         try {
-            $this->verifySignature($body, $actorId, $keyId);
+            $domain = $this->validateTotpRequest(
+                $body, $sub['actor-id'], $sub['key-id'],
+                'fedi-e2ee:v1/api/totp/rotate', 'TOTP-Rotate',
+            );
         } catch (ProtocolException $ex) {
             return $this->error($ex->getMessage(), 400);
         }
 
-        // Validate inputs:
-        if (!hash_equals('fedi-e2ee:v1/api/totp/rotate', $body['!pkd-context'])) {
-            return $this->error('Invalid !pkd-context', 400);
-        }
-        if (!hash_equals('TOTP-Rotate', $body['action'])) {
-            return $this->error('Invalid action', 400);
-        }
-        try {
-            $this->throwIfTimeOutsideWindow((int)($body['current-time']));
-        } catch (ProtocolException $ex) {
-            return $this->error($ex->getMessage(), 400);
-        }
-
-        /** @var Actors $actorTable */
-        $actorTable = $this->table('Actors');
-        $actor = $actorTable->searchForActor($actorId);
-        if (is_null($actor)) {
-            return $this->error('Actor not found', 404);
-        }
-        $domain = self::parseUrlHost($actor->actorID);
-        if (is_null($domain)) {
-            return $this->error('Invalid actor URL', 400);
-        }
         $oldTotp = $this->totpTable->getTotpByDomain($domain);
         if (!$oldTotp) {
             return $this->error('TOTP not enabled', 400);
         }
-        $oldSecret = $oldTotp['secret'];
-        $oldLastTS = $oldTotp['last_time_step'];
-        $tsOld = $this->verifyTOTP($oldSecret, $oldOtp);
+        $tsOld = $this->verifyTOTP($oldTotp['secret'], $sub['old-otp']);
         if (is_null($tsOld)) {
             return $this->error('Invalid old TOTP code', 403);
         }
-        if ($tsOld <= $oldLastTS) {
+        if ($tsOld <= $oldTotp['last_time_step']) {
             return $this->error('Old TOTP code already used', 403);
         }
 
         $hpke = $this->config()->getHPKE();
-        $newSecret = new HPKEAdapter($hpke->cs, 'fedi-e2ee:v1/api/totp/rotate')->open(
+        $newSecret = (new HPKEAdapter($hpke->cs, 'fedi-e2ee:v1/api/totp/rotate'))->open(
             $hpke->getDecapsKey(),
             $hpke->getEncapsKey(),
-            Base32::decode($newTotpSecret)
+            Base32::decode($sub['new-totp-secret'])
         );
-        $tsNewCurrent = $this->verifyTOTP($newSecret, $newOtpCurrent);
-        $tsNewPrevious = $this->verifyTOTP($newSecret, $newOtpPrevious);
+        $tsNewCurrent = $this->verifyTOTP($newSecret, $sub['new-otp-current']);
+        $tsNewPrevious = $this->verifyTOTP($newSecret, $sub['new-otp-previous']);
         if (is_null($tsNewCurrent) || is_null($tsNewPrevious)) {
             return $this->error('Invalid new TOTP codes', 406);
         }
@@ -181,7 +139,7 @@ class TotpRotate implements RequestHandlerInterface, LimitingHandlerInterface
         return $this->json([
             '!pkd-context' => 'fedi-e2ee:v1/api/totp/rotate',
             'success' => true,
-            'time' => (string) new DateTime()->getTimestamp(),
+            'time' => (string) (new DateTime())->getTimestamp(),
         ]);
     }
 

@@ -20,10 +20,7 @@ use FediE2EE\PKDServer\{
     Traits\ReqTrait,
     Traits\TOTPTrait
 };
-use FediE2EE\PKDServer\Tables\{
-    Actors,
-    TOTP as TOTPTable
-};
+use FediE2EE\PKDServer\Tables\TOTP as TOTPTable;
 use JsonException as BaseJsonException;
 use Override;
 use ParagonIE\CipherSweet\Exception\{
@@ -44,8 +41,6 @@ use Psr\Http\Server\RequestHandlerInterface;
 use SodiumException;
 use Throwable;
 use TypeError;
-
-use function hash_equals;
 use function is_null;
 
 class TotpEnroll implements RequestHandlerInterface, LimitingHandlerInterface
@@ -92,46 +87,22 @@ class TotpEnroll implements RequestHandlerInterface, LimitingHandlerInterface
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         try {
-            $body =  self::jsonDecode($request->getBody()->getContents());
-            $enrollment = $body['enrollment'] ?? [];
-            $actorId = $enrollment['actor-id'] ?? '';
-            $keyId = $enrollment['key-id'] ?? '';
-            $otpCurrent = $enrollment['otp-current'] ?? '';
-            $otpPrevious = $enrollment['otp-previous'] ?? '';
-            $totpSecret = $enrollment['totp-secret'] ?? '';
-
-            if (
-                empty($actorId)
-                || empty($keyId)
-                || empty($otpCurrent)
-                || empty($otpPrevious)
-                || empty($totpSecret)
-                || empty($body['action'])
-                || empty($body['current-time'])
-                || empty($body['!pkd-context'])
-            ) {
-                return $this->error('Missing required fields', 400);
-            }
-        } catch (Throwable $ex) {
-            $this->config()->getLogger()->error($ex->getMessage());
-            return $this->error('Invalid JSON', 400);
+            $parsed = $this->parseTotpBody(
+                $request->getBody()->getContents(),
+                'enrollment',
+                ['actor-id', 'key-id', 'otp-current', 'otp-previous', 'totp-secret'],
+            );
+        } catch (Throwable) {
+            return $this->error('Missing required fields', 400);
         }
+        $body = $parsed['body'];
+        $sub = $parsed['sub'];
 
         try {
-            $this->verifySignature($body, $actorId, $keyId);
-        } catch (ProtocolException $ex) {
-            return $this->error($ex->getMessage(), 400);
-        }
-
-        // Validate inputs:
-        if (!hash_equals('fedi-e2ee:v1/api/totp/enroll', $body['!pkd-context'])) {
-            return $this->error('Invalid !pkd-context', 400);
-        }
-        if (!hash_equals('TOTP-Enroll', $body['action'])) {
-            return $this->error('Invalid action', 400);
-        }
-        try {
-            $this->throwIfTimeOutsideWindow((int)($body['current-time']));
+            $domain = $this->validateTotpRequest(
+                $body, $sub['actor-id'], $sub['key-id'],
+                'fedi-e2ee:v1/api/totp/enroll', 'TOTP-Enroll',
+            );
         } catch (ProtocolException $ex) {
             return $this->error($ex->getMessage(), 400);
         }
@@ -140,27 +111,16 @@ class TotpEnroll implements RequestHandlerInterface, LimitingHandlerInterface
         $decryptedSecret = (new HPKEAdapter($hpke->cs, 'fedi-e2ee:v1/api/totp/enroll'))->open(
             $hpke->getDecapsKey(),
             $hpke->getEncapsKey(),
-            Base32::decode($totpSecret),
+            Base32::decode($sub['totp-secret']),
         );
 
-        $tsCurrent = self::verifyTOTP($decryptedSecret, $otpCurrent);
-        $tsPrevious = self::verifyTOTP($decryptedSecret, $otpPrevious);
+        $tsCurrent = self::verifyTOTP($decryptedSecret, $sub['otp-current']);
+        $tsPrevious = self::verifyTOTP($decryptedSecret, $sub['otp-previous']);
         if (is_null($tsCurrent) || is_null($tsPrevious)) {
             return $this->error('Invalid TOTP codes', 406);
         }
         if ($tsCurrent <= $tsPrevious) {
             return $this->error('TOTP codes must be increasing', 406);
-        }
-
-        /** @var Actors $actorTable */
-        $actorTable = $this->table('Actors');
-        $actor = $actorTable->searchForActor($actorId);
-        if (is_null($actor)) {
-            return $this->error('Actor not found', 404);
-        }
-        $domain = self::parseUrlHost($actor->actorID);
-        if (is_null($domain)) {
-            return $this->error('Invalid actor URL', 400);
         }
 
         if ($this->totpTable->getSecretByDomain($domain)) {

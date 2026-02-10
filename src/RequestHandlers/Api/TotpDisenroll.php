@@ -19,10 +19,7 @@ use FediE2EE\PKDServer\{
     Traits\ReqTrait,
     Traits\TOTPTrait
 };
-use FediE2EE\PKDServer\Tables\{
-    Actors,
-    TOTP as TOTPTable
-};
+use FediE2EE\PKDServer\Tables\TOTP as TOTPTable;
 use JsonException as BaseJsonException;
 use Override;
 use ParagonIE\CipherSweet\Exception\{
@@ -40,8 +37,6 @@ use Psr\Http\Server\RequestHandlerInterface;
 use SodiumException;
 use Throwable;
 use TypeError;
-
-use function hash_equals;
 use function is_null;
 
 class TotpDisenroll implements RequestHandlerInterface, LimitingHandlerInterface
@@ -86,67 +81,35 @@ class TotpDisenroll implements RequestHandlerInterface, LimitingHandlerInterface
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         try {
-            $body = self::jsonDecode($request->getBody()->getContents());
-            $disenrollment = $body['disenrollment'] ?? [];
-            $actorId = $disenrollment['actor-id'] ?? '';
-            $keyId = $disenrollment['key-id'] ?? '';
-            $otp = $disenrollment['otp'] ?? '';
-
-            if (
-                empty($actorId)
-                || empty($keyId)
-                || empty($otp)
-                || empty($body['action'])
-                || empty($body['current-time'])
-                || empty($body['!pkd-context'])
-            ) {
-                return $this->error('Missing required fields', 400);
-            }
-        } catch (Throwable $ex) {
-            $this->config()->getLogger()->error($ex->getMessage());
-            return $this->error('Invalid JSON', 400);
+            $parsed = $this->parseTotpBody(
+                $request->getBody()->getContents(),
+                'disenrollment',
+                ['actor-id', 'key-id', 'otp'],
+            );
+        } catch (Throwable) {
+            return $this->error('Missing required fields', 400);
         }
+        $body = $parsed['body'];
+        $sub = $parsed['sub'];
 
         try {
-            $this->verifySignature($body, $actorId, $keyId);
+            $domain = $this->validateTotpRequest(
+                $body, $sub['actor-id'], $sub['key-id'],
+                'fedi-e2ee:v1/api/totp/disenroll', 'TOTP-Disenroll',
+            );
         } catch (ProtocolException $ex) {
             return $this->error($ex->getMessage(), 400);
         }
 
-        // Validate inputs:
-        if (!hash_equals('fedi-e2ee:v1/api/totp/disenroll', $body['!pkd-context'])) {
-            return $this->error('Invalid !pkd-context', 400);
-        }
-        if (!hash_equals('TOTP-Disenroll', $body['action'])) {
-            return $this->error('Invalid action', 400);
-        }
-        try {
-            $this->throwIfTimeOutsideWindow((int)($body['current-time']));
-        } catch (ProtocolException $ex) {
-            return $this->error($ex->getMessage(), 400);
-        }
-
-        /** @var Actors $actorTable */
-        $actorTable = $this->table('Actors');
-        $actor = $actorTable->searchForActor($actorId);
-        if (is_null($actor)) {
-            return $this->error('Actor not found', 404);
-        }
-        $domain = self::parseUrlHost($actor->actorID);
-        if (is_null($domain)) {
-            return $this->error('Invalid actor URL', 400);
-        }
         $totp = $this->totpTable->getTotpByDomain($domain);
         if (!$totp) {
             return $this->error('TOTP not enabled', 409);
         }
-        $secret = $totp['secret'];
-        $lastTS = $totp['last_time_step'];
-        $ts = $this->verifyTOTP($secret, $otp);
+        $ts = $this->verifyTOTP($totp['secret'], $sub['otp']);
         if (is_null($ts)) {
             return $this->error('Invalid TOTP code', 403);
         }
-        if ($ts <= $lastTS) {
+        if ($ts <= $totp['last_time_step']) {
             return $this->error('TOTP code already used', 403);
         }
 
