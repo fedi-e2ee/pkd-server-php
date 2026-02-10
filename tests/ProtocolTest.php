@@ -1710,11 +1710,10 @@ class ProtocolTest extends TestCase
         );
 
         // Submit with outer actor = B (mismatch with message actor A).
-        // May throw ProtocolException or GuzzleException depending on whether WebFinger canonicalization is attempted.
         $threw = false;
         try {
             $protocol->addKey($encrypted, $canonicalB);
-        } catch (ProtocolException|GuzzleException) {
+        } catch (ProtocolException|NetworkException) {
             $threw = true;
         } finally {
             $this->ensureMerkleStateUnlocked();
