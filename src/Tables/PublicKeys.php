@@ -641,26 +641,62 @@ class PublicKeys extends Table
 
         // Explicit check that the outer actor (from ActivityPub) matches the protocol message
         $this->explicitOuterActorCheck($outerActor, $actionData['actor']);
-        $sm = Bundle::fromJson($rawJson)->toSignedMessage();
-        $candidatePublicKeys = $this->getPublicKeysFor(
-            actorName: $actionData['actor'],
-            keyId: $actionData['key-id'] ?? ''
-        );
-        foreach ($candidatePublicKeys as $row) {
-            if ($sm->verify($row['public-key'])) {
-                // Valid key found!
-                $this->db->update(
-                    'pkd_actors_publickeys',
-                    [
-                        'trusted' => false,
-                        'revokeleaf' => $leaf->getPrimaryKey(),
-                    ],
-                    ['actorpublickeyid' => $row['actorpublickeyid']]
-                );
-                return $this->getRecord($row['actorpublickeyid']);
+
+        //= https://raw.githubusercontent.com/fedi-e2ee/public-key-directory-specification/refs/heads/main/Specification.md#revokekey
+        //# Attempting to issue a `RevokeKey` **MUST** fail unless there is another public key associated with this Actor.
+        $allValidKeys = $this->getPublicKeysFor($actionData['actor']);
+        if (count($allValidKeys) < 2) {
+            throw new ProtocolException(
+                'Cannot revoke the last remaining key'
+            );
+        }
+
+        // Identify the target key to revoke by matching public key material
+        $targetPublicKey = PublicKey::fromString($actionData['public-key']);
+        $targetRow = null;
+        foreach ($allValidKeys as $row) {
+            if (hash_equals(
+                $targetPublicKey->toString(),
+                $row['public-key']->toString()
+            )) {
+                $targetRow = $row;
+                break;
             }
         }
-        throw new ProtocolException('Signature is not valid');
+        if ($targetRow === null) {
+            throw new ProtocolException(
+                'Target key not found or already revoked'
+            );
+        }
+
+        // Verify signature by a DIFFERENT valid key (not the target)
+        $sm = Bundle::fromJson($rawJson)->toSignedMessage();
+        $signatureIsValid = false;
+        foreach ($allValidKeys as $row) {
+            if ($row['actorpublickeyid'] === $targetRow['actorpublickeyid']) {
+                continue;
+            }
+            if ($sm->verify($row['public-key'])) {
+                $signatureIsValid = true;
+                break;
+            }
+        }
+        if (!$signatureIsValid) {
+            throw new ProtocolException(
+                'RevokeKey must be signed by a different valid key'
+            );
+        }
+
+        // Revoke the target key
+        $this->db->update(
+            'pkd_actors_publickeys',
+            [
+                'trusted' => false,
+                'revokeleaf' => $leaf->getPrimaryKey(),
+            ],
+            ['actorpublickeyid' => $targetRow['actorpublickeyid']]
+        );
+        return $this->getRecord($targetRow['actorpublickeyid']);
     }
 
     //= https://raw.githubusercontent.com/fedi-e2ee/public-key-directory-specification/refs/heads/main/Specification.md#revokekeythirdparty
