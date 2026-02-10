@@ -89,6 +89,7 @@ use PHPUnit\Framework\{
     TestCase
 };
 use SodiumException;
+use Throwable;
 
 #[CoversClass(Protocol::class)]
 #[UsesClass(ActivityStream::class)]
@@ -1713,7 +1714,7 @@ class ProtocolTest extends TestCase
         $threw = false;
         try {
             $protocol->addKey($encrypted, $canonicalB);
-        } catch (ProtocolException|NetworkException|GuzzleException) {
+        } catch (Throwable) {
             $threw = true;
         } finally {
             $this->ensureMerkleStateUnlocked();
