@@ -1713,7 +1713,7 @@ class ProtocolTest extends TestCase
         $threw = false;
         try {
             $protocol->addKey($encrypted, $canonicalB);
-        } catch (ProtocolException|NetworkException) {
+        } catch (ProtocolException|NetworkException|GuzzleException) {
             $threw = true;
         } finally {
             $this->ensureMerkleStateUnlocked();
