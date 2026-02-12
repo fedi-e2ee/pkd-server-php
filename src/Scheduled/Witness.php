@@ -52,13 +52,13 @@ use Random\RandomException;
 use SodiumException;
 use Throwable;
 
-use function count,
-    is_array,
-    is_string,
-    json_decode,
-    json_last_error_msg,
-    random_bytes,
-    urlencode;
+use function count;
+use function is_array;
+use function is_string;
+use function json_decode;
+use function json_last_error_msg;
+use function random_bytes;
+use function urlencode;
 
 /**
  * Perform witness co-signatures for third-porty Public Key Directory instances.
