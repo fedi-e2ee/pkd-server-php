@@ -294,9 +294,13 @@ static · Returns `string`
 
 **Throws:** `BaseJsonException`
 
-#### [`assertAllArrayKeysExist`](../../../src/Protocol/KeyWrapping.php#L27-L32)
+#### [`assertAllArrayKeysExist`](../../../src/Protocol/KeyWrapping.php#L30-L35)
 
 static · Returns `void`
+
+This method throws an InputException if any of the expected keys are absent.
+
+It does not return anything.
 
 **Parameters:**
 
@@ -305,18 +309,26 @@ static · Returns `void`
 
 **Throws:** `InputException`
 
-#### [`allArrayKeysExist`](../../../src/Protocol/KeyWrapping.php#L34-L41)
+#### [`allArrayKeysExist`](../../../src/Protocol/KeyWrapping.php#L43-L50)
 
 static · Returns `bool`
+
+This method returns true if every expected array key is found in the target array.
+
+Otherwise, it returns false. This is useful for input validation.
 
 **Parameters:**
 
 - `$target`: `array`
 - `...$arrayKeys`: `string`
 
-#### [`constantTimeSelect`](../../../src/Protocol/KeyWrapping.php#L48-L65)
+#### [`constantTimeSelect`](../../../src/Protocol/KeyWrapping.php#L65-L82)
 
 Returns `string`
+
+This is a constant-time conditional select. It should be read like a ternary operation.
+
+$result = ClassWithTrait::constantTimeSelect(1, $left, $right); -> $result === $left. $result = ClassWithTrait::constantTimeSelect(0, $left, $right); -> $result === $right.
 
 **Parameters:**
 
@@ -326,49 +338,63 @@ Returns `string`
 
 **Throws:** `CryptoException`
 
-#### [`dos2unix`](../../../src/Protocol/KeyWrapping.php#L73-L76)
+#### [`dos2unix`](../../../src/Protocol/KeyWrapping.php#L92-L95)
 
 static · Returns `string`
 
 Normalize line-endings to UNIX-style (LF rather than CRLF).
 
+This is mostly used for PEM-encoded strings.
+
 **Parameters:**
 
 - `$in`: `string`
 
-#### [`preAuthEncode`](../../../src/Protocol/KeyWrapping.php#L84-L97)
+#### [`preAuthEncode`](../../../src/Protocol/KeyWrapping.php#L113-L126)
 
 static · Returns `string`
+
+This is an implementation of PAE() from PASETO. It encodes an array of strings into a flat string consisting of:
+
+1. The number of pieces. 2. For each piece: 1. The length of the piece (in bytes). 2. The contents of the piece. This allows multipart messages to have an injective canonical representation before passing ot a hash function (or other cryptographic function).
 
 **Parameters:**
 
 - `$pieces`: `array`
 
-#### [`sortByKey`](../../../src/Protocol/KeyWrapping.php#L99-L107)
+#### [`sortByKey`](../../../src/Protocol/KeyWrapping.php#L133-L141)
 
 static · Returns `void`
+
+This sorts the target array in-place, by its keys, including child arrays.
+
+Used for ensuring arrays are sorted before JSON encoding.
 
 **Parameters:**
 
 - `$arr`: `array`
 
-#### [`LE64`](../../../src/Protocol/KeyWrapping.php#L111-L114)
+#### [`LE64`](../../../src/Protocol/KeyWrapping.php#L148-L151)
 
 static · Returns `string`
+
+Mostly used by preAuthEncode() above. This packs an integer as 8 bytes.
 
 **Parameters:**
 
 - `$n`: `int`
 
-#### [`stringToByteArray`](../../../src/Protocol/KeyWrapping.php#L116-L123)
+#### [`stringToByteArray`](../../../src/Protocol/KeyWrapping.php#L156-L163)
 
 Returns `array`
+
+Get an array of bytes representing the input string.
 
 **Parameters:**
 
 - `$str`: `string`
 
-#### [`stripNewlines`](../../../src/Protocol/KeyWrapping.php#L131-L165)
+#### [`stripNewlines`](../../../src/Protocol/KeyWrapping.php#L171-L205)
 
 static · Returns `string`
 

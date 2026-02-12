@@ -23,10 +23,7 @@ use FediE2EE\PKD\Crypto\Protocol\{
     Handler,
     ProtocolMessageInterface
 };
-use FediE2EE\PKD\Crypto\{
-    SecretKey,
-    SymmetricKey
-};
+use FediE2EE\PKD\Crypto\{Merkle\InclusionProof, SecretKey, SymmetricKey};
 use GuzzleHttp\Psr7\Response;
 use FediE2EE\PKDServer\Protocol\{
     KeyWrapping,
@@ -235,7 +232,7 @@ class ReplicaInfoTest extends TestCase
             'signature' => 'sig0',
             'encrypted-message' => 'msg0',
             'created' => date('Y-m-d H:i:s'),
-        ], 'cosig0', $this->createStub(\FediE2EE\PKD\Crypto\Merkle\InclusionProof::class));
+        ], 'cosig0', new InclusionProof(0, []));
         $historyTable->save($peer, $leaf0);
 
         // Then insert root1
@@ -246,7 +243,7 @@ class ReplicaInfoTest extends TestCase
             'signature' => 'sig1',
             'encrypted-message' => 'msg1',
             'created' => date('Y-m-d H:i:s'),
-        ], 'cosig1', $this->createStub(\FediE2EE\PKD\Crypto\Merkle\InclusionProof::class));
+        ], 'cosig1', new InclusionProof(1, []));
         $historyTable->save($peer, $leaf);
 
         $request = $this->makeGetRequest('/api/replicas/' . $this->replicaId . '/history')

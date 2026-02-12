@@ -226,7 +226,7 @@ Perform witness co-signatures for third-porty Public Key Directory instances.
 
 ### Methods
 
-#### [`__construct`](../../../src/Scheduled/Witness.php#L88-L125)
+#### [`__construct`](../../../src/Scheduled/Witness.php#L87-L124)
 
 Returns `void`
 
@@ -236,13 +236,13 @@ Returns `void`
 
 **Throws:** `CacheException`, `DependencyException`, `TableException`
 
-#### [`run`](../../../src/Scheduled/Witness.php#L132-L144)
+#### [`run`](../../../src/Scheduled/Witness.php#L131-L143)
 
 Returns `void`
 
 **Throws:** `CryptoException`, `DateMalformedStringException`, `SodiumException`
 
-#### [`getHashesSince`](../../../src/Scheduled/Witness.php#L747-L764)
+#### [`getHashesSince`](../../../src/Scheduled/Witness.php#L752-L769)
 
 Returns `array`
 

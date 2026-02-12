@@ -2,17 +2,20 @@
 declare(strict_types=1);
 namespace FediE2EE\PKDServer\RequestHandlers\Api;
 
-use FediE2EE\PKD\Crypto\Exceptions\{BundleException,
+use FediE2EE\PKD\Crypto\Exceptions\{
+    BundleException,
     CryptoException,
-    InputException,
     JsonException,
-    NotImplementedException};
+    NotImplementedException
+};
 use FediE2EE\PKDServer\Exceptions\{
     CacheException,
+    ConcurrentException,
     DependencyException,
     ProtocolException,
     TableException
 };
+use DateMalformedStringException;
 use FediE2EE\PKDServer\{
     Interfaces\LimitingHandlerInterface,
     Meta\Route,
@@ -23,6 +26,7 @@ use JsonException as BaseJsonException;
 use Laminas\Diactoros\Response;
 use Override;
 use ParagonIE\HPKE\HPKEException;
+use Random\RandomException;
 use Psr\Http\Message\{
     ResponseInterface,
     ServerRequestInterface
@@ -48,15 +52,19 @@ class Revoke implements RequestHandlerInterface, LimitingHandlerInterface
      * @throws BaseJsonException
      * @throws BundleException
      * @throws CacheException
+     * @throws ConcurrentException
      * @throws CryptoException
+     * @throws DateMalformedStringException
      * @throws DependencyException
      * @throws HPKEException
      * @throws JsonException
      * @throws NotImplementedException
+     * @throws ProtocolException
+     * @throws RandomException
      * @throws SodiumException
      * @throws TableException
      */
-    #[Route("/api/revoke")]
+    #[Route("/api/burndown")]
     #[Override]
     public function handle(ServerRequestInterface $request): ResponseInterface
     {

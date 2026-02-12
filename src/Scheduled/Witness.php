@@ -20,7 +20,7 @@ use FediE2EE\PKD\Crypto\Exceptions\{
 use FediE2EE\PKD\Crypto\{
     HttpSignature,
     Merkle\InclusionProof,
-    PublicKey
+    Revocation
 };
 use FediE2EE\PKD\Crypto\Protocol\{
     Cosignature,
@@ -58,7 +58,6 @@ use function is_string;
 use function json_decode;
 use function json_last_error_msg;
 use function random_bytes;
-use function substr;
 use function urlencode;
 
 /**
@@ -164,7 +163,7 @@ class Witness
     protected function witnessFor(Peer $peer): void
     {
         if ($this->db->inTransaction()) {
-            $this->db->commit();
+            $this->db->rollBack();
         }
         if (!$peer->cosign && !$peer->replicate) {
             throw new ScheduledTaskException('Neither cosigning nor replication are enabled for this peer');
@@ -196,6 +195,10 @@ class Witness
 
         // Let's begin by fetching some hashes since the latest
         $response1 = $this->getHashesSince($peer);
+        if (!isset($response1['records']) || !is_array($response1['records'])) {
+            $this->db->rollBack();
+            throw new ProtocolException('Invalid peer response: missing or non-array records');
+        }
         if (count($response1['records']) < 1) {
             // We have nothing else to do here:
             $peer->modified = new DateTimeImmutable('NOW');
@@ -232,26 +235,26 @@ class Witness
                 $this->config()->getParams()->hostname
             );
 
-            // If we are sharing the cosignature upstream, let's toss it forward
-            if ($peer->cosign) {
-                if (!$this->cosign($peer, $cosigned, $expectedMerkleRoot)) {
-                    // We had an invalid response:
-                    $this->db->rollBack();
-                    throw new CryptoException('Invalid HTTP Signature from peer response');
-                }
-            }
-            // If we are replicating the contents of the source Public Key Directory server:
+            // Replicate first, before sharing cosignature upstream
             if ($peer->replicate) {
                 if (!$this->replicate($peer, $record, $cosigned, $inclusionProof)) {
                     $this->db->rollBack();
                     throw new CryptoException('Replication failed and no other exception was thrown');
                 }
             }
+            // Share cosignature only after replication succeeds
+            if ($peer->cosign) {
+                if (!$this->cosign($peer, $cosigned, $expectedMerkleRoot)) {
+                    $this->db->rollBack();
+                    throw new CryptoException('Invalid HTTP Signature from peer response');
+                }
+            }
             // Save progress:
             $peer->tree = $cosignature->getTree();
             $this->peers->save($peer);
-            $this->db->commit();
         }
+        // Commit after all records are processed
+        $this->db->commit();
     }
 
     /**
@@ -486,10 +489,12 @@ class Witness
         if (empty($token)) {
             return;
         }
-        $decoded = Base64UrlSafe::decodeNoPadding($token);
-        $pkStart = 8 + 32 + 17; // 57 bytes
-        $pkBytes = substr($decoded, $pkStart, 32);
-        $publicKey = new PublicKey($pkBytes);
+        $revocation = new Revocation();
+        [$publicKey, $signed, $signature] = $revocation->decode($token);
+        if (!$publicKey->verify($signature, $signed)) {
+            $this->logger->warning('Invalid revocation token signature during replication');
+            return;
+        }
 
         // Look up the key by its public key content via blind index
         $cipher = $this->replicaPublicKeys->getCipher();

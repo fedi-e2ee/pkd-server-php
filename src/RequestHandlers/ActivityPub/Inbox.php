@@ -77,8 +77,12 @@ class Inbox implements RequestHandlerInterface
                 return $this->json(['queue_id' => $queueId], 202);
             }
             return $this->json([], 202);
-        } catch (FetchException|HttpSignatureException $ex) {
-            return $this->error($ex->getMessage(), 500);
+        } catch (FetchException $ex) {
+            $this->config()->getLogger()->error($ex->getMessage(), $ex->getTrace());
+            return $this->error('Failed to verify message origin', 500);
+        } catch (HttpSignatureException $ex) {
+            $this->config()->getLogger()->error($ex->getMessage(), $ex->getTrace());
+            return $this->error('HTTP Signature verification failed', 500);
         } catch (ActivityPubException $ex) {
             return $this->error($ex->getMessage());
         }

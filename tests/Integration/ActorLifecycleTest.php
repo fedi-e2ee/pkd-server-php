@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace FediE2EE\PKDServer\Tests\Integration;
 
+use DateMalformedStringException;
 use DateTimeImmutable;
 use FediE2EE\PKD\Crypto\{
     AttributeEncryption\AttributeKeyMap,
@@ -19,7 +20,9 @@ use FediE2EE\PKD\Crypto\Revocation;
 use FediE2EE\PKD\Crypto\Exceptions\{
     BundleException,
     CryptoException,
+    InputException,
     JsonException,
+    NetworkException,
     NotImplementedException,
     ParserException
 };
@@ -42,6 +45,7 @@ use FediE2EE\PKDServer\{
 };
 use FediE2EE\PKDServer\Exceptions\{
     CacheException,
+    ConcurrentException,
     DependencyException,
     ProtocolException,
     TableException,
@@ -65,6 +69,7 @@ use PHPUnit\Framework\Attributes\{
     CoversClass,
     UsesClass
 };
+use GuzzleHttp\Exception\GuzzleException;
 use ParagonIE\ConstantTime\Base64UrlSafe;
 use ParagonIE\Certainty\Exception\CertaintyException;
 use ParagonIE\CipherSweet\Exception\{
@@ -77,6 +82,7 @@ use ParagonIE\CipherSweet\Exception\{
 use ParagonIE\HPKE\HPKEException;
 use PHPUnit\Framework\TestCase;
 use Psr\SimpleCache\InvalidArgumentException;
+use Random\RandomException;
 use ReflectionClass;
 use GuzzleHttp\Psr7\Response;
 use ReflectionException;
@@ -122,25 +128,25 @@ class ActorLifecycleTest extends TestCase
     }
 
     /**
-     * @throws ArrayKeyException
-     * @throws BlindIndexNotFoundException
      * @throws BundleException
      * @throws CacheException
-     * @throws CipherSweetException
+     * @throws CertaintyException
+     * @throws ConcurrentException
      * @throws CryptoException
-     * @throws CryptoOperationException
+     * @throws DateMalformedStringException
      * @throws DependencyException
+     * @throws GuzzleException
      * @throws HPKEException
+     * @throws InputException
      * @throws InvalidArgumentException
-     * @throws InvalidCiphertextException
      * @throws JsonException
+     * @throws NetworkException
      * @throws NotImplementedException
      * @throws ParserException
      * @throws ProtocolException
-     * @throws ReflectionException
+     * @throws RandomException
      * @throws SodiumException
      * @throws TableException
-     * @throws CertaintyException
      */
     public function testOtherActionsWithPeerRewrapping(): void
     {
@@ -221,7 +227,7 @@ class ActorLifecycleTest extends TestCase
         $akm->addKey('new-actor', SymmetricKey::generate());
         $bundle = $handler->handle($moveIdentity->encrypt($akm), $keypair, $akm, $latestRoot);
         $encrypted = $handler->hpkeEncrypt($bundle, $serverHpke->encapsKey, $serverHpke->cs);
-        $protocol->moveIdentity($encrypted, $oldActor);
+        $protocol->moveIdentity($encrypted, $newActor);
         $rewrapped = $db->run("SELECT * FROM pkd_merkle_leaf_rewrapped_keys WHERE peer = ?", $peerId);
         $this->assertNotEmpty($rewrapped, 'Rewrapped keys should have been stored for the peer after moveIdentity');
 
