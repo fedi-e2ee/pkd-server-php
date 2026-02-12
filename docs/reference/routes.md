@@ -8,6 +8,7 @@ This document lists all API routes defined via `#[Route]` attributes.
 |---------------|---------------|--------|
 | `/` | [`RequestHandlers\IndexPage`](../../src/RequestHandlers/IndexPage.php) | `handle` |
 | `/.well-known/webfinger` | [`RequestHandlers\ActivityPub\Finger`](../../src/RequestHandlers/ActivityPub/Finger.php) | `handle` |
+| `/api/burndown` | [`RequestHandlers\Api\Revoke`](../../src/RequestHandlers/Api/Revoke.php) | `handle` |
 | `/api/checkpoint` | [`RequestHandlers\Api\Checkpoint`](../../src/RequestHandlers/Api/Checkpoint.php) | `handle` |
 | `/api/extensions` | [`RequestHandlers\Api\Extensions`](../../src/RequestHandlers/Api/Extensions.php) | `handle` |
 | `/api/history` | [`RequestHandlers\Api\History`](../../src/RequestHandlers/Api/History.php) | `handle` |
@@ -23,7 +24,7 @@ This document lists all API routes defined via `#[Route]` attributes.
 | `/api/replicas/{replica_id}/actor/{actor_id}/keys/key/{key_id}` | [`RequestHandlers\Api\ReplicaInfo`](../../src/RequestHandlers/Api/ReplicaInfo.php) | `actorKey` |
 | `/api/replicas/{replica_id}/history` | [`RequestHandlers\Api\ReplicaInfo`](../../src/RequestHandlers/Api/ReplicaInfo.php) | `history` |
 | `/api/replicas/{replica_id}/history/since/{hash}` | [`RequestHandlers\Api\ReplicaInfo`](../../src/RequestHandlers/Api/ReplicaInfo.php) | `historySince` |
-| `/api/revoke` | [`RequestHandlers\Api\Revoke`](../../src/RequestHandlers/Api/Revoke.php) | `handle` |
+| `/api/revoke` | [`RequestHandlers\Api\BurnDown`](../../src/RequestHandlers/Api/BurnDown.php) | `handle` |
 | `/api/server-public-key` | [`RequestHandlers\Api\ServerPublicKey`](../../src/RequestHandlers/Api/ServerPublicKey.php) | `handle` |
 | `/api/totp/disenroll` | [`RequestHandlers\Api\TotpDisenroll`](../../src/RequestHandlers/Api/TotpDisenroll.php) | `handle` |
 | `/api/totp/enroll` | [`RequestHandlers\Api\TotpEnroll`](../../src/RequestHandlers/Api/TotpEnroll.php) | `handle` |

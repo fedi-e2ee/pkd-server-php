@@ -4098,13 +4098,13 @@ static · Returns `string`
 
 ### Methods
 
-#### [`__construct`](../../../src/RequestHandlers/Api/Revoke.php#L42-L45)
+#### [`__construct`](../../../src/RequestHandlers/Api/Revoke.php#L46-L49)
 
 Returns `void`
 
 **Throws:** `DependencyException`
 
-#### [`handle`](../../../src/RequestHandlers/Api/Revoke.php#L61-L72)
+#### [`handle`](../../../src/RequestHandlers/Api/Revoke.php#L69-L80)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -4114,9 +4114,9 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 - `$request`: `Psr\Http\Message\ServerRequestInterface`
 
-**Throws:** `BaseJsonException`, `BundleException`, `CacheException`, `CryptoException`, `DependencyException`, `HPKEException`, `JsonException`, `NotImplementedException`, `SodiumException`, `TableException`
+**Throws:** `BaseJsonException`, `BundleException`, `CacheException`, `ConcurrentException`, `CryptoException`, `DateMalformedStringException`, `DependencyException`, `HPKEException`, `JsonException`, `NotImplementedException`, `ProtocolException`, `RandomException`, `SodiumException`, `TableException`
 
-#### [`getEnabledRateLimits`](../../../src/RequestHandlers/Api/Revoke.php#L75-L78)
+#### [`getEnabledRateLimits`](../../../src/RequestHandlers/Api/Revoke.php#L83-L86)
 
 Returns `array`
 
