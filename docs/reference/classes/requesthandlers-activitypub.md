@@ -301,7 +301,7 @@ Returns `void`
 
 **Throws:** `TableException`, `DependencyException`, `CacheException`
 
-#### [`handle`](../../../src/RequestHandlers/ActivityPub/Inbox.php#L70-L85)
+#### [`handle`](../../../src/RequestHandlers/ActivityPub/Inbox.php#L70-L89)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
