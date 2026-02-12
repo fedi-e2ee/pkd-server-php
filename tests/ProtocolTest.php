@@ -288,20 +288,26 @@ class ProtocolTest extends TestCase
     }
 
     /**
+     * @throws ArrayKeyException
      * @throws BaseJsonException
+     * @throws BlindIndexNotFoundException
+     * @throws BundleException
      * @throws CacheException
      * @throws CertaintyException
      * @throws CipherSweetException
+     * @throws ConcurrentException
      * @throws CryptoException
      * @throws CryptoOperationException
      * @throws DateMalformedStringException
      * @throws DependencyException
+     * @throws GuzzleException
      * @throws HPKEException
+     * @throws InputException
      * @throws InvalidArgumentException
      * @throws InvalidCiphertextException
      * @throws JsonException
+     * @throws NetworkException
      * @throws NotImplementedException
-     * @throws ParserException
      * @throws ProtocolException
      * @throws RandomException
      * @throws SodiumException
@@ -389,7 +395,7 @@ class ProtocolTest extends TestCase
             $serverHpke->cs,
         );
         $this->assertNotInTransaction();
-        $result = $this->protocol->moveIdentity($encryptedForServer3, $canonical);
+        $result = $this->protocol->moveIdentity($encryptedForServer3, $canonical2);
         $this->assertTrue($result);
         $this->assertCount(0, $pkTable->getPublicKeysFor($canonical));
         $this->assertCount(2, $pkTable->getPublicKeysFor($canonical2));

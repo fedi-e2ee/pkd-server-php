@@ -773,7 +773,6 @@ class PublicKeys extends Table
      * @throws ArrayKeyException
      * @throws BaseJsonException
      * @throws BlindIndexNotFoundException
-     * @throws BundleException
      * @throws CacheException
      * @throws CertaintyException
      * @throws CipherSweetException
@@ -782,10 +781,9 @@ class PublicKeys extends Table
      * @throws DateMalformedStringException
      * @throws DependencyException
      * @throws GuzzleException
-     * @throws InputException
+     * @throws InvalidArgumentException
      * @throws InvalidCiphertextException
      * @throws NetworkException
-     * @throws NotImplementedException
      * @throws ProtocolException
      * @throws SodiumException
      * @throws TableException
@@ -808,8 +806,8 @@ class PublicKeys extends Table
             throw new ProtocolException('Invalid message type');
         }
         $actionData = $decrypted->toArray();
-        // Explicit check that the outer actor (from ActivityPub) matches the protocol message
-        $this->explicitOuterActorCheck($outerActor, $actionData['old-actor']);
+        // Explicit check: the new server must prove it accepted the migration via HTTP Signature
+        $this->explicitOuterActorCheck($outerActor, $actionData['new-actor']);
         $oldActor = $actorTable->searchForActor($actionData['old-actor']);
         if (is_null($oldActor)) {
             throw new ProtocolException('Old actor not found');
@@ -928,13 +926,24 @@ class PublicKeys extends Table
         //# If the instance has previously enrolled a TOTP secret to this Fediverse server
         $this->verifyBurnDownTotp($actor->actorID, $decrypted);
 
+        $actorPK = $actor->getPrimaryKey();
         $affected = $this->db->update(
             'pkd_actors_publickeys',
             [
                 'trusted' => false,
                 'revokeleaf' => $leaf->getPrimaryKey()
             ],
-            ['actorid' => $actor->getPrimaryKey()]
+            ['actorid' => $actorPK]
+        );
+        //= https://raw.githubusercontent.com/fedi-e2ee/public-key-directory-specification/refs/heads/main/Specification.md#burndown
+        //# A `BurnDown` message acts as a soft delete for all public keys and auxiliary data for a given Actor
+        $this->db->update(
+            'pkd_actors_auxdata',
+            [
+                'trusted' => false,
+                'revokeleaf' => $leaf->getPrimaryKey()
+            ],
+            ['actorid' => $actorPK]
         );
         return $affected > 0;
     }
