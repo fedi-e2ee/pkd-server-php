@@ -120,13 +120,17 @@ class RevokeTest extends TestCase
         // Now, let's build a revocation token.
         $revocation = new Revocation();
         $token = $revocation->revokeThirdParty($keypair);
-        $message = new RevokeKeyThirdParty($token);
-        $bundle = $handler->handle($message, $keypair, new AttributeKeyMap(), $latestRoot);
+
+        // RevokeKeyThirdParty uses a minimal bundle: just action + revocation-token
+        $revokeJson = json_encode([
+            'action' => 'RevokeKeyThirdParty',
+            'revocation-token' => $token,
+        ]);
 
         // Now, let's revoke this key.
         $request = $this->makePostRequest(
             '/api/revoke',
-            $bundle->toString(),
+            $revokeJson,
             ['Content-Type' => 'application/json']
         );
 
@@ -251,11 +255,14 @@ class RevokeTest extends TestCase
         $merkleState = $this->table('MerkleState');
         $latestRoot = $merkleState->getLatestRoot();
 
-        $handler = new Handler();
         $revocation = new Revocation();
         $token = $revocation->revokeThirdParty($keypair);
-        $message = new RevokeKeyThirdParty($token);
-        $bundle = $handler->handle($message, $keypair, new AttributeKeyMap(), $latestRoot);
+
+        // RevokeKeyThirdParty uses a minimal bundle: just action + revocation-token
+        $revokeJson = json_encode([
+            'action' => 'RevokeKeyThirdParty',
+            'revocation-token' => $token,
+        ]);
 
         $reflector = new ReflectionClass(Revoke::class);
         $revokeHandler = $reflector->newInstanceWithoutConstructor();
@@ -267,7 +274,7 @@ class RevokeTest extends TestCase
 
         $request = $this->makePostRequest(
             '/api/revoke',
-            $bundle->toString(),
+            $revokeJson,
             ['Content-Type' => 'application/json']
         );
         $response = $revokeHandler->handle($request);
@@ -343,15 +350,16 @@ class RevokeTest extends TestCase
         $wrongKey = SecretKey::generate();
         $revocation = new Revocation();
         $token = $revocation->revokeThirdParty($wrongKey); // Signed by wrong key
-        // But the message is for the original key's public key?
-        // Actually revocation token contains the public key it revokes.
 
-        $message = new RevokeKeyThirdParty($token);
-        $bundle = $handler->handle($message, $keypair, new AttributeKeyMap(), $latestRoot);
+        // RevokeKeyThirdParty uses a minimal bundle: just action + revocation-token
+        $revokeJson = json_encode([
+            'action' => 'RevokeKeyThirdParty',
+            'revocation-token' => $token,
+        ]);
 
         $request = $this->makePostRequest(
             '/api/revoke',
-            $bundle->toString(),
+            $revokeJson,
             ['Content-Type' => 'application/json']
         );
 
@@ -415,17 +423,12 @@ class RevokeTest extends TestCase
         $revocation = new Revocation();
         $token = $revocation->revokeThirdParty($keypair);
 
-        // Now, let's revoke this key using the flat format.
+        // RevokeKeyThirdParty uses a minimal bundle: just action + revocation-token
         $request = $this->makePostRequest(
             '/api/revoke',
             json_encode([
-                '!pkd-context' => 'https://github.com/fedi-e2ee/public-key-directory/v1',
                 'action' => 'RevokeKeyThirdParty',
-                'message' => [
-                    'revocation-token' => $token],
-                'recent-merkle-root' => '',
-                'signature' => '',
-                'symmetric-keys' => []
+                'revocation-token' => $token,
             ]),
             ['Content-Type' => 'application/json']
         );

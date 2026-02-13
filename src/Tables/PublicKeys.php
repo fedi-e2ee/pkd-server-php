@@ -383,7 +383,7 @@ class PublicKeys extends Table
      */
     protected function verifyBurnDownTotp(
         string $actorId,
-        BurnDown $decrypted,
+        string $otp,
     ): void {
         /** @var TOTP $totpTable */
         $totpTable = $this->table('TOTP');
@@ -395,7 +395,7 @@ class PublicKeys extends Table
         if (!$totp) {
             return;
         }
-        $ts = $this->verifyTOTP($totp['secret'], $decrypted->getOtp() ?? '');
+        $ts = $this->verifyTOTP($totp['secret'], $otp);
         if (is_null($ts)) {
             throw new ProtocolException('Invalid TOTP code');
         }
@@ -855,7 +855,6 @@ class PublicKeys extends Table
             'BurnDown',
             fn (MerkleLeaf $leaf, Payload $payload) =>
                 $this->burnDownCallback($leaf, $payload, $outerActor),
-            self::ENCRYPTION_DISALLOWED
         );
     }
 
@@ -924,7 +923,9 @@ class PublicKeys extends Table
 
         //= https://raw.githubusercontent.com/fedi-e2ee/public-key-directory-specification/refs/heads/main/Specification.md#burndown-validation-steps
         //# If the instance has previously enrolled a TOTP secret to this Fediverse server
-        $this->verifyBurnDownTotp($actor->actorID, $decrypted);
+        // OTP is a top-level Bundle field, not part of the encrypted message.
+        $otp = $decoded['otp'] ?? '';
+        $this->verifyBurnDownTotp($actor->actorID, $otp);
 
         $actorPK = $actor->getPrimaryKey();
         $affected = $this->db->update(

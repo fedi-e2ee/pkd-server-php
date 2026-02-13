@@ -12,8 +12,7 @@ use FediE2EE\PKD\Crypto\{
 };
 use FediE2EE\PKD\Crypto\Protocol\Actions\{
     AddAuxData,
-    AddKey,
-    RevokeKeyThirdParty
+    AddKey
 };
 use FediE2EE\PKD\Crypto\Exceptions\{
     CryptoException,
@@ -648,13 +647,17 @@ class ApiTest extends TestCase
         // Now, let's build a revocation token.
         $revocation = new Revocation();
         $token = $revocation->revokeThirdParty($keypair);
-        $message = new RevokeKeyThirdParty($token);
-        $bundle = $handler->handle($message, $keypair, new AttributeKeyMap(), $latestRoot);
+
+        // RevokeKeyThirdParty uses a minimal bundle: just action + revocation-token
+        $revokeJson = json_encode([
+            'action' => 'RevokeKeyThirdParty',
+            'revocation-token' => $token,
+        ]);
 
         // Now, let's revoke this key.
         $request = $this->makePostRequest(
             '/api/revoke',
-            $bundle->toString(),
+            $revokeJson,
             ['Content-Type' => 'application/json']
         );
 

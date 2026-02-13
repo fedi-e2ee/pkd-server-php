@@ -479,7 +479,7 @@ class ProtocolTest extends TestCase
         $pkTable = $this->table('PublicKeys');
         $this->assertCount(1, $pkTable->getPublicKeysFor($canonActor));
 
-        // 3. BurnDown
+        // 3. BurnDown (plaintext - not HPKE encrypted, but with attribute encryption)
         $latestRoot3 = $merkleState->getLatestRoot();
         $burnDown = new BurnDown($canonActor, $canonOperator);
         $akm3 = new AttributeKeyMap()
@@ -487,19 +487,9 @@ class ProtocolTest extends TestCase
             ->addKey('operator', SymmetricKey::generate());
         $encryptedMsg3 = $burnDown->encrypt($akm3);
         $bundle3 = $handler->handle($encryptedMsg3, $operatorKey, $akm3, $latestRoot3, $operatorKeyId);
-        $encryptedForServer3 = $handler->hpkeEncrypt(
-            $bundle3,
-            $serverHpke->encapsKey,
-            $serverHpke->cs
-        );
         $this->assertNotInTransaction();
-        $this->expectException(ProtocolException::class);
-        $this->expectExceptionMessage('BurnDown MUST NOT be encrypted.');
-        try {
-            $this->assertTrue($this->protocol->burnDown($encryptedForServer3, $canonOperator));
-        } finally {
-            $this->ensureMerkleStateUnlocked();
-        }
+        $this->assertTrue($this->protocol->burnDown($bundle3->toString(), $canonOperator));
+        $this->ensureMerkleStateUnlocked();
         $this->assertCount(0, $pkTable->getPublicKeysFor($canonActor));
         $latestRoot4 = $merkleState->getLatestRoot();
         $this->assertKeyRewrapped($latestRoot4, 'Key should be rewrapped after burnDown');
@@ -727,7 +717,7 @@ class ProtocolTest extends TestCase
         $this->assertKeyRewrapped($latestRoot6, 'Key should be rewrapped after undoFireproof');
         $this->ensureMerkleStateUnlocked();
 
-        // 5. BurnDown (should succeed)
+        // 5. BurnDown (should succeed - plaintext with attribute encryption)
         $latestRoot7 = $merkleState->getLatestRoot();
         $burnDown = new BurnDown($canonicalActor, $canonicalOperator);
         $akm5 = new AttributeKeyMap()
@@ -735,22 +725,12 @@ class ProtocolTest extends TestCase
             ->addKey('operator', SymmetricKey::generate());
         $encryptedMsg5 = $burnDown->encrypt($akm5);
         $bundle5 = $handler->handle($encryptedMsg5, $operatorKey, $akm5, $latestRoot7, $operatorKeyId);
-        $encryptedForServer5 = $handler->hpkeEncrypt(
-            $bundle5,
-            $serverHpke->encapsKey,
-            $serverHpke->cs
-        );
         $this->assertNotInTransaction();
-        $this->expectException(ProtocolException::class);
-        $this->expectExceptionMessage('BurnDown MUST NOT be encrypted.');
-        try {
-            $this->assertTrue(
-                $this->protocol->burnDown($encryptedForServer5, $canonicalOperator)
-            );
-        } finally {
-            $this->ensureMerkleStateUnlocked();
-            $this->clearOldTransaction($this->config);
-        }
+        $this->assertTrue(
+            $this->protocol->burnDown($bundle5->toString(), $canonicalOperator)
+        );
+        $this->ensureMerkleStateUnlocked();
+        $this->clearOldTransaction($this->config);
         $this->assertNotInTransaction();
     }
 
@@ -947,11 +927,13 @@ class ProtocolTest extends TestCase
         $revocation = new Revocation();
         $token = $revocation->revokeThirdParty($keypair);
 
-        $revokeAction = new RevokeKeyThirdParty($token);
-        $handler = new Handler();
-        $bundle = $handler->handle($revokeAction, $keypair, new AttributeKeyMap(), $latestRoot);
+        // RevokeKeyThirdParty uses a minimal bundle: just action + revocation-token
+        $revokeJson = json_encode([
+            'action' => 'RevokeKeyThirdParty',
+            'revocation-token' => $token,
+        ]);
 
-        $result = $this->protocol->revokeKeyThirdParty($bundle->toString());
+        $result = $this->protocol->revokeKeyThirdParty($revokeJson);
         $this->assertTrue($result);
         $this->assertCount(0, $pkTable->getPublicKeysFor($canonical));
         $this->ensureMerkleStateUnlocked();
@@ -1404,13 +1386,16 @@ class ProtocolTest extends TestCase
         $this->assertTrue($result);
         $this->ensureMerkleStateUnlocked();
 
-        // Create plaintext BurnDown (NOT HPKE encrypted)
+        // Create BurnDown with attribute encryption (NOT HPKE encrypted)
         $latestRoot = $merkleState->getLatestRoot();
         $burnDown = new BurnDown($canonActor, $canonOperator, null, '');
+        $akm = (new AttributeKeyMap())
+            ->addKey('actor', SymmetricKey::generate())
+            ->addKey('operator', SymmetricKey::generate());
         $bundleBD = $handler->handle(
-            $burnDown,
+            $burnDown->encrypt($akm),
             $operatorKey,
-            new AttributeKeyMap(),
+            $akm,
             $latestRoot
         );
         $plaintextJson = $bundleBD->toJson();

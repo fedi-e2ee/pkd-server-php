@@ -51,6 +51,10 @@ readonly class Payload
         if (array_key_exists('symmetric-keys', $decoded)) {
             unset($decoded['symmetric-keys']);
         }
+        // OTP is a top-level Bundle field, not part of the Merkle leaf.
+        if (array_key_exists('otp', $decoded)) {
+            unset($decoded['otp']);
+        }
         return self::jsonEncode($decoded);
     }
 }

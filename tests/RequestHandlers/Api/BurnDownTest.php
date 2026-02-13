@@ -222,12 +222,18 @@ class BurnDownTest extends TestCase
         $otp = '12345678';
         $now = (new DateTimeImmutable('NOW'));
         $burnDown = new BurnDownAction($actorHandle, $canonOperator, $now, $otp);
-        // BurnDown is in UNENCRYPTED_ACTIONS - use empty AttributeKeyMap (plaintext fields)
-        $emptyKeyMap = new AttributeKeyMap();
-        $bundle3 = $handler->handle($burnDown, $operatorKey, $emptyKeyMap, $latestRoot3);
+        $akm3 = (new AttributeKeyMap())
+            ->addKey('actor', SymmetricKey::generate())
+            ->addKey('operator', SymmetricKey::generate());
+        $bundle3 = $handler->handle($burnDown->encrypt($akm3), $operatorKey, $akm3, $latestRoot3);
+
+        // OTP is a top-level Bundle field (not part of the signed/encrypted message)
+        $bundleData = json_decode($bundle3->toJson(), true);
+        $bundleData['otp'] = $otp;
+        $bundleJson = json_encode($bundleData, JSON_UNESCAPED_SLASHES);
 
         // 4. Create ActivityStream wrapper (direct message format)
-        $activityStream = $this->createActivityStream($canonOperator, $bundle3->toString());
+        $activityStream = $this->createActivityStream($canonOperator, $bundleJson);
 
         // 5. Create and sign the HTTP request
         $request = $this->createSignedRequest(

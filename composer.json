@@ -21,7 +21,7 @@
     "ext-pdo": "*",
     "ext-openssl": "*",
     "ext-sodium": "*",
-    "fedi-e2ee/pkd-crypto": "^0.34|1",
+    "fedi-e2ee/pkd-crypto": "^0.36|1",
     "fedi-e2ee/pkd-extensions": "^0.2|^1",
     "guzzlehttp/guzzle": "^7",
     "laminas/laminas-diactoros": "^3",

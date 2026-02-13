@@ -13,8 +13,7 @@ use FediE2EE\PKD\Crypto\{
 };
 use FediE2EE\PKD\Crypto\Protocol\Actions\{
     AddKey,
-    RevokeKey,
-    RevokeKeyThirdParty
+    RevokeKey
 };
 use FediE2EE\PKD\Crypto\Revocation;
 use FediE2EE\PKD\Crypto\Exceptions\{
@@ -69,6 +68,7 @@ use PHPUnit\Framework\Attributes\{
     CoversClass,
     UsesClass
 };
+use JsonException as BaseJsonException;
 use GuzzleHttp\Exception\GuzzleException;
 use ParagonIE\ConstantTime\Base64UrlSafe;
 use ParagonIE\Certainty\Exception\CertaintyException;
@@ -604,23 +604,32 @@ class ActorLifecycleTest extends TestCase
     }
 
     /**
+     * @return void
      * @throws ArrayKeyException
+     * @throws BaseJsonException
      * @throws BlindIndexNotFoundException
+     * @throws BundleException
      * @throws CacheException
+     * @throws CertaintyException
      * @throws CipherSweetException
+     * @throws ConcurrentException
      * @throws CryptoException
      * @throws CryptoOperationException
+     * @throws DateMalformedStringException
      * @throws DependencyException
+     * @throws GuzzleException
      * @throws HPKEException
+     * @throws InputException
+     * @throws InvalidArgumentException
      * @throws InvalidCiphertextException
      * @throws JsonException
+     * @throws NetworkException
      * @throws NotImplementedException
-     * @throws ParserException
      * @throws ProtocolException
+     * @throws RandomException
      * @throws ReflectionException
      * @throws SodiumException
      * @throws TableException
-     * @throws CertaintyException
      */
     public function testAddAndRevoke(): void
     {
@@ -686,18 +695,16 @@ class ActorLifecycleTest extends TestCase
         $this->assertSame($keypair1->getPublicKey()->toString(), $body['public-keys'][0]['public-key']);
 
         // 2. RevokeKeyThirdParty (uses revocation token to revoke last key)
-        $latestRoot2 = $merkleState->getLatestRoot();
         $revocation = new Revocation();
         $token = $revocation->revokeThirdParty($keypair1);
-        $revokeAction = new RevokeKeyThirdParty($token);
-        $bundle2 = $handler->handle(
-            $revokeAction,
-            $keypair1,
-            new AttributeKeyMap(),
-            $latestRoot2
-        );
+
+        // RevokeKeyThirdParty uses a minimal bundle: just action + revocation-token
+        $revokeJson = json_encode([
+            'action' => 'RevokeKeyThirdParty',
+            'revocation-token' => $token,
+        ]);
         $this->assertNotInTransaction();
-        $protocol->revokeKeyThirdParty($bundle2->toString());
+        $protocol->revokeKeyThirdParty($revokeJson);
         $this->assertNotInTransaction();
 
         // Verify with HTTP request

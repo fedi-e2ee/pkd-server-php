@@ -566,11 +566,18 @@ class VectorsTest extends TestCase
         $operator = $this->extractOperatorFromDescription($step);
         $operatorKey = $this->identityKeys[$operator];
 
-        // BurnDown requires an OTP (use placeholder for testing)
-        $burnDown = new BurnDownAction($targetActor, $operator, null, '00000000');
-        $akm = new AttributeKeyMap();
-        $bundle = $handler->handle($burnDown, $operatorKey, $akm, $latestRoot);
-        $protocol->burnDown($bundle->toString(), $operator);
+        $otp = '00000000';
+        $burnDown = new BurnDownAction($targetActor, $operator, null, $otp);
+        $akm = (new AttributeKeyMap())
+            ->addKey('actor', SymmetricKey::generate())
+            ->addKey('operator', SymmetricKey::generate());
+        $bundle = $handler->handle($burnDown->encrypt($akm), $operatorKey, $akm, $latestRoot);
+
+        // OTP is a top-level Bundle field (not part of the signed/encrypted message)
+        $bundleData = json_decode($bundle->toJson(), true);
+        $bundleData['otp'] = $otp;
+        $bundleJson = json_encode($bundleData, JSON_UNESCAPED_SLASHES);
+        $protocol->burnDown($bundleJson, $operator);
     }
 
     /**
