@@ -621,7 +621,7 @@ Returns `bool`
 
 **Throws:** `ConcurrentException`, `CryptoException`, `DependencyException`, `NotImplementedException`, `ProtocolException`, `RandomException`, `SodiumException`, `TableException`
 
-#### [`burnDown`](../../../src/Tables/PublicKeys.php#L851-L860)
+#### [`burnDown`](../../../src/Tables/PublicKeys.php#L851-L859)
 
 Returns `bool`
 
@@ -632,7 +632,7 @@ Returns `bool`
 
 **Throws:** `ConcurrentException`, `CryptoException`, `DependencyException`, `NotImplementedException`, `ProtocolException`, `RandomException`, `SodiumException`, `TableException`
 
-#### [`fireproof`](../../../src/Tables/PublicKeys.php#L961-L969)
+#### [`fireproof`](../../../src/Tables/PublicKeys.php#L962-L970)
 
 Returns `bool`
 
@@ -643,7 +643,7 @@ Returns `bool`
 
 **Throws:** `ConcurrentException`, `CryptoException`, `DependencyException`, `NotImplementedException`, `ProtocolException`, `RandomException`, `SodiumException`, `TableException`
 
-#### [`undoFireproof`](../../../src/Tables/PublicKeys.php#L1044-L1052)
+#### [`undoFireproof`](../../../src/Tables/PublicKeys.php#L1045-L1053)
 
 Returns `bool`
 
@@ -654,7 +654,7 @@ Returns `bool`
 
 **Throws:** `ConcurrentException`, `CryptoException`, `DependencyException`, `NotImplementedException`, `ProtocolException`, `RandomException`, `SodiumException`, `TableException`
 
-#### [`checkpoint`](../../../src/Tables/PublicKeys.php#L1127-L1135)
+#### [`checkpoint`](../../../src/Tables/PublicKeys.php#L1128-L1136)
 
 Returns `bool`
 

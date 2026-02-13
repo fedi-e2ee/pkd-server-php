@@ -444,7 +444,7 @@ Returns `array`
 
 **Throws:** `JsonException`
 
-#### [`getMerkleTreePayload`](../../../src/Protocol/Payload.php#L45-L55)
+#### [`getMerkleTreePayload`](../../../src/Protocol/Payload.php#L45-L59)
 
 Returns `string`
 
