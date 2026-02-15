@@ -30,7 +30,7 @@ Namespace: `FediE2EE\PKDServer\ActivityPub`
 
 ### Methods
 
-#### [`fromDecoded`](../../../src/ActivityPub/ActivityStream.php#L33-L48)
+#### [`fromDecoded`](../../../src/ActivityPub/ActivityStream.php#L32-L47)
 
 static · Returns `self`
 
@@ -40,7 +40,7 @@ static · Returns `self`
 
 **Throws:** `ActivityPubException`
 
-#### [`fromString`](../../../src/ActivityPub/ActivityStream.php#L53-L56)
+#### [`fromString`](../../../src/ActivityPub/ActivityStream.php#L52-L55)
 
 static · Returns `self`
 
@@ -50,23 +50,23 @@ static · Returns `self`
 
 **Throws:** `ActivityPubException`
 
-#### [`jsonSerialize`](../../../src/ActivityPub/ActivityStream.php#L59-L70)
+#### [`jsonSerialize`](../../../src/ActivityPub/ActivityStream.php#L58-L69)
 
 Returns `stdClass`
 
 **Attributes:** `#[Override]`
 
-#### [`__toString`](../../../src/ActivityPub/ActivityStream.php#L75-L78)
+#### [`__toString`](../../../src/ActivityPub/ActivityStream.php#L74-L77)
 
 Returns `string`
 
 **Throws:** `JsonException`
 
-#### [`isDirectMessage`](../../../src/ActivityPub/ActivityStream.php#L83-L117)
+#### [`isDirectMessage`](../../../src/ActivityPub/ActivityStream.php#L82-L116)
 
 Returns `bool`
 
-#### [`jsonDecode`](../../../src/ActivityPub/ActivityStream.php#L17-L20)
+#### [`jsonDecode`](../../../src/ActivityPub/ActivityStream.php#L16-L19)
 
 static · Returns `array`
 
@@ -76,7 +76,7 @@ static · Returns `array`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonDecodeObject`](../../../src/ActivityPub/ActivityStream.php#L25-L28)
+#### [`jsonDecodeObject`](../../../src/ActivityPub/ActivityStream.php#L24-L27)
 
 static · Returns `stdClass`
 
@@ -86,7 +86,7 @@ static · Returns `stdClass`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonEncode`](../../../src/ActivityPub/ActivityStream.php#L34-L40)
+#### [`jsonEncode`](../../../src/ActivityPub/ActivityStream.php#L33-L39)
 
 static · Returns `string`
 
@@ -106,7 +106,7 @@ static · Returns `string`
 
 ### Methods
 
-#### [`__construct`](../../../src/ActivityPub/WebFinger.php#L57-L76)
+#### [`__construct`](../../../src/ActivityPub/WebFinger.php#L56-L75)
 
 Returns `void`
 
@@ -118,11 +118,11 @@ Returns `void`
 
 **Throws:** `CertaintyException`, `DependencyException`, `SodiumException`
 
-#### [`clearCaches`](../../../src/ActivityPub/WebFinger.php#L81-L88)
+#### [`clearCaches`](../../../src/ActivityPub/WebFinger.php#L80-L87)
 
 **API** · Returns `void`
 
-#### [`canonicalize`](../../../src/ActivityPub/WebFinger.php#L97-L107)
+#### [`canonicalize`](../../../src/ActivityPub/WebFinger.php#L96-L106)
 
 Returns `string`
 
@@ -132,7 +132,7 @@ Returns `string`
 
 **Throws:** `CacheException`, `GuzzleException`, `InvalidArgumentException`, `NetworkException`, `SodiumException`
 
-#### [`fetch`](../../../src/ActivityPub/WebFinger.php#L131-L144)
+#### [`fetch`](../../../src/ActivityPub/WebFinger.php#L130-L143)
 
 Returns `array`
 
@@ -144,7 +144,7 @@ Fetch an entire remote WebFinger response.
 
 **Throws:** `GuzzleException`, `NetworkException`
 
-#### [`getInboxUrl`](../../../src/ActivityPub/WebFinger.php#L191-L210)
+#### [`getInboxUrl`](../../../src/ActivityPub/WebFinger.php#L190-L209)
 
 Returns `string`
 
@@ -154,7 +154,7 @@ Returns `string`
 
 **Throws:** `CacheException`, `GuzzleException`, `InvalidArgumentException`, `NetworkException`, `SodiumException`
 
-#### [`getPublicKey`](../../../src/ActivityPub/WebFinger.php#L218-L262)
+#### [`getPublicKey`](../../../src/ActivityPub/WebFinger.php#L217-L261)
 
 Returns `FediE2EE\PKD\Crypto\PublicKey`
 
@@ -164,7 +164,7 @@ Returns `FediE2EE\PKD\Crypto\PublicKey`
 
 **Throws:** `CryptoException`, `FetchException`, `InvalidArgumentException`, `SodiumException`
 
-#### [`trimUsername`](../../../src/ActivityPub/WebFinger.php#L264-L267)
+#### [`trimUsername`](../../../src/ActivityPub/WebFinger.php#L263-L266)
 
 Returns `string`
 
@@ -172,7 +172,7 @@ Returns `string`
 
 - `$username`: `string`
 
-#### [`setCanonicalForTesting`](../../../src/ActivityPub/WebFinger.php#L322-L329)
+#### [`setCanonicalForTesting`](../../../src/ActivityPub/WebFinger.php#L321-L328)
 
 Returns `void`
 
