@@ -537,7 +537,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `BaseJsonException`, `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`signResponse`](../../../src/Traits/HttpCacheTrait.php#L82-L94)
+#### [`signResponse`](../../../src/Traits/HttpCacheTrait.php#L82-L93)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -549,7 +549,7 @@ Implements an RFC 9421 HTTP Message Signature with Ed25519.
 
 **Throws:** `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`json`](../../../src/Traits/HttpCacheTrait.php#L106-L125)
+#### [`json`](../../../src/Traits/HttpCacheTrait.php#L105-L124)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -563,7 +563,7 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 
 **Throws:** `DependencyException`, `BaseJsonException`, `NotImplementedException`, `SodiumException`
 
-#### [`twig`](../../../src/Traits/HttpCacheTrait.php#L135-L152)
+#### [`twig`](../../../src/Traits/HttpCacheTrait.php#L134-L151)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -916,7 +916,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `BaseJsonException`, `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`signResponse`](../../../src/Traits/ReqTrait.php#L82-L94)
+#### [`signResponse`](../../../src/Traits/ReqTrait.php#L82-L93)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -928,7 +928,7 @@ Implements an RFC 9421 HTTP Message Signature with Ed25519.
 
 **Throws:** `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`json`](../../../src/Traits/ReqTrait.php#L106-L125)
+#### [`json`](../../../src/Traits/ReqTrait.php#L105-L124)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -942,7 +942,7 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 
 **Throws:** `DependencyException`, `BaseJsonException`, `NotImplementedException`, `SodiumException`
 
-#### [`twig`](../../../src/Traits/ReqTrait.php#L135-L152)
+#### [`twig`](../../../src/Traits/ReqTrait.php#L134-L151)
 
 Returns `Psr\Http\Message\ResponseInterface`
 

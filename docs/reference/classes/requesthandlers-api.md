@@ -100,7 +100,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `BaseJsonException`, `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`signResponse`](../../../src/RequestHandlers/Api/Actor.php#L82-L94)
+#### [`signResponse`](../../../src/RequestHandlers/Api/Actor.php#L82-L93)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -112,7 +112,7 @@ Implements an RFC 9421 HTTP Message Signature with Ed25519.
 
 **Throws:** `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`json`](../../../src/RequestHandlers/Api/Actor.php#L106-L125)
+#### [`json`](../../../src/RequestHandlers/Api/Actor.php#L105-L124)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -126,7 +126,7 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 
 **Throws:** `DependencyException`, `BaseJsonException`, `NotImplementedException`, `SodiumException`
 
-#### [`twig`](../../../src/RequestHandlers/Api/Actor.php#L135-L152)
+#### [`twig`](../../../src/RequestHandlers/Api/Actor.php#L134-L151)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -534,7 +534,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `BaseJsonException`, `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`signResponse`](../../../src/RequestHandlers/Api/BurnDown.php#L82-L94)
+#### [`signResponse`](../../../src/RequestHandlers/Api/BurnDown.php#L82-L93)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -546,7 +546,7 @@ Implements an RFC 9421 HTTP Message Signature with Ed25519.
 
 **Throws:** `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`json`](../../../src/RequestHandlers/Api/BurnDown.php#L106-L125)
+#### [`json`](../../../src/RequestHandlers/Api/BurnDown.php#L105-L124)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -560,7 +560,7 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 
 **Throws:** `DependencyException`, `BaseJsonException`, `NotImplementedException`, `SodiumException`
 
-#### [`twig`](../../../src/RequestHandlers/Api/BurnDown.php#L135-L152)
+#### [`twig`](../../../src/RequestHandlers/Api/BurnDown.php#L134-L151)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -628,7 +628,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `BaseJsonException`, `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`signResponse`](../../../src/RequestHandlers/Api/Checkpoint.php#L82-L94)
+#### [`signResponse`](../../../src/RequestHandlers/Api/Checkpoint.php#L82-L93)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -640,7 +640,7 @@ Implements an RFC 9421 HTTP Message Signature with Ed25519.
 
 **Throws:** `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`json`](../../../src/RequestHandlers/Api/Checkpoint.php#L106-L125)
+#### [`json`](../../../src/RequestHandlers/Api/Checkpoint.php#L105-L124)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -654,7 +654,7 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 
 **Throws:** `DependencyException`, `BaseJsonException`, `NotImplementedException`, `SodiumException`
 
-#### [`twig`](../../../src/RequestHandlers/Api/Checkpoint.php#L135-L152)
+#### [`twig`](../../../src/RequestHandlers/Api/Checkpoint.php#L134-L151)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -885,7 +885,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `BaseJsonException`, `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`signResponse`](../../../src/RequestHandlers/Api/Extensions.php#L82-L94)
+#### [`signResponse`](../../../src/RequestHandlers/Api/Extensions.php#L82-L93)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -897,7 +897,7 @@ Implements an RFC 9421 HTTP Message Signature with Ed25519.
 
 **Throws:** `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`json`](../../../src/RequestHandlers/Api/Extensions.php#L106-L125)
+#### [`json`](../../../src/RequestHandlers/Api/Extensions.php#L105-L124)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -911,7 +911,7 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 
 **Throws:** `DependencyException`, `BaseJsonException`, `NotImplementedException`, `SodiumException`
 
-#### [`twig`](../../../src/RequestHandlers/Api/Extensions.php#L135-L152)
+#### [`twig`](../../../src/RequestHandlers/Api/Extensions.php#L134-L151)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -1148,7 +1148,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `BaseJsonException`, `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`signResponse`](../../../src/RequestHandlers/Api/GetAuxData.php#L82-L94)
+#### [`signResponse`](../../../src/RequestHandlers/Api/GetAuxData.php#L82-L93)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -1160,7 +1160,7 @@ Implements an RFC 9421 HTTP Message Signature with Ed25519.
 
 **Throws:** `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`json`](../../../src/RequestHandlers/Api/GetAuxData.php#L106-L125)
+#### [`json`](../../../src/RequestHandlers/Api/GetAuxData.php#L105-L124)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -1174,7 +1174,7 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 
 **Throws:** `DependencyException`, `BaseJsonException`, `NotImplementedException`, `SodiumException`
 
-#### [`twig`](../../../src/RequestHandlers/Api/GetAuxData.php#L135-L152)
+#### [`twig`](../../../src/RequestHandlers/Api/GetAuxData.php#L134-L151)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -1411,7 +1411,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `BaseJsonException`, `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`signResponse`](../../../src/RequestHandlers/Api/GetKey.php#L82-L94)
+#### [`signResponse`](../../../src/RequestHandlers/Api/GetKey.php#L82-L93)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -1423,7 +1423,7 @@ Implements an RFC 9421 HTTP Message Signature with Ed25519.
 
 **Throws:** `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`json`](../../../src/RequestHandlers/Api/GetKey.php#L106-L125)
+#### [`json`](../../../src/RequestHandlers/Api/GetKey.php#L105-L124)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -1437,7 +1437,7 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 
 **Throws:** `DependencyException`, `BaseJsonException`, `NotImplementedException`, `SodiumException`
 
-#### [`twig`](../../../src/RequestHandlers/Api/GetKey.php#L135-L152)
+#### [`twig`](../../../src/RequestHandlers/Api/GetKey.php#L134-L151)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -1674,7 +1674,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `BaseJsonException`, `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`signResponse`](../../../src/RequestHandlers/Api/History.php#L82-L94)
+#### [`signResponse`](../../../src/RequestHandlers/Api/History.php#L82-L93)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -1686,7 +1686,7 @@ Implements an RFC 9421 HTTP Message Signature with Ed25519.
 
 **Throws:** `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`json`](../../../src/RequestHandlers/Api/History.php#L106-L125)
+#### [`json`](../../../src/RequestHandlers/Api/History.php#L105-L124)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -1700,7 +1700,7 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 
 **Throws:** `DependencyException`, `BaseJsonException`, `NotImplementedException`, `SodiumException`
 
-#### [`twig`](../../../src/RequestHandlers/Api/History.php#L135-L152)
+#### [`twig`](../../../src/RequestHandlers/Api/History.php#L134-L151)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -1937,7 +1937,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `BaseJsonException`, `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`signResponse`](../../../src/RequestHandlers/Api/HistoryCosign.php#L82-L94)
+#### [`signResponse`](../../../src/RequestHandlers/Api/HistoryCosign.php#L82-L93)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -1949,7 +1949,7 @@ Implements an RFC 9421 HTTP Message Signature with Ed25519.
 
 **Throws:** `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`json`](../../../src/RequestHandlers/Api/HistoryCosign.php#L106-L125)
+#### [`json`](../../../src/RequestHandlers/Api/HistoryCosign.php#L105-L124)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -1963,7 +1963,7 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 
 **Throws:** `DependencyException`, `BaseJsonException`, `NotImplementedException`, `SodiumException`
 
-#### [`twig`](../../../src/RequestHandlers/Api/HistoryCosign.php#L135-L152)
+#### [`twig`](../../../src/RequestHandlers/Api/HistoryCosign.php#L134-L151)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -2212,7 +2212,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `BaseJsonException`, `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`signResponse`](../../../src/RequestHandlers/Api/HistorySince.php#L82-L94)
+#### [`signResponse`](../../../src/RequestHandlers/Api/HistorySince.php#L82-L93)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -2224,7 +2224,7 @@ Implements an RFC 9421 HTTP Message Signature with Ed25519.
 
 **Throws:** `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`json`](../../../src/RequestHandlers/Api/HistorySince.php#L106-L125)
+#### [`json`](../../../src/RequestHandlers/Api/HistorySince.php#L105-L124)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -2238,7 +2238,7 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 
 **Throws:** `DependencyException`, `BaseJsonException`, `NotImplementedException`, `SodiumException`
 
-#### [`twig`](../../../src/RequestHandlers/Api/HistorySince.php#L135-L152)
+#### [`twig`](../../../src/RequestHandlers/Api/HistorySince.php#L134-L151)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -2487,7 +2487,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `BaseJsonException`, `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`signResponse`](../../../src/RequestHandlers/Api/HistoryView.php#L82-L94)
+#### [`signResponse`](../../../src/RequestHandlers/Api/HistoryView.php#L82-L93)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -2499,7 +2499,7 @@ Implements an RFC 9421 HTTP Message Signature with Ed25519.
 
 **Throws:** `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`json`](../../../src/RequestHandlers/Api/HistoryView.php#L106-L125)
+#### [`json`](../../../src/RequestHandlers/Api/HistoryView.php#L105-L124)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -2513,7 +2513,7 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 
 **Throws:** `DependencyException`, `BaseJsonException`, `NotImplementedException`, `SodiumException`
 
-#### [`twig`](../../../src/RequestHandlers/Api/HistoryView.php#L135-L152)
+#### [`twig`](../../../src/RequestHandlers/Api/HistoryView.php#L134-L151)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -2744,7 +2744,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `BaseJsonException`, `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`signResponse`](../../../src/RequestHandlers/Api/Info.php#L82-L94)
+#### [`signResponse`](../../../src/RequestHandlers/Api/Info.php#L82-L93)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -2756,7 +2756,7 @@ Implements an RFC 9421 HTTP Message Signature with Ed25519.
 
 **Throws:** `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`json`](../../../src/RequestHandlers/Api/Info.php#L106-L125)
+#### [`json`](../../../src/RequestHandlers/Api/Info.php#L105-L124)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -2770,7 +2770,7 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 
 **Throws:** `DependencyException`, `BaseJsonException`, `NotImplementedException`, `SodiumException`
 
-#### [`twig`](../../../src/RequestHandlers/Api/Info.php#L135-L152)
+#### [`twig`](../../../src/RequestHandlers/Api/Info.php#L134-L151)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -3007,7 +3007,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `BaseJsonException`, `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`signResponse`](../../../src/RequestHandlers/Api/ListAuxData.php#L82-L94)
+#### [`signResponse`](../../../src/RequestHandlers/Api/ListAuxData.php#L82-L93)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -3019,7 +3019,7 @@ Implements an RFC 9421 HTTP Message Signature with Ed25519.
 
 **Throws:** `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`json`](../../../src/RequestHandlers/Api/ListAuxData.php#L106-L125)
+#### [`json`](../../../src/RequestHandlers/Api/ListAuxData.php#L105-L124)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -3033,7 +3033,7 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 
 **Throws:** `DependencyException`, `BaseJsonException`, `NotImplementedException`, `SodiumException`
 
-#### [`twig`](../../../src/RequestHandlers/Api/ListAuxData.php#L135-L152)
+#### [`twig`](../../../src/RequestHandlers/Api/ListAuxData.php#L134-L151)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -3270,7 +3270,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `BaseJsonException`, `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`signResponse`](../../../src/RequestHandlers/Api/ListKeys.php#L82-L94)
+#### [`signResponse`](../../../src/RequestHandlers/Api/ListKeys.php#L82-L93)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -3282,7 +3282,7 @@ Implements an RFC 9421 HTTP Message Signature with Ed25519.
 
 **Throws:** `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`json`](../../../src/RequestHandlers/Api/ListKeys.php#L106-L125)
+#### [`json`](../../../src/RequestHandlers/Api/ListKeys.php#L105-L124)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -3296,7 +3296,7 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 
 **Throws:** `DependencyException`, `BaseJsonException`, `NotImplementedException`, `SodiumException`
 
-#### [`twig`](../../../src/RequestHandlers/Api/ListKeys.php#L135-L152)
+#### [`twig`](../../../src/RequestHandlers/Api/ListKeys.php#L134-L151)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -3611,7 +3611,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `BaseJsonException`, `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`signResponse`](../../../src/RequestHandlers/Api/ReplicaInfo.php#L82-L94)
+#### [`signResponse`](../../../src/RequestHandlers/Api/ReplicaInfo.php#L82-L93)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -3623,7 +3623,7 @@ Implements an RFC 9421 HTTP Message Signature with Ed25519.
 
 **Throws:** `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`json`](../../../src/RequestHandlers/Api/ReplicaInfo.php#L106-L125)
+#### [`json`](../../../src/RequestHandlers/Api/ReplicaInfo.php#L105-L124)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -3637,7 +3637,7 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 
 **Throws:** `DependencyException`, `BaseJsonException`, `NotImplementedException`, `SodiumException`
 
-#### [`twig`](../../../src/RequestHandlers/Api/ReplicaInfo.php#L135-L152)
+#### [`twig`](../../../src/RequestHandlers/Api/ReplicaInfo.php#L134-L151)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -3878,7 +3878,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `BaseJsonException`, `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`signResponse`](../../../src/RequestHandlers/Api/Replicas.php#L82-L94)
+#### [`signResponse`](../../../src/RequestHandlers/Api/Replicas.php#L82-L93)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -3890,7 +3890,7 @@ Implements an RFC 9421 HTTP Message Signature with Ed25519.
 
 **Throws:** `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`json`](../../../src/RequestHandlers/Api/Replicas.php#L106-L125)
+#### [`json`](../../../src/RequestHandlers/Api/Replicas.php#L105-L124)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -3904,7 +3904,7 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 
 **Throws:** `DependencyException`, `BaseJsonException`, `NotImplementedException`, `SodiumException`
 
-#### [`twig`](../../../src/RequestHandlers/Api/Replicas.php#L135-L152)
+#### [`twig`](../../../src/RequestHandlers/Api/Replicas.php#L134-L151)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -4147,7 +4147,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `BaseJsonException`, `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`signResponse`](../../../src/RequestHandlers/Api/Revoke.php#L82-L94)
+#### [`signResponse`](../../../src/RequestHandlers/Api/Revoke.php#L82-L93)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -4159,7 +4159,7 @@ Implements an RFC 9421 HTTP Message Signature with Ed25519.
 
 **Throws:** `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`json`](../../../src/RequestHandlers/Api/Revoke.php#L106-L125)
+#### [`json`](../../../src/RequestHandlers/Api/Revoke.php#L105-L124)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -4173,7 +4173,7 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 
 **Throws:** `DependencyException`, `BaseJsonException`, `NotImplementedException`, `SodiumException`
 
-#### [`twig`](../../../src/RequestHandlers/Api/Revoke.php#L135-L152)
+#### [`twig`](../../../src/RequestHandlers/Api/Revoke.php#L134-L151)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -4404,7 +4404,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `BaseJsonException`, `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`signResponse`](../../../src/RequestHandlers/Api/ServerPublicKey.php#L82-L94)
+#### [`signResponse`](../../../src/RequestHandlers/Api/ServerPublicKey.php#L82-L93)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -4416,7 +4416,7 @@ Implements an RFC 9421 HTTP Message Signature with Ed25519.
 
 **Throws:** `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`json`](../../../src/RequestHandlers/Api/ServerPublicKey.php#L106-L125)
+#### [`json`](../../../src/RequestHandlers/Api/ServerPublicKey.php#L105-L124)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -4430,7 +4430,7 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 
 **Throws:** `DependencyException`, `BaseJsonException`, `NotImplementedException`, `SodiumException`
 
-#### [`twig`](../../../src/RequestHandlers/Api/ServerPublicKey.php#L135-L152)
+#### [`twig`](../../../src/RequestHandlers/Api/ServerPublicKey.php#L134-L151)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -4673,7 +4673,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `BaseJsonException`, `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`signResponse`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L82-L94)
+#### [`signResponse`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L82-L93)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -4685,7 +4685,7 @@ Implements an RFC 9421 HTTP Message Signature with Ed25519.
 
 **Throws:** `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`json`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L106-L125)
+#### [`json`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L105-L124)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -4699,7 +4699,7 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 
 **Throws:** `DependencyException`, `BaseJsonException`, `NotImplementedException`, `SodiumException`
 
-#### [`twig`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L135-L152)
+#### [`twig`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L134-L151)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -5065,7 +5065,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `BaseJsonException`, `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`signResponse`](../../../src/RequestHandlers/Api/TotpEnroll.php#L82-L94)
+#### [`signResponse`](../../../src/RequestHandlers/Api/TotpEnroll.php#L82-L93)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -5077,7 +5077,7 @@ Implements an RFC 9421 HTTP Message Signature with Ed25519.
 
 **Throws:** `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`json`](../../../src/RequestHandlers/Api/TotpEnroll.php#L106-L125)
+#### [`json`](../../../src/RequestHandlers/Api/TotpEnroll.php#L105-L124)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -5091,7 +5091,7 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 
 **Throws:** `DependencyException`, `BaseJsonException`, `NotImplementedException`, `SodiumException`
 
-#### [`twig`](../../../src/RequestHandlers/Api/TotpEnroll.php#L135-L152)
+#### [`twig`](../../../src/RequestHandlers/Api/TotpEnroll.php#L134-L151)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -5457,7 +5457,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `BaseJsonException`, `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`signResponse`](../../../src/RequestHandlers/Api/TotpRotate.php#L82-L94)
+#### [`signResponse`](../../../src/RequestHandlers/Api/TotpRotate.php#L82-L93)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -5469,7 +5469,7 @@ Implements an RFC 9421 HTTP Message Signature with Ed25519.
 
 **Throws:** `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`json`](../../../src/RequestHandlers/Api/TotpRotate.php#L106-L125)
+#### [`json`](../../../src/RequestHandlers/Api/TotpRotate.php#L105-L124)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -5483,7 +5483,7 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 
 **Throws:** `DependencyException`, `BaseJsonException`, `NotImplementedException`, `SodiumException`
 
-#### [`twig`](../../../src/RequestHandlers/Api/TotpRotate.php#L135-L152)
+#### [`twig`](../../../src/RequestHandlers/Api/TotpRotate.php#L134-L151)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
