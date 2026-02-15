@@ -82,7 +82,6 @@ trait ReqTrait
     public function signResponse(ResponseInterface $response): ResponseInterface
     {
         $signer = new HttpSignature();
-        $this->config()->getSigningKeys()->secretKey;
         $response = $signer->sign(
             $this->config()->getSigningKeys()->secretKey,
             $response
