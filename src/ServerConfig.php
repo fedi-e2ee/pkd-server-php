@@ -21,7 +21,6 @@ use Predis\Client as RedisClient;
 use SodiumException;
 use Twig\Environment;
 use Throwable;
-
 use function is_null;
 
 class ServerConfig

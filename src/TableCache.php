@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace FediE2EE\PKDServer;
 
 use FediE2EE\PKDServer\Exceptions\CacheException;
-
 use function array_key_exists;
 
 class TableCache

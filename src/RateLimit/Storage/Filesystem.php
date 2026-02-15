@@ -13,7 +13,6 @@ use JsonException;
 use Override;
 use SensitiveParameter;
 use SodiumException;
-
 use function array_key_exists;
 use function file_exists;
 use function file_get_contents;

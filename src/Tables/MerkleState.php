@@ -36,7 +36,6 @@ use PDOException;
 use Psr\SimpleCache\InvalidArgumentException;
 use Random\RandomException;
 use SodiumException;
-
 use function array_key_exists;
 use function hash_equals;
 use function in_array;

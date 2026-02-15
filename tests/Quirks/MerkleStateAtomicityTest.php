@@ -17,7 +17,6 @@ use PHPUnit\Framework\TestCase;
 use Random\RandomException;
 use SodiumException;
 use Throwable;
-
 use function array_key_exists;
 
 #[CoversNothing]

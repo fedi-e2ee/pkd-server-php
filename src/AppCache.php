@@ -13,7 +13,6 @@ use Psr\SimpleCache\{
     InvalidArgumentException
 };
 use SodiumException;
-
 use function array_key_exists;
 use function is_array;
 use function is_int;

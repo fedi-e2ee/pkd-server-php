@@ -34,7 +34,6 @@ use ParagonIE\HPKE\HPKEException;
 use Psr\SimpleCache\InvalidArgumentException;
 use SensitiveParameter;
 use SodiumException;
-
 use function array_key_exists;
 use function is_int;
 use function is_null;

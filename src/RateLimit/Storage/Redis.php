@@ -13,7 +13,6 @@ use Override;
 use Predis\Client as PredisClient;
 use SensitiveParameter;
 use SodiumException;
-
 use function is_null;
 use function sodium_bin2hex;
 use function sodium_crypto_generichash;

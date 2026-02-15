@@ -25,7 +25,6 @@ use Psr\Http\Message\{
 };
 use SodiumException;
 use TypeError;
-
 use function is_null;
 
 class Replicas implements RequestHandlerInterface

@@ -39,7 +39,6 @@ use ParagonIE\Certainty\Exception\CertaintyException;
 use ParagonIE\HPKE\HPKEException;
 use Random\RandomException;
 use SodiumException;
-
 use function property_exists;
 
 /**

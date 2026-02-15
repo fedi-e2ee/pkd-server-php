@@ -9,7 +9,6 @@ use JsonException;
 use JsonSerializable;
 use Override;
 use stdClass;
-
 use function in_array;
 use function is_array;
 use function is_string;

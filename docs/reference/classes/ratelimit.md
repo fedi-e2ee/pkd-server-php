@@ -21,7 +21,7 @@ Namespace: `FediE2EE\PKDServer\RateLimit`
 
 ### Methods
 
-#### [`__construct`](../../../src/RateLimit/DefaultRateLimiting.php#L43-L53)
+#### [`__construct`](../../../src/RateLimit/DefaultRateLimiting.php#L42-L52)
 
 Returns `void`
 
@@ -37,25 +37,25 @@ Returns `void`
 - `$shouldEnforceActor`: `bool` = true
 - `$maxTimeouts`: `array` = []
 
-#### [`getStorage`](../../../src/RateLimit/DefaultRateLimiting.php#L56-L59)
+#### [`getStorage`](../../../src/RateLimit/DefaultRateLimiting.php#L55-L58)
 
 Returns `FediE2EE\PKDServer\Interfaces\RateLimitStorageInterface`
 
 **Attributes:** `#[Override]`
 
-#### [`isEnabled`](../../../src/RateLimit/DefaultRateLimiting.php#L62-L65)
+#### [`isEnabled`](../../../src/RateLimit/DefaultRateLimiting.php#L61-L64)
 
 Returns `bool`
 
 **Attributes:** `#[Override]`
 
-#### [`getBaseDelay`](../../../src/RateLimit/DefaultRateLimiting.php#L68-L71)
+#### [`getBaseDelay`](../../../src/RateLimit/DefaultRateLimiting.php#L67-L70)
 
 Returns `int`
 
 **Attributes:** `#[Override]`
 
-#### [`withBaseDelay`](../../../src/RateLimit/DefaultRateLimiting.php#L73-L78)
+#### [`withBaseDelay`](../../../src/RateLimit/DefaultRateLimiting.php#L72-L77)
 
 Returns `static`
 
@@ -63,7 +63,7 @@ Returns `static`
 
 - `$baseDelay`: `int`
 
-#### [`withMaxTimeout`](../../../src/RateLimit/DefaultRateLimiting.php#L80-L91)
+#### [`withMaxTimeout`](../../../src/RateLimit/DefaultRateLimiting.php#L79-L90)
 
 Returns `static`
 
@@ -72,7 +72,7 @@ Returns `static`
 - `$key`: `string`
 - `$interval`: `?DateInterval` = null
 
-#### [`getRequestSubnet`](../../../src/RateLimit/DefaultRateLimiting.php#L94-L103)
+#### [`getRequestSubnet`](../../../src/RateLimit/DefaultRateLimiting.php#L93-L102)
 
 Returns `string`
 
@@ -82,7 +82,7 @@ Returns `string`
 
 - `$request`: `Psr\Http\Message\ServerRequestInterface`
 
-#### [`shouldEnforce`](../../../src/RateLimit/DefaultRateLimiting.php#L109-L117)
+#### [`shouldEnforce`](../../../src/RateLimit/DefaultRateLimiting.php#L108-L116)
 
 Returns `bool`
 
@@ -94,7 +94,7 @@ Returns `bool`
 
 **Throws:** `DependencyException`
 
-#### [`enforceRateLimit`](../../../src/RateLimit/DefaultRateLimiting.php#L124-L171)
+#### [`enforceRateLimit`](../../../src/RateLimit/DefaultRateLimiting.php#L123-L170)
 
 Returns `void`
 
@@ -107,7 +107,7 @@ Returns `void`
 
 **Throws:** `RateLimitException`, `DateMalformedIntervalStringException`
 
-#### [`getCooledDown`](../../../src/RateLimit/DefaultRateLimiting.php#L179-L197)
+#### [`getCooledDown`](../../../src/RateLimit/DefaultRateLimiting.php#L178-L196)
 
 Returns `FediE2EE\PKDServer\RateLimit\RateLimitData`
 
@@ -121,7 +121,7 @@ Reduce the cooldown until zero or the cooldown window is in the future:
 
 **Throws:** `DateMalformedIntervalStringException`
 
-#### [`processTTL`](../../../src/RateLimit/DefaultRateLimiting.php#L205-L218)
+#### [`processTTL`](../../../src/RateLimit/DefaultRateLimiting.php#L204-L217)
 
 Returns `int`
 
@@ -131,7 +131,7 @@ Collapse multiple types into a number of seconds.
 
 - `$ttl`: `DateInterval|int|null`
 
-#### [`getPenaltyTime`](../../../src/RateLimit/DefaultRateLimiting.php#L223-L248)
+#### [`getPenaltyTime`](../../../src/RateLimit/DefaultRateLimiting.php#L222-L247)
 
 Returns `?DateTimeImmutable`
 
@@ -142,7 +142,7 @@ Returns `?DateTimeImmutable`
 
 **Throws:** `DateMalformedIntervalStringException`
 
-#### [`getIntervalFromFailureCount`](../../../src/RateLimit/DefaultRateLimiting.php#L253-L266)
+#### [`getIntervalFromFailureCount`](../../../src/RateLimit/DefaultRateLimiting.php#L252-L265)
 
 Returns `DateInterval`
 
@@ -152,7 +152,7 @@ Returns `DateInterval`
 
 **Throws:** `DateMalformedIntervalStringException`
 
-#### [`recordPenalty`](../../../src/RateLimit/DefaultRateLimiting.php#L272-L281)
+#### [`recordPenalty`](../../../src/RateLimit/DefaultRateLimiting.php#L271-L280)
 
 Returns `void`
 
@@ -165,7 +165,7 @@ Returns `void`
 
 **Throws:** `DateMalformedIntervalStringException`
 
-#### [`increaseFailures`](../../../src/RateLimit/DefaultRateLimiting.php#L286-L300)
+#### [`increaseFailures`](../../../src/RateLimit/DefaultRateLimiting.php#L285-L299)
 
 Returns `FediE2EE\PKDServer\RateLimit\RateLimitData`
 
@@ -175,7 +175,7 @@ Returns `FediE2EE\PKDServer\RateLimit\RateLimitData`
 
 **Throws:** `DateMalformedIntervalStringException`
 
-#### [`getRequestIPSubnet`](../../../src/RateLimit/DefaultRateLimiting.php#L29-L43)
+#### [`getRequestIPSubnet`](../../../src/RateLimit/DefaultRateLimiting.php#L28-L42)
 
 Returns `string`
 
@@ -188,7 +188,7 @@ Returns `string`
 
 **Throws:** `NetTraitException`
 
-#### [`extractIPFromRequest`](../../../src/RateLimit/DefaultRateLimiting.php#L48-L72)
+#### [`extractIPFromRequest`](../../../src/RateLimit/DefaultRateLimiting.php#L47-L71)
 
 Returns `string`
 
@@ -197,7 +197,7 @@ Returns `string`
 - `$request`: `Psr\Http\Message\ServerRequestInterface`
 - `$trustedProxies`: `array` = []
 
-#### [`ipv4Mask`](../../../src/RateLimit/DefaultRateLimiting.php#L77-L103)
+#### [`ipv4Mask`](../../../src/RateLimit/DefaultRateLimiting.php#L76-L102)
 
 Returns `string`
 
@@ -208,7 +208,7 @@ Returns `string`
 
 **Throws:** `NetTraitException`
 
-#### [`ipv6Mask`](../../../src/RateLimit/DefaultRateLimiting.php#L108-L134)
+#### [`ipv6Mask`](../../../src/RateLimit/DefaultRateLimiting.php#L107-L133)
 
 Returns `string`
 
@@ -219,7 +219,7 @@ Returns `string`
 
 **Throws:** `NetTraitException`
 
-#### [`stringToByteArray`](../../../src/RateLimit/DefaultRateLimiting.php#L139-L146)
+#### [`stringToByteArray`](../../../src/RateLimit/DefaultRateLimiting.php#L138-L145)
 
 Returns `array`
 
@@ -227,7 +227,7 @@ Returns `array`
 
 - `$str`: `string`
 
-#### [`byteArrayToString`](../../../src/RateLimit/DefaultRateLimiting.php#L151-L154)
+#### [`byteArrayToString`](../../../src/RateLimit/DefaultRateLimiting.php#L150-L153)
 
 Returns `string`
 
@@ -235,7 +235,7 @@ Returns `string`
 
 - `$array`: `array`
 
-#### [`getRequestActor`](../../../src/RateLimit/DefaultRateLimiting.php#L156-L176)
+#### [`getRequestActor`](../../../src/RateLimit/DefaultRateLimiting.php#L155-L175)
 
 Returns `?string`
 
@@ -243,7 +243,7 @@ Returns `?string`
 
 - `$request`: `Psr\Http\Message\ServerRequestInterface`
 
-#### [`getRequestDomain`](../../../src/RateLimit/DefaultRateLimiting.php#L178-L186)
+#### [`getRequestDomain`](../../../src/RateLimit/DefaultRateLimiting.php#L177-L185)
 
 Returns `?string`
 
@@ -271,7 +271,7 @@ Returns `?string`
 
 ### Methods
 
-#### [`__construct`](../../../src/RateLimit/RateLimitData.php#L25-L38)
+#### [`__construct`](../../../src/RateLimit/RateLimitData.php#L24-L37)
 
 Returns `void`
 
@@ -281,7 +281,7 @@ Returns `void`
 - `$lastFailTime`: `?DateTimeImmutable` = null
 - `$cooldownStart`: `?DateTimeImmutable` = null
 
-#### [`fromJson`](../../../src/RateLimit/RateLimitData.php#L45-L75)
+#### [`fromJson`](../../../src/RateLimit/RateLimitData.php#L44-L74)
 
 static · Returns `self`
 
@@ -291,21 +291,21 @@ static · Returns `self`
 
 **Throws:** `BaseJsonException`, `DateMalformedStringException`, `InputException`
 
-#### [`getLastFailTime`](../../../src/RateLimit/RateLimitData.php#L77-L80)
+#### [`getLastFailTime`](../../../src/RateLimit/RateLimitData.php#L76-L79)
 
 Returns `DateTimeImmutable`
 
-#### [`getCooldownStart`](../../../src/RateLimit/RateLimitData.php#L82-L85)
+#### [`getCooldownStart`](../../../src/RateLimit/RateLimitData.php#L81-L84)
 
 Returns `DateTimeImmutable`
 
-#### [`jsonSerialize`](../../../src/RateLimit/RateLimitData.php#L91-L98)
+#### [`jsonSerialize`](../../../src/RateLimit/RateLimitData.php#L90-L97)
 
 Returns `array`
 
 **Attributes:** `#[Override]`
 
-#### [`failure`](../../../src/RateLimit/RateLimitData.php#L100-L107)
+#### [`failure`](../../../src/RateLimit/RateLimitData.php#L99-L106)
 
 Returns `self`
 
@@ -313,7 +313,7 @@ Returns `self`
 
 - `$cooldownStart`: `?DateTimeImmutable` = null
 
-#### [`withCooldownStart`](../../../src/RateLimit/RateLimitData.php#L109-L116)
+#### [`withCooldownStart`](../../../src/RateLimit/RateLimitData.php#L108-L115)
 
 Returns `self`
 
@@ -321,7 +321,7 @@ Returns `self`
 
 - `$cooldownStart`: `DateTimeImmutable`
 
-#### [`withFailures`](../../../src/RateLimit/RateLimitData.php#L118-L125)
+#### [`withFailures`](../../../src/RateLimit/RateLimitData.php#L117-L124)
 
 Returns `self`
 
@@ -329,7 +329,7 @@ Returns `self`
 
 - `$failures`: `int`
 
-#### [`withLastFailTime`](../../../src/RateLimit/RateLimitData.php#L127-L134)
+#### [`withLastFailTime`](../../../src/RateLimit/RateLimitData.php#L126-L133)
 
 Returns `self`
 
@@ -337,7 +337,7 @@ Returns `self`
 
 - `$lastFailTime`: `DateTimeImmutable`
 
-#### [`jsonDecode`](../../../src/RateLimit/RateLimitData.php#L17-L20)
+#### [`jsonDecode`](../../../src/RateLimit/RateLimitData.php#L16-L19)
 
 static · Returns `array`
 
@@ -347,7 +347,7 @@ static · Returns `array`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonDecodeObject`](../../../src/RateLimit/RateLimitData.php#L25-L28)
+#### [`jsonDecodeObject`](../../../src/RateLimit/RateLimitData.php#L24-L27)
 
 static · Returns `stdClass`
 
@@ -357,7 +357,7 @@ static · Returns `stdClass`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonEncode`](../../../src/RateLimit/RateLimitData.php#L34-L40)
+#### [`jsonEncode`](../../../src/RateLimit/RateLimitData.php#L33-L39)
 
 static · Returns `string`
 
@@ -367,13 +367,9 @@ static · Returns `string`
 
 **Throws:** `BaseJsonException`
 
-#### [`assertAllArrayKeysExist`](../../../src/RateLimit/RateLimitData.php#L30-L35)
+#### [`assertAllArrayKeysExist`](../../../src/RateLimit/RateLimitData.php#L27-L32)
 
 static · Returns `void`
-
-This method throws an InputException if any of the expected keys are absent.
-
-It does not return anything.
 
 **Parameters:**
 
@@ -382,26 +378,18 @@ It does not return anything.
 
 **Throws:** `InputException`
 
-#### [`allArrayKeysExist`](../../../src/RateLimit/RateLimitData.php#L43-L50)
+#### [`allArrayKeysExist`](../../../src/RateLimit/RateLimitData.php#L34-L41)
 
 static · Returns `bool`
-
-This method returns true if every expected array key is found in the target array.
-
-Otherwise, it returns false. This is useful for input validation.
 
 **Parameters:**
 
 - `$target`: `array`
 - `...$arrayKeys`: `string`
 
-#### [`constantTimeSelect`](../../../src/RateLimit/RateLimitData.php#L65-L82)
+#### [`constantTimeSelect`](../../../src/RateLimit/RateLimitData.php#L48-L65)
 
 Returns `string`
-
-This is a constant-time conditional select. It should be read like a ternary operation.
-
-$result = ClassWithTrait::constantTimeSelect(1, $left, $right); -> $result === $left. $result = ClassWithTrait::constantTimeSelect(0, $left, $right); -> $result === $right.
 
 **Parameters:**
 
@@ -411,63 +399,49 @@ $result = ClassWithTrait::constantTimeSelect(1, $left, $right); -> $result === $
 
 **Throws:** `CryptoException`
 
-#### [`dos2unix`](../../../src/RateLimit/RateLimitData.php#L92-L95)
+#### [`dos2unix`](../../../src/RateLimit/RateLimitData.php#L73-L76)
 
 static · Returns `string`
 
 Normalize line-endings to UNIX-style (LF rather than CRLF).
 
-This is mostly used for PEM-encoded strings.
-
 **Parameters:**
 
 - `$in`: `string`
 
-#### [`preAuthEncode`](../../../src/RateLimit/RateLimitData.php#L113-L126)
+#### [`preAuthEncode`](../../../src/RateLimit/RateLimitData.php#L84-L97)
 
 static · Returns `string`
-
-This is an implementation of PAE() from PASETO. It encodes an array of strings into a flat string consisting of:
-
-1. The number of pieces. 2. For each piece: 1. The length of the piece (in bytes). 2. The contents of the piece. This allows multipart messages to have an injective canonical representation before passing ot a hash function (or other cryptographic function).
 
 **Parameters:**
 
 - `$pieces`: `array`
 
-#### [`sortByKey`](../../../src/RateLimit/RateLimitData.php#L133-L141)
+#### [`sortByKey`](../../../src/RateLimit/RateLimitData.php#L99-L107)
 
 static · Returns `void`
-
-This sorts the target array in-place, by its keys, including child arrays.
-
-Used for ensuring arrays are sorted before JSON encoding.
 
 **Parameters:**
 
 - `$arr`: `array`
 
-#### [`LE64`](../../../src/RateLimit/RateLimitData.php#L148-L151)
+#### [`LE64`](../../../src/RateLimit/RateLimitData.php#L111-L114)
 
 static · Returns `string`
-
-Mostly used by preAuthEncode() above. This packs an integer as 8 bytes.
 
 **Parameters:**
 
 - `$n`: `int`
 
-#### [`stringToByteArray`](../../../src/RateLimit/RateLimitData.php#L156-L163)
+#### [`stringToByteArray`](../../../src/RateLimit/RateLimitData.php#L116-L123)
 
 Returns `array`
-
-Get an array of bytes representing the input string.
 
 **Parameters:**
 
 - `$str`: `string`
 
-#### [`stripNewlines`](../../../src/RateLimit/RateLimitData.php#L171-L205)
+#### [`stripNewlines`](../../../src/RateLimit/RateLimitData.php#L131-L165)
 
 static · Returns `string`
 

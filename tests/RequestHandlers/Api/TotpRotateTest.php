@@ -91,7 +91,6 @@ use PHPUnit\Framework\TestCase;
 use Psr\SimpleCache\InvalidArgumentException;
 use Random\RandomException;
 use SodiumException;
-
 use function floor;
 use function hash;
 use function json_decode;

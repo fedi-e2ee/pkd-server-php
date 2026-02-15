@@ -25,7 +25,7 @@ Namespace: `FediE2EE\PKDServer\Scheduled`
 
 ### Methods
 
-#### [`__construct`](../../../src/Scheduled/ASQueue.php#L47-L56)
+#### [`__construct`](../../../src/Scheduled/ASQueue.php#L46-L55)
 
 Returns `void`
 
@@ -35,7 +35,7 @@ Returns `void`
 
 **Throws:** `CertaintyException`, `DependencyException`, `SodiumException`
 
-#### [`run`](../../../src/Scheduled/ASQueue.php#L68-L103)
+#### [`run`](../../../src/Scheduled/ASQueue.php#L67-L102)
 
 Returns `void`
 
@@ -45,7 +45,7 @@ All this method does is grab the unprocessed messages, order them, decode them, 
 
 **Throws:** `DependencyException`
 
-#### [`appCache`](../../../src/Scheduled/ASQueue.php#L55-L58)
+#### [`appCache`](../../../src/Scheduled/ASQueue.php#L54-L57)
 
 Returns `FediE2EE\PKDServer\AppCache`
 
@@ -56,7 +56,7 @@ Returns `FediE2EE\PKDServer\AppCache`
 
 **Throws:** `DependencyException`
 
-#### [`table`](../../../src/Scheduled/ASQueue.php#L65-L88)
+#### [`table`](../../../src/Scheduled/ASQueue.php#L64-L87)
 
 Returns `FediE2EE\PKDServer\Table`
 
@@ -66,7 +66,7 @@ Returns `FediE2EE\PKDServer\Table`
 
 **Throws:** `CacheException`, `DependencyException`, `TableException`
 
-#### [`injectConfig`](../../../src/Scheduled/ASQueue.php#L90-L93)
+#### [`injectConfig`](../../../src/Scheduled/ASQueue.php#L89-L92)
 
 Returns `void`
 
@@ -74,13 +74,13 @@ Returns `void`
 
 - `$config`: `FediE2EE\PKDServer\ServerConfig`
 
-#### [`config`](../../../src/Scheduled/ASQueue.php#L98-L108)
+#### [`config`](../../../src/Scheduled/ASQueue.php#L97-L107)
 
 Returns `FediE2EE\PKDServer\ServerConfig`
 
 **Throws:** `DependencyException`
 
-#### [`setWebFinger`](../../../src/Scheduled/ASQueue.php#L113-L117)
+#### [`setWebFinger`](../../../src/Scheduled/ASQueue.php#L112-L116)
 
 Returns `self`
 
@@ -90,7 +90,7 @@ This is intended for mocking in unit tests
 
 - `$wf`: `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
-#### [`webfinger`](../../../src/Scheduled/ASQueue.php#L124-L131)
+#### [`webfinger`](../../../src/Scheduled/ASQueue.php#L123-L130)
 
 Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
@@ -100,7 +100,7 @@ Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
 **Throws:** `CertaintyException`, `DependencyException`, `SodiumException`
 
-#### [`parseUrlHost`](../../../src/Scheduled/ASQueue.php#L137-L144)
+#### [`parseUrlHost`](../../../src/Scheduled/ASQueue.php#L136-L143)
 
 static · Returns `?string`
 
@@ -108,7 +108,7 @@ static · Returns `?string`
 
 - `$url`: `string`
 
-#### [`assertArray`](../../../src/Scheduled/ASQueue.php#L152-L158)
+#### [`assertArray`](../../../src/Scheduled/ASQueue.php#L151-L157)
 
 static · Returns `array`
 
@@ -118,7 +118,7 @@ static · Returns `array`
 
 **Throws:** `TypeError`
 
-#### [`assertString`](../../../src/Scheduled/ASQueue.php#L163-L169)
+#### [`assertString`](../../../src/Scheduled/ASQueue.php#L162-L168)
 
 static · Returns `string`
 
@@ -128,7 +128,7 @@ static · Returns `string`
 
 **Throws:** `TypeError`
 
-#### [`assertStringOrNull`](../../../src/Scheduled/ASQueue.php#L171-L180)
+#### [`assertStringOrNull`](../../../src/Scheduled/ASQueue.php#L170-L179)
 
 static · Returns `?string`
 
@@ -136,7 +136,7 @@ static · Returns `?string`
 
 - `$value`: `mixed`
 
-#### [`assertInt`](../../../src/Scheduled/ASQueue.php#L185-L194)
+#### [`assertInt`](../../../src/Scheduled/ASQueue.php#L184-L193)
 
 static · Returns `int`
 
@@ -146,7 +146,7 @@ static · Returns `int`
 
 **Throws:** `TypeError`
 
-#### [`rowToStringArray`](../../../src/Scheduled/ASQueue.php#L201-L211)
+#### [`rowToStringArray`](../../../src/Scheduled/ASQueue.php#L200-L210)
 
 static · Returns `array`
 
@@ -156,7 +156,7 @@ static · Returns `array`
 
 **Throws:** `TypeError`
 
-#### [`decryptedString`](../../../src/Scheduled/ASQueue.php#L217-L227)
+#### [`decryptedString`](../../../src/Scheduled/ASQueue.php#L216-L226)
 
 static · Returns `string`
 
@@ -167,7 +167,7 @@ static · Returns `string`
 
 **Throws:** `TypeError`
 
-#### [`blindIndexValue`](../../../src/Scheduled/ASQueue.php#L234-L244)
+#### [`blindIndexValue`](../../../src/Scheduled/ASQueue.php#L233-L243)
 
 static · Returns `string`
 
@@ -176,7 +176,7 @@ static · Returns `string`
 - `$blindIndex`: `array|string`
 - `$key`: `?string` = null
 
-#### [`jsonDecode`](../../../src/Scheduled/ASQueue.php#L17-L20)
+#### [`jsonDecode`](../../../src/Scheduled/ASQueue.php#L16-L19)
 
 static · Returns `array`
 
@@ -186,7 +186,7 @@ static · Returns `array`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonDecodeObject`](../../../src/Scheduled/ASQueue.php#L25-L28)
+#### [`jsonDecodeObject`](../../../src/Scheduled/ASQueue.php#L24-L27)
 
 static · Returns `stdClass`
 
@@ -196,7 +196,7 @@ static · Returns `stdClass`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonEncode`](../../../src/Scheduled/ASQueue.php#L34-L40)
+#### [`jsonEncode`](../../../src/Scheduled/ASQueue.php#L33-L39)
 
 static · Returns `string`
 
@@ -226,7 +226,7 @@ Perform witness co-signatures for third-porty Public Key Directory instances.
 
 ### Methods
 
-#### [`__construct`](../../../src/Scheduled/Witness.php#L87-L124)
+#### [`__construct`](../../../src/Scheduled/Witness.php#L86-L123)
 
 Returns `void`
 
@@ -236,13 +236,13 @@ Returns `void`
 
 **Throws:** `CacheException`, `DependencyException`, `TableException`
 
-#### [`run`](../../../src/Scheduled/Witness.php#L131-L143)
+#### [`run`](../../../src/Scheduled/Witness.php#L130-L142)
 
 Returns `void`
 
 **Throws:** `CryptoException`, `DateMalformedStringException`, `SodiumException`
 
-#### [`getHashesSince`](../../../src/Scheduled/Witness.php#L752-L769)
+#### [`getHashesSince`](../../../src/Scheduled/Witness.php#L751-L768)
 
 Returns `array`
 
@@ -252,7 +252,7 @@ Returns `array`
 
 **Throws:** `CryptoException`, `GuzzleException`, `HttpSignatureException`, `JsonException`, `NotImplementedException`, `ProtocolException`, `SodiumException`
 
-#### [`appCache`](../../../src/Scheduled/Witness.php#L55-L58)
+#### [`appCache`](../../../src/Scheduled/Witness.php#L54-L57)
 
 Returns `FediE2EE\PKDServer\AppCache`
 
@@ -263,7 +263,7 @@ Returns `FediE2EE\PKDServer\AppCache`
 
 **Throws:** `DependencyException`
 
-#### [`table`](../../../src/Scheduled/Witness.php#L65-L88)
+#### [`table`](../../../src/Scheduled/Witness.php#L64-L87)
 
 Returns `FediE2EE\PKDServer\Table`
 
@@ -273,7 +273,7 @@ Returns `FediE2EE\PKDServer\Table`
 
 **Throws:** `CacheException`, `DependencyException`, `TableException`
 
-#### [`injectConfig`](../../../src/Scheduled/Witness.php#L90-L93)
+#### [`injectConfig`](../../../src/Scheduled/Witness.php#L89-L92)
 
 Returns `void`
 
@@ -281,13 +281,13 @@ Returns `void`
 
 - `$config`: `FediE2EE\PKDServer\ServerConfig`
 
-#### [`config`](../../../src/Scheduled/Witness.php#L98-L108)
+#### [`config`](../../../src/Scheduled/Witness.php#L97-L107)
 
 Returns `FediE2EE\PKDServer\ServerConfig`
 
 **Throws:** `DependencyException`
 
-#### [`setWebFinger`](../../../src/Scheduled/Witness.php#L113-L117)
+#### [`setWebFinger`](../../../src/Scheduled/Witness.php#L112-L116)
 
 Returns `self`
 
@@ -297,7 +297,7 @@ This is intended for mocking in unit tests
 
 - `$wf`: `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
-#### [`webfinger`](../../../src/Scheduled/Witness.php#L124-L131)
+#### [`webfinger`](../../../src/Scheduled/Witness.php#L123-L130)
 
 Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
@@ -307,7 +307,7 @@ Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
 **Throws:** `CertaintyException`, `DependencyException`, `SodiumException`
 
-#### [`parseUrlHost`](../../../src/Scheduled/Witness.php#L137-L144)
+#### [`parseUrlHost`](../../../src/Scheduled/Witness.php#L136-L143)
 
 static · Returns `?string`
 
@@ -315,7 +315,7 @@ static · Returns `?string`
 
 - `$url`: `string`
 
-#### [`assertArray`](../../../src/Scheduled/Witness.php#L152-L158)
+#### [`assertArray`](../../../src/Scheduled/Witness.php#L151-L157)
 
 static · Returns `array`
 
@@ -325,7 +325,7 @@ static · Returns `array`
 
 **Throws:** `TypeError`
 
-#### [`assertString`](../../../src/Scheduled/Witness.php#L163-L169)
+#### [`assertString`](../../../src/Scheduled/Witness.php#L162-L168)
 
 static · Returns `string`
 
@@ -335,7 +335,7 @@ static · Returns `string`
 
 **Throws:** `TypeError`
 
-#### [`assertStringOrNull`](../../../src/Scheduled/Witness.php#L171-L180)
+#### [`assertStringOrNull`](../../../src/Scheduled/Witness.php#L170-L179)
 
 static · Returns `?string`
 
@@ -343,7 +343,7 @@ static · Returns `?string`
 
 - `$value`: `mixed`
 
-#### [`assertInt`](../../../src/Scheduled/Witness.php#L185-L194)
+#### [`assertInt`](../../../src/Scheduled/Witness.php#L184-L193)
 
 static · Returns `int`
 
@@ -353,7 +353,7 @@ static · Returns `int`
 
 **Throws:** `TypeError`
 
-#### [`rowToStringArray`](../../../src/Scheduled/Witness.php#L201-L211)
+#### [`rowToStringArray`](../../../src/Scheduled/Witness.php#L200-L210)
 
 static · Returns `array`
 
@@ -363,7 +363,7 @@ static · Returns `array`
 
 **Throws:** `TypeError`
 
-#### [`decryptedString`](../../../src/Scheduled/Witness.php#L217-L227)
+#### [`decryptedString`](../../../src/Scheduled/Witness.php#L216-L226)
 
 static · Returns `string`
 
@@ -374,7 +374,7 @@ static · Returns `string`
 
 **Throws:** `TypeError`
 
-#### [`blindIndexValue`](../../../src/Scheduled/Witness.php#L234-L244)
+#### [`blindIndexValue`](../../../src/Scheduled/Witness.php#L233-L243)
 
 static · Returns `string`
 
@@ -383,7 +383,7 @@ static · Returns `string`
 - `$blindIndex`: `array|string`
 - `$key`: `?string` = null
 
-#### [`jsonDecode`](../../../src/Scheduled/Witness.php#L17-L20)
+#### [`jsonDecode`](../../../src/Scheduled/Witness.php#L16-L19)
 
 static · Returns `array`
 
@@ -393,7 +393,7 @@ static · Returns `array`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonDecodeObject`](../../../src/Scheduled/Witness.php#L25-L28)
+#### [`jsonDecodeObject`](../../../src/Scheduled/Witness.php#L24-L27)
 
 static · Returns `stdClass`
 
@@ -403,7 +403,7 @@ static · Returns `stdClass`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonEncode`](../../../src/Scheduled/Witness.php#L34-L40)
+#### [`jsonEncode`](../../../src/Scheduled/Witness.php#L33-L39)
 
 static · Returns `string`
 

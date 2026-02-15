@@ -15,7 +15,6 @@ use FediE2EE\PKDServer\Protocol\RewrapConfig;
 use FediE2EE\PKDServer\Tables\Peers;
 use FediE2EE\PKDServer\Traits\TableRecordTrait;
 use ParagonIE\ConstantTime\Base64UrlSafe;
-
 use function is_null;
 
 #[RecordForTable(Peers::class)]

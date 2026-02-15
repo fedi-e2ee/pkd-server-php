@@ -33,7 +33,6 @@ use Psr\Http\Message\{
     ServerRequestInterface
 };
 use Psr\Http\Server\RequestHandlerInterface;
-
 use function is_null;
 
 class HistoryView implements RequestHandlerInterface, HttpCacheInterface

@@ -31,7 +31,6 @@ use GuzzleHttp\Client;
 use ParagonIE\Certainty\Exception\CertaintyException;
 use SodiumException;
 use TypeError;
-
 use function array_key_exists;
 use function get_debug_type;
 use function is_array;

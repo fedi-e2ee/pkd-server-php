@@ -65,17 +65,17 @@ Instantiate a new object without a primary key
 
 Returns `array`
 
-#### [`hasPrimaryKey`](../../../src/Tables/Records/Actor.php#L39-L42)
+#### [`hasPrimaryKey`](../../../src/Tables/Records/Actor.php#L38-L41)
 
 Returns `bool`
 
-#### [`getPrimaryKey`](../../../src/Tables/Records/Actor.php#L48-L54)
+#### [`getPrimaryKey`](../../../src/Tables/Records/Actor.php#L47-L53)
 
 Returns `int`
 
 **Throws:** `TableException`
 
-#### [`attachSymmetricKey`](../../../src/Tables/Records/Actor.php#L60-L70)
+#### [`attachSymmetricKey`](../../../src/Tables/Records/Actor.php#L59-L69)
 
 Returns `self`
 
@@ -86,7 +86,7 @@ Returns `self`
 
 **Throws:** `TableException`
 
-#### [`getSymmetricKeyForProperty`](../../../src/Tables/Records/Actor.php#L76-L85)
+#### [`getSymmetricKeyForProperty`](../../../src/Tables/Records/Actor.php#L75-L84)
 
 Returns `FediE2EE\PKD\Crypto\SymmetricKey`
 
@@ -96,11 +96,11 @@ Returns `FediE2EE\PKD\Crypto\SymmetricKey`
 
 **Throws:** `TableException`
 
-#### [`getSymmetricKeys`](../../../src/Tables/Records/Actor.php#L90-L93)
+#### [`getSymmetricKeys`](../../../src/Tables/Records/Actor.php#L89-L92)
 
 Returns `array`
 
-#### [`getRfc9421PublicKeys`](../../../src/Tables/Records/Actor.php#L109-L112)
+#### [`getRfc9421PublicKeys`](../../../src/Tables/Records/Actor.php#L108-L111)
 
 Returns `FediE2EE\PKD\Crypto\PublicKey`
 
@@ -114,7 +114,7 @@ If multiple are returned (e.g., via FEP-521a), this will cycle through them unti
 
 **Throws:** `CryptoException`, `FetchException`, `InvalidArgumentException`, `SodiumException`
 
-#### [`jsonDecode`](../../../src/Tables/Records/Actor.php#L17-L20)
+#### [`jsonDecode`](../../../src/Tables/Records/Actor.php#L16-L19)
 
 static · Returns `array`
 
@@ -124,7 +124,7 @@ static · Returns `array`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonDecodeObject`](../../../src/Tables/Records/Actor.php#L25-L28)
+#### [`jsonDecodeObject`](../../../src/Tables/Records/Actor.php#L24-L27)
 
 static · Returns `stdClass`
 
@@ -134,7 +134,7 @@ static · Returns `stdClass`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonEncode`](../../../src/Tables/Records/Actor.php#L34-L40)
+#### [`jsonEncode`](../../../src/Tables/Records/Actor.php#L33-L39)
 
 static · Returns `string`
 
@@ -185,17 +185,17 @@ Returns `void`
 - `$keyID`: `?string` = null
 - `$primaryKey`: `?int` = null
 
-#### [`hasPrimaryKey`](../../../src/Tables/Records/ActorKey.php#L39-L42)
+#### [`hasPrimaryKey`](../../../src/Tables/Records/ActorKey.php#L38-L41)
 
 Returns `bool`
 
-#### [`getPrimaryKey`](../../../src/Tables/Records/ActorKey.php#L48-L54)
+#### [`getPrimaryKey`](../../../src/Tables/Records/ActorKey.php#L47-L53)
 
 Returns `int`
 
 **Throws:** `TableException`
 
-#### [`attachSymmetricKey`](../../../src/Tables/Records/ActorKey.php#L60-L70)
+#### [`attachSymmetricKey`](../../../src/Tables/Records/ActorKey.php#L59-L69)
 
 Returns `self`
 
@@ -206,7 +206,7 @@ Returns `self`
 
 **Throws:** `TableException`
 
-#### [`getSymmetricKeyForProperty`](../../../src/Tables/Records/ActorKey.php#L76-L85)
+#### [`getSymmetricKeyForProperty`](../../../src/Tables/Records/ActorKey.php#L75-L84)
 
 Returns `FediE2EE\PKD\Crypto\SymmetricKey`
 
@@ -216,11 +216,11 @@ Returns `FediE2EE\PKD\Crypto\SymmetricKey`
 
 **Throws:** `TableException`
 
-#### [`getSymmetricKeys`](../../../src/Tables/Records/ActorKey.php#L90-L93)
+#### [`getSymmetricKeys`](../../../src/Tables/Records/ActorKey.php#L89-L92)
 
 Returns `array`
 
-#### [`getRfc9421PublicKeys`](../../../src/Tables/Records/ActorKey.php#L109-L112)
+#### [`getRfc9421PublicKeys`](../../../src/Tables/Records/ActorKey.php#L108-L111)
 
 Returns `FediE2EE\PKD\Crypto\PublicKey`
 
@@ -234,7 +234,7 @@ If multiple are returned (e.g., via FEP-521a), this will cycle through them unti
 
 **Throws:** `CryptoException`, `FetchException`, `InvalidArgumentException`, `SodiumException`
 
-#### [`jsonDecode`](../../../src/Tables/Records/ActorKey.php#L17-L20)
+#### [`jsonDecode`](../../../src/Tables/Records/ActorKey.php#L16-L19)
 
 static · Returns `array`
 
@@ -244,7 +244,7 @@ static · Returns `array`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonDecodeObject`](../../../src/Tables/Records/ActorKey.php#L25-L28)
+#### [`jsonDecodeObject`](../../../src/Tables/Records/ActorKey.php#L24-L27)
 
 static · Returns `stdClass`
 
@@ -254,7 +254,7 @@ static · Returns `stdClass`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonEncode`](../../../src/Tables/Records/ActorKey.php#L34-L40)
+#### [`jsonEncode`](../../../src/Tables/Records/ActorKey.php#L33-L39)
 
 static · Returns `string`
 
@@ -309,17 +309,17 @@ Returns `void`
 
 **API** · Returns `FediE2EE\PKDServer\Tables\Records\Actor`
 
-#### [`hasPrimaryKey`](../../../src/Tables/Records/AuxDatum.php#L39-L42)
+#### [`hasPrimaryKey`](../../../src/Tables/Records/AuxDatum.php#L38-L41)
 
 Returns `bool`
 
-#### [`getPrimaryKey`](../../../src/Tables/Records/AuxDatum.php#L48-L54)
+#### [`getPrimaryKey`](../../../src/Tables/Records/AuxDatum.php#L47-L53)
 
 Returns `int`
 
 **Throws:** `TableException`
 
-#### [`attachSymmetricKey`](../../../src/Tables/Records/AuxDatum.php#L60-L70)
+#### [`attachSymmetricKey`](../../../src/Tables/Records/AuxDatum.php#L59-L69)
 
 Returns `self`
 
@@ -330,7 +330,7 @@ Returns `self`
 
 **Throws:** `TableException`
 
-#### [`getSymmetricKeyForProperty`](../../../src/Tables/Records/AuxDatum.php#L76-L85)
+#### [`getSymmetricKeyForProperty`](../../../src/Tables/Records/AuxDatum.php#L75-L84)
 
 Returns `FediE2EE\PKD\Crypto\SymmetricKey`
 
@@ -340,11 +340,11 @@ Returns `FediE2EE\PKD\Crypto\SymmetricKey`
 
 **Throws:** `TableException`
 
-#### [`getSymmetricKeys`](../../../src/Tables/Records/AuxDatum.php#L90-L93)
+#### [`getSymmetricKeys`](../../../src/Tables/Records/AuxDatum.php#L89-L92)
 
 Returns `array`
 
-#### [`getRfc9421PublicKeys`](../../../src/Tables/Records/AuxDatum.php#L109-L112)
+#### [`getRfc9421PublicKeys`](../../../src/Tables/Records/AuxDatum.php#L108-L111)
 
 Returns `FediE2EE\PKD\Crypto\PublicKey`
 
@@ -358,7 +358,7 @@ If multiple are returned (e.g., via FEP-521a), this will cycle through them unti
 
 **Throws:** `CryptoException`, `FetchException`, `InvalidArgumentException`, `SodiumException`
 
-#### [`jsonDecode`](../../../src/Tables/Records/AuxDatum.php#L17-L20)
+#### [`jsonDecode`](../../../src/Tables/Records/AuxDatum.php#L16-L19)
 
 static · Returns `array`
 
@@ -368,7 +368,7 @@ static · Returns `array`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonDecodeObject`](../../../src/Tables/Records/AuxDatum.php#L25-L28)
+#### [`jsonDecodeObject`](../../../src/Tables/Records/AuxDatum.php#L24-L27)
 
 static · Returns `stdClass`
 
@@ -378,7 +378,7 @@ static · Returns `stdClass`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonEncode`](../../../src/Tables/Records/AuxDatum.php#L34-L40)
+#### [`jsonEncode`](../../../src/Tables/Records/AuxDatum.php#L33-L39)
 
 static · Returns `string`
 
@@ -416,7 +416,7 @@ Abstraction for a row in the MerkleState table
 
 ### Methods
 
-#### [`__construct`](../../../src/Tables/Records/MerkleLeaf.php#L33-L44)
+#### [`__construct`](../../../src/Tables/Records/MerkleLeaf.php#L32-L43)
 
 Returns `void`
 
@@ -431,7 +431,7 @@ Returns `void`
 - `$wrappedKeys`: `?string` = null
 - `$primaryKey`: `?int` = null
 
-#### [`from`](../../../src/Tables/Records/MerkleLeaf.php#L50-L67)
+#### [`from`](../../../src/Tables/Records/MerkleLeaf.php#L49-L66)
 
 static · Returns `self`
 
@@ -443,7 +443,7 @@ static · Returns `self`
 
 **Throws:** `NotImplementedException`, `SodiumException`
 
-#### [`fromPayload`](../../../src/Tables/Records/MerkleLeaf.php#L75-L85)
+#### [`fromPayload`](../../../src/Tables/Records/MerkleLeaf.php#L74-L84)
 
 static **API** · Returns `self`
 
@@ -455,7 +455,7 @@ static **API** · Returns `self`
 
 **Throws:** `NotImplementedException`, `SodiumException`
 
-#### [`setPrimaryKey`](../../../src/Tables/Records/MerkleLeaf.php#L87-L91)
+#### [`setPrimaryKey`](../../../src/Tables/Records/MerkleLeaf.php#L86-L90)
 
 Returns `static`
 
@@ -463,35 +463,35 @@ Returns `static`
 
 - `$primary`: `?int`
 
-#### [`getContents`](../../../src/Tables/Records/MerkleLeaf.php#L96-L99)
+#### [`getContents`](../../../src/Tables/Records/MerkleLeaf.php#L95-L98)
 
 Returns `array`
 
-#### [`getInclusionProof`](../../../src/Tables/Records/MerkleLeaf.php#L104-L107)
+#### [`getInclusionProof`](../../../src/Tables/Records/MerkleLeaf.php#L103-L106)
 
 **API** · Returns `?FediE2EE\PKD\Crypto\Merkle\InclusionProof`
 
-#### [`getSignature`](../../../src/Tables/Records/MerkleLeaf.php#L109-L112)
+#### [`getSignature`](../../../src/Tables/Records/MerkleLeaf.php#L108-L111)
 
 Returns `string`
 
-#### [`serializeForMerkle`](../../../src/Tables/Records/MerkleLeaf.php#L117-L124)
+#### [`serializeForMerkle`](../../../src/Tables/Records/MerkleLeaf.php#L116-L123)
 
 Returns `string`
 
 **Throws:** `SodiumException`
 
-#### [`hasPrimaryKey`](../../../src/Tables/Records/MerkleLeaf.php#L39-L42)
+#### [`hasPrimaryKey`](../../../src/Tables/Records/MerkleLeaf.php#L38-L41)
 
 Returns `bool`
 
-#### [`getPrimaryKey`](../../../src/Tables/Records/MerkleLeaf.php#L48-L54)
+#### [`getPrimaryKey`](../../../src/Tables/Records/MerkleLeaf.php#L47-L53)
 
 Returns `int`
 
 **Throws:** `TableException`
 
-#### [`attachSymmetricKey`](../../../src/Tables/Records/MerkleLeaf.php#L60-L70)
+#### [`attachSymmetricKey`](../../../src/Tables/Records/MerkleLeaf.php#L59-L69)
 
 Returns `self`
 
@@ -502,7 +502,7 @@ Returns `self`
 
 **Throws:** `TableException`
 
-#### [`getSymmetricKeyForProperty`](../../../src/Tables/Records/MerkleLeaf.php#L76-L85)
+#### [`getSymmetricKeyForProperty`](../../../src/Tables/Records/MerkleLeaf.php#L75-L84)
 
 Returns `FediE2EE\PKD\Crypto\SymmetricKey`
 
@@ -512,11 +512,11 @@ Returns `FediE2EE\PKD\Crypto\SymmetricKey`
 
 **Throws:** `TableException`
 
-#### [`getSymmetricKeys`](../../../src/Tables/Records/MerkleLeaf.php#L90-L93)
+#### [`getSymmetricKeys`](../../../src/Tables/Records/MerkleLeaf.php#L89-L92)
 
 Returns `array`
 
-#### [`getRfc9421PublicKeys`](../../../src/Tables/Records/MerkleLeaf.php#L109-L112)
+#### [`getRfc9421PublicKeys`](../../../src/Tables/Records/MerkleLeaf.php#L108-L111)
 
 Returns `FediE2EE\PKD\Crypto\PublicKey`
 
@@ -530,7 +530,7 @@ If multiple are returned (e.g., via FEP-521a), this will cycle through them unti
 
 **Throws:** `CryptoException`, `FetchException`, `InvalidArgumentException`, `SodiumException`
 
-#### [`jsonDecode`](../../../src/Tables/Records/MerkleLeaf.php#L17-L20)
+#### [`jsonDecode`](../../../src/Tables/Records/MerkleLeaf.php#L16-L19)
 
 static · Returns `array`
 
@@ -540,7 +540,7 @@ static · Returns `array`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonDecodeObject`](../../../src/Tables/Records/MerkleLeaf.php#L25-L28)
+#### [`jsonDecodeObject`](../../../src/Tables/Records/MerkleLeaf.php#L24-L27)
 
 static · Returns `stdClass`
 
@@ -550,7 +550,7 @@ static · Returns `stdClass`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonEncode`](../../../src/Tables/Records/MerkleLeaf.php#L34-L40)
+#### [`jsonEncode`](../../../src/Tables/Records/MerkleLeaf.php#L33-L39)
 
 static · Returns `string`
 
@@ -560,13 +560,9 @@ static · Returns `string`
 
 **Throws:** `BaseJsonException`
 
-#### [`assertAllArrayKeysExist`](../../../src/Tables/Records/MerkleLeaf.php#L30-L35)
+#### [`assertAllArrayKeysExist`](../../../src/Tables/Records/MerkleLeaf.php#L27-L32)
 
 static · Returns `void`
-
-This method throws an InputException if any of the expected keys are absent.
-
-It does not return anything.
 
 **Parameters:**
 
@@ -575,26 +571,18 @@ It does not return anything.
 
 **Throws:** `InputException`
 
-#### [`allArrayKeysExist`](../../../src/Tables/Records/MerkleLeaf.php#L43-L50)
+#### [`allArrayKeysExist`](../../../src/Tables/Records/MerkleLeaf.php#L34-L41)
 
 static · Returns `bool`
-
-This method returns true if every expected array key is found in the target array.
-
-Otherwise, it returns false. This is useful for input validation.
 
 **Parameters:**
 
 - `$target`: `array`
 - `...$arrayKeys`: `string`
 
-#### [`constantTimeSelect`](../../../src/Tables/Records/MerkleLeaf.php#L65-L82)
+#### [`constantTimeSelect`](../../../src/Tables/Records/MerkleLeaf.php#L48-L65)
 
 Returns `string`
-
-This is a constant-time conditional select. It should be read like a ternary operation.
-
-$result = ClassWithTrait::constantTimeSelect(1, $left, $right); -> $result === $left. $result = ClassWithTrait::constantTimeSelect(0, $left, $right); -> $result === $right.
 
 **Parameters:**
 
@@ -604,63 +592,49 @@ $result = ClassWithTrait::constantTimeSelect(1, $left, $right); -> $result === $
 
 **Throws:** `CryptoException`
 
-#### [`dos2unix`](../../../src/Tables/Records/MerkleLeaf.php#L92-L95)
+#### [`dos2unix`](../../../src/Tables/Records/MerkleLeaf.php#L73-L76)
 
 static · Returns `string`
 
 Normalize line-endings to UNIX-style (LF rather than CRLF).
 
-This is mostly used for PEM-encoded strings.
-
 **Parameters:**
 
 - `$in`: `string`
 
-#### [`preAuthEncode`](../../../src/Tables/Records/MerkleLeaf.php#L113-L126)
+#### [`preAuthEncode`](../../../src/Tables/Records/MerkleLeaf.php#L84-L97)
 
 static · Returns `string`
-
-This is an implementation of PAE() from PASETO. It encodes an array of strings into a flat string consisting of:
-
-1. The number of pieces. 2. For each piece: 1. The length of the piece (in bytes). 2. The contents of the piece. This allows multipart messages to have an injective canonical representation before passing ot a hash function (or other cryptographic function).
 
 **Parameters:**
 
 - `$pieces`: `array`
 
-#### [`sortByKey`](../../../src/Tables/Records/MerkleLeaf.php#L133-L141)
+#### [`sortByKey`](../../../src/Tables/Records/MerkleLeaf.php#L99-L107)
 
 static · Returns `void`
-
-This sorts the target array in-place, by its keys, including child arrays.
-
-Used for ensuring arrays are sorted before JSON encoding.
 
 **Parameters:**
 
 - `$arr`: `array`
 
-#### [`LE64`](../../../src/Tables/Records/MerkleLeaf.php#L148-L151)
+#### [`LE64`](../../../src/Tables/Records/MerkleLeaf.php#L111-L114)
 
 static · Returns `string`
-
-Mostly used by preAuthEncode() above. This packs an integer as 8 bytes.
 
 **Parameters:**
 
 - `$n`: `int`
 
-#### [`stringToByteArray`](../../../src/Tables/Records/MerkleLeaf.php#L156-L163)
+#### [`stringToByteArray`](../../../src/Tables/Records/MerkleLeaf.php#L116-L123)
 
 Returns `array`
-
-Get an array of bytes representing the input string.
 
 **Parameters:**
 
 - `$str`: `string`
 
-#### [`stripNewlines`](../../../src/Tables/Records/MerkleLeaf.php#L171-L205)
+#### [`stripNewlines`](../../../src/Tables/Records/MerkleLeaf.php#L131-L165)
 
 static · Returns `string`
 
@@ -699,7 +673,7 @@ Strip all newlines (CR, LF) characters from a string.
 
 ### Methods
 
-#### [`__construct`](../../../src/Tables/Records/Peer.php#L27-L41)
+#### [`__construct`](../../../src/Tables/Records/Peer.php#L26-L40)
 
 Returns `void`
 
@@ -717,23 +691,23 @@ Returns `void`
 - `$wrapConfig`: `?FediE2EE\PKDServer\Protocol\RewrapConfig` = null
 - `$primaryKey`: `?int` = null
 
-#### [`toArray`](../../../src/Tables/Records/Peer.php#L49-L75)
+#### [`toArray`](../../../src/Tables/Records/Peer.php#L48-L74)
 
 Returns `array`
 
 **Throws:** `BaseJsonException`, `JsonException`
 
-#### [`hasPrimaryKey`](../../../src/Tables/Records/Peer.php#L39-L42)
+#### [`hasPrimaryKey`](../../../src/Tables/Records/Peer.php#L38-L41)
 
 Returns `bool`
 
-#### [`getPrimaryKey`](../../../src/Tables/Records/Peer.php#L48-L54)
+#### [`getPrimaryKey`](../../../src/Tables/Records/Peer.php#L47-L53)
 
 Returns `int`
 
 **Throws:** `TableException`
 
-#### [`attachSymmetricKey`](../../../src/Tables/Records/Peer.php#L60-L70)
+#### [`attachSymmetricKey`](../../../src/Tables/Records/Peer.php#L59-L69)
 
 Returns `self`
 
@@ -744,7 +718,7 @@ Returns `self`
 
 **Throws:** `TableException`
 
-#### [`getSymmetricKeyForProperty`](../../../src/Tables/Records/Peer.php#L76-L85)
+#### [`getSymmetricKeyForProperty`](../../../src/Tables/Records/Peer.php#L75-L84)
 
 Returns `FediE2EE\PKD\Crypto\SymmetricKey`
 
@@ -754,11 +728,11 @@ Returns `FediE2EE\PKD\Crypto\SymmetricKey`
 
 **Throws:** `TableException`
 
-#### [`getSymmetricKeys`](../../../src/Tables/Records/Peer.php#L90-L93)
+#### [`getSymmetricKeys`](../../../src/Tables/Records/Peer.php#L89-L92)
 
 Returns `array`
 
-#### [`getRfc9421PublicKeys`](../../../src/Tables/Records/Peer.php#L109-L112)
+#### [`getRfc9421PublicKeys`](../../../src/Tables/Records/Peer.php#L108-L111)
 
 Returns `FediE2EE\PKD\Crypto\PublicKey`
 
@@ -772,7 +746,7 @@ If multiple are returned (e.g., via FEP-521a), this will cycle through them unti
 
 **Throws:** `CryptoException`, `FetchException`, `InvalidArgumentException`, `SodiumException`
 
-#### [`jsonDecode`](../../../src/Tables/Records/Peer.php#L17-L20)
+#### [`jsonDecode`](../../../src/Tables/Records/Peer.php#L16-L19)
 
 static · Returns `array`
 
@@ -782,7 +756,7 @@ static · Returns `array`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonDecodeObject`](../../../src/Tables/Records/Peer.php#L25-L28)
+#### [`jsonDecodeObject`](../../../src/Tables/Records/Peer.php#L24-L27)
 
 static · Returns `stdClass`
 
@@ -792,7 +766,7 @@ static · Returns `stdClass`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonEncode`](../../../src/Tables/Records/Peer.php#L34-L40)
+#### [`jsonEncode`](../../../src/Tables/Records/Peer.php#L33-L39)
 
 static · Returns `string`
 
@@ -802,13 +776,9 @@ static · Returns `string`
 
 **Throws:** `BaseJsonException`
 
-#### [`assertAllArrayKeysExist`](../../../src/Tables/Records/Peer.php#L30-L35)
+#### [`assertAllArrayKeysExist`](../../../src/Tables/Records/Peer.php#L27-L32)
 
 static · Returns `void`
-
-This method throws an InputException if any of the expected keys are absent.
-
-It does not return anything.
 
 **Parameters:**
 
@@ -817,26 +787,18 @@ It does not return anything.
 
 **Throws:** `InputException`
 
-#### [`allArrayKeysExist`](../../../src/Tables/Records/Peer.php#L43-L50)
+#### [`allArrayKeysExist`](../../../src/Tables/Records/Peer.php#L34-L41)
 
 static · Returns `bool`
-
-This method returns true if every expected array key is found in the target array.
-
-Otherwise, it returns false. This is useful for input validation.
 
 **Parameters:**
 
 - `$target`: `array`
 - `...$arrayKeys`: `string`
 
-#### [`constantTimeSelect`](../../../src/Tables/Records/Peer.php#L65-L82)
+#### [`constantTimeSelect`](../../../src/Tables/Records/Peer.php#L48-L65)
 
 Returns `string`
-
-This is a constant-time conditional select. It should be read like a ternary operation.
-
-$result = ClassWithTrait::constantTimeSelect(1, $left, $right); -> $result === $left. $result = ClassWithTrait::constantTimeSelect(0, $left, $right); -> $result === $right.
 
 **Parameters:**
 
@@ -846,63 +808,49 @@ $result = ClassWithTrait::constantTimeSelect(1, $left, $right); -> $result === $
 
 **Throws:** `CryptoException`
 
-#### [`dos2unix`](../../../src/Tables/Records/Peer.php#L92-L95)
+#### [`dos2unix`](../../../src/Tables/Records/Peer.php#L73-L76)
 
 static · Returns `string`
 
 Normalize line-endings to UNIX-style (LF rather than CRLF).
 
-This is mostly used for PEM-encoded strings.
-
 **Parameters:**
 
 - `$in`: `string`
 
-#### [`preAuthEncode`](../../../src/Tables/Records/Peer.php#L113-L126)
+#### [`preAuthEncode`](../../../src/Tables/Records/Peer.php#L84-L97)
 
 static · Returns `string`
-
-This is an implementation of PAE() from PASETO. It encodes an array of strings into a flat string consisting of:
-
-1. The number of pieces. 2. For each piece: 1. The length of the piece (in bytes). 2. The contents of the piece. This allows multipart messages to have an injective canonical representation before passing ot a hash function (or other cryptographic function).
 
 **Parameters:**
 
 - `$pieces`: `array`
 
-#### [`sortByKey`](../../../src/Tables/Records/Peer.php#L133-L141)
+#### [`sortByKey`](../../../src/Tables/Records/Peer.php#L99-L107)
 
 static · Returns `void`
-
-This sorts the target array in-place, by its keys, including child arrays.
-
-Used for ensuring arrays are sorted before JSON encoding.
 
 **Parameters:**
 
 - `$arr`: `array`
 
-#### [`LE64`](../../../src/Tables/Records/Peer.php#L148-L151)
+#### [`LE64`](../../../src/Tables/Records/Peer.php#L111-L114)
 
 static · Returns `string`
-
-Mostly used by preAuthEncode() above. This packs an integer as 8 bytes.
 
 **Parameters:**
 
 - `$n`: `int`
 
-#### [`stringToByteArray`](../../../src/Tables/Records/Peer.php#L156-L163)
+#### [`stringToByteArray`](../../../src/Tables/Records/Peer.php#L116-L123)
 
 Returns `array`
-
-Get an array of bytes representing the input string.
 
 **Parameters:**
 
 - `$str`: `string`
 
-#### [`stripNewlines`](../../../src/Tables/Records/Peer.php#L171-L205)
+#### [`stripNewlines`](../../../src/Tables/Records/Peer.php#L131-L165)
 
 static · Returns `string`
 
@@ -949,17 +897,17 @@ Returns `void`
 
 Returns `array`
 
-#### [`hasPrimaryKey`](../../../src/Tables/Records/ReplicaActor.php#L39-L42)
+#### [`hasPrimaryKey`](../../../src/Tables/Records/ReplicaActor.php#L38-L41)
 
 Returns `bool`
 
-#### [`getPrimaryKey`](../../../src/Tables/Records/ReplicaActor.php#L48-L54)
+#### [`getPrimaryKey`](../../../src/Tables/Records/ReplicaActor.php#L47-L53)
 
 Returns `int`
 
 **Throws:** `TableException`
 
-#### [`attachSymmetricKey`](../../../src/Tables/Records/ReplicaActor.php#L60-L70)
+#### [`attachSymmetricKey`](../../../src/Tables/Records/ReplicaActor.php#L59-L69)
 
 Returns `self`
 
@@ -970,7 +918,7 @@ Returns `self`
 
 **Throws:** `TableException`
 
-#### [`getSymmetricKeyForProperty`](../../../src/Tables/Records/ReplicaActor.php#L76-L85)
+#### [`getSymmetricKeyForProperty`](../../../src/Tables/Records/ReplicaActor.php#L75-L84)
 
 Returns `FediE2EE\PKD\Crypto\SymmetricKey`
 
@@ -980,11 +928,11 @@ Returns `FediE2EE\PKD\Crypto\SymmetricKey`
 
 **Throws:** `TableException`
 
-#### [`getSymmetricKeys`](../../../src/Tables/Records/ReplicaActor.php#L90-L93)
+#### [`getSymmetricKeys`](../../../src/Tables/Records/ReplicaActor.php#L89-L92)
 
 Returns `array`
 
-#### [`getRfc9421PublicKeys`](../../../src/Tables/Records/ReplicaActor.php#L109-L112)
+#### [`getRfc9421PublicKeys`](../../../src/Tables/Records/ReplicaActor.php#L108-L111)
 
 Returns `FediE2EE\PKD\Crypto\PublicKey`
 
@@ -998,7 +946,7 @@ If multiple are returned (e.g., via FEP-521a), this will cycle through them unti
 
 **Throws:** `CryptoException`, `FetchException`, `InvalidArgumentException`, `SodiumException`
 
-#### [`jsonDecode`](../../../src/Tables/Records/ReplicaActor.php#L17-L20)
+#### [`jsonDecode`](../../../src/Tables/Records/ReplicaActor.php#L16-L19)
 
 static · Returns `array`
 
@@ -1008,7 +956,7 @@ static · Returns `array`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonDecodeObject`](../../../src/Tables/Records/ReplicaActor.php#L25-L28)
+#### [`jsonDecodeObject`](../../../src/Tables/Records/ReplicaActor.php#L24-L27)
 
 static · Returns `stdClass`
 
@@ -1018,7 +966,7 @@ static · Returns `stdClass`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonEncode`](../../../src/Tables/Records/ReplicaActor.php#L34-L40)
+#### [`jsonEncode`](../../../src/Tables/Records/ReplicaActor.php#L33-L39)
 
 static · Returns `string`
 
@@ -1028,13 +976,9 @@ static · Returns `string`
 
 **Throws:** `BaseJsonException`
 
-#### [`assertAllArrayKeysExist`](../../../src/Tables/Records/ReplicaActor.php#L30-L35)
+#### [`assertAllArrayKeysExist`](../../../src/Tables/Records/ReplicaActor.php#L27-L32)
 
 static · Returns `void`
-
-This method throws an InputException if any of the expected keys are absent.
-
-It does not return anything.
 
 **Parameters:**
 
@@ -1043,26 +987,18 @@ It does not return anything.
 
 **Throws:** `InputException`
 
-#### [`allArrayKeysExist`](../../../src/Tables/Records/ReplicaActor.php#L43-L50)
+#### [`allArrayKeysExist`](../../../src/Tables/Records/ReplicaActor.php#L34-L41)
 
 static · Returns `bool`
-
-This method returns true if every expected array key is found in the target array.
-
-Otherwise, it returns false. This is useful for input validation.
 
 **Parameters:**
 
 - `$target`: `array`
 - `...$arrayKeys`: `string`
 
-#### [`constantTimeSelect`](../../../src/Tables/Records/ReplicaActor.php#L65-L82)
+#### [`constantTimeSelect`](../../../src/Tables/Records/ReplicaActor.php#L48-L65)
 
 Returns `string`
-
-This is a constant-time conditional select. It should be read like a ternary operation.
-
-$result = ClassWithTrait::constantTimeSelect(1, $left, $right); -> $result === $left. $result = ClassWithTrait::constantTimeSelect(0, $left, $right); -> $result === $right.
 
 **Parameters:**
 
@@ -1072,63 +1008,49 @@ $result = ClassWithTrait::constantTimeSelect(1, $left, $right); -> $result === $
 
 **Throws:** `CryptoException`
 
-#### [`dos2unix`](../../../src/Tables/Records/ReplicaActor.php#L92-L95)
+#### [`dos2unix`](../../../src/Tables/Records/ReplicaActor.php#L73-L76)
 
 static · Returns `string`
 
 Normalize line-endings to UNIX-style (LF rather than CRLF).
 
-This is mostly used for PEM-encoded strings.
-
 **Parameters:**
 
 - `$in`: `string`
 
-#### [`preAuthEncode`](../../../src/Tables/Records/ReplicaActor.php#L113-L126)
+#### [`preAuthEncode`](../../../src/Tables/Records/ReplicaActor.php#L84-L97)
 
 static · Returns `string`
-
-This is an implementation of PAE() from PASETO. It encodes an array of strings into a flat string consisting of:
-
-1. The number of pieces. 2. For each piece: 1. The length of the piece (in bytes). 2. The contents of the piece. This allows multipart messages to have an injective canonical representation before passing ot a hash function (or other cryptographic function).
 
 **Parameters:**
 
 - `$pieces`: `array`
 
-#### [`sortByKey`](../../../src/Tables/Records/ReplicaActor.php#L133-L141)
+#### [`sortByKey`](../../../src/Tables/Records/ReplicaActor.php#L99-L107)
 
 static · Returns `void`
-
-This sorts the target array in-place, by its keys, including child arrays.
-
-Used for ensuring arrays are sorted before JSON encoding.
 
 **Parameters:**
 
 - `$arr`: `array`
 
-#### [`LE64`](../../../src/Tables/Records/ReplicaActor.php#L148-L151)
+#### [`LE64`](../../../src/Tables/Records/ReplicaActor.php#L111-L114)
 
 static · Returns `string`
-
-Mostly used by preAuthEncode() above. This packs an integer as 8 bytes.
 
 **Parameters:**
 
 - `$n`: `int`
 
-#### [`stringToByteArray`](../../../src/Tables/Records/ReplicaActor.php#L156-L163)
+#### [`stringToByteArray`](../../../src/Tables/Records/ReplicaActor.php#L116-L123)
 
 Returns `array`
-
-Get an array of bytes representing the input string.
 
 **Parameters:**
 
 - `$str`: `string`
 
-#### [`stripNewlines`](../../../src/Tables/Records/ReplicaActor.php#L171-L205)
+#### [`stripNewlines`](../../../src/Tables/Records/ReplicaActor.php#L131-L165)
 
 static · Returns `string`
 
@@ -1179,17 +1101,17 @@ Returns `void`
 - `$revokeLeaf`: `?FediE2EE\PKDServer\Tables\Records\ReplicaLeaf` = null
 - `$primaryKey`: `?int` = null
 
-#### [`hasPrimaryKey`](../../../src/Tables/Records/ReplicaAuxDatum.php#L39-L42)
+#### [`hasPrimaryKey`](../../../src/Tables/Records/ReplicaAuxDatum.php#L38-L41)
 
 Returns `bool`
 
-#### [`getPrimaryKey`](../../../src/Tables/Records/ReplicaAuxDatum.php#L48-L54)
+#### [`getPrimaryKey`](../../../src/Tables/Records/ReplicaAuxDatum.php#L47-L53)
 
 Returns `int`
 
 **Throws:** `TableException`
 
-#### [`attachSymmetricKey`](../../../src/Tables/Records/ReplicaAuxDatum.php#L60-L70)
+#### [`attachSymmetricKey`](../../../src/Tables/Records/ReplicaAuxDatum.php#L59-L69)
 
 Returns `self`
 
@@ -1200,7 +1122,7 @@ Returns `self`
 
 **Throws:** `TableException`
 
-#### [`getSymmetricKeyForProperty`](../../../src/Tables/Records/ReplicaAuxDatum.php#L76-L85)
+#### [`getSymmetricKeyForProperty`](../../../src/Tables/Records/ReplicaAuxDatum.php#L75-L84)
 
 Returns `FediE2EE\PKD\Crypto\SymmetricKey`
 
@@ -1210,11 +1132,11 @@ Returns `FediE2EE\PKD\Crypto\SymmetricKey`
 
 **Throws:** `TableException`
 
-#### [`getSymmetricKeys`](../../../src/Tables/Records/ReplicaAuxDatum.php#L90-L93)
+#### [`getSymmetricKeys`](../../../src/Tables/Records/ReplicaAuxDatum.php#L89-L92)
 
 Returns `array`
 
-#### [`getRfc9421PublicKeys`](../../../src/Tables/Records/ReplicaAuxDatum.php#L109-L112)
+#### [`getRfc9421PublicKeys`](../../../src/Tables/Records/ReplicaAuxDatum.php#L108-L111)
 
 Returns `FediE2EE\PKD\Crypto\PublicKey`
 
@@ -1228,7 +1150,7 @@ If multiple are returned (e.g., via FEP-521a), this will cycle through them unti
 
 **Throws:** `CryptoException`, `FetchException`, `InvalidArgumentException`, `SodiumException`
 
-#### [`jsonDecode`](../../../src/Tables/Records/ReplicaAuxDatum.php#L17-L20)
+#### [`jsonDecode`](../../../src/Tables/Records/ReplicaAuxDatum.php#L16-L19)
 
 static · Returns `array`
 
@@ -1238,7 +1160,7 @@ static · Returns `array`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonDecodeObject`](../../../src/Tables/Records/ReplicaAuxDatum.php#L25-L28)
+#### [`jsonDecodeObject`](../../../src/Tables/Records/ReplicaAuxDatum.php#L24-L27)
 
 static · Returns `stdClass`
 
@@ -1248,7 +1170,7 @@ static · Returns `stdClass`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonEncode`](../../../src/Tables/Records/ReplicaAuxDatum.php#L34-L40)
+#### [`jsonEncode`](../../../src/Tables/Records/ReplicaAuxDatum.php#L33-L39)
 
 static · Returns `string`
 
@@ -1258,13 +1180,9 @@ static · Returns `string`
 
 **Throws:** `BaseJsonException`
 
-#### [`assertAllArrayKeysExist`](../../../src/Tables/Records/ReplicaAuxDatum.php#L30-L35)
+#### [`assertAllArrayKeysExist`](../../../src/Tables/Records/ReplicaAuxDatum.php#L27-L32)
 
 static · Returns `void`
-
-This method throws an InputException if any of the expected keys are absent.
-
-It does not return anything.
 
 **Parameters:**
 
@@ -1273,26 +1191,18 @@ It does not return anything.
 
 **Throws:** `InputException`
 
-#### [`allArrayKeysExist`](../../../src/Tables/Records/ReplicaAuxDatum.php#L43-L50)
+#### [`allArrayKeysExist`](../../../src/Tables/Records/ReplicaAuxDatum.php#L34-L41)
 
 static · Returns `bool`
-
-This method returns true if every expected array key is found in the target array.
-
-Otherwise, it returns false. This is useful for input validation.
 
 **Parameters:**
 
 - `$target`: `array`
 - `...$arrayKeys`: `string`
 
-#### [`constantTimeSelect`](../../../src/Tables/Records/ReplicaAuxDatum.php#L65-L82)
+#### [`constantTimeSelect`](../../../src/Tables/Records/ReplicaAuxDatum.php#L48-L65)
 
 Returns `string`
-
-This is a constant-time conditional select. It should be read like a ternary operation.
-
-$result = ClassWithTrait::constantTimeSelect(1, $left, $right); -> $result === $left. $result = ClassWithTrait::constantTimeSelect(0, $left, $right); -> $result === $right.
 
 **Parameters:**
 
@@ -1302,63 +1212,49 @@ $result = ClassWithTrait::constantTimeSelect(1, $left, $right); -> $result === $
 
 **Throws:** `CryptoException`
 
-#### [`dos2unix`](../../../src/Tables/Records/ReplicaAuxDatum.php#L92-L95)
+#### [`dos2unix`](../../../src/Tables/Records/ReplicaAuxDatum.php#L73-L76)
 
 static · Returns `string`
 
 Normalize line-endings to UNIX-style (LF rather than CRLF).
 
-This is mostly used for PEM-encoded strings.
-
 **Parameters:**
 
 - `$in`: `string`
 
-#### [`preAuthEncode`](../../../src/Tables/Records/ReplicaAuxDatum.php#L113-L126)
+#### [`preAuthEncode`](../../../src/Tables/Records/ReplicaAuxDatum.php#L84-L97)
 
 static · Returns `string`
-
-This is an implementation of PAE() from PASETO. It encodes an array of strings into a flat string consisting of:
-
-1. The number of pieces. 2. For each piece: 1. The length of the piece (in bytes). 2. The contents of the piece. This allows multipart messages to have an injective canonical representation before passing ot a hash function (or other cryptographic function).
 
 **Parameters:**
 
 - `$pieces`: `array`
 
-#### [`sortByKey`](../../../src/Tables/Records/ReplicaAuxDatum.php#L133-L141)
+#### [`sortByKey`](../../../src/Tables/Records/ReplicaAuxDatum.php#L99-L107)
 
 static · Returns `void`
-
-This sorts the target array in-place, by its keys, including child arrays.
-
-Used for ensuring arrays are sorted before JSON encoding.
 
 **Parameters:**
 
 - `$arr`: `array`
 
-#### [`LE64`](../../../src/Tables/Records/ReplicaAuxDatum.php#L148-L151)
+#### [`LE64`](../../../src/Tables/Records/ReplicaAuxDatum.php#L111-L114)
 
 static · Returns `string`
-
-Mostly used by preAuthEncode() above. This packs an integer as 8 bytes.
 
 **Parameters:**
 
 - `$n`: `int`
 
-#### [`stringToByteArray`](../../../src/Tables/Records/ReplicaAuxDatum.php#L156-L163)
+#### [`stringToByteArray`](../../../src/Tables/Records/ReplicaAuxDatum.php#L116-L123)
 
 Returns `array`
-
-Get an array of bytes representing the input string.
 
 **Parameters:**
 
 - `$str`: `string`
 
-#### [`stripNewlines`](../../../src/Tables/Records/ReplicaAuxDatum.php#L171-L205)
+#### [`stripNewlines`](../../../src/Tables/Records/ReplicaAuxDatum.php#L131-L165)
 
 static · Returns `string`
 
@@ -1396,7 +1292,7 @@ Strip all newlines (CR, LF) characters from a string.
 
 ### Methods
 
-#### [`__construct`](../../../src/Tables/Records/ReplicaLeaf.php#L22-L35)
+#### [`__construct`](../../../src/Tables/Records/ReplicaLeaf.php#L21-L34)
 
 Returns `void`
 
@@ -1413,29 +1309,29 @@ Returns `void`
 - `$replicated`: `string` = ''
 - `$primaryKey`: `?int` = null
 
-#### [`toArray`](../../../src/Tables/Records/ReplicaLeaf.php#L41-L65)
+#### [`toArray`](../../../src/Tables/Records/ReplicaLeaf.php#L40-L64)
 
 Returns `array`
 
 **Throws:** `JsonException`
 
-#### [`serializeForMerkle`](../../../src/Tables/Records/ReplicaLeaf.php#L71-L78)
+#### [`serializeForMerkle`](../../../src/Tables/Records/ReplicaLeaf.php#L70-L77)
 
 **API** · Returns `string`
 
 **Throws:** `SodiumException`
 
-#### [`hasPrimaryKey`](../../../src/Tables/Records/ReplicaLeaf.php#L39-L42)
+#### [`hasPrimaryKey`](../../../src/Tables/Records/ReplicaLeaf.php#L38-L41)
 
 Returns `bool`
 
-#### [`getPrimaryKey`](../../../src/Tables/Records/ReplicaLeaf.php#L48-L54)
+#### [`getPrimaryKey`](../../../src/Tables/Records/ReplicaLeaf.php#L47-L53)
 
 Returns `int`
 
 **Throws:** `TableException`
 
-#### [`attachSymmetricKey`](../../../src/Tables/Records/ReplicaLeaf.php#L60-L70)
+#### [`attachSymmetricKey`](../../../src/Tables/Records/ReplicaLeaf.php#L59-L69)
 
 Returns `self`
 
@@ -1446,7 +1342,7 @@ Returns `self`
 
 **Throws:** `TableException`
 
-#### [`getSymmetricKeyForProperty`](../../../src/Tables/Records/ReplicaLeaf.php#L76-L85)
+#### [`getSymmetricKeyForProperty`](../../../src/Tables/Records/ReplicaLeaf.php#L75-L84)
 
 Returns `FediE2EE\PKD\Crypto\SymmetricKey`
 
@@ -1456,11 +1352,11 @@ Returns `FediE2EE\PKD\Crypto\SymmetricKey`
 
 **Throws:** `TableException`
 
-#### [`getSymmetricKeys`](../../../src/Tables/Records/ReplicaLeaf.php#L90-L93)
+#### [`getSymmetricKeys`](../../../src/Tables/Records/ReplicaLeaf.php#L89-L92)
 
 Returns `array`
 
-#### [`getRfc9421PublicKeys`](../../../src/Tables/Records/ReplicaLeaf.php#L109-L112)
+#### [`getRfc9421PublicKeys`](../../../src/Tables/Records/ReplicaLeaf.php#L108-L111)
 
 Returns `FediE2EE\PKD\Crypto\PublicKey`
 
@@ -1474,7 +1370,7 @@ If multiple are returned (e.g., via FEP-521a), this will cycle through them unti
 
 **Throws:** `CryptoException`, `FetchException`, `InvalidArgumentException`, `SodiumException`
 
-#### [`jsonDecode`](../../../src/Tables/Records/ReplicaLeaf.php#L17-L20)
+#### [`jsonDecode`](../../../src/Tables/Records/ReplicaLeaf.php#L16-L19)
 
 static · Returns `array`
 
@@ -1484,7 +1380,7 @@ static · Returns `array`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonDecodeObject`](../../../src/Tables/Records/ReplicaLeaf.php#L25-L28)
+#### [`jsonDecodeObject`](../../../src/Tables/Records/ReplicaLeaf.php#L24-L27)
 
 static · Returns `stdClass`
 
@@ -1494,7 +1390,7 @@ static · Returns `stdClass`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonEncode`](../../../src/Tables/Records/ReplicaLeaf.php#L34-L40)
+#### [`jsonEncode`](../../../src/Tables/Records/ReplicaLeaf.php#L33-L39)
 
 static · Returns `string`
 
@@ -1504,13 +1400,9 @@ static · Returns `string`
 
 **Throws:** `BaseJsonException`
 
-#### [`assertAllArrayKeysExist`](../../../src/Tables/Records/ReplicaLeaf.php#L30-L35)
+#### [`assertAllArrayKeysExist`](../../../src/Tables/Records/ReplicaLeaf.php#L27-L32)
 
 static · Returns `void`
-
-This method throws an InputException if any of the expected keys are absent.
-
-It does not return anything.
 
 **Parameters:**
 
@@ -1519,26 +1411,18 @@ It does not return anything.
 
 **Throws:** `InputException`
 
-#### [`allArrayKeysExist`](../../../src/Tables/Records/ReplicaLeaf.php#L43-L50)
+#### [`allArrayKeysExist`](../../../src/Tables/Records/ReplicaLeaf.php#L34-L41)
 
 static · Returns `bool`
-
-This method returns true if every expected array key is found in the target array.
-
-Otherwise, it returns false. This is useful for input validation.
 
 **Parameters:**
 
 - `$target`: `array`
 - `...$arrayKeys`: `string`
 
-#### [`constantTimeSelect`](../../../src/Tables/Records/ReplicaLeaf.php#L65-L82)
+#### [`constantTimeSelect`](../../../src/Tables/Records/ReplicaLeaf.php#L48-L65)
 
 Returns `string`
-
-This is a constant-time conditional select. It should be read like a ternary operation.
-
-$result = ClassWithTrait::constantTimeSelect(1, $left, $right); -> $result === $left. $result = ClassWithTrait::constantTimeSelect(0, $left, $right); -> $result === $right.
 
 **Parameters:**
 
@@ -1548,63 +1432,49 @@ $result = ClassWithTrait::constantTimeSelect(1, $left, $right); -> $result === $
 
 **Throws:** `CryptoException`
 
-#### [`dos2unix`](../../../src/Tables/Records/ReplicaLeaf.php#L92-L95)
+#### [`dos2unix`](../../../src/Tables/Records/ReplicaLeaf.php#L73-L76)
 
 static · Returns `string`
 
 Normalize line-endings to UNIX-style (LF rather than CRLF).
 
-This is mostly used for PEM-encoded strings.
-
 **Parameters:**
 
 - `$in`: `string`
 
-#### [`preAuthEncode`](../../../src/Tables/Records/ReplicaLeaf.php#L113-L126)
+#### [`preAuthEncode`](../../../src/Tables/Records/ReplicaLeaf.php#L84-L97)
 
 static · Returns `string`
-
-This is an implementation of PAE() from PASETO. It encodes an array of strings into a flat string consisting of:
-
-1. The number of pieces. 2. For each piece: 1. The length of the piece (in bytes). 2. The contents of the piece. This allows multipart messages to have an injective canonical representation before passing ot a hash function (or other cryptographic function).
 
 **Parameters:**
 
 - `$pieces`: `array`
 
-#### [`sortByKey`](../../../src/Tables/Records/ReplicaLeaf.php#L133-L141)
+#### [`sortByKey`](../../../src/Tables/Records/ReplicaLeaf.php#L99-L107)
 
 static · Returns `void`
-
-This sorts the target array in-place, by its keys, including child arrays.
-
-Used for ensuring arrays are sorted before JSON encoding.
 
 **Parameters:**
 
 - `$arr`: `array`
 
-#### [`LE64`](../../../src/Tables/Records/ReplicaLeaf.php#L148-L151)
+#### [`LE64`](../../../src/Tables/Records/ReplicaLeaf.php#L111-L114)
 
 static · Returns `string`
-
-Mostly used by preAuthEncode() above. This packs an integer as 8 bytes.
 
 **Parameters:**
 
 - `$n`: `int`
 
-#### [`stringToByteArray`](../../../src/Tables/Records/ReplicaLeaf.php#L156-L163)
+#### [`stringToByteArray`](../../../src/Tables/Records/ReplicaLeaf.php#L116-L123)
 
 Returns `array`
-
-Get an array of bytes representing the input string.
 
 **Parameters:**
 
 - `$str`: `string`
 
-#### [`stripNewlines`](../../../src/Tables/Records/ReplicaLeaf.php#L171-L205)
+#### [`stripNewlines`](../../../src/Tables/Records/ReplicaLeaf.php#L131-L165)
 
 static · Returns `string`
 
@@ -1655,17 +1525,17 @@ Returns `void`
 - `$keyID`: `?string` = null
 - `$primaryKey`: `?int` = null
 
-#### [`hasPrimaryKey`](../../../src/Tables/Records/ReplicaPublicKey.php#L39-L42)
+#### [`hasPrimaryKey`](../../../src/Tables/Records/ReplicaPublicKey.php#L38-L41)
 
 Returns `bool`
 
-#### [`getPrimaryKey`](../../../src/Tables/Records/ReplicaPublicKey.php#L48-L54)
+#### [`getPrimaryKey`](../../../src/Tables/Records/ReplicaPublicKey.php#L47-L53)
 
 Returns `int`
 
 **Throws:** `TableException`
 
-#### [`attachSymmetricKey`](../../../src/Tables/Records/ReplicaPublicKey.php#L60-L70)
+#### [`attachSymmetricKey`](../../../src/Tables/Records/ReplicaPublicKey.php#L59-L69)
 
 Returns `self`
 
@@ -1676,7 +1546,7 @@ Returns `self`
 
 **Throws:** `TableException`
 
-#### [`getSymmetricKeyForProperty`](../../../src/Tables/Records/ReplicaPublicKey.php#L76-L85)
+#### [`getSymmetricKeyForProperty`](../../../src/Tables/Records/ReplicaPublicKey.php#L75-L84)
 
 Returns `FediE2EE\PKD\Crypto\SymmetricKey`
 
@@ -1686,11 +1556,11 @@ Returns `FediE2EE\PKD\Crypto\SymmetricKey`
 
 **Throws:** `TableException`
 
-#### [`getSymmetricKeys`](../../../src/Tables/Records/ReplicaPublicKey.php#L90-L93)
+#### [`getSymmetricKeys`](../../../src/Tables/Records/ReplicaPublicKey.php#L89-L92)
 
 Returns `array`
 
-#### [`getRfc9421PublicKeys`](../../../src/Tables/Records/ReplicaPublicKey.php#L109-L112)
+#### [`getRfc9421PublicKeys`](../../../src/Tables/Records/ReplicaPublicKey.php#L108-L111)
 
 Returns `FediE2EE\PKD\Crypto\PublicKey`
 
@@ -1704,7 +1574,7 @@ If multiple are returned (e.g., via FEP-521a), this will cycle through them unti
 
 **Throws:** `CryptoException`, `FetchException`, `InvalidArgumentException`, `SodiumException`
 
-#### [`jsonDecode`](../../../src/Tables/Records/ReplicaPublicKey.php#L17-L20)
+#### [`jsonDecode`](../../../src/Tables/Records/ReplicaPublicKey.php#L16-L19)
 
 static · Returns `array`
 
@@ -1714,7 +1584,7 @@ static · Returns `array`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonDecodeObject`](../../../src/Tables/Records/ReplicaPublicKey.php#L25-L28)
+#### [`jsonDecodeObject`](../../../src/Tables/Records/ReplicaPublicKey.php#L24-L27)
 
 static · Returns `stdClass`
 
@@ -1724,7 +1594,7 @@ static · Returns `stdClass`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonEncode`](../../../src/Tables/Records/ReplicaPublicKey.php#L34-L40)
+#### [`jsonEncode`](../../../src/Tables/Records/ReplicaPublicKey.php#L33-L39)
 
 static · Returns `string`
 
@@ -1734,13 +1604,9 @@ static · Returns `string`
 
 **Throws:** `BaseJsonException`
 
-#### [`assertAllArrayKeysExist`](../../../src/Tables/Records/ReplicaPublicKey.php#L30-L35)
+#### [`assertAllArrayKeysExist`](../../../src/Tables/Records/ReplicaPublicKey.php#L27-L32)
 
 static · Returns `void`
-
-This method throws an InputException if any of the expected keys are absent.
-
-It does not return anything.
 
 **Parameters:**
 
@@ -1749,26 +1615,18 @@ It does not return anything.
 
 **Throws:** `InputException`
 
-#### [`allArrayKeysExist`](../../../src/Tables/Records/ReplicaPublicKey.php#L43-L50)
+#### [`allArrayKeysExist`](../../../src/Tables/Records/ReplicaPublicKey.php#L34-L41)
 
 static · Returns `bool`
-
-This method returns true if every expected array key is found in the target array.
-
-Otherwise, it returns false. This is useful for input validation.
 
 **Parameters:**
 
 - `$target`: `array`
 - `...$arrayKeys`: `string`
 
-#### [`constantTimeSelect`](../../../src/Tables/Records/ReplicaPublicKey.php#L65-L82)
+#### [`constantTimeSelect`](../../../src/Tables/Records/ReplicaPublicKey.php#L48-L65)
 
 Returns `string`
-
-This is a constant-time conditional select. It should be read like a ternary operation.
-
-$result = ClassWithTrait::constantTimeSelect(1, $left, $right); -> $result === $left. $result = ClassWithTrait::constantTimeSelect(0, $left, $right); -> $result === $right.
 
 **Parameters:**
 
@@ -1778,63 +1636,49 @@ $result = ClassWithTrait::constantTimeSelect(1, $left, $right); -> $result === $
 
 **Throws:** `CryptoException`
 
-#### [`dos2unix`](../../../src/Tables/Records/ReplicaPublicKey.php#L92-L95)
+#### [`dos2unix`](../../../src/Tables/Records/ReplicaPublicKey.php#L73-L76)
 
 static · Returns `string`
 
 Normalize line-endings to UNIX-style (LF rather than CRLF).
 
-This is mostly used for PEM-encoded strings.
-
 **Parameters:**
 
 - `$in`: `string`
 
-#### [`preAuthEncode`](../../../src/Tables/Records/ReplicaPublicKey.php#L113-L126)
+#### [`preAuthEncode`](../../../src/Tables/Records/ReplicaPublicKey.php#L84-L97)
 
 static · Returns `string`
-
-This is an implementation of PAE() from PASETO. It encodes an array of strings into a flat string consisting of:
-
-1. The number of pieces. 2. For each piece: 1. The length of the piece (in bytes). 2. The contents of the piece. This allows multipart messages to have an injective canonical representation before passing ot a hash function (or other cryptographic function).
 
 **Parameters:**
 
 - `$pieces`: `array`
 
-#### [`sortByKey`](../../../src/Tables/Records/ReplicaPublicKey.php#L133-L141)
+#### [`sortByKey`](../../../src/Tables/Records/ReplicaPublicKey.php#L99-L107)
 
 static · Returns `void`
-
-This sorts the target array in-place, by its keys, including child arrays.
-
-Used for ensuring arrays are sorted before JSON encoding.
 
 **Parameters:**
 
 - `$arr`: `array`
 
-#### [`LE64`](../../../src/Tables/Records/ReplicaPublicKey.php#L148-L151)
+#### [`LE64`](../../../src/Tables/Records/ReplicaPublicKey.php#L111-L114)
 
 static · Returns `string`
-
-Mostly used by preAuthEncode() above. This packs an integer as 8 bytes.
 
 **Parameters:**
 
 - `$n`: `int`
 
-#### [`stringToByteArray`](../../../src/Tables/Records/ReplicaPublicKey.php#L156-L163)
+#### [`stringToByteArray`](../../../src/Tables/Records/ReplicaPublicKey.php#L116-L123)
 
 Returns `array`
-
-Get an array of bytes representing the input string.
 
 **Parameters:**
 
 - `$str`: `string`
 
-#### [`stripNewlines`](../../../src/Tables/Records/ReplicaPublicKey.php#L171-L205)
+#### [`stripNewlines`](../../../src/Tables/Records/ReplicaPublicKey.php#L131-L165)
 
 static · Returns `string`
 

@@ -13,7 +13,6 @@ use ParagonIE\HPKE\HPKEException;
 use ParagonIE\HPKE\Interfaces\EncapsKeyInterface;
 use ParagonIE\HPKE\KEM\DHKEM\EncapsKey;
 use ParagonIE\HPKE\KEM\DiffieHellmanKEM;
-
 use function is_object;
 use function json_decode;
 use function json_last_error_msg;

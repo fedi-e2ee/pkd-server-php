@@ -63,7 +63,6 @@ use Psr\SimpleCache\InvalidArgumentException;
 use Random\RandomException;
 use SodiumException;
 use TypeError;
-
 use function array_any;
 use function hash_equals;
 use function is_array;

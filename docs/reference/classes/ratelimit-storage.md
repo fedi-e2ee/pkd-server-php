@@ -21,7 +21,7 @@ Namespace: `FediE2EE\PKDServer\RateLimit\Storage`
 
 ### Methods
 
-#### [`__construct`](../../../src/RateLimit/Storage/Filesystem.php#L42-L51)
+#### [`__construct`](../../../src/RateLimit/Storage/Filesystem.php#L41-L50)
 
 Returns `void`
 
@@ -33,7 +33,7 @@ Returns `void`
 
 **Throws:** `DependencyException`
 
-#### [`get`](../../../src/RateLimit/Storage/Filesystem.php#L60-L83)
+#### [`get`](../../../src/RateLimit/Storage/Filesystem.php#L59-L82)
 
 Returns `?FediE2EE\PKDServer\RateLimit\RateLimitData`
 
@@ -46,7 +46,7 @@ Returns `?FediE2EE\PKDServer\RateLimit\RateLimitData`
 
 **Throws:** `DateMalformedStringException`, `InputException`, `JsonException`, `SodiumException`
 
-#### [`set`](../../../src/RateLimit/Storage/Filesystem.php#L90-L98)
+#### [`set`](../../../src/RateLimit/Storage/Filesystem.php#L89-L97)
 
 Returns `bool`
 
@@ -60,7 +60,7 @@ Returns `bool`
 
 **Throws:** `SodiumException`, `JsonException`
 
-#### [`delete`](../../../src/RateLimit/Storage/Filesystem.php#L104-L113)
+#### [`delete`](../../../src/RateLimit/Storage/Filesystem.php#L103-L112)
 
 Returns `bool`
 
@@ -73,7 +73,7 @@ Returns `bool`
 
 **Throws:** `SodiumException`
 
-#### [`getFilesystemPath`](../../../src/RateLimit/Storage/Filesystem.php#L118-L139)
+#### [`getFilesystemPath`](../../../src/RateLimit/Storage/Filesystem.php#L117-L138)
 
 Returns `string`
 
@@ -84,7 +84,7 @@ Returns `string`
 
 **Throws:** `SodiumException`
 
-#### [`jsonDecode`](../../../src/RateLimit/Storage/Filesystem.php#L17-L20)
+#### [`jsonDecode`](../../../src/RateLimit/Storage/Filesystem.php#L16-L19)
 
 static · Returns `array`
 
@@ -94,7 +94,7 @@ static · Returns `array`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonDecodeObject`](../../../src/RateLimit/Storage/Filesystem.php#L25-L28)
+#### [`jsonDecodeObject`](../../../src/RateLimit/Storage/Filesystem.php#L24-L27)
 
 static · Returns `stdClass`
 
@@ -104,7 +104,7 @@ static · Returns `stdClass`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonEncode`](../../../src/RateLimit/Storage/Filesystem.php#L34-L40)
+#### [`jsonEncode`](../../../src/RateLimit/Storage/Filesystem.php#L33-L39)
 
 static · Returns `string`
 
@@ -114,13 +114,9 @@ static · Returns `string`
 
 **Throws:** `BaseJsonException`
 
-#### [`assertAllArrayKeysExist`](../../../src/RateLimit/Storage/Filesystem.php#L30-L35)
+#### [`assertAllArrayKeysExist`](../../../src/RateLimit/Storage/Filesystem.php#L27-L32)
 
 static · Returns `void`
-
-This method throws an InputException if any of the expected keys are absent.
-
-It does not return anything.
 
 **Parameters:**
 
@@ -129,26 +125,18 @@ It does not return anything.
 
 **Throws:** `InputException`
 
-#### [`allArrayKeysExist`](../../../src/RateLimit/Storage/Filesystem.php#L43-L50)
+#### [`allArrayKeysExist`](../../../src/RateLimit/Storage/Filesystem.php#L34-L41)
 
 static · Returns `bool`
-
-This method returns true if every expected array key is found in the target array.
-
-Otherwise, it returns false. This is useful for input validation.
 
 **Parameters:**
 
 - `$target`: `array`
 - `...$arrayKeys`: `string`
 
-#### [`constantTimeSelect`](../../../src/RateLimit/Storage/Filesystem.php#L65-L82)
+#### [`constantTimeSelect`](../../../src/RateLimit/Storage/Filesystem.php#L48-L65)
 
 Returns `string`
-
-This is a constant-time conditional select. It should be read like a ternary operation.
-
-$result = ClassWithTrait::constantTimeSelect(1, $left, $right); -> $result === $left. $result = ClassWithTrait::constantTimeSelect(0, $left, $right); -> $result === $right.
 
 **Parameters:**
 
@@ -158,63 +146,49 @@ $result = ClassWithTrait::constantTimeSelect(1, $left, $right); -> $result === $
 
 **Throws:** `CryptoException`
 
-#### [`dos2unix`](../../../src/RateLimit/Storage/Filesystem.php#L92-L95)
+#### [`dos2unix`](../../../src/RateLimit/Storage/Filesystem.php#L73-L76)
 
 static · Returns `string`
 
 Normalize line-endings to UNIX-style (LF rather than CRLF).
 
-This is mostly used for PEM-encoded strings.
-
 **Parameters:**
 
 - `$in`: `string`
 
-#### [`preAuthEncode`](../../../src/RateLimit/Storage/Filesystem.php#L113-L126)
+#### [`preAuthEncode`](../../../src/RateLimit/Storage/Filesystem.php#L84-L97)
 
 static · Returns `string`
-
-This is an implementation of PAE() from PASETO. It encodes an array of strings into a flat string consisting of:
-
-1. The number of pieces. 2. For each piece: 1. The length of the piece (in bytes). 2. The contents of the piece. This allows multipart messages to have an injective canonical representation before passing ot a hash function (or other cryptographic function).
 
 **Parameters:**
 
 - `$pieces`: `array`
 
-#### [`sortByKey`](../../../src/RateLimit/Storage/Filesystem.php#L133-L141)
+#### [`sortByKey`](../../../src/RateLimit/Storage/Filesystem.php#L99-L107)
 
 static · Returns `void`
-
-This sorts the target array in-place, by its keys, including child arrays.
-
-Used for ensuring arrays are sorted before JSON encoding.
 
 **Parameters:**
 
 - `$arr`: `array`
 
-#### [`LE64`](../../../src/RateLimit/Storage/Filesystem.php#L148-L151)
+#### [`LE64`](../../../src/RateLimit/Storage/Filesystem.php#L111-L114)
 
 static · Returns `string`
-
-Mostly used by preAuthEncode() above. This packs an integer as 8 bytes.
 
 **Parameters:**
 
 - `$n`: `int`
 
-#### [`stringToByteArray`](../../../src/RateLimit/Storage/Filesystem.php#L156-L163)
+#### [`stringToByteArray`](../../../src/RateLimit/Storage/Filesystem.php#L116-L123)
 
 Returns `array`
-
-Get an array of bytes representing the input string.
 
 **Parameters:**
 
 - `$str`: `string`
 
-#### [`stripNewlines`](../../../src/RateLimit/Storage/Filesystem.php#L171-L205)
+#### [`stripNewlines`](../../../src/RateLimit/Storage/Filesystem.php#L131-L165)
 
 static · Returns `string`
 
@@ -238,7 +212,7 @@ Strip all newlines (CR, LF) characters from a string.
 
 ### Methods
 
-#### [`__construct`](../../../src/RateLimit/Storage/Redis.php#L32-L40)
+#### [`__construct`](../../../src/RateLimit/Storage/Redis.php#L31-L39)
 
 Returns `void`
 
@@ -249,7 +223,7 @@ Returns `void`
 
 **Throws:** `DependencyException`
 
-#### [`get`](../../../src/RateLimit/Storage/Redis.php#L48-L56)
+#### [`get`](../../../src/RateLimit/Storage/Redis.php#L47-L55)
 
 Returns `?FediE2EE\PKDServer\RateLimit\RateLimitData`
 
@@ -262,7 +236,7 @@ Returns `?FediE2EE\PKDServer\RateLimit\RateLimitData`
 
 **Throws:** `InputException`, `JsonException`, `SodiumException`
 
-#### [`set`](../../../src/RateLimit/Storage/Redis.php#L63-L68)
+#### [`set`](../../../src/RateLimit/Storage/Redis.php#L62-L67)
 
 Returns `bool`
 
@@ -276,7 +250,7 @@ Returns `bool`
 
 **Throws:** `JsonException`, `SodiumException`
 
-#### [`delete`](../../../src/RateLimit/Storage/Redis.php#L74-L79)
+#### [`delete`](../../../src/RateLimit/Storage/Redis.php#L73-L78)
 
 Returns `bool`
 
@@ -289,7 +263,7 @@ Returns `bool`
 
 **Throws:** `SodiumException`
 
-#### [`jsonDecode`](../../../src/RateLimit/Storage/Redis.php#L17-L20)
+#### [`jsonDecode`](../../../src/RateLimit/Storage/Redis.php#L16-L19)
 
 static · Returns `array`
 
@@ -299,7 +273,7 @@ static · Returns `array`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonDecodeObject`](../../../src/RateLimit/Storage/Redis.php#L25-L28)
+#### [`jsonDecodeObject`](../../../src/RateLimit/Storage/Redis.php#L24-L27)
 
 static · Returns `stdClass`
 
@@ -309,7 +283,7 @@ static · Returns `stdClass`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonEncode`](../../../src/RateLimit/Storage/Redis.php#L34-L40)
+#### [`jsonEncode`](../../../src/RateLimit/Storage/Redis.php#L33-L39)
 
 static · Returns `string`
 
@@ -319,13 +293,9 @@ static · Returns `string`
 
 **Throws:** `BaseJsonException`
 
-#### [`assertAllArrayKeysExist`](../../../src/RateLimit/Storage/Redis.php#L30-L35)
+#### [`assertAllArrayKeysExist`](../../../src/RateLimit/Storage/Redis.php#L27-L32)
 
 static · Returns `void`
-
-This method throws an InputException if any of the expected keys are absent.
-
-It does not return anything.
 
 **Parameters:**
 
@@ -334,26 +304,18 @@ It does not return anything.
 
 **Throws:** `InputException`
 
-#### [`allArrayKeysExist`](../../../src/RateLimit/Storage/Redis.php#L43-L50)
+#### [`allArrayKeysExist`](../../../src/RateLimit/Storage/Redis.php#L34-L41)
 
 static · Returns `bool`
-
-This method returns true if every expected array key is found in the target array.
-
-Otherwise, it returns false. This is useful for input validation.
 
 **Parameters:**
 
 - `$target`: `array`
 - `...$arrayKeys`: `string`
 
-#### [`constantTimeSelect`](../../../src/RateLimit/Storage/Redis.php#L65-L82)
+#### [`constantTimeSelect`](../../../src/RateLimit/Storage/Redis.php#L48-L65)
 
 Returns `string`
-
-This is a constant-time conditional select. It should be read like a ternary operation.
-
-$result = ClassWithTrait::constantTimeSelect(1, $left, $right); -> $result === $left. $result = ClassWithTrait::constantTimeSelect(0, $left, $right); -> $result === $right.
 
 **Parameters:**
 
@@ -363,63 +325,49 @@ $result = ClassWithTrait::constantTimeSelect(1, $left, $right); -> $result === $
 
 **Throws:** `CryptoException`
 
-#### [`dos2unix`](../../../src/RateLimit/Storage/Redis.php#L92-L95)
+#### [`dos2unix`](../../../src/RateLimit/Storage/Redis.php#L73-L76)
 
 static · Returns `string`
 
 Normalize line-endings to UNIX-style (LF rather than CRLF).
 
-This is mostly used for PEM-encoded strings.
-
 **Parameters:**
 
 - `$in`: `string`
 
-#### [`preAuthEncode`](../../../src/RateLimit/Storage/Redis.php#L113-L126)
+#### [`preAuthEncode`](../../../src/RateLimit/Storage/Redis.php#L84-L97)
 
 static · Returns `string`
-
-This is an implementation of PAE() from PASETO. It encodes an array of strings into a flat string consisting of:
-
-1. The number of pieces. 2. For each piece: 1. The length of the piece (in bytes). 2. The contents of the piece. This allows multipart messages to have an injective canonical representation before passing ot a hash function (or other cryptographic function).
 
 **Parameters:**
 
 - `$pieces`: `array`
 
-#### [`sortByKey`](../../../src/RateLimit/Storage/Redis.php#L133-L141)
+#### [`sortByKey`](../../../src/RateLimit/Storage/Redis.php#L99-L107)
 
 static · Returns `void`
-
-This sorts the target array in-place, by its keys, including child arrays.
-
-Used for ensuring arrays are sorted before JSON encoding.
 
 **Parameters:**
 
 - `$arr`: `array`
 
-#### [`LE64`](../../../src/RateLimit/Storage/Redis.php#L148-L151)
+#### [`LE64`](../../../src/RateLimit/Storage/Redis.php#L111-L114)
 
 static · Returns `string`
-
-Mostly used by preAuthEncode() above. This packs an integer as 8 bytes.
 
 **Parameters:**
 
 - `$n`: `int`
 
-#### [`stringToByteArray`](../../../src/RateLimit/Storage/Redis.php#L156-L163)
+#### [`stringToByteArray`](../../../src/RateLimit/Storage/Redis.php#L116-L123)
 
 Returns `array`
-
-Get an array of bytes representing the input string.
 
 **Parameters:**
 
 - `$str`: `string`
 
-#### [`stripNewlines`](../../../src/RateLimit/Storage/Redis.php#L171-L205)
+#### [`stripNewlines`](../../../src/RateLimit/Storage/Redis.php#L131-L165)
 
 static · Returns `string`
 
