@@ -23,7 +23,6 @@ use Psr\Http\Message\{
     ResponseInterface
 };
 use SodiumException;
-
 use function array_key_exists;
 use function hash_equals;
 use function preg_match;

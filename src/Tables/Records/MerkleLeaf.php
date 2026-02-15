@@ -14,7 +14,6 @@ use FediE2EE\PKDServer\Traits\TableRecordTrait;
 use FediE2EE\PKDServer\Tables\MerkleState;
 use ParagonIE\ConstantTime\Base64UrlSafe;
 use SodiumException;
-
 use function hash;
 use function json_decode;
 use function sodium_bin2hex;

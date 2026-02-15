@@ -32,7 +32,6 @@ use ParagonIE\CipherSweet\Exception\{
 use ParagonIE\ConstantTime\Base64UrlSafe;
 use SensitiveParameter;
 use SodiumException;
-
 use function floor;
 use function hash_equals;
 use function hash_hmac;

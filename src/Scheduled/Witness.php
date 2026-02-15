@@ -51,7 +51,6 @@ use ParagonIE\EasyDB\EasyDB;
 use Random\RandomException;
 use SodiumException;
 use Throwable;
-
 use function count;
 use function is_array;
 use function is_string;

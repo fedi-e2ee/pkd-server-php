@@ -57,7 +57,6 @@ use ReflectionClass;
 use ReflectionException;
 use SodiumException;
 use TypeError;
-
 use const FediE2EE\PKDServer\PKD_SERVER_ROOT;
 
 /**

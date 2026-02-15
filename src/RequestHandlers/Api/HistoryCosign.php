@@ -21,7 +21,6 @@ use Psr\Http\Server\RequestHandlerInterface;
 use SodiumException;
 use Throwable;
 use TypeError;
-
 use function in_array;
 use function is_object;
 use function json_decode;

@@ -10,7 +10,6 @@ use FediE2EE\PKDServer\Traits\JsonTrait;
 use JsonException as BaseJsonException;
 use Override;
 use JsonSerializable;
-
 use function is_array;
 use function is_null;
 

@@ -25,7 +25,6 @@ use Twig\Error\{
     SyntaxError
 };
 use TypeError;
-
 use function array_key_exists;
 use function time;
 

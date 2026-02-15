@@ -9,7 +9,6 @@ use League\Route\Route;
 use Override;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
-
 use function call_user_func_array;
 use function is_array;
 use function is_object;

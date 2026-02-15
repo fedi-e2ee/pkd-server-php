@@ -77,7 +77,6 @@ use Psr\SimpleCache\InvalidArgumentException;
 use RuntimeException;
 use SodiumException;
 use Throwable;
-
 use const FediE2EE\PKDServer\PKD_SERVER_ROOT;
 
 #[CoversClass(Protocol::class)]

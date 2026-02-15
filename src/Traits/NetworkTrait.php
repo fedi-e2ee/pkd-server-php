@@ -4,7 +4,6 @@ namespace FediE2EE\PKDServer\Traits;
 
 use FediE2EE\PKDServer\Exceptions\NetTraitException;
 use Psr\Http\Message\ServerRequestInterface;
-
 use function array_values;
 use function filter_var;
 use function in_array;

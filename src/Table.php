@@ -15,7 +15,6 @@ use ParagonIE\CipherSweet\CipherSweet;
 use ParagonIE\CipherSweet\Backend\Key\SymmetricKey as CipherSweetKey;
 use ParagonIE\EasyDB\EasyDB;
 use SodiumException;
-
 use function hash_equals;
 
 abstract class Table
