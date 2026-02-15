@@ -17,11 +17,10 @@
   "type": "project",
   "require": {
     "php": "^8.4",
-    "ext-json": "*",
     "ext-pdo": "*",
-    "ext-openssl": "*",
+    "ext-json": "*",
     "ext-sodium": "*",
-    "fedi-e2ee/pkd-crypto": "^0.36|1",
+    "fedi-e2ee/pkd-crypto": "^0.31|1",
     "fedi-e2ee/pkd-extensions": "^0.2|^1",
     "guzzlehttp/guzzle": "^7",
     "laminas/laminas-diactoros": "^3",
@@ -47,6 +46,7 @@
     "phpstan/phpstan": "^2.1",
     "phpunit/phpunit": "^12",
     "roave/security-advisories": "dev-latest",
+    "soatok/code-style": ">= 0",
     "vimeo/psalm": "^6.15"
   },
   "config": {
