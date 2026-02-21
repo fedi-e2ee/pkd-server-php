@@ -156,8 +156,8 @@ class BurnDownTest extends TestCase
     {
         // Create two actors on the SAME domain: one to burn down, one as operator
         // Per spec, BurnDown must be from an operator on the same instance as the target
-        [$actorHandle, $canonActor] = $this->makeDummyActor();
-        [$operatorHandle, $canonOperator] = $this->makeDummyActor();
+        [$actorHandle, $canonActor] = $this->makeDummyActor('text-burndown.example.com');
+        [$operatorHandle, $canonOperator] = $this->makeDummyActor('text-burndown.example.com');
 
         $actorKey = SecretKey::generate();
         $operatorKey = SecretKey::generate();
@@ -227,7 +227,7 @@ class BurnDownTest extends TestCase
         $totpSecret = random_bytes(20);
         /** @var TOTP $totpTable */
         $totpTable = $this->table('TOTP');
-        $totpTable->saveSecret('example.com', $totpSecret);
+        $totpTable->saveSecret('text-burndown.example.com', $totpSecret);
 
         $latestRoot3 = $merkleState->getLatestRoot();
         // Note: BurnDownAction canonicalizes actor but NOT operator, so operator must be canonical URL
@@ -241,6 +241,7 @@ class BurnDownTest extends TestCase
 
         // OTP is a top-level Bundle field (not part of the signed/encrypted message)
         $bundleData = json_decode($bundle3->toJson(), true);
+        $otp = self::generateTOTP($totpSecret);
         $bundleData['otp'] = $otp;
         $bundleJson = json_encode($bundleData, JSON_UNESCAPED_SLASHES);
 
