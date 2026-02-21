@@ -386,7 +386,7 @@ Insert leaf with retry logic for deadlocks
 
 - `$leaf`: `FediE2EE\PKDServer\Tables\Records\MerkleLeaf`
 - `$inTransaction`: `callable`
-- `$maxRetries`: `int` = 5
+- `$maxRetries`: `int` = 20
 
 **Throws:** `ConcurrentException`, `CryptoException`, `DependencyException`, `NotImplementedException`, `RandomException`, `SodiumException`
 
