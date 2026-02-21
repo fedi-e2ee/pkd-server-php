@@ -75,8 +75,10 @@ class ReplicaHistory extends Table
                 FROM pkd_replica_history
                 WHERE peer = ?
                 ORDER BY replicahistoryid DESC
-                LIMIT {$limit} OFFSET {$offset}",
-            $peerID
+                LIMIT ? OFFSET ?",
+            $peerID,
+            $limit,
+            $offset
         );
         return $this->formatHistory($results);
     }

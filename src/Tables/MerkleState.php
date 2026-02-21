@@ -405,8 +405,10 @@ class MerkleState extends Table
             "SELECT publickeyhash, contents, contenthash, wrappedkeys, root, created, signature
             FROM pkd_merkle_leaves
             WHERE merkleleafid > ?
-            LIMIT {$limit} OFFSET {$offset}",
-            $oldRootID
+            LIMIT ? OFFSET ?",
+            $oldRootID,
+            $limit,
+            $offset
         );
         $return = [];
         $keyWrapping = new KeyWrapping($this->config());
