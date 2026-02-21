@@ -85,6 +85,10 @@ trait HttpTestTrait
                 $db->exec('ROLLBACK');
             } catch (PDOException) {
             }
+            try {
+                $db->exec('END TRANSACTION');
+            } catch (PDOException) {
+            }
         }
         if ($db->inTransaction()) {
             $db->rollback();
@@ -214,6 +218,10 @@ trait HttpTestTrait
         if ($db->getDriver() === 'sqlite') {
             try {
                 $db->exec('ROLLBACK');
+            } catch (PDOException) {
+            }
+            try {
+                $db->exec('END TRANSACTION');
             } catch (PDOException) {
             }
         }
