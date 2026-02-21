@@ -25,6 +25,7 @@ class ParamsTest extends TestCase
         $this->assertSame('', $params->getCacheKey());
         $this->assertSame(60, $params->httpCacheTtl);
         $this->assertSame(60, $params->getHttpCacheTtl());
+        $this->assertSame(true, $params->getBurnDownEnabled());
     }
 
     public function testInvalidHashAlgo(): void
@@ -121,7 +122,8 @@ class ParamsTest extends TestCase
             actorUsername: 'alice',
             hostname: 'example.com',
             cacheKey: 'test-key',
-            httpCacheTtl: 100
+            httpCacheTtl: 100,
+            serverAllowsBurnDown: false,
         );
         $this->assertSame('sha512', $params->hashAlgo);
         $this->assertSame(30, $params->otpMaxLife);
@@ -129,5 +131,6 @@ class ParamsTest extends TestCase
         $this->assertSame('example.com', $params->hostname);
         $this->assertSame('test-key', $params->cacheKey);
         $this->assertSame(100, $params->httpCacheTtl);
+        $this->assertSame(false, $params->serverAllowsBurnDown);
     }
 }

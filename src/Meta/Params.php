@@ -23,6 +23,7 @@ readonly class Params
         public string $hostname = 'localhost',
         public string $cacheKey = '',
         public int $httpCacheTtl = 60,
+        public bool $serverAllowsBurnDown = true,
     ) {
         if (!Tree::isHashFunctionAllowed($this->hashAlgo)) {
             throw new DependencyException('Disallowed hash algorithm');
@@ -47,6 +48,11 @@ readonly class Params
     public function getActorUsername(): string
     {
         return $this->actorUsername;
+    }
+
+    public function getBurnDownEnabled(): bool
+    {
+        return $this->serverAllowsBurnDown;
     }
 
     public function getCacheKey(): string

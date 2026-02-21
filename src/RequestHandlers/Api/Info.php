@@ -40,6 +40,7 @@ class Info implements RequestHandlerInterface
             '!pkd-context' => 'fedi-e2ee:v1/api/info',
             'current-time' => $this->time(),
             'actor' => $actor,
+            'burndown-enabled' => $params->getBurnDownEnabled(),
             'public-key' => $keys->publicKey->toString(),
         ]);
     }

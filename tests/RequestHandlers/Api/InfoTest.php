@@ -47,8 +47,9 @@ class InfoTest extends TestCase
         $this->assertArrayHasKey('!pkd-context', $decoded);
         $this->assertArrayHasKey('current-time', $decoded);
         $this->assertArrayHasKey('actor', $decoded);
+        $this->assertArrayHasKey('burndown-enabled', $decoded);
         $this->assertArrayHasKey('public-key', $decoded);
-        $this->assertCount(4, $decoded, 'Response should have exactly 4 keys');
+        $this->assertCount(5, $decoded, 'Response should have exactly 5 keys');
 
         // Verify values
         $this->assertLessThanOrEqual(time(), (int) $decoded['current-time']);
@@ -58,6 +59,7 @@ class InfoTest extends TestCase
         $params = $config->getParams();
         $expectedActor = $params->actorUsername . '@' . $params->hostname;
         $this->assertSame($expectedActor, $decoded['actor']);
+        $this->assertSame($params->serverAllowsBurnDown, $decoded['burndown-enabled']);
         $this->assertNotInTransaction();
     }
 }
