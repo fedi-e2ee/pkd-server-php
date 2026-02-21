@@ -125,10 +125,10 @@ class MerkleState extends Table
 
         // Validate hostname:
         $hostname = $this->config()->getParams()->hostname;
-        if ($tmp['hostname'] !== $hostname) {
+        if (!hash_equals($tmp['hostname'], $hostname)) {
             // If hostname is formatted as a URL, just grab the hostname:
             $parsedHost = self::parseUrlHost($tmp['hostname']);
-            if ($parsedHost !== $hostname) {
+            if (!hash_equals($parsedHost, $hostname)) {
                 // Both mismatched? Bail out.
                 throw new ProtocolException('Hostname mismatch');
             }
