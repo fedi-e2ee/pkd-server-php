@@ -568,12 +568,13 @@ class MerkleState extends Table
             $inTransaction();
 
             // We only commit this transaction if all was successful:
-            if ($this->db->getDriver() === 'sqlite') {
-                $this->db->exec("END TRANSACTION");
-                return true;
-            }
             return $this->db->commit();
         } finally {
+            if ($this->db->getDriver() === 'sqlite') {
+                try {
+                    $this->db->exec("END TRANSACTION");
+                } catch (PDOException) {}
+            }
             // @phpstan-ignore-next-line
             $wrap = !$this->db->inTransaction();
             // @phpstan-ignore-next-line
