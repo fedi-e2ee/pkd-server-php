@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace FediE2EE\PKDServer\Tests\Integration;
 
+use DateMalformedStringException;
 use FediE2EE\PKD\Crypto\ActivityPub\WebFinger as PKDCryptoWebFinger;
 use FediE2EE\PKD\Crypto\AttributeEncryption\AttributeKeyMap;
 use FediE2EE\PKD\Crypto\Exceptions\{
@@ -22,6 +23,8 @@ use FediE2EE\PKD\Crypto\Protocol\Actions\{
 };
 use FediE2EE\PKD\Crypto\Protocol\Handler;
 use GuzzleHttp\Exception\GuzzleException;
+use ParagonIE\CipherSweet\Exception\CipherSweetException;
+use Random\RandomException;
 use FediE2EE\PKD\Crypto\{
     SecretKey,
     SymmetricKey
@@ -42,10 +45,10 @@ use FediE2EE\PKDServer\{
 };
 use FediE2EE\PKDServer\Exceptions\{
     CacheException,
+    ConcurrentException,
     DependencyException,
     ProtocolException,
-    TableException
-};
+    TableException};
 use FediE2EE\PKDServer\Tables\{
     Actors,
     AuxData,
@@ -61,7 +64,10 @@ use FediE2EE\PKDServer\Tables\Records\{
     Peer
 };
 use FediE2EE\PKDServer\Tests\HttpTestTrait;
-use FediE2EE\PKDServer\Traits\ConfigTrait;
+use FediE2EE\PKDServer\Traits\{
+    ConfigTrait,
+    TOTPTrait
+};
 use GuzzleHttp\Psr7\Response;
 use JsonException;
 use ParagonIE\Certainty\Exception\CertaintyException;
@@ -106,6 +112,7 @@ class VectorsTest extends TestCase
 {
     use ConfigTrait;
     use HttpTestTrait;
+    use TOTPTrait;
 
     private const string TEST_VECTORS_PATH = PKD_SERVER_ROOT . '/tests/TestVectors/test-vectors.json';
 
@@ -543,8 +550,11 @@ class VectorsTest extends TestCase
     /**
      * @throws BundleException
      * @throws CacheException
+     * @throws CipherSweetException
+     * @throws ConcurrentException
      * @throws CryptoException
      * @throws CryptoJsonException
+     * @throws DateMalformedStringException
      * @throws DependencyException
      * @throws GuzzleException
      * @throws HPKEException
@@ -552,6 +562,7 @@ class VectorsTest extends TestCase
      * @throws NetworkException
      * @throws NotImplementedException
      * @throws ProtocolException
+     * @throws RandomException
      * @throws SodiumException
      * @throws TableException
      */
@@ -565,7 +576,13 @@ class VectorsTest extends TestCase
         $operator = $this->extractOperatorFromDescription($step);
         $operatorKey = $this->identityKeys[$operator];
 
-        $otp = '00000000';
+        $actorDomain = parse_url($targetActor, PHP_URL_HOST);
+        $totpSecret = random_bytes(20);
+        /** @var TOTP $totpTable */
+        $totpTable = $this->table('TOTP');
+        $totpTable->saveSecret($actorDomain, $totpSecret);
+        $otp = self::generateTOTP($totpSecret);
+
         $burnDown = new BurnDownAction($targetActor, $operator, null, $otp);
         $akm = (new AttributeKeyMap())
             ->addKey('actor', SymmetricKey::generate())

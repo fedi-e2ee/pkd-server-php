@@ -23,7 +23,6 @@ use FediE2EE\PKD\Crypto\Protocol\{
     Actions\MoveIdentity,
     Actions\RevokeAuxData,
     Actions\RevokeKey,
-    Actions\RevokeKeyThirdParty,
     Actions\UndoFireproof,
     Handler
 };
@@ -37,7 +36,10 @@ use FediE2EE\PKD\Crypto\{
     SecretKey,
     SymmetricKey
 };
-use FediE2EE\PKDServer\Traits\ConfigTrait;
+use FediE2EE\PKDServer\Traits\{
+    ConfigTrait,
+    TOTPTrait
+};
 use FediE2EE\PKDServer\Exceptions\{
     CacheException,
     ConcurrentException,
@@ -117,6 +119,7 @@ class ProtocolTest extends TestCase
 {
     use ConfigTrait;
     use HttpTestTrait;
+    use TOTPTrait;
 
     protected Protocol $protocol;
 
@@ -479,14 +482,19 @@ class ProtocolTest extends TestCase
         $pkTable = $this->table('PublicKeys');
         $this->assertCount(1, $pkTable->getPublicKeysFor($canonActor));
 
+        $totpSecret = random_bytes(20);
+        /** @var TOTP $totpTable */
+        $totpTable = $this->table('TOTP');
+        $totpTable->saveSecret('example.com', $totpSecret);
+        $otp = self::generateTOTP($totpSecret);
+
         // 3. BurnDown (plaintext - not HPKE encrypted, but with attribute encryption)
         $latestRoot3 = $merkleState->getLatestRoot();
-        $burnDown = new BurnDown($canonActor, $canonOperator);
+        $burnDown = new BurnDown($canonActor, $canonOperator, null, $otp);
         $akm3 = new AttributeKeyMap()
             ->addKey('actor', SymmetricKey::generate())
             ->addKey('operator', SymmetricKey::generate());
-        $encryptedMsg3 = $burnDown->encrypt($akm3);
-        $bundle3 = $handler->handle($encryptedMsg3, $operatorKey, $akm3, $latestRoot3, $operatorKeyId);
+        $bundle3 = $handler->handle($burnDown, $operatorKey, $akm3, $latestRoot3);
         $this->assertNotInTransaction();
         $this->assertTrue($this->protocol->burnDown($bundle3->toString(), $canonOperator));
         $this->ensureMerkleStateUnlocked();
@@ -717,14 +725,19 @@ class ProtocolTest extends TestCase
         $this->assertKeyRewrapped($latestRoot6, 'Key should be rewrapped after undoFireproof');
         $this->ensureMerkleStateUnlocked();
 
+        $totpSecret = random_bytes(20);
+        /** @var TOTP $totpTable */
+        $totpTable = $this->table('TOTP');
+        $totpTable->saveSecret('example.com', $totpSecret);
+        $otp = self::generateTOTP($totpSecret);
+
         // 5. BurnDown (should succeed - plaintext with attribute encryption)
         $latestRoot7 = $merkleState->getLatestRoot();
-        $burnDown = new BurnDown($canonicalActor, $canonicalOperator);
+        $burnDown = new BurnDown($canonicalActor, $canonicalOperator, null, $otp);
         $akm5 = new AttributeKeyMap()
             ->addKey('actor', SymmetricKey::generate())
             ->addKey('operator', SymmetricKey::generate());
-        $encryptedMsg5 = $burnDown->encrypt($akm5);
-        $bundle5 = $handler->handle($encryptedMsg5, $operatorKey, $akm5, $latestRoot7, $operatorKeyId);
+        $bundle5 = $handler->handle($burnDown, $operatorKey, $akm5, $latestRoot7);
         $this->assertNotInTransaction();
         $this->assertTrue(
             $this->protocol->burnDown($bundle5->toString(), $canonicalOperator)

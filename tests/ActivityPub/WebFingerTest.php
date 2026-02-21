@@ -170,7 +170,6 @@ class WebFingerTest extends TestCase
 
         try {
             $method = new ReflectionMethod(WebFinger::class, 'getPublicKeyFromActivityPub');
-            $method->setAccessible(true);
             $method->invoke($webFinger, 'https://example.com/users/alice');
             $this->fail('Expected FetchException was not thrown');
         } catch (FetchException $e) {

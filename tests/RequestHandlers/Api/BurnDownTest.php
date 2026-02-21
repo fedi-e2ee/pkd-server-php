@@ -66,6 +66,7 @@ use FediE2EE\PKDServer\Tables\Records\{
     Peer
 };
 use FediE2EE\PKDServer\Tests\HttpTestTrait;
+use FediE2EE\PKDServer\Traits\TOTPTrait;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Psr7\{
     Response,
@@ -120,6 +121,7 @@ class BurnDownTest extends TestCase
 {
     use ConfigTrait;
     use HttpTestTrait;
+    use TOTPTrait;
 
     /**
      * @throws ArrayKeyException
@@ -219,9 +221,14 @@ class BurnDownTest extends TestCase
             ]))
         );
 
+        $totpSecret = random_bytes(20);
+        /** @var TOTP $totpTable */
+        $totpTable = $this->table('TOTP');
+        $totpTable->saveSecret('example.com', $totpSecret);
+
         $latestRoot3 = $merkleState->getLatestRoot();
         // Note: BurnDownAction canonicalizes actor but NOT operator, so operator must be canonical URL
-        $otp = '12345678';
+        $otp = self::generateTOTP($totpSecret);
         $now = (new DateTimeImmutable('NOW'));
         $burnDown = new BurnDownAction($actorHandle, $canonOperator, $now, $otp);
         $akm3 = (new AttributeKeyMap())
@@ -288,14 +295,14 @@ class BurnDownTest extends TestCase
 
         // 8. Handle request and verify response
         $response = $burnDownHandler->handle($request);
-        $this->assertSame(400, $response->getStatusCode());
+        $this->assertSame(200, $response->getStatusCode());
 
         $body = json_decode($response->getBody()->getContents(), true);
         $this->assertSame('fedi-e2ee:v1/api/burndown', $body['!pkd-context']);
         // Verify time field is present and is a string
         $this->assertArrayHasKey('time', $body);
         $this->assertIsString($body['time']);
-        $this->assertFalse($body['status']);
+        $this->assertTrue($body['status']);
 
         // 9. Verify actor's keys were burned
         $this->assertCount(0, $pkTable->getPublicKeysFor($canonActor));
