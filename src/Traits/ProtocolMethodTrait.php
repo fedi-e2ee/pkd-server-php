@@ -39,7 +39,6 @@ trait ProtocolMethodTrait
 {
     protected const int ENCRYPTION_REQUIRED = 1;
     protected const int ENCRYPTION_DISALLOWED = 2;
-    protected const int ENCRYPTION_OPTIONAL = 3;
 
     /**
      * @throws ConcurrentException
