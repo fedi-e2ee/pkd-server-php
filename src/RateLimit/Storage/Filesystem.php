@@ -93,7 +93,7 @@ class Filesystem implements RateLimitStorageInterface
             'expires' => time() + $this->ttl,
             'data' => self::jsonEncode($data),
         ]);
-        return file_put_contents($file, $bundled) !== false;
+        return file_put_contents($file, $bundled, LOCK_EX) !== false;
     }
 
     /**
