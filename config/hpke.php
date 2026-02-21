@@ -49,5 +49,6 @@ if (file_exists(__DIR__ . '/hpke.json')) {
         'encaps-key' =>
             Base64UrlSafe::encodeUnpadded($encapsKey->bytes),
     ], JSON_PRETTY_PRINT));
+    chmod(__DIR__ . '/hpke.json', 0600);
 }
 return new HPKE($hpke, $decapsKey, $encapsKey);
