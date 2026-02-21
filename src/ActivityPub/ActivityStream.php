@@ -9,11 +9,7 @@ use JsonException;
 use JsonSerializable;
 use Override;
 use stdClass;
-use function in_array;
-use function is_array;
-use function is_string;
-use function json_decode;
-use function property_exists;
+use function in_array, is_array, is_string, json_decode, property_exists;
 
 #[AllowDynamicProperties]
 class ActivityStream implements JsonSerializable

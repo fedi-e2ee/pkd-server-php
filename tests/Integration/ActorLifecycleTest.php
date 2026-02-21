@@ -125,7 +125,7 @@ class ActorLifecycleTest extends TestCase
 
     public function tearDown(): void
     {
-        Handler::setWebFinger(new PKDCryptoWebFinger);
+        Handler::setWebFinger(new PKDCryptoWebFinger());
     }
 
     /**

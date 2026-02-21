@@ -63,13 +63,7 @@ use Psr\SimpleCache\InvalidArgumentException;
 use Random\RandomException;
 use SodiumException;
 use TypeError;
-use function array_any;
-use function hash_equals;
-use function is_array;
-use function is_null;
-use function is_string;
-use function json_decode;
-use function random_bytes;
+use function array_any, hash_equals, is_array, is_null, is_string, json_decode, random_bytes;
 
 class PublicKeys extends Table
 {

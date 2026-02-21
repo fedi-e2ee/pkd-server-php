@@ -320,7 +320,7 @@ class VectorsTest extends TestCase
             $webFinger->setCanonicalForTesting($actorUrl, $actorUrl);
         }
 
-        Handler::setWebFinger( new class($identities) extends PKDCryptoWebFinger {
+        Handler::setWebFinger(new class($identities) extends PKDCryptoWebFinger {
             /** @param array<string, array<string, mixed>> $identities */
             public function __construct(private readonly array $identities) {}
 

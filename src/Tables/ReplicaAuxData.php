@@ -17,10 +17,7 @@ use ParagonIE\CipherSweet\Exception\{
 };
 use Override;
 use SodiumException;
-use function is_array;
-use function is_null;
-use function is_string;
-use function json_decode;
+use function is_array, is_null, is_string, json_decode;
 
 class ReplicaAuxData extends Table
 {

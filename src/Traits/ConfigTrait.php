@@ -31,15 +31,7 @@ use GuzzleHttp\Client;
 use ParagonIE\Certainty\Exception\CertaintyException;
 use SodiumException;
 use TypeError;
-use function array_key_exists;
-use function get_debug_type;
-use function is_array;
-use function is_int;
-use function is_null;
-use function is_numeric;
-use function is_string;
-use function parse_url;
-use function reset;
+use function array_key_exists, get_debug_type, is_array, is_int, is_null, is_numeric, is_string, parse_url, reset;
 
 trait ConfigTrait
 {

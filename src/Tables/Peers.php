@@ -29,8 +29,7 @@ use ParagonIE\ConstantTime\{
 use ParagonIE\HPKE\HPKEException;
 use Random\RandomException;
 use SodiumException;
-use function is_null;
-use function random_bytes;
+use function is_null, random_bytes;
 
 class Peers extends Table
 {

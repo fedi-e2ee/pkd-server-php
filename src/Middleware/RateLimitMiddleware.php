@@ -13,12 +13,15 @@ use FediE2EE\PKD\Crypto\Exceptions\HttpSignatureException;
 use FediE2EE\PKDServer\Interfaces\LimitingHandlerInterface;
 use FediE2EE\PKDServer\ServerConfig;
 use Override;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Server\MiddlewareInterface;
-use Psr\Http\Server\RequestHandlerInterface;
-use function in_array;
-use function is_null;
+use Psr\Http\Message\{
+    ResponseInterface,
+    ServerRequestInterface
+};
+use Psr\Http\Server\{
+    MiddlewareInterface,
+    RequestHandlerInterface
+};
+use function in_array, is_null;
 
 class RateLimitMiddleware implements MiddlewareInterface
 {

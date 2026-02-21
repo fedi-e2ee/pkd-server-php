@@ -48,10 +48,7 @@ use ParagonIE\CipherSweet\Exception\{
 use Psr\SimpleCache\InvalidArgumentException;
 use Random\RandomException;
 use SodiumException;
-use function hash_equals;
-use function is_null;
-use function is_string;
-use function json_decode;
+use function hash_equals, is_null, is_string, json_decode;
 
 class AuxData extends Table
 {

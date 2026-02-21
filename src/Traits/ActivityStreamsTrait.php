@@ -19,9 +19,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\SimpleCache\InvalidArgumentException;
 use SodiumException;
 use stdClass;
-use function json_decode;
-use function json_last_error_msg;
-use function property_exists;
+use function json_decode, json_last_error_msg, property_exists;
 
 trait ActivityStreamsTrait
 {

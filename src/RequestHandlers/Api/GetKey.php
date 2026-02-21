@@ -37,8 +37,7 @@ use Psr\Http\Server\RequestHandlerInterface;
 use SodiumException;
 use Throwable;
 use TypeError;
-use function is_null;
-use function urlencode;
+use function is_null, urlencode;
 
 class GetKey implements RequestHandlerInterface
 {
