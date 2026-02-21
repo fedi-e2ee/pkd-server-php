@@ -204,6 +204,7 @@ class TotpRotateTest extends TestCase
             $serverHpke->encapsKey,
             $serverHpke->cs,
         );
+        $this->assertNotInTransaction();
         $addKeyResult = $protocol->addKey($encryptedForServer, $canonical);
         $keyId = $addKeyResult->keyID;
 
@@ -636,6 +637,7 @@ class TotpRotateTest extends TestCase
             $serverHpke->encapsKey,
             $serverHpke->cs,
         );
+        $this->assertNotInTransaction();
         $addKeyResult = $protocol->addKey($encryptedForServer, $canonical);
         $keyId = $addKeyResult->keyID;
 

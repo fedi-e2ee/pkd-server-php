@@ -172,6 +172,7 @@ class BurnDownTest extends TestCase
         $serverHpke = $config->getHPKE();
         $handler = new Handler();
 
+        $this->assertNotInTransaction();
         // 1. Add key for the actor (victim)
         $latestRoot1 = $merkleState->getLatestRoot();
         $addKey1 = new AddKey($canonActor, $actorKey->getPublicKey());
