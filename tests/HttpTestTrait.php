@@ -211,6 +211,12 @@ trait HttpTestTrait
         if ($db->inTransaction()) {
             $db->rollback();
         }
+        if ($db->getDriver() === 'sqlite') {
+            try {
+                $db->exec('ROLLBACK');
+            } catch (PDOException) {
+            }
+        }
         $tables = [
             'pkd_merkle_witness_cosignatures',
             'pkd_merkle_witnesses',
