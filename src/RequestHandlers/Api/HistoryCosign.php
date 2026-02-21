@@ -88,8 +88,8 @@ class HistoryCosign implements RequestHandlerInterface
             );
             return $this->json([
                 '!pkd-context' => 'fedi-e2ee:v1/api/history/cosign',
-                'status' => $status,
-                'current-time' => $this->time(),
+                'success' => $status,
+                'time' => $this->time(),
             ]);
         } catch (Throwable $ex) {
             $this->config()->getLogger()->error(

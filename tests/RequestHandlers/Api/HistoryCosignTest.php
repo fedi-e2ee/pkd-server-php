@@ -313,10 +313,10 @@ class HistoryCosignTest extends TestCase
         $this->assertSame(200, $response->getStatusCode());
         $body = json_decode($response->getBody()->getContents(), true);
         $this->assertSame('fedi-e2ee:v1/api/history/cosign', $body['!pkd-context']);
-        $this->assertArrayHasKey('status', $body);
-        $this->assertTrue($body['status']);
-        $this->assertArrayHasKey('current-time', $body);
-        $this->assertIsString($body['current-time']);
+        $this->assertArrayHasKey('success', $body);
+        $this->assertTrue($body['success']);
+        $this->assertArrayHasKey('time', $body);
+        $this->assertIsString($body['time']);
         $this->assertNotInTransaction();
     }
 }
