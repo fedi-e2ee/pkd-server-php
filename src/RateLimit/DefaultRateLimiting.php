@@ -187,7 +187,7 @@ class DefaultRateLimiting implements RateLimitInterface
                 break;
             }
 
-        } while ($data->failures > 0);
+        } while ($failures > 0);
         // Either way, return the updated rate-limit info:
         return $data->withFailures($failures)->withCooldownStart($start);
     }
