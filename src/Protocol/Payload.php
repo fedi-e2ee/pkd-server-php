@@ -9,7 +9,7 @@ use FediE2EE\PKD\Crypto\Protocol\{
     ProtocolMessageInterface
 };
 use FediE2EE\PKDServer\Traits\JsonTrait;
-use function array_key_exists, json_decode;
+use function array_key_exists;
 
 readonly class Payload
 {
@@ -42,7 +42,7 @@ readonly class Payload
      */
     public function getMerkleTreePayload(): string
     {
-        $decoded = json_decode($this->rawJson, true);
+        $decoded = self::jsonDecode($this->rawJson);
         if (array_key_exists('key-id', $decoded)) {
             unset($decoded['key-id']);
         }
