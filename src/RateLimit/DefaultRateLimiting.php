@@ -251,7 +251,8 @@ class DefaultRateLimiting implements RateLimitInterface
         if ($failures < 1) {
             return new DateInterval('PT0S');
         }
-        $milliseconds = $this->baseDelay << ($failures - 1);
+        $shift = min($failures - 1, 60);
+        $milliseconds = $this->baseDelay << $shift;
         $seconds = (int) floor($milliseconds / 1000);
         $us = ($milliseconds % 1000) * 1000;
         $interval = DateInterval::createFromDateString($seconds . ' seconds + ' . $us . ' microseconds');
