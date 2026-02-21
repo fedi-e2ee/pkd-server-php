@@ -5,6 +5,7 @@ namespace FediE2EE\PKDServer\Tests\Integration;
 use DateMalformedStringException;
 use DateTimeImmutable;
 use FediE2EE\PKD\Crypto\{
+    ActivityPub\WebFinger as PKDCryptoWebFinger,
     AttributeEncryption\AttributeKeyMap,
     Merkle\IncrementalTree,
     Protocol\Handler,
@@ -124,7 +125,7 @@ class ActorLifecycleTest extends TestCase
 
     public function tearDown(): void
     {
-        Handler::$wf = null;
+        Handler::setWebFinger(new PKDCryptoWebFinger);
     }
 
     /**
@@ -190,19 +191,23 @@ class ActorLifecycleTest extends TestCase
         $wf->setCanonicalForTesting($canonical2, $canonical2);
 
         // Mock for pkd-crypto side
-        Handler::$wf = new class($canonical, $canonical2) extends \FediE2EE\PKD\Crypto\ActivityPub\WebFinger {
-            public function __construct(private string $c1, private string $c2) {}
-            public function canonicalize(string $actor): string
+        Handler::setWebFinger(new class($canonical, $canonical2) extends PKDCryptoWebFinger {
+            public function __construct(private string $c1, private string $c2)
             {
-                if (str_contains($actor, 'alice')) {
+                parent::__construct();
+            }
+
+            public function canonicalize(string $actorUsernameOrUrl): string
+            {
+                if (str_contains($actorUsernameOrUrl, 'alice')) {
                     return $this->c1;
                 }
-                if (str_contains($actor, 'bob')) {
+                if (str_contains($actorUsernameOrUrl, 'bob')) {
                     return $this->c2;
                 }
-                return $actor;
+                return $actorUsernameOrUrl;
             }
-        };
+        });
 
         $this->table('PublicKeys')->setWebFinger($wf);
         $this->table('AuxData')->setWebFinger($wf);
@@ -633,7 +638,7 @@ class ActorLifecycleTest extends TestCase
      */
     public function testAddAndRevoke(): void
     {
-        Handler::$wf = null;
+        Handler::setWebFinger(new PKDCryptoWebFinger());
         [$actorId, $canonical] = $this->makeDummyActor('example.net');
 
         // Generate key pair for alice

@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace FediE2EE\PKDServer\Tests\Integration;
 
+use FediE2EE\PKD\Crypto\ActivityPub\WebFinger as PKDCryptoWebFinger;
 use FediE2EE\PKD\Crypto\AttributeEncryption\AttributeKeyMap;
 use FediE2EE\PKD\Crypto\Exceptions\{
     BundleException,
@@ -164,14 +165,14 @@ class VectorsTest extends TestCase
         // Clear table cache to avoid stale state between tests
         TableCache::instance()->clearCache();
         $this->truncateTables();
-        Handler::$wf = null;
+        Handler::setWebFinger(new PKDCryptoWebFinger());
         $this->identityKeys = [];
         $this->actorKeyCount = [];
     }
 
     public function tearDown(): void
     {
-        Handler::$wf = null;
+        Handler::setWebFinger(new PKDCryptoWebFinger());
         $this->identityKeys = [];
         $this->actorKeyCount = [];
     }
@@ -319,7 +320,7 @@ class VectorsTest extends TestCase
             $webFinger->setCanonicalForTesting($actorUrl, $actorUrl);
         }
 
-        Handler::$wf = new class($identities) extends \FediE2EE\PKD\Crypto\ActivityPub\WebFinger {
+        Handler::setWebFinger( new class($identities) extends PKDCryptoWebFinger {
             /** @param array<string, array<string, mixed>> $identities */
             public function __construct(private readonly array $identities) {}
 
@@ -332,8 +333,7 @@ class VectorsTest extends TestCase
                 }
                 return $actor;
             }
-        };
-
+        });
         return $webFinger;
     }
 

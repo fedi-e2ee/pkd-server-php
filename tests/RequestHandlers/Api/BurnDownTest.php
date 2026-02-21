@@ -198,24 +198,26 @@ class BurnDownTest extends TestCase
         // 3. Create BurnDown message (plaintext, not HPKE encrypted)
         // Note: BurnDownAction expects actor handles (with @), not canonical URLs
         // Set up mock WebFinger for the pkd-crypto Handler to resolve actor handles
-        Handler::$wf = new CryptoWebFinger($this->getMockClient([
-            new Response(200, ['Content-Type' => 'application/jrd+json'], json_encode([
-                'subject' => "acct:{$actorHandle}",
-                'links' => [[
-                    'rel' => 'self',
-                    'type' => 'application/activity+json',
-                    'href' => $canonActor
-                ]]
-            ])),
-            new Response(200, ['Content-Type' => 'application/jrd+json'], json_encode([
-                'subject' => "acct:{$operatorHandle}",
-                'links' => [[
-                    'rel' => 'self',
-                    'type' => 'application/activity+json',
-                    'href' => $canonOperator
-                ]]
+        Handler::setWebFinger(
+            new CryptoWebFinger($this->getMockClient([
+                new Response(200, ['Content-Type' => 'application/jrd+json'], json_encode([
+                    'subject' => "acct:{$actorHandle}",
+                    'links' => [[
+                        'rel' => 'self',
+                        'type' => 'application/activity+json',
+                        'href' => $canonActor
+                    ]]
+                ])),
+                new Response(200, ['Content-Type' => 'application/jrd+json'], json_encode([
+                    'subject' => "acct:{$operatorHandle}",
+                    'links' => [[
+                        'rel' => 'self',
+                        'type' => 'application/activity+json',
+                        'href' => $canonOperator
+                    ]]
+                ]))
             ]))
-        ]));
+        );
 
         $latestRoot3 = $merkleState->getLatestRoot();
         // Note: BurnDownAction canonicalizes actor but NOT operator, so operator must be canonical URL
@@ -302,7 +304,7 @@ class BurnDownTest extends TestCase
 
         // Clean up for test isolation
         $this->clearMerkleStateLock();
-        Handler::$wf = null;
+        Handler::setWebFinger(new CryptoWebFinger());
     }
 
     /**
