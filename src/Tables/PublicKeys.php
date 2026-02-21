@@ -386,7 +386,7 @@ class PublicKeys extends Table
         }
         $totp = $totpTable->getTotpByDomain($domain);
         if (!$totp) {
-            return;
+            throw new ProtocolException('No TOTP secret enrolled for this domain');
         }
         $ts = $this->verifyTOTP($totp['secret'], $otp);
         if (is_null($ts)) {
