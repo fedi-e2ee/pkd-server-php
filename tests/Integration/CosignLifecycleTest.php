@@ -238,7 +238,7 @@ class CosignLifecycleTest extends TestCase
             $response = $cosignHandler->handle($request);
             $body = json_decode($response->getBody()->getContents(), true);
             $this->assertSame(200, $response->getStatusCode());
-            $this->assertTrue($body['status']);
+            $this->assertTrue($body['success']);
             $countAgain = $merkleState->countCosignatures($leaf->primaryKey);
             $this->assertNotSame($numCosigs, $countAgain, 'Number of cosignatures did not increase');
             $tree = $cosign->getTree();
