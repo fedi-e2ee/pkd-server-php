@@ -26,7 +26,7 @@ Namespace: `FediE2EE\PKDServer\Protocol`
 
 ### Methods
 
-#### [`__construct`](../../../src/Protocol/KeyWrapping.php#L56-L62)
+#### [`__construct`](../../../src/Protocol/KeyWrapping.php#L50-L56)
 
 Returns `void`
 
@@ -36,7 +36,7 @@ Returns `void`
 
 **Throws:** `DependencyException`
 
-#### [`rewrapSymmetricKeys`](../../../src/Protocol/KeyWrapping.php#L76-L106)
+#### [`rewrapSymmetricKeys`](../../../src/Protocol/KeyWrapping.php#L70-L100)
 
 Returns `void`
 
@@ -49,7 +49,7 @@ Initiate a rewrapping of the symmetric keys associated with a record.
 
 **Throws:** `CacheException`, `CryptoException`, `DateMalformedStringException`, `DependencyException`, `HPKEException`, `JsonException`, `SodiumException`, `TableException`
 
-#### [`retrieveLocalWrappedKeys`](../../../src/Protocol/KeyWrapping.php#L113-L124)
+#### [`retrieveLocalWrappedKeys`](../../../src/Protocol/KeyWrapping.php#L107-L118)
 
 Returns `FediE2EE\PKD\Crypto\AttributeEncryption\AttributeKeyMap`
 
@@ -59,7 +59,7 @@ Returns `FediE2EE\PKD\Crypto\AttributeEncryption\AttributeKeyMap`
 
 **Throws:** `HPKEException`, `JsonException`, `TableException`
 
-#### [`hpkeWrapSymmetricKeys`](../../../src/Protocol/KeyWrapping.php#L126-L132)
+#### [`hpkeWrapSymmetricKeys`](../../../src/Protocol/KeyWrapping.php#L120-L126)
 
 Returns `string`
 
@@ -67,7 +67,7 @@ Returns `string`
 
 - `$keyMap`: `FediE2EE\PKD\Crypto\AttributeEncryption\AttributeKeyMap`
 
-#### [`hpkeUnwrap`](../../../src/Protocol/KeyWrapping.php#L137-L141)
+#### [`hpkeUnwrap`](../../../src/Protocol/KeyWrapping.php#L131-L135)
 
 Returns `string`
 
@@ -77,7 +77,7 @@ Returns `string`
 
 **Throws:** `HPKEException`
 
-#### [`serializeKeyMap`](../../../src/Protocol/KeyWrapping.php#L146-L160)
+#### [`serializeKeyMap`](../../../src/Protocol/KeyWrapping.php#L140-L154)
 
 Returns `string`
 
@@ -87,7 +87,7 @@ Returns `string`
 
 **Throws:** `BaseJsonException`
 
-#### [`deserializeKeyMap`](../../../src/Protocol/KeyWrapping.php#L165-L179)
+#### [`deserializeKeyMap`](../../../src/Protocol/KeyWrapping.php#L159-L173)
 
 Returns `FediE2EE\PKD\Crypto\AttributeEncryption\AttributeKeyMap`
 
@@ -97,7 +97,7 @@ Returns `FediE2EE\PKD\Crypto\AttributeEncryption\AttributeKeyMap`
 
 **Throws:** `JsonException`
 
-#### [`decryptAndGetRewrapped`](../../../src/Protocol/KeyWrapping.php#L196-L225)
+#### [`decryptAndGetRewrapped`](../../../src/Protocol/KeyWrapping.php#L190-L219)
 
 Returns `array`
 
@@ -112,7 +112,7 @@ Usage:
 
 **Throws:** `BundleException`, `CryptoException`, `DependencyException`, `HPKEException`, `InputException`, `InvalidArgumentException`, `JsonException`, `SodiumException`
 
-#### [`unwrapLocalMessage`](../../../src/Protocol/KeyWrapping.php#L235-L242)
+#### [`unwrapLocalMessage`](../../../src/Protocol/KeyWrapping.php#L229-L236)
 
 Returns `array`
 
@@ -123,7 +123,7 @@ Returns `array`
 
 **Throws:** `BundleException`, `CryptoException`, `HPKEException`, `InputException`, `JsonException`
 
-#### [`getRewrappedFor`](../../../src/Protocol/KeyWrapping.php#L248-L279)
+#### [`getRewrappedFor`](../../../src/Protocol/KeyWrapping.php#L242-L273)
 
 Returns `array`
 
@@ -133,7 +133,7 @@ Returns `array`
 
 **Throws:** `InputException`
 
-#### [`appCache`](../../../src/Protocol/KeyWrapping.php#L54-L57)
+#### [`appCache`](../../../src/Protocol/KeyWrapping.php#L46-L49)
 
 Returns `FediE2EE\PKDServer\AppCache`
 
@@ -144,7 +144,7 @@ Returns `FediE2EE\PKDServer\AppCache`
 
 **Throws:** `DependencyException`
 
-#### [`table`](../../../src/Protocol/KeyWrapping.php#L64-L87)
+#### [`table`](../../../src/Protocol/KeyWrapping.php#L56-L79)
 
 Returns `FediE2EE\PKDServer\Table`
 
@@ -154,7 +154,7 @@ Returns `FediE2EE\PKDServer\Table`
 
 **Throws:** `CacheException`, `DependencyException`, `TableException`
 
-#### [`injectConfig`](../../../src/Protocol/KeyWrapping.php#L89-L92)
+#### [`injectConfig`](../../../src/Protocol/KeyWrapping.php#L81-L84)
 
 Returns `void`
 
@@ -162,13 +162,13 @@ Returns `void`
 
 - `$config`: `FediE2EE\PKDServer\ServerConfig`
 
-#### [`config`](../../../src/Protocol/KeyWrapping.php#L97-L107)
+#### [`config`](../../../src/Protocol/KeyWrapping.php#L89-L99)
 
 Returns `FediE2EE\PKDServer\ServerConfig`
 
 **Throws:** `DependencyException`
 
-#### [`setWebFinger`](../../../src/Protocol/KeyWrapping.php#L112-L116)
+#### [`setWebFinger`](../../../src/Protocol/KeyWrapping.php#L104-L108)
 
 Returns `self`
 
@@ -178,7 +178,7 @@ This is intended for mocking in unit tests
 
 - `$wf`: `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
-#### [`webfinger`](../../../src/Protocol/KeyWrapping.php#L123-L130)
+#### [`webfinger`](../../../src/Protocol/KeyWrapping.php#L115-L122)
 
 Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
@@ -188,7 +188,7 @@ Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
 **Throws:** `CertaintyException`, `DependencyException`, `SodiumException`
 
-#### [`parseUrlHost`](../../../src/Protocol/KeyWrapping.php#L136-L143)
+#### [`parseUrlHost`](../../../src/Protocol/KeyWrapping.php#L128-L135)
 
 static · Returns `?string`
 
@@ -196,7 +196,7 @@ static · Returns `?string`
 
 - `$url`: `string`
 
-#### [`assertArray`](../../../src/Protocol/KeyWrapping.php#L151-L157)
+#### [`assertArray`](../../../src/Protocol/KeyWrapping.php#L143-L149)
 
 static · Returns `array`
 
@@ -206,7 +206,7 @@ static · Returns `array`
 
 **Throws:** `TypeError`
 
-#### [`assertString`](../../../src/Protocol/KeyWrapping.php#L162-L168)
+#### [`assertString`](../../../src/Protocol/KeyWrapping.php#L154-L160)
 
 static · Returns `string`
 
@@ -216,7 +216,7 @@ static · Returns `string`
 
 **Throws:** `TypeError`
 
-#### [`assertStringOrNull`](../../../src/Protocol/KeyWrapping.php#L170-L179)
+#### [`assertStringOrNull`](../../../src/Protocol/KeyWrapping.php#L162-L171)
 
 static · Returns `?string`
 
@@ -224,7 +224,7 @@ static · Returns `?string`
 
 - `$value`: `mixed`
 
-#### [`assertInt`](../../../src/Protocol/KeyWrapping.php#L184-L193)
+#### [`assertInt`](../../../src/Protocol/KeyWrapping.php#L176-L185)
 
 static · Returns `int`
 
@@ -234,7 +234,7 @@ static · Returns `int`
 
 **Throws:** `TypeError`
 
-#### [`rowToStringArray`](../../../src/Protocol/KeyWrapping.php#L200-L210)
+#### [`rowToStringArray`](../../../src/Protocol/KeyWrapping.php#L192-L202)
 
 static · Returns `array`
 
@@ -244,7 +244,7 @@ static · Returns `array`
 
 **Throws:** `TypeError`
 
-#### [`decryptedString`](../../../src/Protocol/KeyWrapping.php#L216-L226)
+#### [`decryptedString`](../../../src/Protocol/KeyWrapping.php#L208-L218)
 
 static · Returns `string`
 
@@ -255,7 +255,7 @@ static · Returns `string`
 
 **Throws:** `TypeError`
 
-#### [`blindIndexValue`](../../../src/Protocol/KeyWrapping.php#L233-L243)
+#### [`blindIndexValue`](../../../src/Protocol/KeyWrapping.php#L225-L235)
 
 static · Returns `string`
 
@@ -264,7 +264,7 @@ static · Returns `string`
 - `$blindIndex`: `array|string`
 - `$key`: `?string` = null
 
-#### [`jsonDecode`](../../../src/Protocol/KeyWrapping.php#L16-L19)
+#### [`jsonDecode`](../../../src/Protocol/KeyWrapping.php#L15-L18)
 
 static · Returns `array`
 
@@ -274,7 +274,7 @@ static · Returns `array`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonDecodeObject`](../../../src/Protocol/KeyWrapping.php#L24-L27)
+#### [`jsonDecodeObject`](../../../src/Protocol/KeyWrapping.php#L23-L26)
 
 static · Returns `stdClass`
 
@@ -284,7 +284,7 @@ static · Returns `stdClass`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonEncode`](../../../src/Protocol/KeyWrapping.php#L33-L39)
+#### [`jsonEncode`](../../../src/Protocol/KeyWrapping.php#L32-L38)
 
 static · Returns `string`
 
@@ -424,7 +424,7 @@ Strip all newlines (CR, LF) characters from a string.
 
 ### Methods
 
-#### [`__construct`](../../../src/Protocol/Payload.php#L18-L22)
+#### [`__construct`](../../../src/Protocol/Payload.php#L17-L21)
 
 Returns `void`
 
@@ -434,23 +434,23 @@ Returns `void`
 - `$keyMap`: `FediE2EE\PKD\Crypto\AttributeEncryption\AttributeKeyMap`
 - `$rawJson`: `string`
 
-#### [`decrypt`](../../../src/Protocol/Payload.php#L24-L30)
+#### [`decrypt`](../../../src/Protocol/Payload.php#L23-L29)
 
 Returns `FediE2EE\PKD\Crypto\Protocol\ProtocolMessageInterface`
 
-#### [`decode`](../../../src/Protocol/Payload.php#L36-L39)
+#### [`decode`](../../../src/Protocol/Payload.php#L35-L38)
 
 Returns `array`
 
 **Throws:** `JsonException`
 
-#### [`getMerkleTreePayload`](../../../src/Protocol/Payload.php#L44-L58)
+#### [`getMerkleTreePayload`](../../../src/Protocol/Payload.php#L43-L57)
 
 Returns `string`
 
 **Throws:** `JsonException`
 
-#### [`jsonDecode`](../../../src/Protocol/Payload.php#L16-L19)
+#### [`jsonDecode`](../../../src/Protocol/Payload.php#L15-L18)
 
 static · Returns `array`
 
@@ -460,7 +460,7 @@ static · Returns `array`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonDecodeObject`](../../../src/Protocol/Payload.php#L24-L27)
+#### [`jsonDecodeObject`](../../../src/Protocol/Payload.php#L23-L26)
 
 static · Returns `stdClass`
 
@@ -470,7 +470,7 @@ static · Returns `stdClass`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonEncode`](../../../src/Protocol/Payload.php#L33-L39)
+#### [`jsonEncode`](../../../src/Protocol/Payload.php#L32-L38)
 
 static · Returns `string`
 
@@ -499,7 +499,7 @@ static · Returns `string`
 
 ### Methods
 
-#### [`__construct`](../../../src/Protocol/RewrapConfig.php#L23-L26)
+#### [`__construct`](../../../src/Protocol/RewrapConfig.php#L20-L23)
 
 Returns `void`
 
@@ -508,7 +508,7 @@ Returns `void`
 - `$cs`: `string`
 - `$encapsKey`: `string`
 
-#### [`from`](../../../src/Protocol/RewrapConfig.php#L31-L42)
+#### [`from`](../../../src/Protocol/RewrapConfig.php#L28-L39)
 
 static · Returns `self`
 
@@ -519,7 +519,7 @@ static · Returns `self`
 
 **Throws:** `DependencyException`
 
-#### [`fromJson`](../../../src/Protocol/RewrapConfig.php#L44-L57)
+#### [`fromJson`](../../../src/Protocol/RewrapConfig.php#L41-L54)
 
 static · Returns `self`
 
@@ -527,19 +527,19 @@ static · Returns `self`
 
 - `$json`: `string`
 
-#### [`jsonSerialize`](../../../src/Protocol/RewrapConfig.php#L63-L69)
+#### [`jsonSerialize`](../../../src/Protocol/RewrapConfig.php#L60-L66)
 
 Returns `array`
 
 **Attributes:** `#[Override]`
 
-#### [`getCipherSuite`](../../../src/Protocol/RewrapConfig.php#L74-L77)
+#### [`getCipherSuite`](../../../src/Protocol/RewrapConfig.php#L71-L74)
 
 Returns `ParagonIE\HPKE\HPKE`
 
 **Throws:** `HPKEException`
 
-#### [`getEncapsKey`](../../../src/Protocol/RewrapConfig.php#L84-L91)
+#### [`getEncapsKey`](../../../src/Protocol/RewrapConfig.php#L81-L88)
 
 Returns `ParagonIE\HPKE\Interfaces\EncapsKeyInterface`
 

@@ -173,7 +173,7 @@ Collapse multiple types into a number of seconds for Redis.
 
 - `$ttl`: `DateInterval|int|null`
 
-#### [`jsonDecode`](../../../src/AppCache.php#L16-L19)
+#### [`jsonDecode`](../../../src/AppCache.php#L15-L18)
 
 static · Returns `array`
 
@@ -183,7 +183,7 @@ static · Returns `array`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonDecodeObject`](../../../src/AppCache.php#L24-L27)
+#### [`jsonDecodeObject`](../../../src/AppCache.php#L23-L26)
 
 static · Returns `stdClass`
 
@@ -193,7 +193,7 @@ static · Returns `stdClass`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonEncode`](../../../src/AppCache.php#L33-L39)
+#### [`jsonEncode`](../../../src/AppCache.php#L32-L38)
 
 static · Returns `string`
 
@@ -213,7 +213,7 @@ static · Returns `string`
 
 ### Methods
 
-#### [`getHighVolumeCutoff`](../../../src/Math.php#L10-L13)
+#### [`getHighVolumeCutoff`](../../../src/Math.php#L9-L12)
 
 static · Returns `int`
 
@@ -221,7 +221,7 @@ static · Returns `int`
 
 - `$numLeaves`: `int`
 
-#### [`getLowVolumeCutoff`](../../../src/Math.php#L15-L22)
+#### [`getLowVolumeCutoff`](../../../src/Math.php#L14-L21)
 
 static · Returns `int`
 
@@ -398,7 +398,7 @@ Returns `bool`
 
 **Throws:** `BundleException`, `CacheException`, `ConcurrentException`, `CryptoException`, `DateMalformedStringException`, `DependencyException`, `HPKEException`, `JsonException`, `NotImplementedException`, `ProtocolException`, `RandomException`, `SodiumException`, `TableException`
 
-#### [`appCache`](../../../src/Protocol.php#L54-L57)
+#### [`appCache`](../../../src/Protocol.php#L46-L49)
 
 Returns `FediE2EE\PKDServer\AppCache`
 
@@ -409,7 +409,7 @@ Returns `FediE2EE\PKDServer\AppCache`
 
 **Throws:** `DependencyException`
 
-#### [`table`](../../../src/Protocol.php#L64-L87)
+#### [`table`](../../../src/Protocol.php#L56-L79)
 
 Returns `FediE2EE\PKDServer\Table`
 
@@ -419,7 +419,7 @@ Returns `FediE2EE\PKDServer\Table`
 
 **Throws:** `CacheException`, `DependencyException`, `TableException`
 
-#### [`injectConfig`](../../../src/Protocol.php#L89-L92)
+#### [`injectConfig`](../../../src/Protocol.php#L81-L84)
 
 Returns `void`
 
@@ -427,13 +427,13 @@ Returns `void`
 
 - `$config`: `FediE2EE\PKDServer\ServerConfig`
 
-#### [`config`](../../../src/Protocol.php#L97-L107)
+#### [`config`](../../../src/Protocol.php#L89-L99)
 
 Returns `FediE2EE\PKDServer\ServerConfig`
 
 **Throws:** `DependencyException`
 
-#### [`parseUrlHost`](../../../src/Protocol.php#L136-L143)
+#### [`parseUrlHost`](../../../src/Protocol.php#L128-L135)
 
 static · Returns `?string`
 
@@ -441,7 +441,7 @@ static · Returns `?string`
 
 - `$url`: `string`
 
-#### [`assertArray`](../../../src/Protocol.php#L151-L157)
+#### [`assertArray`](../../../src/Protocol.php#L143-L149)
 
 static · Returns `array`
 
@@ -451,7 +451,7 @@ static · Returns `array`
 
 **Throws:** `TypeError`
 
-#### [`assertString`](../../../src/Protocol.php#L162-L168)
+#### [`assertString`](../../../src/Protocol.php#L154-L160)
 
 static · Returns `string`
 
@@ -461,7 +461,7 @@ static · Returns `string`
 
 **Throws:** `TypeError`
 
-#### [`assertStringOrNull`](../../../src/Protocol.php#L170-L179)
+#### [`assertStringOrNull`](../../../src/Protocol.php#L162-L171)
 
 static · Returns `?string`
 
@@ -469,7 +469,7 @@ static · Returns `?string`
 
 - `$value`: `mixed`
 
-#### [`assertInt`](../../../src/Protocol.php#L184-L193)
+#### [`assertInt`](../../../src/Protocol.php#L176-L185)
 
 static · Returns `int`
 
@@ -479,7 +479,7 @@ static · Returns `int`
 
 **Throws:** `TypeError`
 
-#### [`rowToStringArray`](../../../src/Protocol.php#L200-L210)
+#### [`rowToStringArray`](../../../src/Protocol.php#L192-L202)
 
 static · Returns `array`
 
@@ -489,7 +489,7 @@ static · Returns `array`
 
 **Throws:** `TypeError`
 
-#### [`decryptedString`](../../../src/Protocol.php#L216-L226)
+#### [`decryptedString`](../../../src/Protocol.php#L208-L218)
 
 static · Returns `string`
 
@@ -500,7 +500,7 @@ static · Returns `string`
 
 **Throws:** `TypeError`
 
-#### [`blindIndexValue`](../../../src/Protocol.php#L233-L243)
+#### [`blindIndexValue`](../../../src/Protocol.php#L225-L235)
 
 static · Returns `string`
 
@@ -509,7 +509,7 @@ static · Returns `string`
 - `$blindIndex`: `array|string`
 - `$key`: `?string` = null
 
-#### [`jsonDecode`](../../../src/Protocol.php#L16-L19)
+#### [`jsonDecode`](../../../src/Protocol.php#L15-L18)
 
 static · Returns `array`
 
@@ -519,7 +519,7 @@ static · Returns `array`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonDecodeObject`](../../../src/Protocol.php#L24-L27)
+#### [`jsonDecodeObject`](../../../src/Protocol.php#L23-L26)
 
 static · Returns `stdClass`
 
@@ -529,7 +529,7 @@ static · Returns `stdClass`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonEncode`](../../../src/Protocol.php#L33-L39)
+#### [`jsonEncode`](../../../src/Protocol.php#L32-L38)
 
 static · Returns `string`
 
@@ -824,7 +824,7 @@ Returns `void`
 
 **Throws:** `DependencyException`, `SodiumException`
 
-#### [`appCache`](../../../src/Table.php#L54-L57)
+#### [`appCache`](../../../src/Table.php#L46-L49)
 
 Returns `FediE2EE\PKDServer\AppCache`
 
@@ -835,7 +835,7 @@ Returns `FediE2EE\PKDServer\AppCache`
 
 **Throws:** `DependencyException`
 
-#### [`table`](../../../src/Table.php#L64-L87)
+#### [`table`](../../../src/Table.php#L56-L79)
 
 Returns `FediE2EE\PKDServer\Table`
 
@@ -845,7 +845,7 @@ Returns `FediE2EE\PKDServer\Table`
 
 **Throws:** `CacheException`, `DependencyException`, `TableException`
 
-#### [`injectConfig`](../../../src/Table.php#L89-L92)
+#### [`injectConfig`](../../../src/Table.php#L81-L84)
 
 Returns `void`
 
@@ -853,13 +853,13 @@ Returns `void`
 
 - `$config`: `FediE2EE\PKDServer\ServerConfig`
 
-#### [`config`](../../../src/Table.php#L97-L107)
+#### [`config`](../../../src/Table.php#L89-L99)
 
 Returns `FediE2EE\PKDServer\ServerConfig`
 
 **Throws:** `DependencyException`
 
-#### [`setWebFinger`](../../../src/Table.php#L112-L116)
+#### [`setWebFinger`](../../../src/Table.php#L104-L108)
 
 Returns `self`
 
@@ -869,7 +869,7 @@ This is intended for mocking in unit tests
 
 - `$wf`: `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
-#### [`webfinger`](../../../src/Table.php#L123-L130)
+#### [`webfinger`](../../../src/Table.php#L115-L122)
 
 Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
@@ -879,7 +879,7 @@ Returns `FediE2EE\PKDServer\ActivityPub\WebFinger`
 
 **Throws:** `CertaintyException`, `DependencyException`, `SodiumException`
 
-#### [`parseUrlHost`](../../../src/Table.php#L136-L143)
+#### [`parseUrlHost`](../../../src/Table.php#L128-L135)
 
 static · Returns `?string`
 
@@ -887,7 +887,7 @@ static · Returns `?string`
 
 - `$url`: `string`
 
-#### [`assertArray`](../../../src/Table.php#L151-L157)
+#### [`assertArray`](../../../src/Table.php#L143-L149)
 
 static · Returns `array`
 
@@ -897,7 +897,7 @@ static · Returns `array`
 
 **Throws:** `TypeError`
 
-#### [`assertString`](../../../src/Table.php#L162-L168)
+#### [`assertString`](../../../src/Table.php#L154-L160)
 
 static · Returns `string`
 
@@ -907,7 +907,7 @@ static · Returns `string`
 
 **Throws:** `TypeError`
 
-#### [`assertStringOrNull`](../../../src/Table.php#L170-L179)
+#### [`assertStringOrNull`](../../../src/Table.php#L162-L171)
 
 static · Returns `?string`
 
@@ -915,7 +915,7 @@ static · Returns `?string`
 
 - `$value`: `mixed`
 
-#### [`assertInt`](../../../src/Table.php#L184-L193)
+#### [`assertInt`](../../../src/Table.php#L176-L185)
 
 static · Returns `int`
 
@@ -925,7 +925,7 @@ static · Returns `int`
 
 **Throws:** `TypeError`
 
-#### [`rowToStringArray`](../../../src/Table.php#L200-L210)
+#### [`rowToStringArray`](../../../src/Table.php#L192-L202)
 
 static · Returns `array`
 
@@ -935,7 +935,7 @@ static · Returns `array`
 
 **Throws:** `TypeError`
 
-#### [`decryptedString`](../../../src/Table.php#L216-L226)
+#### [`decryptedString`](../../../src/Table.php#L208-L218)
 
 static · Returns `string`
 
@@ -946,7 +946,7 @@ static · Returns `string`
 
 **Throws:** `TypeError`
 
-#### [`blindIndexValue`](../../../src/Table.php#L233-L243)
+#### [`blindIndexValue`](../../../src/Table.php#L225-L235)
 
 static · Returns `string`
 
@@ -955,7 +955,7 @@ static · Returns `string`
 - `$blindIndex`: `array|string`
 - `$key`: `?string` = null
 
-#### [`jsonDecode`](../../../src/Table.php#L16-L19)
+#### [`jsonDecode`](../../../src/Table.php#L15-L18)
 
 static · Returns `array`
 
@@ -965,7 +965,7 @@ static · Returns `array`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonDecodeObject`](../../../src/Table.php#L24-L27)
+#### [`jsonDecodeObject`](../../../src/Table.php#L23-L26)
 
 static · Returns `stdClass`
 
@@ -975,7 +975,7 @@ static · Returns `stdClass`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonEncode`](../../../src/Table.php#L33-L39)
+#### [`jsonEncode`](../../../src/Table.php#L32-L38)
 
 static · Returns `string`
 

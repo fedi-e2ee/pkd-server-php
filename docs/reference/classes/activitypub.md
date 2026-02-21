@@ -30,7 +30,7 @@ Namespace: `FediE2EE\PKDServer\ActivityPub`
 
 ### Methods
 
-#### [`fromDecoded`](../../../src/ActivityPub/ActivityStream.php#L32-L47)
+#### [`fromDecoded`](../../../src/ActivityPub/ActivityStream.php#L28-L43)
 
 static · Returns `self`
 
@@ -40,7 +40,7 @@ static · Returns `self`
 
 **Throws:** `ActivityPubException`
 
-#### [`fromString`](../../../src/ActivityPub/ActivityStream.php#L52-L55)
+#### [`fromString`](../../../src/ActivityPub/ActivityStream.php#L48-L51)
 
 static · Returns `self`
 
@@ -50,23 +50,23 @@ static · Returns `self`
 
 **Throws:** `ActivityPubException`
 
-#### [`jsonSerialize`](../../../src/ActivityPub/ActivityStream.php#L58-L69)
+#### [`jsonSerialize`](../../../src/ActivityPub/ActivityStream.php#L54-L65)
 
 Returns `stdClass`
 
 **Attributes:** `#[Override]`
 
-#### [`__toString`](../../../src/ActivityPub/ActivityStream.php#L74-L77)
+#### [`__toString`](../../../src/ActivityPub/ActivityStream.php#L70-L73)
 
 Returns `string`
 
 **Throws:** `JsonException`
 
-#### [`isDirectMessage`](../../../src/ActivityPub/ActivityStream.php#L82-L116)
+#### [`isDirectMessage`](../../../src/ActivityPub/ActivityStream.php#L78-L112)
 
 Returns `bool`
 
-#### [`jsonDecode`](../../../src/ActivityPub/ActivityStream.php#L16-L19)
+#### [`jsonDecode`](../../../src/ActivityPub/ActivityStream.php#L15-L18)
 
 static · Returns `array`
 
@@ -76,7 +76,7 @@ static · Returns `array`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonDecodeObject`](../../../src/ActivityPub/ActivityStream.php#L24-L27)
+#### [`jsonDecodeObject`](../../../src/ActivityPub/ActivityStream.php#L23-L26)
 
 static · Returns `stdClass`
 
@@ -86,7 +86,7 @@ static · Returns `stdClass`
 
 **Throws:** `BaseJsonException`
 
-#### [`jsonEncode`](../../../src/ActivityPub/ActivityStream.php#L33-L39)
+#### [`jsonEncode`](../../../src/ActivityPub/ActivityStream.php#L32-L38)
 
 static · Returns `string`
 
