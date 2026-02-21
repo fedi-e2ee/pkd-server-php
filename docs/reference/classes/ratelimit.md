@@ -142,7 +142,7 @@ Returns `?DateTimeImmutable`
 
 **Throws:** `DateMalformedIntervalStringException`
 
-#### [`getIntervalFromFailureCount`](../../../src/RateLimit/DefaultRateLimiting.php#L249-L262)
+#### [`getIntervalFromFailureCount`](../../../src/RateLimit/DefaultRateLimiting.php#L249-L263)
 
 Returns `DateInterval`
 
@@ -152,7 +152,7 @@ Returns `DateInterval`
 
 **Throws:** `DateMalformedIntervalStringException`
 
-#### [`recordPenalty`](../../../src/RateLimit/DefaultRateLimiting.php#L268-L277)
+#### [`recordPenalty`](../../../src/RateLimit/DefaultRateLimiting.php#L269-L278)
 
 Returns `void`
 
@@ -165,7 +165,7 @@ Returns `void`
 
 **Throws:** `DateMalformedIntervalStringException`
 
-#### [`increaseFailures`](../../../src/RateLimit/DefaultRateLimiting.php#L282-L296)
+#### [`increaseFailures`](../../../src/RateLimit/DefaultRateLimiting.php#L283-L297)
 
 Returns `FediE2EE\PKDServer\RateLimit\RateLimitData`
 
@@ -235,7 +235,7 @@ Returns `string`
 
 - `$array`: `array`
 
-#### [`getRequestActor`](../../../src/RateLimit/DefaultRateLimiting.php#L155-L175)
+#### [`getRequestActor`](../../../src/RateLimit/DefaultRateLimiting.php#L155-L173)
 
 Returns `?string`
 
@@ -243,7 +243,7 @@ Returns `?string`
 
 - `$request`: `Psr\Http\Message\ServerRequestInterface`
 
-#### [`getRequestDomain`](../../../src/RateLimit/DefaultRateLimiting.php#L177-L185)
+#### [`getRequestDomain`](../../../src/RateLimit/DefaultRateLimiting.php#L175-L183)
 
 Returns `?string`
 

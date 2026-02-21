@@ -320,13 +320,13 @@ static · Returns `string`
 
 ### Methods
 
-#### [`__construct`](../../../src/RequestHandlers/Api/BurnDown.php#L49-L52)
+#### [`__construct`](../../../src/RequestHandlers/Api/BurnDown.php#L54-L57)
 
 Returns `void`
 
 **Throws:** `DependencyException`
 
-#### [`handle`](../../../src/RequestHandlers/Api/BurnDown.php#L69-L91)
+#### [`handle`](../../../src/RequestHandlers/Api/BurnDown.php#L79-L106)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -336,7 +336,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 - `$request`: `Psr\Http\Message\ServerRequestInterface`
 
-**Throws:** `CacheException`, `CertaintyException`, `CryptoException`, `DependencyException`, `HPKEException`, `JsonException`, `NotImplementedException`, `ParserException`, `SodiumException`, `TableException`, `InvalidArgumentException`
+**Throws:** `BaseJsonException`, `BundleException`, `CacheException`, `CertaintyException`, `ConcurrentException`, `CryptoException`, `DateMalformedStringException`, `DependencyException`, `HPKEException`, `InvalidArgumentException`, `JsonException`, `NotImplementedException`, `ParserException`, `RandomException`, `SodiumException`, `TableException`
 
 #### [`getVerifiedStream`](../../../src/RequestHandlers/Api/BurnDown.php#L39-L62)
 
@@ -2707,7 +2707,7 @@ static · Returns `string`
 
 ### Methods
 
-#### [`handle`](../../../src/RequestHandlers/Api/Info.php#L34-L45)
+#### [`handle`](../../../src/RequestHandlers/Api/Info.php#L34-L46)
 
 Returns `Psr\Http\Message\ResponseInterface`
 

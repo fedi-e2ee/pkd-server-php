@@ -342,7 +342,7 @@ Return the witness data (including public key) for a given origin
 
 **Throws:** `TableException`
 
-#### [`addWitnessCosignature`](../../../src/Tables/MerkleState.php#L112-L157)
+#### [`addWitnessCosignature`](../../../src/Tables/MerkleState.php#L112-L160)
 
 **API** · Returns `bool`
 
@@ -354,7 +354,7 @@ Return the witness data (including public key) for a given origin
 
 **Throws:** `CryptoException`, `DependencyException`, `JsonException`, `NotImplementedException`, `ProtocolException`, `SodiumException`, `TableException`
 
-#### [`getCosignatures`](../../../src/Tables/MerkleState.php#L162-L180)
+#### [`getCosignatures`](../../../src/Tables/MerkleState.php#L165-L183)
 
 Returns `array`
 
@@ -362,7 +362,7 @@ Returns `array`
 
 - `$leafId`: `int`
 
-#### [`countCosignatures`](../../../src/Tables/MerkleState.php#L182-L192)
+#### [`countCosignatures`](../../../src/Tables/MerkleState.php#L185-L195)
 
 Returns `int`
 
@@ -370,13 +370,13 @@ Returns `int`
 
 - `$leafId`: `int`
 
-#### [`getLatestRoot`](../../../src/Tables/MerkleState.php#L200-L209)
+#### [`getLatestRoot`](../../../src/Tables/MerkleState.php#L203-L212)
 
 **API** · Returns `string`
 
 **Throws:** `DependencyException`, `SodiumException`
 
-#### [`insertLeaf`](../../../src/Tables/MerkleState.php#L228-L292)
+#### [`insertLeaf`](../../../src/Tables/MerkleState.php#L231-L295)
 
 **API** · Returns `bool`
 
@@ -390,7 +390,7 @@ Insert leaf with retry logic for deadlocks
 
 **Throws:** `ConcurrentException`, `CryptoException`, `DependencyException`, `NotImplementedException`, `RandomException`, `SodiumException`
 
-#### [`getLeafByRoot`](../../../src/Tables/MerkleState.php#L311-L327)
+#### [`getLeafByRoot`](../../../src/Tables/MerkleState.php#L314-L330)
 
 **API** · Returns `?FediE2EE\PKDServer\Tables\Records\MerkleLeaf`
 
@@ -398,7 +398,7 @@ Insert leaf with retry logic for deadlocks
 
 - `$root`: `string`
 
-#### [`getLeafByID`](../../../src/Tables/MerkleState.php#L332-L348)
+#### [`getLeafByID`](../../../src/Tables/MerkleState.php#L335-L351)
 
 **API** · Returns `?FediE2EE\PKDServer\Tables\Records\MerkleLeaf`
 
@@ -406,7 +406,7 @@ Insert leaf with retry logic for deadlocks
 
 - `$primaryKey`: `int`
 
-#### [`getHashesSince`](../../../src/Tables/MerkleState.php#L388-L430)
+#### [`getHashesSince`](../../../src/Tables/MerkleState.php#L391-L435)
 
 **API** · Returns `array`
 
@@ -994,7 +994,7 @@ Returns `void`
 
 **Throws:** `JsonException`, `TableException`
 
-#### [`getHistory`](../../../src/Tables/ReplicaHistory.php#L71-L82)
+#### [`getHistory`](../../../src/Tables/ReplicaHistory.php#L71-L84)
 
 Returns `array`
 
@@ -1006,7 +1006,7 @@ Returns `array`
 
 **Throws:** `JsonException`
 
-#### [`getHistorySince`](../../../src/Tables/ReplicaHistory.php#L88-L108)
+#### [`getHistorySince`](../../../src/Tables/ReplicaHistory.php#L90-L110)
 
 Returns `array`
 

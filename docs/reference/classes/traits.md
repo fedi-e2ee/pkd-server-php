@@ -873,7 +873,7 @@ Returns `string`
 
 - `$array`: `array`
 
-#### [`getRequestActor`](../../../src/Traits/NetworkTrait.php#L155-L175)
+#### [`getRequestActor`](../../../src/Traits/NetworkTrait.php#L155-L173)
 
 Returns `?string`
 
@@ -881,7 +881,7 @@ Returns `?string`
 
 - `$request`: `Psr\Http\Message\ServerRequestInterface`
 
-#### [`getRequestDomain`](../../../src/Traits/NetworkTrait.php#L177-L185)
+#### [`getRequestDomain`](../../../src/Traits/NetworkTrait.php#L175-L183)
 
 Returns `?string`
 
