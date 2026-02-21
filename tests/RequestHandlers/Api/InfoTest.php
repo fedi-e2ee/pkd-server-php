@@ -5,6 +5,7 @@ namespace FediE2EE\PKDServer\Tests\RequestHandlers\Api;
 use FediE2EE\PKD\Crypto\Exceptions\NotImplementedException;
 use FediE2EE\PKDServer\AppCache;
 use FediE2EE\PKDServer\Exceptions\DependencyException;
+use FediE2EE\PKDServer\Meta\Params;
 use FediE2EE\PKDServer\RequestHandlers\Api\Info;
 use FediE2EE\PKDServer\ServerConfig;
 use FediE2EE\PKDServer\Tests\HttpTestTrait;
@@ -19,6 +20,7 @@ use SodiumException;
 
 #[CoversClass(Info::class)]
 #[UsesClass(AppCache::class)]
+#[UsesClass(Params::class)]
 #[UsesClass(ServerConfig::class)]
 class InfoTest extends TestCase
 {

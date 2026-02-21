@@ -94,6 +94,9 @@ trait ProtocolMethodTrait
         }
         // Before we do any insets, we should make sure we're not in a dangling transaction:
         if ($this->config()->getDb()->inTransaction()) {
+            if ($this->config()->getDb()->getDriver() === 'sqlite') {
+                $this->config()->getDb()->exec('END TRANSACTION');
+            }
             $this->config()->getDb()->rollBack();
         }
         throw new TableException('Could not insert new leaf');

@@ -109,6 +109,12 @@ trait HttpTestTrait
     public function assertNotInTransaction(): void
     {
         $db = $this->config()->getDb();
+        if ($db->getDriver() === 'sqlite') {
+            try {
+                $db->exec('ROLLBACK');
+            } catch (\PDOException $e) {
+            }
+        }
         $this->assertFalse($db->inTransaction(), 'we should not be in transaction');
     }
 
@@ -195,6 +201,9 @@ trait HttpTestTrait
             $db = $this->getConfig()->getDb();
         } else {
             $db = $GLOBALS['pkdConfig']->getDb();
+        }
+        if ($db->inTransaction()) {
+            $db->rollback();
         }
         $tables = [
             'pkd_merkle_witness_cosignatures',
