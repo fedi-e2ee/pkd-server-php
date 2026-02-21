@@ -586,6 +586,7 @@ class TotpEnrollTest extends TestCase
         $this->clearOldTransaction($config);
         $protocol = new Protocol($config);
 
+        $this->assertNotInTransaction();
         $result = $this->addKeyForActor($canonical, $keypair, $protocol, $config);
         $this->assertNotInTransaction();
         $this->ensureMerkleStateUnlocked();
@@ -732,6 +733,7 @@ class TotpEnrollTest extends TestCase
         $this->clearOldTransaction($config);
         $protocol = new Protocol($config);
 
+        $this->assertNotInTransaction();
         $result = $this->addKeyForActor($canonical, $keypair, $protocol, $config);
         $this->assertNotInTransaction();
         $this->ensureMerkleStateUnlocked();

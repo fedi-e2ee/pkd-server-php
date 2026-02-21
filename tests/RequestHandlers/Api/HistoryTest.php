@@ -106,6 +106,7 @@ class HistoryTest extends TestCase
             $serverHpke->encapsKey,
             $serverHpke->cs
         );
+        $this->assertNotInTransaction();
         $protocol->addKey($encryptedForServer, $canonical);
         $newRoot = $merkleState->getLatestRoot();
 

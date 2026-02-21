@@ -125,6 +125,7 @@ class ApiTest extends TestCase
     public function setUp(): void
     {
         $this->config = $this->getConfig();
+        $this->assertNotInTransaction();
         $this->truncateTables();
     }
 

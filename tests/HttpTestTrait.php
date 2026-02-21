@@ -80,6 +80,12 @@ trait HttpTestTrait
     public function clearOldTransaction(ServerConfig $config): void
     {
         $db = $config->getDb();
+        if ($db->getDriver() === 'sqlite') {
+            try {
+                $db->exec('ROLLBACK');
+            } catch (PDOException) {
+            }
+        }
         if ($db->inTransaction()) {
             $db->rollback();
         }
@@ -112,7 +118,7 @@ trait HttpTestTrait
         if ($db->getDriver() === 'sqlite') {
             try {
                 $db->exec('ROLLBACK');
-            } catch (\PDOException $e) {
+            } catch (PDOException) {
             }
         }
         $this->assertFalse($db->inTransaction(), 'we should not be in transaction');

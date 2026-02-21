@@ -107,6 +107,7 @@ class ReplicasTest extends TestCase
         if (!($peersTable instanceof Peers)) {
             $this->fail('peers table is not the right type');
         }
+        $this->assertNotInTransaction();
         /** @var Peer $newPeer */
         $newPeer = $peersTable->create(
             $this->config->getSigningKeys()->publicKey,
