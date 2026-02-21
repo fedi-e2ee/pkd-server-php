@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace FediE2EE\PKDServer\Tests\Traits;
 
 use FediE2EE\PKDServer\Traits\NetworkTrait;
+use GuzzleHttp\Psr7\ServerRequest;
 use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
@@ -120,5 +121,24 @@ class NetworkTraitTest extends TestCase
     {
         $dummy = $this->getDummyClass();
         $this->assertSame($expected, $dummy->ipv6Mask($input, $maskBits));
+    }
+    public function testGetRequestActor(): void
+    {
+        $dummy = $this->getDummyClass();
+        $json = json_encode(['actor' => 'https://example.com/users/alice']);
+        $this->assertSame(
+            'https://example.com/users/alice',
+            $dummy->getRequestActor(new ServerRequest('GET', '/', [], $json, '1.1'))
+        );
+    }
+
+    public function testGetRequestDomain(): void
+    {
+        $dummy = $this->getDummyClass();
+        $json = json_encode(['actor' => 'https://example.com/users/alice']);
+        $this->assertSame(
+            'example.com',
+            $dummy->getRequestDomain(new ServerRequest('GET', '/', [], $json, '1.1'))
+        );
     }
 }

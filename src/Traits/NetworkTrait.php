@@ -169,9 +169,7 @@ trait NetworkTrait
         if (!is_string($actorID)) {
             return null;
         }
-
-        $parsed = parse_url($actorID);
-        return $parsed['host'] ?? null;
+        return $actorID;
     }
 
     public function getRequestDomain(ServerRequestInterface $request): ?string

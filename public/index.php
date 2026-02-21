@@ -29,6 +29,9 @@ try {
     if ($ex instanceof RateLimitException) {
         // Rate-limited by the Middleware
         http_response_code(420);
+        if (!is_null($ex->rateLimitedUntil)) {
+            header('Retry-After: ' . $ex->rateLimitedUntil->format(DateTimeInterface::ATOM));
+        }
         echo $ex->getMessage(), PHP_EOL;
         if (!is_null($ex->rateLimitedUntil)) {
             echo 'Try again after: ',
