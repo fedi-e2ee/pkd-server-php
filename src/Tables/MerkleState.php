@@ -128,6 +128,9 @@ class MerkleState extends Table
         if (!hash_equals($tmp['hostname'], $hostname)) {
             // If hostname is formatted as a URL, just grab the hostname:
             $parsedHost = self::parseUrlHost($tmp['hostname']);
+            if (!is_string($parsedHost)) {
+                throw new ProtocolException('Invalid hostname');
+            }
             if (!hash_equals($parsedHost, $hostname)) {
                 // Both mismatched? Bail out.
                 throw new ProtocolException('Hostname mismatch');
