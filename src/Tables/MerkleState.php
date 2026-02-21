@@ -465,8 +465,8 @@ class MerkleState extends Table
                 break;
             case "sqlite":
                 $this->db->exec("BEGIN EXCLUSIVE TRANSACTION");
-                $this->db->exec("PRAGMA busy_timeout=2000");
-                $this->db->getPdo()->setAttribute(PDO::ATTR_TIMEOUT, 2);
+                $this->db->exec("PRAGMA busy_timeout=1000");
+                $this->db->getPdo()->setAttribute(PDO::ATTR_TIMEOUT, 10);
                 $row = self::assertArray($this->db->row(
                     "SELECT merkle_state, lock_challenge
                         FROM pkd_merkle_state WHERE 1"
