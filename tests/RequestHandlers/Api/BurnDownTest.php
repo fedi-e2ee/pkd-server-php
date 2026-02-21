@@ -41,6 +41,7 @@ use FediE2EE\PKDServer\Exceptions\{
 };
 use FediE2EE\PKDServer\{
     AppCache,
+    Meta\Params,
     Traits\ConfigTrait,
     Math,
     Protocol,
@@ -117,6 +118,7 @@ use SodiumException;
 #[UsesClass(Math::class)]
 #[UsesClass(RewrapConfig::class)]
 #[UsesClass(Peer::class)]
+#[UsesClass(Params::class)]
 class BurnDownTest extends TestCase
 {
     use ConfigTrait;
