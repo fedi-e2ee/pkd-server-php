@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace FediE2EE\PKDServer\RequestHandlers\Api;
 
 use FediE2EE\PKD\Crypto\Exceptions\{
+    BundleException,
     CryptoException,
     HttpSignatureException,
     JsonException,
@@ -12,11 +13,13 @@ use FediE2EE\PKD\Crypto\Exceptions\{
 use FediE2EE\PKDServer\Exceptions\{
     ActivityPubException,
     CacheException,
+    ConcurrentException,
     DependencyException,
     FetchException,
     ProtocolException,
     TableException
 };
+use DateMalformedStringException;
 use FediE2EE\PKDServer\{
     Meta\Route,
     Protocol
@@ -25,10 +28,12 @@ use FediE2EE\PKDServer\Traits\{
     ActivityStreamsTrait,
     ReqTrait
 };
+use JsonException as BaseJsonException;
 use Override;
 use ParagonIE\Certainty\Exception\CertaintyException;
 use ParagonIE\HPKE\HPKEException;
 use Psr\SimpleCache\InvalidArgumentException;
+use Random\RandomException;
 use Psr\Http\Message\{
     ResponseInterface,
     ServerRequestInterface
@@ -52,17 +57,22 @@ class BurnDown implements RequestHandlerInterface
     }
 
     /**
+     * @throws BaseJsonException
+     * @throws BundleException
      * @throws CacheException
      * @throws CertaintyException
+     * @throws ConcurrentException
      * @throws CryptoException
+     * @throws DateMalformedStringException
      * @throws DependencyException
      * @throws HPKEException
+     * @throws InvalidArgumentException
      * @throws JsonException
      * @throws NotImplementedException
      * @throws ParserException
+     * @throws RandomException
      * @throws SodiumException
      * @throws TableException
-     * @throws InvalidArgumentException
      */
     #[Route("/api/burndown")]
     #[Override]
@@ -70,6 +80,8 @@ class BurnDown implements RequestHandlerInterface
     {
         try {
             $as = $this->getVerifiedStream($request);
+            // We set $isActivityPub to false here because this payload is sent over HTTP.
+            // This is important because BurnDown MUST NOT be sent over ActivityPub.
             /** @var array{action: string, result: bool, latest-root: string} $result */
             $result = $this->protocol->process($as, false);
             return $this->json([
