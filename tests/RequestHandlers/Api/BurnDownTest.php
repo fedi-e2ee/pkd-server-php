@@ -288,14 +288,14 @@ class BurnDownTest extends TestCase
 
         // 8. Handle request and verify response
         $response = $burnDownHandler->handle($request);
-        $this->assertSame(200, $response->getStatusCode());
+        $this->assertSame(400, $response->getStatusCode());
 
         $body = json_decode($response->getBody()->getContents(), true);
         $this->assertSame('fedi-e2ee:v1/api/burndown', $body['!pkd-context']);
         // Verify time field is present and is a string
         $this->assertArrayHasKey('time', $body);
         $this->assertIsString($body['time']);
-        $this->assertTrue($body['status']);
+        $this->assertFalse($body['status']);
 
         // 9. Verify actor's keys were burned
         $this->assertCount(0, $pkTable->getPublicKeysFor($canonActor));

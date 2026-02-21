@@ -78,6 +78,9 @@ class BurnDown implements RequestHandlerInterface
     #[Override]
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
+        if (!$this->config()->getParams()->getBurnDownEnabled()) {
+            return $this->error('BurnDown is not enabled');
+        }
         try {
             $as = $this->getVerifiedStream($request);
             // We set $isActivityPub to false here because this payload is sent over HTTP.
