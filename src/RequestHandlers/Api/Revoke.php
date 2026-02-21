@@ -64,7 +64,7 @@ class Revoke implements RequestHandlerInterface, LimitingHandlerInterface
      * @throws SodiumException
      * @throws TableException
      */
-    #[Route("/api/burndown")]
+    #[Route("/api/revoke")]
     #[Override]
     public function handle(ServerRequestInterface $request): ResponseInterface
     {

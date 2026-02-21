@@ -64,7 +64,7 @@ class BurnDown implements RequestHandlerInterface
      * @throws TableException
      * @throws InvalidArgumentException
      */
-    #[Route("/api/revoke")]
+    #[Route("/api/burndown")]
     #[Override]
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
@@ -86,7 +86,7 @@ class BurnDown implements RequestHandlerInterface
                 '!pkd-context' => 'fedi-e2ee:v1/api/burndown',
                 'time' => $this->time(),
                 'status' => false,
-            ]);
+            ], 400);
         }
     }
 }

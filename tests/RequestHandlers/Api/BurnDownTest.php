@@ -366,7 +366,7 @@ class BurnDownTest extends TestCase
         // Handle request - should fail signature verification
         $this->clearOldTransaction($config);
         $response = $burnDownHandler->handle($request);
-        $this->assertSame(200, $response->getStatusCode());
+        $this->assertSame(400, $response->getStatusCode());
 
         $body = json_decode($response->getBody()->getContents(), true);
         $this->assertSame('fedi-e2ee:v1/api/burndown', $body['!pkd-context']);
