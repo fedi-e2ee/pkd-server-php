@@ -228,7 +228,7 @@ class MerkleState extends Table
      *
      * @api
      */
-    public function insertLeaf(MerkleLeaf $leaf, callable $inTransaction, int $maxRetries = 5): bool
+    public function insertLeaf(MerkleLeaf $leaf, callable $inTransaction, int $maxRetries = 20): bool
     {
         $attempt = 0;
         $lockChallenge = sodium_bin2hex(random_bytes(32));
@@ -243,7 +243,7 @@ class MerkleState extends Table
             } catch (ConcurrentException $e) {
                 if ($attempt < $maxRetries - 1) {
                     $attempt++;
-                    usleep(random_int(10000, 100000)); // Random backoff 10-100ms
+                    usleep(random_int(10000, 1000000)); // Random backoff 10-1000ms
                     continue;
                 }
                 throw $e;
@@ -465,8 +465,8 @@ class MerkleState extends Table
                 break;
             case "sqlite":
                 $this->db->exec("BEGIN EXCLUSIVE TRANSACTION");
-                $this->db->exec("PRAGMA busy_timeout=5000");
-                $this->db->getPdo()->setAttribute(PDO::ATTR_TIMEOUT, 5);
+                $this->db->exec("PRAGMA busy_timeout=2000");
+                $this->db->getPdo()->setAttribute(PDO::ATTR_TIMEOUT, 2);
                 $row = self::assertArray($this->db->row(
                     "SELECT merkle_state, lock_challenge
                         FROM pkd_merkle_state WHERE 1"
