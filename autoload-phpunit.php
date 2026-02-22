@@ -59,11 +59,17 @@ if (!($GLOBALS['pkdConfig'] instanceof ServerConfig)) {
             mkdir(__DIR__ . '/tmp/db/', 0777, true);
         }
         $temp = __DIR__ . '/tmp/db/' . sodium_bin2hex(random_bytes(16)) . '-test.db';
-        $pkdConfig->withDatabase(new EasyDBCache(new PDO('sqlite:' . $temp)));
+        $mainPDO = new PDO('sqlite:' . $temp);
+        $mainPDO->exec('PRAGMA jounral_mode=WAL');
+        $mainPDO->exec('PRAGMA busy_timeout=5000');
+        $pkdConfig->withDatabase(new EasyDBCache($mainPDO));
         chmod($temp, 0777);
 
         // Create second DB connection for testing concurrency
-        $GLOBALS['PKD_PHPUNIT_DB'] = new EasyDBCache(new PDO('sqlite:' . $temp));
+        $secondPDO = new PDO('sqlite:' . $temp);
+        $secondPDO->exec('PRAGMA jounral_mode=WAL');
+        $secondPDO->exec('PRAGMA busy_timeout=5000');
+        $GLOBALS['PKD_PHPUNIT_DB'] = new EasyDBCache($secondPDO);
 
         // Call cleanup-test-db.php to cleanup test file after phpunit is finished.
         if (getenv('AUTO_CLEANUP_TEST_DB')) {

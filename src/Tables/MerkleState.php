@@ -464,9 +464,9 @@ class MerkleState extends Table
                 $storedChallenge = $row['lock_challenge'] ?? null;
                 break;
             case "sqlite":
-                $this->db->exec("BEGIN EXCLUSIVE TRANSACTION");
                 $this->db->exec("PRAGMA busy_timeout=1000");
                 $this->db->getPdo()->setAttribute(PDO::ATTR_TIMEOUT, 1);
+                $this->db->exec("BEGIN EXCLUSIVE TRANSACTION");
                 $row = self::assertArray($this->db->row(
                     "SELECT merkle_state, lock_challenge
                         FROM pkd_merkle_state WHERE 1"
@@ -568,11 +568,15 @@ class MerkleState extends Table
             $inTransaction();
 
             // We only commit this transaction if all was successful:
+            if ($this->db->getDriver() === 'sqlite') {
+                $this->db->exec("END TRANSACTION");
+                return true;
+            }
             return $this->db->commit();
         } finally {
             if ($this->db->getDriver() === 'sqlite') {
                 try {
-                    $this->db->exec("END TRANSACTION");
+                    $this->db->exec("ROLLBACK");
                 } catch (PDOException) {
                 }
             }
