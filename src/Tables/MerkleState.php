@@ -573,7 +573,8 @@ class MerkleState extends Table
             if ($this->db->getDriver() === 'sqlite') {
                 try {
                     $this->db->exec("END TRANSACTION");
-                } catch (PDOException) {}
+                } catch (PDOException) {
+                }
             }
             // @phpstan-ignore-next-line
             $wrap = !$this->db->inTransaction();
