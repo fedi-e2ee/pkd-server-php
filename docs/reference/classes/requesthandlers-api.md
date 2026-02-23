@@ -2432,19 +2432,19 @@ static · Returns `string`
 
 ### Methods
 
-#### [`__construct`](../../../src/RequestHandlers/Api/HistoryView.php#L50-L57)
+#### [`__construct`](../../../src/RequestHandlers/Api/HistoryView.php#L51-L58)
 
 Returns `void`
 
 **Throws:** `DependencyException`, `TableException`, `CacheException`
 
-#### [`getPrimaryCacheKey`](../../../src/RequestHandlers/Api/HistoryView.php#L60-L63)
+#### [`getPrimaryCacheKey`](../../../src/RequestHandlers/Api/HistoryView.php#L61-L64)
 
 Returns `string`
 
 **Attributes:** `#[Override]`
 
-#### [`handle`](../../../src/RequestHandlers/Api/HistoryView.php#L79-L112)
+#### [`handle`](../../../src/RequestHandlers/Api/HistoryView.php#L80-L115)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
