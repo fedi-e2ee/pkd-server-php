@@ -21,6 +21,7 @@ use FediE2EE\PKDServer\Exceptions\{
 use FediE2EE\PKDServer\Interfaces\HttpCacheInterface;
 use FediE2EE\PKDServer\Tables\MerkleState;
 use JsonException as BaseJsonException;
+use ParagonIE\ConstantTime\Base64UrlSafe;
 use ParagonIE\HPKE\HPKEException;
 use Psr\SimpleCache\InvalidArgumentException;
 use SodiumException;
@@ -96,6 +97,8 @@ class HistoryView implements RequestHandlerInterface, HttpCacheInterface
                 return [
                     '!pkd-context' => 'fedi-e2ee:v1/api/history/view',
                     'created' => $leaf->created,
+                    'dir-publickeyhash' => Base64UrlSafe::encodeUnpadded(sodium_bin2hex($leaf->publicKeyhash)),
+                    'dir-signature' => Base64UrlSafe::encodeUnpadded(sodium_bin2hex($leaf->signature)),
                     'encrypted-message' => $leaf->contents,
                     'inclusion-proof' => $leaf->inclusionProof,
                     'message' => $message,
