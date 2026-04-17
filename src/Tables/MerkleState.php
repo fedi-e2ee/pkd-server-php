@@ -580,18 +580,34 @@ class MerkleState extends Table
                 } catch (PDOException) {
                 }
             }
-            // @phpstan-ignore-next-line
-            $wrap = !$this->db->inTransaction();
-            // @phpstan-ignore-next-line
-            if ($wrap) {
-                $this->db->beginTransaction();
-            }
-            // Unlock challenge
-
-            $this->db->exec("UPDATE pkd_merkle_state SET lock_challenge = ''");
-            // @phpstan-ignore-next-line
-            if ($wrap) {
-                $this->db->commit();
+            try {
+                // @phpstan-ignore-next-line
+                $wrap = !$this->db->inTransaction();
+                // @phpstan-ignore-next-line
+                if ($wrap) {
+                    $this->db->beginTransaction();
+                }
+                $this->db->exec(
+                    "UPDATE pkd_merkle_state SET lock_challenge = ''"
+                );
+                // @phpstan-ignore-next-line
+                if ($wrap) {
+                    $this->db->commit();
+                }
+            } catch (PDOException) {
+                // Transaction is likely aborted; roll back and retry.
+                try {
+                    if ($this->db->inTransaction()) {
+                        $this->db->rollBack();
+                    }
+                    $this->db->beginTransaction();
+                    $this->db->exec(
+                        "UPDATE pkd_merkle_state SET lock_challenge = ''"
+                    );
+                    $this->db->commit();
+                } catch (PDOException) {
+                    // Best-effort: lock clears on next retry
+                }
             }
         }
     }

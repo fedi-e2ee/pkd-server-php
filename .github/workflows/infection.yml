@@ -39,6 +39,12 @@ jobs:
           toolchain: nightly
           components: rustfmt
 
+      - name: Setup PHP
+        uses: shivammathur/setup-php@accd6127cb78bee3e8082180cb391013d204ef9f  # v2.37.0
+        with:
+          php-version: ${{ matrix.php-versions }}
+          coverage: pcov
+
       - name: Build and install ext-pqcrypto
         shell: bash
         run: |
@@ -53,12 +59,6 @@ jobs:
           fi
           echo "extension=pqcrypto" >> "$(php -r "echo php_ini_loaded_file();")"
           php -m | grep pqcrypto
-
-      - name: Setup PHP
-        uses: shivammathur/setup-php@accd6127cb78bee3e8082180cb391013d204ef9f  # v2.37.0
-        with:
-          php-version: ${{ matrix.php-versions }}
-          coverage: pcov
 
       - name: Add Infection as dependency
         run: composer require --dev infection/infection
