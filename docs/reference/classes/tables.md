@@ -198,7 +198,7 @@ static · Returns `string`
 - `$auxDataType`: `string`
 - `$data`: `string`
 
-#### [`assertAllArrayKeysExist`](../../../src/Tables/AuxData.php#L29-L34)
+#### [`assertAllArrayKeysExist`](../../../src/Tables/AuxData.php#L31-L36)
 
 static · Returns `void`
 
@@ -213,7 +213,7 @@ It does not return anything.
 
 **Throws:** `InputException`
 
-#### [`allArrayKeysExist`](../../../src/Tables/AuxData.php#L42-L49)
+#### [`allArrayKeysExist`](../../../src/Tables/AuxData.php#L44-L51)
 
 static · Returns `bool`
 
@@ -226,7 +226,22 @@ Otherwise, it returns false. This is useful for input validation.
 - `$target`: `array`
 - `...$arrayKeys`: `string`
 
-#### [`constantTimeSelect`](../../../src/Tables/AuxData.php#L64-L81)
+#### [`assertKeyIsAllowed`](../../../src/Tables/AuxData.php#L59-L70)
+
+static · Returns `void`
+
+Throw an exception if someone attempts to misuse a more broadly acceptable {secret,public} key
+
+for the Public Key Directory protocol (which is more narrowly focused in what it accepts)
+
+**Parameters:**
+
+- `$key`: `FediE2EE\PKD\Crypto\SecretKey|FediE2EE\PKD\Crypto\PublicKey`
+- `$version`: `?FediE2EE\PKD\Crypto\Enums\ProtocolVersion` = null
+
+**Throws:** `CryptoException`
+
+#### [`constantTimeSelect`](../../../src/Tables/AuxData.php#L85-L102)
 
 Returns `string`
 
@@ -242,7 +257,7 @@ $result = ClassWithTrait::constantTimeSelect(1, $left, $right); -> $result === $
 
 **Throws:** `CryptoException`
 
-#### [`dos2unix`](../../../src/Tables/AuxData.php#L91-L94)
+#### [`dos2unix`](../../../src/Tables/AuxData.php#L112-L115)
 
 static · Returns `string`
 
@@ -254,7 +269,7 @@ This is mostly used for PEM-encoded strings.
 
 - `$in`: `string`
 
-#### [`preAuthEncode`](../../../src/Tables/AuxData.php#L112-L125)
+#### [`preAuthEncode`](../../../src/Tables/AuxData.php#L133-L146)
 
 static · Returns `string`
 
@@ -266,7 +281,7 @@ This is an implementation of PAE() from PASETO. It encodes an array of strings i
 
 - `$pieces`: `array`
 
-#### [`sortByKey`](../../../src/Tables/AuxData.php#L132-L140)
+#### [`sortByKey`](../../../src/Tables/AuxData.php#L153-L161)
 
 static · Returns `void`
 
@@ -278,7 +293,7 @@ Used for ensuring arrays are sorted before JSON encoding.
 
 - `$arr`: `array`
 
-#### [`LE64`](../../../src/Tables/AuxData.php#L147-L150)
+#### [`LE64`](../../../src/Tables/AuxData.php#L168-L171)
 
 static · Returns `string`
 
@@ -288,7 +303,7 @@ Mostly used by preAuthEncode() above. This packs an integer as 8 bytes.
 
 - `$n`: `int`
 
-#### [`stringToByteArray`](../../../src/Tables/AuxData.php#L155-L162)
+#### [`stringToByteArray`](../../../src/Tables/AuxData.php#L176-L183)
 
 Returns `array`
 
@@ -298,7 +313,7 @@ Get an array of bytes representing the input string.
 
 - `$str`: `string`
 
-#### [`stripNewlines`](../../../src/Tables/AuxData.php#L170-L204)
+#### [`stripNewlines`](../../../src/Tables/AuxData.php#L191-L225)
 
 static · Returns `string`
 
@@ -621,7 +636,7 @@ Returns `bool`
 
 **Throws:** `ConcurrentException`, `CryptoException`, `DependencyException`, `NotImplementedException`, `ProtocolException`, `RandomException`, `SodiumException`, `TableException`
 
-#### [`burnDown`](../../../src/Tables/PublicKeys.php#L844-L852)
+#### [`burnDown`](../../../src/Tables/PublicKeys.php#L845-L854)
 
 Returns `bool`
 
@@ -632,7 +647,7 @@ Returns `bool`
 
 **Throws:** `ConcurrentException`, `CryptoException`, `DependencyException`, `NotImplementedException`, `ProtocolException`, `RandomException`, `SodiumException`, `TableException`
 
-#### [`fireproof`](../../../src/Tables/PublicKeys.php#L955-L963)
+#### [`fireproof`](../../../src/Tables/PublicKeys.php#L957-L965)
 
 Returns `bool`
 
@@ -643,7 +658,7 @@ Returns `bool`
 
 **Throws:** `ConcurrentException`, `CryptoException`, `DependencyException`, `NotImplementedException`, `ProtocolException`, `RandomException`, `SodiumException`, `TableException`
 
-#### [`undoFireproof`](../../../src/Tables/PublicKeys.php#L1038-L1046)
+#### [`undoFireproof`](../../../src/Tables/PublicKeys.php#L1040-L1048)
 
 Returns `bool`
 
@@ -654,7 +669,7 @@ Returns `bool`
 
 **Throws:** `ConcurrentException`, `CryptoException`, `DependencyException`, `NotImplementedException`, `ProtocolException`, `RandomException`, `SodiumException`, `TableException`
 
-#### [`checkpoint`](../../../src/Tables/PublicKeys.php#L1121-L1129)
+#### [`checkpoint`](../../../src/Tables/PublicKeys.php#L1123-L1131)
 
 Returns `bool`
 
@@ -694,7 +709,7 @@ static · Returns `string`
 
 **Throws:** `BaseJsonException`
 
-#### [`verifyTOTP`](../../../src/Tables/PublicKeys.php#L49-L63)
+#### [`verifyTOTP`](../../../src/Tables/PublicKeys.php#L50-L64)
 
 static · Returns `?int`
 
@@ -704,7 +719,7 @@ static · Returns `?int`
 - `$otp`: `string`
 - `$windows`: `int` = 2
 
-#### [`generateTOTP`](../../../src/Tables/PublicKeys.php#L65-L81)
+#### [`generateTOTP`](../../../src/Tables/PublicKeys.php#L66-L82)
 
 static · Returns `string`
 
@@ -713,7 +728,7 @@ static · Returns `string`
 - `$secret`: `string`
 - `$time`: `?int` = null
 
-#### [`ord`](../../../src/Tables/PublicKeys.php#L86-L90)
+#### [`ord`](../../../src/Tables/PublicKeys.php#L87-L91)
 
 static · Returns `int`
 
@@ -723,7 +738,7 @@ Avoid cache-timing leaks in ord() by using unpack()
 
 - `$chr`: `string`
 
-#### [`throwIfTimeOutsideWindow`](../../../src/Tables/PublicKeys.php#L151-L160)
+#### [`throwIfTimeOutsideWindow`](../../../src/Tables/PublicKeys.php#L156-L165)
 
 Returns `void`
 
@@ -733,7 +748,7 @@ Returns `void`
 
 **Throws:** `DependencyException`, `ProtocolException`
 
-#### [`assertAllArrayKeysExist`](../../../src/Tables/PublicKeys.php#L29-L34)
+#### [`assertAllArrayKeysExist`](../../../src/Tables/PublicKeys.php#L31-L36)
 
 static · Returns `void`
 
@@ -748,7 +763,7 @@ It does not return anything.
 
 **Throws:** `InputException`
 
-#### [`allArrayKeysExist`](../../../src/Tables/PublicKeys.php#L42-L49)
+#### [`allArrayKeysExist`](../../../src/Tables/PublicKeys.php#L44-L51)
 
 static · Returns `bool`
 
@@ -761,7 +776,22 @@ Otherwise, it returns false. This is useful for input validation.
 - `$target`: `array`
 - `...$arrayKeys`: `string`
 
-#### [`constantTimeSelect`](../../../src/Tables/PublicKeys.php#L64-L81)
+#### [`assertKeyIsAllowed`](../../../src/Tables/PublicKeys.php#L59-L70)
+
+static · Returns `void`
+
+Throw an exception if someone attempts to misuse a more broadly acceptable {secret,public} key
+
+for the Public Key Directory protocol (which is more narrowly focused in what it accepts)
+
+**Parameters:**
+
+- `$key`: `FediE2EE\PKD\Crypto\SecretKey|FediE2EE\PKD\Crypto\PublicKey`
+- `$version`: `?FediE2EE\PKD\Crypto\Enums\ProtocolVersion` = null
+
+**Throws:** `CryptoException`
+
+#### [`constantTimeSelect`](../../../src/Tables/PublicKeys.php#L85-L102)
 
 Returns `string`
 
@@ -777,7 +807,7 @@ $result = ClassWithTrait::constantTimeSelect(1, $left, $right); -> $result === $
 
 **Throws:** `CryptoException`
 
-#### [`dos2unix`](../../../src/Tables/PublicKeys.php#L91-L94)
+#### [`dos2unix`](../../../src/Tables/PublicKeys.php#L112-L115)
 
 static · Returns `string`
 
@@ -789,7 +819,7 @@ This is mostly used for PEM-encoded strings.
 
 - `$in`: `string`
 
-#### [`preAuthEncode`](../../../src/Tables/PublicKeys.php#L112-L125)
+#### [`preAuthEncode`](../../../src/Tables/PublicKeys.php#L133-L146)
 
 static · Returns `string`
 
@@ -801,7 +831,7 @@ This is an implementation of PAE() from PASETO. It encodes an array of strings i
 
 - `$pieces`: `array`
 
-#### [`sortByKey`](../../../src/Tables/PublicKeys.php#L132-L140)
+#### [`sortByKey`](../../../src/Tables/PublicKeys.php#L153-L161)
 
 static · Returns `void`
 
@@ -813,7 +843,7 @@ Used for ensuring arrays are sorted before JSON encoding.
 
 - `$arr`: `array`
 
-#### [`LE64`](../../../src/Tables/PublicKeys.php#L147-L150)
+#### [`LE64`](../../../src/Tables/PublicKeys.php#L168-L171)
 
 static · Returns `string`
 
@@ -823,7 +853,7 @@ Mostly used by preAuthEncode() above. This packs an integer as 8 bytes.
 
 - `$n`: `int`
 
-#### [`stringToByteArray`](../../../src/Tables/PublicKeys.php#L155-L162)
+#### [`stringToByteArray`](../../../src/Tables/PublicKeys.php#L176-L183)
 
 Returns `array`
 
@@ -833,7 +863,7 @@ Get an array of bytes representing the input string.
 
 - `$str`: `string`
 
-#### [`stripNewlines`](../../../src/Tables/PublicKeys.php#L170-L204)
+#### [`stripNewlines`](../../../src/Tables/PublicKeys.php#L191-L225)
 
 static · Returns `string`
 

@@ -106,7 +106,7 @@ Returns `FediE2EE\PKD\Crypto\PublicKey`
 
 Fetch the RFC 9421 public keys for an actor.
 
-If multiple are returned (e.g., via FEP-521a), this will cycle through them until the first Ed25519 public key is found. We do not support JWS, RSA, or ECDSA keys.
+If multiple are returned (e.g., via FEP-521a), this will cycle through them until the first Ed25519 or ML-DSA-44 public key is found. We do not support JWS, RSA, or ECDSA keys.
 
 **Parameters:**
 
@@ -226,7 +226,7 @@ Returns `FediE2EE\PKD\Crypto\PublicKey`
 
 Fetch the RFC 9421 public keys for an actor.
 
-If multiple are returned (e.g., via FEP-521a), this will cycle through them until the first Ed25519 public key is found. We do not support JWS, RSA, or ECDSA keys.
+If multiple are returned (e.g., via FEP-521a), this will cycle through them until the first Ed25519 or ML-DSA-44 public key is found. We do not support JWS, RSA, or ECDSA keys.
 
 **Parameters:**
 
@@ -350,7 +350,7 @@ Returns `FediE2EE\PKD\Crypto\PublicKey`
 
 Fetch the RFC 9421 public keys for an actor.
 
-If multiple are returned (e.g., via FEP-521a), this will cycle through them until the first Ed25519 public key is found. We do not support JWS, RSA, or ECDSA keys.
+If multiple are returned (e.g., via FEP-521a), this will cycle through them until the first Ed25519 or ML-DSA-44 public key is found. We do not support JWS, RSA, or ECDSA keys.
 
 **Parameters:**
 
@@ -522,7 +522,7 @@ Returns `FediE2EE\PKD\Crypto\PublicKey`
 
 Fetch the RFC 9421 public keys for an actor.
 
-If multiple are returned (e.g., via FEP-521a), this will cycle through them until the first Ed25519 public key is found. We do not support JWS, RSA, or ECDSA keys.
+If multiple are returned (e.g., via FEP-521a), this will cycle through them until the first Ed25519 or ML-DSA-44 public key is found. We do not support JWS, RSA, or ECDSA keys.
 
 **Parameters:**
 
@@ -560,7 +560,7 @@ static · Returns `string`
 
 **Throws:** `BaseJsonException`
 
-#### [`assertAllArrayKeysExist`](../../../src/Tables/Records/MerkleLeaf.php#L29-L34)
+#### [`assertAllArrayKeysExist`](../../../src/Tables/Records/MerkleLeaf.php#L31-L36)
 
 static · Returns `void`
 
@@ -575,7 +575,7 @@ It does not return anything.
 
 **Throws:** `InputException`
 
-#### [`allArrayKeysExist`](../../../src/Tables/Records/MerkleLeaf.php#L42-L49)
+#### [`allArrayKeysExist`](../../../src/Tables/Records/MerkleLeaf.php#L44-L51)
 
 static · Returns `bool`
 
@@ -588,7 +588,22 @@ Otherwise, it returns false. This is useful for input validation.
 - `$target`: `array`
 - `...$arrayKeys`: `string`
 
-#### [`constantTimeSelect`](../../../src/Tables/Records/MerkleLeaf.php#L64-L81)
+#### [`assertKeyIsAllowed`](../../../src/Tables/Records/MerkleLeaf.php#L59-L70)
+
+static · Returns `void`
+
+Throw an exception if someone attempts to misuse a more broadly acceptable {secret,public} key
+
+for the Public Key Directory protocol (which is more narrowly focused in what it accepts)
+
+**Parameters:**
+
+- `$key`: `FediE2EE\PKD\Crypto\SecretKey|FediE2EE\PKD\Crypto\PublicKey`
+- `$version`: `?FediE2EE\PKD\Crypto\Enums\ProtocolVersion` = null
+
+**Throws:** `CryptoException`
+
+#### [`constantTimeSelect`](../../../src/Tables/Records/MerkleLeaf.php#L85-L102)
 
 Returns `string`
 
@@ -604,7 +619,7 @@ $result = ClassWithTrait::constantTimeSelect(1, $left, $right); -> $result === $
 
 **Throws:** `CryptoException`
 
-#### [`dos2unix`](../../../src/Tables/Records/MerkleLeaf.php#L91-L94)
+#### [`dos2unix`](../../../src/Tables/Records/MerkleLeaf.php#L112-L115)
 
 static · Returns `string`
 
@@ -616,7 +631,7 @@ This is mostly used for PEM-encoded strings.
 
 - `$in`: `string`
 
-#### [`preAuthEncode`](../../../src/Tables/Records/MerkleLeaf.php#L112-L125)
+#### [`preAuthEncode`](../../../src/Tables/Records/MerkleLeaf.php#L133-L146)
 
 static · Returns `string`
 
@@ -628,7 +643,7 @@ This is an implementation of PAE() from PASETO. It encodes an array of strings i
 
 - `$pieces`: `array`
 
-#### [`sortByKey`](../../../src/Tables/Records/MerkleLeaf.php#L132-L140)
+#### [`sortByKey`](../../../src/Tables/Records/MerkleLeaf.php#L153-L161)
 
 static · Returns `void`
 
@@ -640,7 +655,7 @@ Used for ensuring arrays are sorted before JSON encoding.
 
 - `$arr`: `array`
 
-#### [`LE64`](../../../src/Tables/Records/MerkleLeaf.php#L147-L150)
+#### [`LE64`](../../../src/Tables/Records/MerkleLeaf.php#L168-L171)
 
 static · Returns `string`
 
@@ -650,7 +665,7 @@ Mostly used by preAuthEncode() above. This packs an integer as 8 bytes.
 
 - `$n`: `int`
 
-#### [`stringToByteArray`](../../../src/Tables/Records/MerkleLeaf.php#L155-L162)
+#### [`stringToByteArray`](../../../src/Tables/Records/MerkleLeaf.php#L176-L183)
 
 Returns `array`
 
@@ -660,7 +675,7 @@ Get an array of bytes representing the input string.
 
 - `$str`: `string`
 
-#### [`stripNewlines`](../../../src/Tables/Records/MerkleLeaf.php#L170-L204)
+#### [`stripNewlines`](../../../src/Tables/Records/MerkleLeaf.php#L191-L225)
 
 static · Returns `string`
 
@@ -764,7 +779,7 @@ Returns `FediE2EE\PKD\Crypto\PublicKey`
 
 Fetch the RFC 9421 public keys for an actor.
 
-If multiple are returned (e.g., via FEP-521a), this will cycle through them until the first Ed25519 public key is found. We do not support JWS, RSA, or ECDSA keys.
+If multiple are returned (e.g., via FEP-521a), this will cycle through them until the first Ed25519 or ML-DSA-44 public key is found. We do not support JWS, RSA, or ECDSA keys.
 
 **Parameters:**
 
@@ -802,7 +817,7 @@ static · Returns `string`
 
 **Throws:** `BaseJsonException`
 
-#### [`assertAllArrayKeysExist`](../../../src/Tables/Records/Peer.php#L29-L34)
+#### [`assertAllArrayKeysExist`](../../../src/Tables/Records/Peer.php#L31-L36)
 
 static · Returns `void`
 
@@ -817,7 +832,7 @@ It does not return anything.
 
 **Throws:** `InputException`
 
-#### [`allArrayKeysExist`](../../../src/Tables/Records/Peer.php#L42-L49)
+#### [`allArrayKeysExist`](../../../src/Tables/Records/Peer.php#L44-L51)
 
 static · Returns `bool`
 
@@ -830,7 +845,22 @@ Otherwise, it returns false. This is useful for input validation.
 - `$target`: `array`
 - `...$arrayKeys`: `string`
 
-#### [`constantTimeSelect`](../../../src/Tables/Records/Peer.php#L64-L81)
+#### [`assertKeyIsAllowed`](../../../src/Tables/Records/Peer.php#L59-L70)
+
+static · Returns `void`
+
+Throw an exception if someone attempts to misuse a more broadly acceptable {secret,public} key
+
+for the Public Key Directory protocol (which is more narrowly focused in what it accepts)
+
+**Parameters:**
+
+- `$key`: `FediE2EE\PKD\Crypto\SecretKey|FediE2EE\PKD\Crypto\PublicKey`
+- `$version`: `?FediE2EE\PKD\Crypto\Enums\ProtocolVersion` = null
+
+**Throws:** `CryptoException`
+
+#### [`constantTimeSelect`](../../../src/Tables/Records/Peer.php#L85-L102)
 
 Returns `string`
 
@@ -846,7 +876,7 @@ $result = ClassWithTrait::constantTimeSelect(1, $left, $right); -> $result === $
 
 **Throws:** `CryptoException`
 
-#### [`dos2unix`](../../../src/Tables/Records/Peer.php#L91-L94)
+#### [`dos2unix`](../../../src/Tables/Records/Peer.php#L112-L115)
 
 static · Returns `string`
 
@@ -858,7 +888,7 @@ This is mostly used for PEM-encoded strings.
 
 - `$in`: `string`
 
-#### [`preAuthEncode`](../../../src/Tables/Records/Peer.php#L112-L125)
+#### [`preAuthEncode`](../../../src/Tables/Records/Peer.php#L133-L146)
 
 static · Returns `string`
 
@@ -870,7 +900,7 @@ This is an implementation of PAE() from PASETO. It encodes an array of strings i
 
 - `$pieces`: `array`
 
-#### [`sortByKey`](../../../src/Tables/Records/Peer.php#L132-L140)
+#### [`sortByKey`](../../../src/Tables/Records/Peer.php#L153-L161)
 
 static · Returns `void`
 
@@ -882,7 +912,7 @@ Used for ensuring arrays are sorted before JSON encoding.
 
 - `$arr`: `array`
 
-#### [`LE64`](../../../src/Tables/Records/Peer.php#L147-L150)
+#### [`LE64`](../../../src/Tables/Records/Peer.php#L168-L171)
 
 static · Returns `string`
 
@@ -892,7 +922,7 @@ Mostly used by preAuthEncode() above. This packs an integer as 8 bytes.
 
 - `$n`: `int`
 
-#### [`stringToByteArray`](../../../src/Tables/Records/Peer.php#L155-L162)
+#### [`stringToByteArray`](../../../src/Tables/Records/Peer.php#L176-L183)
 
 Returns `array`
 
@@ -902,7 +932,7 @@ Get an array of bytes representing the input string.
 
 - `$str`: `string`
 
-#### [`stripNewlines`](../../../src/Tables/Records/Peer.php#L170-L204)
+#### [`stripNewlines`](../../../src/Tables/Records/Peer.php#L191-L225)
 
 static · Returns `string`
 
@@ -990,7 +1020,7 @@ Returns `FediE2EE\PKD\Crypto\PublicKey`
 
 Fetch the RFC 9421 public keys for an actor.
 
-If multiple are returned (e.g., via FEP-521a), this will cycle through them until the first Ed25519 public key is found. We do not support JWS, RSA, or ECDSA keys.
+If multiple are returned (e.g., via FEP-521a), this will cycle through them until the first Ed25519 or ML-DSA-44 public key is found. We do not support JWS, RSA, or ECDSA keys.
 
 **Parameters:**
 
@@ -1028,7 +1058,7 @@ static · Returns `string`
 
 **Throws:** `BaseJsonException`
 
-#### [`assertAllArrayKeysExist`](../../../src/Tables/Records/ReplicaActor.php#L29-L34)
+#### [`assertAllArrayKeysExist`](../../../src/Tables/Records/ReplicaActor.php#L31-L36)
 
 static · Returns `void`
 
@@ -1043,7 +1073,7 @@ It does not return anything.
 
 **Throws:** `InputException`
 
-#### [`allArrayKeysExist`](../../../src/Tables/Records/ReplicaActor.php#L42-L49)
+#### [`allArrayKeysExist`](../../../src/Tables/Records/ReplicaActor.php#L44-L51)
 
 static · Returns `bool`
 
@@ -1056,7 +1086,22 @@ Otherwise, it returns false. This is useful for input validation.
 - `$target`: `array`
 - `...$arrayKeys`: `string`
 
-#### [`constantTimeSelect`](../../../src/Tables/Records/ReplicaActor.php#L64-L81)
+#### [`assertKeyIsAllowed`](../../../src/Tables/Records/ReplicaActor.php#L59-L70)
+
+static · Returns `void`
+
+Throw an exception if someone attempts to misuse a more broadly acceptable {secret,public} key
+
+for the Public Key Directory protocol (which is more narrowly focused in what it accepts)
+
+**Parameters:**
+
+- `$key`: `FediE2EE\PKD\Crypto\SecretKey|FediE2EE\PKD\Crypto\PublicKey`
+- `$version`: `?FediE2EE\PKD\Crypto\Enums\ProtocolVersion` = null
+
+**Throws:** `CryptoException`
+
+#### [`constantTimeSelect`](../../../src/Tables/Records/ReplicaActor.php#L85-L102)
 
 Returns `string`
 
@@ -1072,7 +1117,7 @@ $result = ClassWithTrait::constantTimeSelect(1, $left, $right); -> $result === $
 
 **Throws:** `CryptoException`
 
-#### [`dos2unix`](../../../src/Tables/Records/ReplicaActor.php#L91-L94)
+#### [`dos2unix`](../../../src/Tables/Records/ReplicaActor.php#L112-L115)
 
 static · Returns `string`
 
@@ -1084,7 +1129,7 @@ This is mostly used for PEM-encoded strings.
 
 - `$in`: `string`
 
-#### [`preAuthEncode`](../../../src/Tables/Records/ReplicaActor.php#L112-L125)
+#### [`preAuthEncode`](../../../src/Tables/Records/ReplicaActor.php#L133-L146)
 
 static · Returns `string`
 
@@ -1096,7 +1141,7 @@ This is an implementation of PAE() from PASETO. It encodes an array of strings i
 
 - `$pieces`: `array`
 
-#### [`sortByKey`](../../../src/Tables/Records/ReplicaActor.php#L132-L140)
+#### [`sortByKey`](../../../src/Tables/Records/ReplicaActor.php#L153-L161)
 
 static · Returns `void`
 
@@ -1108,7 +1153,7 @@ Used for ensuring arrays are sorted before JSON encoding.
 
 - `$arr`: `array`
 
-#### [`LE64`](../../../src/Tables/Records/ReplicaActor.php#L147-L150)
+#### [`LE64`](../../../src/Tables/Records/ReplicaActor.php#L168-L171)
 
 static · Returns `string`
 
@@ -1118,7 +1163,7 @@ Mostly used by preAuthEncode() above. This packs an integer as 8 bytes.
 
 - `$n`: `int`
 
-#### [`stringToByteArray`](../../../src/Tables/Records/ReplicaActor.php#L155-L162)
+#### [`stringToByteArray`](../../../src/Tables/Records/ReplicaActor.php#L176-L183)
 
 Returns `array`
 
@@ -1128,7 +1173,7 @@ Get an array of bytes representing the input string.
 
 - `$str`: `string`
 
-#### [`stripNewlines`](../../../src/Tables/Records/ReplicaActor.php#L170-L204)
+#### [`stripNewlines`](../../../src/Tables/Records/ReplicaActor.php#L191-L225)
 
 static · Returns `string`
 
@@ -1220,7 +1265,7 @@ Returns `FediE2EE\PKD\Crypto\PublicKey`
 
 Fetch the RFC 9421 public keys for an actor.
 
-If multiple are returned (e.g., via FEP-521a), this will cycle through them until the first Ed25519 public key is found. We do not support JWS, RSA, or ECDSA keys.
+If multiple are returned (e.g., via FEP-521a), this will cycle through them until the first Ed25519 or ML-DSA-44 public key is found. We do not support JWS, RSA, or ECDSA keys.
 
 **Parameters:**
 
@@ -1258,7 +1303,7 @@ static · Returns `string`
 
 **Throws:** `BaseJsonException`
 
-#### [`assertAllArrayKeysExist`](../../../src/Tables/Records/ReplicaAuxDatum.php#L29-L34)
+#### [`assertAllArrayKeysExist`](../../../src/Tables/Records/ReplicaAuxDatum.php#L31-L36)
 
 static · Returns `void`
 
@@ -1273,7 +1318,7 @@ It does not return anything.
 
 **Throws:** `InputException`
 
-#### [`allArrayKeysExist`](../../../src/Tables/Records/ReplicaAuxDatum.php#L42-L49)
+#### [`allArrayKeysExist`](../../../src/Tables/Records/ReplicaAuxDatum.php#L44-L51)
 
 static · Returns `bool`
 
@@ -1286,7 +1331,22 @@ Otherwise, it returns false. This is useful for input validation.
 - `$target`: `array`
 - `...$arrayKeys`: `string`
 
-#### [`constantTimeSelect`](../../../src/Tables/Records/ReplicaAuxDatum.php#L64-L81)
+#### [`assertKeyIsAllowed`](../../../src/Tables/Records/ReplicaAuxDatum.php#L59-L70)
+
+static · Returns `void`
+
+Throw an exception if someone attempts to misuse a more broadly acceptable {secret,public} key
+
+for the Public Key Directory protocol (which is more narrowly focused in what it accepts)
+
+**Parameters:**
+
+- `$key`: `FediE2EE\PKD\Crypto\SecretKey|FediE2EE\PKD\Crypto\PublicKey`
+- `$version`: `?FediE2EE\PKD\Crypto\Enums\ProtocolVersion` = null
+
+**Throws:** `CryptoException`
+
+#### [`constantTimeSelect`](../../../src/Tables/Records/ReplicaAuxDatum.php#L85-L102)
 
 Returns `string`
 
@@ -1302,7 +1362,7 @@ $result = ClassWithTrait::constantTimeSelect(1, $left, $right); -> $result === $
 
 **Throws:** `CryptoException`
 
-#### [`dos2unix`](../../../src/Tables/Records/ReplicaAuxDatum.php#L91-L94)
+#### [`dos2unix`](../../../src/Tables/Records/ReplicaAuxDatum.php#L112-L115)
 
 static · Returns `string`
 
@@ -1314,7 +1374,7 @@ This is mostly used for PEM-encoded strings.
 
 - `$in`: `string`
 
-#### [`preAuthEncode`](../../../src/Tables/Records/ReplicaAuxDatum.php#L112-L125)
+#### [`preAuthEncode`](../../../src/Tables/Records/ReplicaAuxDatum.php#L133-L146)
 
 static · Returns `string`
 
@@ -1326,7 +1386,7 @@ This is an implementation of PAE() from PASETO. It encodes an array of strings i
 
 - `$pieces`: `array`
 
-#### [`sortByKey`](../../../src/Tables/Records/ReplicaAuxDatum.php#L132-L140)
+#### [`sortByKey`](../../../src/Tables/Records/ReplicaAuxDatum.php#L153-L161)
 
 static · Returns `void`
 
@@ -1338,7 +1398,7 @@ Used for ensuring arrays are sorted before JSON encoding.
 
 - `$arr`: `array`
 
-#### [`LE64`](../../../src/Tables/Records/ReplicaAuxDatum.php#L147-L150)
+#### [`LE64`](../../../src/Tables/Records/ReplicaAuxDatum.php#L168-L171)
 
 static · Returns `string`
 
@@ -1348,7 +1408,7 @@ Mostly used by preAuthEncode() above. This packs an integer as 8 bytes.
 
 - `$n`: `int`
 
-#### [`stringToByteArray`](../../../src/Tables/Records/ReplicaAuxDatum.php#L155-L162)
+#### [`stringToByteArray`](../../../src/Tables/Records/ReplicaAuxDatum.php#L176-L183)
 
 Returns `array`
 
@@ -1358,7 +1418,7 @@ Get an array of bytes representing the input string.
 
 - `$str`: `string`
 
-#### [`stripNewlines`](../../../src/Tables/Records/ReplicaAuxDatum.php#L170-L204)
+#### [`stripNewlines`](../../../src/Tables/Records/ReplicaAuxDatum.php#L191-L225)
 
 static · Returns `string`
 
@@ -1466,7 +1526,7 @@ Returns `FediE2EE\PKD\Crypto\PublicKey`
 
 Fetch the RFC 9421 public keys for an actor.
 
-If multiple are returned (e.g., via FEP-521a), this will cycle through them until the first Ed25519 public key is found. We do not support JWS, RSA, or ECDSA keys.
+If multiple are returned (e.g., via FEP-521a), this will cycle through them until the first Ed25519 or ML-DSA-44 public key is found. We do not support JWS, RSA, or ECDSA keys.
 
 **Parameters:**
 
@@ -1504,7 +1564,7 @@ static · Returns `string`
 
 **Throws:** `BaseJsonException`
 
-#### [`assertAllArrayKeysExist`](../../../src/Tables/Records/ReplicaLeaf.php#L29-L34)
+#### [`assertAllArrayKeysExist`](../../../src/Tables/Records/ReplicaLeaf.php#L31-L36)
 
 static · Returns `void`
 
@@ -1519,7 +1579,7 @@ It does not return anything.
 
 **Throws:** `InputException`
 
-#### [`allArrayKeysExist`](../../../src/Tables/Records/ReplicaLeaf.php#L42-L49)
+#### [`allArrayKeysExist`](../../../src/Tables/Records/ReplicaLeaf.php#L44-L51)
 
 static · Returns `bool`
 
@@ -1532,7 +1592,22 @@ Otherwise, it returns false. This is useful for input validation.
 - `$target`: `array`
 - `...$arrayKeys`: `string`
 
-#### [`constantTimeSelect`](../../../src/Tables/Records/ReplicaLeaf.php#L64-L81)
+#### [`assertKeyIsAllowed`](../../../src/Tables/Records/ReplicaLeaf.php#L59-L70)
+
+static · Returns `void`
+
+Throw an exception if someone attempts to misuse a more broadly acceptable {secret,public} key
+
+for the Public Key Directory protocol (which is more narrowly focused in what it accepts)
+
+**Parameters:**
+
+- `$key`: `FediE2EE\PKD\Crypto\SecretKey|FediE2EE\PKD\Crypto\PublicKey`
+- `$version`: `?FediE2EE\PKD\Crypto\Enums\ProtocolVersion` = null
+
+**Throws:** `CryptoException`
+
+#### [`constantTimeSelect`](../../../src/Tables/Records/ReplicaLeaf.php#L85-L102)
 
 Returns `string`
 
@@ -1548,7 +1623,7 @@ $result = ClassWithTrait::constantTimeSelect(1, $left, $right); -> $result === $
 
 **Throws:** `CryptoException`
 
-#### [`dos2unix`](../../../src/Tables/Records/ReplicaLeaf.php#L91-L94)
+#### [`dos2unix`](../../../src/Tables/Records/ReplicaLeaf.php#L112-L115)
 
 static · Returns `string`
 
@@ -1560,7 +1635,7 @@ This is mostly used for PEM-encoded strings.
 
 - `$in`: `string`
 
-#### [`preAuthEncode`](../../../src/Tables/Records/ReplicaLeaf.php#L112-L125)
+#### [`preAuthEncode`](../../../src/Tables/Records/ReplicaLeaf.php#L133-L146)
 
 static · Returns `string`
 
@@ -1572,7 +1647,7 @@ This is an implementation of PAE() from PASETO. It encodes an array of strings i
 
 - `$pieces`: `array`
 
-#### [`sortByKey`](../../../src/Tables/Records/ReplicaLeaf.php#L132-L140)
+#### [`sortByKey`](../../../src/Tables/Records/ReplicaLeaf.php#L153-L161)
 
 static · Returns `void`
 
@@ -1584,7 +1659,7 @@ Used for ensuring arrays are sorted before JSON encoding.
 
 - `$arr`: `array`
 
-#### [`LE64`](../../../src/Tables/Records/ReplicaLeaf.php#L147-L150)
+#### [`LE64`](../../../src/Tables/Records/ReplicaLeaf.php#L168-L171)
 
 static · Returns `string`
 
@@ -1594,7 +1669,7 @@ Mostly used by preAuthEncode() above. This packs an integer as 8 bytes.
 
 - `$n`: `int`
 
-#### [`stringToByteArray`](../../../src/Tables/Records/ReplicaLeaf.php#L155-L162)
+#### [`stringToByteArray`](../../../src/Tables/Records/ReplicaLeaf.php#L176-L183)
 
 Returns `array`
 
@@ -1604,7 +1679,7 @@ Get an array of bytes representing the input string.
 
 - `$str`: `string`
 
-#### [`stripNewlines`](../../../src/Tables/Records/ReplicaLeaf.php#L170-L204)
+#### [`stripNewlines`](../../../src/Tables/Records/ReplicaLeaf.php#L191-L225)
 
 static · Returns `string`
 
@@ -1696,7 +1771,7 @@ Returns `FediE2EE\PKD\Crypto\PublicKey`
 
 Fetch the RFC 9421 public keys for an actor.
 
-If multiple are returned (e.g., via FEP-521a), this will cycle through them until the first Ed25519 public key is found. We do not support JWS, RSA, or ECDSA keys.
+If multiple are returned (e.g., via FEP-521a), this will cycle through them until the first Ed25519 or ML-DSA-44 public key is found. We do not support JWS, RSA, or ECDSA keys.
 
 **Parameters:**
 
@@ -1734,7 +1809,7 @@ static · Returns `string`
 
 **Throws:** `BaseJsonException`
 
-#### [`assertAllArrayKeysExist`](../../../src/Tables/Records/ReplicaPublicKey.php#L29-L34)
+#### [`assertAllArrayKeysExist`](../../../src/Tables/Records/ReplicaPublicKey.php#L31-L36)
 
 static · Returns `void`
 
@@ -1749,7 +1824,7 @@ It does not return anything.
 
 **Throws:** `InputException`
 
-#### [`allArrayKeysExist`](../../../src/Tables/Records/ReplicaPublicKey.php#L42-L49)
+#### [`allArrayKeysExist`](../../../src/Tables/Records/ReplicaPublicKey.php#L44-L51)
 
 static · Returns `bool`
 
@@ -1762,7 +1837,22 @@ Otherwise, it returns false. This is useful for input validation.
 - `$target`: `array`
 - `...$arrayKeys`: `string`
 
-#### [`constantTimeSelect`](../../../src/Tables/Records/ReplicaPublicKey.php#L64-L81)
+#### [`assertKeyIsAllowed`](../../../src/Tables/Records/ReplicaPublicKey.php#L59-L70)
+
+static · Returns `void`
+
+Throw an exception if someone attempts to misuse a more broadly acceptable {secret,public} key
+
+for the Public Key Directory protocol (which is more narrowly focused in what it accepts)
+
+**Parameters:**
+
+- `$key`: `FediE2EE\PKD\Crypto\SecretKey|FediE2EE\PKD\Crypto\PublicKey`
+- `$version`: `?FediE2EE\PKD\Crypto\Enums\ProtocolVersion` = null
+
+**Throws:** `CryptoException`
+
+#### [`constantTimeSelect`](../../../src/Tables/Records/ReplicaPublicKey.php#L85-L102)
 
 Returns `string`
 
@@ -1778,7 +1868,7 @@ $result = ClassWithTrait::constantTimeSelect(1, $left, $right); -> $result === $
 
 **Throws:** `CryptoException`
 
-#### [`dos2unix`](../../../src/Tables/Records/ReplicaPublicKey.php#L91-L94)
+#### [`dos2unix`](../../../src/Tables/Records/ReplicaPublicKey.php#L112-L115)
 
 static · Returns `string`
 
@@ -1790,7 +1880,7 @@ This is mostly used for PEM-encoded strings.
 
 - `$in`: `string`
 
-#### [`preAuthEncode`](../../../src/Tables/Records/ReplicaPublicKey.php#L112-L125)
+#### [`preAuthEncode`](../../../src/Tables/Records/ReplicaPublicKey.php#L133-L146)
 
 static · Returns `string`
 
@@ -1802,7 +1892,7 @@ This is an implementation of PAE() from PASETO. It encodes an array of strings i
 
 - `$pieces`: `array`
 
-#### [`sortByKey`](../../../src/Tables/Records/ReplicaPublicKey.php#L132-L140)
+#### [`sortByKey`](../../../src/Tables/Records/ReplicaPublicKey.php#L153-L161)
 
 static · Returns `void`
 
@@ -1814,7 +1904,7 @@ Used for ensuring arrays are sorted before JSON encoding.
 
 - `$arr`: `array`
 
-#### [`LE64`](../../../src/Tables/Records/ReplicaPublicKey.php#L147-L150)
+#### [`LE64`](../../../src/Tables/Records/ReplicaPublicKey.php#L168-L171)
 
 static · Returns `string`
 
@@ -1824,7 +1914,7 @@ Mostly used by preAuthEncode() above. This packs an integer as 8 bytes.
 
 - `$n`: `int`
 
-#### [`stringToByteArray`](../../../src/Tables/Records/ReplicaPublicKey.php#L155-L162)
+#### [`stringToByteArray`](../../../src/Tables/Records/ReplicaPublicKey.php#L176-L183)
 
 Returns `array`
 
@@ -1834,7 +1924,7 @@ Get an array of bytes representing the input string.
 
 - `$str`: `string`
 
-#### [`stripNewlines`](../../../src/Tables/Records/ReplicaPublicKey.php#L170-L204)
+#### [`stripNewlines`](../../../src/Tables/Records/ReplicaPublicKey.php#L191-L225)
 
 static · Returns `string`
 

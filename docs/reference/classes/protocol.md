@@ -294,7 +294,7 @@ static · Returns `string`
 
 **Throws:** `BaseJsonException`
 
-#### [`assertAllArrayKeysExist`](../../../src/Protocol/KeyWrapping.php#L29-L34)
+#### [`assertAllArrayKeysExist`](../../../src/Protocol/KeyWrapping.php#L31-L36)
 
 static · Returns `void`
 
@@ -309,7 +309,7 @@ It does not return anything.
 
 **Throws:** `InputException`
 
-#### [`allArrayKeysExist`](../../../src/Protocol/KeyWrapping.php#L42-L49)
+#### [`allArrayKeysExist`](../../../src/Protocol/KeyWrapping.php#L44-L51)
 
 static · Returns `bool`
 
@@ -322,7 +322,22 @@ Otherwise, it returns false. This is useful for input validation.
 - `$target`: `array`
 - `...$arrayKeys`: `string`
 
-#### [`constantTimeSelect`](../../../src/Protocol/KeyWrapping.php#L64-L81)
+#### [`assertKeyIsAllowed`](../../../src/Protocol/KeyWrapping.php#L59-L70)
+
+static · Returns `void`
+
+Throw an exception if someone attempts to misuse a more broadly acceptable {secret,public} key
+
+for the Public Key Directory protocol (which is more narrowly focused in what it accepts)
+
+**Parameters:**
+
+- `$key`: `FediE2EE\PKD\Crypto\SecretKey|FediE2EE\PKD\Crypto\PublicKey`
+- `$version`: `?FediE2EE\PKD\Crypto\Enums\ProtocolVersion` = null
+
+**Throws:** `CryptoException`
+
+#### [`constantTimeSelect`](../../../src/Protocol/KeyWrapping.php#L85-L102)
 
 Returns `string`
 
@@ -338,7 +353,7 @@ $result = ClassWithTrait::constantTimeSelect(1, $left, $right); -> $result === $
 
 **Throws:** `CryptoException`
 
-#### [`dos2unix`](../../../src/Protocol/KeyWrapping.php#L91-L94)
+#### [`dos2unix`](../../../src/Protocol/KeyWrapping.php#L112-L115)
 
 static · Returns `string`
 
@@ -350,7 +365,7 @@ This is mostly used for PEM-encoded strings.
 
 - `$in`: `string`
 
-#### [`preAuthEncode`](../../../src/Protocol/KeyWrapping.php#L112-L125)
+#### [`preAuthEncode`](../../../src/Protocol/KeyWrapping.php#L133-L146)
 
 static · Returns `string`
 
@@ -362,7 +377,7 @@ This is an implementation of PAE() from PASETO. It encodes an array of strings i
 
 - `$pieces`: `array`
 
-#### [`sortByKey`](../../../src/Protocol/KeyWrapping.php#L132-L140)
+#### [`sortByKey`](../../../src/Protocol/KeyWrapping.php#L153-L161)
 
 static · Returns `void`
 
@@ -374,7 +389,7 @@ Used for ensuring arrays are sorted before JSON encoding.
 
 - `$arr`: `array`
 
-#### [`LE64`](../../../src/Protocol/KeyWrapping.php#L147-L150)
+#### [`LE64`](../../../src/Protocol/KeyWrapping.php#L168-L171)
 
 static · Returns `string`
 
@@ -384,7 +399,7 @@ Mostly used by preAuthEncode() above. This packs an integer as 8 bytes.
 
 - `$n`: `int`
 
-#### [`stringToByteArray`](../../../src/Protocol/KeyWrapping.php#L155-L162)
+#### [`stringToByteArray`](../../../src/Protocol/KeyWrapping.php#L176-L183)
 
 Returns `array`
 
@@ -394,7 +409,7 @@ Get an array of bytes representing the input string.
 
 - `$str`: `string`
 
-#### [`stripNewlines`](../../../src/Protocol/KeyWrapping.php#L170-L204)
+#### [`stripNewlines`](../../../src/Protocol/KeyWrapping.php#L191-L225)
 
 static · Returns `string`
 
@@ -437,6 +452,10 @@ Returns `void`
 #### [`decrypt`](../../../src/Protocol/Payload.php#L23-L29)
 
 Returns `FediE2EE\PKD\Crypto\Protocol\ProtocolMessageInterface`
+
+**Parameters:**
+
+- `$recentMerkleRoot`: `string`
 
 #### [`decode`](../../../src/Protocol/Payload.php#L35-L38)
 
@@ -499,7 +518,7 @@ static · Returns `string`
 
 ### Methods
 
-#### [`__construct`](../../../src/Protocol/RewrapConfig.php#L20-L23)
+#### [`__construct`](../../../src/Protocol/RewrapConfig.php#L21-L24)
 
 Returns `void`
 
@@ -508,7 +527,7 @@ Returns `void`
 - `$cs`: `string`
 - `$encapsKey`: `string`
 
-#### [`from`](../../../src/Protocol/RewrapConfig.php#L28-L39)
+#### [`from`](../../../src/Protocol/RewrapConfig.php#L29-L40)
 
 static · Returns `self`
 
@@ -519,7 +538,7 @@ static · Returns `self`
 
 **Throws:** `DependencyException`
 
-#### [`fromJson`](../../../src/Protocol/RewrapConfig.php#L41-L54)
+#### [`fromJson`](../../../src/Protocol/RewrapConfig.php#L42-L55)
 
 static · Returns `self`
 
@@ -527,19 +546,19 @@ static · Returns `self`
 
 - `$json`: `string`
 
-#### [`jsonSerialize`](../../../src/Protocol/RewrapConfig.php#L60-L66)
+#### [`jsonSerialize`](../../../src/Protocol/RewrapConfig.php#L61-L67)
 
 Returns `array`
 
 **Attributes:** `#[Override]`
 
-#### [`getCipherSuite`](../../../src/Protocol/RewrapConfig.php#L71-L74)
+#### [`getCipherSuite`](../../../src/Protocol/RewrapConfig.php#L72-L75)
 
 Returns `ParagonIE\HPKE\HPKE`
 
 **Throws:** `HPKEException`
 
-#### [`getEncapsKey`](../../../src/Protocol/RewrapConfig.php#L81-L88)
+#### [`getEncapsKey`](../../../src/Protocol/RewrapConfig.php#L82-L90)
 
 Returns `ParagonIE\HPKE\Interfaces\EncapsKeyInterface`
 

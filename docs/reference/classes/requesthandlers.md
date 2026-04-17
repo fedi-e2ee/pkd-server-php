@@ -65,7 +65,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 Returns `Psr\Http\Message\ResponseInterface`
 
-Implements an RFC 9421 HTTP Message Signature with Ed25519.
+Implements an RFC 9421 HTTP Message Signature with Ed25519 or ML-DSA-44.
 
 **Parameters:**
 
