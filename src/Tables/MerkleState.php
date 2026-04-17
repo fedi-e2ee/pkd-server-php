@@ -597,6 +597,7 @@ class MerkleState extends Table
             } catch (PDOException) {
                 // Transaction is likely aborted; roll back and retry.
                 try {
+                    // @phpstan-ignore-next-line
                     if ($this->db->inTransaction()) {
                         $this->db->rollBack();
                     }
