@@ -545,19 +545,19 @@ Returns `void`
 
 ### Methods
 
-#### [`getCipher`](../../../src/Tables/PublicKeys.php#L74-L88)
+#### [`getCipher`](../../../src/Tables/PublicKeys.php#L75-L89)
 
 Returns `FediE2EE\PKDServer\Dependency\WrappedEncryptedRow`
 
 **Attributes:** `#[Override]`
 
-#### [`generateKeyID`](../../../src/Tables/PublicKeys.php#L93-L96)
+#### [`generateKeyID`](../../../src/Tables/PublicKeys.php#L94-L97)
 
 Returns `string`
 
 **Throws:** `RandomException`
 
-#### [`lookup`](../../../src/Tables/PublicKeys.php#L125-L173)
+#### [`lookup`](../../../src/Tables/PublicKeys.php#L126-L174)
 
 Returns `array`
 
@@ -568,7 +568,7 @@ Returns `array`
 
 **Throws:** `BaseJsonException`, `CipherSweetException`, `CryptoOperationException`, `DateMalformedStringException`, `InvalidCiphertextException`, `SodiumException`
 
-#### [`getRecord`](../../../src/Tables/PublicKeys.php#L188-L221)
+#### [`getRecord`](../../../src/Tables/PublicKeys.php#L189-L222)
 
 Returns `FediE2EE\PKDServer\Tables\Records\ActorKey`
 
@@ -578,7 +578,7 @@ Returns `FediE2EE\PKDServer\Tables\Records\ActorKey`
 
 **Throws:** `CacheException`, `CipherSweetException`, `CryptoException`, `CryptoOperationException`, `DependencyException`, `InvalidCiphertextException`, `SodiumException`, `TableException`
 
-#### [`getPublicKeysFor`](../../../src/Tables/PublicKeys.php#L238-L304)
+#### [`getPublicKeysFor`](../../../src/Tables/PublicKeys.php#L239-L305)
 
 Returns `array`
 
@@ -589,11 +589,11 @@ Returns `array`
 
 **Throws:** `ArrayKeyException`, `BaseJsonException`, `BlindIndexNotFoundException`, `CacheException`, `CipherSweetException`, `CryptoException`, `CryptoOperationException`, `DateMalformedStringException`, `DependencyException`, `InvalidCiphertextException`, `SodiumException`, `TableException`
 
-#### [`getNextPrimaryKey`](../../../src/Tables/PublicKeys.php#L306-L313)
+#### [`getNextPrimaryKey`](../../../src/Tables/PublicKeys.php#L307-L314)
 
 Returns `int`
 
-#### [`addKey`](../../../src/Tables/PublicKeys.php#L411-L419)
+#### [`addKey`](../../../src/Tables/PublicKeys.php#L412-L420)
 
 Returns `FediE2EE\PKDServer\Tables\Records\ActorKey`
 
@@ -604,7 +604,7 @@ Returns `FediE2EE\PKDServer\Tables\Records\ActorKey`
 
 **Throws:** `ConcurrentException`, `CryptoException`, `DependencyException`, `NotImplementedException`, `ProtocolException`, `RandomException`, `SodiumException`, `TableException`
 
-#### [`revokeKey`](../../../src/Tables/PublicKeys.php#L431-L439)
+#### [`revokeKey`](../../../src/Tables/PublicKeys.php#L432-L440)
 
 Returns `FediE2EE\PKDServer\Tables\Records\ActorKey`
 
@@ -615,7 +615,7 @@ Returns `FediE2EE\PKDServer\Tables\Records\ActorKey`
 
 **Throws:** `ConcurrentException`, `CryptoException`, `DependencyException`, `NotImplementedException`, `ProtocolException`, `RandomException`, `SodiumException`, `TableException`
 
-#### [`revokeKeyThirdParty`](../../../src/Tables/PublicKeys.php#L451-L459)
+#### [`revokeKeyThirdParty`](../../../src/Tables/PublicKeys.php#L452-L460)
 
 Returns `bool`
 
@@ -625,18 +625,7 @@ Returns `bool`
 
 **Throws:** `ConcurrentException`, `CryptoException`, `DependencyException`, `NotImplementedException`, `ProtocolException`, `RandomException`, `SodiumException`, `TableException`
 
-#### [`moveIdentity`](../../../src/Tables/PublicKeys.php#L471-L479)
-
-Returns `bool`
-
-**Parameters:**
-
-- `$payload`: `FediE2EE\PKDServer\Protocol\Payload`
-- `$outerActor`: `string`
-
-**Throws:** `ConcurrentException`, `CryptoException`, `DependencyException`, `NotImplementedException`, `ProtocolException`, `RandomException`, `SodiumException`, `TableException`
-
-#### [`burnDown`](../../../src/Tables/PublicKeys.php#L845-L854)
+#### [`moveIdentity`](../../../src/Tables/PublicKeys.php#L472-L480)
 
 Returns `bool`
 
@@ -647,7 +636,7 @@ Returns `bool`
 
 **Throws:** `ConcurrentException`, `CryptoException`, `DependencyException`, `NotImplementedException`, `ProtocolException`, `RandomException`, `SodiumException`, `TableException`
 
-#### [`fireproof`](../../../src/Tables/PublicKeys.php#L957-L965)
+#### [`burnDown`](../../../src/Tables/PublicKeys.php#L850-L859)
 
 Returns `bool`
 
@@ -658,7 +647,7 @@ Returns `bool`
 
 **Throws:** `ConcurrentException`, `CryptoException`, `DependencyException`, `NotImplementedException`, `ProtocolException`, `RandomException`, `SodiumException`, `TableException`
 
-#### [`undoFireproof`](../../../src/Tables/PublicKeys.php#L1040-L1048)
+#### [`fireproof`](../../../src/Tables/PublicKeys.php#L962-L970)
 
 Returns `bool`
 
@@ -669,7 +658,18 @@ Returns `bool`
 
 **Throws:** `ConcurrentException`, `CryptoException`, `DependencyException`, `NotImplementedException`, `ProtocolException`, `RandomException`, `SodiumException`, `TableException`
 
-#### [`checkpoint`](../../../src/Tables/PublicKeys.php#L1123-L1131)
+#### [`undoFireproof`](../../../src/Tables/PublicKeys.php#L1045-L1053)
+
+Returns `bool`
+
+**Parameters:**
+
+- `$payload`: `FediE2EE\PKDServer\Protocol\Payload`
+- `$outerActor`: `string`
+
+**Throws:** `ConcurrentException`, `CryptoException`, `DependencyException`, `NotImplementedException`, `ProtocolException`, `RandomException`, `SodiumException`, `TableException`
+
+#### [`checkpoint`](../../../src/Tables/PublicKeys.php#L1128-L1136)
 
 Returns `bool`
 
