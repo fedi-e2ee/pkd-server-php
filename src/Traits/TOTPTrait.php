@@ -143,7 +143,7 @@ trait TOTPTrait
                     return;
                 }
             } catch (Throwable $ex) {
-                throw new ProtocolException('Invalid signature: ' . $ex->getMessage(), $ex->getCode(), $ex);
+                throw new ProtocolException('Invalid signature: ' . $ex->getMessage(), 0, $ex);
             }
         }
         throw new ProtocolException('Invalid signature');
