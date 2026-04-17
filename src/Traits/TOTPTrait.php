@@ -7,6 +7,7 @@ use FediE2EE\PKD\Crypto\Exceptions\{
     CryptoException,
     NotImplementedException
 };
+use ParagonIE\PQCrypto\Exception\MLDSAInternalException;
 use FediE2EE\PKD\Crypto\{
     PublicKey,
     UtilTrait
@@ -32,6 +33,7 @@ use ParagonIE\CipherSweet\Exception\{
 use ParagonIE\ConstantTime\Base64UrlSafe;
 use SensitiveParameter;
 use SodiumException;
+use Throwable;
 use function floor, hash_equals, hash_hmac, is_null, pack, sprintf, substr, time, unpack;
 
 trait TOTPTrait
@@ -136,8 +138,12 @@ trait TOTPTrait
                 $message
             ]);
 
-            if ($publicKey->verify(Base64UrlSafe::decodeNoPadding($signature), $toSign)) {
-                return;
+            try {
+                if ($publicKey->verify(Base64UrlSafe::decodeNoPadding($signature), $toSign)) {
+                    return;
+                }
+            } catch (Throwable $ex) {
+                throw new ProtocolException('Invalid signature: ' . $ex->getMessage(), 0, $ex);
             }
         }
         throw new ProtocolException('Invalid signature');

@@ -225,7 +225,7 @@ static · Returns `string`
 - `$auxDataType`: `string`
 - `$data`: `string`
 
-#### [`assertAllArrayKeysExist`](../../../src/Traits/AuxDataIdTrait.php#L29-L34)
+#### [`assertAllArrayKeysExist`](../../../src/Traits/AuxDataIdTrait.php#L31-L36)
 
 static · Returns `void`
 
@@ -240,7 +240,7 @@ It does not return anything.
 
 **Throws:** `InputException`
 
-#### [`allArrayKeysExist`](../../../src/Traits/AuxDataIdTrait.php#L42-L49)
+#### [`allArrayKeysExist`](../../../src/Traits/AuxDataIdTrait.php#L44-L51)
 
 static · Returns `bool`
 
@@ -253,7 +253,22 @@ Otherwise, it returns false. This is useful for input validation.
 - `$target`: `array`
 - `...$arrayKeys`: `string`
 
-#### [`constantTimeSelect`](../../../src/Traits/AuxDataIdTrait.php#L64-L81)
+#### [`assertKeyIsAllowed`](../../../src/Traits/AuxDataIdTrait.php#L59-L70)
+
+static · Returns `void`
+
+Throw an exception if someone attempts to misuse a more broadly acceptable {secret,public} key
+
+for the Public Key Directory protocol (which is more narrowly focused in what it accepts)
+
+**Parameters:**
+
+- `$key`: `FediE2EE\PKD\Crypto\SecretKey|FediE2EE\PKD\Crypto\PublicKey`
+- `$version`: `?FediE2EE\PKD\Crypto\Enums\ProtocolVersion` = null
+
+**Throws:** `CryptoException`
+
+#### [`constantTimeSelect`](../../../src/Traits/AuxDataIdTrait.php#L85-L102)
 
 Returns `string`
 
@@ -269,7 +284,7 @@ $result = ClassWithTrait::constantTimeSelect(1, $left, $right); -> $result === $
 
 **Throws:** `CryptoException`
 
-#### [`dos2unix`](../../../src/Traits/AuxDataIdTrait.php#L91-L94)
+#### [`dos2unix`](../../../src/Traits/AuxDataIdTrait.php#L112-L115)
 
 static · Returns `string`
 
@@ -281,7 +296,7 @@ This is mostly used for PEM-encoded strings.
 
 - `$in`: `string`
 
-#### [`preAuthEncode`](../../../src/Traits/AuxDataIdTrait.php#L112-L125)
+#### [`preAuthEncode`](../../../src/Traits/AuxDataIdTrait.php#L133-L146)
 
 static · Returns `string`
 
@@ -293,7 +308,7 @@ This is an implementation of PAE() from PASETO. It encodes an array of strings i
 
 - `$pieces`: `array`
 
-#### [`sortByKey`](../../../src/Traits/AuxDataIdTrait.php#L132-L140)
+#### [`sortByKey`](../../../src/Traits/AuxDataIdTrait.php#L153-L161)
 
 static · Returns `void`
 
@@ -305,7 +320,7 @@ Used for ensuring arrays are sorted before JSON encoding.
 
 - `$arr`: `array`
 
-#### [`LE64`](../../../src/Traits/AuxDataIdTrait.php#L147-L150)
+#### [`LE64`](../../../src/Traits/AuxDataIdTrait.php#L168-L171)
 
 static · Returns `string`
 
@@ -315,7 +330,7 @@ Mostly used by preAuthEncode() above. This packs an integer as 8 bytes.
 
 - `$n`: `int`
 
-#### [`stringToByteArray`](../../../src/Traits/AuxDataIdTrait.php#L155-L162)
+#### [`stringToByteArray`](../../../src/Traits/AuxDataIdTrait.php#L176-L183)
 
 Returns `array`
 
@@ -325,7 +340,7 @@ Get an array of bytes representing the input string.
 
 - `$str`: `string`
 
-#### [`stripNewlines`](../../../src/Traits/AuxDataIdTrait.php#L170-L204)
+#### [`stripNewlines`](../../../src/Traits/AuxDataIdTrait.php#L191-L225)
 
 static · Returns `string`
 
@@ -567,7 +582,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 Returns `Psr\Http\Message\ResponseInterface`
 
-Implements an RFC 9421 HTTP Message Signature with Ed25519.
+Implements an RFC 9421 HTTP Message Signature with Ed25519 or ML-DSA-44.
 
 **Parameters:**
 
@@ -946,7 +961,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 Returns `Psr\Http\Message\ResponseInterface`
 
-Implements an RFC 9421 HTTP Message Signature with Ed25519.
+Implements an RFC 9421 HTTP Message Signature with Ed25519 or ML-DSA-44.
 
 **Parameters:**
 
@@ -1154,7 +1169,7 @@ static · Returns `string`
 
 ### Methods
 
-#### [`verifyTOTP`](../../../src/Traits/TOTPTrait.php#L49-L63)
+#### [`verifyTOTP`](../../../src/Traits/TOTPTrait.php#L51-L65)
 
 static · Returns `?int`
 
@@ -1164,7 +1179,7 @@ static · Returns `?int`
 - `$otp`: `string`
 - `$windows`: `int` = 2
 
-#### [`generateTOTP`](../../../src/Traits/TOTPTrait.php#L65-L81)
+#### [`generateTOTP`](../../../src/Traits/TOTPTrait.php#L67-L83)
 
 static · Returns `string`
 
@@ -1173,7 +1188,7 @@ static · Returns `string`
 - `$secret`: `string`
 - `$time`: `?int` = null
 
-#### [`ord`](../../../src/Traits/TOTPTrait.php#L86-L90)
+#### [`ord`](../../../src/Traits/TOTPTrait.php#L88-L92)
 
 static · Returns `int`
 
@@ -1183,7 +1198,7 @@ Avoid cache-timing leaks in ord() by using unpack()
 
 - `$chr`: `string`
 
-#### [`throwIfTimeOutsideWindow`](../../../src/Traits/TOTPTrait.php#L151-L160)
+#### [`throwIfTimeOutsideWindow`](../../../src/Traits/TOTPTrait.php#L157-L166)
 
 Returns `void`
 
@@ -1223,7 +1238,7 @@ static · Returns `string`
 
 **Throws:** `BaseJsonException`
 
-#### [`assertAllArrayKeysExist`](../../../src/Traits/TOTPTrait.php#L29-L34)
+#### [`assertAllArrayKeysExist`](../../../src/Traits/TOTPTrait.php#L31-L36)
 
 static · Returns `void`
 
@@ -1238,7 +1253,7 @@ It does not return anything.
 
 **Throws:** `InputException`
 
-#### [`allArrayKeysExist`](../../../src/Traits/TOTPTrait.php#L42-L49)
+#### [`allArrayKeysExist`](../../../src/Traits/TOTPTrait.php#L44-L51)
 
 static · Returns `bool`
 
@@ -1251,7 +1266,22 @@ Otherwise, it returns false. This is useful for input validation.
 - `$target`: `array`
 - `...$arrayKeys`: `string`
 
-#### [`constantTimeSelect`](../../../src/Traits/TOTPTrait.php#L64-L81)
+#### [`assertKeyIsAllowed`](../../../src/Traits/TOTPTrait.php#L59-L70)
+
+static · Returns `void`
+
+Throw an exception if someone attempts to misuse a more broadly acceptable {secret,public} key
+
+for the Public Key Directory protocol (which is more narrowly focused in what it accepts)
+
+**Parameters:**
+
+- `$key`: `FediE2EE\PKD\Crypto\SecretKey|FediE2EE\PKD\Crypto\PublicKey`
+- `$version`: `?FediE2EE\PKD\Crypto\Enums\ProtocolVersion` = null
+
+**Throws:** `CryptoException`
+
+#### [`constantTimeSelect`](../../../src/Traits/TOTPTrait.php#L85-L102)
 
 Returns `string`
 
@@ -1267,7 +1297,7 @@ $result = ClassWithTrait::constantTimeSelect(1, $left, $right); -> $result === $
 
 **Throws:** `CryptoException`
 
-#### [`dos2unix`](../../../src/Traits/TOTPTrait.php#L91-L94)
+#### [`dos2unix`](../../../src/Traits/TOTPTrait.php#L112-L115)
 
 static · Returns `string`
 
@@ -1279,7 +1309,7 @@ This is mostly used for PEM-encoded strings.
 
 - `$in`: `string`
 
-#### [`preAuthEncode`](../../../src/Traits/TOTPTrait.php#L112-L125)
+#### [`preAuthEncode`](../../../src/Traits/TOTPTrait.php#L133-L146)
 
 static · Returns `string`
 
@@ -1291,7 +1321,7 @@ This is an implementation of PAE() from PASETO. It encodes an array of strings i
 
 - `$pieces`: `array`
 
-#### [`sortByKey`](../../../src/Traits/TOTPTrait.php#L132-L140)
+#### [`sortByKey`](../../../src/Traits/TOTPTrait.php#L153-L161)
 
 static · Returns `void`
 
@@ -1303,7 +1333,7 @@ Used for ensuring arrays are sorted before JSON encoding.
 
 - `$arr`: `array`
 
-#### [`LE64`](../../../src/Traits/TOTPTrait.php#L147-L150)
+#### [`LE64`](../../../src/Traits/TOTPTrait.php#L168-L171)
 
 static · Returns `string`
 
@@ -1313,7 +1343,7 @@ Mostly used by preAuthEncode() above. This packs an integer as 8 bytes.
 
 - `$n`: `int`
 
-#### [`stringToByteArray`](../../../src/Traits/TOTPTrait.php#L155-L162)
+#### [`stringToByteArray`](../../../src/Traits/TOTPTrait.php#L176-L183)
 
 Returns `array`
 
@@ -1323,7 +1353,7 @@ Get an array of bytes representing the input string.
 
 - `$str`: `string`
 
-#### [`stripNewlines`](../../../src/Traits/TOTPTrait.php#L170-L204)
+#### [`stripNewlines`](../../../src/Traits/TOTPTrait.php#L191-L225)
 
 static · Returns `string`
 
@@ -1393,7 +1423,7 @@ Returns `FediE2EE\PKD\Crypto\PublicKey`
 
 Fetch the RFC 9421 public keys for an actor.
 
-If multiple are returned (e.g., via FEP-521a), this will cycle through them until the first Ed25519 public key is found. We do not support JWS, RSA, or ECDSA keys.
+If multiple are returned (e.g., via FEP-521a), this will cycle through them until the first Ed25519 or ML-DSA-44 public key is found. We do not support JWS, RSA, or ECDSA keys.
 
 **Parameters:**
 

@@ -23,11 +23,11 @@ if (file_exists(__DIR__ . '/signing.json')) {
     }
     $secretKey = new SecretKey(
         Base64UrlSafe::decodeNoPadding($json['secret-key'] ?? ''),
-        $json['alg'] ?? 'ed25519',
+        $json['alg'] ?? 'mldsa44',
     );
     $publicKey = $secretKey->getPublicKey();
     if (!hash_equals($publicKey->toString(), $json['public-key'])) {
-        throw new DependencyException('Invalid Ed25519 keypair: public key mismatch');
+        throw new DependencyException('Invalid ML-DSA-44 keypair: public key mismatch');
     }
 } else {
     // No keys? No problem.

@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS pkd_merkle_leaves (
     root TEXT UNIQUE,
     publickeyhash TEXT, -- SHA256 of public key that committed to merkle tree
     contenthash TEXT, -- SHA256 of contents. Not the leaf hash.
-    signature TEXT, -- Ed25519 signature of contenthash and publickey
+    signature TEXT, -- MLDSA-44 signature of contenthash and publickey
     contents TEXT, -- Protocol Message being hashes
     inclusionproof TEXT, -- JSON: encodes a proof of inclusion
     wrappedkeys TEXT, -- Optional: Wrapped symmetric keys
@@ -65,6 +65,7 @@ CREATE TABLE IF NOT EXISTS pkd_actors_publickeys (
     keyid TEXT UNIQUE,
     publickey TEXT, -- Encrypted, client-side
     publickey_idx TEXT, -- Blind index, used for searching
+    publickey_hash TEXT UNIQUE NOT NULL, -- SHA-512 hash to prevent duplicates
     wrap_publickey TEXT NULL, -- Wrapped symmetric key for the publickey field
     key_id TEXT NULL, -- Unique, chosen by server
     insertleaf INTEGER,

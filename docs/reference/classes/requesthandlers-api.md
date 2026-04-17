@@ -104,7 +104,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 Returns `Psr\Http\Message\ResponseInterface`
 
-Implements an RFC 9421 HTTP Message Signature with Ed25519.
+Implements an RFC 9421 HTTP Message Signature with Ed25519 or ML-DSA-44.
 
 **Parameters:**
 
@@ -538,7 +538,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 Returns `Psr\Http\Message\ResponseInterface`
 
-Implements an RFC 9421 HTTP Message Signature with Ed25519.
+Implements an RFC 9421 HTTP Message Signature with Ed25519 or ML-DSA-44.
 
 **Parameters:**
 
@@ -632,7 +632,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 Returns `Psr\Http\Message\ResponseInterface`
 
-Implements an RFC 9421 HTTP Message Signature with Ed25519.
+Implements an RFC 9421 HTTP Message Signature with Ed25519 or ML-DSA-44.
 
 **Parameters:**
 
@@ -889,7 +889,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 Returns `Psr\Http\Message\ResponseInterface`
 
-Implements an RFC 9421 HTTP Message Signature with Ed25519.
+Implements an RFC 9421 HTTP Message Signature with Ed25519 or ML-DSA-44.
 
 **Parameters:**
 
@@ -1152,7 +1152,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 Returns `Psr\Http\Message\ResponseInterface`
 
-Implements an RFC 9421 HTTP Message Signature with Ed25519.
+Implements an RFC 9421 HTTP Message Signature with Ed25519 or ML-DSA-44.
 
 **Parameters:**
 
@@ -1415,7 +1415,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 Returns `Psr\Http\Message\ResponseInterface`
 
-Implements an RFC 9421 HTTP Message Signature with Ed25519.
+Implements an RFC 9421 HTTP Message Signature with Ed25519 or ML-DSA-44.
 
 **Parameters:**
 
@@ -1678,7 +1678,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 Returns `Psr\Http\Message\ResponseInterface`
 
-Implements an RFC 9421 HTTP Message Signature with Ed25519.
+Implements an RFC 9421 HTTP Message Signature with Ed25519 or ML-DSA-44.
 
 **Parameters:**
 
@@ -1941,7 +1941,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 Returns `Psr\Http\Message\ResponseInterface`
 
-Implements an RFC 9421 HTTP Message Signature with Ed25519.
+Implements an RFC 9421 HTTP Message Signature with Ed25519 or ML-DSA-44.
 
 **Parameters:**
 
@@ -2216,7 +2216,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 Returns `Psr\Http\Message\ResponseInterface`
 
-Implements an RFC 9421 HTTP Message Signature with Ed25519.
+Implements an RFC 9421 HTTP Message Signature with Ed25519 or ML-DSA-44.
 
 **Parameters:**
 
@@ -2491,7 +2491,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 Returns `Psr\Http\Message\ResponseInterface`
 
-Implements an RFC 9421 HTTP Message Signature with Ed25519.
+Implements an RFC 9421 HTTP Message Signature with Ed25519 or ML-DSA-44.
 
 **Parameters:**
 
@@ -2748,7 +2748,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 Returns `Psr\Http\Message\ResponseInterface`
 
-Implements an RFC 9421 HTTP Message Signature with Ed25519.
+Implements an RFC 9421 HTTP Message Signature with Ed25519 or ML-DSA-44.
 
 **Parameters:**
 
@@ -3011,7 +3011,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 Returns `Psr\Http\Message\ResponseInterface`
 
-Implements an RFC 9421 HTTP Message Signature with Ed25519.
+Implements an RFC 9421 HTTP Message Signature with Ed25519 or ML-DSA-44.
 
 **Parameters:**
 
@@ -3274,7 +3274,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 Returns `Psr\Http\Message\ResponseInterface`
 
-Implements an RFC 9421 HTTP Message Signature with Ed25519.
+Implements an RFC 9421 HTTP Message Signature with Ed25519 or ML-DSA-44.
 
 **Parameters:**
 
@@ -3615,7 +3615,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 Returns `Psr\Http\Message\ResponseInterface`
 
-Implements an RFC 9421 HTTP Message Signature with Ed25519.
+Implements an RFC 9421 HTTP Message Signature with Ed25519 or ML-DSA-44.
 
 **Parameters:**
 
@@ -3882,7 +3882,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 Returns `Psr\Http\Message\ResponseInterface`
 
-Implements an RFC 9421 HTTP Message Signature with Ed25519.
+Implements an RFC 9421 HTTP Message Signature with Ed25519 or ML-DSA-44.
 
 **Parameters:**
 
@@ -4151,7 +4151,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 Returns `Psr\Http\Message\ResponseInterface`
 
-Implements an RFC 9421 HTTP Message Signature with Ed25519.
+Implements an RFC 9421 HTTP Message Signature with Ed25519 or ML-DSA-44.
 
 **Parameters:**
 
@@ -4408,7 +4408,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 Returns `Psr\Http\Message\ResponseInterface`
 
-Implements an RFC 9421 HTTP Message Signature with Ed25519.
+Implements an RFC 9421 HTTP Message Signature with Ed25519 or ML-DSA-44.
 
 **Parameters:**
 
@@ -4677,7 +4677,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 Returns `Psr\Http\Message\ResponseInterface`
 
-Implements an RFC 9421 HTTP Message Signature with Ed25519.
+Implements an RFC 9421 HTTP Message Signature with Ed25519 or ML-DSA-44.
 
 **Parameters:**
 
@@ -4873,7 +4873,7 @@ static · Returns `string`
 
 **Throws:** `BaseJsonException`
 
-#### [`verifyTOTP`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L49-L63)
+#### [`verifyTOTP`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L51-L65)
 
 static · Returns `?int`
 
@@ -4883,7 +4883,7 @@ static · Returns `?int`
 - `$otp`: `string`
 - `$windows`: `int` = 2
 
-#### [`generateTOTP`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L65-L81)
+#### [`generateTOTP`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L67-L83)
 
 static · Returns `string`
 
@@ -4892,7 +4892,7 @@ static · Returns `string`
 - `$secret`: `string`
 - `$time`: `?int` = null
 
-#### [`ord`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L86-L90)
+#### [`ord`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L88-L92)
 
 static · Returns `int`
 
@@ -4902,7 +4902,7 @@ Avoid cache-timing leaks in ord() by using unpack()
 
 - `$chr`: `string`
 
-#### [`throwIfTimeOutsideWindow`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L151-L160)
+#### [`throwIfTimeOutsideWindow`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L157-L166)
 
 Returns `void`
 
@@ -4912,7 +4912,7 @@ Returns `void`
 
 **Throws:** `DependencyException`, `ProtocolException`
 
-#### [`assertAllArrayKeysExist`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L29-L34)
+#### [`assertAllArrayKeysExist`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L31-L36)
 
 static · Returns `void`
 
@@ -4927,7 +4927,7 @@ It does not return anything.
 
 **Throws:** `InputException`
 
-#### [`allArrayKeysExist`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L42-L49)
+#### [`allArrayKeysExist`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L44-L51)
 
 static · Returns `bool`
 
@@ -4940,7 +4940,22 @@ Otherwise, it returns false. This is useful for input validation.
 - `$target`: `array`
 - `...$arrayKeys`: `string`
 
-#### [`constantTimeSelect`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L64-L81)
+#### [`assertKeyIsAllowed`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L59-L70)
+
+static · Returns `void`
+
+Throw an exception if someone attempts to misuse a more broadly acceptable {secret,public} key
+
+for the Public Key Directory protocol (which is more narrowly focused in what it accepts)
+
+**Parameters:**
+
+- `$key`: `FediE2EE\PKD\Crypto\SecretKey|FediE2EE\PKD\Crypto\PublicKey`
+- `$version`: `?FediE2EE\PKD\Crypto\Enums\ProtocolVersion` = null
+
+**Throws:** `CryptoException`
+
+#### [`constantTimeSelect`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L85-L102)
 
 Returns `string`
 
@@ -4956,7 +4971,7 @@ $result = ClassWithTrait::constantTimeSelect(1, $left, $right); -> $result === $
 
 **Throws:** `CryptoException`
 
-#### [`dos2unix`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L91-L94)
+#### [`dos2unix`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L112-L115)
 
 static · Returns `string`
 
@@ -4968,7 +4983,7 @@ This is mostly used for PEM-encoded strings.
 
 - `$in`: `string`
 
-#### [`preAuthEncode`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L112-L125)
+#### [`preAuthEncode`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L133-L146)
 
 static · Returns `string`
 
@@ -4980,7 +4995,7 @@ This is an implementation of PAE() from PASETO. It encodes an array of strings i
 
 - `$pieces`: `array`
 
-#### [`sortByKey`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L132-L140)
+#### [`sortByKey`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L153-L161)
 
 static · Returns `void`
 
@@ -4992,7 +5007,7 @@ Used for ensuring arrays are sorted before JSON encoding.
 
 - `$arr`: `array`
 
-#### [`LE64`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L147-L150)
+#### [`LE64`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L168-L171)
 
 static · Returns `string`
 
@@ -5002,7 +5017,7 @@ Mostly used by preAuthEncode() above. This packs an integer as 8 bytes.
 
 - `$n`: `int`
 
-#### [`stringToByteArray`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L155-L162)
+#### [`stringToByteArray`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L176-L183)
 
 Returns `array`
 
@@ -5012,7 +5027,7 @@ Get an array of bytes representing the input string.
 
 - `$str`: `string`
 
-#### [`stripNewlines`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L170-L204)
+#### [`stripNewlines`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L191-L225)
 
 static · Returns `string`
 
@@ -5095,7 +5110,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 Returns `Psr\Http\Message\ResponseInterface`
 
-Implements an RFC 9421 HTTP Message Signature with Ed25519.
+Implements an RFC 9421 HTTP Message Signature with Ed25519 or ML-DSA-44.
 
 **Parameters:**
 
@@ -5291,7 +5306,7 @@ static · Returns `string`
 
 **Throws:** `BaseJsonException`
 
-#### [`verifyTOTP`](../../../src/RequestHandlers/Api/TotpEnroll.php#L49-L63)
+#### [`verifyTOTP`](../../../src/RequestHandlers/Api/TotpEnroll.php#L51-L65)
 
 static · Returns `?int`
 
@@ -5301,7 +5316,7 @@ static · Returns `?int`
 - `$otp`: `string`
 - `$windows`: `int` = 2
 
-#### [`generateTOTP`](../../../src/RequestHandlers/Api/TotpEnroll.php#L65-L81)
+#### [`generateTOTP`](../../../src/RequestHandlers/Api/TotpEnroll.php#L67-L83)
 
 static · Returns `string`
 
@@ -5310,7 +5325,7 @@ static · Returns `string`
 - `$secret`: `string`
 - `$time`: `?int` = null
 
-#### [`ord`](../../../src/RequestHandlers/Api/TotpEnroll.php#L86-L90)
+#### [`ord`](../../../src/RequestHandlers/Api/TotpEnroll.php#L88-L92)
 
 static · Returns `int`
 
@@ -5320,7 +5335,7 @@ Avoid cache-timing leaks in ord() by using unpack()
 
 - `$chr`: `string`
 
-#### [`throwIfTimeOutsideWindow`](../../../src/RequestHandlers/Api/TotpEnroll.php#L151-L160)
+#### [`throwIfTimeOutsideWindow`](../../../src/RequestHandlers/Api/TotpEnroll.php#L157-L166)
 
 Returns `void`
 
@@ -5330,7 +5345,7 @@ Returns `void`
 
 **Throws:** `DependencyException`, `ProtocolException`
 
-#### [`assertAllArrayKeysExist`](../../../src/RequestHandlers/Api/TotpEnroll.php#L29-L34)
+#### [`assertAllArrayKeysExist`](../../../src/RequestHandlers/Api/TotpEnroll.php#L31-L36)
 
 static · Returns `void`
 
@@ -5345,7 +5360,7 @@ It does not return anything.
 
 **Throws:** `InputException`
 
-#### [`allArrayKeysExist`](../../../src/RequestHandlers/Api/TotpEnroll.php#L42-L49)
+#### [`allArrayKeysExist`](../../../src/RequestHandlers/Api/TotpEnroll.php#L44-L51)
 
 static · Returns `bool`
 
@@ -5358,7 +5373,22 @@ Otherwise, it returns false. This is useful for input validation.
 - `$target`: `array`
 - `...$arrayKeys`: `string`
 
-#### [`constantTimeSelect`](../../../src/RequestHandlers/Api/TotpEnroll.php#L64-L81)
+#### [`assertKeyIsAllowed`](../../../src/RequestHandlers/Api/TotpEnroll.php#L59-L70)
+
+static · Returns `void`
+
+Throw an exception if someone attempts to misuse a more broadly acceptable {secret,public} key
+
+for the Public Key Directory protocol (which is more narrowly focused in what it accepts)
+
+**Parameters:**
+
+- `$key`: `FediE2EE\PKD\Crypto\SecretKey|FediE2EE\PKD\Crypto\PublicKey`
+- `$version`: `?FediE2EE\PKD\Crypto\Enums\ProtocolVersion` = null
+
+**Throws:** `CryptoException`
+
+#### [`constantTimeSelect`](../../../src/RequestHandlers/Api/TotpEnroll.php#L85-L102)
 
 Returns `string`
 
@@ -5374,7 +5404,7 @@ $result = ClassWithTrait::constantTimeSelect(1, $left, $right); -> $result === $
 
 **Throws:** `CryptoException`
 
-#### [`dos2unix`](../../../src/RequestHandlers/Api/TotpEnroll.php#L91-L94)
+#### [`dos2unix`](../../../src/RequestHandlers/Api/TotpEnroll.php#L112-L115)
 
 static · Returns `string`
 
@@ -5386,7 +5416,7 @@ This is mostly used for PEM-encoded strings.
 
 - `$in`: `string`
 
-#### [`preAuthEncode`](../../../src/RequestHandlers/Api/TotpEnroll.php#L112-L125)
+#### [`preAuthEncode`](../../../src/RequestHandlers/Api/TotpEnroll.php#L133-L146)
 
 static · Returns `string`
 
@@ -5398,7 +5428,7 @@ This is an implementation of PAE() from PASETO. It encodes an array of strings i
 
 - `$pieces`: `array`
 
-#### [`sortByKey`](../../../src/RequestHandlers/Api/TotpEnroll.php#L132-L140)
+#### [`sortByKey`](../../../src/RequestHandlers/Api/TotpEnroll.php#L153-L161)
 
 static · Returns `void`
 
@@ -5410,7 +5440,7 @@ Used for ensuring arrays are sorted before JSON encoding.
 
 - `$arr`: `array`
 
-#### [`LE64`](../../../src/RequestHandlers/Api/TotpEnroll.php#L147-L150)
+#### [`LE64`](../../../src/RequestHandlers/Api/TotpEnroll.php#L168-L171)
 
 static · Returns `string`
 
@@ -5420,7 +5450,7 @@ Mostly used by preAuthEncode() above. This packs an integer as 8 bytes.
 
 - `$n`: `int`
 
-#### [`stringToByteArray`](../../../src/RequestHandlers/Api/TotpEnroll.php#L155-L162)
+#### [`stringToByteArray`](../../../src/RequestHandlers/Api/TotpEnroll.php#L176-L183)
 
 Returns `array`
 
@@ -5430,7 +5460,7 @@ Get an array of bytes representing the input string.
 
 - `$str`: `string`
 
-#### [`stripNewlines`](../../../src/RequestHandlers/Api/TotpEnroll.php#L170-L204)
+#### [`stripNewlines`](../../../src/RequestHandlers/Api/TotpEnroll.php#L191-L225)
 
 static · Returns `string`
 
@@ -5513,7 +5543,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 Returns `Psr\Http\Message\ResponseInterface`
 
-Implements an RFC 9421 HTTP Message Signature with Ed25519.
+Implements an RFC 9421 HTTP Message Signature with Ed25519 or ML-DSA-44.
 
 **Parameters:**
 
@@ -5709,7 +5739,7 @@ static · Returns `string`
 
 **Throws:** `BaseJsonException`
 
-#### [`verifyTOTP`](../../../src/RequestHandlers/Api/TotpRotate.php#L49-L63)
+#### [`verifyTOTP`](../../../src/RequestHandlers/Api/TotpRotate.php#L51-L65)
 
 static · Returns `?int`
 
@@ -5719,7 +5749,7 @@ static · Returns `?int`
 - `$otp`: `string`
 - `$windows`: `int` = 2
 
-#### [`generateTOTP`](../../../src/RequestHandlers/Api/TotpRotate.php#L65-L81)
+#### [`generateTOTP`](../../../src/RequestHandlers/Api/TotpRotate.php#L67-L83)
 
 static · Returns `string`
 
@@ -5728,7 +5758,7 @@ static · Returns `string`
 - `$secret`: `string`
 - `$time`: `?int` = null
 
-#### [`ord`](../../../src/RequestHandlers/Api/TotpRotate.php#L86-L90)
+#### [`ord`](../../../src/RequestHandlers/Api/TotpRotate.php#L88-L92)
 
 static · Returns `int`
 
@@ -5738,7 +5768,7 @@ Avoid cache-timing leaks in ord() by using unpack()
 
 - `$chr`: `string`
 
-#### [`throwIfTimeOutsideWindow`](../../../src/RequestHandlers/Api/TotpRotate.php#L151-L160)
+#### [`throwIfTimeOutsideWindow`](../../../src/RequestHandlers/Api/TotpRotate.php#L157-L166)
 
 Returns `void`
 
@@ -5748,7 +5778,7 @@ Returns `void`
 
 **Throws:** `DependencyException`, `ProtocolException`
 
-#### [`assertAllArrayKeysExist`](../../../src/RequestHandlers/Api/TotpRotate.php#L29-L34)
+#### [`assertAllArrayKeysExist`](../../../src/RequestHandlers/Api/TotpRotate.php#L31-L36)
 
 static · Returns `void`
 
@@ -5763,7 +5793,7 @@ It does not return anything.
 
 **Throws:** `InputException`
 
-#### [`allArrayKeysExist`](../../../src/RequestHandlers/Api/TotpRotate.php#L42-L49)
+#### [`allArrayKeysExist`](../../../src/RequestHandlers/Api/TotpRotate.php#L44-L51)
 
 static · Returns `bool`
 
@@ -5776,7 +5806,22 @@ Otherwise, it returns false. This is useful for input validation.
 - `$target`: `array`
 - `...$arrayKeys`: `string`
 
-#### [`constantTimeSelect`](../../../src/RequestHandlers/Api/TotpRotate.php#L64-L81)
+#### [`assertKeyIsAllowed`](../../../src/RequestHandlers/Api/TotpRotate.php#L59-L70)
+
+static · Returns `void`
+
+Throw an exception if someone attempts to misuse a more broadly acceptable {secret,public} key
+
+for the Public Key Directory protocol (which is more narrowly focused in what it accepts)
+
+**Parameters:**
+
+- `$key`: `FediE2EE\PKD\Crypto\SecretKey|FediE2EE\PKD\Crypto\PublicKey`
+- `$version`: `?FediE2EE\PKD\Crypto\Enums\ProtocolVersion` = null
+
+**Throws:** `CryptoException`
+
+#### [`constantTimeSelect`](../../../src/RequestHandlers/Api/TotpRotate.php#L85-L102)
 
 Returns `string`
 
@@ -5792,7 +5837,7 @@ $result = ClassWithTrait::constantTimeSelect(1, $left, $right); -> $result === $
 
 **Throws:** `CryptoException`
 
-#### [`dos2unix`](../../../src/RequestHandlers/Api/TotpRotate.php#L91-L94)
+#### [`dos2unix`](../../../src/RequestHandlers/Api/TotpRotate.php#L112-L115)
 
 static · Returns `string`
 
@@ -5804,7 +5849,7 @@ This is mostly used for PEM-encoded strings.
 
 - `$in`: `string`
 
-#### [`preAuthEncode`](../../../src/RequestHandlers/Api/TotpRotate.php#L112-L125)
+#### [`preAuthEncode`](../../../src/RequestHandlers/Api/TotpRotate.php#L133-L146)
 
 static · Returns `string`
 
@@ -5816,7 +5861,7 @@ This is an implementation of PAE() from PASETO. It encodes an array of strings i
 
 - `$pieces`: `array`
 
-#### [`sortByKey`](../../../src/RequestHandlers/Api/TotpRotate.php#L132-L140)
+#### [`sortByKey`](../../../src/RequestHandlers/Api/TotpRotate.php#L153-L161)
 
 static · Returns `void`
 
@@ -5828,7 +5873,7 @@ Used for ensuring arrays are sorted before JSON encoding.
 
 - `$arr`: `array`
 
-#### [`LE64`](../../../src/RequestHandlers/Api/TotpRotate.php#L147-L150)
+#### [`LE64`](../../../src/RequestHandlers/Api/TotpRotate.php#L168-L171)
 
 static · Returns `string`
 
@@ -5838,7 +5883,7 @@ Mostly used by preAuthEncode() above. This packs an integer as 8 bytes.
 
 - `$n`: `int`
 
-#### [`stringToByteArray`](../../../src/RequestHandlers/Api/TotpRotate.php#L155-L162)
+#### [`stringToByteArray`](../../../src/RequestHandlers/Api/TotpRotate.php#L176-L183)
 
 Returns `array`
 
@@ -5848,7 +5893,7 @@ Get an array of bytes representing the input string.
 
 - `$str`: `string`
 
-#### [`stripNewlines`](../../../src/RequestHandlers/Api/TotpRotate.php#L170-L204)
+#### [`stripNewlines`](../../../src/RequestHandlers/Api/TotpRotate.php#L191-L225)
 
 static · Returns `string`
 

@@ -123,7 +123,7 @@ class KeyWrappingTest extends TestCase
         $serverHpke = $this->config->getHPKE();
         $rewrapConfig = [
             'cs' => $serverHpke->cs->getSuiteName(),
-            'ek' => Base64UrlSafe::encodeUnpadded($peerKey->getPublicKey()->getBytes())
+            'ek' => Base64UrlSafe::encodeUnpadded($this->config->getHPKE()->encapsKey->bytes)
         ];
         $tree = new IncrementalTree([], $this->config->getParams()->hashAlgo);
         $this->config->getDb()->insert('pkd_peers', [
@@ -205,7 +205,7 @@ class KeyWrappingTest extends TestCase
         $serverHpke = $this->config->getHPKE();
         $rewrapConfig = [
             'cs' => $serverHpke->cs->getSuiteName(),
-            'ek' => Base64UrlSafe::encodeUnpadded($peerKey->getPublicKey()->getBytes())
+            'ek' => Base64UrlSafe::encodeUnpadded($this->config->getHPKE()->encapsKey->bytes)
         ];
         $tree = new IncrementalTree([], $this->config->getParams()->hashAlgo);
         $this->config->getDb()->insert('pkd_peers', [

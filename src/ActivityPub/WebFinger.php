@@ -303,7 +303,7 @@ class WebFinger
             throw new FetchException("Could not find public key for {$actorUrl}");
         }
 
-        // This will throw if a non-Ed25519 public key is defined:
+        // This will throw if a non-Ed25519 and non-MLDSA-44 public key is defined:
         return $this->pemToPublicKey($actor->publicKey->publicKeyPem);
     }
 

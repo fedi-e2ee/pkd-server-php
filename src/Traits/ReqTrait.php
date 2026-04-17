@@ -70,7 +70,7 @@ trait ReqTrait
     }
 
     /**
-     * Implements an RFC 9421 HTTP Message Signature with Ed25519.
+     * Implements an RFC 9421 HTTP Message Signature with Ed25519 or ML-DSA-44.
      *
      * @link https://www.rfc-editor.org/rfc/rfc9421.html#name-eddsa-using-curve-edwards25
      *

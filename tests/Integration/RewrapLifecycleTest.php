@@ -176,7 +176,7 @@ class RewrapLifecycleTest extends TestCase
         $akm = new AttributeKeyMap()
             ->addKey('actor', SymmetricKey::generate())
             ->addKey('public-key', SymmetricKey::generate());
-        $encryptedMsg = $addKey->encrypt($akm);
+        $encryptedMsg = $addKey->encrypt($akm, $latestRootBefore);
         $bundle = $handler->handle($encryptedMsg, $keypair, $akm, $latestRootBefore);
         $encryptedForServer = $handler->hpkeEncrypt(
             $bundle,

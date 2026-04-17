@@ -23,6 +23,7 @@ use FediE2EE\PKD\Crypto\Protocol\{
 use DateMalformedStringException;
 use DateTimeImmutable;
 use FediE2EE\PKD\Crypto\AttributeEncryption\AttributeKeyMap;
+use PDOException;
 use FediE2EE\PKD\Crypto\{
     PublicKey,
     Revocation
@@ -520,7 +521,7 @@ class PublicKeys extends Table
         $this->assertRecentMerkleRoot($recentMerkle);
 
         // AddKey is special: It can be self-signed!
-        $decrypted = $payload->decrypt();
+        $decrypted = $payload->decrypt($recentMerkle);
         if (!($decrypted instanceof AddKey)) {
             throw new TypeError('Decrypted message must be an AddKey');
         }
@@ -575,6 +576,7 @@ class PublicKeys extends Table
                 'actorpublickeyid' => $nextActorPKId,
                 'actorid' => (string) $actorId,
                 'publickey' => (string) $actionData['public-key'],
+                'publickey_hash' => hash('sha512', $actionData['public-key']),
                 'trusted' => true,
                 'key_id' => $keyID,
                 'insertleaf' => $leaf->getPrimaryKey(),
@@ -583,11 +585,15 @@ class PublicKeys extends Table
         );
         [$rowToInsert, $blindIndexes] = $encryptor->prepareRowForStorage($plaintextRow);
         $rowToInsert['publickey_idx'] = self::blindIndexValue($blindIndexes['publickey_idx']);
-        $this->db->insert(
-            'pkd_actors_publickeys',
-            $rowToInsert
-        );
-        return $this->getRecord($nextActorPKId);
+        try {
+            $this->db->insert(
+                'pkd_actors_publickeys',
+                $rowToInsert
+            );
+            return $this->getRecord($nextActorPKId);
+        } catch (PDOException $e) {
+            throw new ProtocolException($e->getMessage(), 0, $e);
+        }
     }
 
     //= https://raw.githubusercontent.com/fedi-e2ee/public-key-directory-specification/refs/heads/main/Specification.md#revokekey
@@ -626,7 +632,7 @@ class PublicKeys extends Table
         $this->assertRecentMerkleRoot($recentMerkle);
 
         // Get the public key used to sign the protocol message
-        $decrypted = $payload->decrypt();
+        $decrypted = $payload->decrypt($recentMerkle);
         if (!($decrypted instanceof RevokeKey)) {
             throw new ProtocolException('Invalid message type');
         }
@@ -794,7 +800,7 @@ class PublicKeys extends Table
             throw new DependencyException('Actor Table is of wrong type');
         }
 
-        $decrypted = $payload->decrypt();
+        $decrypted = $payload->decrypt($decoded['recent-merkle-root']);
         if (!($decrypted instanceof MoveIdentity)) {
             throw new ProtocolException('Invalid message type');
         }
@@ -848,6 +854,7 @@ class PublicKeys extends Table
             'BurnDown',
             fn (MerkleLeaf $leaf, Payload $payload) =>
                 $this->burnDownCallback($leaf, $payload, $outerActor),
+            self::ENCRYPTION_DISALLOWED
         );
     }
 
@@ -881,7 +888,7 @@ class PublicKeys extends Table
 
         $this->assertRecentMerkleRoot($decoded['recent-merkle-root']);
 
-        $decrypted = $payload->decrypt();
+        $decrypted = $payload->decrypt($decoded['recent-merkle-root']);
         if (!($decrypted instanceof BurnDown)) {
             throw new ProtocolException('Invalid message type');
         }
@@ -990,7 +997,7 @@ class PublicKeys extends Table
 
         $this->assertRecentMerkleRoot($decoded['recent-merkle-root']);
 
-        $decrypted = $payload->decrypt();
+        $decrypted = $payload->decrypt($decoded['recent-merkle-root']);
         if (!($decrypted instanceof Fireproof)) {
             throw new ProtocolException('Invalid message type');
         }
@@ -1073,7 +1080,7 @@ class PublicKeys extends Table
 
         $this->assertRecentMerkleRoot($decoded['recent-merkle-root']);
 
-        $decrypted = $payload->decrypt();
+        $decrypted = $payload->decrypt($decoded['recent-merkle-root']);
         if (!($decrypted instanceof UndoFireproof)) {
             throw new ProtocolException('Invalid message type');
         }

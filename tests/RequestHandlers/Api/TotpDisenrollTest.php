@@ -11,6 +11,7 @@ use FediE2EE\PKD\Crypto\{
     SymmetricKey,
     UtilTrait
 };
+use ParagonIE\PQCrypto\Compat;
 use FediE2EE\PKDServer\RequestHandlers\Api\{
     TotpDisenroll
 };
@@ -122,7 +123,7 @@ class TotpDisenrollTest extends TestCase
         $akm = new AttributeKeyMap()
             ->addKey('actor', SymmetricKey::generate())
             ->addKey('public-key', SymmetricKey::generate());
-        $encryptedMsg = $addKey->encrypt($akm);
+        $encryptedMsg = $addKey->encrypt($akm, $latestRoot);
         $bundle = $handler->handle($encryptedMsg, $keypair, $akm, $latestRoot);
         $encryptedForServer = $handler->hpkeEncrypt(
             $bundle,
@@ -409,7 +410,7 @@ class TotpDisenrollTest extends TestCase
         $akm = new AttributeKeyMap()
             ->addKey('actor', SymmetricKey::generate())
             ->addKey('public-key', SymmetricKey::generate());
-        $encryptedMsg = $addKey->encrypt($akm);
+        $encryptedMsg = $addKey->encrypt($akm, $latestRoot);
         $bundle = $handler->handle($encryptedMsg, $keypair, $akm, $latestRoot);
         $encryptedForServer = $handler->hpkeEncrypt(
             $bundle,
@@ -448,7 +449,7 @@ class TotpDisenrollTest extends TestCase
             json_encode($disenrollment, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_SLASHES),
         ]);
         $signature = $keypair->sign($messageToSign);
-        $signature ^= str_repeat("\xFF", 64);
+        $signature ^= str_repeat("\xFF", Compat::MLDSA44_SIGNATURE_BYTES);
 
         $body = [
             '!pkd-context' => 'fedi-e2ee:v1/api/totp/disenroll',
@@ -473,7 +474,7 @@ class TotpDisenrollTest extends TestCase
         $body = json_decode($response->getBody()->getContents(), true);
         $this->assertSame(400, $response->getStatusCode());
         $this->assertArrayHasKey('error', $body);
-        $this->assertSame('Invalid signature', $body['error']);
+        $this->assertStringStartsWith('Invalid signature', $body['error']);
     }
 
 
@@ -584,7 +585,7 @@ class TotpDisenrollTest extends TestCase
         $akm = new AttributeKeyMap()
             ->addKey('actor', SymmetricKey::generate())
             ->addKey('public-key', SymmetricKey::generate());
-        $encryptedMsg = $addKey->encrypt($akm);
+        $encryptedMsg = $addKey->encrypt($akm, $latestRoot);
         $bundle = $handler->handle($encryptedMsg, $keypair, $akm, $latestRoot);
         $encryptedForServer = $handler->hpkeEncrypt(
             $bundle,
@@ -674,7 +675,7 @@ class TotpDisenrollTest extends TestCase
         $akm = new AttributeKeyMap()
             ->addKey('actor', SymmetricKey::generate())
             ->addKey('public-key', SymmetricKey::generate());
-        $encryptedMsg = $addKey->encrypt($akm);
+        $encryptedMsg = $addKey->encrypt($akm, $latestRoot);
         $bundle = $handler->handle($encryptedMsg, $keypair, $akm, $latestRoot);
         $encryptedForServer = $handler->hpkeEncrypt(
             $bundle,

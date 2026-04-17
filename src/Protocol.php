@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace FediE2EE\PKDServer;
 
 use DateMalformedStringException;
+use GuzzleHttp\Exception\GuzzleException;
 use FediE2EE\PKD\Crypto\{
     Protocol\HPKEAdapter,
     Protocol\Parser
@@ -10,10 +11,11 @@ use FediE2EE\PKD\Crypto\{
 use FediE2EE\PKD\Crypto\Exceptions\{
     BundleException,
     CryptoException,
+    InputException,
     JsonException,
+    NetworkException,
     NotImplementedException,
-    ParserException,
-};
+    ParserException};
 use FediE2EE\PKDServer\Exceptions\{
     CacheException,
     ConcurrentException,
@@ -72,8 +74,11 @@ class Protocol
      * @throws CryptoException
      * @throws DateMalformedStringException
      * @throws DependencyException
+     * @throws GuzzleException
      * @throws HPKEException
+     * @throws InputException
      * @throws JsonException
+     * @throws NetworkException
      * @throws NotImplementedException
      * @throws ParserException
      * @throws ProtocolException
@@ -328,7 +333,11 @@ class Protocol
      * @throws BundleException
      * @throws CryptoException
      * @throws DependencyException
+     * @throws GuzzleException
      * @throws HPKEException
+     * @throws InputException
+     * @throws JsonException
+     * @throws NetworkException
      */
     protected function hpkeUnwrap(string $arbitrary): Payload
     {
@@ -346,8 +355,11 @@ class Protocol
      * @throws CryptoException
      * @throws DateMalformedStringException
      * @throws DependencyException
+     * @throws GuzzleException
      * @throws HPKEException
+     * @throws InputException
      * @throws JsonException
+     * @throws NetworkException
      * @throws NotImplementedException
      * @throws ProtocolException
      * @throws RandomException

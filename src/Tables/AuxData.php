@@ -230,7 +230,7 @@ class AuxData extends Table
 
         $this->assertRecentMerkleRoot($decoded['recent-merkle-root']);
 
-        $decrypted = $payload->decrypt();
+        $decrypted = $payload->decrypt($decoded['recent-merkle-root']);
         if (!($decrypted instanceof AddAuxData)) {
             throw new ProtocolException('Invalid message type');
         }
@@ -356,7 +356,7 @@ class AuxData extends Table
 
         $this->assertRecentMerkleRoot($decoded['recent-merkle-root']);
 
-        $decrypted = $payload->decrypt();
+        $decrypted = $payload->decrypt($decoded['recent-merkle-root']);
         if (!($decrypted instanceof RevokeAuxData)) {
             throw new ProtocolException('Invalid message type');
         }

@@ -92,7 +92,7 @@ trait TableRecordTrait
     /**
      * Fetch the RFC 9421 public keys for an actor.
      *
-     * If multiple are returned (e.g., via FEP-521a), this will cycle through them until the first Ed25519
+     * If multiple are returned (e.g., via FEP-521a), this will cycle through them until the first Ed25519 or ML-DSA-44
      * public key is found. We do not support JWS, RSA, or ECDSA keys.
      *
      * @param string $actorId

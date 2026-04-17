@@ -16,6 +16,7 @@ use FediE2EE\PKD\Crypto\Protocol\{
 };
 use ParagonIE\Certainty\Fetch;
 use ParagonIE\Certainty\RemoteFetch;
+use ParagonIE\HPKE\KEM\PQKEM\EncapsKey;
 use FediE2EE\PKD\Crypto\{
     SecretKey,
     SymmetricKey
@@ -335,7 +336,8 @@ trait HttpTestTrait
         $akm->addKey('actor', SymmetricKey::generate());
         $akm->addKey('public-key', SymmetricKey::generate());
 
-        $bundle = $handler->handle($addKey->encrypt($akm), $keypair, $akm, $latestRoot);
+        $bundle = $handler->handle($addKey->encrypt($akm, $latestRoot), $keypair, $akm, $latestRoot);
+        $this->assertInstanceOf(EncapsKey::class, $serverHpke->encapsKey);
         $encrypted = $handler->hpkeEncrypt($bundle, $serverHpke->encapsKey, $serverHpke->cs);
 
         return $protocol->addKey($encrypted, $canonical);

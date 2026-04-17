@@ -202,6 +202,9 @@ class VectorsTest extends TestCase
         if ($testCase === null) {
             $this->markTestSkipped("Test case '{$testCaseName}' not found in vectors");
         }
+        if (is_null($testCase['identities'])) {
+            $this->markTestSkipped("Test case '{$testCaseName}' has no identities.");
+        }
 
         $this->truncateTables();
 
@@ -295,9 +298,9 @@ class VectorsTest extends TestCase
     {
         foreach ($identities as $actorUrl => $identity) {
             $secretKeyBytes = Base64UrlSafe::decodeNoPadding(
-                $identity['ed25519']['secret-key']
+                $identity['mldsa44']['secret-key']
             );
-            $this->identityKeys[$actorUrl] = new SecretKey($secretKeyBytes, 'ed25519');
+            $this->identityKeys[$actorUrl] = new SecretKey($secretKeyBytes, 'mldsa44');
         }
     }
 
@@ -477,7 +480,7 @@ class VectorsTest extends TestCase
         $akm = (new AttributeKeyMap())
             ->addKey('actor', SymmetricKey::generate())
             ->addKey('public-key', SymmetricKey::generate());
-        $bundle = $handler->handle($addKey->encrypt($akm), $signingKey, $akm, $latestRoot);
+        $bundle = $handler->handle($addKey->encrypt($akm, $latestRoot), $signingKey, $akm, $latestRoot);
         $encrypted = $handler->hpkeEncrypt($bundle, $serverHpke->encapsKey, $serverHpke->cs);
         $protocol->addKey($encrypted, $actor);
 
@@ -511,7 +514,7 @@ class VectorsTest extends TestCase
         $fireproof = new Fireproof($actor);
         $akm = (new AttributeKeyMap())
             ->addKey('actor', SymmetricKey::generate());
-        $bundle = $handler->handle($fireproof->encrypt($akm), $keypair, $akm, $latestRoot);
+        $bundle = $handler->handle($fireproof->encrypt($akm, $latestRoot), $keypair, $akm, $latestRoot);
         $encrypted = $handler->hpkeEncrypt($bundle, $serverHpke->encapsKey, $serverHpke->cs);
         $protocol->fireproof($encrypted, $actor);
     }
@@ -542,7 +545,7 @@ class VectorsTest extends TestCase
         $undoFireproof = new UndoFireproof($actor);
         $akm = (new AttributeKeyMap())
             ->addKey('actor', SymmetricKey::generate());
-        $bundle = $handler->handle($undoFireproof->encrypt($akm), $keypair, $akm, $latestRoot);
+        $bundle = $handler->handle($undoFireproof->encrypt($akm, $latestRoot), $keypair, $akm, $latestRoot);
         $encrypted = $handler->hpkeEncrypt($bundle, $serverHpke->encapsKey, $serverHpke->cs);
         $protocol->undoFireproof($encrypted, $actor);
     }
@@ -587,7 +590,7 @@ class VectorsTest extends TestCase
         $akm = (new AttributeKeyMap())
             ->addKey('actor', SymmetricKey::generate())
             ->addKey('operator', SymmetricKey::generate());
-        $bundle = $handler->handle($burnDown->encrypt($akm), $operatorKey, $akm, $latestRoot);
+        $bundle = $handler->handle($burnDown, $operatorKey, $akm, $latestRoot);
 
         // OTP is a top-level Bundle field (not part of the signed/encrypted message)
         $bundleData = json_decode($bundle->toJson(), true);
@@ -632,7 +635,7 @@ class VectorsTest extends TestCase
         $akm = (new AttributeKeyMap())
             ->addKey('actor', SymmetricKey::generate())
             ->addKey('aux-data', SymmetricKey::generate());
-        $bundle = $handler->handle($addAuxData->encrypt($akm), $keypair, $akm, $latestRoot);
+        $bundle = $handler->handle($addAuxData->encrypt($akm, $latestRoot), $keypair, $akm, $latestRoot);
         $encrypted = $handler->hpkeEncrypt($bundle, $serverHpke->encapsKey, $serverHpke->cs);
         $protocol->addAuxData($encrypted, $actor);
     }
@@ -676,7 +679,7 @@ class VectorsTest extends TestCase
         $akm = (new AttributeKeyMap())
             ->addKey('actor', SymmetricKey::generate())
             ->addKey('aux-data', SymmetricKey::generate());
-        $bundle = $handler->handle($revokeAuxData->encrypt($akm), $keypair, $akm, $latestRoot);
+        $bundle = $handler->handle($revokeAuxData->encrypt($akm, $latestRoot), $keypair, $akm, $latestRoot);
         $encrypted = $handler->hpkeEncrypt($bundle, $serverHpke->encapsKey, $serverHpke->cs);
         $protocol->revokeAuxData($encrypted, $actor);
     }

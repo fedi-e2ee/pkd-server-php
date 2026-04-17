@@ -367,7 +367,7 @@ static · Returns `string`
 
 **Throws:** `BaseJsonException`
 
-#### [`assertAllArrayKeysExist`](../../../src/RateLimit/RateLimitData.php#L29-L34)
+#### [`assertAllArrayKeysExist`](../../../src/RateLimit/RateLimitData.php#L31-L36)
 
 static · Returns `void`
 
@@ -382,7 +382,7 @@ It does not return anything.
 
 **Throws:** `InputException`
 
-#### [`allArrayKeysExist`](../../../src/RateLimit/RateLimitData.php#L42-L49)
+#### [`allArrayKeysExist`](../../../src/RateLimit/RateLimitData.php#L44-L51)
 
 static · Returns `bool`
 
@@ -395,7 +395,22 @@ Otherwise, it returns false. This is useful for input validation.
 - `$target`: `array`
 - `...$arrayKeys`: `string`
 
-#### [`constantTimeSelect`](../../../src/RateLimit/RateLimitData.php#L64-L81)
+#### [`assertKeyIsAllowed`](../../../src/RateLimit/RateLimitData.php#L59-L70)
+
+static · Returns `void`
+
+Throw an exception if someone attempts to misuse a more broadly acceptable {secret,public} key
+
+for the Public Key Directory protocol (which is more narrowly focused in what it accepts)
+
+**Parameters:**
+
+- `$key`: `FediE2EE\PKD\Crypto\SecretKey|FediE2EE\PKD\Crypto\PublicKey`
+- `$version`: `?FediE2EE\PKD\Crypto\Enums\ProtocolVersion` = null
+
+**Throws:** `CryptoException`
+
+#### [`constantTimeSelect`](../../../src/RateLimit/RateLimitData.php#L85-L102)
 
 Returns `string`
 
@@ -411,7 +426,7 @@ $result = ClassWithTrait::constantTimeSelect(1, $left, $right); -> $result === $
 
 **Throws:** `CryptoException`
 
-#### [`dos2unix`](../../../src/RateLimit/RateLimitData.php#L91-L94)
+#### [`dos2unix`](../../../src/RateLimit/RateLimitData.php#L112-L115)
 
 static · Returns `string`
 
@@ -423,7 +438,7 @@ This is mostly used for PEM-encoded strings.
 
 - `$in`: `string`
 
-#### [`preAuthEncode`](../../../src/RateLimit/RateLimitData.php#L112-L125)
+#### [`preAuthEncode`](../../../src/RateLimit/RateLimitData.php#L133-L146)
 
 static · Returns `string`
 
@@ -435,7 +450,7 @@ This is an implementation of PAE() from PASETO. It encodes an array of strings i
 
 - `$pieces`: `array`
 
-#### [`sortByKey`](../../../src/RateLimit/RateLimitData.php#L132-L140)
+#### [`sortByKey`](../../../src/RateLimit/RateLimitData.php#L153-L161)
 
 static · Returns `void`
 
@@ -447,7 +462,7 @@ Used for ensuring arrays are sorted before JSON encoding.
 
 - `$arr`: `array`
 
-#### [`LE64`](../../../src/RateLimit/RateLimitData.php#L147-L150)
+#### [`LE64`](../../../src/RateLimit/RateLimitData.php#L168-L171)
 
 static · Returns `string`
 
@@ -457,7 +472,7 @@ Mostly used by preAuthEncode() above. This packs an integer as 8 bytes.
 
 - `$n`: `int`
 
-#### [`stringToByteArray`](../../../src/RateLimit/RateLimitData.php#L155-L162)
+#### [`stringToByteArray`](../../../src/RateLimit/RateLimitData.php#L176-L183)
 
 Returns `array`
 
@@ -467,7 +482,7 @@ Get an array of bytes representing the input string.
 
 - `$str`: `string`
 
-#### [`stripNewlines`](../../../src/RateLimit/RateLimitData.php#L170-L204)
+#### [`stripNewlines`](../../../src/RateLimit/RateLimitData.php#L191-L225)
 
 static · Returns `string`
 
