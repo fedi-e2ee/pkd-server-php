@@ -4873,7 +4873,7 @@ static · Returns `string`
 
 **Throws:** `BaseJsonException`
 
-#### [`verifyTOTP`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L50-L64)
+#### [`verifyTOTP`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L51-L65)
 
 static · Returns `?int`
 
@@ -4883,7 +4883,7 @@ static · Returns `?int`
 - `$otp`: `string`
 - `$windows`: `int` = 2
 
-#### [`generateTOTP`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L66-L82)
+#### [`generateTOTP`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L67-L83)
 
 static · Returns `string`
 
@@ -4892,7 +4892,7 @@ static · Returns `string`
 - `$secret`: `string`
 - `$time`: `?int` = null
 
-#### [`ord`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L87-L91)
+#### [`ord`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L88-L92)
 
 static · Returns `int`
 
@@ -4902,7 +4902,7 @@ Avoid cache-timing leaks in ord() by using unpack()
 
 - `$chr`: `string`
 
-#### [`throwIfTimeOutsideWindow`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L156-L165)
+#### [`throwIfTimeOutsideWindow`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L157-L166)
 
 Returns `void`
 
@@ -5306,7 +5306,7 @@ static · Returns `string`
 
 **Throws:** `BaseJsonException`
 
-#### [`verifyTOTP`](../../../src/RequestHandlers/Api/TotpEnroll.php#L50-L64)
+#### [`verifyTOTP`](../../../src/RequestHandlers/Api/TotpEnroll.php#L51-L65)
 
 static · Returns `?int`
 
@@ -5316,7 +5316,7 @@ static · Returns `?int`
 - `$otp`: `string`
 - `$windows`: `int` = 2
 
-#### [`generateTOTP`](../../../src/RequestHandlers/Api/TotpEnroll.php#L66-L82)
+#### [`generateTOTP`](../../../src/RequestHandlers/Api/TotpEnroll.php#L67-L83)
 
 static · Returns `string`
 
@@ -5325,7 +5325,7 @@ static · Returns `string`
 - `$secret`: `string`
 - `$time`: `?int` = null
 
-#### [`ord`](../../../src/RequestHandlers/Api/TotpEnroll.php#L87-L91)
+#### [`ord`](../../../src/RequestHandlers/Api/TotpEnroll.php#L88-L92)
 
 static · Returns `int`
 
@@ -5335,7 +5335,7 @@ Avoid cache-timing leaks in ord() by using unpack()
 
 - `$chr`: `string`
 
-#### [`throwIfTimeOutsideWindow`](../../../src/RequestHandlers/Api/TotpEnroll.php#L156-L165)
+#### [`throwIfTimeOutsideWindow`](../../../src/RequestHandlers/Api/TotpEnroll.php#L157-L166)
 
 Returns `void`
 
@@ -5739,7 +5739,7 @@ static · Returns `string`
 
 **Throws:** `BaseJsonException`
 
-#### [`verifyTOTP`](../../../src/RequestHandlers/Api/TotpRotate.php#L50-L64)
+#### [`verifyTOTP`](../../../src/RequestHandlers/Api/TotpRotate.php#L51-L65)
 
 static · Returns `?int`
 
@@ -5749,7 +5749,7 @@ static · Returns `?int`
 - `$otp`: `string`
 - `$windows`: `int` = 2
 
-#### [`generateTOTP`](../../../src/RequestHandlers/Api/TotpRotate.php#L66-L82)
+#### [`generateTOTP`](../../../src/RequestHandlers/Api/TotpRotate.php#L67-L83)
 
 static · Returns `string`
 
@@ -5758,7 +5758,7 @@ static · Returns `string`
 - `$secret`: `string`
 - `$time`: `?int` = null
 
-#### [`ord`](../../../src/RequestHandlers/Api/TotpRotate.php#L87-L91)
+#### [`ord`](../../../src/RequestHandlers/Api/TotpRotate.php#L88-L92)
 
 static · Returns `int`
 
@@ -5768,7 +5768,7 @@ Avoid cache-timing leaks in ord() by using unpack()
 
 - `$chr`: `string`
 
-#### [`throwIfTimeOutsideWindow`](../../../src/RequestHandlers/Api/TotpRotate.php#L156-L165)
+#### [`throwIfTimeOutsideWindow`](../../../src/RequestHandlers/Api/TotpRotate.php#L157-L166)
 
 Returns `void`
 

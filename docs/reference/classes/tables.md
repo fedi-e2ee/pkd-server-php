@@ -709,7 +709,7 @@ static · Returns `string`
 
 **Throws:** `BaseJsonException`
 
-#### [`verifyTOTP`](../../../src/Tables/PublicKeys.php#L50-L64)
+#### [`verifyTOTP`](../../../src/Tables/PublicKeys.php#L51-L65)
 
 static · Returns `?int`
 
@@ -719,7 +719,7 @@ static · Returns `?int`
 - `$otp`: `string`
 - `$windows`: `int` = 2
 
-#### [`generateTOTP`](../../../src/Tables/PublicKeys.php#L66-L82)
+#### [`generateTOTP`](../../../src/Tables/PublicKeys.php#L67-L83)
 
 static · Returns `string`
 
@@ -728,7 +728,7 @@ static · Returns `string`
 - `$secret`: `string`
 - `$time`: `?int` = null
 
-#### [`ord`](../../../src/Tables/PublicKeys.php#L87-L91)
+#### [`ord`](../../../src/Tables/PublicKeys.php#L88-L92)
 
 static · Returns `int`
 
@@ -738,7 +738,7 @@ Avoid cache-timing leaks in ord() by using unpack()
 
 - `$chr`: `string`
 
-#### [`throwIfTimeOutsideWindow`](../../../src/Tables/PublicKeys.php#L156-L165)
+#### [`throwIfTimeOutsideWindow`](../../../src/Tables/PublicKeys.php#L157-L166)
 
 Returns `void`
 
