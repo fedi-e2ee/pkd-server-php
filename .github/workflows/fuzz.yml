@@ -40,55 +40,55 @@ jobs:
         run: composer install --optimize-autoloader
       - name: Run FuzzProtocol
         run: |
-          php-fuzzer fuzz --max-runs "$FUZZ_RUNS" fuzzing/FuzzProtocol.php
+          php-fuzzer fuzz --timeout 10 --max-runs "$FUZZ_RUNS" fuzzing/FuzzProtocol.php
           shopt -s nullglob; for f in crash-*.txt; do mv "$f" "${f/crash-/fuzzed-FuzzProtocol-}"; done
       - name: Run FuzzRequestHandlers
         run: |
-          php-fuzzer fuzz --max-runs "$FUZZ_RUNS" fuzzing/FuzzRequestHandlers.php
+          php-fuzzer fuzz --timeout 10 --max-runs "$FUZZ_RUNS" fuzzing/FuzzRequestHandlers.php
           shopt -s nullglob; for f in crash-*.txt; do mv "$f" "${f/crash-/fuzzed-FuzzRequestHandlers-}"; done
       - name: Run FuzzActivityStream
         run: |
-          php-fuzzer fuzz --max-runs "$FUZZ_RUNS" fuzzing/FuzzActivityStream.php
+          php-fuzzer fuzz --timeout 10 --max-runs "$FUZZ_RUNS" fuzzing/FuzzActivityStream.php
           shopt -s nullglob; for f in crash-*.txt; do mv "$f" "${f/crash-/fuzzed-FuzzActivityStream-}"; done
       - name: Run FuzzJsonParsing
         run: |
-          php-fuzzer fuzz --max-runs "$FUZZ_RUNS" fuzzing/FuzzJsonParsing.php
+          php-fuzzer fuzz --timeout 10 --max-runs "$FUZZ_RUNS" fuzzing/FuzzJsonParsing.php
           shopt -s nullglob; for f in crash-*.txt; do mv "$f" "${f/crash-/fuzzed-FuzzJsonParsing-}"; done
       - name: Run FuzzMath
         run: |
-          php-fuzzer fuzz --max-runs "$FUZZ_RUNS" fuzzing/FuzzMath.php
+          php-fuzzer fuzz --timeout 10 --max-runs "$FUZZ_RUNS" fuzzing/FuzzMath.php
           shopt -s nullglob; for f in crash-*.txt; do mv "$f" "${f/crash-/fuzzed-FuzzMath-}"; done
       - name: Run FuzzNetworkTrait
         run: |
-          php-fuzzer fuzz --max-runs "$FUZZ_RUNS" fuzzing/FuzzNetworkTrait.php
+          php-fuzzer fuzz --timeout 10 --max-runs "$FUZZ_RUNS" fuzzing/FuzzNetworkTrait.php
           shopt -s nullglob; for f in crash-*.txt; do mv "$f" "${f/crash-/fuzzed-FuzzNetworkTrait-}"; done
       - name: Run FuzzParams
         run: |
-          php-fuzzer fuzz --max-runs "$FUZZ_RUNS" fuzzing/FuzzParams.php
+          php-fuzzer fuzz --timeout 10 --max-runs "$FUZZ_RUNS" fuzzing/FuzzParams.php
           shopt -s nullglob; for f in crash-*.txt; do mv "$f" "${f/crash-/fuzzed-FuzzParams-}"; done
       - name: Run FuzzRateLimit
         run: |
-          php-fuzzer fuzz --max-runs "$FUZZ_RUNS" fuzzing/FuzzRateLimit.php
+          php-fuzzer fuzz --timeout 10 --max-runs "$FUZZ_RUNS" fuzzing/FuzzRateLimit.php
           shopt -s nullglob; for f in crash-*.txt; do mv "$f" "${f/crash-/fuzzed-FuzzRateLimit-}"; done
       - name: Run FuzzBase64
         run: |
-          php-fuzzer fuzz --max-runs "$FUZZ_RUNS" fuzzing/FuzzBase64.php
+          php-fuzzer fuzz --timeout 10 --max-runs "$FUZZ_RUNS" fuzzing/FuzzBase64.php
           shopt -s nullglob; for f in crash-*.txt; do mv "$f" "${f/crash-/fuzzed-FuzzBase64-}"; done
       - name: Run FuzzMerkleLeaf
         run: |
-          php-fuzzer fuzz --max-runs "$FUZZ_RUNS" fuzzing/FuzzMerkleLeaf.php
+          php-fuzzer fuzz --timeout 10 --max-runs "$FUZZ_RUNS" fuzzing/FuzzMerkleLeaf.php
           shopt -s nullglob; for f in crash-*.txt; do mv "$f" "${f/crash-/fuzzed-FuzzMerkleLeaf-}"; done
       - name: Run FuzzMerkleTree
         run: |
-          php-fuzzer fuzz --max-runs "$FUZZ_RUNS" fuzzing/FuzzMerkleTree.php
+          php-fuzzer fuzz --timeout 10 --max-runs "$FUZZ_RUNS" fuzzing/FuzzMerkleTree.php
           shopt -s nullglob; for f in crash-*.txt; do mv "$f" "${f/crash-/fuzzed-FuzzMerkleTree-}"; done
       - name: Run FuzzTOTP
         run: |
-          php-fuzzer fuzz --max-runs "$FUZZ_RUNS" fuzzing/FuzzTOTP.php
+          php-fuzzer fuzz --timeout 10 --max-runs "$FUZZ_RUNS" fuzzing/FuzzTOTP.php
           shopt -s nullglob; for f in crash-*.txt; do mv "$f" "${f/crash-/fuzzed-FuzzTOTP-}"; done
       - name: Run DifferentialFuzzProtocolWitness
         run: |
-          php-fuzzer fuzz --max-runs "$FUZZ_RUNS" fuzzing/DifferentialFuzzProtocolWitness.php
+          php-fuzzer fuzz --timeout 10 --max-runs "$FUZZ_RUNS" fuzzing/DifferentialFuzzProtocolWitness.php
           shopt -s nullglob; for f in crash-*.txt; do mv "$f" "${f/crash-/fuzzed-DifferentialFuzzProtocolWitness-}"; done
       - name: Check for crashes
         if: always()
