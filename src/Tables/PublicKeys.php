@@ -23,6 +23,7 @@ use FediE2EE\PKD\Crypto\Protocol\{
 use DateMalformedStringException;
 use DateTimeImmutable;
 use FediE2EE\PKD\Crypto\AttributeEncryption\AttributeKeyMap;
+use PDOException;
 use FediE2EE\PKD\Crypto\{
     PublicKey,
     Revocation
@@ -584,11 +585,15 @@ class PublicKeys extends Table
         );
         [$rowToInsert, $blindIndexes] = $encryptor->prepareRowForStorage($plaintextRow);
         $rowToInsert['publickey_idx'] = self::blindIndexValue($blindIndexes['publickey_idx']);
-        $this->db->insert(
-            'pkd_actors_publickeys',
-            $rowToInsert
-        );
-        return $this->getRecord($nextActorPKId);
+        try {
+            $this->db->insert(
+                'pkd_actors_publickeys',
+                $rowToInsert
+            );
+            return $this->getRecord($nextActorPKId);
+        } catch (PDOException $e) {
+            throw new ProtocolException($e->getMessage(), $e->getCode(), $e);
+        }
     }
 
     //= https://raw.githubusercontent.com/fedi-e2ee/public-key-directory-specification/refs/heads/main/Specification.md#revokekey
