@@ -141,7 +141,7 @@ trait TOTPTrait
                 if ($publicKey->verify(Base64UrlSafe::decodeNoPadding($signature), $toSign)) {
                     return;
                 }
-            } catch (MLDSAInternalException $ex) {
+            } catch (MLDSAInternalException|CryptoException $ex) {
                 throw new ProtocolException('Invalid signature: ' . $ex->getMessage(), $ex->getCode(), $ex);
             }
         }
