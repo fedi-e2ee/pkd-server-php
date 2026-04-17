@@ -592,7 +592,7 @@ class PublicKeys extends Table
             );
             return $this->getRecord($nextActorPKId);
         } catch (PDOException $e) {
-            throw new ProtocolException($e->getMessage(), $e->getCode(), $e);
+            throw new ProtocolException($e->getMessage(), 0, $e);
         }
     }
 
