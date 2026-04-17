@@ -28,6 +28,12 @@ jobs:
         uses: shivammathur/setup-php@accd6127cb78bee3e8082180cb391013d204ef9f  # v2.37.0
         with:
           php-version: '8.4'
+          ini-values: >-
+            opcache.enable_cli=1,
+            opcache.jit=tracing,
+            opcache.jit_buffer_size=128M,
+            error_reporting=-1,
+            display_errors=On
       - name: Setup PHP-Fuzzer
         run: composer global require --dev nikic/php-fuzzer
       - name: Install dependencies
