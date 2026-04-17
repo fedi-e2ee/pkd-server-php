@@ -11,8 +11,9 @@ use ParagonIE\HPKE\Factory;
 use ParagonIE\HPKE\HPKE as Ciphersuite;
 use ParagonIE\HPKE\HPKEException;
 use ParagonIE\HPKE\Interfaces\EncapsKeyInterface;
-use ParagonIE\HPKE\KEM\DHKEM\EncapsKey;
-use ParagonIE\HPKE\KEM\DiffieHellmanKEM;
+use ParagonIE\HPKE\KEM\PostQuantumKEM;
+use ParagonIE\HPKE\KEM\PQKEM\EncapsKey;
+use ParagonIE\PQCrypto\Compat;
 use function is_object, json_decode, json_last_error_msg, property_exists;
 
 readonly class RewrapConfig implements JsonSerializable
@@ -30,7 +31,7 @@ readonly class RewrapConfig implements JsonSerializable
         EncapsKeyInterface $encapsKey
     ): self {
         if (!($encapsKey instanceof EncapsKey)) {
-            throw new DependencyException('EncapsKey is not DHKEM');
+            throw new DependencyException('EncapsKey is not for Post-Quantum KEMs');
         }
         return new RewrapConfig(
             $cs->getSuiteName(),
@@ -81,9 +82,10 @@ readonly class RewrapConfig implements JsonSerializable
     public function getEncapsKey(): EncapsKeyInterface
     {
         $cs = $this->getCipherSuite();
-        if (!($cs->kem instanceof DiffieHellmanKEM)) {
-            throw new DependencyException('Ciphersuite KEM is not DiffieeHemanKEM');
+        if (!($cs->kem instanceof PostQuantumKEM)) {
+            throw new DependencyException('Ciphersuite KEM is not PostQuantumKEM');
         }
-        return new EncapsKey($cs->kem->curve, Base64UrlSafe::decodeNoPadding($this->encapsKey));
+        $rawKey = Base64UrlSafe::decodeNoPadding($this->encapsKey);
+        return new EncapsKey($cs->kem->algorithm, $rawKey);
     }
 }

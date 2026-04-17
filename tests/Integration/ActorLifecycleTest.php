@@ -81,6 +81,7 @@ use ParagonIE\CipherSweet\Exception\{
     InvalidCiphertextException
 };
 use ParagonIE\HPKE\HPKEException;
+use ParagonIE\HPKE\KEM\PostQuantumKEM;
 use PHPUnit\Framework\TestCase;
 use Psr\SimpleCache\InvalidArgumentException;
 use Random\RandomException;
@@ -159,7 +160,7 @@ class ActorLifecycleTest extends TestCase
         $peerKey = SecretKey::generate();
         $rewrapConfig = [
             'cs' => $config->getHPKE()->cs->getSuiteName(),
-            'ek' => Base64UrlSafe::encodeUnpadded($peerKey->getPublicKey()->getBytes())
+            'ek' => Base64UrlSafe::encodeUnpadded($config->getHPKE()->encapsKey->bytes)
         ];
 
         $db->insert('pkd_peers', [
@@ -230,7 +231,7 @@ class ActorLifecycleTest extends TestCase
         $akm = new AttributeKeyMap();
         $akm->addKey('old-actor', SymmetricKey::generate());
         $akm->addKey('new-actor', SymmetricKey::generate());
-        $bundle = $handler->handle($moveIdentity->encrypt($akm), $keypair, $akm, $latestRoot);
+        $bundle = $handler->handle($moveIdentity->encrypt($akm, $latestRoot), $keypair, $akm, $latestRoot);
         $encrypted = $handler->hpkeEncrypt($bundle, $serverHpke->encapsKey, $serverHpke->cs);
         $protocol->moveIdentity($encrypted, $newActor);
         $rewrapped = $db->run("SELECT * FROM pkd_merkle_leaf_rewrapped_keys WHERE peer = ?", $peerId);
@@ -242,7 +243,7 @@ class ActorLifecycleTest extends TestCase
         $fireproof = new \FediE2EE\PKD\Crypto\Protocol\Actions\Fireproof($canonical2);
         $akm = new AttributeKeyMap();
         $akm->addKey('actor', SymmetricKey::generate());
-        $bundle = $handler->handle($fireproof->encrypt($akm), $keypair, $akm, $latestRoot);
+        $bundle = $handler->handle($fireproof->encrypt($akm, $latestRoot), $keypair, $akm, $latestRoot);
         $encrypted = $handler->hpkeEncrypt($bundle, $serverHpke->encapsKey, $serverHpke->cs);
         $protocol->fireproof($encrypted, $canonical2);
         $rewrapped = $db->run("SELECT * FROM pkd_merkle_leaf_rewrapped_keys WHERE peer = ?", $peerId);
@@ -254,7 +255,7 @@ class ActorLifecycleTest extends TestCase
         $undoFireproof = new \FediE2EE\PKD\Crypto\Protocol\Actions\UndoFireproof($canonical2);
         $akm = new AttributeKeyMap();
         $akm->addKey('actor', SymmetricKey::generate());
-        $bundle = $handler->handle($undoFireproof->encrypt($akm), $keypair, $akm, $latestRoot);
+        $bundle = $handler->handle($undoFireproof->encrypt($akm, $latestRoot), $keypair, $akm, $latestRoot);
         $encrypted = $handler->hpkeEncrypt($bundle, $serverHpke->encapsKey, $serverHpke->cs);
         $protocol->undoFireproof($encrypted, $canonical2);
         $rewrapped = $db->run("SELECT * FROM pkd_merkle_leaf_rewrapped_keys WHERE peer = ?", $peerId);
@@ -304,7 +305,7 @@ class ActorLifecycleTest extends TestCase
         $peerKey = SecretKey::generate();
         $rewrapConfig = [
             'cs' => $config->getHPKE()->cs->getSuiteName(),
-            'ek' => Base64UrlSafe::encodeUnpadded($peerKey->getPublicKey()->getBytes())
+            'ek' => Base64UrlSafe::encodeUnpadded($config->getHPKE()->encapsKey->bytes)
         ];
 
         $db->insert('pkd_peers', [
@@ -315,7 +316,7 @@ class ActorLifecycleTest extends TestCase
             'cosign' => 1,
             'rewrap' => json_encode($rewrapConfig),
             'incrementaltreestate' => Base64UrlSafe::encodeUnpadded(
-                (new \FediE2EE\PKD\Crypto\Merkle\IncrementalTree([], $config->getParams()->hashAlgo))->toJson()
+                (new IncrementalTree([], $config->getParams()->hashAlgo))->toJson()
             ),
             'latestroot' => '',
             'created' => (new DateTimeImmutable())->format(DateTimeImmutable::ATOM),
@@ -367,7 +368,7 @@ class ActorLifecycleTest extends TestCase
         $peerKey = SecretKey::generate();
         $rewrapConfig = [
             'cs' => $config->getHPKE()->cs->getSuiteName(),
-            'ek' => Base64UrlSafe::encodeUnpadded($peerKey->getPublicKey()->getBytes())
+            'ek' => Base64UrlSafe::encodeUnpadded($config->getHPKE()->encapsKey->bytes)
         ];
 
         $db->insert('pkd_peers', [
@@ -378,7 +379,7 @@ class ActorLifecycleTest extends TestCase
             'cosign' => 1,
             'rewrap' => json_encode($rewrapConfig),
             'incrementaltreestate' => Base64UrlSafe::encodeUnpadded(
-                (new \FediE2EE\PKD\Crypto\Merkle\IncrementalTree([], $config->getParams()->hashAlgo))->toJson()
+                (new IncrementalTree([], $config->getParams()->hashAlgo))->toJson()
             ),
             'latestroot' => '',
             'created' => (new DateTimeImmutable())->format(DateTimeImmutable::ATOM),
@@ -410,7 +411,7 @@ class ActorLifecycleTest extends TestCase
         $akm2 = new AttributeKeyMap()
             ->addKey('actor', SymmetricKey::generate())
             ->addKey('public-key', SymmetricKey::generate());
-        $bundle2 = $handler->handle($addKey2->encrypt($akm2), $keypair1, $akm2, $latestRoot);
+        $bundle2 = $handler->handle($addKey2->encrypt($akm2, $latestRoot), $keypair1, $akm2, $latestRoot);
         $encrypted2 = $handler->hpkeEncrypt($bundle2, $serverHpke->encapsKey, $serverHpke->cs);
         $protocol->addKey($encrypted2, $canonical);
         $this->assertNotInTransaction();
@@ -424,7 +425,7 @@ class ActorLifecycleTest extends TestCase
         $akm = new AttributeKeyMap();
         $akm->addKey('actor', SymmetricKey::generate());
         $akm->addKey('public-key', SymmetricKey::generate());
-        $bundle = $handler->handle($revokeKey->encrypt($akm), $keypair1, $akm, $latestRoot);
+        $bundle = $handler->handle($revokeKey->encrypt($akm, $latestRoot), $keypair1, $akm, $latestRoot);
         $encrypted = $handler->hpkeEncrypt($bundle, $serverHpke->encapsKey, $serverHpke->cs);
         $protocol->revokeKey($encrypted, $canonical);
 
@@ -462,7 +463,7 @@ class ActorLifecycleTest extends TestCase
         $peerKey = SecretKey::generate();
         $rewrapConfig = [
             'cs' => $config->getHPKE()->cs->getSuiteName(),
-            'ek' => Base64UrlSafe::encodeUnpadded($peerKey->getPublicKey()->getBytes())
+            'ek' => Base64UrlSafe::encodeUnpadded($config->getHPKE()->encapsKey->bytes)
         ];
 
         $db->insert('pkd_peers', [
@@ -473,7 +474,7 @@ class ActorLifecycleTest extends TestCase
             'cosign' => 1,
             'rewrap' => json_encode($rewrapConfig),
             'incrementaltreestate' => Base64UrlSafe::encodeUnpadded(
-                (new \FediE2EE\PKD\Crypto\Merkle\IncrementalTree([], $config->getParams()->hashAlgo))->toJson()
+                (new IncrementalTree([], $config->getParams()->hashAlgo))->toJson()
             ),
             'latestroot' => '',
             'created' => (new DateTimeImmutable())->format(DateTimeImmutable::ATOM),
@@ -504,7 +505,7 @@ class ActorLifecycleTest extends TestCase
         $akm = new AttributeKeyMap();
         $akm->addKey('actor', SymmetricKey::generate());
         $akm->addKey('public-key', SymmetricKey::generate());
-        $bundle = $handler->handle($fireproof->encrypt($akm), $keypair, $akm, $latestRoot);
+        $bundle = $handler->handle($fireproof->encrypt($akm, $latestRoot), $keypair, $akm, $latestRoot);
         $encrypted = $handler->hpkeEncrypt($bundle, $serverHpke->encapsKey, $serverHpke->cs);
         $protocol->fireproof($encrypted, $canonical);
 
@@ -542,7 +543,7 @@ class ActorLifecycleTest extends TestCase
         $peerKey = SecretKey::generate();
         $rewrapConfig = [
             'cs' => $config->getHPKE()->cs->getSuiteName(),
-            'ek' => Base64UrlSafe::encodeUnpadded($peerKey->getPublicKey()->getBytes())
+            'ek' => Base64UrlSafe::encodeUnpadded($config->getHPKE()->encapsKey->bytes)
         ];
 
         $db->insert('pkd_peers', [
@@ -553,7 +554,7 @@ class ActorLifecycleTest extends TestCase
             'cosign' => 1,
             'rewrap' => json_encode($rewrapConfig),
             'incrementaltreestate' => Base64UrlSafe::encodeUnpadded(
-                (new \FediE2EE\PKD\Crypto\Merkle\IncrementalTree([], $config->getParams()->hashAlgo))->toJson()
+                (new IncrementalTree([], $config->getParams()->hashAlgo))->toJson()
             ),
             'latestroot' => '',
             'created' => (new DateTimeImmutable())->format(DateTimeImmutable::ATOM),
@@ -584,7 +585,7 @@ class ActorLifecycleTest extends TestCase
         $akm = new AttributeKeyMap();
         $akm->addKey('actor', SymmetricKey::generate());
         $akm->addKey('aux-data', SymmetricKey::generate());
-        $bundle = $handler->handle($addAuxData->encrypt($akm), $keypair, $akm, $latestRoot);
+        $bundle = $handler->handle($addAuxData->encrypt($akm, $latestRoot), $keypair, $akm, $latestRoot);
         $encrypted = $handler->hpkeEncrypt($bundle, $serverHpke->encapsKey, $serverHpke->cs);
         $protocol->addAuxData($encrypted, $canonical);
 
@@ -599,7 +600,7 @@ class ActorLifecycleTest extends TestCase
         $akm2 = new AttributeKeyMap();
         $akm2->addKey('actor', SymmetricKey::generate());
         $akm2->addKey('aux-data', SymmetricKey::generate());
-        $bundle2 = $handler->handle($revokeAuxData->encrypt($akm2), $keypair, $akm2, $latestRoot2);
+        $bundle2 = $handler->handle($revokeAuxData->encrypt($akm2, $latestRoot2), $keypair, $akm2, $latestRoot2);
         $encrypted2 = $handler->hpkeEncrypt($bundle2, $serverHpke->encapsKey, $serverHpke->cs);
         $protocol->revokeAuxData($encrypted2, $canonical);
 
@@ -665,7 +666,7 @@ class ActorLifecycleTest extends TestCase
         $akm1 = new AttributeKeyMap()
             ->addRandomKey('actor')
             ->addRandomKey('public-key');
-        $encryptedMsg1 = $addKey1->encrypt($akm1);
+        $encryptedMsg1 = $addKey1->encrypt($akm1, $latestRoot1);
         $bundle1 = $handler->handle($encryptedMsg1, $keypair1, $akm1, $latestRoot1);
         $encryptedForServer1 = $handler->hpkeEncrypt(
             $bundle1,

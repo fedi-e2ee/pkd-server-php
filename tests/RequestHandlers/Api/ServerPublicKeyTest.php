@@ -46,6 +46,6 @@ class ServerPublicKeyTest extends TestCase
         // Verify hpke-ciphersuite field
         $this->assertArrayHasKey('hpke-ciphersuite', $body);
         $this->assertIsString($body['hpke-ciphersuite']);
-        $this->assertMatchesRegularExpression('/^DHKEM\(X25519/', $body['hpke-ciphersuite']);
+        $this->assertMatchesRegularExpression('/^ML-?KEM/', $body['hpke-ciphersuite']);
     }
 }

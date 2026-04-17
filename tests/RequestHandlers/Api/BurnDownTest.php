@@ -179,7 +179,7 @@ class BurnDownTest extends TestCase
         $akm1 = (new AttributeKeyMap())
             ->addKey('actor', SymmetricKey::generate())
             ->addKey('public-key', SymmetricKey::generate());
-        $bundle1 = $handler->handle($addKey1->encrypt($akm1), $actorKey, $akm1, $latestRoot1);
+        $bundle1 = $handler->handle($addKey1->encrypt($akm1, $latestRoot1), $actorKey, $akm1, $latestRoot1);
         $encrypted1 = $handler->hpkeEncrypt($bundle1, $serverHpke->encapsKey, $serverHpke->cs);
         $protocol->addKey($encrypted1, $canonActor);
         $this->assertNotInTransaction();
@@ -190,7 +190,7 @@ class BurnDownTest extends TestCase
         $akm2 = (new AttributeKeyMap())
             ->addKey('actor', SymmetricKey::generate())
             ->addKey('public-key', SymmetricKey::generate());
-        $bundle2 = $handler->handle($addKey2->encrypt($akm2), $operatorKey, $akm2, $latestRoot2);
+        $bundle2 = $handler->handle($addKey2->encrypt($akm2, $latestRoot2), $operatorKey, $akm2, $latestRoot2);
         $encrypted2 = $handler->hpkeEncrypt($bundle2, $serverHpke->encapsKey, $serverHpke->cs);
         $protocol->addKey($encrypted2, $canonOperator);
         $this->assertNotInTransaction();
@@ -237,7 +237,7 @@ class BurnDownTest extends TestCase
         $akm3 = (new AttributeKeyMap())
             ->addKey('actor', SymmetricKey::generate())
             ->addKey('operator', SymmetricKey::generate());
-        $bundle3 = $handler->handle($burnDown->encrypt($akm3), $operatorKey, $akm3, $latestRoot3);
+        $bundle3 = $handler->handle($burnDown, $operatorKey, $akm3, $latestRoot3);
 
         // OTP is a top-level Bundle field (not part of the signed/encrypted message)
         $bundleData = json_decode($bundle3->toJson(), true);

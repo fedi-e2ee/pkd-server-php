@@ -20,10 +20,10 @@ readonly class Payload
         public string $rawJson,
     ) {}
 
-    public function decrypt(): ProtocolMessageInterface
+    public function decrypt(string $recentMerkleRoot): ProtocolMessageInterface
     {
         if ($this->message instanceof EncryptedProtocolMessageInterface) {
-            return $this->message->decrypt($this->keyMap);
+            return $this->message->decrypt($this->keyMap, $recentMerkleRoot);
         }
         return $this->message;
     }

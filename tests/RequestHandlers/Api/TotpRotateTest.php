@@ -21,6 +21,7 @@ use FediE2EE\PKD\Crypto\Exceptions\{
     ParserException
 };
 use GuzzleHttp\Exception\GuzzleException;
+use ParagonIE\PQCrypto\Compat;
 use FediE2EE\PKDServer\RequestHandlers\Api\{
     TotpRotate
 };
@@ -197,7 +198,7 @@ class TotpRotateTest extends TestCase
         $akm = new AttributeKeyMap()
             ->addKey('actor', SymmetricKey::generate())
             ->addKey('public-key', SymmetricKey::generate());
-        $encryptedMsg = $addKey->encrypt($akm);
+        $encryptedMsg = $addKey->encrypt($akm, $latestRoot);
         $this->clearOldTransaction($config);
         $bundle = $handler->handle($encryptedMsg, $sk, $akm, $latestRoot);
         $encryptedForServer = $handler->hpkeEncrypt(
@@ -631,7 +632,7 @@ class TotpRotateTest extends TestCase
         $akm = new AttributeKeyMap()
             ->addKey('actor', SymmetricKey::generate())
             ->addKey('public-key', SymmetricKey::generate());
-        $encryptedMsg = $addKey->encrypt($akm);
+        $encryptedMsg = $addKey->encrypt($akm, $latestRoot);
         $this->clearOldTransaction($config);
         $bundle = $handler->handle($encryptedMsg, $sk, $akm, $latestRoot);
         $encryptedForServer = $handler->hpkeEncrypt(
@@ -691,7 +692,7 @@ class TotpRotateTest extends TestCase
         ]);
         $signature = $sk->sign($toSign);
         // Flip all bits to make invalid:
-        $signature ^= str_repeat("\xFF", 64);
+        $signature ^= str_repeat("\xFF", Compat::MLDSA44_SIGNATURE_BYTES);
         $message['signature'] = Base64UrlSafe::encodeUnpadded($signature);
 
         $encodedBody = json_encode($message);
@@ -706,7 +707,7 @@ class TotpRotateTest extends TestCase
         $body = json_decode((string)$response->getBody(), true);
         $this->assertSame(400, $response->getStatusCode());
         $this->assertArrayHasKey('error', $body);
-        $this->assertSame('Invalid signature', $body['error']);
+        $this->assertStringStartsWith('Invalid signature', $body['error']);
     }
 
     /**

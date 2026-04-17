@@ -100,7 +100,7 @@ class HistorySinceTest extends TestCase
         $akm = new AttributeKeyMap()
             ->addKey('actor', SymmetricKey::generate())
             ->addKey('public-key', SymmetricKey::generate());
-        $encryptedMsg = $addKey->encrypt($akm);
+        $encryptedMsg = $addKey->encrypt($akm, $latestRoot);
         $bundle = $handler->handle($encryptedMsg, $keypair, $akm, $latestRoot);
         $encryptedForServer = $handler->hpkeEncrypt(
             $bundle,
@@ -140,7 +140,7 @@ class HistorySinceTest extends TestCase
             $this->assertArrayHasKey('publickeyhash', $body['records'][0]);
             $this->assertSame(64, strlen($body['records'][0]['publickeyhash']));
             $this->assertArrayHasKey('signature', $body['records'][0]);
-            $this->assertSame(86, strlen($body['records'][0]['signature']));
+            $this->assertSame(3227, strlen($body['records'][0]['signature']));
             $this->assertSame($newRoot, $body['records'][0]['merkle-root']);
             $this->assertNotInTransaction();
         }

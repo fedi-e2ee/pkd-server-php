@@ -37,6 +37,12 @@ jobs:
         with:
           php-version: ${{ matrix.php-versions }}
           coverage: pcov
+          ini-values: >-
+            opcache.enable_cli=1,
+            opcache.jit=tracing,
+            opcache.jit_buffer_size=128M,
+            error_reporting=-1,
+            display_errors=On
 
       - name: Add Infection as dependency
         run: composer require --dev infection/infection

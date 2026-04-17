@@ -4,21 +4,20 @@ namespace FediE2EE\PKDServer\Config;
 
 use FediE2EE\PKDServer\Dependency\HPKE;
 use FediE2EE\PKDServer\Exceptions\DependencyException;
-use ParagonIE\HPKE\KEM\DHKEM\{
+use ParagonIE\HPKE\KEM\PQKEM\{
     EncapsKey,
     DecapsKey
 };
 use ParagonIE\ConstantTime\Base64UrlSafe;
 use ParagonIE\HPKE\Factory;
-use ParagonIE\HPKE\KEM\DiffieHellmanKEM;
+use ParagonIE\HPKE\KEM\PostQuantumKEM;
 
 /* Defer to local config (if applicable) */
 if (file_exists(__DIR__ . '/local/hpke.php')) {
     return require_once __DIR__ . '/local/hpke.php';
 }
 /* Default cipher suite: */
-$defaultCipherSuite = 'DHKEM(X25519, HKDF-SHA256), HKDF-SHA256, ChaCha20-Poly1305';
-
+$defaultCipherSuite = 'MLKEM768-X25519, HKDF-SHA256, ChaCha20-Poly1305';
 if (file_exists(__DIR__ . '/hpke.json')) {
     $file = file_get_contents(__DIR__ . '/hpke.json');
     if (!is_string($file)) {
@@ -29,9 +28,9 @@ if (file_exists(__DIR__ . '/hpke.json')) {
         throw new DependencyException('Cannot read HPKE json');
     }
     $hpke = Factory::init($json['ciphersuite'] ?? $defaultCipherSuite);
-    if ($hpke->kem instanceof DiffieHellmanKEM) {
-        $decapsKey = new DecapsKey($hpke->kem->curve, Base64UrlSafe::decodeNoPadding($json['decaps-key']));
-        $encapsKey = new EncapsKey($hpke->kem->curve, Base64UrlSafe::decodeNoPadding($json['encaps-key']));
+    if ($hpke->kem instanceof PostQuantumKEM) {
+        $decapsKey = new DecapsKey($hpke->kem->algorithm, Base64UrlSafe::decodeNoPadding($json['decaps-key']));
+        $encapsKey = new EncapsKey($hpke->kem->algorithm, Base64UrlSafe::decodeNoPadding($json['encaps-key']));
     } else {
         throw new DependencyException('Unrecognized HPKE KEM type');
     }

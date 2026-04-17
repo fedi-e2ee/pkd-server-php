@@ -152,7 +152,7 @@ class ListAuxDataTest extends TestCase
         $akm = new AttributeKeyMap()
             ->addKey('actor', SymmetricKey::generate())
             ->addKey('public-key', SymmetricKey::generate());
-        $encryptedMsg = $addKey->encrypt($akm);
+        $encryptedMsg = $addKey->encrypt($akm, $latestRoot);
         $bundle = $handler->handle($encryptedMsg, $keypair, $akm, $latestRoot);
         $encryptedForServer = $handler->hpkeEncrypt(
             $bundle,
@@ -170,7 +170,7 @@ class ListAuxDataTest extends TestCase
             ->addKey('actor', SymmetricKey::generate())
             ->addKey('aux-type', SymmetricKey::generate())
             ->addKey('aux-data', SymmetricKey::generate());
-        $encryptedMsg = $addAux->encrypt($akm);
+        $encryptedMsg = $addAux->encrypt($akm, $latestRoot);
         $bundle = $handler->handle($encryptedMsg, $keypair, $akm, $latestRoot);
         $encryptedForServer = $handler->hpkeEncrypt(
             $bundle,

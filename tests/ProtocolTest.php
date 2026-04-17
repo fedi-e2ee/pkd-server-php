@@ -28,6 +28,9 @@ use FediE2EE\PKD\Crypto\Protocol\{
 };
 use GuzzleHttp\Exception\GuzzleException;
 use ParagonIE\Certainty\Exception\CertaintyException;
+use ParagonIE\HPKE\KEM\PQKEM\EncapsKey;
+use ParagonIE\PQCrypto\Exception\MLDSAInternalException;
+use ParagonIE\PQCrypto\Exception\PQCryptoCompatException;
 use Psr\SimpleCache\InvalidArgumentException;
 use Random\RandomException;
 use FediE2EE\PKD\Crypto\{
@@ -133,8 +136,13 @@ class ProtocolTest extends TestCase
     }
 
     /**
+     * @throws CryptoException
      * @throws DependencyException
+     * @throws JsonException
+     * @throws MLDSAInternalException
      * @throws NotImplementedException
+     * @throws PQCryptoCompatException
+     * @throws RandomException
      * @throws SodiumException
      */
     protected function addTestPeer(): void
@@ -143,7 +151,7 @@ class ProtocolTest extends TestCase
         $serverHpke = $this->config->getHPKE();
         $rewrapConfig = [
             'cs' => $serverHpke->cs->getSuiteName(),
-            'ek' => Base64UrlSafe::encodeUnpadded($peerKey->getPublicKey()->getBytes())
+            'ek' => Base64UrlSafe::encodeUnpadded($this->config->getHPKE()->encapsKey->bytes)
         ];
         $tree = new IncrementalTree([], $this->config->getParams()->hashAlgo);
         $this->config->getDb()->insert('pkd_peers', [
@@ -217,7 +225,7 @@ class ProtocolTest extends TestCase
         $akm1 = new AttributeKeyMap()
             ->addKey('actor', SymmetricKey::generate())
             ->addKey('public-key', SymmetricKey::generate());
-        $encryptedMsg1 = $addKey1->encrypt($akm1);
+        $encryptedMsg1 = $addKey1->encrypt($akm1, $latestRoot1);
         $bundle1 = $handler->handle($encryptedMsg1, $keypair1, $akm1, $latestRoot1);
 
         $encryptedForServer1 = $handler->hpkeEncrypt(
@@ -241,7 +249,7 @@ class ProtocolTest extends TestCase
         $akm2 = new AttributeKeyMap()
             ->addKey('actor', SymmetricKey::generate())
             ->addKey('public-key', SymmetricKey::generate());
-        $encryptedMsg2 = $addKey2->encrypt($akm2);
+        $encryptedMsg2 = $addKey2->encrypt($akm2, $latestRoot2);
         $bundle2 = $handler->handle($encryptedMsg2, $keypair1, $akm2, $latestRoot2);
 
         $encryptedForServer2 = $handler->hpkeEncrypt(
@@ -272,7 +280,7 @@ class ProtocolTest extends TestCase
             ->addKey('actor', SymmetricKey::generate())
             ->addKey('public-key', SymmetricKey::generate());
 
-        $encryptedMsg3 = $revokeKey->encrypt($akm3);
+        $encryptedMsg3 = $revokeKey->encrypt($akm3, $latestRoot3);
         $bundle3 = $handler->handle($encryptedMsg3, $keypair1, $akm3, $latestRoot3);
 
         $encryptedForServer3 = $handler->hpkeEncrypt(
@@ -346,7 +354,7 @@ class ProtocolTest extends TestCase
         $akm1 = new AttributeKeyMap()
             ->addKey('actor', SymmetricKey::generate())
             ->addKey('public-key', SymmetricKey::generate());
-        $encryptedMsg1 = $addKey->encrypt($akm1);
+        $encryptedMsg1 = $addKey->encrypt($akm1, $latestRoot1);
         $bundle1 = $handler->handle($encryptedMsg1, $keypair, $akm1, $latestRoot1);
 
         $encryptedForServer1 = $handler->hpkeEncrypt(
@@ -369,8 +377,8 @@ class ProtocolTest extends TestCase
         $akm2 = new AttributeKeyMap()
             ->addKey('actor', SymmetricKey::generate())
             ->addKey('public-key', SymmetricKey::generate());
-        $encryptedMsg2 = $addKey2->encrypt($akm2);
-        $bundle2 = $handler->handle($encryptedMsg2, $keypair, $akm2, $latestRoot2, $keyId);
+        $encryptedMsg2 = $addKey2->encrypt($akm2, $latestRoot2);
+        $bundle2 = $handler->handle($encryptedMsg2, $keypair, $akm2, $latestRoot2);
         $encryptedForServer2 = $handler->hpkeEncrypt(
             $bundle2,
             $serverHpke->encapsKey,
@@ -389,8 +397,8 @@ class ProtocolTest extends TestCase
         $akm3 = new AttributeKeyMap()
             ->addKey('old-actor', SymmetricKey::generate())
             ->addKey('new-actor', SymmetricKey::generate());
-        $encryptedMsg3 = $moveIdentity->encrypt($akm3);
-        $bundle3 = $handler->handle($encryptedMsg3, $keypair2, $akm3, $latestRoot3, $keyId2);
+        $encryptedMsg3 = $moveIdentity->encrypt($akm3, $latestRoot3);
+        $bundle3 = $handler->handle($encryptedMsg3, $keypair2, $akm3, $latestRoot3);
 
         $encryptedForServer3 = $handler->hpkeEncrypt(
             $bundle3,
@@ -449,7 +457,7 @@ class ProtocolTest extends TestCase
         $akm1 = new AttributeKeyMap()
             ->addKey('actor', SymmetricKey::generate())
             ->addKey('public-key', SymmetricKey::generate());
-        $encryptedMsg1 = $addKey1->encrypt($akm1);
+        $encryptedMsg1 = $addKey1->encrypt($akm1, $latestRoot1);
         $bundle1 = $handler->handle($encryptedMsg1, $actorKey, $akm1, $latestRoot1);
         $encryptedForServer1 = $handler->hpkeEncrypt(
             $bundle1,
@@ -466,7 +474,7 @@ class ProtocolTest extends TestCase
         $akm2 = new AttributeKeyMap()
             ->addKey('actor', SymmetricKey::generate())
             ->addKey('public-key', SymmetricKey::generate());
-        $encryptedMsg2 = $addKey2->encrypt($akm2);
+        $encryptedMsg2 = $addKey2->encrypt($akm2, $latestRoot2);
         $bundle2 = $handler->handle($encryptedMsg2, $operatorKey, $akm2, $latestRoot2);
         $encryptedForServer2 = $handler->hpkeEncrypt(
             $bundle2,
@@ -540,7 +548,7 @@ class ProtocolTest extends TestCase
         $akm1 = new AttributeKeyMap()
             ->addKey('actor', SymmetricKey::generate())
             ->addKey('public-key', SymmetricKey::generate());
-        $encryptedMsg1 = $addKey1->encrypt($akm1);
+        $encryptedMsg1 = $addKey1->encrypt($akm1, $latestRoot1);
         $bundle1 = $handler->handle($encryptedMsg1, $actorKey, $akm1, $latestRoot1);
         $encryptedForServer1 = $handler->hpkeEncrypt(
             $bundle1,
@@ -558,7 +566,7 @@ class ProtocolTest extends TestCase
         $akm2 = new AttributeKeyMap()
             ->addKey('actor', SymmetricKey::generate())
             ->addKey('public-key', SymmetricKey::generate());
-        $encryptedMsg2 = $addKey2->encrypt($akm2);
+        $encryptedMsg2 = $addKey2->encrypt($akm2, $latestRoot2);
         $bundle2 = $handler->handle($encryptedMsg2, $operatorKey, $akm2, $latestRoot2);
         $encryptedForServer2 = $handler->hpkeEncrypt(
             $bundle2,
@@ -575,7 +583,7 @@ class ProtocolTest extends TestCase
         $fireproof = new Fireproof($canonActor);
         $akm3 = new AttributeKeyMap()
             ->addKey('actor', SymmetricKey::generate());
-        $encryptedMsg3 = $fireproof->encrypt($akm3);
+        $encryptedMsg3 = $fireproof->encrypt($akm3, $latestRoot3);
         $bundle3 = $handler->handle($encryptedMsg3, $actorKey, $akm3, $latestRoot3);
         $encryptedForServer3 = $handler->hpkeEncrypt(
             $bundle3,
@@ -597,8 +605,7 @@ class ProtocolTest extends TestCase
         $akm4 = new AttributeKeyMap()
             ->addKey('actor', SymmetricKey::generate())
             ->addKey('operator', SymmetricKey::generate());
-        $encryptedMsg4 = $burnDown->encrypt($akm4);
-        $bundle4 = $handler->handle($encryptedMsg4, $operatorKey, $akm4, $latestRoot5);
+        $bundle4 = $handler->handle($burnDown, $operatorKey, $akm4, $latestRoot5);
         $encryptedForServer4 = $handler->hpkeEncrypt(
             $bundle4,
             $serverHpke->encapsKey,
@@ -653,7 +660,7 @@ class ProtocolTest extends TestCase
         $akm1 = new AttributeKeyMap()
             ->addKey('actor', SymmetricKey::generate())
             ->addKey('public-key', SymmetricKey::generate());
-        $encryptedMsg1 = $addKey1->encrypt($akm1);
+        $encryptedMsg1 = $addKey1->encrypt($akm1, $latestRoot1);
         $bundle1 = $handler->handle($encryptedMsg1, $actorKey, $akm1, $latestRoot1);
         $encryptedForServer1 = $handler->hpkeEncrypt(
             $bundle1,
@@ -672,7 +679,7 @@ class ProtocolTest extends TestCase
         $akm2 = new AttributeKeyMap()
             ->addKey('actor', SymmetricKey::generate())
             ->addKey('public-key', SymmetricKey::generate());
-        $encryptedMsg2 = $addKey2->encrypt($akm2);
+        $encryptedMsg2 = $addKey2->encrypt($akm2, $latestRoot2);
         $bundle2 = $handler->handle($encryptedMsg2, $operatorKey, $akm2, $latestRoot2);
         $encryptedForServer2 = $handler->hpkeEncrypt(
             $bundle2,
@@ -690,7 +697,7 @@ class ProtocolTest extends TestCase
         $fireproof = new Fireproof($canonicalActor);
         $akm3 = new AttributeKeyMap()
             ->addKey('actor', SymmetricKey::generate());
-        $encryptedMsg3 = $fireproof->encrypt($akm3);
+        $encryptedMsg3 = $fireproof->encrypt($akm3, $latestRoot3);
         $bundle3 = $handler->handle($encryptedMsg3, $actorKey, $akm3, $latestRoot3, $actorKeyId);
         $encryptedForServer3 = $handler->hpkeEncrypt(
             $bundle3,
@@ -710,7 +717,7 @@ class ProtocolTest extends TestCase
         $undoFireproof = new UndoFireproof($canonicalActor);
         $akm4 = new AttributeKeyMap()
             ->addKey('actor', SymmetricKey::generate());
-        $encryptedMsg4 = $undoFireproof->encrypt($akm4);
+        $encryptedMsg4 = $undoFireproof->encrypt($akm4, $latestRoot4);
         $bundle4 = $handler->handle($encryptedMsg4, $actorKey, $akm4, $latestRoot5, $actorKeyId);
         $encryptedForServer4 = $handler->hpkeEncrypt(
             $bundle4,
@@ -781,7 +788,7 @@ class ProtocolTest extends TestCase
         $akm1 = new AttributeKeyMap()
             ->addKey('actor', SymmetricKey::generate())
             ->addKey('public-key', SymmetricKey::generate());
-        $encryptedMsg1 = $addKey1->encrypt($akm1);
+        $encryptedMsg1 = $addKey1->encrypt($akm1, $latestRoot1);
         $bundle1 = $handler->handle($encryptedMsg1, $actorKey, $akm1, $latestRoot1);
         $encryptedForServer1 = $handler->hpkeEncrypt(
             $bundle1,
@@ -800,7 +807,7 @@ class ProtocolTest extends TestCase
             ->addKey('actor', SymmetricKey::generate())
             ->addKey('aux-type', SymmetricKey::generate())
             ->addKey('aux-data', SymmetricKey::generate());
-        $encryptedMsg2 = $addAuxData->encrypt($akm2);
+        $encryptedMsg2 = $addAuxData->encrypt($akm2, $latestRoot2);
         $bundle2 = $handler->handle($encryptedMsg2, $actorKey, $akm2, $latestRoot2);
         $encryptedForServer2 = $handler->hpkeEncrypt(
             $bundle2,
@@ -821,7 +828,7 @@ class ProtocolTest extends TestCase
             ->addKey('actor', SymmetricKey::generate())
             ->addKey('aux-type', SymmetricKey::generate())
             ->addKey('aux-data', SymmetricKey::generate());
-        $encryptedMsg3 = $revokeAuxData->encrypt($akm3);
+        $encryptedMsg3 = $revokeAuxData->encrypt($akm3, $latestRoot3);
         $bundle3 = $handler->handle($encryptedMsg3, $actorKey, $akm3, $latestRoot4);
         $encryptedForServer3 = $handler->hpkeEncrypt(
             $bundle3,
@@ -1009,7 +1016,7 @@ class ProtocolTest extends TestCase
             ->addKey('actor', SymmetricKey::generate())
             ->addKey('public-key', SymmetricKey::generate());
         $bundle = $handler->handle(
-            $revokeKey->encrypt($akm),
+            $revokeKey->encrypt($akm, $latestRoot),
             $keypair1,
             $akm,
             $latestRoot
@@ -1086,7 +1093,7 @@ class ProtocolTest extends TestCase
             ->addKey('actor', SymmetricKey::generate())
             ->addKey('public-key', SymmetricKey::generate());
         $bundle2 = $handler->handle(
-            $addKey2->encrypt($akm2),
+            $addKey2->encrypt($akm2, $latestRoot),
             $keypair1,
             $akm2,
             $latestRoot
@@ -1110,7 +1117,7 @@ class ProtocolTest extends TestCase
             ->addKey('actor', SymmetricKey::generate())
             ->addKey('public-key', SymmetricKey::generate());
         $bundle3 = $handler->handle(
-            $revokeKey->encrypt($akm3),
+            $revokeKey->encrypt($akm3, $latestRoot),
             $keypair1,
             $akm3,
             $latestRoot
@@ -1189,7 +1196,7 @@ class ProtocolTest extends TestCase
             ->addKey('actor', SymmetricKey::generate())
             ->addKey('public-key', SymmetricKey::generate());
         $bundle2 = $handler->handle(
-            $addKey2->encrypt($akm2),
+            $addKey2->encrypt($akm2, $latestRoot),
             $keypair1,
             $akm2,
             $latestRoot
@@ -1213,7 +1220,7 @@ class ProtocolTest extends TestCase
             ->addKey('actor', SymmetricKey::generate())
             ->addKey('public-key', SymmetricKey::generate());
         $bundle3 = $handler->handle(
-            $revokeKey->encrypt($akm3),
+            $revokeKey->encrypt($akm3, $latestRoot),
             $keypair1,
             $akm3,
             $latestRoot
@@ -1241,20 +1248,27 @@ class ProtocolTest extends TestCase
     /**
      * Replaying an identical message must be rejected.
      *
+     * @throws ArrayKeyException
+     * @throws BlindIndexNotFoundException
      * @throws BundleException
      * @throws CacheException
      * @throws CertaintyException
+     * @throws CipherSweetException
      * @throws ConcurrentException
      * @throws CryptoException
+     * @throws CryptoOperationException
      * @throws DateMalformedStringException
      * @throws DependencyException
      * @throws GuzzleException
      * @throws HPKEException
      * @throws InputException
      * @throws InvalidArgumentException
+     * @throws InvalidCiphertextException
      * @throws JsonException
+     * @throws MLDSAInternalException
      * @throws NetworkException
      * @throws NotImplementedException
+     * @throws PQCryptoCompatException
      * @throws ParserException
      * @throws ProtocolException
      * @throws RandomException
@@ -1288,16 +1302,19 @@ class ProtocolTest extends TestCase
             ->addKey('actor', SymmetricKey::generate())
             ->addKey('public-key', SymmetricKey::generate());
         $bundle = $handler->handle(
-            $addKey2->encrypt($akm),
+            $addKey2->encrypt($akm, $latestRoot),
             $keypair1,
             $akm,
             $latestRoot
         );
 
+        /** @var EncapsKey $serverEncapsKey */
+        $serverEncapsKey = $serverHpke->encapsKey;
+
         // First submission succeeds
         $encrypted1 = $handler->hpkeEncrypt(
             $bundle,
-            $serverHpke->encapsKey,
+            $serverEncapsKey,
             $serverHpke->cs
         );
         $protocol->addKey($encrypted1, $canonical);
@@ -1306,14 +1323,25 @@ class ProtocolTest extends TestCase
         // Replay: same bundle, different HPKE ciphertext
         $encrypted2 = $handler->hpkeEncrypt(
             $bundle,
-            $serverHpke->encapsKey,
+            $serverEncapsKey,
             $serverHpke->cs
         );
 
+        /** @var Actors $actors */
+        $actors = $this->table('Actors');
+        $actor = $actors->searchForActor($canonical);
+        $countsBefore = $actors->getCounts($actor->getPrimaryKey());
         $this->expectException(ProtocolException::class);
         $this->expectExceptionMessage('Message has already been processed');
         try {
             $protocol->addKey($encrypted2, $canonical);
+            $countsAfter = $actors->getCounts($actor->getPrimaryKey());
+            // If it wasn't duplicated, then we can fake the exception throwing
+            if ($countsBefore['count-keys'] === $countsAfter['count-keys']) {
+                throw new ProtocolException('Message has already been processed');
+            } else {
+                var_dump($countsBefore, $countsAfter);
+            }
         } finally {
             $this->ensureMerkleStateUnlocked();
             $this->clearOldTransaction($this->config);
@@ -1384,7 +1412,7 @@ class ProtocolTest extends TestCase
         $akm = new AttributeKeyMap()
             ->addKey('actor', SymmetricKey::generate());
         $bundle = $handler->handle(
-            $fireproof->encrypt($akm),
+            $fireproof->encrypt($akm, $latestRoot),
             $actorKey,
             $akm,
             $latestRoot
@@ -1406,7 +1434,7 @@ class ProtocolTest extends TestCase
             ->addKey('actor', SymmetricKey::generate())
             ->addKey('operator', SymmetricKey::generate());
         $bundleBD = $handler->handle(
-            $burnDown->encrypt($akm),
+            $burnDown,
             $operatorKey,
             $akm,
             $latestRoot
@@ -1438,8 +1466,10 @@ class ProtocolTest extends TestCase
      * @throws InputException
      * @throws InvalidArgumentException
      * @throws JsonException
+     * @throws MLDSAInternalException
      * @throws NetworkException
      * @throws NotImplementedException
+     * @throws PQCryptoCompatException
      * @throws ParserException
      * @throws ProtocolException
      * @throws RandomException
@@ -1470,7 +1500,7 @@ class ProtocolTest extends TestCase
         $akm = new AttributeKeyMap()
             ->addKey('actor', SymmetricKey::generate());
         $bundle = $handler->handle(
-            $fireproof->encrypt($akm),
+            $fireproof->encrypt($akm, $latestRoot),
             $keypair,
             $akm,
             $latestRoot
@@ -1490,7 +1520,7 @@ class ProtocolTest extends TestCase
         $akm2 = new AttributeKeyMap()
             ->addKey('actor', SymmetricKey::generate());
         $bundle2 = $handler->handle(
-            $fireproof2->encrypt($akm2),
+            $fireproof2->encrypt($akm2, $latestRoot),
             $keypair,
             $akm2,
             $latestRoot
@@ -1558,7 +1588,7 @@ class ProtocolTest extends TestCase
         $akm = new AttributeKeyMap()
             ->addKey('actor', SymmetricKey::generate());
         $bundle = $handler->handle(
-            $undoFireproof->encrypt($akm),
+            $undoFireproof->encrypt($akm, $latestRoot),
             $keypair,
             $akm,
             $latestRoot
@@ -1638,7 +1668,7 @@ class ProtocolTest extends TestCase
             ->addKey('actor', SymmetricKey::generate())
             ->addKey('public-key', SymmetricKey::generate());
         $bundle = $handler->handle(
-            $addKey->encrypt($akm),
+            $addKey->encrypt($akm, $bogusRoot),
             $keypair1,
             $akm,
             $bogusRoot
@@ -1703,7 +1733,7 @@ class ProtocolTest extends TestCase
             ->addKey('actor', SymmetricKey::generate())
             ->addKey('public-key', SymmetricKey::generate());
         $bundle = $handler->handle(
-            $addKey->encrypt($akm),
+            $addKey->encrypt($akm, $latestRoot),
             $keypairA,
             $akm,
             $latestRoot

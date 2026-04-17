@@ -11,7 +11,7 @@ use FediE2EE\PKDServer\Exceptions\DependencyException;
 use FediE2EE\PKDServer\Meta\Route;
 use Override;
 use ParagonIE\ConstantTime\Base64UrlSafe;
-use ParagonIE\HPKE\KEM\DHKEM\EncapsKey;
+use ParagonIE\HPKE\KEM\PQKEM\EncapsKey;
 use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Http\Message\{
     ServerRequestInterface,
@@ -38,7 +38,7 @@ class ServerPublicKey implements RequestHandlerInterface
         $cs = $hpke->cs->getSuiteName();
         $encapsKey = $hpke->encapsKey;
         if (!($encapsKey instanceof EncapsKey)) {
-            throw new TypeError('Only DHKEM encaps keys are expected');
+            throw new TypeError('Only Post-Quantum KEM encaps keys are expected');
         }
         return $this->json([
             '!pkd-context' => 'fedi-e2ee:v1/api/server-public-key',
