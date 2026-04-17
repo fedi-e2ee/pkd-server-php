@@ -33,16 +33,14 @@ jobs:
           persist-credentials: false
 
       - name: Setup PHP
-        uses: shivammathur/setup-php@db91e1a0e48e84637d325a7ee4d2677e146ceec4  # v2.36.0
+        uses: shivammathur/setup-php@accd6127cb78bee3e8082180cb391013d204ef9f  # v2.37.0
         with:
           php-version: ${{ matrix.php-versions }}
           coverage: pcov
           ini-values: >-
             opcache.enable_cli=1,
             opcache.jit=tracing,
-            opcache.jit_buffer_size=128M,
-            error_reporting=-1,
-            display_errors=On
+            opcache.jit_buffer_size=128M
 
       - name: Add Infection as dependency
         run: composer require --dev infection/infection
