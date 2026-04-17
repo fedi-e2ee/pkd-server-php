@@ -19,12 +19,15 @@ CREATE TABLE IF NOT EXISTS pkd_merkle_leaves (
     publickeyhash TEXT, -- SHA256 of public key that committed to merkle tree
     contenthash TEXT, -- SHA256 of contents. Not the leaf hash.
     signature TEXT, -- MLDSA-44 signature of contenthash and publickey
+    signature_digest TEXT GENERATED ALWAYS AS (
+        encode(sha256(signature::bytea), 'hex')
+    ) STORED,
     contents TEXT, -- Protocol Message being hashes
     inclusionproof TEXT, -- JSON: encodes a proof of inclusion
     wrappedkeys TEXT NULL, -- Optional: Wrapped symmetric keys
     created TIMESTAMP DEFAULT NOW()
 );
-CREATE UNIQUE INDEX ON pkd_merkle_leaves (publickeyhash, contenthash, signature);
+CREATE UNIQUE INDEX ON pkd_merkle_leaves (publickeyhash, contenthash, signature_digest);
 
 -- Transparency Log Witnesses
 CREATE TABLE IF NOT EXISTS pkd_merkle_witnesses (
