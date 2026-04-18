@@ -135,7 +135,7 @@ trait NetworkTrait
     /**
      * @return array<int, int>
      */
-    public function stringToByteArray(string $str): array
+    public static function stringToByteArray(string $str): array
     {
         $values = unpack('C*', $str);
         if ($values === false) {

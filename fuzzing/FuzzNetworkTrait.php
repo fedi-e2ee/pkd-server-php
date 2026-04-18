@@ -131,7 +131,7 @@ $config->setTarget(function (string $input) use ($testClass): void {
 
     // Test stringToByteArray and byteArrayToString round-trip
     try {
-        $array = $testClass->stringToByteArray($input);
+        $array = $testClass::stringToByteArray($input);
         $result = $testClass->byteArrayToString($array);
         assert($result === $input);
     } catch (TypeError) {
