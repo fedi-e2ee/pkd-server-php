@@ -874,7 +874,7 @@ Returns `string`
 
 #### [`stringToByteArray`](../../../src/Traits/NetworkTrait.php#L138-L145)
 
-Returns `array`
+static · Returns `array`
 
 **Parameters:**
 

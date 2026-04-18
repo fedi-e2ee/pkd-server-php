@@ -221,7 +221,7 @@ Returns `string`
 
 #### [`stringToByteArray`](../../../src/RateLimit/DefaultRateLimiting.php#L138-L145)
 
-Returns `array`
+static · Returns `array`
 
 **Parameters:**
 
