@@ -332,6 +332,10 @@ class WebFinger
      */
     protected function pemToPublicKey(string $pem): PublicKey
     {
-        return PublicKey::importPem($pem);
+        try {
+            return PublicKey::importPem($pem);
+        } catch (CryptoException) {
+            return PublicKey::importPem($pem, 'ed25519');
+        }
     }
 }

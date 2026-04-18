@@ -136,6 +136,45 @@ class ProtocolTest extends TestCase
     }
 
     /**
+     * @throws CacheException
+     * @throws CertaintyException
+     * @throws CryptoException
+     * @throws DependencyException
+     * @throws GuzzleException
+     * @throws InputException
+     * @throws InvalidArgumentException
+     * @throws JsonException
+     * @throws MLDSAInternalException
+     * @throws NetworkException
+     * @throws NotImplementedException
+     * @throws PQCryptoCompatException
+     * @throws RandomException
+     * @throws SodiumException
+     * @throws TableException
+     */
+    public function testAddKeyRejectsEd25519ForPublicKeyDirectory(): void
+    {
+        $this->clearOldTransaction($this->config);
+        $this->truncateTables();
+        [, $canonical] = $this->makeDummyActor();
+
+        $ed25519Key = SecretKey::generate('ed25519');
+        /** @var MerkleState $merkleState */
+        $merkleState = $this->table('MerkleState');
+        $latestRoot = $merkleState->getLatestRoot();
+
+        $addKey = new AddKey($canonical, $ed25519Key->getPublicKey());
+        $akm = (new AttributeKeyMap())
+            ->addKey('actor', SymmetricKey::generate())
+            ->addKey('public-key', SymmetricKey::generate());
+        $encryptedMsg = $addKey->encrypt($akm, $latestRoot);
+
+        $this->expectException(CryptoException::class);
+        $this->expectExceptionMessage('The ed25519 is not permitted for v1 of the public key directory');
+        (new Handler())->handle($encryptedMsg, $ed25519Key, $akm, $latestRoot);
+    }
+
+    /**
      * @throws CryptoException
      * @throws DependencyException
      * @throws JsonException
