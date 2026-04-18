@@ -60,14 +60,14 @@ if (!($GLOBALS['pkdConfig'] instanceof ServerConfig)) {
         }
         $temp = __DIR__ . '/tmp/db/' . sodium_bin2hex(random_bytes(16)) . '-test.db';
         $mainPDO = new PDO('sqlite:' . $temp);
-        $mainPDO->exec('PRAGMA jounral_mode=WAL');
+        $mainPDO->exec('PRAGMA journal_mode=WAL');
         $mainPDO->exec('PRAGMA busy_timeout=5000');
         $pkdConfig->withDatabase(new EasyDBCache($mainPDO));
         chmod($temp, 0777);
 
         // Create second DB connection for testing concurrency
         $secondPDO = new PDO('sqlite:' . $temp);
-        $secondPDO->exec('PRAGMA jounral_mode=WAL');
+        $secondPDO->exec('PRAGMA journal_mode=WAL');
         $secondPDO->exec('PRAGMA busy_timeout=5000');
         $GLOBALS['PKD_PHPUNIT_DB'] = new EasyDBCache($secondPDO);
 

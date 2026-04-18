@@ -259,6 +259,7 @@ class KeyWrappingTest extends TestCase
         // 1. Setup a leaf
         $db->insert('pkd_merkle_leaves', [
             'root' => 'root-multi',
+            'prev_root' => 'prev-root-multi',
             'contents' => '...',
             'wrappedkeys' => '...',
             'created' => (new DateTimeImmutable())->format(DateTimeImmutable::ATOM),

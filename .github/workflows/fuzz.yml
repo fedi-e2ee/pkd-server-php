@@ -24,14 +24,30 @@ jobs:
       - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8  # v6.0.1
         with:
           persist-credentials: false
+      - name: Install Rust toolchain
+        if: matrix.ext-pqcrypto
+        uses: dtolnay/rust-toolchain@3c5f7ea28cd621ae0bf5283f0e981fb97b8a7af9  # nightly
+        with:
+          toolchain: nightly
+          components: rustfmt
       - name: Setup PHP
         uses: shivammathur/setup-php@accd6127cb78bee3e8082180cb391013d204ef9f  # v2.37.0
         with:
           php-version: '8.4'
-          ini-values: >-
-            opcache.enable_cli=1,
-            error_reporting=-1,
-            display_errors=On
+      - name: Build and install ext-pqcrypto
+        shell: bash
+        run: |
+          git clone --depth 1 https://github.com/paragonie/ext-pqcrypto.git "$RUNNER_TEMP/ext-pqcrypto"
+          cd "$RUNNER_TEMP/ext-pqcrypto"
+          cargo build --release
+          EXT_DIR="$(php -r "echo ini_get('extension_dir');")"
+          if [[ "$RUNNER_OS" == "Windows" ]]; then
+            cp target/release/pqcrypto.dll "$EXT_DIR/pqcrypto.dll"
+          else
+            sudo cp target/release/libpqcrypto.so "$EXT_DIR/pqcrypto.so"
+          fi
+          echo "extension=pqcrypto" >> "$(php -r "echo php_ini_loaded_file();")"
+          php -m | grep pqcrypto
       - name: Setup PHP-Fuzzer
         run: composer global require --dev nikic/php-fuzzer
       - name: Install dependencies

@@ -251,8 +251,18 @@ class MerkleState extends Table
                 if ($this->db->inTransaction()) {
                     $this->db->rollBack();
                 }
+                if ($this->isPrevRootCollision($e)) {
+                    if ($attempt < $maxRetries - 1) {
+                        $attempt++;
+                        usleep(random_int(10000, 1000000)); // Random backoff 10-1000ms
+                        continue;
+                    }
+                    throw new ConcurrentException(
+                        'Lost the Merkle append race after exhausting retries'
+                    );
+                }
 
-                // Unique constraint violation = duplicate message replay
+                // Any other unique constraint violation = duplicate message replay
                 if ($this->isUniqueConstraintViolation($e)) {
                     throw new ProtocolException(
                         'Message has already been processed'
@@ -304,6 +314,20 @@ class MerkleState extends Table
                 $e->getMessage(),
                 'UNIQUE constraint failed'
             ),
+            default => false,
+        };
+    }
+
+    private function isPrevRootCollision(PDOException $e): bool
+    {
+        if (!$this->isUniqueConstraintViolation($e)) {
+            return false;
+        }
+        $message = $e->getMessage();
+        return match ($this->db->getDriver()) {
+            'pgsql' => str_contains($message, 'prev_root'),
+            'mysql' => str_contains($message, 'uniq_merkle_leaves_prev_root') || str_contains($message, 'prev_root'),
+            'sqlite' => str_contains($message, 'pkd_merkle_leaves.prev_root'),
             default => false,
         };
     }
@@ -509,6 +533,7 @@ class MerkleState extends Table
         // Deserialize state:
         $incremental = IncrementalTree::fromJson(Base64UrlSafe::decodeNoPadding($state));
 
+        $prevRoot = $incremental->getEncodedRoot();
         // Append this leaf to the tree:
         $rawLeaf = $leaf->serializeForMerkle();
         $incremental->addLeaf($rawLeaf);
@@ -540,6 +565,7 @@ class MerkleState extends Table
                 'inclusionproof' => self::jsonEncode($inclusion),
                 'wrappedkeys' => $leaf->wrappedKeys,
                 'root' => $root,
+                'prev_root' => $prevRoot,
             ],
             $sequenceId
         );

@@ -16,6 +16,7 @@ CREATE TABLE IF NOT EXISTS pkd_merkle_state (
 CREATE TABLE IF NOT EXISTS pkd_merkle_leaves (
     merkleleafid BIGSERIAL PRIMARY KEY,
     root TEXT UNIQUE,
+    prev_root TEXT NOT NULL UNIQUE, -- encoded Merkle root that this leaf extends; prevents tree forks
     publickeyhash TEXT, -- SHA256 of public key that committed to merkle tree
     contenthash TEXT, -- SHA256 of contents. Not the leaf hash.
     signature TEXT, -- MLDSA-44 signature of contenthash and publickey
