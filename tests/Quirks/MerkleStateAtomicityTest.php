@@ -165,6 +165,9 @@ class MerkleStateAtomicityTest extends TestCase
         $config1 = $this->config();
         $config2 = clone $config1;
         $config2->withDatabase($GLOBALS['PKD_PHPUNIT_DB']);
+        if ($config1->getDb()->getDriver() === 'sqlite') {
+            $this->markTestSkipped('skipping this test suite on sqlite');
+        }
 
         $table1 = new MerkleState($config1);
         $table2 = new MerkleState($config2);
