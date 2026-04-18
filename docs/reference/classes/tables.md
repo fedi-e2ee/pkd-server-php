@@ -391,7 +391,7 @@ Returns `int`
 
 **Throws:** `DependencyException`, `SodiumException`
 
-#### [`insertLeaf`](../../../src/Tables/MerkleState.php#L231-L295)
+#### [`insertLeaf`](../../../src/Tables/MerkleState.php#L231-L305)
 
 **API** · Returns `bool`
 
@@ -405,7 +405,7 @@ Insert leaf with retry logic for deadlocks
 
 **Throws:** `ConcurrentException`, `CryptoException`, `DependencyException`, `NotImplementedException`, `RandomException`, `SodiumException`
 
-#### [`getLeafByRoot`](../../../src/Tables/MerkleState.php#L314-L330)
+#### [`getLeafByRoot`](../../../src/Tables/MerkleState.php#L338-L354)
 
 **API** · Returns `?FediE2EE\PKDServer\Tables\Records\MerkleLeaf`
 
@@ -413,7 +413,7 @@ Insert leaf with retry logic for deadlocks
 
 - `$root`: `string`
 
-#### [`getLeafByID`](../../../src/Tables/MerkleState.php#L335-L351)
+#### [`getLeafByID`](../../../src/Tables/MerkleState.php#L359-L375)
 
 **API** · Returns `?FediE2EE\PKDServer\Tables\Records\MerkleLeaf`
 
@@ -421,7 +421,7 @@ Insert leaf with retry logic for deadlocks
 
 - `$primaryKey`: `int`
 
-#### [`getHashesSince`](../../../src/Tables/MerkleState.php#L391-L435)
+#### [`getHashesSince`](../../../src/Tables/MerkleState.php#L415-L459)
 
 **API** · Returns `array`
 
