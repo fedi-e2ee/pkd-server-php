@@ -8,6 +8,7 @@ CREATE TABLE IF NOT EXISTS pkd_merkle_state (
 CREATE TABLE IF NOT EXISTS pkd_merkle_leaves (
     merkleleafid BIGINT AUTO_INCREMENT PRIMARY KEY,
     root TEXT,
+    prev_root VARCHAR(255) NOT NULL, -- encoded Merkle root that this leaf extends; prevents tree forks
     publickeyhash TEXT, -- SHA256 of public key that committed to merkle tree
     contenthash TEXT, -- SHA256 of contents. Not the leaf hash.
     signature TEXT, -- MLDSA-44 signature of contenthash and publickey
@@ -15,8 +16,9 @@ CREATE TABLE IF NOT EXISTS pkd_merkle_leaves (
     inclusionproof TEXT, -- JSON: encodes a proof of inclusion
     wrappedkeys TEXT NULL, -- Optional: Wrapped symmetric keys
     created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    UNIQUE KEY (root(255)),
-    UNIQUE KEY (publickeyhash(255), contenthash(255), signature(255))
+    UNIQUE KEY uniq_merkle_leaves_root (root(255)),
+    UNIQUE KEY uniq_merkle_leaves_prev_root (prev_root),
+    UNIQUE KEY uniq_merkle_leaves_msg (publickeyhash(255), contenthash(255), signature(255))
 );
 
 -- Transparency Log Witnesses
