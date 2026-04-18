@@ -35,6 +35,7 @@ use FediE2EE\PKDServer\Dependency\{
 };
 use FediE2EE\PKDServer\Exceptions\{
     CacheException,
+    ConcurrentException,
     DependencyException,
     ProtocolException,
     TableException
@@ -69,6 +70,9 @@ use FediE2EE\PKDServer\Tables\Records\{
 use FediE2EE\PKDServer\Tests\HttpTestTrait;
 use FediE2EE\PKDServer\Traits\TOTPTrait;
 use GuzzleHttp\Exception\GuzzleException;
+use ParagonIE\HPKE\KEM\PQKEM\EncapsKey;
+use ParagonIE\PQCrypto\Exception\MLDSAInternalException;
+use ParagonIE\PQCrypto\Exception\PQCryptoCompatException;
 use GuzzleHttp\Psr7\{
     Response,
     ServerRequest
@@ -132,6 +136,7 @@ class BurnDownTest extends TestCase
      * @throws CacheException
      * @throws CertaintyException
      * @throws CipherSweetException
+     * @throws ConcurrentException
      * @throws CryptoException
      * @throws CryptoJsonException
      * @throws CryptoOperationException
@@ -143,8 +148,10 @@ class BurnDownTest extends TestCase
      * @throws InvalidArgumentException
      * @throws InvalidCiphertextException
      * @throws JsonException
+     * @throws MLDSAInternalException
      * @throws NetworkException
      * @throws NotImplementedException
+     * @throws PQCryptoCompatException
      * @throws ParserException
      * @throws ProtocolException
      * @throws RandomException
@@ -154,22 +161,102 @@ class BurnDownTest extends TestCase
      */
     public function testHandle(): void
     {
+        $this->assertSuccessfulBurnDownRequest(
+            SecretKey::generate(),
+            SecretKey::generate()
+        );
+    }
+
+    /**
+     * @throws ArrayKeyException
+     * @throws BlindIndexNotFoundException
+     * @throws BundleException
+     * @throws CacheException
+     * @throws CertaintyException
+     * @throws CipherSweetException
+     * @throws ConcurrentException
+     * @throws CryptoException
+     * @throws CryptoJsonException
+     * @throws CryptoOperationException
+     * @throws DateMalformedStringException
+     * @throws DependencyException
+     * @throws GuzzleException
+     * @throws HPKEException
+     * @throws InputException
+     * @throws InvalidArgumentException
+     * @throws InvalidCiphertextException
+     * @throws JsonException
+     * @throws MLDSAInternalException
+     * @throws NetworkException
+     * @throws NotImplementedException
+     * @throws PQCryptoCompatException
+     * @throws ParserException
+     * @throws ProtocolException
+     * @throws RandomException
+     * @throws ReflectionException
+     * @throws SodiumException
+     * @throws TableException
+     */
+    public function testHandleAllowsEd25519HttpSignature(): void
+    {
+        $this->assertSuccessfulBurnDownRequest(
+            SecretKey::generate(),
+            SecretKey::generate('ed25519')
+        );
+    }
+
+    /**
+     * @throws ArrayKeyException
+     * @throws BlindIndexNotFoundException
+     * @throws BundleException
+     * @throws CacheException
+     * @throws CertaintyException
+     * @throws CipherSweetException
+     * @throws ConcurrentException
+     * @throws CryptoException
+     * @throws CryptoJsonException
+     * @throws CryptoOperationException
+     * @throws DateMalformedStringException
+     * @throws DependencyException
+     * @throws GuzzleException
+     * @throws HPKEException
+     * @throws InputException
+     * @throws InvalidArgumentException
+     * @throws InvalidCiphertextException
+     * @throws JsonException
+     * @throws MLDSAInternalException
+     * @throws NetworkException
+     * @throws NotImplementedException
+     * @throws PQCryptoCompatException
+     * @throws ParserException
+     * @throws ProtocolException
+     * @throws RandomException
+     * @throws ReflectionException
+     * @throws SodiumException
+     * @throws TableException
+     */
+    private function assertSuccessfulBurnDownRequest(
+        SecretKey $operatorProtocolKey,
+        SecretKey $httpSignatureKey
+    ): void {
         // Create two actors on the SAME domain: one to burn down, one as operator
         // Per spec, BurnDown must be from an operator on the same instance as the target
         [$actorHandle, $canonActor] = $this->makeDummyActor('text-burndown.example.com');
         [$operatorHandle, $canonOperator] = $this->makeDummyActor('text-burndown.example.com');
 
         $actorKey = SecretKey::generate();
-        $operatorKey = SecretKey::generate();
 
         $config = $this->getConfig();
         $this->clearOldTransaction($config);
+        $this->truncateTables();
 
         $protocol = new Protocol($config);
 
         /** @var MerkleState $merkleState */
         $merkleState = $this->table('MerkleState');
         $serverHpke = $config->getHPKE();
+        /** @var EncapsKey $encapsKey */
+        $encapsKey = $serverHpke->encapsKey;
         $handler = new Handler();
 
         $this->assertNotInTransaction();
@@ -180,18 +267,23 @@ class BurnDownTest extends TestCase
             ->addKey('actor', SymmetricKey::generate())
             ->addKey('public-key', SymmetricKey::generate());
         $bundle1 = $handler->handle($addKey1->encrypt($akm1, $latestRoot1), $actorKey, $akm1, $latestRoot1);
-        $encrypted1 = $handler->hpkeEncrypt($bundle1, $serverHpke->encapsKey, $serverHpke->cs);
+        $encrypted1 = $handler->hpkeEncrypt($bundle1, $encapsKey, $serverHpke->cs);
         $protocol->addKey($encrypted1, $canonActor);
         $this->assertNotInTransaction();
 
         // 2. Add key for the operator
         $latestRoot2 = $merkleState->getLatestRoot();
-        $addKey2 = new AddKey($canonOperator, $operatorKey->getPublicKey());
+        $addKey2 = new AddKey($canonOperator, $operatorProtocolKey->getPublicKey());
         $akm2 = (new AttributeKeyMap())
             ->addKey('actor', SymmetricKey::generate())
             ->addKey('public-key', SymmetricKey::generate());
-        $bundle2 = $handler->handle($addKey2->encrypt($akm2, $latestRoot2), $operatorKey, $akm2, $latestRoot2);
-        $encrypted2 = $handler->hpkeEncrypt($bundle2, $serverHpke->encapsKey, $serverHpke->cs);
+        $bundle2 = $handler->handle(
+            $addKey2->encrypt($akm2, $latestRoot2),
+            $operatorProtocolKey,
+            $akm2,
+            $latestRoot2
+        );
+        $encrypted2 = $handler->hpkeEncrypt($bundle2, $encapsKey, $serverHpke->cs);
         $protocol->addKey($encrypted2, $canonOperator);
         $this->assertNotInTransaction();
 
@@ -237,7 +329,7 @@ class BurnDownTest extends TestCase
         $akm3 = (new AttributeKeyMap())
             ->addKey('actor', SymmetricKey::generate())
             ->addKey('operator', SymmetricKey::generate());
-        $bundle3 = $handler->handle($burnDown, $operatorKey, $akm3, $latestRoot3);
+        $bundle3 = $handler->handle($burnDown, $operatorProtocolKey, $akm3, $latestRoot3);
 
         // OTP is a top-level Bundle field (not part of the signed/encrypted message)
         $bundleData = json_decode($bundle3->toJson(), true);
@@ -252,7 +344,7 @@ class BurnDownTest extends TestCase
         $request = $this->createSignedRequest(
             '/api/burndown',
             $activityStream,
-            $operatorKey,
+            $httpSignatureKey,
             $canonOperator . '#main-key'
         );
 
@@ -276,7 +368,7 @@ class BurnDownTest extends TestCase
                 'publicKey' => [
                     'id' => $canonOperator . '#main-key',
                     'owner' => $canonOperator,
-                    'publicKeyPem' => $operatorKey->getPublicKey()->encodePem()
+                    'publicKeyPem' => $httpSignatureKey->getPublicKey()->encodePem()
                 ]
             ]))
         ]));
