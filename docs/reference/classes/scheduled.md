@@ -25,7 +25,7 @@ Namespace: `FediE2EE\PKDServer\Scheduled`
 
 ### Methods
 
-#### [`__construct`](../../../src/Scheduled/ASQueue.php#L45-L54)
+#### [`__construct`](../../../src/Scheduled/ASQueue.php#L56-L65)
 
 Returns `void`
 
@@ -35,7 +35,7 @@ Returns `void`
 
 **Throws:** `CertaintyException`, `DependencyException`, `SodiumException`
 
-#### [`run`](../../../src/Scheduled/ASQueue.php#L66-L101)
+#### [`run`](../../../src/Scheduled/ASQueue.php#L77-L112)
 
 Returns `void`
 
