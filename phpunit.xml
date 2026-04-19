@@ -16,6 +16,9 @@
             <directory>tests</directory>
         </testsuite>
     </testsuites>
+    <php>
+        <const name="IS_TESTING" value="true"/>
+    </php>
 
     <source ignoreIndirectDeprecations="true" restrictNotices="true" restrictWarnings="true">
         <include>

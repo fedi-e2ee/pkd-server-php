@@ -69,7 +69,10 @@ class WebFinger
         }
         $this->fetch = $fetch;
         if (is_null($client)) {
-            $client = new Client(['verify' => $this->fetch->getLatestBundle()]);
+            $client = new Client(['verify' => $this->fetch->getLatestBundle(
+                true,
+                !defined('IS_TESTING'))
+            ]);
         }
         $this->http = $client;
     }

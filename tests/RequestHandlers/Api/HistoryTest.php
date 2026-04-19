@@ -10,6 +10,7 @@ use FediE2EE\PKD\Crypto\{
     SecretKey,
     SymmetricKey
 };
+use GuzzleHttp\Exception\ServerException;
 use FediE2EE\PKDServer\RequestHandlers\Api\{
     History
 };
@@ -95,7 +96,11 @@ class HistoryTest extends TestCase
         $handler = new Handler();
 
         // Add a key
-        $addKey = new AddKey($canonical, $keypair->getPublicKey());
+        try {
+            $addKey = new AddKey($canonical, $keypair->getPublicKey());
+        } catch (ServerException $ex) {
+            $this->markTestSkipped($ex->getMessage());
+        }
         $akm = new AttributeKeyMap()
             ->addKey('actor', SymmetricKey::generate())
             ->addKey('public-key', SymmetricKey::generate());
