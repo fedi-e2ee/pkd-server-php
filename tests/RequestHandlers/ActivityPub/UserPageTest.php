@@ -4,14 +4,21 @@ namespace FediE2EE\PKDServer\Tests\RequestHandlers\ActivityPub;
 
 use FediE2EE\PKD\Crypto\Exceptions\CryptoException;
 use FediE2EE\PKD\Crypto\PublicKey;
+use FediE2EE\PKDServer\ActivityPub\WebFinger;
+use FediE2EE\PKDServer\AppCache;
 use FediE2EE\PKDServer\Exceptions\DependencyException;
 use FediE2EE\PKDServer\RequestHandlers\ActivityPub\UserPage;
+use FediE2EE\PKDServer\ServerConfig;
 use FediE2EE\PKDServer\Tests\HttpTestTrait;
 use FediE2EE\PKDServer\Traits\ConfigTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 use ReflectionException;
 
+#[UsesClass(ServerConfig::class)]
+#[UsesClass(AppCache::class)]
+#[UsesClass(WebFinger::class)]
 #[CoversClass(UserPage::class)]
 class UserPageTest extends TestCase
 {
