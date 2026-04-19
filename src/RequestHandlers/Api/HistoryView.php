@@ -97,8 +97,8 @@ class HistoryView implements RequestHandlerInterface, HttpCacheInterface
                 return [
                     '!pkd-context' => 'fedi-e2ee:v1/api/history/view',
                     'created' => $leaf->created,
-                    'dir-publickeyhash' => Base64UrlSafe::encodeUnpadded(sodium_bin2hex($leaf->publicKeyHash)),
-                    'dir-signature' => Base64UrlSafe::encodeUnpadded(sodium_bin2hex($leaf->signature)),
+                    'dir-publickeyhash' => Base64UrlSafe::encodeUnpadded(sodium_hex2bin($leaf->publicKeyHash)),
+                    'dir-signature' => $leaf->signature,
                     'encrypted-message' => $leaf->contents,
                     'inclusion-proof' => $leaf->inclusionProof,
                     'message' => $message,

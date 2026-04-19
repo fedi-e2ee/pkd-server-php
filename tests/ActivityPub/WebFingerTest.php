@@ -517,9 +517,12 @@ class WebFingerTest extends TestCase
         $config = $this->getConfig();
         $container = [];
         $history = Middleware::history($container);
+        $canonical = $expect === 'https://furry.engineer/users/soatok/inbox'
+            ? 'https://furry.engineer/users/soatok'
+            : 'https://mastodon.social/ap/users/115428847654719749';
         $mock = new MockHandler([
             new Response(200, ['Content-Type' => 'application/jrd+json'], json_encode([
-                'links' => [['rel' => 'self', 'type' => 'application/activity+json', 'href' => str_replace('.json', '', $expect)]]
+                'links' => [['rel' => 'self', 'type' => 'application/activity+json', 'href' => $canonical]]
             ])),
             new Response(200, ['Content-Type' => 'application/activity+json'], json_encode([
                 'inbox' => $expect
@@ -535,10 +538,16 @@ class WebFingerTest extends TestCase
 
         // Verify requested URL
         $this->assertCount(2, $container);
+        $actorFetch = $container[1]['request'];
         $this->assertSame(
-            str_replace('.json', '', $expect) . '.json',
-            (string) $container[1]['request']->getUri(),
-            'Second request should be to the canonical URL + .json'
+            $canonical,
+            (string) $actorFetch->getUri(),
+            'Second request should be to the canonical actor URL without .json suffix'
+        );
+        $this->assertSame(
+            'application/activity+json',
+            $actorFetch->getHeaderLine('Accept'),
+            'Accept header must be emitted for ActivityPub content negotiation'
         );
     }
 
@@ -551,7 +560,9 @@ class WebFingerTest extends TestCase
      */
     public function testFetch(): void
     {
-        $jsonStr = json_encode(['links' => [['rel' => 'self', 'type' => 'application/activity+json', 'href' => 'https://example.com/users/alice']]]);
+        $jsonStr = json_encode(['links' => [
+            ['rel' => 'self', 'type' => 'application/activity+json', 'href' => 'https://example.com/users/alice']
+        ]]);
         $mockHttp = $this->getMockClient([
             new Response(
                 200,
@@ -631,23 +642,38 @@ class WebFingerTest extends TestCase
      */
     public function testAcceptHeader(): void
     {
-        $mockHttp = $this->createMock(Client::class);
-        $mockHttp->expects($this->once())
-            ->method('get')
-            ->with($this->anything(), $this->callback(function ($options) {
-                $this->assertArrayHasKey('Accept', $options);
-                $this->assertSame('application/activity+json', $options['Accept']);
-                return true;
-            }))
-            ->willReturn(new Response(
+        $container = [];
+        $history = Middleware::history($container);
+        $mock = new MockHandler([
+            new Response(
                 200,
-                ['Content-Type' => 'application/json'],
+                ['Content-Type' => 'application/activity+json'],
                 '{"inbox":"https://example.com/users/alice/inbox"}'
-            ));
+            ),
+        ]);
+        $stack = HandlerStack::create($mock);
+        $stack->push($history);
+        $mockHttp = new Client(['handler' => $stack]);
 
         $webFinger = new WebFinger($this->getConfig(), $mockHttp);
-        $webFinger->setCanonicalForTesting('https://example.com/users/alice', 'https://example.com/users/alice');
+        $webFinger->setCanonicalForTesting(
+            'https://example.com/users/alice',
+            'https://example.com/users/alice'
+        );
         $webFinger->getInboxUrl('https://example.com/users/alice');
+
+        $this->assertCount(1, $container);
+        $outgoing = $container[0]['request'];
+        $this->assertSame(
+            'https://example.com/users/alice',
+            (string) $outgoing->getUri(),
+            'Request must target the canonical URL (no .json suffix hack)'
+        );
+        $this->assertSame(
+            'application/activity+json',
+            $outgoing->getHeaderLine('Accept'),
+            'Accept header must reach the wire'
+        );
     }
 
     /**

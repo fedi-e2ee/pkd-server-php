@@ -191,10 +191,7 @@ class WebFinger
     {
         $url = $this->inboxCache->cache($actorUrl, function () use ($actorUrl) {
             $canonicalUrl = $this->canonicalize($actorUrl);
-            $raw = $this->http->get(
-                $canonicalUrl . '.json',
-                ['Accept' => 'application/activity+json']
-            );
+            $raw = $this->http->get($canonicalUrl, ['headers' => ['Accept' => 'application/activity+json']]);
             $decoded = json_decode($raw->getBody()->getContents());
             if (!is_object($decoded) || !property_exists($decoded, 'inbox')) {
                 throw new NetworkException('Could not decode ' . $canonicalUrl);
