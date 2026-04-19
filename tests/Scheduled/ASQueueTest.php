@@ -14,13 +14,13 @@ use FediE2EE\PKDServer\Tests\HttpTestTrait;
 use ParagonIE\Certainty\Exception\CertaintyException;
 use ParagonIE\ConstantTime\Base64;
 use ParagonIE\PQCrypto\Exception\MLDSAInternalException;
-use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\TestCase;
 use ReflectionException;
 use ReflectionMethod;
 use SodiumException;
 
-#[CoversClass(ASQueue::class)]
+#[CoversNothing]
 class ASQueueTest extends TestCase
 {
     use HttpTestTrait;
