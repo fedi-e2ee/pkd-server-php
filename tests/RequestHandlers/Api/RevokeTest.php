@@ -4,10 +4,7 @@ namespace FediE2EE\PKDServer\Tests\RequestHandlers\Api;
 
 use Exception;
 use FediE2EE\PKD\Crypto\Exceptions\BundleException;
-use FediE2EE\PKD\Crypto\Protocol\Actions\{
-    AddKey,
-    RevokeKeyThirdParty
-};
+use FediE2EE\PKD\Crypto\Protocol\Actions\AddKey;
 use FediE2EE\PKD\Crypto\{AttributeEncryption\AttributeKeyMap,
     Exceptions\InputException,
     Protocol\Handler,
@@ -44,6 +41,7 @@ use FediE2EE\PKDServer\Tables\Records\{
 };
 use FediE2EE\PKDServer\Tests\HttpTestTrait;
 use FediE2EE\PKDServer\Traits\ConfigTrait;
+use GuzzleHttp\Exception\ServerException;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\{
@@ -102,7 +100,11 @@ class RevokeTest extends TestCase
         $handler = new Handler();
 
         // Add a key
-        $addKey = new AddKey($canonical, $keypair->getPublicKey());
+        try {
+            $addKey = new AddKey($canonical, $keypair->getPublicKey());
+        } catch (ServerException $ex) {
+            $this->markTestSkipped($ex->getMessage());
+        }
         $akm = (new AttributeKeyMap())
             ->addKey('actor', SymmetricKey::generate())
             ->addKey('public-key', SymmetricKey::generate());

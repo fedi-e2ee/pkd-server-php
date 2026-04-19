@@ -6,13 +6,20 @@ use FediE2EE\PKDServer\ActivityPub\{
     ActivityStream,
     WebFinger
 };
-use FediE2EE\PKD\Crypto\Exceptions\NetworkException;
+use FediE2EE\PKD\Crypto\Exceptions\{
+    CryptoException,
+    HttpSignatureException,
+    NetworkException
+};
+use FediE2EE\PKD\Crypto\HttpSignature;
 use FediE2EE\PKDServer\Exceptions\{
     CacheException,
     DependencyException,
     ProtocolException
 };
 use JsonException;
+use ParagonIE\PQCrypto\Exception\MLDSAInternalException;
+use ParagonIE\PQCrypto\Exception\PQCryptoCompatException;
 use FediE2EE\PKDServer\{
     Protocol,
     ServerConfig
@@ -24,11 +31,15 @@ use GuzzleHttp\{
     Psr7\Request
 };
 use ParagonIE\Certainty\Exception\CertaintyException;
+use ParagonIE\ConstantTime\Base64;
 use ParagonIE\EasyDB\EasyDB;
+use Psr\Http\Message\RequestInterface;
 use Psr\SimpleCache\InvalidArgumentException;
+use Random\RandomException;
 use SodiumException;
 use Throwable;
-use function defined, is_null;
+use TypeError;
+use function defined, hash, is_null;
 
 class ASQueue
 {
@@ -158,11 +169,16 @@ class ASQueue
      * @param array<string, mixed> $object
      *
      * @throws CacheException
+     * @throws CryptoException
      * @throws DependencyException
      * @throws GuzzleException
+     * @throws HttpSignatureException
      * @throws InvalidArgumentException
      * @throws JsonException
+     * @throws MLDSAInternalException
      * @throws NetworkException
+     * @throws PQCryptoCompatException
+     * @throws RandomException
      * @throws SodiumException
      */
     protected function sendDM(string $actor, string $inReplyTo, array $object): void
@@ -186,13 +202,45 @@ class ASQueue
         }
         $actorInbox = $this->webFinger->getInboxUrl($actor);
 
-        // Create and send a request:
+        $request = $this->buildSignedPost($actorInbox, $encoded);
+        $this->http->send($request);
+    }
+
+    /**
+     * @throws CryptoException
+     * @throws DependencyException
+     * @throws HttpSignatureException
+     * @throws MLDSAInternalException
+     * @throws PQCryptoCompatException
+     * @throws RandomException
+     * @throws SodiumException
+     */
+    protected function buildSignedPost(string $inboxUrl, string $body): RequestInterface
+    {
+        $params = $this->config()->getParams();
+        $keyId = 'https://' . $params->hostname . '/users/' . $params->actorUsername . '#main-key';
+
+        $digest = 'sha-512=:' . Base64::encode(hash('sha512', $body, true)) . ':';
         $request = new Request(
             'POST',
-            $actorInbox,
-            ['Accept' => 'application/activity+json'],
-            $encoded
+            $inboxUrl,
+            [
+                'Accept' => 'application/activity+json',
+                'Content-Type' => 'application/activity+json',
+                'Content-Digest' => $digest,
+            ],
+            $body
         );
-        $this->http->send($request);
+
+        $signed = (new HttpSignature())->sign(
+            $this->config()->getSigningKeys()->secretKey,
+            $request,
+            ['@method', '@path', 'content-type', 'content-digest'],
+            $keyId
+        );
+        if (!($signed instanceof RequestInterface)) {
+            throw new TypeError('incorrect return type');
+        }
+        return $signed;
     }
 }

@@ -4,6 +4,7 @@ namespace FediE2EE\PKDServer;
 
 use Exception;
 use FediE2EE\PKD\Extensions\ExtensionInterface;
+use ParagonIE\Certainty\Fetch;
 use ParagonIE\EasyDB\EasyDB;
 use ParagonIE\EasyDB\EasyDBCache;
 use PDO;
@@ -127,5 +128,8 @@ if (!($GLOBALS['pkdConfig'] instanceof ServerConfig)) {
     // Add "test" extension to allow list
     $pkdConfig->withAuxDataTypeAllowList(
         $pkdConfig->getAuxDataTypeAllowList() + ['test-v1', 'age-v1']
+    );
+    $pkdConfig->withCACertFetch(
+        new Fetch(PKD_SERVER_ROOT . '/vendor/paragonie/certainty/data')
     );
 })();

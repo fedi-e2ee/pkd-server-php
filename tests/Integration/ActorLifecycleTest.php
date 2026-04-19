@@ -69,6 +69,7 @@ use PHPUnit\Framework\Attributes\{
     CoversClass,
     UsesClass
 };
+use GuzzleHttp\Exception\ServerException;
 use JsonException as BaseJsonException;
 use GuzzleHttp\Exception\GuzzleException;
 use ParagonIE\ConstantTime\Base64UrlSafe;
@@ -81,7 +82,6 @@ use ParagonIE\CipherSweet\Exception\{
     InvalidCiphertextException
 };
 use ParagonIE\HPKE\HPKEException;
-use ParagonIE\HPKE\KEM\PostQuantumKEM;
 use PHPUnit\Framework\TestCase;
 use Psr\SimpleCache\InvalidArgumentException;
 use Random\RandomException;
@@ -124,6 +124,10 @@ class ActorLifecycleTest extends TestCase
         $this->truncateTables();
     }
 
+    /**
+     * @throws CertaintyException
+     * @throws SodiumException
+     */
     public function tearDown(): void
     {
         Handler::setWebFinger(new PKDCryptoWebFinger());
@@ -187,7 +191,11 @@ class ActorLifecycleTest extends TestCase
         $this->clearOldTransaction($config);
         $protocol = new Protocol($config);
 
-        $wf = new WebFinger($config);
+        try {
+            $wf = new WebFinger($config);
+        } catch (ServerException $ex) {
+            $this->markTestSkipped($ex->getMessage());
+        }
         $wf->setCanonicalForTesting($canonical, $canonical);
         $wf->setCanonicalForTesting($canonical2, $canonical2);
 

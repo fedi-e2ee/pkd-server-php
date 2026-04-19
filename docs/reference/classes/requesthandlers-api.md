@@ -75,11 +75,11 @@ Returns `bool`
 
 **Throws:** `DependencyException`
 
-#### [`time`](../../../src/RequestHandlers/Api/Actor.php#L37-L40)
+#### [`time`](../../../src/RequestHandlers/Api/Actor.php#L44-L47)
 
 Returns `string`
 
-#### [`canonicalizeActor`](../../../src/RequestHandlers/Api/Actor.php#L51-L59)
+#### [`canonicalizeActor`](../../../src/RequestHandlers/Api/Actor.php#L58-L66)
 
 Returns `string`
 
@@ -89,7 +89,7 @@ Returns `string`
 
 **Throws:** `CacheException`, `CertaintyException`, `DependencyException`, `GuzzleException`, `InvalidArgumentException`, `NetworkException`, `SodiumException`
 
-#### [`error`](../../../src/RequestHandlers/Api/Actor.php#L67-L70)
+#### [`error`](../../../src/RequestHandlers/Api/Actor.php#L74-L77)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -100,7 +100,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `BaseJsonException`, `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`signResponse`](../../../src/RequestHandlers/Api/Actor.php#L81-L92)
+#### [`signResponse`](../../../src/RequestHandlers/Api/Actor.php#L91-L113)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -110,9 +110,9 @@ Implements an RFC 9421 HTTP Message Signature with Ed25519 or ML-DSA-44.
 
 - `$response`: `Psr\Http\Message\ResponseInterface`
 
-**Throws:** `DependencyException`, `NotImplementedException`, `SodiumException`
+**Throws:** `CryptoException`, `DependencyException`, `MLDSAInternalException`, `PQCryptoCompatException`, `RandomException`, `SodiumException`
 
-#### [`json`](../../../src/RequestHandlers/Api/Actor.php#L104-L123)
+#### [`json`](../../../src/RequestHandlers/Api/Actor.php#L129-L148)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -124,9 +124,9 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 - `$status`: `int` = 200
 - `$headers`: `array` = []
 
-**Throws:** `DependencyException`, `BaseJsonException`, `NotImplementedException`, `SodiumException`
+**Throws:** `DependencyException`, `BaseJsonException`, `CryptoException`, `MLDSAInternalException`, `NotImplementedException`, `PQCryptoCompatException`, `RandomException`, `SodiumException`
 
-#### [`twig`](../../../src/RequestHandlers/Api/Actor.php#L133-L150)
+#### [`twig`](../../../src/RequestHandlers/Api/Actor.php#L158-L175)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -509,11 +509,11 @@ static · Returns `string`
 
 **Throws:** `BaseJsonException`
 
-#### [`time`](../../../src/RequestHandlers/Api/BurnDown.php#L37-L40)
+#### [`time`](../../../src/RequestHandlers/Api/BurnDown.php#L44-L47)
 
 Returns `string`
 
-#### [`canonicalizeActor`](../../../src/RequestHandlers/Api/BurnDown.php#L51-L59)
+#### [`canonicalizeActor`](../../../src/RequestHandlers/Api/BurnDown.php#L58-L66)
 
 Returns `string`
 
@@ -523,7 +523,7 @@ Returns `string`
 
 **Throws:** `CacheException`, `CertaintyException`, `DependencyException`, `GuzzleException`, `InvalidArgumentException`, `NetworkException`, `SodiumException`
 
-#### [`error`](../../../src/RequestHandlers/Api/BurnDown.php#L67-L70)
+#### [`error`](../../../src/RequestHandlers/Api/BurnDown.php#L74-L77)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -534,7 +534,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `BaseJsonException`, `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`signResponse`](../../../src/RequestHandlers/Api/BurnDown.php#L81-L92)
+#### [`signResponse`](../../../src/RequestHandlers/Api/BurnDown.php#L91-L113)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -544,9 +544,9 @@ Implements an RFC 9421 HTTP Message Signature with Ed25519 or ML-DSA-44.
 
 - `$response`: `Psr\Http\Message\ResponseInterface`
 
-**Throws:** `DependencyException`, `NotImplementedException`, `SodiumException`
+**Throws:** `CryptoException`, `DependencyException`, `MLDSAInternalException`, `PQCryptoCompatException`, `RandomException`, `SodiumException`
 
-#### [`json`](../../../src/RequestHandlers/Api/BurnDown.php#L104-L123)
+#### [`json`](../../../src/RequestHandlers/Api/BurnDown.php#L129-L148)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -558,9 +558,9 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 - `$status`: `int` = 200
 - `$headers`: `array` = []
 
-**Throws:** `DependencyException`, `BaseJsonException`, `NotImplementedException`, `SodiumException`
+**Throws:** `DependencyException`, `BaseJsonException`, `CryptoException`, `MLDSAInternalException`, `NotImplementedException`, `PQCryptoCompatException`, `RandomException`, `SodiumException`
 
-#### [`twig`](../../../src/RequestHandlers/Api/BurnDown.php#L133-L150)
+#### [`twig`](../../../src/RequestHandlers/Api/BurnDown.php#L158-L175)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -603,11 +603,11 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 - `$request`: `Psr\Http\Message\ServerRequestInterface`
 
-#### [`time`](../../../src/RequestHandlers/Api/Checkpoint.php#L37-L40)
+#### [`time`](../../../src/RequestHandlers/Api/Checkpoint.php#L44-L47)
 
 Returns `string`
 
-#### [`canonicalizeActor`](../../../src/RequestHandlers/Api/Checkpoint.php#L51-L59)
+#### [`canonicalizeActor`](../../../src/RequestHandlers/Api/Checkpoint.php#L58-L66)
 
 Returns `string`
 
@@ -617,7 +617,7 @@ Returns `string`
 
 **Throws:** `CacheException`, `CertaintyException`, `DependencyException`, `GuzzleException`, `InvalidArgumentException`, `NetworkException`, `SodiumException`
 
-#### [`error`](../../../src/RequestHandlers/Api/Checkpoint.php#L67-L70)
+#### [`error`](../../../src/RequestHandlers/Api/Checkpoint.php#L74-L77)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -628,7 +628,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `BaseJsonException`, `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`signResponse`](../../../src/RequestHandlers/Api/Checkpoint.php#L81-L92)
+#### [`signResponse`](../../../src/RequestHandlers/Api/Checkpoint.php#L91-L113)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -638,9 +638,9 @@ Implements an RFC 9421 HTTP Message Signature with Ed25519 or ML-DSA-44.
 
 - `$response`: `Psr\Http\Message\ResponseInterface`
 
-**Throws:** `DependencyException`, `NotImplementedException`, `SodiumException`
+**Throws:** `CryptoException`, `DependencyException`, `MLDSAInternalException`, `PQCryptoCompatException`, `RandomException`, `SodiumException`
 
-#### [`json`](../../../src/RequestHandlers/Api/Checkpoint.php#L104-L123)
+#### [`json`](../../../src/RequestHandlers/Api/Checkpoint.php#L129-L148)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -652,9 +652,9 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 - `$status`: `int` = 200
 - `$headers`: `array` = []
 
-**Throws:** `DependencyException`, `BaseJsonException`, `NotImplementedException`, `SodiumException`
+**Throws:** `DependencyException`, `BaseJsonException`, `CryptoException`, `MLDSAInternalException`, `NotImplementedException`, `PQCryptoCompatException`, `RandomException`, `SodiumException`
 
-#### [`twig`](../../../src/RequestHandlers/Api/Checkpoint.php#L133-L150)
+#### [`twig`](../../../src/RequestHandlers/Api/Checkpoint.php#L158-L175)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -860,11 +860,11 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `DependencyException`, `JsonException`, `NotImplementedException`, `SodiumException`
 
-#### [`time`](../../../src/RequestHandlers/Api/Extensions.php#L37-L40)
+#### [`time`](../../../src/RequestHandlers/Api/Extensions.php#L44-L47)
 
 Returns `string`
 
-#### [`canonicalizeActor`](../../../src/RequestHandlers/Api/Extensions.php#L51-L59)
+#### [`canonicalizeActor`](../../../src/RequestHandlers/Api/Extensions.php#L58-L66)
 
 Returns `string`
 
@@ -874,7 +874,7 @@ Returns `string`
 
 **Throws:** `CacheException`, `CertaintyException`, `DependencyException`, `GuzzleException`, `InvalidArgumentException`, `NetworkException`, `SodiumException`
 
-#### [`error`](../../../src/RequestHandlers/Api/Extensions.php#L67-L70)
+#### [`error`](../../../src/RequestHandlers/Api/Extensions.php#L74-L77)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -885,7 +885,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `BaseJsonException`, `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`signResponse`](../../../src/RequestHandlers/Api/Extensions.php#L81-L92)
+#### [`signResponse`](../../../src/RequestHandlers/Api/Extensions.php#L91-L113)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -895,9 +895,9 @@ Implements an RFC 9421 HTTP Message Signature with Ed25519 or ML-DSA-44.
 
 - `$response`: `Psr\Http\Message\ResponseInterface`
 
-**Throws:** `DependencyException`, `NotImplementedException`, `SodiumException`
+**Throws:** `CryptoException`, `DependencyException`, `MLDSAInternalException`, `PQCryptoCompatException`, `RandomException`, `SodiumException`
 
-#### [`json`](../../../src/RequestHandlers/Api/Extensions.php#L104-L123)
+#### [`json`](../../../src/RequestHandlers/Api/Extensions.php#L129-L148)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -909,9 +909,9 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 - `$status`: `int` = 200
 - `$headers`: `array` = []
 
-**Throws:** `DependencyException`, `BaseJsonException`, `NotImplementedException`, `SodiumException`
+**Throws:** `DependencyException`, `BaseJsonException`, `CryptoException`, `MLDSAInternalException`, `NotImplementedException`, `PQCryptoCompatException`, `RandomException`, `SodiumException`
 
-#### [`twig`](../../../src/RequestHandlers/Api/Extensions.php#L133-L150)
+#### [`twig`](../../../src/RequestHandlers/Api/Extensions.php#L158-L175)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -1123,11 +1123,11 @@ Returns `void`
 
 **Throws:** `ArrayKeyException`, `BaseJsonException`, `BlindIndexNotFoundException`, `CipherSweetException`, `CryptoException`, `CryptoOperationException`, `DateMalformedStringException`, `DependencyException`, `InvalidCiphertextException`, `JsonException`, `NotImplementedException`, `SodiumException`, `TableException`
 
-#### [`time`](../../../src/RequestHandlers/Api/GetAuxData.php#L37-L40)
+#### [`time`](../../../src/RequestHandlers/Api/GetAuxData.php#L44-L47)
 
 Returns `string`
 
-#### [`canonicalizeActor`](../../../src/RequestHandlers/Api/GetAuxData.php#L51-L59)
+#### [`canonicalizeActor`](../../../src/RequestHandlers/Api/GetAuxData.php#L58-L66)
 
 Returns `string`
 
@@ -1137,7 +1137,7 @@ Returns `string`
 
 **Throws:** `CacheException`, `CertaintyException`, `DependencyException`, `GuzzleException`, `InvalidArgumentException`, `NetworkException`, `SodiumException`
 
-#### [`error`](../../../src/RequestHandlers/Api/GetAuxData.php#L67-L70)
+#### [`error`](../../../src/RequestHandlers/Api/GetAuxData.php#L74-L77)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -1148,7 +1148,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `BaseJsonException`, `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`signResponse`](../../../src/RequestHandlers/Api/GetAuxData.php#L81-L92)
+#### [`signResponse`](../../../src/RequestHandlers/Api/GetAuxData.php#L91-L113)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -1158,9 +1158,9 @@ Implements an RFC 9421 HTTP Message Signature with Ed25519 or ML-DSA-44.
 
 - `$response`: `Psr\Http\Message\ResponseInterface`
 
-**Throws:** `DependencyException`, `NotImplementedException`, `SodiumException`
+**Throws:** `CryptoException`, `DependencyException`, `MLDSAInternalException`, `PQCryptoCompatException`, `RandomException`, `SodiumException`
 
-#### [`json`](../../../src/RequestHandlers/Api/GetAuxData.php#L104-L123)
+#### [`json`](../../../src/RequestHandlers/Api/GetAuxData.php#L129-L148)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -1172,9 +1172,9 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 - `$status`: `int` = 200
 - `$headers`: `array` = []
 
-**Throws:** `DependencyException`, `BaseJsonException`, `NotImplementedException`, `SodiumException`
+**Throws:** `DependencyException`, `BaseJsonException`, `CryptoException`, `MLDSAInternalException`, `NotImplementedException`, `PQCryptoCompatException`, `RandomException`, `SodiumException`
 
-#### [`twig`](../../../src/RequestHandlers/Api/GetAuxData.php#L133-L150)
+#### [`twig`](../../../src/RequestHandlers/Api/GetAuxData.php#L158-L175)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -1386,11 +1386,11 @@ Returns `void`
 
 **Throws:** `ArrayKeyException`, `BaseJsonException`, `BlindIndexNotFoundException`, `CipherSweetException`, `CryptoException`, `CryptoOperationException`, `DateMalformedStringException`, `DependencyException`, `InvalidCiphertextException`, `JsonException`, `NotImplementedException`, `SodiumException`, `TableException`
 
-#### [`time`](../../../src/RequestHandlers/Api/GetKey.php#L37-L40)
+#### [`time`](../../../src/RequestHandlers/Api/GetKey.php#L44-L47)
 
 Returns `string`
 
-#### [`canonicalizeActor`](../../../src/RequestHandlers/Api/GetKey.php#L51-L59)
+#### [`canonicalizeActor`](../../../src/RequestHandlers/Api/GetKey.php#L58-L66)
 
 Returns `string`
 
@@ -1400,7 +1400,7 @@ Returns `string`
 
 **Throws:** `CacheException`, `CertaintyException`, `DependencyException`, `GuzzleException`, `InvalidArgumentException`, `NetworkException`, `SodiumException`
 
-#### [`error`](../../../src/RequestHandlers/Api/GetKey.php#L67-L70)
+#### [`error`](../../../src/RequestHandlers/Api/GetKey.php#L74-L77)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -1411,7 +1411,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `BaseJsonException`, `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`signResponse`](../../../src/RequestHandlers/Api/GetKey.php#L81-L92)
+#### [`signResponse`](../../../src/RequestHandlers/Api/GetKey.php#L91-L113)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -1421,9 +1421,9 @@ Implements an RFC 9421 HTTP Message Signature with Ed25519 or ML-DSA-44.
 
 - `$response`: `Psr\Http\Message\ResponseInterface`
 
-**Throws:** `DependencyException`, `NotImplementedException`, `SodiumException`
+**Throws:** `CryptoException`, `DependencyException`, `MLDSAInternalException`, `PQCryptoCompatException`, `RandomException`, `SodiumException`
 
-#### [`json`](../../../src/RequestHandlers/Api/GetKey.php#L104-L123)
+#### [`json`](../../../src/RequestHandlers/Api/GetKey.php#L129-L148)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -1435,9 +1435,9 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 - `$status`: `int` = 200
 - `$headers`: `array` = []
 
-**Throws:** `DependencyException`, `BaseJsonException`, `NotImplementedException`, `SodiumException`
+**Throws:** `DependencyException`, `BaseJsonException`, `CryptoException`, `MLDSAInternalException`, `NotImplementedException`, `PQCryptoCompatException`, `RandomException`, `SodiumException`
 
-#### [`twig`](../../../src/RequestHandlers/Api/GetKey.php#L133-L150)
+#### [`twig`](../../../src/RequestHandlers/Api/GetKey.php#L158-L175)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -1649,11 +1649,11 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `DependencyException`, `JsonException`, `NotImplementedException`, `SodiumException`
 
-#### [`time`](../../../src/RequestHandlers/Api/History.php#L37-L40)
+#### [`time`](../../../src/RequestHandlers/Api/History.php#L44-L47)
 
 Returns `string`
 
-#### [`canonicalizeActor`](../../../src/RequestHandlers/Api/History.php#L51-L59)
+#### [`canonicalizeActor`](../../../src/RequestHandlers/Api/History.php#L58-L66)
 
 Returns `string`
 
@@ -1663,7 +1663,7 @@ Returns `string`
 
 **Throws:** `CacheException`, `CertaintyException`, `DependencyException`, `GuzzleException`, `InvalidArgumentException`, `NetworkException`, `SodiumException`
 
-#### [`error`](../../../src/RequestHandlers/Api/History.php#L67-L70)
+#### [`error`](../../../src/RequestHandlers/Api/History.php#L74-L77)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -1674,7 +1674,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `BaseJsonException`, `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`signResponse`](../../../src/RequestHandlers/Api/History.php#L81-L92)
+#### [`signResponse`](../../../src/RequestHandlers/Api/History.php#L91-L113)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -1684,9 +1684,9 @@ Implements an RFC 9421 HTTP Message Signature with Ed25519 or ML-DSA-44.
 
 - `$response`: `Psr\Http\Message\ResponseInterface`
 
-**Throws:** `DependencyException`, `NotImplementedException`, `SodiumException`
+**Throws:** `CryptoException`, `DependencyException`, `MLDSAInternalException`, `PQCryptoCompatException`, `RandomException`, `SodiumException`
 
-#### [`json`](../../../src/RequestHandlers/Api/History.php#L104-L123)
+#### [`json`](../../../src/RequestHandlers/Api/History.php#L129-L148)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -1698,9 +1698,9 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 - `$status`: `int` = 200
 - `$headers`: `array` = []
 
-**Throws:** `DependencyException`, `BaseJsonException`, `NotImplementedException`, `SodiumException`
+**Throws:** `DependencyException`, `BaseJsonException`, `CryptoException`, `MLDSAInternalException`, `NotImplementedException`, `PQCryptoCompatException`, `RandomException`, `SodiumException`
 
-#### [`twig`](../../../src/RequestHandlers/Api/History.php#L133-L150)
+#### [`twig`](../../../src/RequestHandlers/Api/History.php#L158-L175)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -1912,11 +1912,11 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `DependencyException`, `JsonException`, `NotImplementedException`, `SodiumException`
 
-#### [`time`](../../../src/RequestHandlers/Api/HistoryCosign.php#L37-L40)
+#### [`time`](../../../src/RequestHandlers/Api/HistoryCosign.php#L44-L47)
 
 Returns `string`
 
-#### [`canonicalizeActor`](../../../src/RequestHandlers/Api/HistoryCosign.php#L51-L59)
+#### [`canonicalizeActor`](../../../src/RequestHandlers/Api/HistoryCosign.php#L58-L66)
 
 Returns `string`
 
@@ -1926,7 +1926,7 @@ Returns `string`
 
 **Throws:** `CacheException`, `CertaintyException`, `DependencyException`, `GuzzleException`, `InvalidArgumentException`, `NetworkException`, `SodiumException`
 
-#### [`error`](../../../src/RequestHandlers/Api/HistoryCosign.php#L67-L70)
+#### [`error`](../../../src/RequestHandlers/Api/HistoryCosign.php#L74-L77)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -1937,7 +1937,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `BaseJsonException`, `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`signResponse`](../../../src/RequestHandlers/Api/HistoryCosign.php#L81-L92)
+#### [`signResponse`](../../../src/RequestHandlers/Api/HistoryCosign.php#L91-L113)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -1947,9 +1947,9 @@ Implements an RFC 9421 HTTP Message Signature with Ed25519 or ML-DSA-44.
 
 - `$response`: `Psr\Http\Message\ResponseInterface`
 
-**Throws:** `DependencyException`, `NotImplementedException`, `SodiumException`
+**Throws:** `CryptoException`, `DependencyException`, `MLDSAInternalException`, `PQCryptoCompatException`, `RandomException`, `SodiumException`
 
-#### [`json`](../../../src/RequestHandlers/Api/HistoryCosign.php#L104-L123)
+#### [`json`](../../../src/RequestHandlers/Api/HistoryCosign.php#L129-L148)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -1961,9 +1961,9 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 - `$status`: `int` = 200
 - `$headers`: `array` = []
 
-**Throws:** `DependencyException`, `BaseJsonException`, `NotImplementedException`, `SodiumException`
+**Throws:** `DependencyException`, `BaseJsonException`, `CryptoException`, `MLDSAInternalException`, `NotImplementedException`, `PQCryptoCompatException`, `RandomException`, `SodiumException`
 
-#### [`twig`](../../../src/RequestHandlers/Api/HistoryCosign.php#L133-L150)
+#### [`twig`](../../../src/RequestHandlers/Api/HistoryCosign.php#L158-L175)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -2187,11 +2187,11 @@ Returns `bool`
 
 **Throws:** `DependencyException`
 
-#### [`time`](../../../src/RequestHandlers/Api/HistorySince.php#L37-L40)
+#### [`time`](../../../src/RequestHandlers/Api/HistorySince.php#L44-L47)
 
 Returns `string`
 
-#### [`canonicalizeActor`](../../../src/RequestHandlers/Api/HistorySince.php#L51-L59)
+#### [`canonicalizeActor`](../../../src/RequestHandlers/Api/HistorySince.php#L58-L66)
 
 Returns `string`
 
@@ -2201,7 +2201,7 @@ Returns `string`
 
 **Throws:** `CacheException`, `CertaintyException`, `DependencyException`, `GuzzleException`, `InvalidArgumentException`, `NetworkException`, `SodiumException`
 
-#### [`error`](../../../src/RequestHandlers/Api/HistorySince.php#L67-L70)
+#### [`error`](../../../src/RequestHandlers/Api/HistorySince.php#L74-L77)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -2212,7 +2212,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `BaseJsonException`, `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`signResponse`](../../../src/RequestHandlers/Api/HistorySince.php#L81-L92)
+#### [`signResponse`](../../../src/RequestHandlers/Api/HistorySince.php#L91-L113)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -2222,9 +2222,9 @@ Implements an RFC 9421 HTTP Message Signature with Ed25519 or ML-DSA-44.
 
 - `$response`: `Psr\Http\Message\ResponseInterface`
 
-**Throws:** `DependencyException`, `NotImplementedException`, `SodiumException`
+**Throws:** `CryptoException`, `DependencyException`, `MLDSAInternalException`, `PQCryptoCompatException`, `RandomException`, `SodiumException`
 
-#### [`json`](../../../src/RequestHandlers/Api/HistorySince.php#L104-L123)
+#### [`json`](../../../src/RequestHandlers/Api/HistorySince.php#L129-L148)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -2236,9 +2236,9 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 - `$status`: `int` = 200
 - `$headers`: `array` = []
 
-**Throws:** `DependencyException`, `BaseJsonException`, `NotImplementedException`, `SodiumException`
+**Throws:** `DependencyException`, `BaseJsonException`, `CryptoException`, `MLDSAInternalException`, `NotImplementedException`, `PQCryptoCompatException`, `RandomException`, `SodiumException`
 
-#### [`twig`](../../../src/RequestHandlers/Api/HistorySince.php#L133-L150)
+#### [`twig`](../../../src/RequestHandlers/Api/HistorySince.php#L158-L175)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -2462,11 +2462,11 @@ Returns `bool`
 
 **Throws:** `DependencyException`
 
-#### [`time`](../../../src/RequestHandlers/Api/HistoryView.php#L37-L40)
+#### [`time`](../../../src/RequestHandlers/Api/HistoryView.php#L44-L47)
 
 Returns `string`
 
-#### [`canonicalizeActor`](../../../src/RequestHandlers/Api/HistoryView.php#L51-L59)
+#### [`canonicalizeActor`](../../../src/RequestHandlers/Api/HistoryView.php#L58-L66)
 
 Returns `string`
 
@@ -2476,7 +2476,7 @@ Returns `string`
 
 **Throws:** `CacheException`, `CertaintyException`, `DependencyException`, `GuzzleException`, `InvalidArgumentException`, `NetworkException`, `SodiumException`
 
-#### [`error`](../../../src/RequestHandlers/Api/HistoryView.php#L67-L70)
+#### [`error`](../../../src/RequestHandlers/Api/HistoryView.php#L74-L77)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -2487,7 +2487,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `BaseJsonException`, `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`signResponse`](../../../src/RequestHandlers/Api/HistoryView.php#L81-L92)
+#### [`signResponse`](../../../src/RequestHandlers/Api/HistoryView.php#L91-L113)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -2497,9 +2497,9 @@ Implements an RFC 9421 HTTP Message Signature with Ed25519 or ML-DSA-44.
 
 - `$response`: `Psr\Http\Message\ResponseInterface`
 
-**Throws:** `DependencyException`, `NotImplementedException`, `SodiumException`
+**Throws:** `CryptoException`, `DependencyException`, `MLDSAInternalException`, `PQCryptoCompatException`, `RandomException`, `SodiumException`
 
-#### [`json`](../../../src/RequestHandlers/Api/HistoryView.php#L104-L123)
+#### [`json`](../../../src/RequestHandlers/Api/HistoryView.php#L129-L148)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -2511,9 +2511,9 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 - `$status`: `int` = 200
 - `$headers`: `array` = []
 
-**Throws:** `DependencyException`, `BaseJsonException`, `NotImplementedException`, `SodiumException`
+**Throws:** `DependencyException`, `BaseJsonException`, `CryptoException`, `MLDSAInternalException`, `NotImplementedException`, `PQCryptoCompatException`, `RandomException`, `SodiumException`
 
-#### [`twig`](../../../src/RequestHandlers/Api/HistoryView.php#L133-L150)
+#### [`twig`](../../../src/RequestHandlers/Api/HistoryView.php#L158-L175)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -2719,11 +2719,11 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `DependencyException`, `JsonException`, `NotImplementedException`, `SodiumException`
 
-#### [`time`](../../../src/RequestHandlers/Api/Info.php#L37-L40)
+#### [`time`](../../../src/RequestHandlers/Api/Info.php#L44-L47)
 
 Returns `string`
 
-#### [`canonicalizeActor`](../../../src/RequestHandlers/Api/Info.php#L51-L59)
+#### [`canonicalizeActor`](../../../src/RequestHandlers/Api/Info.php#L58-L66)
 
 Returns `string`
 
@@ -2733,7 +2733,7 @@ Returns `string`
 
 **Throws:** `CacheException`, `CertaintyException`, `DependencyException`, `GuzzleException`, `InvalidArgumentException`, `NetworkException`, `SodiumException`
 
-#### [`error`](../../../src/RequestHandlers/Api/Info.php#L67-L70)
+#### [`error`](../../../src/RequestHandlers/Api/Info.php#L74-L77)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -2744,7 +2744,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `BaseJsonException`, `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`signResponse`](../../../src/RequestHandlers/Api/Info.php#L81-L92)
+#### [`signResponse`](../../../src/RequestHandlers/Api/Info.php#L91-L113)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -2754,9 +2754,9 @@ Implements an RFC 9421 HTTP Message Signature with Ed25519 or ML-DSA-44.
 
 - `$response`: `Psr\Http\Message\ResponseInterface`
 
-**Throws:** `DependencyException`, `NotImplementedException`, `SodiumException`
+**Throws:** `CryptoException`, `DependencyException`, `MLDSAInternalException`, `PQCryptoCompatException`, `RandomException`, `SodiumException`
 
-#### [`json`](../../../src/RequestHandlers/Api/Info.php#L104-L123)
+#### [`json`](../../../src/RequestHandlers/Api/Info.php#L129-L148)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -2768,9 +2768,9 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 - `$status`: `int` = 200
 - `$headers`: `array` = []
 
-**Throws:** `DependencyException`, `BaseJsonException`, `NotImplementedException`, `SodiumException`
+**Throws:** `DependencyException`, `BaseJsonException`, `CryptoException`, `MLDSAInternalException`, `NotImplementedException`, `PQCryptoCompatException`, `RandomException`, `SodiumException`
 
-#### [`twig`](../../../src/RequestHandlers/Api/Info.php#L133-L150)
+#### [`twig`](../../../src/RequestHandlers/Api/Info.php#L158-L175)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -2982,11 +2982,11 @@ Returns `void`
 
 **Throws:** `ArrayKeyException`, `BlindIndexNotFoundException`, `CipherSweetException`, `CryptoOperationException`, `DependencyException`, `InvalidCiphertextException`, `JsonException`, `NotImplementedException`, `SodiumException`, `TableException`, `DateMalformedStringException`, `CryptoException`
 
-#### [`time`](../../../src/RequestHandlers/Api/ListAuxData.php#L37-L40)
+#### [`time`](../../../src/RequestHandlers/Api/ListAuxData.php#L44-L47)
 
 Returns `string`
 
-#### [`canonicalizeActor`](../../../src/RequestHandlers/Api/ListAuxData.php#L51-L59)
+#### [`canonicalizeActor`](../../../src/RequestHandlers/Api/ListAuxData.php#L58-L66)
 
 Returns `string`
 
@@ -2996,7 +2996,7 @@ Returns `string`
 
 **Throws:** `CacheException`, `CertaintyException`, `DependencyException`, `GuzzleException`, `InvalidArgumentException`, `NetworkException`, `SodiumException`
 
-#### [`error`](../../../src/RequestHandlers/Api/ListAuxData.php#L67-L70)
+#### [`error`](../../../src/RequestHandlers/Api/ListAuxData.php#L74-L77)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -3007,7 +3007,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `BaseJsonException`, `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`signResponse`](../../../src/RequestHandlers/Api/ListAuxData.php#L81-L92)
+#### [`signResponse`](../../../src/RequestHandlers/Api/ListAuxData.php#L91-L113)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -3017,9 +3017,9 @@ Implements an RFC 9421 HTTP Message Signature with Ed25519 or ML-DSA-44.
 
 - `$response`: `Psr\Http\Message\ResponseInterface`
 
-**Throws:** `DependencyException`, `NotImplementedException`, `SodiumException`
+**Throws:** `CryptoException`, `DependencyException`, `MLDSAInternalException`, `PQCryptoCompatException`, `RandomException`, `SodiumException`
 
-#### [`json`](../../../src/RequestHandlers/Api/ListAuxData.php#L104-L123)
+#### [`json`](../../../src/RequestHandlers/Api/ListAuxData.php#L129-L148)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -3031,9 +3031,9 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 - `$status`: `int` = 200
 - `$headers`: `array` = []
 
-**Throws:** `DependencyException`, `BaseJsonException`, `NotImplementedException`, `SodiumException`
+**Throws:** `DependencyException`, `BaseJsonException`, `CryptoException`, `MLDSAInternalException`, `NotImplementedException`, `PQCryptoCompatException`, `RandomException`, `SodiumException`
 
-#### [`twig`](../../../src/RequestHandlers/Api/ListAuxData.php#L133-L150)
+#### [`twig`](../../../src/RequestHandlers/Api/ListAuxData.php#L158-L175)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -3245,11 +3245,11 @@ Returns `void`
 
 **Throws:** `ArrayKeyException`, `BlindIndexNotFoundException`, `CacheException`, `CipherSweetException`, `CryptoOperationException`, `DependencyException`, `InvalidCiphertextException`, `JsonException`, `NotImplementedException`, `SodiumException`, `TableException`, `DateMalformedStringException`, `CryptoException`, `BaseJsonException`
 
-#### [`time`](../../../src/RequestHandlers/Api/ListKeys.php#L37-L40)
+#### [`time`](../../../src/RequestHandlers/Api/ListKeys.php#L44-L47)
 
 Returns `string`
 
-#### [`canonicalizeActor`](../../../src/RequestHandlers/Api/ListKeys.php#L51-L59)
+#### [`canonicalizeActor`](../../../src/RequestHandlers/Api/ListKeys.php#L58-L66)
 
 Returns `string`
 
@@ -3259,7 +3259,7 @@ Returns `string`
 
 **Throws:** `CacheException`, `CertaintyException`, `DependencyException`, `GuzzleException`, `InvalidArgumentException`, `NetworkException`, `SodiumException`
 
-#### [`error`](../../../src/RequestHandlers/Api/ListKeys.php#L67-L70)
+#### [`error`](../../../src/RequestHandlers/Api/ListKeys.php#L74-L77)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -3270,7 +3270,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `BaseJsonException`, `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`signResponse`](../../../src/RequestHandlers/Api/ListKeys.php#L81-L92)
+#### [`signResponse`](../../../src/RequestHandlers/Api/ListKeys.php#L91-L113)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -3280,9 +3280,9 @@ Implements an RFC 9421 HTTP Message Signature with Ed25519 or ML-DSA-44.
 
 - `$response`: `Psr\Http\Message\ResponseInterface`
 
-**Throws:** `DependencyException`, `NotImplementedException`, `SodiumException`
+**Throws:** `CryptoException`, `DependencyException`, `MLDSAInternalException`, `PQCryptoCompatException`, `RandomException`, `SodiumException`
 
-#### [`json`](../../../src/RequestHandlers/Api/ListKeys.php#L104-L123)
+#### [`json`](../../../src/RequestHandlers/Api/ListKeys.php#L129-L148)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -3294,9 +3294,9 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 - `$status`: `int` = 200
 - `$headers`: `array` = []
 
-**Throws:** `DependencyException`, `BaseJsonException`, `NotImplementedException`, `SodiumException`
+**Throws:** `DependencyException`, `BaseJsonException`, `CryptoException`, `MLDSAInternalException`, `NotImplementedException`, `PQCryptoCompatException`, `RandomException`, `SodiumException`
 
-#### [`twig`](../../../src/RequestHandlers/Api/ListKeys.php#L133-L150)
+#### [`twig`](../../../src/RequestHandlers/Api/ListKeys.php#L158-L175)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -3586,11 +3586,11 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `BaseJsonException`, `CacheException`, `CryptoException`, `DateMalformedStringException`, `DependencyException`, `JsonException`, `NotImplementedException`, `SodiumException`, `TableException`
 
-#### [`time`](../../../src/RequestHandlers/Api/ReplicaInfo.php#L37-L40)
+#### [`time`](../../../src/RequestHandlers/Api/ReplicaInfo.php#L44-L47)
 
 Returns `string`
 
-#### [`canonicalizeActor`](../../../src/RequestHandlers/Api/ReplicaInfo.php#L51-L59)
+#### [`canonicalizeActor`](../../../src/RequestHandlers/Api/ReplicaInfo.php#L58-L66)
 
 Returns `string`
 
@@ -3600,7 +3600,7 @@ Returns `string`
 
 **Throws:** `CacheException`, `CertaintyException`, `DependencyException`, `GuzzleException`, `InvalidArgumentException`, `NetworkException`, `SodiumException`
 
-#### [`error`](../../../src/RequestHandlers/Api/ReplicaInfo.php#L67-L70)
+#### [`error`](../../../src/RequestHandlers/Api/ReplicaInfo.php#L74-L77)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -3611,7 +3611,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `BaseJsonException`, `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`signResponse`](../../../src/RequestHandlers/Api/ReplicaInfo.php#L81-L92)
+#### [`signResponse`](../../../src/RequestHandlers/Api/ReplicaInfo.php#L91-L113)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -3621,9 +3621,9 @@ Implements an RFC 9421 HTTP Message Signature with Ed25519 or ML-DSA-44.
 
 - `$response`: `Psr\Http\Message\ResponseInterface`
 
-**Throws:** `DependencyException`, `NotImplementedException`, `SodiumException`
+**Throws:** `CryptoException`, `DependencyException`, `MLDSAInternalException`, `PQCryptoCompatException`, `RandomException`, `SodiumException`
 
-#### [`json`](../../../src/RequestHandlers/Api/ReplicaInfo.php#L104-L123)
+#### [`json`](../../../src/RequestHandlers/Api/ReplicaInfo.php#L129-L148)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -3635,9 +3635,9 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 - `$status`: `int` = 200
 - `$headers`: `array` = []
 
-**Throws:** `DependencyException`, `BaseJsonException`, `NotImplementedException`, `SodiumException`
+**Throws:** `DependencyException`, `BaseJsonException`, `CryptoException`, `MLDSAInternalException`, `NotImplementedException`, `PQCryptoCompatException`, `RandomException`, `SodiumException`
 
-#### [`twig`](../../../src/RequestHandlers/Api/ReplicaInfo.php#L133-L150)
+#### [`twig`](../../../src/RequestHandlers/Api/ReplicaInfo.php#L158-L175)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -3853,11 +3853,11 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `CryptoException`, `DateMalformedStringException`, `DependencyException`, `JsonException`, `NotImplementedException`, `SodiumException`
 
-#### [`time`](../../../src/RequestHandlers/Api/Replicas.php#L37-L40)
+#### [`time`](../../../src/RequestHandlers/Api/Replicas.php#L44-L47)
 
 Returns `string`
 
-#### [`canonicalizeActor`](../../../src/RequestHandlers/Api/Replicas.php#L51-L59)
+#### [`canonicalizeActor`](../../../src/RequestHandlers/Api/Replicas.php#L58-L66)
 
 Returns `string`
 
@@ -3867,7 +3867,7 @@ Returns `string`
 
 **Throws:** `CacheException`, `CertaintyException`, `DependencyException`, `GuzzleException`, `InvalidArgumentException`, `NetworkException`, `SodiumException`
 
-#### [`error`](../../../src/RequestHandlers/Api/Replicas.php#L67-L70)
+#### [`error`](../../../src/RequestHandlers/Api/Replicas.php#L74-L77)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -3878,7 +3878,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `BaseJsonException`, `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`signResponse`](../../../src/RequestHandlers/Api/Replicas.php#L81-L92)
+#### [`signResponse`](../../../src/RequestHandlers/Api/Replicas.php#L91-L113)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -3888,9 +3888,9 @@ Implements an RFC 9421 HTTP Message Signature with Ed25519 or ML-DSA-44.
 
 - `$response`: `Psr\Http\Message\ResponseInterface`
 
-**Throws:** `DependencyException`, `NotImplementedException`, `SodiumException`
+**Throws:** `CryptoException`, `DependencyException`, `MLDSAInternalException`, `PQCryptoCompatException`, `RandomException`, `SodiumException`
 
-#### [`json`](../../../src/RequestHandlers/Api/Replicas.php#L104-L123)
+#### [`json`](../../../src/RequestHandlers/Api/Replicas.php#L129-L148)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -3902,9 +3902,9 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 - `$status`: `int` = 200
 - `$headers`: `array` = []
 
-**Throws:** `DependencyException`, `BaseJsonException`, `NotImplementedException`, `SodiumException`
+**Throws:** `DependencyException`, `BaseJsonException`, `CryptoException`, `MLDSAInternalException`, `NotImplementedException`, `PQCryptoCompatException`, `RandomException`, `SodiumException`
 
-#### [`twig`](../../../src/RequestHandlers/Api/Replicas.php#L133-L150)
+#### [`twig`](../../../src/RequestHandlers/Api/Replicas.php#L158-L175)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -4122,11 +4122,11 @@ Returns `array`
 
 **Attributes:** `#[Override]`
 
-#### [`time`](../../../src/RequestHandlers/Api/Revoke.php#L37-L40)
+#### [`time`](../../../src/RequestHandlers/Api/Revoke.php#L44-L47)
 
 Returns `string`
 
-#### [`canonicalizeActor`](../../../src/RequestHandlers/Api/Revoke.php#L51-L59)
+#### [`canonicalizeActor`](../../../src/RequestHandlers/Api/Revoke.php#L58-L66)
 
 Returns `string`
 
@@ -4136,7 +4136,7 @@ Returns `string`
 
 **Throws:** `CacheException`, `CertaintyException`, `DependencyException`, `GuzzleException`, `InvalidArgumentException`, `NetworkException`, `SodiumException`
 
-#### [`error`](../../../src/RequestHandlers/Api/Revoke.php#L67-L70)
+#### [`error`](../../../src/RequestHandlers/Api/Revoke.php#L74-L77)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -4147,7 +4147,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `BaseJsonException`, `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`signResponse`](../../../src/RequestHandlers/Api/Revoke.php#L81-L92)
+#### [`signResponse`](../../../src/RequestHandlers/Api/Revoke.php#L91-L113)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -4157,9 +4157,9 @@ Implements an RFC 9421 HTTP Message Signature with Ed25519 or ML-DSA-44.
 
 - `$response`: `Psr\Http\Message\ResponseInterface`
 
-**Throws:** `DependencyException`, `NotImplementedException`, `SodiumException`
+**Throws:** `CryptoException`, `DependencyException`, `MLDSAInternalException`, `PQCryptoCompatException`, `RandomException`, `SodiumException`
 
-#### [`json`](../../../src/RequestHandlers/Api/Revoke.php#L104-L123)
+#### [`json`](../../../src/RequestHandlers/Api/Revoke.php#L129-L148)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -4171,9 +4171,9 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 - `$status`: `int` = 200
 - `$headers`: `array` = []
 
-**Throws:** `DependencyException`, `BaseJsonException`, `NotImplementedException`, `SodiumException`
+**Throws:** `DependencyException`, `BaseJsonException`, `CryptoException`, `MLDSAInternalException`, `NotImplementedException`, `PQCryptoCompatException`, `RandomException`, `SodiumException`
 
-#### [`twig`](../../../src/RequestHandlers/Api/Revoke.php#L133-L150)
+#### [`twig`](../../../src/RequestHandlers/Api/Revoke.php#L158-L175)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -4379,11 +4379,11 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `DependencyException`, `JsonException`, `NotImplementedException`, `SodiumException`
 
-#### [`time`](../../../src/RequestHandlers/Api/ServerPublicKey.php#L37-L40)
+#### [`time`](../../../src/RequestHandlers/Api/ServerPublicKey.php#L44-L47)
 
 Returns `string`
 
-#### [`canonicalizeActor`](../../../src/RequestHandlers/Api/ServerPublicKey.php#L51-L59)
+#### [`canonicalizeActor`](../../../src/RequestHandlers/Api/ServerPublicKey.php#L58-L66)
 
 Returns `string`
 
@@ -4393,7 +4393,7 @@ Returns `string`
 
 **Throws:** `CacheException`, `CertaintyException`, `DependencyException`, `GuzzleException`, `InvalidArgumentException`, `NetworkException`, `SodiumException`
 
-#### [`error`](../../../src/RequestHandlers/Api/ServerPublicKey.php#L67-L70)
+#### [`error`](../../../src/RequestHandlers/Api/ServerPublicKey.php#L74-L77)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -4404,7 +4404,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `BaseJsonException`, `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`signResponse`](../../../src/RequestHandlers/Api/ServerPublicKey.php#L81-L92)
+#### [`signResponse`](../../../src/RequestHandlers/Api/ServerPublicKey.php#L91-L113)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -4414,9 +4414,9 @@ Implements an RFC 9421 HTTP Message Signature with Ed25519 or ML-DSA-44.
 
 - `$response`: `Psr\Http\Message\ResponseInterface`
 
-**Throws:** `DependencyException`, `NotImplementedException`, `SodiumException`
+**Throws:** `CryptoException`, `DependencyException`, `MLDSAInternalException`, `PQCryptoCompatException`, `RandomException`, `SodiumException`
 
-#### [`json`](../../../src/RequestHandlers/Api/ServerPublicKey.php#L104-L123)
+#### [`json`](../../../src/RequestHandlers/Api/ServerPublicKey.php#L129-L148)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -4428,9 +4428,9 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 - `$status`: `int` = 200
 - `$headers`: `array` = []
 
-**Throws:** `DependencyException`, `BaseJsonException`, `NotImplementedException`, `SodiumException`
+**Throws:** `DependencyException`, `BaseJsonException`, `CryptoException`, `MLDSAInternalException`, `NotImplementedException`, `PQCryptoCompatException`, `RandomException`, `SodiumException`
 
-#### [`twig`](../../../src/RequestHandlers/Api/ServerPublicKey.php#L133-L150)
+#### [`twig`](../../../src/RequestHandlers/Api/ServerPublicKey.php#L158-L175)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -4648,11 +4648,11 @@ Returns `array`
 
 **Attributes:** `#[Override]`
 
-#### [`time`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L37-L40)
+#### [`time`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L44-L47)
 
 Returns `string`
 
-#### [`canonicalizeActor`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L51-L59)
+#### [`canonicalizeActor`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L58-L66)
 
 Returns `string`
 
@@ -4662,7 +4662,7 @@ Returns `string`
 
 **Throws:** `CacheException`, `CertaintyException`, `DependencyException`, `GuzzleException`, `InvalidArgumentException`, `NetworkException`, `SodiumException`
 
-#### [`error`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L67-L70)
+#### [`error`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L74-L77)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -4673,7 +4673,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `BaseJsonException`, `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`signResponse`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L81-L92)
+#### [`signResponse`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L91-L113)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -4683,9 +4683,9 @@ Implements an RFC 9421 HTTP Message Signature with Ed25519 or ML-DSA-44.
 
 - `$response`: `Psr\Http\Message\ResponseInterface`
 
-**Throws:** `DependencyException`, `NotImplementedException`, `SodiumException`
+**Throws:** `CryptoException`, `DependencyException`, `MLDSAInternalException`, `PQCryptoCompatException`, `RandomException`, `SodiumException`
 
-#### [`json`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L104-L123)
+#### [`json`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L129-L148)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -4697,9 +4697,9 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 - `$status`: `int` = 200
 - `$headers`: `array` = []
 
-**Throws:** `DependencyException`, `BaseJsonException`, `NotImplementedException`, `SodiumException`
+**Throws:** `DependencyException`, `BaseJsonException`, `CryptoException`, `MLDSAInternalException`, `NotImplementedException`, `PQCryptoCompatException`, `RandomException`, `SodiumException`
 
-#### [`twig`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L133-L150)
+#### [`twig`](../../../src/RequestHandlers/Api/TotpDisenroll.php#L158-L175)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -5081,11 +5081,11 @@ Returns `array`
 
 **Attributes:** `#[Override]`
 
-#### [`time`](../../../src/RequestHandlers/Api/TotpEnroll.php#L37-L40)
+#### [`time`](../../../src/RequestHandlers/Api/TotpEnroll.php#L44-L47)
 
 Returns `string`
 
-#### [`canonicalizeActor`](../../../src/RequestHandlers/Api/TotpEnroll.php#L51-L59)
+#### [`canonicalizeActor`](../../../src/RequestHandlers/Api/TotpEnroll.php#L58-L66)
 
 Returns `string`
 
@@ -5095,7 +5095,7 @@ Returns `string`
 
 **Throws:** `CacheException`, `CertaintyException`, `DependencyException`, `GuzzleException`, `InvalidArgumentException`, `NetworkException`, `SodiumException`
 
-#### [`error`](../../../src/RequestHandlers/Api/TotpEnroll.php#L67-L70)
+#### [`error`](../../../src/RequestHandlers/Api/TotpEnroll.php#L74-L77)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -5106,7 +5106,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `BaseJsonException`, `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`signResponse`](../../../src/RequestHandlers/Api/TotpEnroll.php#L81-L92)
+#### [`signResponse`](../../../src/RequestHandlers/Api/TotpEnroll.php#L91-L113)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -5116,9 +5116,9 @@ Implements an RFC 9421 HTTP Message Signature with Ed25519 or ML-DSA-44.
 
 - `$response`: `Psr\Http\Message\ResponseInterface`
 
-**Throws:** `DependencyException`, `NotImplementedException`, `SodiumException`
+**Throws:** `CryptoException`, `DependencyException`, `MLDSAInternalException`, `PQCryptoCompatException`, `RandomException`, `SodiumException`
 
-#### [`json`](../../../src/RequestHandlers/Api/TotpEnroll.php#L104-L123)
+#### [`json`](../../../src/RequestHandlers/Api/TotpEnroll.php#L129-L148)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -5130,9 +5130,9 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 - `$status`: `int` = 200
 - `$headers`: `array` = []
 
-**Throws:** `DependencyException`, `BaseJsonException`, `NotImplementedException`, `SodiumException`
+**Throws:** `DependencyException`, `BaseJsonException`, `CryptoException`, `MLDSAInternalException`, `NotImplementedException`, `PQCryptoCompatException`, `RandomException`, `SodiumException`
 
-#### [`twig`](../../../src/RequestHandlers/Api/TotpEnroll.php#L133-L150)
+#### [`twig`](../../../src/RequestHandlers/Api/TotpEnroll.php#L158-L175)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -5514,11 +5514,11 @@ Returns `array`
 
 **Attributes:** `#[Override]`
 
-#### [`time`](../../../src/RequestHandlers/Api/TotpRotate.php#L37-L40)
+#### [`time`](../../../src/RequestHandlers/Api/TotpRotate.php#L44-L47)
 
 Returns `string`
 
-#### [`canonicalizeActor`](../../../src/RequestHandlers/Api/TotpRotate.php#L51-L59)
+#### [`canonicalizeActor`](../../../src/RequestHandlers/Api/TotpRotate.php#L58-L66)
 
 Returns `string`
 
@@ -5528,7 +5528,7 @@ Returns `string`
 
 **Throws:** `CacheException`, `CertaintyException`, `DependencyException`, `GuzzleException`, `InvalidArgumentException`, `NetworkException`, `SodiumException`
 
-#### [`error`](../../../src/RequestHandlers/Api/TotpRotate.php#L67-L70)
+#### [`error`](../../../src/RequestHandlers/Api/TotpRotate.php#L74-L77)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -5539,7 +5539,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `BaseJsonException`, `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`signResponse`](../../../src/RequestHandlers/Api/TotpRotate.php#L81-L92)
+#### [`signResponse`](../../../src/RequestHandlers/Api/TotpRotate.php#L91-L113)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -5549,9 +5549,9 @@ Implements an RFC 9421 HTTP Message Signature with Ed25519 or ML-DSA-44.
 
 - `$response`: `Psr\Http\Message\ResponseInterface`
 
-**Throws:** `DependencyException`, `NotImplementedException`, `SodiumException`
+**Throws:** `CryptoException`, `DependencyException`, `MLDSAInternalException`, `PQCryptoCompatException`, `RandomException`, `SodiumException`
 
-#### [`json`](../../../src/RequestHandlers/Api/TotpRotate.php#L104-L123)
+#### [`json`](../../../src/RequestHandlers/Api/TotpRotate.php#L129-L148)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -5563,9 +5563,9 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 - `$status`: `int` = 200
 - `$headers`: `array` = []
 
-**Throws:** `DependencyException`, `BaseJsonException`, `NotImplementedException`, `SodiumException`
+**Throws:** `DependencyException`, `BaseJsonException`, `CryptoException`, `MLDSAInternalException`, `NotImplementedException`, `PQCryptoCompatException`, `RandomException`, `SodiumException`
 
-#### [`twig`](../../../src/RequestHandlers/Api/TotpRotate.php#L133-L150)
+#### [`twig`](../../../src/RequestHandlers/Api/TotpRotate.php#L158-L175)
 
 Returns `Psr\Http\Message\ResponseInterface`
 

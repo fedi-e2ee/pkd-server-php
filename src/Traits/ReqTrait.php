@@ -5,13 +5,20 @@ namespace FediE2EE\PKDServer\Traits;
 use FediE2EE\PKDServer\Exceptions\CacheException;
 use GuzzleHttp\Exception\GuzzleException;
 use FediE2EE\PKD\Crypto\Exceptions\{
+    CryptoException,
     NetworkException,
     NotImplementedException
 };
 use FediE2EE\PKD\Crypto\HttpSignature;
+use ParagonIE\ConstantTime\Base64;
 use FediE2EE\PKDServer\Exceptions\DependencyException;
 use JsonException as BaseJsonException;
+use ParagonIE\PQCrypto\Exception\{
+    MLDSAInternalException,
+    PQCryptoCompatException
+};
 use Psr\SimpleCache\InvalidArgumentException;
+use Random\RandomException;
 use Laminas\Diactoros\{
     Response,
     Stream
@@ -74,16 +81,30 @@ trait ReqTrait
      *
      * @link https://www.rfc-editor.org/rfc/rfc9421.html#name-eddsa-using-curve-edwards25
      *
+     * @throws CryptoException
      * @throws DependencyException
-     * @throws NotImplementedException
+     * @throws MLDSAInternalException
+     * @throws PQCryptoCompatException
+     * @throws RandomException
      * @throws SodiumException
      */
     public function signResponse(ResponseInterface $response): ResponseInterface
     {
+        $body = $response->getBody()->getContents();
+        $response->getBody()->rewind();
+        $response = $response->withHeader(
+            'Content-Digest',
+            'sha-512=:' . Base64::encode(hash('sha512', $body, true)) . ':'
+        );
+        $params = $this->config()->getParams();
+        $keyId = 'https://' . $params->hostname . '/users/' . $params->actorUsername . '#main-key';
+
         $signer = new HttpSignature();
         $response = $signer->sign(
             $this->config()->getSigningKeys()->secretKey,
-            $response
+            $response,
+            ['@status', 'content-type', 'content-digest'],
+            $keyId
         );
         if (!($response instanceof ResponseInterface)) {
             throw new TypeError('PKD Crypto did not return a response');
@@ -98,7 +119,11 @@ trait ReqTrait
      * @param array<string, string> $headers
      * @throws DependencyException
      * @throws BaseJsonException
+     * @throws CryptoException
+     * @throws MLDSAInternalException
      * @throws NotImplementedException
+     * @throws PQCryptoCompatException
+     * @throws RandomException
      * @throws SodiumException
      */
     public function json(
@@ -109,7 +134,7 @@ trait ReqTrait
         if (!array_key_exists('Content-Type', $headers)) {
             $headers['Content-Type'] = 'application/json';
         }
-        $json = self::jsoNEncode($data);
+        $json = self::jsonEncode($data);
         $stream = new Stream('php://temp', 'wb');
         $stream->write($json);
         $stream->rewind();

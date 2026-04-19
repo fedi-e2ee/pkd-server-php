@@ -36,11 +36,11 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 - `$request`: `Psr\Http\Message\ServerRequestInterface`
 
-#### [`time`](../../../src/RequestHandlers/IndexPage.php#L37-L40)
+#### [`time`](../../../src/RequestHandlers/IndexPage.php#L44-L47)
 
 Returns `string`
 
-#### [`canonicalizeActor`](../../../src/RequestHandlers/IndexPage.php#L51-L59)
+#### [`canonicalizeActor`](../../../src/RequestHandlers/IndexPage.php#L58-L66)
 
 Returns `string`
 
@@ -50,7 +50,7 @@ Returns `string`
 
 **Throws:** `CacheException`, `CertaintyException`, `DependencyException`, `GuzzleException`, `InvalidArgumentException`, `NetworkException`, `SodiumException`
 
-#### [`error`](../../../src/RequestHandlers/IndexPage.php#L67-L70)
+#### [`error`](../../../src/RequestHandlers/IndexPage.php#L74-L77)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -61,7 +61,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `BaseJsonException`, `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`signResponse`](../../../src/RequestHandlers/IndexPage.php#L81-L92)
+#### [`signResponse`](../../../src/RequestHandlers/IndexPage.php#L91-L113)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -71,9 +71,9 @@ Implements an RFC 9421 HTTP Message Signature with Ed25519 or ML-DSA-44.
 
 - `$response`: `Psr\Http\Message\ResponseInterface`
 
-**Throws:** `DependencyException`, `NotImplementedException`, `SodiumException`
+**Throws:** `CryptoException`, `DependencyException`, `MLDSAInternalException`, `PQCryptoCompatException`, `RandomException`, `SodiumException`
 
-#### [`json`](../../../src/RequestHandlers/IndexPage.php#L104-L123)
+#### [`json`](../../../src/RequestHandlers/IndexPage.php#L129-L148)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -85,9 +85,9 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 - `$status`: `int` = 200
 - `$headers`: `array` = []
 
-**Throws:** `DependencyException`, `BaseJsonException`, `NotImplementedException`, `SodiumException`
+**Throws:** `DependencyException`, `BaseJsonException`, `CryptoException`, `MLDSAInternalException`, `NotImplementedException`, `PQCryptoCompatException`, `RandomException`, `SodiumException`
 
-#### [`twig`](../../../src/RequestHandlers/IndexPage.php#L133-L150)
+#### [`twig`](../../../src/RequestHandlers/IndexPage.php#L158-L175)
 
 Returns `Psr\Http\Message\ResponseInterface`
 

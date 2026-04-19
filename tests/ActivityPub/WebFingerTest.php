@@ -22,15 +22,15 @@ use GuzzleHttp\{
     Exception\ClientException,
     Exception\GuzzleException,
     Exception\RequestException,
+    Exception\ServerException,
     Handler\MockHandler,
     HandlerStack,
     Middleware,
     Psr7\Request,
-    Psr7\Response
-};
+    Psr7\Response};
 use ParagonIE\Certainty\{
     Exception\CertaintyException,
-    RemoteFetch
+    Fetch
 };
 use PHPUnit\Framework\{
     Attributes\CoversClass,
@@ -53,7 +53,11 @@ class WebFingerTest extends TestCase
 
     public function tearDown(): void
     {
-        new WebFinger($this->getConfig())->clearCaches();
+        try {
+            new WebFinger($this->getConfig())->clearCaches();
+        } catch (ServerException $ex) {
+            $this->markTestSkipped($ex->getMessage());
+        }
     }
 
     public function testConstructorDefaults(): void
@@ -75,7 +79,7 @@ class WebFingerTest extends TestCase
         $webFinger = new WebFinger($this->getConfig());
 
         $fetchProp = new ReflectionProperty(WebFinger::class, 'fetch');
-        $this->assertInstanceOf(RemoteFetch::class, $fetchProp->getValue($webFinger));
+        $this->assertInstanceOf(Fetch::class, $fetchProp->getValue($webFinger));
 
         $httpProp = new ReflectionProperty(WebFinger::class, 'http');
         $this->assertInstanceOf(Client::class, $httpProp->getValue($webFinger));
@@ -517,9 +521,12 @@ class WebFingerTest extends TestCase
         $config = $this->getConfig();
         $container = [];
         $history = Middleware::history($container);
+        $canonical = $expect === 'https://furry.engineer/users/soatok/inbox'
+            ? 'https://furry.engineer/users/soatok'
+            : 'https://mastodon.social/ap/users/115428847654719749';
         $mock = new MockHandler([
             new Response(200, ['Content-Type' => 'application/jrd+json'], json_encode([
-                'links' => [['rel' => 'self', 'type' => 'application/activity+json', 'href' => str_replace('.json', '', $expect)]]
+                'links' => [['rel' => 'self', 'type' => 'application/activity+json', 'href' => $canonical]]
             ])),
             new Response(200, ['Content-Type' => 'application/activity+json'], json_encode([
                 'inbox' => $expect
@@ -535,10 +542,16 @@ class WebFingerTest extends TestCase
 
         // Verify requested URL
         $this->assertCount(2, $container);
+        $actorFetch = $container[1]['request'];
         $this->assertSame(
-            str_replace('.json', '', $expect) . '.json',
-            (string) $container[1]['request']->getUri(),
-            'Second request should be to the canonical URL + .json'
+            $canonical,
+            (string) $actorFetch->getUri(),
+            'Second request should be to the canonical actor URL without .json suffix'
+        );
+        $this->assertSame(
+            'application/activity+json',
+            $actorFetch->getHeaderLine('Accept'),
+            'Accept header must be emitted for ActivityPub content negotiation'
         );
     }
 
@@ -551,7 +564,9 @@ class WebFingerTest extends TestCase
      */
     public function testFetch(): void
     {
-        $jsonStr = json_encode(['links' => [['rel' => 'self', 'type' => 'application/activity+json', 'href' => 'https://example.com/users/alice']]]);
+        $jsonStr = json_encode(['links' => [
+            ['rel' => 'self', 'type' => 'application/activity+json', 'href' => 'https://example.com/users/alice']
+        ]]);
         $mockHttp = $this->getMockClient([
             new Response(
                 200,
@@ -631,23 +646,38 @@ class WebFingerTest extends TestCase
      */
     public function testAcceptHeader(): void
     {
-        $mockHttp = $this->createMock(Client::class);
-        $mockHttp->expects($this->once())
-            ->method('get')
-            ->with($this->anything(), $this->callback(function ($options) {
-                $this->assertArrayHasKey('Accept', $options);
-                $this->assertSame('application/activity+json', $options['Accept']);
-                return true;
-            }))
-            ->willReturn(new Response(
+        $container = [];
+        $history = Middleware::history($container);
+        $mock = new MockHandler([
+            new Response(
                 200,
-                ['Content-Type' => 'application/json'],
+                ['Content-Type' => 'application/activity+json'],
                 '{"inbox":"https://example.com/users/alice/inbox"}'
-            ));
+            ),
+        ]);
+        $stack = HandlerStack::create($mock);
+        $stack->push($history);
+        $mockHttp = new Client(['handler' => $stack]);
 
         $webFinger = new WebFinger($this->getConfig(), $mockHttp);
-        $webFinger->setCanonicalForTesting('https://example.com/users/alice', 'https://example.com/users/alice');
+        $webFinger->setCanonicalForTesting(
+            'https://example.com/users/alice',
+            'https://example.com/users/alice'
+        );
         $webFinger->getInboxUrl('https://example.com/users/alice');
+
+        $this->assertCount(1, $container);
+        $outgoing = $container[0]['request'];
+        $this->assertSame(
+            'https://example.com/users/alice',
+            (string) $outgoing->getUri(),
+            'Request must target the canonical URL (no .json suffix hack)'
+        );
+        $this->assertSame(
+            'application/activity+json',
+            $outgoing->getHeaderLine('Accept'),
+            'Accept header must reach the wire'
+        );
     }
 
     /**

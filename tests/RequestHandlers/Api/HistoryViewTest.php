@@ -51,6 +51,7 @@ use FediE2EE\PKDServer\Tables\Records\{
 use FediE2EE\PKDServer\Tests\HttpTestTrait;
 use FediE2EE\PKDServer\Traits\ConfigTrait;
 use GuzzleHttp\Psr7\Response;
+use ParagonIE\ConstantTime\Base64UrlSafe;
 use PHPUnit\Framework\Attributes\{
     CoversClass,
     UsesClass
@@ -150,6 +151,34 @@ class HistoryViewTest extends TestCase
         $this->assertArrayHasKey('witnesses', $body);
         $this->assertIsArray($body['witnesses']);
         $this->assertIsArray($body['message']);
+        $this->assertArrayHasKey('dir-publickeyhash', $body);
+        $this->assertArrayHasKey('dir-signature', $body);
+        $serverPublicKey = $config->getSigningKeys()->publicKey;
+        $publicKeyHashBytes = Base64UrlSafe::decodeNoPadding($body['dir-publickeyhash']);
+        $this->assertSame(
+            32,
+            strlen($publicKeyHashBytes),
+            'dir-publickeyhash must decode to 32 raw bytes (sha-256)'
+        );
+        $this->assertSame(
+            hash('sha256', $serverPublicKey->getBytes(), true),
+            $publicKeyHashBytes,
+            'dir-publickeyhash must match sha256(server signing key bytes)'
+        );
+
+        $expectedSigLen = $serverPublicKey->getAlgo()->signatureLength();
+        $signatureBytes = Base64UrlSafe::decodeNoPadding($body['dir-signature']);
+        $this->assertSame(
+            $expectedSigLen,
+            strlen($signatureBytes),
+            'dir-signature must decode to raw signature bytes of the expected length'
+        );
+
+        $contentHash = hash('sha256', $body['encrypted-message'], true);
+        $this->assertTrue(
+            $serverPublicKey->verify($signatureBytes, $contentHash),
+            'Decoded dir-signature must verify contentHash with the server public key'
+        );
 
         $this->assertNotInTransaction();
     }

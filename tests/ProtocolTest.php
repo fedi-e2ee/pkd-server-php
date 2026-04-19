@@ -27,6 +27,7 @@ use FediE2EE\PKD\Crypto\Protocol\{
     Handler
 };
 use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\Exception\ServerException;
 use ParagonIE\Certainty\Exception\CertaintyException;
 use ParagonIE\HPKE\KEM\PQKEM\EncapsKey;
 use ParagonIE\PQCrypto\Exception\MLDSAInternalException;
@@ -370,7 +371,12 @@ class ProtocolTest extends TestCase
         $this->addTestPeer();
         [$oldActor, $canonical] = $this->makeDummyActor();
         [$newActor, $canonical2] = $this->makeDummyActor();
-        $wf = new WebFinger($this->config);
+        try {
+            $wf = new WebFinger($this->config);
+        } catch (ServerException $ex) {
+            // Network issue, not a code issue:
+            $this->markTestSkipped($ex->getMessage());
+        }
         $wf->setCanonicalForTesting($oldActor, $canonical);
         $wf->setCanonicalForTesting($newActor, $canonical2);
         $wf->setCanonicalForTesting($canonical, $canonical);

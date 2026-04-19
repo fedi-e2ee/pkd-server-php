@@ -30,8 +30,8 @@ This document lists all API routes defined via `#[Route]` attributes.
 | `/api/totp/enroll` | [`RequestHandlers\Api\TotpEnroll`](../../src/RequestHandlers/Api/TotpEnroll.php) | `handle` |
 | `/api/totp/rotate` | [`RequestHandlers\Api\TotpRotate`](../../src/RequestHandlers/Api/TotpRotate.php) | `handle` |
 | `/history/cosign/{hash}` | [`RequestHandlers\Api\HistoryCosign`](../../src/RequestHandlers/Api/HistoryCosign.php) | `handle` |
-| `/user/{user_id}` | [`RequestHandlers\ActivityPub\UserPage`](../../src/RequestHandlers/ActivityPub/UserPage.php) | `handle` |
 | `/user/{user_id}/inbox` | [`RequestHandlers\ActivityPub\Inbox`](../../src/RequestHandlers/ActivityPub/Inbox.php) | `handle` |
+| `/users/{user_id}` | [`RequestHandlers\ActivityPub\UserPage`](../../src/RequestHandlers/ActivityPub/UserPage.php) | `handle` |
 | `/api/actor/{actor_id}` | [`RequestHandlers\Api\Actor`](../../src/RequestHandlers/Api/Actor.php) | `handle` |
 | `/api/actor/{actor_id}/auxiliary` | [`RequestHandlers\Api\ListAuxData`](../../src/RequestHandlers/Api/ListAuxData.php) | `handle` |
 | `/api/actor/{actor_id}/auxiliary/{aux_data_id}` | [`RequestHandlers\Api\GetAuxData`](../../src/RequestHandlers/Api/GetAuxData.php) | `handle` |

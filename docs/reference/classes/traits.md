@@ -553,11 +553,11 @@ Returns `bool`
 
 **Throws:** `DependencyException`
 
-#### [`time`](../../../src/Traits/HttpCacheTrait.php#L37-L40)
+#### [`time`](../../../src/Traits/HttpCacheTrait.php#L44-L47)
 
 Returns `string`
 
-#### [`canonicalizeActor`](../../../src/Traits/HttpCacheTrait.php#L51-L59)
+#### [`canonicalizeActor`](../../../src/Traits/HttpCacheTrait.php#L58-L66)
 
 Returns `string`
 
@@ -567,7 +567,7 @@ Returns `string`
 
 **Throws:** `CacheException`, `CertaintyException`, `DependencyException`, `GuzzleException`, `InvalidArgumentException`, `NetworkException`, `SodiumException`
 
-#### [`error`](../../../src/Traits/HttpCacheTrait.php#L67-L70)
+#### [`error`](../../../src/Traits/HttpCacheTrait.php#L74-L77)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -578,7 +578,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `BaseJsonException`, `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`signResponse`](../../../src/Traits/HttpCacheTrait.php#L81-L92)
+#### [`signResponse`](../../../src/Traits/HttpCacheTrait.php#L91-L113)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -588,9 +588,9 @@ Implements an RFC 9421 HTTP Message Signature with Ed25519 or ML-DSA-44.
 
 - `$response`: `Psr\Http\Message\ResponseInterface`
 
-**Throws:** `DependencyException`, `NotImplementedException`, `SodiumException`
+**Throws:** `CryptoException`, `DependencyException`, `MLDSAInternalException`, `PQCryptoCompatException`, `RandomException`, `SodiumException`
 
-#### [`json`](../../../src/Traits/HttpCacheTrait.php#L104-L123)
+#### [`json`](../../../src/Traits/HttpCacheTrait.php#L129-L148)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -602,9 +602,9 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 - `$status`: `int` = 200
 - `$headers`: `array` = []
 
-**Throws:** `DependencyException`, `BaseJsonException`, `NotImplementedException`, `SodiumException`
+**Throws:** `DependencyException`, `BaseJsonException`, `CryptoException`, `MLDSAInternalException`, `NotImplementedException`, `PQCryptoCompatException`, `RandomException`, `SodiumException`
 
-#### [`twig`](../../../src/Traits/HttpCacheTrait.php#L133-L150)
+#### [`twig`](../../../src/Traits/HttpCacheTrait.php#L158-L175)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -932,11 +932,11 @@ Request Handler trait
 
 ### Methods
 
-#### [`time`](../../../src/Traits/ReqTrait.php#L37-L40)
+#### [`time`](../../../src/Traits/ReqTrait.php#L44-L47)
 
 Returns `string`
 
-#### [`canonicalizeActor`](../../../src/Traits/ReqTrait.php#L51-L59)
+#### [`canonicalizeActor`](../../../src/Traits/ReqTrait.php#L58-L66)
 
 Returns `string`
 
@@ -946,7 +946,7 @@ Returns `string`
 
 **Throws:** `CacheException`, `CertaintyException`, `DependencyException`, `GuzzleException`, `InvalidArgumentException`, `NetworkException`, `SodiumException`
 
-#### [`error`](../../../src/Traits/ReqTrait.php#L67-L70)
+#### [`error`](../../../src/Traits/ReqTrait.php#L74-L77)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -957,7 +957,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `BaseJsonException`, `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`signResponse`](../../../src/Traits/ReqTrait.php#L81-L92)
+#### [`signResponse`](../../../src/Traits/ReqTrait.php#L91-L113)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -967,9 +967,9 @@ Implements an RFC 9421 HTTP Message Signature with Ed25519 or ML-DSA-44.
 
 - `$response`: `Psr\Http\Message\ResponseInterface`
 
-**Throws:** `DependencyException`, `NotImplementedException`, `SodiumException`
+**Throws:** `CryptoException`, `DependencyException`, `MLDSAInternalException`, `PQCryptoCompatException`, `RandomException`, `SodiumException`
 
-#### [`json`](../../../src/Traits/ReqTrait.php#L104-L123)
+#### [`json`](../../../src/Traits/ReqTrait.php#L129-L148)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -981,9 +981,9 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 - `$status`: `int` = 200
 - `$headers`: `array` = []
 
-**Throws:** `DependencyException`, `BaseJsonException`, `NotImplementedException`, `SodiumException`
+**Throws:** `DependencyException`, `BaseJsonException`, `CryptoException`, `MLDSAInternalException`, `NotImplementedException`, `PQCryptoCompatException`, `RandomException`, `SodiumException`
 
-#### [`twig`](../../../src/Traits/ReqTrait.php#L133-L150)
+#### [`twig`](../../../src/Traits/ReqTrait.php#L158-L175)
 
 Returns `Psr\Http\Message\ResponseInterface`
 

@@ -211,11 +211,11 @@ static · Returns `string`
 
 **Throws:** `BaseJsonException`
 
-#### [`time`](../../../src/RequestHandlers/ActivityPub/Finger.php#L37-L40)
+#### [`time`](../../../src/RequestHandlers/ActivityPub/Finger.php#L44-L47)
 
 Returns `string`
 
-#### [`canonicalizeActor`](../../../src/RequestHandlers/ActivityPub/Finger.php#L51-L59)
+#### [`canonicalizeActor`](../../../src/RequestHandlers/ActivityPub/Finger.php#L58-L66)
 
 Returns `string`
 
@@ -225,7 +225,7 @@ Returns `string`
 
 **Throws:** `CacheException`, `CertaintyException`, `DependencyException`, `GuzzleException`, `InvalidArgumentException`, `NetworkException`, `SodiumException`
 
-#### [`error`](../../../src/RequestHandlers/ActivityPub/Finger.php#L67-L70)
+#### [`error`](../../../src/RequestHandlers/ActivityPub/Finger.php#L74-L77)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -236,7 +236,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `BaseJsonException`, `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`signResponse`](../../../src/RequestHandlers/ActivityPub/Finger.php#L81-L92)
+#### [`signResponse`](../../../src/RequestHandlers/ActivityPub/Finger.php#L91-L113)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -246,9 +246,9 @@ Implements an RFC 9421 HTTP Message Signature with Ed25519 or ML-DSA-44.
 
 - `$response`: `Psr\Http\Message\ResponseInterface`
 
-**Throws:** `DependencyException`, `NotImplementedException`, `SodiumException`
+**Throws:** `CryptoException`, `DependencyException`, `MLDSAInternalException`, `PQCryptoCompatException`, `RandomException`, `SodiumException`
 
-#### [`json`](../../../src/RequestHandlers/ActivityPub/Finger.php#L104-L123)
+#### [`json`](../../../src/RequestHandlers/ActivityPub/Finger.php#L129-L148)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -260,9 +260,9 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 - `$status`: `int` = 200
 - `$headers`: `array` = []
 
-**Throws:** `DependencyException`, `BaseJsonException`, `NotImplementedException`, `SodiumException`
+**Throws:** `DependencyException`, `BaseJsonException`, `CryptoException`, `MLDSAInternalException`, `NotImplementedException`, `PQCryptoCompatException`, `RandomException`, `SodiumException`
 
-#### [`twig`](../../../src/RequestHandlers/ActivityPub/Finger.php#L133-L150)
+#### [`twig`](../../../src/RequestHandlers/ActivityPub/Finger.php#L158-L175)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -484,11 +484,11 @@ static · Returns `string`
 
 **Throws:** `BaseJsonException`
 
-#### [`time`](../../../src/RequestHandlers/ActivityPub/Inbox.php#L37-L40)
+#### [`time`](../../../src/RequestHandlers/ActivityPub/Inbox.php#L44-L47)
 
 Returns `string`
 
-#### [`canonicalizeActor`](../../../src/RequestHandlers/ActivityPub/Inbox.php#L51-L59)
+#### [`canonicalizeActor`](../../../src/RequestHandlers/ActivityPub/Inbox.php#L58-L66)
 
 Returns `string`
 
@@ -498,7 +498,7 @@ Returns `string`
 
 **Throws:** `CacheException`, `CertaintyException`, `DependencyException`, `GuzzleException`, `InvalidArgumentException`, `NetworkException`, `SodiumException`
 
-#### [`error`](../../../src/RequestHandlers/ActivityPub/Inbox.php#L67-L70)
+#### [`error`](../../../src/RequestHandlers/ActivityPub/Inbox.php#L74-L77)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -509,7 +509,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `BaseJsonException`, `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`signResponse`](../../../src/RequestHandlers/ActivityPub/Inbox.php#L81-L92)
+#### [`signResponse`](../../../src/RequestHandlers/ActivityPub/Inbox.php#L91-L113)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -519,9 +519,9 @@ Implements an RFC 9421 HTTP Message Signature with Ed25519 or ML-DSA-44.
 
 - `$response`: `Psr\Http\Message\ResponseInterface`
 
-**Throws:** `DependencyException`, `NotImplementedException`, `SodiumException`
+**Throws:** `CryptoException`, `DependencyException`, `MLDSAInternalException`, `PQCryptoCompatException`, `RandomException`, `SodiumException`
 
-#### [`json`](../../../src/RequestHandlers/ActivityPub/Inbox.php#L104-L123)
+#### [`json`](../../../src/RequestHandlers/ActivityPub/Inbox.php#L129-L148)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -533,9 +533,9 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 - `$status`: `int` = 200
 - `$headers`: `array` = []
 
-**Throws:** `DependencyException`, `BaseJsonException`, `NotImplementedException`, `SodiumException`
+**Throws:** `DependencyException`, `BaseJsonException`, `CryptoException`, `MLDSAInternalException`, `NotImplementedException`, `PQCryptoCompatException`, `RandomException`, `SodiumException`
 
-#### [`twig`](../../../src/RequestHandlers/ActivityPub/Inbox.php#L133-L150)
+#### [`twig`](../../../src/RequestHandlers/ActivityPub/Inbox.php#L158-L175)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -568,7 +568,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 ### Methods
 
-#### [`handle`](../../../src/RequestHandlers/ActivityPub/UserPage.php#L34-L37)
+#### [`handle`](../../../src/RequestHandlers/ActivityPub/UserPage.php#L46-L84)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -578,7 +578,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 - `$request`: `Psr\Http\Message\ServerRequestInterface`
 
-**Throws:** `DependencyException`, `JsonException`, `NotImplementedException`, `SodiumException`
+**Throws:** `CryptoException`, `DependencyException`, `JsonException`, `MLDSAInternalException`, `NotImplementedException`, `PQCryptoCompatException`, `RandomException`, `SodiumException`
 
 #### [`getVerifiedStream`](../../../src/RequestHandlers/ActivityPub/UserPage.php#L39-L62)
 
@@ -751,11 +751,11 @@ static · Returns `string`
 
 **Throws:** `BaseJsonException`
 
-#### [`time`](../../../src/RequestHandlers/ActivityPub/UserPage.php#L37-L40)
+#### [`time`](../../../src/RequestHandlers/ActivityPub/UserPage.php#L44-L47)
 
 Returns `string`
 
-#### [`canonicalizeActor`](../../../src/RequestHandlers/ActivityPub/UserPage.php#L51-L59)
+#### [`canonicalizeActor`](../../../src/RequestHandlers/ActivityPub/UserPage.php#L58-L66)
 
 Returns `string`
 
@@ -765,7 +765,7 @@ Returns `string`
 
 **Throws:** `CacheException`, `CertaintyException`, `DependencyException`, `GuzzleException`, `InvalidArgumentException`, `NetworkException`, `SodiumException`
 
-#### [`error`](../../../src/RequestHandlers/ActivityPub/UserPage.php#L67-L70)
+#### [`error`](../../../src/RequestHandlers/ActivityPub/UserPage.php#L74-L77)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -776,7 +776,7 @@ Returns `Psr\Http\Message\ResponseInterface`
 
 **Throws:** `BaseJsonException`, `DependencyException`, `NotImplementedException`, `SodiumException`
 
-#### [`signResponse`](../../../src/RequestHandlers/ActivityPub/UserPage.php#L81-L92)
+#### [`signResponse`](../../../src/RequestHandlers/ActivityPub/UserPage.php#L91-L113)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -786,9 +786,9 @@ Implements an RFC 9421 HTTP Message Signature with Ed25519 or ML-DSA-44.
 
 - `$response`: `Psr\Http\Message\ResponseInterface`
 
-**Throws:** `DependencyException`, `NotImplementedException`, `SodiumException`
+**Throws:** `CryptoException`, `DependencyException`, `MLDSAInternalException`, `PQCryptoCompatException`, `RandomException`, `SodiumException`
 
-#### [`json`](../../../src/RequestHandlers/ActivityPub/UserPage.php#L104-L123)
+#### [`json`](../../../src/RequestHandlers/ActivityPub/UserPage.php#L129-L148)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
@@ -800,9 +800,9 @@ Return a JSON response with HTTP Message Signature (from signResponse())
 - `$status`: `int` = 200
 - `$headers`: `array` = []
 
-**Throws:** `DependencyException`, `BaseJsonException`, `NotImplementedException`, `SodiumException`
+**Throws:** `DependencyException`, `BaseJsonException`, `CryptoException`, `MLDSAInternalException`, `NotImplementedException`, `PQCryptoCompatException`, `RandomException`, `SodiumException`
 
-#### [`twig`](../../../src/RequestHandlers/ActivityPub/UserPage.php#L133-L150)
+#### [`twig`](../../../src/RequestHandlers/ActivityPub/UserPage.php#L158-L175)
 
 Returns `Psr\Http\Message\ResponseInterface`
 
