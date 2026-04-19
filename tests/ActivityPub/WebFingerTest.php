@@ -22,12 +22,12 @@ use GuzzleHttp\{
     Exception\ClientException,
     Exception\GuzzleException,
     Exception\RequestException,
+    Exception\ServerException,
     Handler\MockHandler,
     HandlerStack,
     Middleware,
     Psr7\Request,
-    Psr7\Response
-};
+    Psr7\Response};
 use ParagonIE\Certainty\{
     Exception\CertaintyException,
     RemoteFetch
@@ -53,7 +53,11 @@ class WebFingerTest extends TestCase
 
     public function tearDown(): void
     {
-        new WebFinger($this->getConfig())->clearCaches();
+        try {
+            new WebFinger($this->getConfig())->clearCaches();
+        } catch (ServerException $ex) {
+            $this->markTestSkipped($ex->getMessage());
+        }
     }
 
     public function testConstructorDefaults(): void

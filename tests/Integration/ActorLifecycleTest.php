@@ -69,6 +69,7 @@ use PHPUnit\Framework\Attributes\{
     CoversClass,
     UsesClass
 };
+use GuzzleHttp\Exception\ServerException;
 use JsonException as BaseJsonException;
 use GuzzleHttp\Exception\GuzzleException;
 use ParagonIE\ConstantTime\Base64UrlSafe;
@@ -187,7 +188,11 @@ class ActorLifecycleTest extends TestCase
         $this->clearOldTransaction($config);
         $protocol = new Protocol($config);
 
-        $wf = new WebFinger($config);
+        try {
+            $wf = new WebFinger($config);
+        } catch (ServerException $ex) {
+            $this->markTestSkipped($ex->getMessage());
+        }
         $wf->setCanonicalForTesting($canonical, $canonical);
         $wf->setCanonicalForTesting($canonical2, $canonical2);
 

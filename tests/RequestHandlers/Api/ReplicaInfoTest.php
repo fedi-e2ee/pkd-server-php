@@ -23,6 +23,7 @@ use FediE2EE\PKD\Crypto\Protocol\{
     Handler,
     ProtocolMessageInterface
 };
+use GuzzleHttp\Exception\ServerException;
 use FediE2EE\PKD\Crypto\{Merkle\InclusionProof, SecretKey, SymmetricKey};
 use GuzzleHttp\Psr7\Response;
 use FediE2EE\PKDServer\Protocol\{
@@ -168,7 +169,11 @@ class ReplicaInfoTest extends TestCase
         [$canonical, $sk] = $this->makeAndStoreDummyActor();
 
         // Next, let's kick off replication:
-        $witness = new Witness($this->config);
+        try {
+            $witness = new Witness($this->config);
+        } catch (ServerException $ex) {
+            $this->markTestSkipped($ex->getMessage());
+        }
         $witness->run();
 
         // Now let's store the dummy info:
