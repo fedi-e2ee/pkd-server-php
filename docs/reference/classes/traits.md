@@ -882,7 +882,7 @@ static · Returns `array`
 
 #### [`byteArrayToString`](../../../src/Traits/NetworkTrait.php#L150-L153)
 
-Returns `string`
+static · Returns `string`
 
 **Parameters:**
 

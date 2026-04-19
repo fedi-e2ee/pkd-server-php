@@ -229,7 +229,7 @@ static · Returns `array`
 
 #### [`byteArrayToString`](../../../src/RateLimit/DefaultRateLimiting.php#L150-L153)
 
-Returns `string`
+static · Returns `string`
 
 **Parameters:**
 

@@ -147,7 +147,7 @@ trait NetworkTrait
     /**
      * @param array<int, int> $array
      */
-    public function byteArrayToString(array $array): string
+    public static function byteArrayToString(array $array): string
     {
         return pack('C*', ...$array);
     }
