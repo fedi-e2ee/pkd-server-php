@@ -106,7 +106,7 @@ static · Returns `string`
 
 ### Methods
 
-#### [`__construct`](../../../src/ActivityPub/WebFinger.php#L56-L75)
+#### [`__construct`](../../../src/ActivityPub/WebFinger.php#L56-L80)
 
 Returns `void`
 
@@ -118,11 +118,11 @@ Returns `void`
 
 **Throws:** `CertaintyException`, `DependencyException`, `SodiumException`
 
-#### [`clearCaches`](../../../src/ActivityPub/WebFinger.php#L80-L87)
+#### [`clearCaches`](../../../src/ActivityPub/WebFinger.php#L85-L92)
 
 **API** · Returns `void`
 
-#### [`canonicalize`](../../../src/ActivityPub/WebFinger.php#L96-L106)
+#### [`canonicalize`](../../../src/ActivityPub/WebFinger.php#L101-L111)
 
 Returns `string`
 
@@ -132,7 +132,7 @@ Returns `string`
 
 **Throws:** `CacheException`, `GuzzleException`, `InvalidArgumentException`, `NetworkException`, `SodiumException`
 
-#### [`fetch`](../../../src/ActivityPub/WebFinger.php#L130-L143)
+#### [`fetch`](../../../src/ActivityPub/WebFinger.php#L135-L148)
 
 Returns `array`
 
@@ -144,7 +144,7 @@ Fetch an entire remote WebFinger response.
 
 **Throws:** `GuzzleException`, `NetworkException`
 
-#### [`getInboxUrl`](../../../src/ActivityPub/WebFinger.php#L190-L206)
+#### [`getInboxUrl`](../../../src/ActivityPub/WebFinger.php#L195-L211)
 
 Returns `string`
 
@@ -154,7 +154,7 @@ Returns `string`
 
 **Throws:** `CacheException`, `GuzzleException`, `InvalidArgumentException`, `NetworkException`, `SodiumException`
 
-#### [`getPublicKey`](../../../src/ActivityPub/WebFinger.php#L214-L258)
+#### [`getPublicKey`](../../../src/ActivityPub/WebFinger.php#L219-L263)
 
 Returns `FediE2EE\PKD\Crypto\PublicKey`
 
@@ -164,7 +164,7 @@ Returns `FediE2EE\PKD\Crypto\PublicKey`
 
 **Throws:** `CryptoException`, `FetchException`, `InvalidArgumentException`, `SodiumException`
 
-#### [`trimUsername`](../../../src/ActivityPub/WebFinger.php#L260-L263)
+#### [`trimUsername`](../../../src/ActivityPub/WebFinger.php#L265-L268)
 
 Returns `string`
 
@@ -172,7 +172,7 @@ Returns `string`
 
 - `$username`: `string`
 
-#### [`setCanonicalForTesting`](../../../src/ActivityPub/WebFinger.php#L318-L325)
+#### [`setCanonicalForTesting`](../../../src/ActivityPub/WebFinger.php#L323-L330)
 
 Returns `void`
 
