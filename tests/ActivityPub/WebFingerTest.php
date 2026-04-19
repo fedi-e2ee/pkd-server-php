@@ -30,7 +30,7 @@ use GuzzleHttp\{
     Psr7\Response};
 use ParagonIE\Certainty\{
     Exception\CertaintyException,
-    RemoteFetch
+    Fetch
 };
 use PHPUnit\Framework\{
     Attributes\CoversClass,
@@ -79,7 +79,7 @@ class WebFingerTest extends TestCase
         $webFinger = new WebFinger($this->getConfig());
 
         $fetchProp = new ReflectionProperty(WebFinger::class, 'fetch');
-        $this->assertInstanceOf(RemoteFetch::class, $fetchProp->getValue($webFinger));
+        $this->assertInstanceOf(Fetch::class, $fetchProp->getValue($webFinger));
 
         $httpProp = new ReflectionProperty(WebFinger::class, 'http');
         $this->assertInstanceOf(Client::class, $httpProp->getValue($webFinger));

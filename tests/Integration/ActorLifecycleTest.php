@@ -82,7 +82,6 @@ use ParagonIE\CipherSweet\Exception\{
     InvalidCiphertextException
 };
 use ParagonIE\HPKE\HPKEException;
-use ParagonIE\HPKE\KEM\PostQuantumKEM;
 use PHPUnit\Framework\TestCase;
 use Psr\SimpleCache\InvalidArgumentException;
 use Random\RandomException;
@@ -125,6 +124,10 @@ class ActorLifecycleTest extends TestCase
         $this->truncateTables();
     }
 
+    /**
+     * @throws CertaintyException
+     * @throws SodiumException
+     */
     public function tearDown(): void
     {
         Handler::setWebFinger(new PKDCryptoWebFinger());
