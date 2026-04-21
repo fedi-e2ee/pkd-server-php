@@ -2,27 +2,36 @@
 declare(strict_types=1);
 namespace FediE2EE\PKDServer\Tests;
 
+use DateMalformedStringException;
 use FediE2EE\PKD\Crypto\AttributeEncryption\AttributeKeyMap;
 use FediE2EE\PKD\Crypto\Exceptions\{
+    BundleException,
     CryptoException,
+    InputException,
     JsonException,
-    NotImplementedException,
-    ParserException
+    NetworkException,
+    NotImplementedException
 };
 use FediE2EE\PKD\Crypto\Merkle\IncrementalTree;
 use FediE2EE\PKD\Crypto\Protocol\{
     Actions\AddKey,
     Handler
 };
+use GuzzleHttp\Exception\ConnectException;
+use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\Exception\ServerException;
 use ParagonIE\Certainty\Fetch;
 use ParagonIE\Certainty\RemoteFetch;
 use ParagonIE\HPKE\KEM\PQKEM\EncapsKey;
+use ParagonIE\PQCrypto\Exception\MLDSAInternalException;
+use ParagonIE\PQCrypto\Exception\PQCryptoCompatException;
 use FediE2EE\PKD\Crypto\{
     SecretKey,
     SymmetricKey
 };
 use FediE2EE\PKDServer\Exceptions\{
     CacheException,
+    ConcurrentException,
     DependencyException,
     ProtocolException,
     TableException
@@ -141,13 +150,14 @@ trait HttpTestTrait
         if (file_exists(PKD_SERVER_ROOT . '/tmp/ca-certs.json')) {
             $fetch = new Fetch(PKD_SERVER_ROOT . '/tmp');
         } else {
-
             $fetch = new RemoteFetch(PKD_SERVER_ROOT . '/tmp');
         }
         $wf = new WebFinger(
             $this->getConfig(),
             new Client([
-                'verify' => $fetch->getLatestBundle(false, false)->getFilePath()
+                'verify' => $fetch
+                    ->getLatestBundle(false, false)
+                    ->getFilePath()
             ]),
             $fetch
         );
@@ -307,14 +317,27 @@ trait HttpTestTrait
     /**
      * Add a key for an actor via the Protocol class.
      *
+     * @param string $canonical
+     * @param SecretKey $keypair
+     * @param Protocol $protocol
+     * @param ServerConfig $config
+     * @return ActorKey
+     * @throws BundleException
      * @throws CacheException
+     * @throws ConcurrentException
      * @throws CryptoException
+     * @throws DateMalformedStringException
      * @throws DependencyException
+     * @throws GuzzleException
      * @throws HPKEException
+     * @throws InputException
      * @throws JsonException
+     * @throws MLDSAInternalException
+     * @throws NetworkException
      * @throws NotImplementedException
-     * @throws ParserException
+     * @throws PQCryptoCompatException
      * @throws ProtocolException
+     * @throws RandomException
      * @throws SodiumException
      * @throws TableException
      */
@@ -331,14 +354,20 @@ trait HttpTestTrait
         $serverHpke = $config->getHPKE();
         $handler = new Handler();
 
-        $addKey = new AddKey($canonical, $keypair->getPublicKey());
+        try {
+            $addKey = new AddKey($canonical, $keypair->getPublicKey());
+        } catch (ServerException|ConnectException $e) {
+            $this->markTestSkipped($e->getMessage());
+        }
         $akm = new AttributeKeyMap();
         $akm->addKey('actor', SymmetricKey::generate());
         $akm->addKey('public-key', SymmetricKey::generate());
 
         $bundle = $handler->handle($addKey->encrypt($akm, $latestRoot), $keypair, $akm, $latestRoot);
         $this->assertInstanceOf(EncapsKey::class, $serverHpke->encapsKey);
-        $encrypted = $handler->hpkeEncrypt($bundle, $serverHpke->encapsKey, $serverHpke->cs);
+        /** @var EncapsKey $encapsKey */
+        $encapsKey = $serverHpke->encapsKey;
+        $encrypted = $handler->hpkeEncrypt($bundle, $encapsKey, $serverHpke->cs);
 
         return $protocol->addKey($encrypted, $canonical);
     }
