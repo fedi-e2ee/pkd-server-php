@@ -47,7 +47,7 @@ class ActivityStream implements JsonSerializable
      */
     public static function fromString(string $input): self
     {
-        return self::fromDecoded(json_decode($input, false, JSON_FORCE_OBJECT));
+        return self::fromDecoded(json_decode($input, false, 32, JSON_FORCE_OBJECT));
     }
 
     #[Override]
