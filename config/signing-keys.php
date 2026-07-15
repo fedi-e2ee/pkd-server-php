@@ -23,7 +23,7 @@ if (file_exists(__DIR__ . '/signing.json')) {
     }
     $secretKey = new SecretKey(
         Base64UrlSafe::decodeNoPadding($json['secret-key'] ?? ''),
-        $json['alg'] ?? 'mldsa44',
+        $json['alg'] ?? 'ml-dsa-44',
     );
     $publicKey = $secretKey->getPublicKey();
     if (!hash_equals($publicKey->toString(), $json['public-key'])) {
@@ -33,7 +33,7 @@ if (file_exists(__DIR__ . '/signing.json')) {
     // No keys? No problem.
     $secretKey = SecretKey::generate();
     $publicKey = $secretKey->getPublicKey();
-    $alg = $secretKey->getAlgo();
+    $alg = $secretKey->getAlgo()->value;
 
     file_put_contents(__DIR__ . '/signing.json', json_encode([
         'alg' =>
